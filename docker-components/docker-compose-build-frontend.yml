@@ -1,0 +1,27 @@
+version: '2'
+
+# this docker configuation intends to build frontend
+# it is supposed that your declared some ENV variables:
+#   - ${FRONTEND} points to matchID-frontend (from GitHub, branch 'master')
+
+services:
+  build-frontend:
+    build:
+      context: ${FRONTEND}
+      dockerfile: Dockerfile.build
+      args:
+        proxy: ${http_proxy}
+    image: matchid-frontend:latest
+    container_name: matchid-build-front
+    volumes:
+      - ${FRONTEND}/index.html:/matchid/index.html
+      - ${FRONTEND}/.babelrc:/matchid/.babelrc
+      - ${FRONTEND}/.editorconfig:/matchid/.editorconfig
+      - ${FRONTEND}/.eslintignore:/matchid/.eslintignore
+      - ${FRONTEND}/.eslintrc.js:/matchid/.eslintrc.js
+      - ${FRONTEND}/matchIdConfig:/matchid/matchIdConfig/
+      - ${FRONTEND}/config:/matchid/config/
+      - ${FRONTEND}/src:/matchid/src/
+      - ${FRONTEND}/build:/matchid/build/
+      - ${FRONTEND}/static:/matchid/static/
+      - ${FRONTEND}/dist:/matchid/dist/

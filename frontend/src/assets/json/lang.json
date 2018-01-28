@@ -1,0 +1,43 @@
+{
+  "available": [
+    "en",
+    "fr"
+  ],
+  "default": "fr",
+  "global": {
+    "refresh_list": {
+      "en": "Refresh list",
+      "fr": "Rafraîchir la liste"
+    },
+    "see_more": {
+      "en": "See more",
+      "fr": "Voir plus"
+    }
+  },
+  "new": {
+    "en": "new",
+    "fr": "nouveau"
+  },
+  "navbar": {
+    "static": {
+      "name": {
+        "en": "static list",
+        "fr": "liste statique"
+      },
+      "first_item": {
+        "en": "this is a first item",
+        "fr": "premier item"
+      },
+      "second_item": {
+        "en": "second item",
+        "fr": "deuxième item"
+      }      
+    },
+    "dynamic": {
+      "name": {
+        "en": "dynamic list from API",
+        "fr": "liste dynamique par API"
+      }
+    }
+  }
+}

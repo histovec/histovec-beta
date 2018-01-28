@@ -1,0 +1,206 @@
+@import "~bulma";
+@import './colors.scss';
+@import '~font-awesome/css/font-awesome.css';
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+
+  #table-wrapper {
+    flex-grow: 1;
+    display: flex;
+    overflow: auto;
+    background-color: $grey-lighter;
+  }
+}
+
+#project {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  background-color: $grey-lighter;
+}
+
+#jobs {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  background-color: $grey-lighter;
+}
+
+#home {
+  padding-top: 3rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  background-color: $grey-lighter;
+}
+
+.logo {
+  font-weight: bolder;
+  font-family: monospace;
+  font-size: 24px;
+  background-color: $white;
+  color: $white;
+}
+
+.custom-unclickable {
+  pointer-events: none;
+  cursor: default;
+}
+
+.custom-clickable {
+  cursor: pointer;
+}
+
+.custom-margin-right-8 {
+  margin-right: 8px;
+}
+
+.custom-checkbox {
+  line-height: 2.25rem;
+}
+
+.custom-nowrap {
+  white-space: nowrap;
+}
+
+.loading-border {
+  border: 3px solid #eee;
+}
+
+#controller {
+  padding: 0.5rem 0.7rem;
+  background-color: $grey-lighter;
+}
+
+#validationWrapper {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: none;
+  height: 100%;
+}
+
+.box {
+  padding: 0.7rem;
+}
+
+.table {
+  td,th {
+    vertical-align: middle !important;
+    > div, > span {
+      vertical-align: middle !important;
+    }
+  }
+
+  .head-centered {
+    text-align: center !important;
+  }
+}
+.loading-spinner {
+  margin-top: 8rem;
+}
+
+.stickTable-container {
+  position: relative;
+}
+
+.stickTable {
+  table {
+    width: 100%;
+    background-color: $white;
+  }
+}
+
+#sliderWrapper {
+  padding-left: 5px;
+  padding-right: 10px;
+}
+
+.operation-success {
+  background-color: $turquoise;
+}
+
+.operation-fail {
+  background-color: $red;
+}
+
+.operation-fade {
+  animation: fadeout 1s forwards;
+  animation-delay: 1s;
+  -moz-animation: fadeout 1s forwards;
+  -moz-animation-delay: 1s;
+  -webkit-animation: fadeout 1s forwards;
+  -webkit-animation-delay: 1s;
+  -o-animation: fadeout 1s forwards;
+  -o-animation-delay: 1s;
+}
+
+.activeShortcuts {
+  .border-selected {
+    border: 2px solid $turquoise;
+    transform: scale(1, 1.1)
+  }
+
+  .fade-unselected {
+    opacity: 0.3;
+  }
+}
+
+.table tr:hover {
+  background-color: inherit;
+}
+
+@keyframes fadeout {
+  to {
+    background-color:$white;
+  }
+}
+@-moz-keyframes fadeout {
+  to {
+    background-color: $white;
+  }
+}
+@-webkit-keyframes fadeout {
+  to {
+    background-color: $white;
+  }
+}
+@-o-keyframes fadeout {
+  to {
+    background-color: $white;
+  }
+}
+
+.modal, .navbar-dropdown {
+  z-index: 22;
+}
+
+.is-fullheight {
+	height: 100%
+}
+
+.is-fullwidth {
+	width: 100%
+}
+
+.is-overflowed {
+  overflow: auto;
+}
+
+.is-overflowed-x {
+  overflow-x: auto;
+}
+
+.is-overflowed-y {
+  overflow-y: auto;
+}

@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  backend:
+    build:
+      context: ${BACKEND}
+      args:
+        proxy: ${http_proxy}
+        app_path: /${APP}
+        app_name: ${APP}
+    image: ${APP}-backend:latest
+    container_name: ${APP}-backend
+    volumes:
+      - ${BACKEND}/code/:/${APP}/code/
+      - ${BACKEND}/conf/:/${APP}/conf/
+      - ${BACKEND}/log:/log/
+    restart: always
+
+networks:
+  default:
+    external:
+      name: ${APP}

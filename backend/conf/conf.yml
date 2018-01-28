@@ -1,0 +1,13 @@
+global:
+  api:
+    prefix: /api/v0
+    port: 8081
+    domain: ':80' 
+    host: 0.0.0.0
+    use_reloader: True
+    processes: 1
+    debug: True
+  log:
+    dir: /log/
+    verbose: True
+    level: 1

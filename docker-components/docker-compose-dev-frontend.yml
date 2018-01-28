@@ -1,0 +1,59 @@
+version: '2'
+
+# this docker configuation is for dev use only
+# it is supposed that your declared some ENV variables:
+#   - ${FRONTEND} points to matchID-frontend (from GitHub, branch 'master')
+#   - ${PROJECTS} points to your projects path
+#   - ${UPLOAD} points to your upload path
+# the dev conf allows you to change both python and nodejs code and conf live they will be
+# updated within the docker instances
+
+# for dev use it is recommanded to have at least 8Gb of memory and SSD and 4 vCPU, to ensure
+# good performance and testing.
+
+# for production use many adaptation will be needed if you use docker
+# - assume you docker images with a custum managed repo
+# - securize nginx routes allowing only stricly needed routes of API
+# - build the static files from node frontend and put them to the nginx
+# - build a cluster for elasticsearch
+# - use real volumes : S3-like storage for configurations (using volumes) of front and back,
+#   and DB-storage for ES volume like SSD volumes (or memory storage still better)
+
+services:
+  nginx-dev:
+    image: nginx
+    container_name: ${APP}-nginx-dev
+    depends_on:
+      - frontend-dev
+    volumes:
+      - ${APP_PATH}/nginx/nginx-dev.template:/etc/nginx/conf.d/default.template
+    ports:
+      - "80:80"
+    command: /bin/bash -c '(sed "s/<APP>/${APP}/g" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && nginx -g "daemon off;"'
+    restart: always
+
+  frontend-dev:
+    build:
+      context: ${FRONTEND}
+      dockerfile: Dockerfile.dev
+      args:
+        proxy: ${http_proxy}
+        app_path: /${APP}
+        app_name: ${APP}
+    image: ${APP}-frontend-dev:latest
+    container_name: ${APP}-frontend-dev
+    volumes:
+      - ${FRONTEND}/index.html:/${APP}/index.html
+      - ${FRONTEND}/.babelrc:/${APP}/.babelrc
+      - ${FRONTEND}/.editorconfig:/${APP}/.editorconfig
+      - ${FRONTEND}/.eslintignore:/${APP}/.eslintignore
+      - ${FRONTEND}/.eslintrc.js:/${APP}/.eslintrc.js
+      - ${FRONTEND}/config:/${APP}/config/
+      - ${FRONTEND}/src:/${APP}/src/
+      - ${FRONTEND}/build:/${APP}/build/
+
+networks:
+  default:
+    external:
+      name: ${APP}
+ 
