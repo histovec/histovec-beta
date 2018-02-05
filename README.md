@@ -23,4 +23,10 @@ cd vue-python-docker-dev-kit
 make dev
 ```
 
+then go to : `http://localhost`
+
+to stop:
+```
+make dev-stop
+```
 
