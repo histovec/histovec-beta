@@ -27,31 +27,31 @@ network-stop:
 network:
 	@docker network create ${APP} 2> /dev/null; true
 
-elasticsearch-stop:
-	@echo docker-compose down ${APP} elasticsearch
-	@${DC} -f ${DC_PREFIX}-elasticsearch.yml down
+# elasticsearch-stop:
+# 	@echo docker-compose down ${APP} elasticsearch
+# 	@${DC} -f ${DC_PREFIX}-elasticsearch.yml down
 
-elasticsearch: network
-ifeq "$(ES_NODES)" "1"
-	@sudo mkdir -p ${ES_PATH} && sudo chmod 777 ${ES_PATH}/.
-	${DC} -f ${DC_PREFIX}-elasticsearch.yml up --build -d
-else
-	@echo docker-compose up elasticsearch with ${ES_NODES} nodes
-	@cat ${DC_PREFIX}-elasticsearch.yml > ${DC_PREFIX}-elasticsearch-huge.yml
-	@i=2; $while [$i -le $ES_NODES]; do cat ${DC_PREFIX}-elasticsearch-node.yml | sed "s/%N/$i" >> ${DC_PREFIX}-elasticsearch-huge.yml;done
-	${DC} -f ${DC_PREFIX}-elasticsearch-huge.yml up -d 
-endif
+# elasticsearch: network
+# ifeq "$(ES_NODES)" "1"
+# 	@sudo mkdir -p ${ES_PATH} && sudo chmod 777 ${ES_PATH}/.
+# 	${DC} -f ${DC_PREFIX}-elasticsearch.yml up --build -d
+# else
+# 	@echo docker-compose up elasticsearch with ${ES_NODES} nodes
+# 	@cat ${DC_PREFIX}-elasticsearch.yml > ${DC_PREFIX}-elasticsearch-huge.yml
+# 	@i=2; $while [$i -le $ES_NODES]; do cat ${DC_PREFIX}-elasticsearch-node.yml | sed "s/%N/$i" >> ${DC_PREFIX}-elasticsearch-huge.yml;done
+# 	${DC} -f ${DC_PREFIX}-elasticsearch-huge.yml up -d 
+# endif
 
-kibana-stop:
-	${DC} -f ${DC_PREFIX}-kibana.yml down
-kibana: network
-	${DC} -f ${DC_PREFIX}-kibana.yml up -d
+# kibana-stop:
+# 	${DC} -f ${DC_PREFIX}-kibana.yml down
+# kibana: network
+# 	${DC} -f ${DC_PREFIX}-kibana.yml up -d
 
-postgres-stop:
-	${DC} -f ${DC_PREFIX}-${PG}.yml down
+# postgres-stop:
+# 	${DC} -f ${DC_PREFIX}-${PG}.yml down
 
-postgres: network
-	${DC} -f ${DC_PREFIX}-${PG}.yml up -d
+# postgres: network
+# 	${DC} -f ${DC_PREFIX}-${PG}.yml up -d
 
 backend-stop:
 	${DC} -f ${DC_PREFIX}-backend.yml down
@@ -66,16 +66,21 @@ frontend-dev: network
 	@echo docker-compose up frontend for dev
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 
 
+frontend-dev-stop:  
+	${DC} -f ${DC_PREFIX}-dev-frontend.yml down 
+
 dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
+dev: network backend frontend-dev
 
-dev: network backend kibana frontend-dev
+dev-stop: backend-stop frontend-dev-stop network-stop
+
 
 frontend-build: frontend-download network
 ifneq "$(commit-frontend)" "$(lastcommit-frontend)"
-	@echo building matchID frontend after new commit
+	@echo building ${APP} frontend after new commit
 	@make clean
 	@echo building frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist
@@ -83,22 +88,22 @@ ifneq "$(commit-frontend)" "$(lastcommit-frontend)"
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif	
 
-frontend-stop:
-	${DC} -f ${DC_PREFIX}-run-frontend.yml down
+# frontend-stop:
+# 	${DC} -f ${DC_PREFIX}-run-frontend.yml down
 
-frontend: frontend-build
-	${DC} -f ${DC_PREFIX}-run-frontend.yml up -d
+# frontend: frontend-build
+# 	${DC} -f ${DC_PREFIX}-run-frontend.yml up -d
 
-frontend-log:
-	${DC} -f ${DC_PREFIX}-run-frontend.yml log
+# frontend-log:
+# 	${DC} -f ${DC_PREFIX}-run-frontend.yml log
 
-stop: backend-stop elasticsearch-stop kibana-stop postgres-stop 
-	@echo all components stopped
+# stop: backend-stop elasticsearch-stop kibana-stop postgres-stop 
+# 	@echo all components stopped
 
-start-all: start postgres
-	@echo all components started, please enter following command to supervise: 
+# start-all: start postgres
+# 	@echo all components started, please enter following command to supervise: 
 
-start: elasticsearch kibana backend frontend
-	@echo all components started
+# start: elasticsearch kibana backend frontend
+# 	@echo all components started
 
 
