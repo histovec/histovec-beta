@@ -6,7 +6,7 @@ server {
   	proxy_pass http://frontend-dev:8080;
   }
 
-  location ~ (^/<APP>) {
+  location /<APP> {
         proxy_pass http://frontend-dev:8080;
   }
 
