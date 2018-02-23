@@ -30,7 +30,7 @@ def deepupdate(original, update):
     Subdict's won't be overwritten but also updated.
     """
 	print(original)
-	if (isinstance(original, dict)):   
+	if (isinstance(original, dict)):
 		for key, value in original.items():
 		# python3 for key, value in original.items():
 			if key not in update:
@@ -75,4 +75,3 @@ def read_conf_dir(conf_dir,cfg):
 				except:
 					cfg["global"]["paths"][path]["files"][filename]="yaml is ko - "+log.err()
 	return cfg
-

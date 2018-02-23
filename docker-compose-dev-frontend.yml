@@ -15,7 +15,6 @@ version: '2'
 # - assume you docker images with a custum managed repo
 # - securize nginx routes allowing only stricly needed routes of API
 # - build the static files from node frontend and put them to the nginx
-# - build a cluster for elasticsearch
 # - use real volumes : S3-like storage for configurations (using volumes) of front and back,
 #   and DB-storage for ES volume like SSD volumes (or memory storage still better)
 
@@ -56,4 +55,3 @@ networks:
   default:
     external:
       name: ${APP}
- 

@@ -14,6 +14,8 @@ services:
       - ${BACKEND}/code/:/${APP}/code/
       - ${BACKEND}/conf/:/${APP}/conf/
       - ${BACKEND}/log:/log/
+      - ${BACKEND}/upload:/upload/
+
     restart: always
 
 networks:
