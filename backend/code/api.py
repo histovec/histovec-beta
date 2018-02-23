@@ -38,29 +38,11 @@ api=Api(app,version="0.1",title=os.environ['APP'],description="API in developpem
 app.config['APPLICATION_ROOT']="/"+os.environ['APP']+config.conf["global"]["api"]["prefix"]
 
 
-
-@api.route('/uploadOne/', endpoint='uploadone')
-class UploadOne(Resource):
-	@api.expect(parsers.upload_parser2)
-	def post(self):
-		'''upload one data file, .gz or .txt or .csv'''
-		response={"upload_status":{}}
-		args = parsers.upload_parser2.parse_args()
-		if (allowed_upload_file(args['in_file'].filename)):
-			try:
-				args['in_file'].save(os.path.join(config.conf["global"]["paths"]["upload"], secure_filename(args['in_file'].filename)))
-				response["upload_status"][args['in_file'].filename]="ok"
-			except:
-				response["upload_status"][args['in_file'].filename]=log.err()
-		else:
-			response["upload_status"][args['in_file'].filename]="extension not allowed"
-		return response
-
-@api.route('/getOne/<file>', endpoint='getone/<file>')
+@api.route('/download/<file>', endpoint='download/<file>')
 @api.doc(parmas={'file': 'file name of a previously uploaded file'})
-class GetOne(Resource):
+class Download(Resource):
 	def get(self,file):
-		'''get your uploaded file'''
+		'''download your uploaded file'''
 		available=False
 		pfile=os.path.join(config.conf["global"]["paths"]["upload"],file)
 		filePreview = ''
@@ -76,11 +58,6 @@ class GetOne(Resource):
 		return send_file(pfile,mimetype='text/csv')
 
 
-
-
-# begining original
-
-
 @api.route('/conf/', endpoint='conf' )
 class Conf(Resource):
 	def get(self):
@@ -91,44 +68,31 @@ class Conf(Resource):
 		except:
 			return {"error": "problem while reading conf"}
 
-
-
 @api.route('/upload/', endpoint='upload')
 class Upload(Resource):
 	def get(self):
 		'''list uploaded resources'''
 		return list([filenames for root, dirnames, filenames in os.walk(config.conf["global"]["paths"]["upload"])])[0]
 
-	@api.expect(parsers.upload_parser)
+	@api.expect(parsers.upload_parser2)
 	def post(self):
-		'''upload multiple tabular data files, .gz or .txt or .csv'''
+		'''upload a csv or txt or gz'''
 		response={"upload_status":{}}
-		args = parsers.upload_parser.parse_args()
-		for file in args['file']:
-			if (allowed_upload_file(file.filename)):
-				try:
-					file.save(os.path.join(config.conf["global"]["paths"]["upload"], secure_filename(file.filename)))
-					response["upload_status"][file.filename]="ok"
-				except:
-					response["upload_status"][file.filename]=log.err()
-			else:
-				response["upload_status"][file.filename]="extension not allowed"
+		args = parsers.upload_parser2.parse_args()
+		if (allowed_upload_file(args['in_file'].filename)):
+			try:
+				args['in_file'].save(os.path.join(config.conf["global"]["paths"]["upload"], secure_filename(args['in_file'].filename)))
+				response["upload_status"][args['in_file'].filename]="ok"
+			except:
+				response["upload_status"][args['in_file'].filename]=log.err()
+		else:
+			response["upload_status"][args['in_file'].filename]="extension not allowed"
 		return response
 
-@api.route('/upload/<file>', endpoint='upload/<file>')
+
+@api.route('/delete/<file>', endpoint='delete/<file>')
 @api.doc(parmas={'file': 'file name of a previously uploaded file'})
 class actionFile(Resource):
-	def get(self,file):
-		'''get back uploaded file'''
-		filetype="unknown"
-		pfile=os.path.join(config.conf["global"]["paths"]["upload"],file)
-		try:
-			df=pd.read_csv(pfile,nrows=100)
-			filetype="csv"
-		except:
-			pass
-		return {"file": df, "type_guessed": filetype}
-
 	def delete(self,file):
 		'''deleted uploaded file'''
 		try:
@@ -137,9 +101,6 @@ class actionFile(Resource):
 			return {"file": file, "status": "deleted"}
 		except:
 			api.abort(404,{"file": file, "status": log.err()})
-
-
-
 
 # end original
 
