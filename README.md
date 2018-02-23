@@ -8,7 +8,6 @@ Some stack has to be choosen here, even the components may be changed:
 - proxy : nginx - could be Apache as well
 - frontend : Vue.js - could be any npm framework
 - backend : Python + FlaskRestPlus - could by any api framework
-- database : Elasticsearch + PostGreSQL -  could be any wished stack
 
 This is the first draft of making something quite neutral, but still derived from the matchID project. But it should take you small minutes to move it to your own playground.
 
@@ -29,4 +28,3 @@ to stop:
 ```
 make dev-stop
 ```
-

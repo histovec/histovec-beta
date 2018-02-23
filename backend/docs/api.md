@@ -30,9 +30,6 @@ $curl -s -XGET http://localhost:8080/matchID/api/v0/recipes/
 ]
 ```
 
-Before running a recipe you first have to have a configured elasticsearch. Default provided conf supposes elasticsearch to be onto "elasticsearch:9200".
-You can change it in conf/connectors/connectors.yml
-
 Then you're ready for a first matching with the two test datasets.
 
 ```
