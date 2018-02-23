@@ -12,4 +12,8 @@ global:
     verbose: True
     level: 1
   paths:
-    upload: upload
+    upload: ../upload
+  data_extensions:
+    - csv
+    - txt
+    - gz

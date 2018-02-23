@@ -12,7 +12,7 @@ import simplejson
 from collections import OrderedDict
 
 ### api dependecies
-from flask import Flask,jsonify,Response, abort,request
+from flask import Flask,jsonify,Response, abort,request,send_file
 from flask_restplus import Resource,Api,reqparse
 from werkzeug.utils import secure_filename
 from werkzeug.serving import run_simple
@@ -22,6 +22,7 @@ from werkzeug.wsgi import DispatcherMiddleware
 import parsers
 import log
 import config
+import pandas as pd
 
 def allowed_upload_file(filename=None):
     return '.' in filename and \
@@ -42,27 +43,37 @@ app.config['APPLICATION_ROOT']="/"+os.environ['APP']+config.conf["global"]["api"
 class UploadOne(Resource):
 	@api.expect(parsers.upload_parser2)
 	def post(self):
-		'''upload data file, .gz or .txt or .csv'''
+		'''upload one data file, .gz or .txt or .csv'''
 		response={"upload_status":{}}
 		args = parsers.upload_parser2.parse_args()
-		response = { 't' : str(args.items()) }
-		print( 'args before for ', args)
-		# print( file4, type(file4) )
-		for count in range(0,50):
-			print('-'*50,count)
-		pass
-		# if (allowed_upload_file(file.filename)):
-		# 	try:
-		# 		file.save(os.path.join(config.conf["global"]["paths"]["upload"], secure_filename(file.filename)))
-		# 		response["upload_status"][file.filename]="ok"
-		# 	except:
-		# 		response["upload_status"][file.filename]=log.err()
-		# else:
-		# 	response["upload_status"][file.filename]="extension not allowed"
+		if (allowed_upload_file(args['in_file'].filename)):
+			try:
+				args['in_file'].save(os.path.join(config.conf["global"]["paths"]["upload"], secure_filename(args['in_file'].filename)))
+				response["upload_status"][args['in_file'].filename]="ok"
+			except:
+				response["upload_status"][args['in_file'].filename]=log.err()
+		else:
+			response["upload_status"][args['in_file'].filename]="extension not allowed"
 		return response
 
-
-
+@api.route('/getOne/<file>', endpoint='getone/<file>')
+@api.doc(parmas={'file': 'file name of a previously uploaded file'})
+class GetOne(Resource):
+	def get(self,file):
+		'''get your uploaded file'''
+		available=False
+		pfile=os.path.join(config.conf["global"]["paths"]["upload"],file)
+		filePreview = ''
+		try:
+			df=pd.read_csv(pfile,nrows=100)
+			# print(df)
+			# filePreview = str(df)[:50] + '...'
+			available=True
+		except:
+			pass
+		# return {"filePath": pfile, 'filePreview':filePreview , "available": available}
+		# return send_from_directory(directory=config.conf["global"]["paths"]["upload"],filename=file)
+		return send_file(pfile,mimetype='text/csv')
 
 
 
@@ -116,7 +127,7 @@ class actionFile(Resource):
 			filetype="csv"
 		except:
 			pass
-		return {"file": file, "type_guessed": filetype}
+		return {"file": df, "type_guessed": filetype}
 
 	def delete(self,file):
 		'''deleted uploaded file'''
