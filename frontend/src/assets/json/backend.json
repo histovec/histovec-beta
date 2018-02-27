@@ -1,5 +1,5 @@
 {
     "api": {
-        "url": "/myfabapp/api/v0/"
+        "url": "/<APP>/api/v0/"
     }
 }
