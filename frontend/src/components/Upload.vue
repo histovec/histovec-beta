@@ -4,7 +4,7 @@
   <div class="container">
     <!--UPLOAD-->
     <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-      <h1>Upload images {{ envVars }}</h1>
+      <h1>Upload images</h1>
       <div class="dropbox">
         <input type="file" multiple :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept=".csv" class="input-file">
         <p v-if="isInitial">
@@ -99,7 +99,6 @@ export default {
   name: 'app',
   data () {
     return {
-      envVars: process.env,
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
