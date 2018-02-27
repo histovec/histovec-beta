@@ -1,15 +1,10 @@
 <template>
   <div id="app">
-    <!-- <header>
-      <navigation></navigation>
-    </header> -->
-
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Navigation from './components/Navigation'
 import Vue from 'vue'
 import VueCodeMirror from 'vue-codemirror'
 import VueClipboard from 'vue-clipboard2'
@@ -42,10 +37,7 @@ Vue.mixin({
 })
 
 export default {
-  name: 'app',
-  components: {
-    Navigation
-  }
+  name: 'app'
 }
 </script>
 
