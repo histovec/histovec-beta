@@ -13,7 +13,7 @@ yaml_parser.add_argument('yaml',
 
 upload_parser = reqparse.RequestParser()
 upload_parser.add_argument('file', location='files',
-                           type=FileStorage, action='append', required=True, help='data file : csv, ...')
+                           type=FileStorage, action='append', required=True, help='files : csv, ... For test, use POSTMAN because swagger does not work')
 live_parser = reqparse.RequestParser()
 live_parser.add_argument('file', location='files',
                            type=FileStorage, required=True, help='data file : csv, ...')
