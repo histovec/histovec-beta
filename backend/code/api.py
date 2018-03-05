@@ -12,7 +12,7 @@ import simplejson
 from collections import OrderedDict
 
 ### api dependecies
-from flask import Flask,jsonify,Response, abort,request,send_file
+from flask import Flask, jsonify, Response, abort, request, send_file
 from flask_restplus import Resource,Api,reqparse
 from werkzeug.utils import secure_filename
 from werkzeug.serving import run_simple
@@ -47,36 +47,39 @@ class Download(Resource):
 		pfile=os.path.join(config.conf["global"]["paths"]["upload"],file)
 		filePreview = ''
 		try:
-			df=pd.read_csv(pfile,nrows=100)
+			# df=pd.read_csv(pfile,nrows=100)
 			# print(df)
 			# filePreview = str(df)[:50] + '...'
-			available=True
+			# available=True
+			return send_file(pfile)
 		except:
-			pass
+			return {"error": "problem while sending you the file"}
 		# return {"filePath": pfile, 'filePreview':filePreview , "available": available}
 		# return send_from_directory(directory=config.conf["global"]["paths"]["upload"],filename=file)
-		return send_file(pfile,mimetype='text/csv')
+		# return send_file(pfile,mimetype='text/csv')
 
 
 @api.route('/conf/', endpoint='conf' )
 class Conf(Resource):
 	def get(self):
-		'''get all configured elements'''
+		'''get configuration'''
 		try:
 			config.read_conf()
 			return config.conf["global"]
 		except:
 			return {"error": "problem while reading conf"}
 
-@api.route('/upload/', endpoint='upload')
-class Upload(Resource):
+@api.route('/uploaded/', endpoint='uploaded')
+class Uploaded(Resource):
 	def get(self):
-		'''list uploaded resources'''
+		'''list of uploaded resources'''
 		return list([filenames for root, dirnames, filenames in os.walk(config.conf["global"]["paths"]["upload"])])[0]
 
+@api.route('/uploadone/', endpoint='uploadone')
+class UploadOne(Resource):
 	@api.expect(parsers.upload_parser2)
 	def post(self):
-		'''upload a csv or txt or gz'''
+		'''upload one file'''
 		response={"upload_status":{}}
 		args = parsers.upload_parser2.parse_args()
 		if (allowed_upload_file(args['in_file'].filename)):
@@ -89,6 +92,23 @@ class Upload(Resource):
 			response["upload_status"][args['in_file'].filename]="extension not allowed"
 		return response
 
+@api.route('/uploadmany/', endpoint='uploadmany')
+class UploadMany(Resource):
+	@api.expect(parsers.upload_parser)
+	def post(self):
+		'''upload many files at once'''
+		response={"upload_status":{}}
+		args = parsers.upload_parser.parse_args()
+		for fileEntity in args['file']:
+			if (allowed_upload_file(fileEntity.filename)):
+				try:
+					fileEntity.save(os.path.join(config.conf["global"]["paths"]["upload"], secure_filename(fileEntity.filename)))
+					response["upload_status"][fileEntity.filename]="ok"
+				except:
+					response["upload_status"][fileEntity.filename]=log.err()
+			else:
+				response["upload_status"][fileEntity.filename]="extension not allowed"
+		return response
 
 @api.route('/delete/<file>', endpoint='delete/<file>')
 @api.doc(parmas={'file': 'file name of a previously uploaded file'})

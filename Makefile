@@ -1,4 +1,4 @@
-export APP=myfabapp
+export APP=starterapp
 export APP_PATH := $(shell pwd)
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend

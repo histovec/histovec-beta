@@ -40,6 +40,8 @@ services:
         app_path: /${APP}
         app_name: ${APP}
     image: ${APP}-frontend-dev:latest
+    environment:
+      - APP=${APP}
     container_name: ${APP}-frontend-dev
     volumes:
       - ${FRONTEND}/index.html:/${APP}/index.html

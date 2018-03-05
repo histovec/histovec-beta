@@ -12,8 +12,84 @@ global:
     verbose: True
     level: 1
   paths:
-    upload: ../upload
+    upload: /upload
   data_extensions:
     - csv
     - txt
     - gz
+    - doc
+    - docx
+    - odt
+    - pdf
+    - jpg
+    - jpeg
+    - png
+    - gif
+    - xls
+    - xlsx
+    - ods
+    - ppt
+    - pptx
+    - 7z
+    - ACEARC
+    - ARJ
+    - B1
+    - Cabinet
+    - cfs
+    - cpt
+    - dar
+    - DGCA
+    - dmg
+    - egg
+    - kgb
+    - LHA
+    - LZX
+    - MPQ
+    - PEA
+    - RAR
+    - rzip
+    - sit
+    - SQX
+    - UDA
+    - Xar
+    - zoo
+    - ZIP
+    - ZPAQ
+    - ar
+    - cpio
+    - shar
+    - tar
+    - LBR
+    - WAD
+    - bzip2
+    - gzip
+    - lzip
+    - LZMA
+    - lzop
+    - xz
+    - SQ
+    - APK
+    - deb
+    - apk
+    - macOS
+    - RPM
+    - MSI
+    - JAR
+    - WAR
+    - Java
+    - RAR
+    - EAR
+    - js
+    - py
+    - bash
+    - css
+    - gitignore
+    - scss
+    - less
+    - svg
+    - json
+    - vue
+    - yml
+    - md
+    - conf
+    - fwf
