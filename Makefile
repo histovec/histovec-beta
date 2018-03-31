@@ -1,4 +1,14 @@
+##############################################
+# WARNING : THIS FILE SHOULDN'T BE TOUCHED   #
+#    FOR ENVIRONNEMENT CONFIGURATION         #
+# CONFIGURABLE VARIABLES SHOULD BE OVERRIDED #
+# IN THE 'artifacts' FILE, AS NOT COMMITTED  #
+##############################################
+
+
+export PORT=80
 export APP=starterapp
+export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend
@@ -7,6 +17,9 @@ export DC_PREFIX=${DC_DIR}/docker-compose
 
 date                := $(shell date -I)
 id                  := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+
+dummy               := $(shell touch artifacts)
+include ./artifacts
 
 DC := 'docker-compose'
 

@@ -27,7 +27,7 @@ services:
     volumes:
       - ${APP_PATH}/nginx/nginx-dev.template:/etc/nginx/conf.d/default.template
     ports:
-      - "80:80"
+      - ${PORT}:80
     command: /bin/bash -c '(sed "s/<APP>/${APP}/g" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && nginx -g "daemon off;"'
     restart: always
 
@@ -40,6 +40,7 @@ services:
         app_path: /${APP}
         app_name: ${APP}
     image: ${APP}-frontend-dev:latest
+    container_name: ${APP}-frontend-dev
     environment:
       - APP=${APP}
     container_name: ${APP}-frontend-dev

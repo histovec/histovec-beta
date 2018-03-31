@@ -12,7 +12,7 @@ services:
       args:
         proxy: ${http_proxy}
     image: matchid-frontend:latest
-    container_name: matchid-build-front
+    container_name: ${APP}-build-front
     volumes:
       - ${FRONTEND}/index.html:/matchid/index.html
       - ${FRONTEND}/.babelrc:/matchid/.babelrc
