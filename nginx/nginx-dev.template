@@ -1,5 +1,6 @@
 server {
   listen 80 default_server;
+  include tor-ip.conf;
 
   # frontend (dev, npm server)
   location / {
@@ -8,6 +9,10 @@ server {
 
   location /<APP> {
         proxy_pass http://frontend-dev:8080;
+  }
+
+  location /assets {
+    alias /usr/share/nginx/html/assets;
   }
 
   # backend RESTful API
@@ -26,4 +31,11 @@ server {
     proxy_set_header Connection "upgrade";
   }
 
+  location ~ .*/(_search).* {
+    proxy_pass http://elasticsearch:9200;
+    proxy_redirect off;
+    proxy_buffering off;
+    proxy_http_version 1.1;
+
+  }
 }

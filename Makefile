@@ -15,6 +15,8 @@ export FRONTEND=${APP_PATH}/frontend
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 
+export ES_MEM=512m
+
 date                := $(shell date -I)
 id                  := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 
@@ -37,6 +39,19 @@ network-stop:
 network:
 	@docker network create ${APP} 2> /dev/null; true
 
+tor:
+ifeq ("$(wildcard nginx/tor-ip.conf)","") 
+	wget -q https://www.dan.me.uk/torlist/ -O - | sed "s/^/deny /g; s/$/;/g" >  nginx/tor-ip.conf
+endif
+
+elasticsearch:
+ifeq ("$(wildcard ${BACKEND}/esdata/)","")
+	@echo creating elasticsearch data directory
+	@mkdir -p ${BACKEND}/esdata
+	@chmod 777 ${BACKEND}/esdata/.
+endif
+	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d
+
 backend-stop:
 	${DC} -f ${DC_PREFIX}-backend.yml down
 
@@ -46,7 +61,7 @@ backend: network
 backend-log:
 	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d
 
-frontend-dev: network
+frontend-dev: network tor
 	@echo docker-compose up frontend for dev
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate
 
@@ -57,7 +72,7 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network backend frontend-dev
+dev: network backend elasticsearch frontend-dev
 
 dev-stop: backend-stop frontend-dev-stop network-stop
 

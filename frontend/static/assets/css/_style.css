@@ -1,0 +1,88 @@
+@charset "utf-8";
+/* CSS Document */
+
+.title-logo {
+	background-image:url("../images/logo_dsic_250.png");
+	background-position:center top;
+	background-repeat:no-repeat;
+	color:#000;
+	font-family:"Muli", "Lato", sans-serif;
+	font-size:2.3em;
+	font-weight:300;
+	height:200px;
+	margin-bottom:10px;
+	padding-top:70px;
+	text-align:center;
+}
+.retr_pl_sit a {
+	padding:0 0 0 10px;
+	text-decoration:none;
+}
+.retr_pl_sit a:hover {
+	padding-left:15px;
+}
+.color-success {
+	color:#5cb85c;
+}
+.color-info {
+	color:#5bc0de;
+}
+.color-warning {
+	color:#f0ad4e;
+}
+.color-danger {
+	color:#d9534f;
+}
+.color-primary {
+	color:#337ab7;
+}
+.txt-small {
+	font-size:9px;
+}
+.info_red {
+	font-weight:400;
+	color:#900;
+}
+.bold {
+	font-weight:bold;
+}
+
+/* Alerts vignette
+---------------------------------- */
+.alert {
+	margin:20px 0;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius:5px;
+	border:none;
+}
+.alert-0 {
+	color:#fff;
+	background-color:#407337;
+}
+.alert-1 {
+	color:#fff;
+	background-color:#7b4787;
+}
+.alert-2 {
+	color:#f6da53;
+	background-color:#edbd37;
+}
+.alert-3 {
+	color:#fff;
+	background-color:#e88939;
+}
+.alert-4 {
+	color:#fff;
+	background-color:#4a252c;
+}
+.alert-5 {
+	color:#fff;
+	background-color:#4a4643;
+}
+h6 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform:uppercase;
+}
+
