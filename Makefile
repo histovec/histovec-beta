@@ -20,6 +20,8 @@ export ES_MEM=512m
 date                := $(shell date -I)
 id                  := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 
+vm_max_count		:= $(shell cat /etc/sysctl.conf | egrep vm.max_map_count\s*=\s*262144 && echo true)
+
 dummy               := $(shell touch artifacts)
 include ./artifacts
 
@@ -44,7 +46,13 @@ ifeq ("$(wildcard nginx/tor-ip.conf)","")
 	wget -q https://www.dan.me.uk/torlist/ -O - | sed "s/^/deny /g; s/$/;/g" >  nginx/tor-ip.conf
 endif
 
-elasticsearch:
+vm_max:
+ifeq ("$(vm_max_count)", "")
+	@echo updating vm.max_map_count $(vm_max_count) to 262144
+	sudo sysctl -w vm.max_map_count=262144
+endif
+
+elasticsearch: vm_max
 ifeq ("$(wildcard ${BACKEND}/esdata/)","")
 	@echo creating elasticsearch data directory
 	@mkdir -p ${BACKEND}/esdata
