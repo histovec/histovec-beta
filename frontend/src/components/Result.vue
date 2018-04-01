@@ -10,7 +10,7 @@
   </div>
   <!-- breadcrumb end -->
   <!-- main-container start -->
-  <div class="main-container">
+  <div class="main-container" v-if="this.display">
     <div class="row">
       <!-- main start -->
       <div class="main col-md-12">
@@ -698,6 +698,10 @@
       </div>
     </div>
   </div>
+
+  <div class="main-container" v-else>
+    <div class="alert alert-info" role="alert"> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
+  </div>
   </section>
 </template>
 
@@ -825,7 +829,6 @@ export default {
         }
       }
     }).then(response => {
-      console.log(response)
       response = response.hits.hits[0]
       this.vin = response.cveh_num_identif
       this.vehicule.caracteristiques.vin = response._source.cveh_num_identif
@@ -835,7 +838,7 @@ export default {
       this.vehicule.caracteristiques.marque = response._source.ctec_marque
       this.vehicule.caracteristiques.modele = response._source.ctec_denom_com
       this.vehicule.certificat.premier = response._source.dos_date_prem_immat
-      console.log(this.vehicule)
+      this.display = true
     })
   }
 }
