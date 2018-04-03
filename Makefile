@@ -43,7 +43,7 @@ network:
 
 tor:
 ifeq ("$(wildcard nginx/tor-ip.conf)","") 
-	wget -q https://www.dan.me.uk/torlist/ -O - | sed "s/^/deny /g; s/$/;/g" >  nginx/tor-ip.conf
+	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
 endif
 
 vm_max:
