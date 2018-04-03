@@ -17,7 +17,7 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-window-maximize"></i> Numéro - Plaque d'immatriculation : {{ vehicule.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-window-maximize"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
           <div class="col-sm-5">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
@@ -43,33 +43,33 @@
           <div class="tab-content">
             <div class="tab-pane fade in active" id="vtab1">
               <h6 class="title">Caractéristiques technique</h6>
-              <!-- debut tableau vehicule -->
+              <!-- debut tableau v.-->
               <table class="table table-striped table-responsive" >
                 <tbody>
                 <tr>
                   <td class="rd_w350">Marque</td>
                   <td class="bold rd_w150">D.1</td>
-                  <td class="info_red rd_w250">{{ vehicule.caracteristiques.marque }}</td>
+                  <td class="info_red rd_w250">{{ v.ctec.marque }}</td>
                 </tr>
                 <tr>
                   <td>Tvv</td>
                   <td class="bold">D.2</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.tvv }}</td>
+                  <td class="info_red">{{ v.ctec.tvv }}</td>
                 </tr>
                 <tr>
                   <td>Nom commercial</td>
                   <td class="bold">D.3</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.modele }}</td>
+                  <td class="info_red">{{ v.ctec.modele }}</td>
                 </tr>
                 <tr>
                   <td>Numéro CNIT</td>
                   <td class="bold">D.2.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.cnit }}</td>
+                  <td class="info_red">{{ v.ctec.cnit }}</td>
                 </tr>
                 <tr>
                   <td>Couleur</td>
                   <td class="bold">&nbsp;</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.couleurs }}</td>
+                  <td class="info_red">{{ v.ctec.couleur }}</td>
                 </tr>
                 <tr>
                   <td>Type de reception</td>
@@ -82,7 +82,7 @@
                 <tr>
                   <td>Numéro d'identification véhicule</td>
                   <td class="bold">E</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.vin }}</td>
+                  <td class="info_red">{{ v.ctec.vin }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -90,17 +90,17 @@
                 <tr>
                   <td>PT technique admissible (kg)</td>
                   <td class="bold">F.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.PT.admissible }}</td>
+                  <td class="info_red">{{ v.ctec.PT.admissible }}</td>
                 </tr>
                 <tr>
                   <td>PTAC (kg)</td>
                   <td class="bold">F.2</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.PT.AC }}</td>
+                  <td class="info_red">{{ v.ctec.PT.AC }}</td>
                 </tr>
                 <tr>
                   <td>PTRA (kg)</td>
                   <td class="bold">F.3</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.PT.RA }}</td>
+                  <td class="info_red">{{ v.ctec.PT.RA }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -108,12 +108,12 @@
                 <tr>
                   <td>PT en service (kg)</td>
                   <td class="bold">G</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.PT.service }}</td>
+                  <td class="info_red">{{ v.ctec.PT.service }}</td>
                 </tr>
                 <tr>
                   <td>PTAV (kg)</td>
                   <td class="bold">G.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.PT.AV }}</td>
+                  <td class="info_red">{{ v.ctec.PT.AV }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -121,22 +121,22 @@
                 <tr>
                   <td>Catégorie (Ce)</td>
                   <td class="bold">J</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.categorie }}</td>
+                  <td class="info_red">{{ v.ctec.categorie }}</td>
                 </tr>
                 <tr>
                   <td>Genre (National)</td>
                   <td class="bold">J.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.genre }}</td>
+                  <td class="info_red">{{ v.ctec.genre }}</td>
                 </tr>
                 <tr>
                   <td>Carrosserie (Ce)</td>
                   <td class="bold">J.2</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.carrosserie.ce }}</td>
+                  <td class="info_red">{{ v.ctec.carrosserie.ce }}</td>
                 </tr>
                 <tr>
                   <td>Carrosserie (National)</td>
                   <td class="bold">J.3</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.carrosserie.national }}</td>
+                  <td class="info_red">{{ v.ctec.carrosserie.national }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -144,7 +144,7 @@
                 <tr>
                   <td>Numéro de réception</td>
                   <td class="bold">K</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.reception.numero }}</td>
+                  <td class="info_red">{{ v.ctec.reception.numero }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -152,22 +152,22 @@
                 <tr>
                   <td>Cylindrée (cm3)</td>
                   <td class="bold">P.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.puissance.cylindres }}</td>
+                  <td class="info_red">{{ v.ctec.puissance.cylindres }}</td>
                 </tr>
                 <tr>
                   <td>Puissance nette max (kW)</td>
                   <td class="bold">P.2</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.puissance.nette }}</td>
+                  <td class="info_red">{{ v.ctec.puissance.nette }}</td>
                 </tr>
                 <tr>
                   <td>Energie</td>
                   <td class="bold">P.3</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.energie }}</td>
+                  <td class="info_red">{{ v.ctec.energie }}</td>
                 </tr>
                 <tr>
                   <td>Puissance CV</td>
                   <td class="bold">P.6</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.puissance.cv }}</td>
+                  <td class="info_red">{{ v.ctec.puissance.cv }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -175,7 +175,7 @@
                 <tr>
                   <td>Puissance / masse (kW/kg)</td>
                   <td class="bold">Q</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.puissance.norm }}</td>
+                  <td class="info_red">{{ v.ctec.puissance.norm }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -183,12 +183,12 @@
                 <tr>
                   <td>Places assises</td>
                   <td class="bold">S.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.places.assis }}</td>
+                  <td class="info_red">{{ v.ctec.places.assis }}</td>
                 </tr>
                 <tr>
                   <td>Pace debout</td>
                   <td class="bold">S.3</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.places.debout }}</td>
+                  <td class="info_red">{{ v.ctec.places.debout }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -196,12 +196,12 @@
                 <tr>
                   <td>Niveau sonore (db(A))</td>
                   <td class="bold">U.1</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.db }}</td>
+                  <td class="info_red">{{ v.ctec.db }}</td>
                 </tr>
                 <tr>
                   <td>Vitesse moteur (min-1)</td>
                   <td class="bold">U.2</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.moteur }}</td>
+                  <td class="info_red">{{ v.ctec.moteur }}</td>
                 </tr>
                 <tr>
                   <td colspan="3">&nbsp;</td>
@@ -209,16 +209,16 @@
                 <tr>
                   <td>CO2 (g/km)</td>
                   <td class="bold">V.7</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.co2 }}</td>
+                  <td class="info_red">{{ v.ctec.co2 }}</td>
                 </tr>
                 <tr>
                   <td>Classe environnement (CE)</td>
                   <td class="bold">V.9</td>
-                  <td class="info_red">{{ vehicule.caracteristiques.environnement }}</td>
+                  <td class="info_red">{{ v.ctec.environnement }}</td>
                 </tr>
               </tbody>
               </table>
-              <!-- fin tableau vehicule -->
+              <!-- fin tableau v.-->
               <!-- debut tableau controle technique -->
               <table class="table table-striped table-responsive" >
               <tbody>
@@ -228,20 +228,20 @@
                 <tr>
                   <td class="bold">OTC</td>
                   <td>Résultat</td>
-                  <td><span class="label label-success">{{ vehicule.controle.otc.resultat }}</span></td>
+                  <td><span class="label label-success">{{ v.controle.otc.resultat }}</span></td>
                   <td>Date du contrôle</td>
-                  <td class="info_red">{{ vehicule.controle.otc.date }}</td>
+                  <td class="info_red">{{ v.controle.otc.date }}</td>
                   <td>Fin de validité</td>
-                  <td class="info_red">{{ vehicule.controle.otc.validite }}</td>
+                  <td class="info_red">{{ v.controle.otc.validite }}</td>
                 </tr>
                 <tr>
                   <td class="bold">SIV</td>
                   <td>Résultat</td>
-                  <td><span class="label label-warning">{{ vehicule.controle.siv.resultat }}</span></td>
+                  <td><span class="label label-warning">{{ v.controle.siv.resultat }}</span></td>
                   <td>Date du contrôle</td>
-                  <td class="info_red">{{ vehicule.controle.siv.date }}</td>
+                  <td class="info_red">{{ v.controle.siv.date }}</td>
                   <td>Fin de validité</td>
-                  <td class="info_red">{{ vehicule.controle.siv.validite }}</td>
+                  <td class="info_red">{{ v.controle.siv.validite }}</td>
                 </tr>
               </tbody>
               </table>
@@ -253,7 +253,7 @@
                   <td><h6>Mentions particulières</h6></td>
                 </tr>
                 <tr>
-                  <td><div class="alert alert-info" role="alert">{{ vehicule.mentions }}</div></td>
+                  <td><div class="alert alert-info" role="alert">{{ v.mentions }}</div></td>
                 </tr>
               </tbody>
               </table>
@@ -266,15 +266,15 @@
                 <tbody>
                 <tr >
                   <td class="rd_w350">Nature</td>
-                  <td class="info_red">{{ vehicule.titulaire.nature }}</td>
+                  <td class="info_red">{{ v.titulaire.nature }}</td>
                 </tr>
                 <tr>
                   <td>Identité</td>
-                  <td class="info_red">{{ vehicule.titulaire.identite }}</td>
+                  <td class="info_red">{{ v.titulaire.identite }}</td>
                 </tr>
                 <tr>
                   <td>Adresse</td>
-                  <td class="info_red">{{ vehicule.titulaire.adresse }}</td>
+                  <td class="info_red">{{ v.titulaire.adresse }}</td>
                 </tr>
               </tbody>
               </table>
@@ -285,11 +285,11 @@
                 <tbody>
                 <tr>
                   <td class="rd_w350">Date de première immatriculation</td>
-                  <td class="info_red">{{ vehicule.certificat.premier }}</td>
+                  <td class="info_red">{{ v.certificat.premier }}</td>
                 </tr>
                 <tr>
                   <td>Date du CI</td>
-                  <td class="info_red">{{ vehicule.certificat.courant }}</td>
+                  <td class="info_red">{{ v.certificat.courant }}</td>
                 </tr>
               </tbody>
               </table>
@@ -302,7 +302,7 @@
                 <table class="table table-responsive">
                   <tbody>
                   <tr>
-                    <td class="info_red">{{ vehicule.administratif.gages }}</td>
+                    <td class="info_red">{{ v.administratif.gages }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -314,7 +314,7 @@
                 <table class="table table-responsive">
                   <tbody>
                   <tr>
-                    <td class="info_red">{{ vehicule.administratif.oppositions }}</td>
+                    <td class="info_red">{{ v.administratif.oppositions }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -326,7 +326,7 @@
                 <table class="table table-responsive">
                   <tbody>
                   <tr>
-                    <td class="info_red">{{ vehicule.administratif.suspensions }}</td>
+                    <td class="info_red">{{ v.administratif.suspensions }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -338,7 +338,7 @@
                 <table class="table table-responsive">
                   <tbody>
                   <tr>
-                    <td class="info_red">{{ vehicule.administratif.procedures }}</td>
+                    <td class="info_red">{{ v.administratif.procedures }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -351,7 +351,7 @@
                   <tbody>
                   <tr>
                     <td>Etat de vol</td>
-                    <td class="info_red">{{ vehicule.administratif.vol }}</td>
+                    <td class="info_red">{{ v.administratif.vol }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -364,19 +364,19 @@
                   <tbody>
                   <tr>
                     <td>Etat de vol</td>
-                    <td class="info_red">{{ vehicule.administratif.titre.vol }}</td>
+                    <td class="info_red">{{ v.administratif.titre.vol }}</td>
                   </tr>
                   <tr>
                     <td>Etat de perte</td>
-                    <td class="info_red">{{ vehicule.administratif.titre.perte }}</td>
+                    <td class="info_red">{{ v.administratif.titre.perte }}</td>
                   </tr>
                   <tr>
                     <td>Duplicata</td>
-                    <td class="info_red">{{ vehicule.administratif.titre.duplicata }}</td>
+                    <td class="info_red">{{ v.administratif.titre.duplicata }}</td>
                   </tr>
                   <tr>
                     <td>Remise du titre</td>
-                    <td class="info_red">{{ vehicule.administratif.titre.remise }}</td>
+                    <td class="info_red">{{ v.administratif.titre.remise }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -397,7 +397,7 @@
                     <td class="rd_w350"><h6>Date</h6></td>
                     <td><h6>Nature</h6></td>
                   </tr>
-                  <tr v-for="(entry, index) in vehicule.historique"
+                  <tr v-for="(entry, index) in v.historique"
                      :key="index"
                   >
                     <td>{{ entry.date }}</td>  
@@ -423,36 +423,36 @@
         <div class="collapse" id="collapseContent">
           <div class="row">
             <div class="col-lg-12">
-              <!-- debut vehicule -->
+              <!-- debut v.-->
               <h6>Véhicule</h6>
               <div>
-                <!-- debut tableau vehicule -->
+                <!-- debut tableau v.-->
                 <table class="table table-striped table-responsive" >
                   <tbody>
                   <tr>
                     <td class="rd_w350">Marque</td>
                     <td class="bold rd_w150">D.1</td>
-                    <td class="info_red rd_w250">{{ vehicule.caracteristiques.marque }}</td>
+                    <td class="info_red rd_w250">{{ v.ctec.marque }}</td>
                   </tr>
                   <tr>
                     <td>Tvv</td>
                     <td class="bold">D.2</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.tvv }}</td>
+                    <td class="info_red">{{ v.ctec.tvv }}</td>
                   </tr>
                   <tr>
                     <td>Nom commercial</td>
                     <td class="bold">D.3</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.modele }}</td>
+                    <td class="info_red">{{ v.ctec.modele }}</td>
                   </tr>
                   <tr>
                     <td>Numéro CNIT</td>
                     <td class="bold">D.2.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.cnit }}</td>
+                    <td class="info_red">{{ v.ctec.cnit }}</td>
                   </tr>
                   <tr>
                     <td>Couleur</td>
                     <td class="bold">&nbsp;</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.couleur }}</td>
+                    <td class="info_red">{{ v.ctec.couleur }}</td>
                   </tr>
                   <tr>
                     <td>Type de reception</td>
@@ -465,7 +465,7 @@
                   <tr>
                     <td>Numéro d'identification véhicule</td>
                     <td class="bold">E</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.vin }}</td>
+                    <td class="info_red">{{ v.ctec.vin }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -473,17 +473,17 @@
                   <tr>
                     <td>PT technique admissible (kg)</td>
                     <td class="bold">F.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.PT.admissible }}</td>
+                    <td class="info_red">{{ v.ctec.PT.admissible }}</td>
                   </tr>
                   <tr>
                     <td>PTAC (kg)</td>
                     <td class="bold">F.2</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.PT.AC }}</td>
+                    <td class="info_red">{{ v.ctec.PT.AC }}</td>
                   </tr>
                   <tr>
                     <td>PTRA (kg)</td>
                     <td class="bold">F.3</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.PT.RA }}</td>
+                    <td class="info_red">{{ v.ctec.PT.RA }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -491,12 +491,12 @@
                   <tr>
                     <td>PT en service (kg)</td>
                     <td class="bold">G</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.PT.service }}</td>
+                    <td class="info_red">{{ v.ctec.PT.service }}</td>
                   </tr>
                   <tr>
                     <td>PTAV (kg)</td>
                     <td class="bold">G.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.PT.AV }}</td>
+                    <td class="info_red">{{ v.ctec.PT.AV }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -504,22 +504,22 @@
                   <tr>
                     <td>Catégorie (Ce)</td>
                     <td class="bold">J</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.categorie }}</td>
+                    <td class="info_red">{{ v.ctec.categorie }}</td>
                   </tr>
                   <tr>
                     <td>Genre (National)</td>
                     <td class="bold">J.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.genre }}</td>
+                    <td class="info_red">{{ v.ctec.genre }}</td>
                   </tr>
                   <tr>
                     <td>Carrosserie (Ce)</td>
                     <td class="bold">J.2</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.carrosserie.ce }}</td>
+                    <td class="info_red">{{ v.ctec.carrosserie.ce }}</td>
                   </tr>
                   <tr>
                     <td>Carrosserie (National)</td>
                     <td class="bold">J.3</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.carrosserie.national }}</td>
+                    <td class="info_red">{{ v.ctec.carrosserie.national }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -527,7 +527,7 @@
                   <tr>
                     <td>Numéro de réception</td>
                     <td class="bold">K</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.reception.numero }}</td>
+                    <td class="info_red">{{ v.ctec.reception.numero }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -535,22 +535,22 @@
                   <tr>
                     <td>Cylindrée (cm3)</td>
                     <td class="bold">P.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.puissance.cylindres }}</td>
+                    <td class="info_red">{{ v.ctec.puissance.cylindres }}</td>
                   </tr>
                   <tr>
                     <td>Puissance nette max (kW)</td>
                     <td class="bold">P.2</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.puissance.nette }}</td>
+                    <td class="info_red">{{ v.ctec.puissance.nette }}</td>
                   </tr>
                   <tr>
                     <td>Energie</td>
                     <td class="bold">P.3</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.energe }}</td>
+                    <td class="info_red">{{ v.ctec.energe }}</td>
                   </tr>
                   <tr>
                     <td>Puissance CV</td>
                     <td class="bold">P.6</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.puissance.cv }}</td>
+                    <td class="info_red">{{ v.ctec.puissance.cv }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -558,7 +558,7 @@
                   <tr>
                     <td>Puissance / masse (kW/kg)</td>
                     <td class="bold">Q</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.puissance.norm }}</td>
+                    <td class="info_red">{{ v.ctec.puissance.norm }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -566,12 +566,12 @@
                   <tr>
                     <td>Places assises</td>
                     <td class="bold">S.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.places.assis }}</td>
+                    <td class="info_red">{{ v.ctec.places.assis }}</td>
                   </tr>
                   <tr>
                     <td>Pace debout</td>
                     <td class="bold">S.3</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.places.debout }}</td>
+                    <td class="info_red">{{ v.ctec.places.debout }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -579,12 +579,12 @@
                   <tr>
                     <td>Niveau sonore (db(A))</td>
                     <td class="bold">U.1</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.db }}</td>
+                    <td class="info_red">{{ v.ctec.db }}</td>
                   </tr>
                   <tr>
                     <td>Vitesse moteur (min-1)</td>
                     <td class="bold">U.2</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.moteur }}</td>
+                    <td class="info_red">{{ v.ctec.moteur }}</td>
                   </tr>
                   <tr>
                     <td colspan="3">&nbsp;</td>
@@ -592,16 +592,16 @@
                   <tr>
                     <td>CO2 (g/km)</td>
                     <td class="bold">V.7</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.co2 }}</td>
+                    <td class="info_red">{{ v.ctec.co2 }}</td>
                   </tr>
                   <tr>
                     <td>Classe environnement (CE)</td>
                     <td class="bold">V.9</td>
-                    <td class="info_red">{{ vehicule.caracteristiques.environnement }}</td>
+                    <td class="info_red">{{ v.ctec.environnement }}</td>
                   </tr>
                 </tbody>
                 </table>
-                <!-- fin tableau vehicule -->
+                <!-- fin tableau v.-->
                 <div class="separator"></div>
                 <!-- debut tableau controle technique -->
                 <table class="table table-striped table-responsive" >
@@ -612,20 +612,20 @@
                   <tr>
                     <td class="bold">OTC</td>
                     <td>Résultat</td>
-                    <td><span class="label label-success">{{ vehicule.controle.otc.resultat }}</span></td>
+                    <td><span class="label label-success">{{ v.controle.otc.resultat }}</span></td>
                     <td>Date du contrôle</td>
-                    <td class="info_red">{{ vehicule.controle.otc.date }}</td>
+                    <td class="info_red">{{ v.controle.otc.date }}</td>
                     <td>Fin de validité</td>
-                    <td class="info_red">{{ vehicule.controle.otc.validite }}</td>
+                    <td class="info_red">{{ v.controle.otc.validite }}</td>
                   </tr>
                   <tr>
                     <td class="bold">SIV</td>
                     <td>Résultat</td>
-                    <td><span class="label label-warning">{{ vehicule.controle.siv.resultat }}</span></td>
+                    <td><span class="label label-warning">{{ v.controle.siv.resultat }}</span></td>
                     <td>Date du contrôle</td>
-                    <td class="info_red">{{ vehicule.controle.siv.date }}</td>
+                    <td class="info_red">{{ v.controle.siv.date }}</td>
                     <td>Fin de validité</td>
-                    <td class="info_red">{{ vehicule.controle.siv.validite }}</td>
+                    <td class="info_red">{{ v.controle.siv.validite }}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -638,13 +638,13 @@
                     <td><h6>Mentions particulières</h6></td>
                   </tr>
                   <tr>
-                    <td><div class="alert alert-info" role="alert"> {{ vehicule.mentions }}</div></td>
+                    <td><div class="alert alert-info" role="alert"> {{ v.mentions }}</div></td>
                   </tr>
                 </tbody>
                 </table>
                 <!-- fin mentions particuliéres -->
               </div>
-              <!-- fin vehicule -->
+              <!-- fin v.-->
               <div class="separator"></div>
               <h6 class="title">Titulaire et co-titulaires</h6>
               <!-- debut titulaire et co-titulaire -->
@@ -652,15 +652,15 @@
                 <tbody>
                 <tr >
                   <td class="rd_w350">Nature</td>
-                  <td class="info_red">{{ vehicule.titulaire.nature }}</td>
+                  <td class="info_red">{{ v.titulaire.nature }}</td>
                 </tr>
                 <tr>
                   <td>Identité</td>
-                  <td class="info_red">{{ vehicule.titulaire.identite }}</td>
+                  <td class="info_red">{{ v.titulaire.identite }}</td>
                 </tr>
                 <tr>
                   <td>Adresse</td>
-                  <td class="info_red">{{ vehicule.titulaire.adresse }}</td>
+                  <td class="info_red">{{ v.titulaire.adresse }}</td>
                 </tr>
               </tbody>
               </table>
@@ -671,11 +671,11 @@
                 <tbody>
                 <tr>
                   <td class="rd_w350">Date de première immatriculation</td>
-                  <td class="info_red">{{ vehicule.certificat.premier }}</td>
+                  <td class="info_red">{{ v.certificat.premier }}</td>
                 </tr>
                 <tr>
                   <td>Date du CI</td>
-                  <td class="info_red">{{ vehicule.certificat.courant }}</td>
+                  <td class="info_red">{{ v.certificat.courant }}</td>
                 </tr>
               </tbody>
               </table>
@@ -689,7 +689,7 @@
                   <td class="rd_w350"><h6>Date</h6></td>
                   <td><h6>Nature</h6></td>
                 </tr>
-                    <tr v-for="(entry, index) in vehicule.historique"
+                    <tr v-for="(entry, index) in v.historique"
                        :key="index"
                     >
                       <td>{{ entry.date }}</td>  
@@ -731,9 +731,9 @@ export default {
       display: false,
       conf: [],
       elasticsearch: null,
-      vehicule: {
+      v: {
         plaque: 'AA-555-AA',
-        caracteristiques: {
+        ctec: {
           marque: 'BMW',
           tvv: '390LVG91AA',
           modele: 'Série 3',
