@@ -85,4 +85,58 @@ h6 {
   font-weight: 700;
   text-transform:uppercase;
 }
+hr.style1{
+	border-top: 1px solid #ddd;
+}
+.marg_but{
+	margin:0 10px 10px 0;	
+}
+.no-margin {
+  margin:0 !important;
+}
+.no-padding {
+  padding:0 !important;
+}
+.no-margin-bottom {
+  margin-bottom:0 !important;
+}
+.no-margin-top {
+  margin-top:0 !important;
+}
+.no-margin-left {
+  margin-left:0 !important;
+}
+.no-margin-right {
+  margin-right:0 !important;
+}
+
+/* debut largeur colonne */
+.rd_w10 { width:10px; } .rd_w15 { width:15px; } .rd_w20 { width:20px; } .rd_w25 { width:25px; } .rd_w30 { width:30px; } .rd_w35 { width:35px; }
+.rd_w40 { width:40px; } .rd_w45 { width:45px; } .rd_w50 { width:50px; } .rd_w55 { width:55px; } .rd_w60 { width:60px; } .rd_w65 { width:65px; }
+.rd_w70 { width:70px; } .rd_w75 { width:75px; }.rd_w80 { width:80px; } .rd_w85 { width:85px; } .rd_w90 { width:90px; } .rd_w95 { width:95px; }
+.rd_w100 { width:100px; } .rd_w105 { width:100px; } .rd_w110 { width:110px; } .rd_w115 { width:115px; } .rd_w120 { width:120px; } .rd_w125 { width:125px; }
+.rd_w130 { width:130px; } .rd_w135 { width:135px; } .rd_w140 { width:140px; } .rd_w145 { width:145px; } .rd_w150 { width:150px; } .rd_w155 { width:155px; }
+.rd_w160 { width:160px; } .rd_w165 { width:165px; } .rd_w170 { width:170px; } .rd_w175 { width:175px; } .rd_w180 { width:180px; } .rd_w185 { width:185px; }
+.rd_w190 { width:190px; } .rd_w195 { width:195px; } .rd_w200 { width:200px; } .rd_w205 { width:205px; } .rd_w210 { width:210px; } .rd_w215 { width:215px; }
+.rd_w220 { width:220px; } .rd_w225 { width:225px; } .rd_w230 { width:230px; } .rd_w235 { width:235px; } .rd_w240 { width:240px; } .rd_w245 { width:245px; }
+.rd_w250 { width:250px; } .rd_w255 { width:255px; } .rd_w260 { width:260px; } .rd_w265 { width:265px; } .rd_w270 { width:270px; } .rd_w275 { width:275px; }
+.rd_w280 { width:280px; } .rd_w285 { width:285px; } .rd_w290 { width:290px; } .rd_w295 { width:295px; } .rd_w300 { width:300px; } .rd_w305 { width:305px; }
+.rd_w310 { width:310px; } .rd_w315 { width:315px; } .rd_w320 { width:320px; } .rd_w325 { width:325px; } .rd_w330 { width:330px; } .rd_w335 { width:335px; }
+.rd_w340 { width:340px; } .rd_w345 { width:345px; } .rd_w350 { width:350px; } .rd_w355 { width:355px; } .rd_w360 { width:360px; } .rd_w365 { width:365px; }
+.rd_w370 { width:370px; } .rd_w375 { width:375px; } .rd_w380 { width:380px; } .rd_w385 { width:385px; } .rd_w390 { width:390px; } .rd_w395 { width:395px; }
+.rd_w400 { width:400px; } .rd_w410 { width:410px; } .rd_w415 { width:415px; } .rd_w420 { width:420px; } .rd_w425 { width:425px; } .rd_w430 { width:430px; }
+.rd_w435 { width:435px; } .rd_w440 { width:440px; } .rd_w445 { width:445px; } .rd_w450 { width:450px; } .rd_w455 { width:455px; } .rd_w460 { width:460px; }
+.rd_w465 { width:465px; } .rd_w470 { width:470px; } .rd_w475 { width:475px; } .rd_w480 { width:480px; } .rd_w485 { width:485px; } .rd_w490 { width:490px; }
+.rd_w495 { width:495px; } .rd_w500 { width:500px; }
+/* fin largeur colonne */
+
+
+/* debut tableau  */
+.table{ font-size:13px;}
+.no-trait-left, td {border-left:none;}
+.no-trait-right, td {border-right:none;}
+
+/* fin tableau */
+
+
 

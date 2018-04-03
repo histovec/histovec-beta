@@ -1,638 +1,274 @@
-	<!DOCTYPE html>
-	<!--[if IE 9]> <html lang="fr" class="ie9"> <![endif]-->
-	<!--[if gt IE 9]> <html lang="fr" class="ie"> <![endif]-->
-	<!--[if !IE]><!-->
-	<html lang="fr">
-		<!--<![endif]-->
-	  <head>
-	    <meta charset="utf-8">
-		<title>Site HistoVec</title>
-		<!-- Mobile Meta -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- Favicon -->	
-	    <link rel="shortcut icon" href="assets/images/mi.ico" />
-	    <!-- debut web fonts -->
-	    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
-	    <link href='http://fonts.googleapis.com/css?family=Raleway:700,400,300' rel='stylesheet' type='text/css'>
-	    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-	    <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
-	    <!-- fin web fonts -->
-	    <!-- debut feuilles de style -->
-	    <link href="assets/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
-	    <link href="assets/Font-Awesome-master/css/font-awesome.min.css" rel="stylesheet">
-	    <link href="assets/css/fontello.css" rel="stylesheet">
-	    <link href="assets/css/magnific-popup.css" rel="stylesheet">
-	    <link href="assets/css/settings.css" rel="stylesheet">
-	    <link href="assets/css/owl.carousel.css" rel="stylesheet">
-	    <link href="assets/css/owl.transitions.css" rel="stylesheet">
-	    <link href="assets/css/hover-min.css" rel="stylesheet">
-	    <link href="assets/css/morphext.css" rel="stylesheet">
-	    <link href="assets/css/style.css" rel="stylesheet" >
-	    <link href="assets/css/_style.css" rel="stylesheet" >
-	    <link href="assets/css/typography-default.css" rel="stylesheet" >
-	    <link href="assets/css/bleu_vert.css" rel="stylesheet">
-		<!-- fin feuilles de style -->
-	  </head>
-	<body class="front-page boxed pattern-2">
-	<!-- scrollToTop -->
-	<div class="scrollToTop circle"><i class="fa fa-angle-up"></i></div>
-	<!-- page wrapper start -->
-	<div class="page-wrapper">
-	  <!-- header-container start -->
-	  <div class="header-container">
-	    <!-- header-top start -->
-	    <header class="header">
-	      <div class="container">
-	        <div class="row">
-	          <div class="col-md-1">
-	            <!-- header-left start -->
-	            <div class="header-left clearfix">
-	              <!-- logo -->
-	              <div id="logo"> <a href="#"><img src="assets/images/logo_mi.png" class="img-responsive" alt="Ministère de l'Intérieur"></a></div>
-	            </div>
-	            <!-- header-left end -->
-	          </div>
-	          <div class="col-md-7">
-	            <h1 class="text-uppercase title_spec"><span class="text-default">H</span>isto<span class="text-default">V</span>ec </h1>
-	            <p class="slogan">Historique du Véhicule</p>
-	          </div>
-	          <div class="col-md-4">
-	            <!-- header-top-second start -->
-	            <div id="header-top-second" class="clearfix">
-	              <!-- header top dropdowns start -->
-	              <div class="header-top-dropdown text-right">
-	                <div class="btn-group"> <a href="https://ants.gouv.fr/monespace/s-inscrire.html" class="btn btn-default btn-sm" target="_blank"><i class="fa fa-lock pr-10"></i> Identification</a> </div>
-	                <div class="btn-group"> <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-times pr-10"></i> Déconnexion</a> </div>
-	              </div>
-	              <!--  header top dropdowns end -->
-	            </div>
-	            <!-- header-top-second end -->
-	          </div>
-	          <div class="col-md-12">
-	            <!-- header-right start -->
-	            <div class="header-right clearfix">
-	              <!-- main-navigation start -->
-	              <div class="main-navigation with-dropdown-buttons">
-	                <!-- navbar start -->
-	                <nav class="navbar navbar-default" role="navigation">
-	                  <div class="container-fluid">
-	                    <!-- Toggle get grouped for better mobile display -->
-	                    <div class="navbar-header">
-	                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-	                    </div>
-	                    <!-- Collect the nav links, forms, and other content for toggling -->
-	                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
-	                      <!-- main-menu -->
-	                      <ul class="nav navbar-nav ">
-	                        <!-- mega-menu start -->
-	                        <li class="dropdown active mega-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Vos démarches</a>
-	                          <ul class="dropdown-menu">
-	                            <li>
-	                              <div class="row">
-	                                <div class="col-md-12">
-	                                  <h4 class="title"><i class="fa fa-laptop pr-10"></i> Démarches</h4>
-	                                  <div class="row">
-	                                    <div class="col-sm-6 col-md-3">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-home pr-10"></i>Changement d'adresse</a></li>
-	                                        <li><a href="#"><i class="fa fa-suitcase pr-10"></i>Changement d'état civil</a></li>
-	                                        <li><a href="#"><i class="fa fa-suitcase pr-10"></i>FAQ</a></li>
-	                                        <li><a href="#"><i class="fa fa-suitcase pr-10"></i>Informations</a></li>
-	                                        <li><a href="#"><i class="fa fa-suitcase pr-10"></i>Tout savoir </a></li>
-	                                        <li><a href="#"><i class="fa fa-suitcase pr-10"></i>Contact </a></li>
-	                                        <li><a href="#"><i class="fa fa-eur pr-10"></i>Nos partenaires </a></li>
-	                                      </ul>
-	                                    </div>
-	                                    <div class="col-sm-6 col-md-3">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-eur pr-10"></i>Commerce 2</a></li>
-	                                        <li><a href="#"><i class="fa fa-briefcase pr-10"></i>Agence photos</a></li>
-	                                        <li><a href="#"><i class="fa fa-ambulance pr-10"></i>Medicale</a></li>
-	                                        <li><a href="#"><i class="fa fa-cutlery pr-10"></i>Restaurant</a></li>
-	                                        <li><a href="#"><i class="fa fa-cutlery pr-10"></i>Restaurant 2 <span class="badge">NEW</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-heart pr-10"></i>Circulaire</a></li>
-	                                        <li><a href="#"><i class="fa fa-star pr-10"></i>Loi</a></li>
-	                                      </ul>
-	                                    </div>
-	                                    <div class="col-sm-6 col-md-3">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-star pr-10"></i>Décret <span class="badge">NEW</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-clock-o pr-10"></i>Cheval</a></li>
-	                                        <li><a href="#"><i class="icon-home pr-10"></i>Vélo</a></li>
-	                                        <li><a href="#"><i class="fa fa-building pr-10"></i>Construction <span class="badge">v1.1</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-graduation-cap pr-10"></i>Education <span class="badge">v1.1</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-bed pr-10"></i>Hotel <span class="badge">v1.1</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-pencil pr-10"></i>Blog <span class="badge">v1.1</span></a></li>
-	                                      </ul>
-	                                    </div>
-	                                    <div class="col-sm-6 col-md-3">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-pencil pr-10"></i>Blog 2<span class="badge">NEW</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-magic pr-10"></i>Centre <span class="badge">v1.1</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-heartbeat pr-10"></i>Gymnastique <span class="badge">v1.2</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-user pr-10"></i>Natation <span class="badge">v1.2</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-users pr-10"></i>Technique <span class="badge">v1.2</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-truck pr-10"></i>Logistique <span class="badge">v1.2</span></a></li>
-	                                      </ul>
-	                                    </div>
-	                                  </div>
-	                                </div>
-	                              </div>
-	                            </li>
-	                          </ul>
-	                        </li>
-	                        <!-- mega-menu end -->
-	                        <!-- mega-menu start -->
-	                        <li class="dropdown  mega-menu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Services</a>
-	                          <ul class="dropdown-menu">
-	                            <li>
-	                              <div class="row">
-	                                <div class="col-lg-8 col-md-9">
-	                                  <h4 class="title">Pages</h4>
-	                                  <div class="row">
-	                                    <div class="col-sm-4">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="organigramme.html"><i class="fa fa-angle-right"></i>Organigramme</a></li>
-	                                        <li><a href="boutons.html"><i class="fa fa-angle-right"></i>Boutons</a></li>
-	                                        <li><a href="progress_bar.html"><i class="fa fa-angle-right"></i>Barre de progression</a></li>
-	                                        <li><a href="modal.html"><i class="fa fa-angle-right"></i>Modals</a></li>
-	                                        <li><a href="boutons.html"><i class="fa fa-angle-right"></i>Boutons</a></li>
-	                                        <li><a href="alertes.html"><i class="fa fa-angle-right"></i>Alertes</a></li>
-	                                        <li><a href="plan_site.html"><i class="fa fa-angle-right"></i>Plan du site</a></li>
-	                                      </ul>
-	                                    </div>
-	                                    <div class="col-sm-4">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="plugins.html"><i class="fa fa-angle-right"></i>Plugins</a></li>
-	                                        <li><a href="graphique.html"><i class="fa fa-angle-right"></i>Graphiques</a></li>
-	                                        <li><a href="resultats.html"><i class="fa fa-angle-right"></i>Tabs</a></li>
-	                                        <li><a href="accordions.html"><i class="fa fa-angle-right"></i>Accordions</a></li>
-	                                        <li><a href="contact.html"><i class="fa fa-angle-right"></i>Contact</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Sign Up 1</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Sign Up 2 - Fullsreen</a></li>
-	                                      </ul>
-	                                    </div>
-	                                    <div class="col-sm-4">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>404 error</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>404 error - Parallax</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Sidebar - Affix Menu</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Left Sidebar</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Right Sidebar</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Two Sidebars</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Two Sidebars Left</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Two Sidebars Right</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>No Sidebars</a></li>
-	                                        <li><a href="#"><i class="fa fa-angle-right"></i>Sitemap</a></li>
-	                                      </ul>
-	                                    </div>
-	                                  </div>
-	                                </div>
-	                                <div class="col-lg-4 col-md-3 hidden-sm">
-	                                  <h4 class="title">Premium HTML5 Template</h4>
-	                                  <p class="mb-10">The Project is perfectly suitable for Entreprise, business and company webpages.</p>
-	                                  <img src="assets/images/section-image-3.png" class="img-responsive" alt="The Project"> </div>
-	                              </div>
-	                            </li>
-	                          </ul>
-	                        </li>
-	                        <!-- mega-menu end -->
-	                        <li class="dropdown "> <a class="dropdown-toggle" data-toggle="dropdown" href="#">Questions fréquentes</a>
-	                          <ul class="dropdown-menu">
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Headers <span class="badge">v1.2</span></a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Default/Semi-Transparent</a></li>
-	                                <li><a href="#">Dark/Semi-Transparent</a></li>
-	                                <li><a href="#">Gradient Dark <span class="badge">v1.2</span></a></li>
-	                                <li><a href="#">Gradient Light <span class="badge">v1.2</span></a></li>
-	                                <li><a href="#">Classic Light</a></li>
-	                                <li><a href="#">Classic Dark</a></li>
-	                                <li><a href="#">Colored/Light</a></li>
-	                                <li><a href="#">Colored/Dark</a></li>
-	                                <li><a href="#">Full Width</a></li>
-	                                <li><a href="#">Offcanvas Left Side</a></li>
-	                                <li><a href="#">Offcanvas Right Side</a></li>
-	                                <li><a href="#">Logo Centered</a></li>
-	                                <li><a href="#">Slider Top</a></li>
-	                                <li><a href="#">Simple Static</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Sticky Headers <span class="badge">v1.2</span></a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Default</a></li>
-	                                <li><a href="#">Alternative <span class="badge">v1.2</span></a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Menus</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Default/On Hover Menu</a></li>
-	                                <li><a href="#">On Hover Menu - No Animations</a></li>
-	                                <li><a href="#">On Click Menu - With Animations</a></li>
-	                                <li><a href="#">On Click Menu - No Animations</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Footers <span class="badge">v1.2</span></a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Default</a></li>
-	                                <li><a href="#">Contact Form</a></li>
-	                                <li><a href="#">Contact Form 2 <span class="badge">v1.2</span></a></li>
-	                                <li><a href="#">Google Maps</a></li>
-	                                <li><a href="#">Subscribe Form</a></li>
-	                                <li><a href="#">Minimal</a></li>
-	                                <li><a href="#">Links <span class="badge">v1.1</span></a></li>
-	                                <li><a href="#">Full Width <span class="badge">v1.2</span></a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Main Sliders <span class="badge">v1.2</span></a>
-	                              <ul class="dropdown-menu">
-	                                <li class="dropdown-header default-bg">SLIDER REVOLUTION 5 - v1.2</li>
-	                                <li><a href="#">Full Screen</a></li>
-	                                <li><a href="#">Full Width</a></li>
-	                                <li><a href="#">Full Width - Big Height</a></li>
-	                                <li><a href="#">Boxed Width - Light Bg</a></li>
-	                                <li><a href="#">Boxed Width - Dark Bg</a></li>
-	                                <li><a href="#">Boxed Width - Default Bg</a></li>
-	                                <li><a href="#">Video Background</a></li>
-	                                <li><a href="#">Text Rotator</a></li>
-	                                <li  class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Revolution 4</a>
-	                                  <ul class="dropdown-menu">
-	                                    <li><a href="#">Full Screen</a></li>
-	                                    <li><a href="#">Full Width</a></li>
-	                                    <li><a href="#">Full Width - Big Height</a></li>
-	                                    <li><a href="#">Boxed Width - Light Bg</a></li>
-	                                    <li><a href="#">Boxed Width - Dark Bg</a></li>
-	                                    <li><a href="#">Boxed Width - Default Bg</a></li>
-	                                    <li><a href="#">Video Background</a></li>
-	                                    <li><a href="#">Text Rotator</a></li>
-	                                  </ul>
-	                                </li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown"> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Email Templates <span class="badge">v1.1</span></a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Blue</a></li>
-	                                <li><a href="#">Brown</a></li>
-	                                <li><a href="#">Cool Green</a></li>
-	                                <li><a href="#">Dark Cyan</a></li>
-	                                <li><a href="#">Dark Red</a></li>
-	                                <li><a href="#">Gold</a></li>
-	                                <li><a href="#">Gray</a></li>
-	                                <li><a href="#">Green</a></li>
-	                                <li><a href="#">Light Blue</a></li>
-	                                <li><a href="#">Orange</a></li>
-	                                <li><a href="#">Pink</a></li>
-	                                <li><a href="#">Purple</a></li>
-	                                <li><a href="#">Red</a></li>
-	                                <li><a href="#">Vivid Red</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Pricing Tables</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Pricing Tables 1</a></li>
-	                                <li><a href="#">Pricing Tables 2</a></li>
-	                                <li><a href="#">Pricing Tables 3</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Icons</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">Font Awesome</a></li>
-	                                <li><a href="#">Fontello</a></li>
-	                                <li><a href="#">Glyphicons</a></li>
-	                              </ul>
-	                            </li>
-	                            <li><a href="#">Dark Page</a></li>
-	                            <li><a href="#">Typography</a></li>
-	                            <li><a href="#">Backgrounds</a></li>
-	                            <li><a href="#">Grid</a></li>
-	                          </ul>
-	                        </li>
-	                        <!-- mega-menu start -->
-	                        <li class="dropdown  mega-menu narrow"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Infos pros</a>
-	                          <ul class="dropdown-menu">
-	                            <li>
-	                              <div class="row">
-	                                <div class="col-md-12">
-	                                  <h4 class="title"><i class="fa fa-magic pr-10"></i> Components</h4>
-	                                  <div class="row">
-	                                    <div class="col-sm-6">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-share-alt pr-10"></i>Social Icons</a></li>
-	                                        <li><a href="#"><i class="fa fa-flask pr-10"></i>Buttons</a></li>
-	                                        <li><a href="#"><i class="fa fa-sheqel pr-10"></i>Forms</a></li>
-	                                        <li><a href="#"><i class="fa fa-dot-circle-o pr-10"></i>Tabs &amp; Pills</a></li>
-	                                        <li><a href="#"><i class="fa fa-sign-out pr-10"></i>Accordions</a></li>
-	                                        <li><a href="#"><i class="fa fa-bar-chart pr-10"></i>Progress Bars</a></li>
-	                                        <li><a href="#"><i class="fa fa-area-chat pr-10"></i>Call to Action Blocks</a></li>
-	                                        <li><a href="#"><i class="fa fa-info pr-10"></i>Alerts &amp; Callouts</a></li>
-	                                        <li><a href="#"><i class="fa fa-star-o pr-10"></i>Content Sliders</a></li>
-	                                        <li><a href="#"><i class="fa fa-pie-chart pr-10"></i>Charts</a></li>
-	                                        <li><a href="#"><i class="fa fa-circle-o-notch fa-spin"></i>Page Loaders <span class="badge">v1.1</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-picture-o pr-10"></i>Icon Boxes</a></li>
-	                                      </ul>
-	                                    </div>
-	                                    <div class="col-sm-6">
-	                                      <div class="divider"></div>
-	                                      <ul class="menu">
-	                                        <li><a href="#"><i class="fa fa-camera pr-10"></i>Image Boxes</a></li>
-	                                        <li><a href="#"><i class="fa fa-code pr-10"></i>Full Width Sections</a></li>
-	                                        <li><a href="#"><i class="fa fa-file-o pr-10"></i>Animations</a></li>
-	                                        <li><a href="#"><i class="fa fa-file-video-o pr-10"></i>Video &amp; Audio</a></li>
-	                                        <li><a href="#"><i class="fa fa-plus pr-10"></i>Lightbox</a></li>
-	                                        <li><a href="#"><i class="fa fa-sort-numeric-asc pr-10"></i>Counters</a></li>
-	                                        <li><a href="#"><i class="fa fa-taxi pr-10"></i>Modals</a></li>
-	                                        <li><a href="#"><i class="fa fa-rocket pr-10"></i>Tables</a></li>
-	                                        <li><a href="#"><i class="fa fa-rss pr-10"></i>Text Rotators</a></li>
-	                                        <li><a href="#"><i class="fa fa-retweet pr-10"></i>Announcements <span class="badge">NEW</span></a></li>
-	                                        <li><a href="#"><i class="fa fa-star pr-10"></i>Separators <span class="badge">NEW</span></a></li>
-	                                      </ul>
-	                                    </div>
-	                                  </div>
-	                                </div>
-	                              </div>
-	                            </li>
-	                          </ul>
-	                        </li>
-	                        <!-- mega-menu end -->
-	                        <li class="dropdown "> <a href="portfolio-grid-2-3-col.html" class="dropdown-toggle" data-toggle="dropdown">Tout savoir</a>
-	                          <ul class="dropdown-menu">
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Portfolio Grid 1</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">2 Column</a></li>
-	                                <li><a href="#">3 Column</a></li>
-	                                <li><a href="#">4 Column</a></li>
-	                                <li><a href="#">With Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Portfolio Grid 2</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">2 Column</a></li>
-	                                <li><a href="#">3 Column</a></li>
-	                                <li><a href="#">4 Column</a></li>
-	                                <li><a href="#">With Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Portfolio Grid 3 - Dark</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">2 Column</a></li>
-	                                <li><a href="#">3 Column</a></li>
-	                                <li><a href="#">4 Column</a></li>
-	                                <li><a href="#">With Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Portfolio Fullwidth</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">2 Column</a></li>
-	                                <li><a href="#">3 Column</a></li>
-	                                <li><a href="#">4 Column</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Portfolio List</a>
-	                              <ul class="dropdown-menu">
-	                                <li><a href="#">List - Large Images</a></li>
-	                                <li><a href="#">List - Small Images</a></li>
-	                                <li><a href="#">With Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li><a href="#">Single Item 1</a></li>
-	                            <li><a href="#">Single Item 2</a></li>
-	                            <li><a href="#">Single Item 3</a></li>
-	                          </ul>
-	                        </li>
-	                        <li class="dropdown "> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Nos partenaires</a>
-	                          <ul class="dropdown-menu">
-	                            <li><a href="#">Shop Home 1</a></li>
-	                            <li><a href="#">Shop Home 2</a></li>
-	                            <li><a href="#">Grid - 4 Columns</a></li>
-	                            <li><a href="#">Grid - 3 Columns</a></li>
-	                            <li><a href="#">Grid - 2 Columns</a></li>
-	                            <li><a href="#">Grid - With Sidebar</a></li>
-	                            <li><a href="#">List</a></li>
-	                            <li><a href="#">Product Page</a></li>
-	                            <li><a href="#">Product Page 2 <span class="badge">NEW</span></a></li>
-	                            <li><a href="#">Shopping Cart</a></li>
-	                            <li><a href="#">Checkout Page - Step 1</a></li>
-	                            <li><a href="#">Checkout Page - Step 2</a></li>
-	                            <li><a href="#">Checkout Page - Step 3</a></li>
-	                            <li><a href="#">Invoice</a></li>
-	                          </ul>
-	                        </li>
-	                        <li class="dropdown "> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contact</a>
-	                          <ul class="dropdown-menu">
-	                            <li><a href="#">Blog Home <span class="badge">v1.1</span></a></li>
-	                            <li><a href="#">Blog Home 2 <span class="badge">NEW</span></a></li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Large Image</a>
-	                              <ul class="dropdown-menu to-left">
-	                                <li><a href="#">Right Sidebar</a></li>
-	                                <li><a href="#">Left Sidebar</a></li>
-	                                <li><a href="#">Without Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Medium Image</a>
-	                              <ul class="dropdown-menu to-left">
-	                                <li><a href="#">Right Sidebar</a></li>
-	                                <li><a href="#">Left Sidebar</a></li>
-	                                <li><a href="#">Without Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li class="dropdown "> <a  class="dropdown-toggle" data-toggle="dropdown" href="#">Masonry</a>
-	                              <ul class="dropdown-menu to-left">
-	                                <li><a href="#">Right Sidebar</a></li>
-	                                <li><a href="#">Left Sidebar</a></li>
-	                                <li><a href="#">Without Sidebar</a></li>
-	                              </ul>
-	                            </li>
-	                            <li><a href="#">Timeline</a></li>
-	                            <li><a href="#">Blog Post</a></li>
-	                          </ul>
-	                        </li>
-	                      </ul>
-	                      <!-- main-menu end -->
-	                    </div>
-	                  </div>
-	                </nav>
-	                <!-- navbar end -->
-	              </div>
-	              <!-- main-navigation end -->
-	            </div>
-	            <!-- header-right end -->
-	          </div>
-	        </div>
-	      </div>
-	    </header>
-	    <!-- header end -->
-	  </div>
-	  <!-- header-container end -->
-	  <!-- section -->
-	  <div class="main-container">
-	    <div id="root"></div>
-	  </div>
-	  <!-- section -->
-	  <!-- footer start -->
-	  <footer id="footer" class="clearfix dark">
-	    <!-- .footer start -->
-	    <div class="footer">
-	      <div class="container">
-	        <div class="footer-inner">
-	          <div class="row">
-	            <div class="col-md-3">
-	              <div class="footer-content">
-	                <h2 class="title">Information sur le portail</h2>
-	                <div class="separator-2"></div>
-	                <nav>
-	                  <ul class="nav nav-pills nav-stacked">
-	                    <li><a href="#">Plan du site</a></li>
-	                    <li><a href="#">Contact</a></li>
-	                    <li><a href="#">Accessibilité</a></li>
-	                    <li><a href="#">Aide</a></li>
-	                    <li><a href="#">Flus RSS</a></li>
-	                    <li><a href="#">Mentions légales</a></li>
-	                  </ul>
-	                </nav>
-	              </div>
-	            </div>
-	            <div class="col-md-3">
-	              <div class="footer-content">
-	                <h2 class="title">Liens utiles</h2>
-	                <div class="separator-2"></div>
-	                <div class="media margin-clear">
-	                  <div class="media-left">
-	                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/ants.png" alt="ants"> </div>
-	                  </div>
-	                  <div class="media-body">
-	                    <h6 class="media-heading"><a href="https://ants.gouv.fr/" target="_blank">ANTS</a></h6>
-	                  </div>
-	                  <hr>
-	                </div>
-	                <div class="media margin-clear">
-	                  <div class="media-left">
-	                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/cnil.png" alt="cnil"> <a href="#" class="overlay-link small"><i class="fa fa-link"></i></a> </div>
-	                  </div>
-	                  <div class="media-body">
-	                    <h6 class="media-heading"><a href="https://www.cnil.fr/professionnel" target="_blank">CNIL</a></h6>
-	                  </div>
-	                  <hr>
-	                </div>
-	                <div class="media margin-clear">
-	                  <div class="media-left">
-	                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/immatriculation.png" alt="immatriculation"> <a href="#" class="overlay-link small"><i class="fa fa-link"></i></a> </div>
-	                  </div>
-	                  <div class="media-body">
-	                    <h6 class="media-heading"><a href="https://immatriculation.ants.gouv.fr/" target="_blank">Immatriculation</a></h6>
-	                  </div>
-	                  <hr>
-	                </div>
-	                <div class="media margin-clear">
-	                  <div class="media-left">
-	                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/permis_conduire.png" alt="permis de conduire"> <a href="#" class="overlay-link small"><i class="fa fa-link"></i></a> </div>
-	                  </div>
-	                  <div class="media-body">
-	                    <h6 class="media-heading"><a href="https://permisdeconduire.ants.gouv.fr/" target="_blank">Permis de conduire</a></h6>
-	                  </div>
-	                </div>
-	              </div>
-	            </div>
-	            <div class="col-md-3">
-	              <div class="footer-content">
-	                <h2 class="title">Documents à télécharger</h2>
-	                <div class="separator-2"></div>
-	                <nav>
-	                  <ul class="nav nav-pills nav-stacked">
-	                    <li><a href="#" target="_blank">Doc 1</a></li>
-	                    <li><a href="#" target="_blank">Doc 2</a></li>
-	                    <li><a href="#" target="_blank">Doc 3</a></li>
-	                    <li><a href="#" target="_blank">Doc 4</a></li>
-	                    <li><a href="#" target="_blank">Doc 5</a></li>
-	                    <li><a href="#" target="_blank">Doc 6</a></li>
-	                  </ul>
-	                </nav>
-	              </div>
-	            </div>
-	            <div class="col-md-3">
-	              <div class="footer-content">
-	                <h2 class="title">Trouver nous</h2>
-	                <div class="separator-2"></div>
-	                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium odio voluptatem necessitatibus illo vel dolorum soluta.</p>
-	                <ul class="social-links circle animated-effect-1">
-	                  <li class="facebook"><a href="#" title="facebook"><i class="fa fa-facebook"></i></a></li>
-	                  <li class="twitter"><a href="#" title="twitter"><i class="fa fa-twitter"></i></a></li>
-	                  <li class="googleplus"><a href="#" title="google-plus"><i class="fa fa-google-plus"></i></a></li>
-	                  <li class="linkedin"><a href="#" title="linkedin"><i class="fa fa-linkedin"></i></a></li>
-	                </ul>
-	                <div class="separator-2"></div>
-	                <ul class="list-icons">
-	                  <li><i class="fa fa-map-marker pr-10 text-default"></i> 40, avenue des Terroirs de France, 75012 PARIS</li>
-	                  <li><i class="fa fa-phone pr-10 text-default"></i> 01.49.27.49.27</li>
-	                  <li><a href="#"><i class="fa fa-envelope-o pr-10"></i>xxxxx.xxxxx@interieur.gouv.fr</a></li>
-	                </ul>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	    <!-- .footer end -->
-	    <!-- .subfooter start -->
-	    <div class="subfooter">
-	      <div class="container">
-	        <div class="subfooter-inner">
-	          <div class="row">
-	            <div class="col-md-12">
-	              <p class="text-center">Copyright &copy; 2017 <a href="#">Site HistoVec</a></p>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-	    <!-- .subfooter end -->
-	  </footer>
-	  <!-- footer end -->
-	</div>
-	<!-- page-wrapper end -->
-	<!-- Jquery and Bootstap core js files -->
-	<script type="text/javascript" src="assets/js/jquery.js"></script>
-	<script type="text/javascript" src="assets/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-	<script>
-	$(function () {
-	  $('[data-toggle="tooltip"]').tooltip()
-	})
-	</script>
-	<!-- Modernizr javascript -->
-	<script type="text/javascript" src="assets/js/modernizr.js"></script>
-	<!-- jQuery Revolution Slider  -->
-	<script type="text/javascript" src="assets/js/jquery.themepunch.tools.min.js"></script>
-	<script type="text/javascript" src="assets/js/jquery.themepunch.revolution.min.js"></script>
-	<!-- Isotope javascript -->
-	<script type="text/javascript" src="assets/js/isotope.pkgd.min.js"></script>
-	<!-- Magnific Popup javascript -->
-	<script type="text/javascript" src="assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- Appear javascript -->
-	<script type="text/javascript" src="assets/js/jquery.waypoints.min.js"></script>
-	<!-- Count To javascript -->
-	<script type="text/javascript" src="assets/js/jquery.countTo.js"></script>
-	<!-- Parallax javascript -->
-	<script src="assets/js/jquery.parallax-1.1.3.js"></script>
-	<!-- Contact form -->
-	<script src="assets/js/jquery.validate.js"></script>
-	<!-- Morphext -->
-	<script type="text/javascript" src="assets/js/morphext.min.js"></script>
-	<!-- Background Video -->
-	<script src="assets/js/jquery.vide.js"></script>
-	<!-- Owl carousel javascript -->
-	<script type="text/javascript" src="assets/js/owl.carousel.js"></script>
-	<!-- SmoothScroll javascript -->
-	<script type="text/javascript" src="assets/js/jquery.browser.js"></script>
-	<script type="text/javascript" src="assets/js/smoothscroll.js"></script>
-	<!-- Initialization of Plugins -->
-	<script type="text/javascript" src="assets/js/template.js"></script>
-	<!-- Custom Scripts -->
-	<script type="text/javascript" src="assets/js/custom.js"></script>
-	  </body>
-	</html>
+<!DOCTYPE html>
+<!--[if IE 9]> <html lang="fr" class="ie9"> <![endif]-->
+<!--[if gt IE 9]> <html lang="fr" class="ie"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="fr">
+	<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Site HistoVec</title>
+<!-- Mobile Meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Favicon -->
+<link rel="shortcut icon" href="assets/images/mi.ico" />
+<!-- debut web fonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Raleway:700,400,300" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet" type="text/css">
+<!-- fin web fonts -->
+<!-- debut feuilles de style -->
+<link href="assets/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
+<link href="assets/Font-Awesome-master/css/font-awesome.min.css" rel="stylesheet">
+<link href="assets/css/fontello.css" rel="stylesheet">
+<link href="assets/css/magnific-popup.css" rel="stylesheet">
+<link href="assets/css/settings.css" rel="stylesheet">
+<link href="assets/css/owl.carousel.css" rel="stylesheet">
+<link href="assets/css/owl.transitions.css" rel="stylesheet">
+<link href="assets/css/hover-min.css" rel="stylesheet">
+<link href="assets/css/morphext.css" rel="stylesheet">
+<link href="assets/css/_style.css" rel="stylesheet" >
+<link href="assets/css/style.css" rel="stylesheet" >
+<link href="assets/css/typography-default.css" rel="stylesheet" >
+<link href="assets/css/bleu_vert.css" rel="stylesheet">
+<!-- fin feuilles de style -->
+</head>
+<body class="front-page boxed pattern-2">
+<!-- scrollToTop -->
+<div class="scrollToTop circle"><i class="fa fa-angle-up"></i></div>
+<!-- page wrapper start -->
+<div class="page-wrapper">
+  <!-- header-container start -->
+  <div class="header-container">
+    <!-- header-top start -->
+    <header class="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1">
+            <!-- header-left start -->
+            <div class="header-left clearfix">
+              <!-- logo -->
+              <div id="logo"> <a href="#"><img src="assets/images/logo_mi.png" class="img-responsive" alt="Ministère de l'Intérieur"></a></div>
+            </div>
+            <!-- header-left end -->
+          </div>
+          <div class="col-md-7">
+            <h1 class="text-uppercase title_spec"><span class="text-default">H</span>isto<span class="text-default">V</span>ec </h1>
+            <p class="slogan">Historique du Véhicule</p>
+          </div>
+          <div class="col-md-4">
+            <!-- header-top-second start -->
+            <div id="header-top-second" class="clearfix">
+              <!-- header top dropdowns start -->
+              <div class="header-top-dropdown text-right">
+                <div class="btn-group"> <a href="https://ants.gouv.fr/monespace/s-inscrire.html" class="btn btn-default btn-sm" target="_blank"><i class="fa fa-lock pr-10"></i> Identification</a> </div>
+                <div class="btn-group"> <a href="#" class="btn btn-danger btn-sm"><i class="fa fa-times pr-10"></i> Déconnexion</a> </div>
+              </div>
+              <!--  header top dropdowns end -->
+            </div>
+            <!-- header-top-second end -->
+          </div>
+          <div class="col-md-12">
+            <!-- header-right start -->
+            <div class="header-right clearfix">
+              <!-- main-navigation start -->
+              <div class="main-navigation with-dropdown-buttons">
+                <!-- navbar start -->
+                <nav class="navbar navbar-default" role="navigation">
+                  <div class="container-fluid">
+                    <!-- Toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                      <!-- main-menu -->
+                      <ul class="nav navbar-nav ">
+                        <li class="mega-menu"> <a href="#">Acheteur</a> </li>
+                        <li class="mega-menu "> <a href="#">Vendeur</a> </li>
+                        <li class="mega-menu"> <a href="#">Infos pros</a> </li>
+                        <li class="mega-menu "> <a href="#" >Nos partenaires</a> </li>
+                        <li class="mega-menu "> <a href="faq.html" >FAQ</a> </li>
+                        <li class="mega-menu "> <a href="contact.html">Contact</a> </li>
+                      </ul>
+                      <!-- main-menu end -->
+                    </div>
+                  </div>
+                </nav>
+                <!-- navbar end -->
+              </div>
+              <!-- main-navigation end -->
+            </div>
+            <!-- header-right end -->
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- header end -->
+  </div>
+  <!-- header-container end -->
+    <div class="main-container">
+      <div id="root"></div>
+    </div>
+  <!-- section end -->
+  <!-- footer start -->
+  <footer id="footer" class="clearfix dark">
+    <!-- .footer start -->
+    <div class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="footer-content">
+                <h2 class="title">Information sur le portail</h2>
+                <div class="separator-2"></div>
+                <!-- debut <nav>
+                  <ul class="nav nav-pills nav-stacked">
+                    <li><a href="#">Plan du site</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Accessibilité</a></li>
+                    <li><a href="#">Aide</a></li>
+                    <li><a href="#">Flus RSS</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                  </ul>
+                </nav> fin -->
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="footer-content">
+                <h2 class="title">Liens utiles</h2>
+                <div class="separator-2"></div>
+                <!-- debut <div class="media margin-clear">
+                  <div class="media-left">
+                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/ants.png" alt="ants"> </div>
+                  </div>
+                  <div class="media-body">
+                    <h6 class="media-heading"><a href="https://ants.gouv.fr/" target="_blank">ANTS</a></h6>
+                  </div>
+                  <hr>
+                </div>
+                <div class="media margin-clear">
+                  <div class="media-left">
+                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/cnil.png" alt="cnil"> <a href="#" class="overlay-link small"><i class="fa fa-link"></i></a> </div>
+                  </div>
+                  <div class="media-body">
+                    <h6 class="media-heading"><a href="https://www.cnil.fr/professionnel" target="_blank">CNIL</a></h6>
+                  </div>
+                  <hr>
+                </div>
+                <div class="media margin-clear">
+                  <div class="media-left">
+                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/immatriculation.png" alt="immatriculation"> <a href="#" class="overlay-link small"><i class="fa fa-link"></i></a> </div>
+                  </div>
+                  <div class="media-body">
+                    <h6 class="media-heading"><a href="https://immatriculation.ants.gouv.fr/" target="_blank">Immatriculation</a></h6>
+                  </div>
+                  <hr>
+                </div>
+                <div class="media margin-clear">
+                  <div class="media-left">
+                    <div class="overlay-container"> <img class="media-object img-responsive" src="assets/images/permis_conduire.png" alt="permis de conduire"> <a href="#" class="overlay-link small"><i class="fa fa-link"></i></a> </div>
+                  </div>
+                  <div class="media-body">
+                    <h6 class="media-heading"><a href="https://permisdeconduire.ants.gouv.fr/" target="_blank">Permis de conduire</a></h6>
+                  </div> 
+                </div> fin -->
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="footer-content">
+                <h2 class="title">Documents à télécharger</h2>
+                <div class="separator-2"></div>
+                <!-- debut <nav>
+                  <ul class="nav nav-pills nav-stacked">
+                    <li><a href="#" target="_blank">Doc 1</a></li>
+                    <li><a href="#" target="_blank">Doc 2</a></li>
+                    <li><a href="#" target="_blank">Doc 3</a></li>
+                    <li><a href="#" target="_blank">Doc 4</a></li>
+                    <li><a href="#" target="_blank">Doc 5</a></li>
+                    <li><a href="#" target="_blank">Doc 6</a></li>
+                  </ul>
+                </nav> fin -->
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="footer-content">
+                <h2 class="title">Trouver nous</h2>
+                <div class="separator-2"></div>
+                <!-- debut <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium odio voluptatem necessitatibus illo vel dolorum soluta.</p>
+                <ul class="social-links circle animated-effect-1">
+                  <li class="facebook"><a href="#" title="facebook"><i class="fa fa-facebook"></i></a></li>
+                  <li class="twitter"><a href="#" title="twitter"><i class="fa fa-twitter"></i></a></li>
+                  <li class="googleplus"><a href="#" title="google-plus"><i class="fa fa-google-plus"></i></a></li>
+                  <li class="linkedin"><a href="#" title="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                </ul>
+                <div class="separator-2"></div>
+                <ul class="list-icons">
+                  <li><i class="fa fa-map-marker pr-10 text-default"></i> 40, avenue des Terroirs de France, 75012 PARIS</li>
+                  <li><i class="fa fa-phone pr-10 text-default"></i> 01.49.27.49.27</li>
+                  <li><a href="#"><i class="fa fa-envelope-o pr-10"></i>xxxxx.xxxxx@interieur.gouv.fr</a></li>
+                </ul> fin -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- .footer end -->
+    <!-- .subfooter start -->
+    <div class="subfooter">
+      <div class="container">
+        <div class="subfooter-inner">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="text-center">Copyright &copy; 2018 <a href="index.html">Site HistoVec</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- .subfooter end -->
+  </footer>
+  <!-- footer end -->
+</div>
+<!-- page-wrapper end -->
+<!-- Jquery and Bootstap core js files -->
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+<!-- Modernizr javascript -->
+<script type="text/javascript" src="assets/js/modernizr.js"></script>
+<!-- jQuery Revolution Slider  -->
+<script type="text/javascript" src="assets/js/jquery.themepunch.tools.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.themepunch.revolution.min.js"></script>
+<!-- Isotope javascript -->
+<script type="text/javascript" src="assets/js/isotope.pkgd.min.js"></script>
+<!-- Magnific Popup javascript -->
+<script type="text/javascript" src="assets/js/jquery.magnific-popup.min.js"></script>
+<!-- Appear javascript -->
+<script type="text/javascript" src="assets/js/jquery.waypoints.min.js"></script>
+<!-- Count To javascript -->
+<script type="text/javascript" src="assets/js/jquery.countTo.js"></script>
+<!-- Parallax javascript -->
+<script src="assets/js/jquery.parallax-1.1.3.js"></script>
+<!-- Contact form -->
+<script src="assets/js/jquery.validate.js"></script>
+<!-- Morphext -->
+<script type="text/javascript" src="assets/js/morphext.min.js"></script>
+<!-- Background Video -->
+<script src="assets/js/jquery.vide.js"></script>
+<!-- Owl carousel javascript -->
+<script type="text/javascript" src="assets/js/owl.carousel.js"></script>
+<!-- SmoothScroll javascript -->
+<script type="text/javascript" src="assets/js/jquery.browser.js"></script>
+<script type="text/javascript" src="assets/js/smoothscroll.js"></script>
+<!-- Initialization of Plugins -->
+<script type="text/javascript" src="assets/js/template.js"></script>
+<!-- Custom Scripts -->
+<script type="text/javascript" src="assets/js/custom.js"></script>
+</body>
+</html>

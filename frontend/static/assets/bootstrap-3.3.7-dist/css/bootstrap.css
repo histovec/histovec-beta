@@ -249,6 +249,7 @@ th {
     border: 1px solid #000;
   }
   .table {
+
     border-collapse: collapse !important;
   }
   .table td,
@@ -492,7 +493,7 @@ th {
 .glyphicon-share:before {
   content: "\e066";
 }
-.glyphfa fa-check:before {
+.glyphicon-check:before {
   content: "\e067";
 }
 .glyphicon-move:before {
