@@ -716,6 +716,7 @@ export default {
     return {
       plaque: 'AA-086-FS',
       vin: 'VF32M8HZA9Y044370',
+      display: false,
       conf: [],
       elasticsearch: null,
       vehicule: {
