@@ -417,17 +417,17 @@
                 </tr>
                 <tr>
                   <td><i class="fa fa-car fa-3x pr-10"></i></td>
-                  <td><span class="info_red">{{ v.marque }} {{ v.ctec.modele }}</span> </br> Propriétaire : {{ v.titulaire.identite }} depuis {{ v.certificat.courant }}</td>
+                  <td><span class="info_red">{{ v.marque }} {{ v.ctec.modele }}</span> </br> Propriétaire : {{ v.titulaire.identite }} depuis {{ v.certificat.annee }}</td>
           <td>&nbsp;</td>
         </tr>
                 <tr>
                   <td><i class="fa fa-address-card fa-3x pr-10"></i></td>
-                  <td>En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }} éme</span> propriétaire</td>
+                  <td>En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }} ème</span> propriétaire</td>
           <td>&nbsp;</td>
                 </tr>
                 <tr>
                   <td><i class="fa fa-first-order fa-3x pr-10"></i></td>
-                  <td>Premiére immatriculation le <span class="info_red">17/06/2008</span> </td>
+                  <td>Premiére immatriculation le <span class="info_red">{{ v.certificat.premier }}</span> </td>
           <td>&nbsp;</td>
                 </tr>
                 <tr>
