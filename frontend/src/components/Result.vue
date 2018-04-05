@@ -400,7 +400,7 @@
                   <tr v-for="(entry, index) in v.historique"
                      :key="index"
                   >
-                    <td>{{ entry.date }}</td>  
+                    <td>{{ entry.opa_date }}</td>  
                     <td class="info_red">{{ entry.nature }}</td>
                   </tr>
                 </tbody>
@@ -408,7 +408,50 @@
               <!-- fin tableau operation historique -->
             </div>
             <div class="tab-pane fade" id="vtab5">
-              <h6 class="title">Titre</h6>
+              <table class="table table-responsive">
+                <tbody>
+                <tr>
+                  <td class="rdw300"><h6>Resumé</h6></td>
+          <td><h6></h6></td>
+                  <td><h6>Conseils de l'acheteur averti</h6></td>
+                </tr>
+                <tr>
+                  <td><i class="fa fa-car fa-3x pr-10"></i></td>
+                  <td><span class="info_red">{{ v.marque }} {{ v.ctec.modele }}</span> </br> Propriétaire : {{ v.titulaire.identite }} depuis {{ v.certificat.courant }}</td>
+          <td>&nbsp;</td>
+        </tr>
+                <tr>
+                  <td><i class="fa fa-address-card fa-3x pr-10"></i></td>
+                  <td>En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }} éme</span> propriétaire</td>
+          <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td><i class="fa fa-first-order fa-3x pr-10"></i></td>
+                  <td>Premiére immatriculation le <span class="info_red">17/06/2008</span> </td>
+          <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td><i class="fa fa-arrows-h fa-3x pr-10"></i></td>
+                  <td><span class="info_red">48210 km</span> Au dernier contrôle technique du 21/04/2016 </td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+                  <td><i class="fa fa fa-globe fa-3x pr-10"></i></td>
+                  <td>Ce véhicule a déjà été <span class="info_red">immatriculé à l'étranger</span></td>
+          <td>vérifier les options incluses</br> qui peuvent être différentes</td>
+                </tr>
+        <tr>
+          <td><i class="fa fa-thumbs-up fa-3x pr-10"></i></td>
+                  <td>Ce véhicule a été <span class="info_red">déclaré accidenté</span> en février 2012</br> et <span class="info_red">déclaré apte à circuler</span>  en avril 2012</td>
+          <td>Demander le rapport d'expert</br>et la(es) facture(s)</td>
+                </tr>
+        <tr>
+          <td><i class="fa fa-clipboard fa-3x pr-10"></i></td>
+                  <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>(gages, opposition, vol,...)</td>
+          <td>Un contrôle technique de moins</br>de 3 mois doit être fourni</td>
+                </tr>
+              </tbody>
+        </table>
             </div>
           </div>
         </div>
