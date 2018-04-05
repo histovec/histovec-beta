@@ -952,11 +952,12 @@ export default {
 
       this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_prenom_tit].join(' ')
       this.v.titulaire.adresse = veh.adresse
-      this.v.certificat.premier = veh.dos_date_prem_immat
-      this.v.certificat.courant = veh.dos_date_prem_immat_siv
+      this.v.certificat.premier = this.formatDate(veh.dos_date_prem_immat)
+      this.v.certificat.courant = this.formatDate(veh.dos_date_prem_immat_siv)
+      this.v.certificat.annee = this.v.certificat.courant.replace(/.*\//, '')
 
-      this.v.historique = veh.historique
-      this.v.np_proprietaires = veh.nb_prop
+      this.v.historique = this.histoFilter(veh.historique)
+      this.v.nb_proprietaires = parseInt(veh.nb_prop)
 
       this.v.administratif.gages = (veh.Gage === 'Aucune') ? 'Aucun gage' : veh.Gage
       this.v.administratif.suspensions = (veh.immat_susp === 'Aucune') ? 'Aucune suspension' : veh.immat_susp
@@ -965,11 +966,17 @@ export default {
       this.v.administratif.vol = (veh.veh_vole === 'Aucune') ? 'non volé' : 'volé'
 
       this.v.administratif.titre.vol = (veh.certif_immat_vole === 'Aucune') ? 'Aucune information' : veh.certif_immat_vole
-      this.v.administratif.titre.perte = (veh.certif_immat_perdu === 'Aucune') ? 'Aucune information' : veh.certif_immat_perdu
-      // this.v.administratif.titre.duplicata = ??
-      // this.v.administratif.titre.remise = ??
+      this.v.administratif.titre.perte = veh.historique.some(e => e.nature === 'DECLARATION_PERTE_TITRE') ? 'Oui' : 'Non'
+      this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'DUPLICATA') ? 'Oui' : 'Aucun'
+      this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'INSCRIPTION_GAGE') ? (veh.historique.some(e => e.nature === 'RADIATION_GAGE') ? 'Radié' : 'Oui') : 'Aucun'
+      this.v.administratif.titre.remise = veh.historique.some(e => e.nature === 'REMISE_LOT_TITRE') ? 'Oui' : 'Aucune'
+      this.v.etranger = veh.historique.some(e => e.nature === 'IMMAT_NORMALE_PREM_VO') || veh.historique.some(e => e.nature === 'SORTIE_TERRITOIRE')
+
       this.display = true
     })
+    if (this.$route.query.id === 'test') {
+      this.display = true
+    }
   }
 }
 </script>
