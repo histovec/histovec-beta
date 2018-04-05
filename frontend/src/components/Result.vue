@@ -422,7 +422,7 @@
         </tr>
                 <tr>
                   <td><i class="fa fa-address-card fa-3x pr-10"></i></td>
-                  <td>En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }} ème</span> propriétaire</td>
+                  <td>En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}ème</span> propriétaire</td>
           <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -790,7 +790,7 @@ export default {
       conf: [],
       elasticsearch: null,
       v: {
-        np_proprietaires: 3,
+        nb_proprietaires: 3,
         plaque: 'AA-555-AA',
         etranger: true,
         sinistre: '2012',
