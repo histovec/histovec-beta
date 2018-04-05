@@ -766,10 +766,21 @@
 import elasticsearchLib from 'elasticsearch'
 
 export default {
-  props: {
-  },
   data () {
     return {
+      libelleOperation: {
+        'CHANG_TIT_NORMAL': 'Changement de titulaire',
+        'DECLARATION_CESSION': 'Cession',
+        'DECLARATION_ACHAT': 'Achat',
+        'IMMAT_NORMALE': 'Immatriculation',
+        'REMISE_LOT_TITRE': 'Remise lot',
+        'MODIF_ADRESSE': 'Changement d\'adresse',
+        'IMMAT_NORMALE_PREM_VO': 'Immatriculation à l\'étranger',
+        'DEC_VE': 'Déclaration de véhicule endommagé',
+        'PREM_RAP_VE': 'Premier rapport d\'expert',
+        'REIMMAT_ETRANGER': 'Ré-immatriculation à l\'étrager',
+        'SEC_RAP_VE': 'Second rapport d\'expert'
+      },
       plaque: 'AA-086-FS',
       vin: 'VF32M8HZA9Y044370',
       display: false,
