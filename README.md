@@ -15,7 +15,7 @@ Le POC intègre les composants suivants :
 
 L'environnement lance de plus un backend Python 3, mais à ce stade inutile.
 
-## lancement
+## lancement du mode développeur
 ```
 git clone https://github.com/histovec/poc-vue
 cd poc-vue
@@ -23,6 +23,17 @@ make dev
 ```
 Rendez-vous sur : http://localhost puis :
 - entrez une plaque et un numéro VIN et appuyez sur recherche
+
+## changement des données
+Pour charger les données (vous devez disposer du fichier `siv.csv.gz.gpg` et de la passphrase.
+```
+make index-create
+make index-load
+```
+pour purger l'index elasticsearch
+```
+make index-purge
+```
 
 ## limitations
 - fonction de hashage : la fonction de recherche de base à ce stade sur le hash sha1 (=> à migrer vers un sha3 ou autre fonction plus robuste), basé sur la concaténation de la plaque d'immatriculation et le numéro VIN.
