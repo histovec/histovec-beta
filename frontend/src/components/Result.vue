@@ -882,6 +882,23 @@ export default {
       return this.$lodash.sortBy(this.projects)
     }
   },
+  methods: {
+    formatDate (isoDate) {
+      let date = new Date(isoDate)
+      let mm = date.getMonth() + 1 // getMonth() is zero-based
+      let dd = date.getDate()
+
+      return [(dd > 9 ? '' : '0') + dd,
+        (mm > 9 ? '' : '0') + mm,
+        date.getFullYear()
+      ].join('/')
+    },
+    histoFilter (historique) {
+      return historique.filter(event => this.libelleOperation[event.nature] !== undefined).map(event => {
+        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.nature]}
+      })
+    }
+  },
   created () {
     this.elasticsearch = {
       connection: {
