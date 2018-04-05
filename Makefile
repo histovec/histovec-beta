@@ -23,7 +23,7 @@ export datasource=${datadir}/siv.csv.gz.gpg
 export datasource_json=${datadir}/siv.json.gz
 export dataset=siv
 export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "keyword"}}}
-export index_log=${datadir}/index.log
+export index_log=${datadir}/index.log.gz
 
 date                := $(shell date -I)
 id                  := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
