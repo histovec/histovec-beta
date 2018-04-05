@@ -400,7 +400,7 @@
                   <tr v-for="(entry, index) in v.historique"
                      :key="index"
                   >
-                    <td>{{ entry.opa_date }}</td>  
+                    <td>{{ entry.date }}</td>  
                     <td class="info_red">{{ entry.nature }}</td>
                   </tr>
                 </tbody>
@@ -854,13 +854,13 @@ export default {
           }
         },
         historique: [
-          {opa_date: '17/06/2008', nature: 'Première immatriculation'},
-          {opa_date: '21/01/2009', nature: 'Achat'},
-          {opa_date: '23/10/2009', nature: 'Achat'},
-          {opa_date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
-          {opa_date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
-          {opa_date: '01/02/2012', nature: 'Déclaration, expert no 000000-VE Véhicule techniquement réparable Procédure : Véhicule à réparations contrôlées (VRC)'},
-          {opa_date: '03/03/2012', nature: '1er rapport, expert no 000000-VE Véhicule techniquement réparable'}
+          {date: '17/06/2008', nature: 'Première immatriculation'},
+          {date: '21/01/2009', nature: 'Achat'},
+          {date: '23/10/2009', nature: 'Achat'},
+          {date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
+          {date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
+          {date: '01/02/2012', nature: 'Déclaration, expert no 000000-VE Véhicule techniquement réparable Procédure : Véhicule à réparations contrôlées (VRC)'},
+          {date: '03/03/2012', nature: '1er rapport, expert no 000000-VE Véhicule techniquement réparable'}
         ]
       }
     }
