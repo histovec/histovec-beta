@@ -842,15 +842,41 @@ export default {
         }
       }
     }).then(response => {
-      response = response.hits.hits[0]
-      this.vin = response.cveh_num_identif
-      this.vehicule.caracteristiques.vin = response._source.cveh_num_identif
-      this.plaque = response._source.info_num_plaque
-      this.vehicule.plaque = response._source.info_num_plaque
-      this.vehicule.caracteristiques.places.assis = response._source.ctec_places_assises
-      this.vehicule.caracteristiques.marque = response._source.ctec_marque
-      this.vehicule.caracteristiques.modele = response._source.ctec_denom_com
-      this.vehicule.certificat.premier = response._source.dos_date_prem_immat
+      var veh = response.hits.hits[0]._source
+      this.vin = veh.vin
+      this.v.ctec.vin = veh.vin
+      this.plaque = veh.num_plaque
+      this.v.plaque = veh.num_plaque
+      this.v.ctec.couleur = veh.couleur
+      this.v.ctec.cnit = veh.cveh_code_cnit
+      this.v.ctec.reception.type = veh.cveh_type_recep
+      this.v.ctec.reception.numero = veh.cveh_num_recep
+      this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
+      this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
+      this.v.ctec.puissance.cv = veh.CTEC_PUISS_ADMIN
+      this.v.ctec.puissance.norm = veh.CTEC_PUISS_MASS
+      this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
+      this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
+      this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
+      this.v.ctec.co2 = veh.CTEC_CO2
+      this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
+      this.v.ctec.marque = veh.marque
+      this.v.ctec.modele = veh.modele
+      this.v.ctec.genre = veh.CTEC_RLIB_GENRE
+      this.v.ctec.cateogire = veh.CTEC_RLIB_CATEGORIE
+      this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE
+      this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
+      this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
+      this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
+      this.v.ctec.PT.admissible = veh.CTEC_MASSE_F1
+      this.v.ctec.PT.AC = veh.CTEC_MASSE_F2
+      this.v.ctec.PT.RA = veh.CTEC_MASSE_F3
+      this.v.ctec.PT.service = veh.CTEC_MASSE_G
+      this.v.ctec.PT.AV = veh.CTEC_POIDS_VIDE
+
+      this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_prenom_tit].join(' ')
+      this.v.titulaire.adresse = veh.adresse
+      this.v.certificat.premier = veh.dos_date_prem_immat
       this.display = true
     })
   }

@@ -17,6 +17,14 @@ export DC_PREFIX=${DC_DIR}/docker-compose
 
 export ES_MEM=512m
 
+# data prep (data not included in repo)
+export datadir=sample_data
+export datasource=${datadir}/siv.csv.gz.gpg
+export datasource_json=${datadir}/siv.json.gz
+export dataset=siv
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "keyword"}}}
+export index_log=${datadir}/index.log
+
 date                := $(shell date -I)
 id                  := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 
@@ -27,10 +35,67 @@ include ./artifacts
 
 DC := 'docker-compose'
 
+install-prerequisites:
+ifeq ("$(wildcard /usr/bin/docker)","")
+        echo install docker-ce, still to be tested
+        sudo apt-get update
+        sudo apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        software-properties-common
+
+        curl -fsSL https://download.docker.com/linux/${ID}/gpg | sudo apt-key add -
+        sudo add-apt-repository \
+                "deb https://download.docker.com/linux/ubuntu \
+                `lsb_release -cs` \
+                stable"
+        sudo apt-get update
+        sudo apt-get install -y docker-ce
+        @(if (id -Gn ${USER} | grep -vc docker); then sudo usermod -aG docker ${USER} ;fi) > /dev/null
+endif
+ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
+        @echo installing docker-compose
+        @sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+        @sudo chmod +x /usr/local/bin/docker-compose
+endif
+
+dataprep:
+ifeq ("$(wildcard ${datasource})","")
+	@echo WARNING: missing data source ${datasource}
+endif
+ifeq ("$(wildcard ${datasource_json})","")
+	@echo decrypting csv to json for bulk load into elasticsearch, enter your key and wait about 3 minutes
+	@gpg -d ${datasource} | gunzip | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | gzip > ${datasource_json}
+endif
+
+index-purge: network elasticsearch
+	@docker exec -it ${APP}-elasticsearch curl -XDELETE localhost:9200/${dataset} | sed 's/{"acknowledged":true}/index purged/'
+	@sleep 1
+	@echo
+
+index-create: network elasticsearch
+ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
+else
+	@echo
+	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}
+	@echo
+	@docker exec -it ${APP}-elasticsearch curl -H "Content-Type: application/json" -XPUT localhost:9200/${dataset}/_mapping/${dataset} -d '${mapping}' | sed 's/{"acknowledged":true}/index created with mapping/'
+	@echo
+	@echo wating a few seconds for index being up
+	@sleep 3
+
+endif
+
+index-load: dataprep index-create
+ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
+	zcat ${datasource_json} | split -l 10000 --filter='docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | gzip > ${index_log}
+endif
+
 docker-clean: stop
 	docker container rm ${APP}-build-front ${APP}-nginx
 
-clean:
+clean: index-purge docker-clean
 	@echo cleaning ${APP} frontend npm dist
 	sudo rm -rf ${FRONTEND}/dist
 
@@ -38,7 +103,7 @@ network-stop:
 	@echo cleaning ${APP} docker network
 	docker network rm ${APP}
 
-network:
+network: install-prerequisites
 	@docker network create ${APP} 2> /dev/null; true
 
 tor:
