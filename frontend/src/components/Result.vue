@@ -895,6 +895,7 @@ export default {
       this.v.plaque = veh.num_plaque
       this.v.ctec.couleur = veh.couleur
       this.v.ctec.cnit = veh.cveh_code_cnit
+      this.v.ctec.tvv = veh.CTEC_TYPE_VARIANTE
       this.v.ctec.reception.type = veh.cveh_type_recep
       this.v.ctec.reception.numero = veh.cveh_num_recep
       this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
@@ -909,7 +910,7 @@ export default {
       this.v.ctec.marque = veh.marque
       this.v.ctec.modele = veh.modele
       this.v.ctec.genre = veh.CTEC_RLIB_GENRE
-      this.v.ctec.cateogire = veh.CTEC_RLIB_CATEGORIE
+      this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
       this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE
       this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
       this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
@@ -923,6 +924,21 @@ export default {
       this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_prenom_tit].join(' ')
       this.v.titulaire.adresse = veh.adresse
       this.v.certificat.premier = veh.dos_date_prem_immat
+      this.v.certificat.courant = veh.dos_date_prem_immat_siv
+
+      this.v.historique = veh.historique
+      this.v.np_proprietaires = veh.nb_prop
+
+      this.v.administratif.gages = (veh.Gage === 'Aucune') ? 'Aucun gage' : veh.Gage
+      this.v.administratif.suspensions = (veh.immat_susp === 'Aucune') ? 'Aucune suspension' : veh.immat_susp
+      this.v.administratif.oppositions = (veh.opposition_veh_endom === 'Aucune') ? 'Aucune opposion' : veh.opposition_veh_endom
+      this.v.administratif.procedures = (veh.otci === 'Aucune') ? 'Aucune procédure' : veh.otci
+      this.v.administratif.vol = (veh.veh_vole === 'Aucune') ? 'non volé' : 'volé'
+
+      this.v.administratif.titre.vol = (veh.certif_immat_vole === 'Aucune') ? 'Aucune information' : veh.certif_immat_vole
+      this.v.administratif.titre.perte = (veh.certif_immat_perdu === 'Aucune') ? 'Aucune information' : veh.certif_immat_perdu
+      // this.v.administratif.titre.duplicata = ??
+      // this.v.administratif.titre.remise = ??
       this.display = true
     })
   }
