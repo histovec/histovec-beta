@@ -435,13 +435,13 @@
                   <td><span class="info_red">48210 km</span> Au dernier contrôle technique du 21/04/2016 </td>
           <td>&nbsp;</td>
         </tr>
-        <tr>
+              <tr v-if="v.etranger">
                   <td><i class="fa fa fa-globe fa-3x pr-10"></i></td>
                   <td>Ce véhicule a déjà été <span class="info_red">immatriculé à l'étranger</span></td>
-          <td>vérifier les options incluses</br> qui peuvent être différentes</td>
-                </tr>
-        <tr>
-          <td><i class="fa fa-thumbs-up fa-3x pr-10"></i></td>
+                  <td>vérifier les options incluses</br> qui peuvent être différentes</td>
+              </tr>
+              <tr>
+              <td><i class="fa fa-thumbs-up fa-3x pr-10"></i></td>
                   <td>Ce véhicule a été <span class="info_red">déclaré accidenté</span> en février 2012</br> et <span class="info_red">déclaré apte à circuler</span>  en avril 2012</td>
           <td>Demander le rapport d'expert</br>et la(es) facture(s)</td>
                 </tr>
@@ -778,6 +778,7 @@ export default {
       v: {
         np_proprietaires: 3,
         plaque: 'AA-555-AA',
+        etranger: true,
         ctec: {
           marque: 'BMW',
           tvv: '390LVG91AA',
