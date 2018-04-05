@@ -743,6 +743,7 @@
               <div class="separator"></div>
               <h6>Synthèse</h6>
               <!-- debut synthèse -->
+
               <!-- fin synthèse -->
             </div>
           </div>
@@ -755,7 +756,7 @@
   <!-- container -->
 
   <div class="main-container" v-else>
-    <div class="alert alert-info" role="alert"> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
+    <div class="danger alert-info" role="alert"> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
   </div>
   </section>
 </template>
@@ -775,6 +776,7 @@ export default {
       conf: [],
       elasticsearch: null,
       v: {
+        np_proprietaires: 3,
         plaque: 'AA-555-AA',
         ctec: {
           marque: 'BMW',
@@ -840,7 +842,7 @@ export default {
         },
         administratif: {
           gages: 'Aucun gage',
-          oppositions: 'Aucune oppoistion',
+          oppositions: 'Aucune opposition',
           suspensions: 'Aucune suspension',
           procedures: 'Aucune procédure',
           vol: 'non volé',
@@ -852,12 +854,13 @@ export default {
           }
         },
         historique: [
-          {date: '17/06/2008', nature: 'Première immatriculation'},
-          {date: '21/01/2009', nature: 'Achat'},
-          {date: '23/10/2009', nature: 'Achat'},
-          {date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
-          {date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
-          {date: '17/06/2016', nature: 'Changement de titulaire'}
+          {opa_date: '17/06/2008', nature: 'Première immatriculation'},
+          {opa_date: '21/01/2009', nature: 'Achat'},
+          {opa_date: '23/10/2009', nature: 'Achat'},
+          {opa_date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
+          {opa_date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
+          {opa_date: '01/02/2012', nature: 'Déclaration, expert no 000000-VE Véhicule techniquement réparable Procédure : Véhicule à réparations contrôlées (VRC)'},
+          {opa_date: '03/03/2012', nature: '1er rapport, expert no 000000-VE Véhicule techniquement réparable'}
         ]
       }
     }
