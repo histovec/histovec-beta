@@ -440,9 +440,12 @@
                   <td>Ce véhicule a déjà été <span class="info_red">immatriculé à l'étranger</span></td>
                   <td>vérifier les options incluses</br> qui peuvent être différentes</td>
               </tr>
-              <tr>
-              <td><i class="fa fa-thumbs-up fa-3x pr-10"></i></td>
-                  <td>Ce véhicule a été <span class="info_red">déclaré accidenté</span> en février 2012</br> et <span class="info_red">déclaré apte à circuler</span>  en avril 2012</td>
+              <tr v-if="v.sinistre !== false">
+              <td><i :class="[{'fa fa-thumbs-up fa-3x pr-10' : v.apte !== false},
+                             {'fa fa-thumbs-down info_red fa-3x pr-10' : v.apte === false}]"
+                  ></i></td>
+                  <td>Ce véhicule a été <span class="info_red">déclaré sinistré</span> en {{ v.sinistre }}</br> 
+                    <span v-if="v.apte !== false"> et <span class="info_red">déclaré apte à circuler</span>  en avril 2012</span></td>
           <td>Demander le rapport d'expert</br>et la(es) facture(s)</td>
                 </tr>
         <tr>
@@ -790,6 +793,8 @@ export default {
         np_proprietaires: 3,
         plaque: 'AA-555-AA',
         etranger: true,
+        sinistre: '2012',
+        apte: '2013',
         ctec: {
           marque: 'BMW',
           tvv: '390LVG91AA',
@@ -971,6 +976,8 @@ export default {
       this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'INSCRIPTION_GAGE') ? (veh.historique.some(e => e.nature === 'RADIATION_GAGE') ? 'Radié' : 'Oui') : 'Aucun'
       this.v.administratif.titre.remise = veh.historique.some(e => e.nature === 'REMISE_LOT_TITRE') ? 'Oui' : 'Aucune'
       this.v.etranger = veh.historique.some(e => e.nature === 'IMMAT_NORMALE_PREM_VO') || veh.historique.some(e => e.nature === 'SORTIE_TERRITOIRE')
+      this.v.sinistre = veh.historique.some(e => e.nature === 'INSCRIRE_OTCI') ? veh.historique.filter(e => e.nature === 'INSCRIRE_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
+      this.v.apte = veh.historique.some(e => e.nature === 'LEVER_OTCI') ? veh.historique.filter(e => e.nature === 'LEVER_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
 
       this.display = true
     })
