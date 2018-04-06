@@ -967,7 +967,7 @@ export default {
 
       this.v.administratif.gages = (veh.Gage === 'Aucune') ? 'Aucun gage' : veh.Gage
       this.v.administratif.suspensions = (veh.immat_susp === 'Aucune') ? 'Aucune suspension' : veh.immat_susp
-      this.v.administratif.oppositions = (veh.opposition_veh_endom === 'Aucune') ? 'Aucune opposion' : veh.opposition_veh_endom
+      this.v.administratif.oppositions = (veh.Opposition_veh_endom === 'Aucune') ? 'Aucune opposition' : veh.Opposition_veh_endom
       this.v.administratif.procedures = (veh.otci === 'Aucune') ? 'Aucune procédure' : veh.otci
       this.v.administratif.vol = (veh.veh_vole === 'Aucune') ? 'non volé' : 'volé'
 
