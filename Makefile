@@ -7,7 +7,7 @@
 
 
 export PORT=80
-export APP=starterapp
+export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export BACKEND=${APP_PATH}/backend
