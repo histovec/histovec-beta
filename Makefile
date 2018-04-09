@@ -125,6 +125,9 @@ ifeq ("$(wildcard ${BACKEND}/esdata/)","")
 endif
 	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d
 
+elasticsearch-stop:
+        ${DC} -f ${DC_PREFIX}-elasticsearch.yml down
+
 backend-stop:
 	${DC} -f ${DC_PREFIX}-backend.yml down
 
@@ -147,7 +150,7 @@ dev-log:
 
 dev: network backend elasticsearch frontend-dev
 
-dev-stop: backend-stop frontend-dev-stop network-stop
+dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 
 
 frontend-build: frontend-download network
