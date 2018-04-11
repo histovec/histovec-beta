@@ -126,7 +126,7 @@ endif
 	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d
 
 elasticsearch-stop:
-        ${DC} -f ${DC_PREFIX}-elasticsearch.yml down
+	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
 
 backend-stop:
 	${DC} -f ${DC_PREFIX}-backend.yml down
