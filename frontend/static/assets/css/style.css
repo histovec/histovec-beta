@@ -92,7 +92,7 @@ tbody {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  padding:7px 7px 7px 7px; /* padding:8px 0 0 15px;*/
+  padding:4px 7px 4px 7px; /* padding:8px 0 0 15px;*/
   border-top:1px solid #f3f3f3;
 }
 
@@ -284,7 +284,7 @@ tbody {
 }
 
 .main-container {
-  padding:50px 0;
+   padding:20px 0; /* padding:50px 0; */
 }
 
 .block {
