@@ -1,6 +1,6 @@
 # POC Vue.js Histovec
 
-Ceci est un premier draft quick-and-dirty intégrant la maquette réalisée au Hackathon du MI en décembre 2017 sous Boostrap.
+Ceci est un premier draft quick-and-dirty intégrant la maquette réalisée au Hackathon du MI en décembre 2017 sous Boostrap, et les dernières itérations du début mois d'avril avec des premiers usagers.
 Il intègre deux vues: 
 - la recherche
 - le résultat (rapport)
@@ -15,10 +15,10 @@ Le POC intègre les composants suivants :
 
 L'environnement lance de plus un backend Python 3, mais à ce stade inutile.
 
-## lancement du mode développeur
+## collaborez en mode développeur
 ```
-git clone https://github.com/histovec/poc-vue
-cd poc-vue
+git clone https://github.com/poc-vue
+git checkout origin/dev
 make dev
 ```
 Rendez-vous sur : http://localhost puis :
