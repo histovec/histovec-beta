@@ -10,7 +10,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3
     container_name: ${APP}-elasticsearch
     environment:
-      - cluster.name=matchid-cluster
+      - cluster.name=${APP}
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM}"
     ulimits:
@@ -19,5 +19,3 @@ services:
         hard: -1
     volumes:
       - ${BACKEND}/esdata/:/usr/share/elasticsearch/data
-
-

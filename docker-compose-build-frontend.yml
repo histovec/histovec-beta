@@ -2,7 +2,7 @@ version: '2'
 
 # this docker configuation intends to build frontend
 # it is supposed that your declared some ENV variables:
-#   - ${FRONTEND} points to matchID-frontend (from GitHub, branch 'master')
+#   - ${FRONTEND} points to HistoVec frontend
 
 services:
   build-frontend:
