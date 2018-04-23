@@ -169,31 +169,31 @@ hr.style1{
 /* -------------------- debut margin -------------------- */
 
 /* debut margin haut  */
-.p-h-05 {margin:5px 0 0 0;}.p-h-10 {margin:10px 0 0 0;}.p-h-15 {margin:15px 0 0 0;}.p-h-20 {margin:20px 0 0 0;}.p-h-25 {margin:25px 0 0 0;}.p-h-30 {margin:30px 0 0 0;}
-.p-h-35 {margin:35px 0 0 0;}.p-h-40 {margin:40px 0 0 0;}.p-h-45 {margin:45px 0 0 0;}.p-h-50 {margin:50px 0 0 0;}.p-h-55 {margin:55px 0 0 0;}.p-h-60 {margin:60px 0 0 0;}
-.p-h-65 {margin:65px 0 0 0;}.p-h-70 {margin:70px 0 0 0;}.p-h-75 {margin:75px 0 0 0;}.p-h-80 {margin:80px 0 0 0;}.p-h-85 {margin:85px 0 0 0;}.p-h-90 {margin:90px 0 0 0;}
-.p-h-95 {margin:95px 0 0 0;}.p-h-100 {margin:100px 0 0 0;}
+.m-h-05 {margin:5px 0 0 0;}.m-h-10 {margin:10px 0 0 0;}.m-h-15 {margin:15px 0 0 0;}.m-h-20 {margin:20px 0 0 0;}.m-h-25 {margin:25px 0 0 0;}.m-h-30 {margin:30px 0 0 0;}
+.m-h-35 {margin:35px 0 0 0;}.m-h-40 {margin:40px 0 0 0;}.m-h-45 {margin:45px 0 0 0;}.m-h-50 {margin:50px 0 0 0;}.m-h-55 {margin:55px 0 0 0;}.m-h-60 {margin:60px 0 0 0;}
+.m-h-65 {margin:65px 0 0 0;}.m-h-70 {margin:70px 0 0 0;}.m-h-75 {margin:75px 0 0 0;}.m-h-80 {margin:80px 0 0 0;}.m-h-85 {margin:85px 0 0 0;}.m-h-90 {margin:90px 0 0 0;}
+.m-h-95 {margin:95px 0 0 0;}.m-h-100 {margin:100px 0 0 0;}
 /* fin margin haut */
 
 /* debut margin gauche  */
-.p-g-05 {margin:0 5px 0 0;}.p-g-10 {margin:0 10px 0 0;}.p-g-15 {margin:0 15px 0 0;}.p-g-20 {margin:0 20px 0 0;}.p-g-25 {margin:0 25px 0 0;}.p-g-30 {margin:0 30px 0 0;}
-.p-g-35 {margin:0 35px 0 0;}.p-g-40 {margin:0 40px 0 0;}.p-g-45 {margin:0 45px 0 0;}.p-g-50 {margin:0 50px 0 0;}.p-g-55 {margin:0 55px 0 0;}.p-g-60 {margin:0 60px 0 0;}
-.p-g-65 {margin:0 65px 0 0;}.p-g-70 {margin:0 70px 0 0;}.p-g-75 {margin:0 75px 0 0;}.p-g-80 {margin:0 80px 0 0;}.p-g-85 {margin:0 85px 0 0;}.p-g-90 {margin:0 90px 0 0;}
-.p-g-95 {margin:0 95px 0 0;}.p-g-100 {margin:0 100px 0 0;}
+.m-g-05 {margin:0 5px 0 0;}.m-g-10 {margin:0 10px 0 0;}.m-g-15 {margin:0 15px 0 0;}.m-g-20 {margin:0 20px 0 0;}.m-g-25 {margin:0 25px 0 0;}.m-g-30 {margin:0 30px 0 0;}
+.m-g-35 {margin:0 35px 0 0;}.m-g-40 {margin:0 40px 0 0;}.m-g-45 {margin:0 45px 0 0;}.m-g-50 {margin:0 50px 0 0;}.m-g-55 {margin:0 55px 0 0;}.m-g-60 {margin:0 60px 0 0;}
+.m-g-65 {margin:0 65px 0 0;}.m-g-70 {margin:0 70px 0 0;}.m-g-75 {margin:0 75px 0 0;}.m-g-80 {margin:0 80px 0 0;}.m-g-85 {margin:0 85px 0 0;}.m-g-90 {margin:0 90px 0 0;}
+.m-g-95 {margin:0 95px 0 0;}.m-g-100 {margin:0 100px 0 0;}
 /* fin margin gauche */
 
 /* debut margin bas  */
-.p-b-05 {margin:0 0 5px 0;}.p-b-10 {margin:0 0 10px 0;}.p-b-15 {margin:0 0 15px 0;}.p-b-20 {margin:0 0 20px 0;}.p-b-25 {margin:0 0 25px 0;}.p-b-30 {margin:0 0 30px 0;}
-.p-b-35 {margin:0 0 35px 0;}.p-b-40 {margin:0 0 40px 0;}.p-b-45 {margin:0 0 45px 0;}.p-b-50 {margin:0 0 50px 0;}.p-b-55 {margin:0 0 55px 0;}.p-b-60 {margin:0 0 60px 0;}
-.p-b-65 {margin:0 0 65px 0;}.p-b-70 {margin:0 0 70px 0;}.p-b-75 {margin:0 0 75px 0;}.p-b-80 {margin:0 0 80px 0;}.p-b-85 {margin:0 0 85px 0;}.p-b-90 {margin:0 0 90px 0;}
-.p-b-95 {margin:0 0 95px 0;}.p-b-100 {margin:0 0 100px 0;}
+.m-b-05 {margin:0 0 5px 0;}.m-b-10 {margin:0 0 10px 0;}.m-b-15 {margin:0 0 15px 0;}.m-b-20 {margin:0 0 20px 0;}.m-b-25 {margin:0 0 25px 0;}.m-b-30 {margin:0 0 30px 0;}
+.m-b-35 {margin:0 0 35px 0;}.m-b-40 {margin:0 0 40px 0;}.m-b-45 {margin:0 0 45px 0;}.m-b-50 {margin:0 0 50px 0;}.m-b-55 {margin:0 0 55px 0;}.m-b-60 {margin:0 0 60px 0;}
+.m-b-65 {margin:0 0 65px 0;}.m-b-70 {margin:0 0 70px 0;}.m-b-75 {margin:0 0 75px 0;}.m-b-80 {margin:0 0 80px 0;}.m-b-85 {margin:0 0 85px 0;}.m-b-90 {margin:0 0 90px 0;}
+.m-b-95 {margin:0 0 95px 0;}.m-b-100 {margin:0 0 100px 0;}
 /* fin margin bas */
 
 /* debut margin droite  */
-.p-d-05 {margin:0 0 0 5px;}.p-d-10 {margin:0 0 0 10px;}.p-d-15 {margin:0 0 0 15px;}.p-d-20 {margin:0 0 0 20px;}.p-d-25 {margin:0 0 0 25px;}.p-d-30 {margin:0 0 0 30px;}
-.p-d-35 {margin:0 0 0 35px;}.p-d-40 {margin:0 0 0 40px;}.p-d-45 {margin:0 0 0 45px;}.p-d-50 {margin:0 0 0 50px;}.p-d-55 {margin:0 0 0 55px;}.p-d-60 {margin:0 0 0 60px;}
-.p-d-65 {margin:0 0 0 65px;}.p-d-70 {margin:0 0 0 70px;}.p-d-75 {margin:0 0 0 75px;}.p-d-80 {margin:0 0 0 80px;}.p-d-85 {margin:0 0 0 85px;}.p-d-90 {margin:0 0 0 90px;}
-.p-d-95 {margin:0 0 0 95px;}.p-d-100 {margin:0 0 0 100px;}
+.m-d-05 {margin:0 0 0 5px;}.m-d-10 {margin:0 0 0 10px;}.m-d-15 {margin:0 0 0 15px;}.m-d-20 {margin:0 0 0 20px;}.m-d-25 {margin:0 0 0 25px;}.m-d-30 {margin:0 0 0 30px;}
+.m-d-35 {margin:0 0 0 35px;}.m-d-40 {margin:0 0 0 40px;}.m-d-45 {margin:0 0 0 45px;}.m-d-50 {margin:0 0 0 50px;}.m-d-55 {margin:0 0 0 55px;}.m-d-60 {margin:0 0 0 60px;}
+.m-d-65 {margin:0 0 0 65px;}.m-d-70 {margin:0 0 0 70px;}.m-d-75 {margin:0 0 0 75px;}.m-d-80 {margin:0 0 0 80px;}.m-d-85 {margin:0 0 0 85px;}.m-d-90 {margin:0 0 0 90px;}
+.m-d-95 {margin:0 0 0 95px;}.m-d-100 {margin:0 0 0 100px;}
 /* fin margin droite */
 
 /* -------------------- fin margin -------------------- */
