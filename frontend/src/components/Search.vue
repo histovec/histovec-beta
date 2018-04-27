@@ -288,13 +288,10 @@
 
 <script>
 
-import Upload from './Upload'
-
 var sha1 = require('sha1')
 
 export default {
   components: {
-    Upload
   },
   data () {
     return {
