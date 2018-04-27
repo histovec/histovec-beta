@@ -64,6 +64,7 @@ mark, .mark {
 }
 .text-default {
     color: #2aa4a5;
+	font-family:pacifico;
 }
 .table.table-colored {
     border-bottom-color: #2aa4a5;
