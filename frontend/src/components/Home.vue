@@ -14,7 +14,22 @@
                     <div class="col-sm-6 text-center">
                         <div class="btn-group">
                             <button type="button" class="btn radius-30 btn-default btn-lg dropdown-toggle" data-toggle="dropdown"> Vendeur </button>
-                            <div class="dropdown-menu"> <a class="dropdown-item" href="vendeur.html"><i class="fa fa-user pr-10"></i>Particulier</a> <a class="dropdown-item" href="vendeur.html"><i class="fa fa-building-o pr-10"></i>Entreprise</a> </div>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item">
+                                    <router-link
+                                            :to="{ name: 'search', query: {t: 'particulier'}}"
+                                    >
+                                        Particulier
+                                    </router-link>
+                                </a>
+                                <a class="dropdown-item">
+                                    <router-link
+                                                :to="{ name: 'search', query: {t: 'pro'}}"
+                                        >
+                                            Entreprise
+                                        </router-link>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <!-- fin bouton vendeurs -->
