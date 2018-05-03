@@ -1,0 +1,253 @@
+heat_template_version: 2013-05-23
+
+description: Ceci est un modèle de déploiement d'un serveur debian unique exposé va une floating IP.
+
+parameters:
+  key_name:
+    type: string
+    label: Name of keypair to assign to servers
+    description: key_name=foo
+  front_subnet_cidr:
+    type: string
+    default: "192.168.1.0/24"
+  back_subnet_cidr:
+    type: string
+    default: "192.168.2.0/24"
+  floatingip_network_name:
+    type: string
+    label: The Floating Network
+    description: floatingip_network_name=public
+  floatingip_id_bastion:
+    type: string
+    label: The Floating IP for Bastion NAT
+    description: floatingip_id=public
+
+  bastion_flavor:
+    type: string
+    label: The flavor for bastion Instances
+    description: flavor=small
+  front_flavor:
+    type: string
+    label: The flavor for front Instances
+    description: flavor=xsmall
+    default: small
+  back_flavor:
+    type: string
+    label: The flavor for back Instances
+    description: flavor=xsmall
+    default: small
+
+  bastion_image:
+    type: string
+    label: The debian bastion_image based for Instances
+    description: bastion_image=debian-8-latest
+    default: debian-8-latest
+  bastion_vol_size:
+    type: number
+    description: The size of the Cinder volume for instance
+    default: 10
+  bastion_vol_type:
+    type: string
+    description: The volume type of the Cinder volume for instance
+    default: default
+  front_image:
+    type: string
+    label: The debian front_image based for Instances
+    description: front_image=debian-8-latest
+    default: debian-8-latest
+  front_vol_size:
+    type: number
+    description: The size of the Cinder volume for instance
+    default: 10
+  front_vol_type:
+    type: string
+    description: The volume type of the Cinder volume for instance
+    default: default
+  back_image:
+    type: string
+    label: The debian back_image based for Instances
+    description: back_image=debian-8-latest
+    default: debian-8-latest
+  back_vol_size:
+    type: number
+    description: The size of the Cinder volume for instance
+    default: 10
+  back_vol_type:
+    type: string
+    description: The volume type of the Cinder volume for instance
+    default: default
+
+resources:
+# front network
+  front_network:
+    type: OS::Neutron::Net
+
+  front_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: front_network }
+      cidr: { get_param: front_subnet_cidr }
+      ip_version: 4
+
+  front_router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info: { network: { get_param: floatingip_network_name } }
+
+  front_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: front_router }
+      subnet: { get_resource: front_subnet }
+
+  front_node_securitygroup:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+        - protocol: tcp
+          remote_ip_prefix: 0.0.0.0/0
+          port_range_min: 22
+          port_range_max: 22
+        - protocol: tcp
+          remote_ip_prefix: 0.0.0.0/0
+          port_range_min: 80
+          port_range_max: 80
+        - protocol: tcp
+          remote_ip_prefix: 0.0.0.0/0
+          port_range_min: 443
+          port_range_max: 443
+
+  front_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: front_network }
+      security_groups:
+        - { get_resource: front_node_securitygroup }
+      fixed_ips:
+        - subnet_id: { get_resource: front_subnet }
+
+  floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: floatingip_network_name }
+
+# back network
+  back_network:
+    type: OS::Neutron::Net
+
+  back_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: front_network }
+      cidr: { get_param: back_subnet_cidr }
+      ip_version: 4
+
+  back_router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info: { get_resource: front_network }
+
+  back_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: back_router }
+      subnet: { get_resource: back_subnet }
+
+  back_node_securitygroup:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      rules:
+        - protocol: tcp
+          remote_ip_prefix: { get_param: front_subnet_cidr }
+          port_range_min: 22
+          port_range_max: 22
+        # elastic
+        - remote_ip_prefix:  { get_param: front_subnet_cidr }
+          protocol: tcp
+          port_range_min: 9200
+          port_range_max: 9200
+          direction: ingress
+
+  back_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: back_network }
+      security_groups:
+        - { get_resource: back_node_securitygroup }
+      fixed_ips:
+        - subnet_id: { get_resource: back_subnet }
+
+# bastion compute
+  bastion_vol:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: bastion_vol_size }
+      image: { get_param: bastion_image }
+      volume_type: { get_param: bastion_vol_type }
+
+  bastion:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: bastion_flavor }
+      key_name: { get_param: key_name }
+      networks:
+        - port: { get_resource: front_port }
+      block_device_mapping:
+        - device_name: vda
+          volume_id: { get_resource: bastion_vol }
+          delete_on_termination: false
+      user_data_format: RAW
+      user_data:
+        get_file: bation_postconf.sh
+
+  bastion_lien_floatingip:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_param: floatingip_id_bastion }
+      port_id: { get_resource: front_port }
+
+# front compute
+  front_vol:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: front_vol_size }
+      image: { get_param: front_image }
+      volume_type: { get_param: front_vol_type }
+
+  front:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: front_flavor }
+      key_name: { get_param: key_name }
+      networks:
+        - port: { get_resource: front_port }
+      block_device_mapping:
+        - device_name: vda
+          volume_id: { get_resource: front_vol }
+          delete_on_termination: false
+      user_data_format: RAW
+      user_data:
+        get_file: front_postconf.sh
+
+# back compute
+  back_vol:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: back_vol_size }
+      image: { get_param: back_image }
+      volume_type: { get_param: back_vol_type }
+
+  back:
+    type: OS::Nova::Server
+    properties:
+      flavor: { get_param: back_flavor }
+      key_name: { get_param: key_name }
+      networks:
+        - port: { get_resource: back_port }
+      block_device_mapping:
+        - device_name: vda
+          volume_id: { get_resource: back_vol }
+          delete_on_termination: false
+      user_data_format: RAW
+      user_data:
+        get_file: back_postconf.sh
