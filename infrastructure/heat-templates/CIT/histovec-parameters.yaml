@@ -14,8 +14,9 @@ parameters:
   back_flavor: standard
   back_image: debian-8-latest
 
-  front_subnet_cidr: "172.16.4.0/24"
-  back_subnet_cidr: "172.16.6.0/24"
+  dns_nameservers: [ '8.8.8.8', '4.4.4.4' ]
+  front_subnet_cidr: "192.168.1.0/24"
+  back_subnet_cidr: "192.168.100.0/24"
 
   floatingip_id_bastion: 3cb07d88-e955-444d-a02e-1822d043bf4f
   floatingip_id_front: 2eab90de-8973-4309-bc03-6ef1bfac2e73
