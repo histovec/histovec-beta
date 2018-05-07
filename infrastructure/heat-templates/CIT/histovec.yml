@@ -84,6 +84,10 @@ parameters:
     type: string
     description: The volume type of the Cinder volume for instance
     default: default
+  docker_image_url:
+    type: string
+    description: url to docker.deb for installation
+    default: default
 
 resources:
   front_router:
@@ -148,7 +152,24 @@ resources:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: { get_param: floatingip_network_name }
-      
+
+# back network
+  # back_network:
+  #   type: OS::Neutron::Net
+  #
+  # back_subnet:
+  #   type: OS::Neutron::Subnet
+  #   properties:
+  #     network_id: { get_resource: back_network }
+  #     cidr: { get_param: back_subnet_cidr }
+  #     ip_version: 4
+  #
+  # back_interface:
+  #   type: OS::Neutron::RouterInterface
+  #   properties:
+  #     router_id: { get_resource: front_router }
+  #     subnet: { get_resource: front_subnet }
+
   back_port:
     type: OS::Neutron::Port
     properties:
@@ -252,4 +273,8 @@ resources:
           delete_on_termination: false
       user_data_format: RAW
       user_data:
-        get_file: back_postconf.sh
+        str_replace:
+          template: { get_file: param/back_postconf.sh }
+          params:
+            $docker_image: { get_param: docker_image_url }
+        get_file: param/back_postconf.sh
