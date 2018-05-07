@@ -669,7 +669,9 @@ export default {
         }
       }
     }).then(response => {
-      var veh = response.hits.hits[0]._source
+      var encrypted = response.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
+      var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
+      var veh = this.decrypt(key, encrypted)
       this.vin = veh.vin
       this.v.ctec.vin = veh.vin
       this.plaque = veh.num_plaque
