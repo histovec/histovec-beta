@@ -92,7 +92,7 @@ parameters:
     type: string
     description: docker.deb for installation
     default: default
-  docker_copose_image:
+  docker_compose_image:
     type: string
     description: docker-compse.deb for installation
     default: default
