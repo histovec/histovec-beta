@@ -152,23 +152,7 @@ resources:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: { get_param: floatingip_network_name }
-
-# back network
-  # back_network:
-  #   type: OS::Neutron::Net
-  #
-  # back_subnet:
-  #   type: OS::Neutron::Subnet
-  #   properties:
-  #     network_id: { get_resource: back_network }
-  #     cidr: { get_param: back_subnet_cidr }
-  #     ip_version: 4
-  #
-  # back_interface:
-  #   type: OS::Neutron::RouterInterface
-  #   properties:
-  #     router_id: { get_resource: front_router }
-  #     subnet: { get_resource: front_subnet }
+      port_id: { get_resource: back_port }
 
   back_port:
     type: OS::Neutron::Port
@@ -193,12 +177,6 @@ resources:
           port_range_min: 9200
           port_range_max: 9200
           direction: ingress
-
-  floating_ip:
-    type: OS::Neutron::FloatingIP
-      properties:
-        floating_network_id: { get_param: floating_ip }
-        port_id: { get_resource: back_port }
 
 
 # bastion compute
