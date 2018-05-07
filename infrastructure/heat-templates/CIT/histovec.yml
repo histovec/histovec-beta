@@ -1,6 +1,6 @@
 heat_template_version: 2013-05-23
 
-description: Ceci est un modèle de déploiement d'un serveur debian unique exposé va une floating IP.
+description: Stack de déploiement de l'infrastructure HistoVec.
 
 parameters:
   key_name:
@@ -13,6 +13,10 @@ parameters:
   back_subnet_cidr:
     type: string
     default: "192.168.2.0/24"
+  dns_nameservers:
+    type: comma_delimited_list
+    label: DNS nameservers
+    description: dns_nameservers=8.8.8.8,8.8.4.4
   floatingip_network_name:
     type: string
     label: The Floating Network
@@ -20,6 +24,10 @@ parameters:
   floatingip_id_bastion:
     type: string
     label: The Floating IP for Bastion NAT
+    description: floatingip_id=public
+  floatingip_id_front:
+    type: string
+    label: The Floating IP for front NAT
     description: floatingip_id=public
 
   bastion_flavor:
@@ -78,6 +86,11 @@ parameters:
     default: default
 
 resources:
+  front_router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info: { network: { get_param: floatingip_network_name } }
+
 # front network
   front_network:
     type: OS::Neutron::Net
@@ -87,18 +100,32 @@ resources:
     properties:
       network_id: { get_resource: front_network }
       cidr: { get_param: front_subnet_cidr }
+      dns_nameservers: { get_param: dns_nameservers }
       ip_version: 4
-
-  front_router:
-    type: OS::Neutron::Router
-    properties:
-      external_gateway_info: { network: { get_param: floatingip_network_name } }
 
   front_interface:
     type: OS::Neutron::RouterInterface
     properties:
       router_id: { get_resource: front_router }
       subnet: { get_resource: front_subnet }
+
+  front_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: front_network }
+      security_groups:
+        - { get_resource: front_node_securitygroup }
+      fixed_ips:
+        - subnet_id: { get_resource: front_subnet }
+
+  bastion_port:
+    type: OS::Neutron::Port
+    properties:
+      network: { get_resource: front_network }
+      security_groups:
+        - { get_resource: front_node_securitygroup }
+      fixed_ips:
+        - subnet_id: { get_resource: front_subnet }
 
   front_node_securitygroup:
     type: OS::Neutron::SecurityGroup
@@ -117,41 +144,19 @@ resources:
           port_range_min: 443
           port_range_max: 443
 
-  front_port:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_resource: front_network }
-      security_groups:
-        - { get_resource: front_node_securitygroup }
-      fixed_ips:
-        - subnet_id: { get_resource: front_subnet }
-
   floating_ip:
     type: OS::Neutron::FloatingIP
     properties:
       floating_network: { get_param: floatingip_network_name }
-
-# back network
-  back_network:
-    type: OS::Neutron::Net
-
-  back_subnet:
-    type: OS::Neutron::Subnet
+      
+  back_port:
+    type: OS::Neutron::Port
     properties:
-      network_id: { get_resource: front_network }
-      cidr: { get_param: back_subnet_cidr }
-      ip_version: 4
-
-  back_router:
-    type: OS::Neutron::Router
-    properties:
-      external_gateway_info: { get_resource: front_network }
-
-  back_interface:
-    type: OS::Neutron::RouterInterface
-    properties:
-      router_id: { get_resource: back_router }
-      subnet: { get_resource: back_subnet }
+      network: { get_resource: front_network }
+      security_groups:
+        - { get_resource: back_node_securitygroup }
+      fixed_ips:
+        - subnet_id: { get_resource: front_subnet }
 
   back_node_securitygroup:
     type: OS::Neutron::SecurityGroup
@@ -168,15 +173,6 @@ resources:
           port_range_max: 9200
           direction: ingress
 
-  back_port:
-    type: OS::Neutron::Port
-    properties:
-      network: { get_resource: back_network }
-      security_groups:
-        - { get_resource: back_node_securitygroup }
-      fixed_ips:
-        - subnet_id: { get_resource: back_subnet }
-
 # bastion compute
   bastion_vol:
     type: OS::Cinder::Volume
@@ -191,20 +187,20 @@ resources:
       flavor: { get_param: bastion_flavor }
       key_name: { get_param: key_name }
       networks:
-        - port: { get_resource: front_port }
+        - port: { get_resource: bastion_port }
       block_device_mapping:
         - device_name: vda
           volume_id: { get_resource: bastion_vol }
           delete_on_termination: false
       user_data_format: RAW
       user_data:
-        get_file: bation_postconf.sh
+        get_file: bastion_postconf.sh
 
   bastion_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
     properties:
       floatingip_id: { get_param: floatingip_id_bastion }
-      port_id: { get_resource: front_port }
+      port_id: { get_resource: bastion_port }
 
 # front compute
   front_vol:
@@ -228,6 +224,12 @@ resources:
       user_data_format: RAW
       user_data:
         get_file: front_postconf.sh
+
+  front_lien_floatingip:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_param: floatingip_id_front }
+      port_id: { get_resource: front_port }
 
 # back compute
   back_vol:
