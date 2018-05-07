@@ -92,6 +92,10 @@ parameters:
     type: string
     description: docker.deb for installation
     default: default
+  docker_copose_image:
+    type: string
+    description: docker-compse.deb for installation
+    default: default
 
 resources:
   front_router:
@@ -207,8 +211,9 @@ resources:
         str_replace:
           template: { get_file: param/bastion_postconf.sh }
           params:
-            $docker_image: { get_param: docker_image }
             $artefact_url: { get_param: artefact_url }
+            $docker_image: { get_param: docker_image }
+            $docker_compose_image: { get_param: docker_compose_image }
 
   bastion_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -240,8 +245,9 @@ resources:
         str_replace:
           template: { get_file: param/front_postconf.sh }
           params:
-            $docker_image: { get_param: docker_image }
             $artefact_url: { get_param: artefact_url }
+            $docker_image: { get_param: docker_image }
+            $docker_compose_image: { get_param: docker_compose_image }
 
   front_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -273,5 +279,6 @@ resources:
         str_replace:
           template: { get_file: param/back_postconf.sh }
           params:
-            $docker_image: { get_param: docker_image }
             $artefact_url: { get_param: artefact_url }
+            $docker_image: { get_param: docker_image }
+            $docker_compose_image: { get_param: docker_compose_image }
