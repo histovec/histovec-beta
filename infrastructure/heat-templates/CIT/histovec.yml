@@ -1,6 +1,6 @@
 heat_template_version: 2013-05-23
 
-description: Stack de déploiement de l'infrastructure HistoVec.
+description: Stack de déploiement de l'infrastructure HistoVec pour le développement.
 
 parameters:
   key_name:
@@ -184,7 +184,7 @@ resources:
     properties:
       rules:
         - protocol: tcp
-          remote_ip_prefix: { get_param: front_subnet_cidr }
+          remote_ip_prefix: 0.0.0.0/0
           port_range_min: 22
           port_range_max: 22
         # elastic
@@ -215,7 +215,10 @@ resources:
           delete_on_termination: false
       user_data_format: RAW
       user_data:
-        get_file: bastion_postconf.sh
+        str_replace:
+          template: { get_file: param/bastion_postconf.sh }
+          params:
+            $docker_image: { get_param: docker_image_url }
 
   bastion_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -244,7 +247,10 @@ resources:
           delete_on_termination: false
       user_data_format: RAW
       user_data:
-        get_file: front_postconf.sh
+        str_replace:
+          template: { get_file: param/front_postconf.sh }
+          params:
+            $docker_image: { get_param: docker_image_url }
 
   front_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -277,4 +283,3 @@ resources:
           template: { get_file: param/back_postconf.sh }
           params:
             $docker_image: { get_param: docker_image_url }
-        get_file: param/back_postconf.sh
