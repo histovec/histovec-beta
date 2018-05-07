@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "crypto-js": "^3.1.8",
     "elasticsearch": "^13.0.0-rc2",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",

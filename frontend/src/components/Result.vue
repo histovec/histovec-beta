@@ -496,6 +496,7 @@
 <script>
 
 import elasticsearchLib from 'elasticsearch'
+import CryptoJS from 'crypto-js'
 
 export default {
   data () {
