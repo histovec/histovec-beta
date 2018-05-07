@@ -84,9 +84,13 @@ parameters:
     type: string
     description: The volume type of the Cinder volume for instance
     default: default
-  docker_image_url:
+  artefact_url:
     type: string
-    description: url to docker.deb for installation
+    description: url to artefact storage
+    default: default
+  docker_image:
+    type: string
+    description: docker.deb for installation
     default: default
 
 resources:
@@ -203,7 +207,8 @@ resources:
         str_replace:
           template: { get_file: param/bastion_postconf.sh }
           params:
-            $docker_image: { get_param: docker_image_url }
+            $docker_image: { get_param: docker_image }
+            $artefact_url: { get_param: artefact_url }
 
   bastion_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -235,7 +240,8 @@ resources:
         str_replace:
           template: { get_file: param/front_postconf.sh }
           params:
-            $docker_image: { get_param: docker_image_url }
+            $docker_image: { get_param: docker_image }
+            $artefact_url: { get_param: artefact_url }
 
   front_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -267,4 +273,5 @@ resources:
         str_replace:
           template: { get_file: param/back_postconf.sh }
           params:
-            $docker_image: { get_param: docker_image_url }
+            $docker_image: { get_param: docker_image }
+            $artefact_url: { get_param: artefact_url }
