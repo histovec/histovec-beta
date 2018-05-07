@@ -194,6 +194,13 @@ resources:
           port_range_max: 9200
           direction: ingress
 
+  floating_ip:
+    type: OS::Neutron::FloatingIP
+      properties:
+        floating_network_id: { get_param: floating_ip }
+        port_id: { get_resource: back_port }
+
+
 # bastion compute
   bastion_vol:
     type: OS::Cinder::Volume
