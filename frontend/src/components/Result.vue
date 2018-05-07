@@ -619,6 +619,22 @@ export default {
     }
   },
   methods: {
+    decrypt (key, encrypted) {
+      key = CryptoJS.enc.Base64.parse(key)
+      var rawData = atob(encrypted)
+      let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
+      encrypted = btoa(rawData.substring(16))
+      var decrypted = CryptoJS.AES.decrypt({
+        ciphertext: CryptoJS.enc.Base64.parse(encrypted),
+        salt: ''
+      },
+        key, {
+          iv: iv,
+          padding: CryptoJS.pad.Pkcs7,
+          mode: CryptoJS.mode.CBC
+        })
+      return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8))
+    },
     formatDate (isoDate) {
       let date = new Date(isoDate)
       let mm = date.getMonth() + 1 // getMonth() is zero-based
