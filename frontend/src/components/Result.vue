@@ -65,7 +65,7 @@
                   </tr>
                   <tr>
                     <td><i class="fa fa-address-card fa-2x pr-10"></i></td>
-                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.annee }}</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><span class="info_red txt-small">éme</span>                      propriétaire</td>
+                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><span class="info_red txt-small">éme</span>                      propriétaire</td>
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
@@ -646,8 +646,8 @@ export default {
       ].join('/')
     },
     histoFilter (historique) {
-      return historique.filter(event => this.libelleOperation[event.nature] !== undefined).map(event => {
-        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.nature]}
+      return historique.filter(event => this.libelleOperation[event.opa_type] !== undefined).map(event => {
+        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.opa_type]}
       })
     }
   },
@@ -674,58 +674,59 @@ export default {
       var veh = this.decrypt(key, encrypted)
       this.vin = veh.vin
       this.v.ctec.vin = veh.vin
-      this.plaque = veh.num_plaque
-      this.v.plaque = veh.num_plaque
+      this.plaque = veh.plaque_immat
+      this.v.plaque = veh.plaque_immat
       this.v.ctec.couleur = veh.couleur
-      this.v.ctec.cnit = veh.cveh_code_cnit
-      this.v.ctec.tvv = veh.CTEC_TYPE_VARIANTE
-      this.v.ctec.reception.type = veh.cveh_type_recep
-      this.v.ctec.reception.numero = veh.cveh_num_recep
+      this.v.ctec.cnit = veh.num_cnit
+      this.v.ctec.tvv = veh.tvv
+      this.v.ctec.reception.type = veh.type_reception
+      this.v.ctec.reception.numero = veh.cveh_num_reception
       this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
       this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-      this.v.ctec.puissance.cv = veh.CTEC_PUISS_ADMIN
-      this.v.ctec.puissance.norm = veh.CTEC_PUISS_MASS
+      this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
+      this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
       this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
       this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
       this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
       this.v.ctec.co2 = veh.CTEC_CO2
       this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
       this.v.ctec.marque = veh.marque
-      this.v.ctec.modele = veh.modele
+      this.v.ctec.modele = veh.nom_commercial
       this.v.ctec.genre = veh.CTEC_RLIB_GENRE
       this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-      this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE
+      this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
       this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
       this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
       this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
-      this.v.ctec.PT.admissible = veh.CTEC_MASSE_F1
-      this.v.ctec.PT.AC = veh.CTEC_MASSE_F2
-      this.v.ctec.PT.RA = veh.CTEC_MASSE_F3
-      this.v.ctec.PT.service = veh.CTEC_MASSE_G
-      this.v.ctec.PT.AV = veh.CTEC_POIDS_VIDE
+      this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
+      this.v.ctec.PT.AC = veh.ptac_f2
+      this.v.ctec.PT.RA = veh.ptra_f3
+      this.v.ctec.PT.service = veh.pt_service_g
+      this.v.ctec.PT.AV = veh.ptav_g1
 
-      this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_prenom_tit].join(' ')
-      this.v.titulaire.adresse = veh.adresse
-      this.v.certificat.premier = this.formatDate(veh.dos_date_prem_immat)
-      this.v.certificat.courant = this.formatDate(veh.dos_date_prem_immat_siv)
-      this.v.certificat.annee = this.v.certificat.courant.replace(/.*\//, '')
+      this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
+      this.v.titulaire.adresse = veh.adr_code_postal_tit
+      this.v.certificat.premier = veh.date_premiere_immat
+      this.v.certificat.courant = veh.date_ci
+      this.v.certificat.depuis = veh.duree_dernier_prop
 
       this.v.historique = this.histoFilter(veh.historique)
-      this.v.nb_proprietaires = parseInt(veh.nb_prop)
+      this.v.nb_proprietaires = veh.nb_proprietaire
+      this.v.age_veh = veh.age_annee
 
-      this.v.administratif.gages = (veh.Gage === 'Aucune') ? 'Aucun gage' : veh.Gage
-      this.v.administratif.suspensions = (veh.immat_susp === 'Aucune') ? 'Aucune suspension' : veh.immat_susp
-      this.v.administratif.oppositions = (veh.Opposition_veh_endom === 'Aucune') ? 'Aucune opposition' : veh.Opposition_veh_endom
-      this.v.administratif.procedures = (veh.otci === 'Aucune') ? 'Aucune procédure' : veh.otci
-      this.v.administratif.vol = (veh.veh_vole === 'Aucune') ? 'non volé' : 'volé'
+      this.v.administratif.gages = veh.gage
+      this.v.administratif.suspensions = veh.suspension
+      // opposition et procédure à valider
+      this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.annulation_ci === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule saisi, certificat annulé') // mapping à valider
+      this.v.administratif.vol = veh.vehicule_vole
 
-      this.v.administratif.titre.vol = (veh.certif_immat_vole === 'Aucune') ? 'Aucune information' : veh.certif_immat_vole
-      this.v.administratif.titre.perte = veh.historique.some(e => e.nature === 'DECLARATION_PERTE_TITRE') ? 'Oui' : 'Non'
-      this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'DUPLICATA') ? 'Oui' : 'Aucun'
-      this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'INSCRIPTION_GAGE') ? (veh.historique.some(e => e.nature === 'RADIATION_GAGE') ? 'Radié' : 'Oui') : 'Aucun'
-      this.v.administratif.titre.remise = veh.historique.some(e => e.nature === 'REMISE_LOT_TITRE') ? 'Oui' : 'Aucune'
+      this.v.administratif.titre.vol = veh.ci_vole
+      this.v.administratif.titre.perte = veh.perte_ci
+      this.v.administratif.titre.duplicata = veh.duplicata
 
-      this.v.etranger = veh.historique.some(e => e.nature === 'IMMAT_NORMALE_PREM_VO') || veh.historique.some(e => e.nature === 'SORTIE_TERRITOIRE')
+      this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
+      // ci-dessous : encore à valider
       this.v.sinistre = veh.historique.some(e => e.nature === 'INSCRIRE_OTCI') ? veh.historique.filter(e => e.nature === 'INSCRIRE_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
       this.v.apte = veh.historique.some(e => e.nature === 'LEVER_OTCI') ? veh.historique.filter(e => e.nature === 'LEVER_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
 
