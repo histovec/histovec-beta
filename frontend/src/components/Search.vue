@@ -168,9 +168,13 @@ export default {
     return {
       type_personne: 'particulier',
       nom: '',
+      raison_sociale: '',
       prenom: '',
       date_naissance: '',
       plaque: '',
+      siren: '',
+      formule: '',
+      date_prem_immat: '',
       vin: '',
       conf: []
     }
