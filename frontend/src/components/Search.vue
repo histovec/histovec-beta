@@ -60,7 +60,7 @@
                           <div class="col-md-4">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
-                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
+                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4">
