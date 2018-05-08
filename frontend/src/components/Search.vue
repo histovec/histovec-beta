@@ -199,13 +199,9 @@ export default {
   methods: {
     hash (string) {
       var hash = string
-      console.log(['hash', hash])
       hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
-      console.log(['hash', hash])
       hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
-      console.log(['hash', hash])
       hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
-      console.log(['hash', hash])
       return hash
     }
   },
