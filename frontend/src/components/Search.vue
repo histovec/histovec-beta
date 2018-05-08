@@ -92,8 +92,8 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Nom</label>
-                            <input type="text" class="form-control" v-model="nom">
+                            <label class="control-label">Raison sociale</label>
+                            <input type="text" class="form-control" v-model="raison_sociale">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-6">
