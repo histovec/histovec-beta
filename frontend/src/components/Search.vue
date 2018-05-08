@@ -76,7 +76,7 @@
                       <div class="col-xs-offset-4 col-sm-5">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'result', query: {id: id}}"
+                                :to="{ name: 'result', query: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
@@ -133,7 +133,7 @@
                       <div class="col-xs-offset-4 col-sm-5">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'result', query: {id: id}}"
+                                :to="{ name: 'result', query: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
