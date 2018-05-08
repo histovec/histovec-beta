@@ -159,7 +159,7 @@
 
 <script>
 
-var sha1 = require('sha1')
+import CryptoJS from 'crypto-js'
 
 export default {
   components: {
@@ -183,9 +183,30 @@ export default {
     orderedProjects () {
       return this.$lodash.sortBy(this.projects)
     },
+    weekNumber () {
+      return 18
+    },
     id () {
-      console.log(this.plaque.replace(/-/g, '') + this.vin)
-      return sha1(this.plaque.replace(/-/g, '') + this.vin)
+      return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
+    },
+    code () {
+      return this.hash(this.plaque + this.formule + this.weekNumber)
+    },
+    key () {
+      return this.hash(this.plaque + this.formule)
+    }
+  },
+  methods: {
+    hash (string) {
+      var hash = string
+      console.log(['hash', hash])
+      hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
+      console.log(['hash', hash])
+      hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
+      console.log(['hash', hash])
+      hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
+      console.log(['hash', hash])
+      return hash
     }
   },
   created () {
