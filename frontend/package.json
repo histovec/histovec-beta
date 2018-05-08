@@ -16,6 +16,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "nouislider": "^10.0.0",
+    "qrcode.vue": "^1.6.0",
     "vue": "^2.3.3",
     "vue-awesome": "^2.2.0",
     "vue-js-toggle-button": "^1.1.4",

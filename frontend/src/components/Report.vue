@@ -99,6 +99,12 @@
                   </tr>
                 </tbody>
               </table>
+              <div v-if="$route.query.code !== undefined">
+                <h6  class="title">Transmettez le rapport à vos acheteurs potentiels</h6>
+                <p> copiez ce lien: {{ url }} </p>
+                <p> ou ce QR code (envoi par photo ou capture d'écran) </p>
+                <qrcode-vue :value="url" :size="200" level="L"></qrcode-vue>              </div>
+
             </div>
             <div class="tab-pane fade" id="vtab2">
               <h6 class="title">Caractéristiques technique</h6>
@@ -497,8 +503,12 @@
 
 import elasticsearchLib from 'elasticsearch'
 import CryptoJS from 'crypto-js'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
+  components: {
+    QrcodeVue
+  },
   data () {
     return {
       libelleOperation: {
@@ -614,8 +624,8 @@ export default {
     }
   },
   computed: {
-    orderedProjects () {
-      return this.$lodash.sortBy(this.projects)
+    url () {
+      return 'http://' + window.location.host + '/report?id=' + this.$route.query.code + '&#38;key=' + this.$route.query.key
     }
   },
   methods: {
