@@ -10,6 +10,9 @@ import Vue from 'vue'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
 import lodash from 'lodash'
 
 Vue.prototype.$lodash = lodash

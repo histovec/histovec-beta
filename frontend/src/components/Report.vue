@@ -38,6 +38,7 @@
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Opération Historique</a></li>
+            <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -99,12 +100,6 @@
                   </tr>
                 </tbody>
               </table>
-              <div v-if="$route.query.code !== undefined">
-                <h6  class="title">Transmettez le rapport à vos acheteurs potentiels</h6>
-                <p> copiez ce lien: {{ url }} </p>
-                <p> ou ce QR code (envoi par photo ou capture d'écran) </p>
-                <qrcode-vue :value="url" :size="200" level="L"></qrcode-vue>              </div>
-
             </div>
             <div class="tab-pane fade" id="vtab2">
               <h6 class="title">Caractéristiques technique</h6>
@@ -476,6 +471,26 @@
               </table>
               <!-- fin tableau operation historique -->
             </div>
+            <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
+              <h6  class="title">Transmettre le rapport</h6>
+              <div class="table table-responsive" style="overflow-x: hidden">
+                <div class="row" style="background: white">
+                  <div class="col-sm-9">
+                    <p> Transmettez le rapport à vos acheteurs potentiels en toute confiance, par mail, SMS ou QR-Code</p>
+                    <p> Ce lien restera valide <b>4 semaines</b> et il vous suffira de revenir ici pour en générer un nouveau </p>
+                    <code> {{url}} </code>
+                    <p class="text-center">
+                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn-sm">Copier <i class="fa fa-copy"></i></button>
+                      <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-dark btn-animated btn-sm">Courriel <i class="fa fa-send"></i></a>
+                      <a :href="'sms://?body=' + smsBody" class="btn radius-30 btn-dark btn-animated btn-sm">Texto <i class="fa fa-mobile fa-2x"></i></a>
+                    </p>
+                  </div>
+                  <div class="col-sm-2">
+                    <qrcode-vue :value="url" :size="150" level="L"></qrcode-vue>
+                  </div>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -624,8 +639,16 @@ export default {
     }
   },
   computed: {
+    mailBody () {
+      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
+      return text + this.url.replace('&', '%26')
+    },
+    smsBody () {
+      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec.\n\nRendez-vous sur le lien suivant pour le consulter: \n')
+      return text + this.url.replace('&', '%26')
+    },
     url () {
-      return 'http://' + window.location.host + '/report?id=' + this.$route.query.code + '&#38;key=' + this.$route.query.key
+      return window.location.protocol + '//' + window.location.host + '/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
     }
   },
   methods: {
