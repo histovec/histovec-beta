@@ -754,6 +754,7 @@ export default {
       this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.annulation_ci === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule saisi, certificat annulé') // mapping à valider
       this.v.administratif.vol = veh.vehicule_vole
 
+      // vol : les informations viennent-elles de foves ?
       this.v.administratif.titre.vol = veh.ci_vole
       this.v.administratif.titre.perte = veh.perte_ci
       this.v.administratif.titre.duplicata = veh.duplicata
