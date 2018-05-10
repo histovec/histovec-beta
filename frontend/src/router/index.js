@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import Home from '@/components/Home'
 import Search from '@/components/Search'
-import Result from '@/components/Result'
+import Report from '@/components/Report'
 
 Vue.use(Router)
 
@@ -13,6 +13,6 @@ export default new Router({
     {name: 'root', path: '/', redirect: { name: 'home' }},
     {name: 'home', path: '/home', component: Home},
     {name: 'search', path: '/search', component: Search},
-    {name: 'result', path: '/result', component: Result}
+    {name: 'report', path: '/report', component: Report}
   ]
 })

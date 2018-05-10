@@ -51,24 +51,25 @@
                       <legend><span class="color-default">Mettre ici un titre</span></legend>
                       <form role="form">
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback">
                               <label for="input" class="control-label">N° SIV</label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
-                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
+                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-4" v-if="false">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">Date première mise en circulation</label>
                               <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
+
                         </div>
                       </form>
                     </fieldset>
@@ -76,7 +77,7 @@
                       <div class="col-xs-offset-4 col-sm-5">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'result', query: {id: id}}"
+                                :to="{ name: 'report', query: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
@@ -92,8 +93,8 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Nom</label>
-                            <input type="text" class="form-control" v-model="nom">
+                            <label class="control-label">Raison sociale</label>
+                            <input type="text" class="form-control" v-model="raison_sociale">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-6">
@@ -108,19 +109,19 @@
                       <legend><span class="color-default">Mettre ici un titre</span></legend>
                       <form role="form">
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback">
                               <label for="input" class="control-label">N° SIV</label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
                               <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover"  v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-4" v-if="false">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">Date première mise en circulation</label>
                               <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Date de première mise en circulation, telle qu'indiquée sur la carte grise" title="Date de première mise en circulation" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat" >
@@ -133,7 +134,7 @@
                       <div class="col-xs-offset-4 col-sm-5">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'result', query: {id: id}}"
+                                :to="{ name: 'report', query: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
@@ -159,7 +160,7 @@
 
 <script>
 
-var sha1 = require('sha1')
+import CryptoJS from 'crypto-js'
 
 export default {
   components: {
@@ -168,9 +169,13 @@ export default {
     return {
       type_personne: 'particulier',
       nom: '',
+      raison_sociale: '',
       prenom: '',
       date_naissance: '',
       plaque: '',
+      siren: '',
+      formule: '',
+      date_prem_immat: '',
       vin: '',
       conf: []
     }
@@ -179,9 +184,38 @@ export default {
     orderedProjects () {
       return this.$lodash.sortBy(this.projects)
     },
+    weekNumber () {
+      return '19'
+      // let d = new Date()
+      // // Copy date so don't modify original
+      // d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+      // // Set to nearest Thursday: current date + 4 - current day number
+      // // Make Sunday's day number 7
+      // d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7))
+      // // Get first day of year
+      // var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
+      // // Calculate full weeks to nearest Thursday
+      // var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7)
+      // // Return array of year and week number
+      // return [d.getUTCFullYear(), weekNo]
+    },
     id () {
-      console.log(this.plaque.replace(/-/g, '') + this.vin)
-      return sha1(this.plaque.replace(/-/g, '') + this.vin)
+      return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
+    },
+    code () {
+      return this.hash(this.plaque + this.formule + this.weekNumber)
+    },
+    key () {
+      return this.hash(this.plaque + this.formule)
+    }
+  },
+  methods: {
+    hash (string) {
+      var hash = string
+      hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
+      hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
+      hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
+      return hash
     }
   },
   created () {

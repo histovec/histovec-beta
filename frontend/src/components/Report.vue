@@ -19,10 +19,10 @@
           <div class="col-sm-5">
             <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-window-maximize"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
-          <div class="col-sm-5">
+          <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
           </div>
-          <div class="col-sm-2"><img class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
+          <div class="col-sm-2" v-if="beta"><img class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
         </div>
         <!-- fin vignette -->
         <!-- debut trait séparation -->
@@ -38,6 +38,7 @@
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Opération Historique</a></li>
+            <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -65,7 +66,7 @@
                   </tr>
                   <tr>
                     <td><i class="fa fa-address-card fa-2x pr-10"></i></td>
-                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.annee }}</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><span class="info_red txt-small">éme</span>                      propriétaire</td>
+                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><span class="info_red txt-small">éme</span>                      propriétaire</td>
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
@@ -73,11 +74,11 @@
                     <td>Premiére immatriculation le <span class="info_red">{{ v.certificat.premier }}</span></td>
                     <td>&nbsp;</td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td><i class="fa fa-arrows-h fa-2x pr-10"></i></td>
                     <td><span class="info_red">48.210 km</span> Relevé au dernier contrôle technique du <span class="info_red">21/04/2016</span></td>
                     <td class="color-info_2 bold_4">Un contrôle technique de moins de 6 mois doit être fourni</td>
-                  </tr>
+                  </tr> -->
                   <tr v-if="v.etranger">
                     <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
                     <td>Ce véhicule a été <span class="info_red">immatriculé dans un autre pays</span></td>
@@ -279,7 +280,7 @@
               </table>
               <!-- fin tableau v.-->
               <!-- debut tableau controle technique -->
-              <table class="table table-striped table-responsive">
+              <table class="table table-striped table-responsive" v-if="beta">
                 <tbody>
                   <tr>
                     <td colspan="4">
@@ -306,8 +307,8 @@
                 </tbody>
               </table>
               <!-- fin tableau controle technique -->
-              <!-- debut mentions particuliéres -->
-              <table class="table table-striped table-responsive">
+              <!-- debut mentions particuliéres : à supprimer ultérieurement ? selon validation comité Histovec -->
+              <!-- <table class="table table-striped table-responsive">
                 <tbody>
                   <tr>
                     <td>
@@ -319,7 +320,7 @@
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </table> -->
               <!-- fin mentions particuliéres -->
             </div>
             <div class="tab-pane fade" id="vtab3">
@@ -454,7 +455,7 @@
             </div>
             <div class="tab-pane fade" id="vtab5">
               <!-- debut tableau operation historique -->
-              <table class="table table-responsive">
+              <table class="table table-striped table-responsive">
                 <tbody>
                   <tr>
                     <td class="rd_w250">
@@ -469,6 +470,26 @@
                 </tbody>
               </table>
               <!-- fin tableau operation historique -->
+            </div>
+            <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
+              <h6  class="title">Transmettre le rapport</h6>
+              <div class="table table-responsive" style="overflow-x: hidden">
+                <div class="row" style="background: white">
+                  <div class="col-sm-9">
+                    <p> Transmettez le rapport à vos acheteurs potentiels en toute confiance, par mail, SMS ou QR-Code</p>
+                    <p> Ce lien restera valide <b>4 semaines</b> et il vous suffira de revenir ici pour en générer un nouveau </p>
+                    <code> {{url}} </code>
+                    <p class="text-center">
+                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn-sm">Copier <i class="fa fa-copy"></i></button>
+                      <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-dark btn-animated btn-sm">Courriel <i class="fa fa-send"></i></a>
+                      <a :href="'sms://?body=' + smsBody" class="btn radius-30 btn-dark btn-animated btn-sm">Texto <i class="fa fa-mobile fa-2x"></i></a>
+                    </p>
+                  </div>
+                  <div class="col-sm-2">
+                    <qrcode-vue :value="url" :size="150" level="L"></qrcode-vue>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -496,8 +517,13 @@
 <script>
 
 import elasticsearchLib from 'elasticsearch'
+import CryptoJS from 'crypto-js'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
+  components: {
+    QrcodeVue
+  },
   data () {
     return {
       libelleOperation: {
@@ -613,11 +639,35 @@ export default {
     }
   },
   computed: {
-    orderedProjects () {
-      return this.$lodash.sortBy(this.projects)
+    mailBody () {
+      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
+      return text + this.url.replace('&', '%26')
+    },
+    smsBody () {
+      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec.\n\nRendez-vous sur le lien suivant pour le consulter: \n')
+      return text + this.url.replace('&', '%26')
+    },
+    url () {
+      return window.location.protocol + '//' + window.location.host + '/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
     }
   },
   methods: {
+    decrypt (key, encrypted) {
+      key = CryptoJS.enc.Base64.parse(key)
+      var rawData = atob(encrypted)
+      let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
+      encrypted = btoa(rawData.substring(16))
+      var decrypted = CryptoJS.AES.decrypt({
+        ciphertext: CryptoJS.enc.Base64.parse(encrypted),
+        salt: ''
+      },
+        key, {
+          iv: iv,
+          padding: CryptoJS.pad.Pkcs7,
+          mode: CryptoJS.mode.CBC
+        })
+      return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8))
+    },
     formatDate (isoDate) {
       let date = new Date(isoDate)
       let mm = date.getMonth() + 1 // getMonth() is zero-based
@@ -629,8 +679,8 @@ export default {
       ].join('/')
     },
     histoFilter (historique) {
-      return historique.filter(event => this.libelleOperation[event.nature] !== undefined).map(event => {
-        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.nature]}
+      return historique.filter(event => this.libelleOperation[event.opa_type] !== undefined).map(event => {
+        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.opa_type]}
       })
     }
   },
@@ -652,61 +702,65 @@ export default {
         }
       }
     }).then(response => {
-      var veh = response.hits.hits[0]._source
+      var encrypted = response.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
+      var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
+      var veh = this.decrypt(key, encrypted)
       this.vin = veh.vin
       this.v.ctec.vin = veh.vin
-      this.plaque = veh.num_plaque
-      this.v.plaque = veh.num_plaque
+      this.plaque = veh.plaque_immat
+      this.v.plaque = veh.plaque_immat
       this.v.ctec.couleur = veh.couleur
-      this.v.ctec.cnit = veh.cveh_code_cnit
-      this.v.ctec.tvv = veh.CTEC_TYPE_VARIANTE
-      this.v.ctec.reception.type = veh.cveh_type_recep
-      this.v.ctec.reception.numero = veh.cveh_num_recep
+      this.v.ctec.cnit = veh.num_cnit
+      this.v.ctec.tvv = veh.tvv
+      this.v.ctec.reception.type = veh.type_reception
+      this.v.ctec.reception.numero = veh.cveh_num_reception
       this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
       this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-      this.v.ctec.puissance.cv = veh.CTEC_PUISS_ADMIN
-      this.v.ctec.puissance.norm = veh.CTEC_PUISS_MASS
+      this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
+      this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
       this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
       this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
       this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
       this.v.ctec.co2 = veh.CTEC_CO2
       this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
       this.v.ctec.marque = veh.marque
-      this.v.ctec.modele = veh.modele
+      this.v.ctec.modele = veh.nom_commercial
       this.v.ctec.genre = veh.CTEC_RLIB_GENRE
       this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-      this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE
+      this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
       this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
       this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
       this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
-      this.v.ctec.PT.admissible = veh.CTEC_MASSE_F1
-      this.v.ctec.PT.AC = veh.CTEC_MASSE_F2
-      this.v.ctec.PT.RA = veh.CTEC_MASSE_F3
-      this.v.ctec.PT.service = veh.CTEC_MASSE_G
-      this.v.ctec.PT.AV = veh.CTEC_POIDS_VIDE
+      this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
+      this.v.ctec.PT.AC = veh.ptac_f2
+      this.v.ctec.PT.RA = veh.ptra_f3
+      this.v.ctec.PT.service = veh.pt_service_g
+      this.v.ctec.PT.AV = veh.ptav_g1
 
-      this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_prenom_tit].join(' ')
-      this.v.titulaire.adresse = veh.adresse
-      this.v.certificat.premier = this.formatDate(veh.dos_date_prem_immat)
-      this.v.certificat.courant = this.formatDate(veh.dos_date_prem_immat_siv)
-      this.v.certificat.annee = this.v.certificat.courant.replace(/.*\//, '')
+      this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
+      this.v.titulaire.adresse = veh.adr_code_postal_tit
+      this.v.certificat.premier = veh.date_premiere_immat
+      this.v.certificat.courant = veh.date_ci
+      this.v.certificat.depuis = veh.duree_dernier_prop
 
       this.v.historique = this.histoFilter(veh.historique)
-      this.v.nb_proprietaires = parseInt(veh.nb_prop)
+      this.v.nb_proprietaires = veh.nb_proprietaire
+      this.v.age_veh = veh.age_annee
 
-      this.v.administratif.gages = (veh.Gage === 'Aucune') ? 'Aucun gage' : veh.Gage
-      this.v.administratif.suspensions = (veh.immat_susp === 'Aucune') ? 'Aucune suspension' : veh.immat_susp
-      this.v.administratif.oppositions = (veh.Opposition_veh_endom === 'Aucune') ? 'Aucune opposition' : veh.Opposition_veh_endom
-      this.v.administratif.procedures = (veh.otci === 'Aucune') ? 'Aucune procédure' : veh.otci
-      this.v.administratif.vol = (veh.veh_vole === 'Aucune') ? 'non volé' : 'volé'
+      this.v.administratif.gages = veh.gage
+      this.v.administratif.suspensions = veh.suspension
+      // opposition et procédure à valider
+      this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.annulation_ci === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule saisi, certificat annulé') // mapping à valider
+      this.v.administratif.vol = veh.vehicule_vole
 
-      this.v.administratif.titre.vol = (veh.certif_immat_vole === 'Aucune') ? 'Aucune information' : veh.certif_immat_vole
-      this.v.administratif.titre.perte = veh.historique.some(e => e.nature === 'DECLARATION_PERTE_TITRE') ? 'Oui' : 'Non'
-      this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'DUPLICATA') ? 'Oui' : 'Aucun'
-      this.v.administratif.titre.duplicata = veh.historique.some(e => e.nature === 'INSCRIPTION_GAGE') ? (veh.historique.some(e => e.nature === 'RADIATION_GAGE') ? 'Radié' : 'Oui') : 'Aucun'
-      this.v.administratif.titre.remise = veh.historique.some(e => e.nature === 'REMISE_LOT_TITRE') ? 'Oui' : 'Aucune'
+      // vol : les informations viennent-elles de foves ?
+      this.v.administratif.titre.vol = veh.ci_vole
+      this.v.administratif.titre.perte = veh.perte_ci
+      this.v.administratif.titre.duplicata = veh.duplicata
 
-      this.v.etranger = veh.historique.some(e => e.nature === 'IMMAT_NORMALE_PREM_VO') || veh.historique.some(e => e.nature === 'SORTIE_TERRITOIRE')
+      this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
+      // ci-dessous : encore à valider
       this.v.sinistre = veh.historique.some(e => e.nature === 'INSCRIRE_OTCI') ? veh.historique.filter(e => e.nature === 'INSCRIRE_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
       this.v.apte = veh.historique.some(e => e.nature === 'LEVER_OTCI') ? veh.historique.filter(e => e.nature === 'LEVER_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
 

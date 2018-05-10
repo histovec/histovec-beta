@@ -70,8 +70,8 @@ ifeq ("$(wildcard ${datasource_json})","")
 endif
 
 index-purge: network elasticsearch
+	@sleep 3
 	@docker exec -it ${APP}-elasticsearch curl -XDELETE localhost:9200/${dataset} | sed 's/{"acknowledged":true}/index purged/'
-	@sleep 1
 	@echo
 
 index-create: network elasticsearch
