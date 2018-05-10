@@ -51,24 +51,25 @@
                       <legend><span class="color-default">Mettre ici un titre</span></legend>
                       <form role="form">
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback">
                               <label for="input" class="control-label">N° SIV</label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
                               <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-4" v-if="false">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">Date première mise en circulation</label>
                               <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
+
                         </div>
                       </form>
                     </fieldset>
@@ -108,19 +109,19 @@
                       <legend><span class="color-default">Mettre ici un titre</span></legend>
                       <form role="form">
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback">
                               <label for="input" class="control-label">N° SIV</label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
                               <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover"  v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-4" v-if="false">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">Date première mise en circulation</label>
                               <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Date de première mise en circulation, telle qu'indiquée sur la carte grise" title="Date de première mise en circulation" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat" >

@@ -19,10 +19,10 @@
           <div class="col-sm-5">
             <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-window-maximize"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
-          <div class="col-sm-5">
+          <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
           </div>
-          <div class="col-sm-2"><img class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
+          <div class="col-sm-2" v-if="beta"><img class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
         </div>
         <!-- fin vignette -->
         <!-- debut trait séparation -->
@@ -74,11 +74,11 @@
                     <td>Premiére immatriculation le <span class="info_red">{{ v.certificat.premier }}</span></td>
                     <td>&nbsp;</td>
                   </tr>
-                  <tr>
+                  <!-- <tr>
                     <td><i class="fa fa-arrows-h fa-2x pr-10"></i></td>
                     <td><span class="info_red">48.210 km</span> Relevé au dernier contrôle technique du <span class="info_red">21/04/2016</span></td>
                     <td class="color-info_2 bold_4">Un contrôle technique de moins de 6 mois doit être fourni</td>
-                  </tr>
+                  </tr> -->
                   <tr v-if="v.etranger">
                     <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
                     <td>Ce véhicule a été <span class="info_red">immatriculé dans un autre pays</span></td>
@@ -280,7 +280,7 @@
               </table>
               <!-- fin tableau v.-->
               <!-- debut tableau controle technique -->
-              <table class="table table-striped table-responsive">
+              <table class="table table-striped table-responsive" v-if="beta">
                 <tbody>
                   <tr>
                     <td colspan="4">
@@ -307,8 +307,8 @@
                 </tbody>
               </table>
               <!-- fin tableau controle technique -->
-              <!-- debut mentions particuliéres -->
-              <table class="table table-striped table-responsive">
+              <!-- debut mentions particuliéres : à supprimer ultérieurement ? selon validation comité Histovec -->
+              <!-- <table class="table table-striped table-responsive">
                 <tbody>
                   <tr>
                     <td>
@@ -320,7 +320,7 @@
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </table> -->
               <!-- fin mentions particuliéres -->
             </div>
             <div class="tab-pane fade" id="vtab3">
