@@ -455,7 +455,7 @@
             </div>
             <div class="tab-pane fade" id="vtab5">
               <!-- debut tableau operation historique -->
-              <table class="table table-responsive">
+              <table class="table table-striped table-responsive">
                 <tbody>
                   <tr>
                     <td class="rd_w250">
