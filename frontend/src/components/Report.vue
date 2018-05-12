@@ -37,7 +37,7 @@
             <li><a href="#vtab2" role="tab" data-toggle="tab"><i class="fa fa-car pr-10"></i>Véhicule</a></li>
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
-            <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Opération Historique</a></li>
+            <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
             <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
