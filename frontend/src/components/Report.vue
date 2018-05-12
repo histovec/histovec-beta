@@ -799,10 +799,11 @@ export default {
       this.v.age_veh = veh.age_annee
 
       this.v.administratif.gages = veh.gage
-      this.v.administratif.suspensions = veh.suspension
+      this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
       // opposition et procédure à valider
       this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
-      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.annulation_ci === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule saisi, certificat annulé') // mapping à valider
+      // pour l'instant aucun véhicule saisi dans les échantillons
+      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
       this.v.administratif.vol = veh.vehicule_vole
 
       // vol : les informations viennent-elles de foves ?
