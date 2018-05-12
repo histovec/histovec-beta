@@ -679,8 +679,8 @@ export default {
       ].join('/')
     },
     histoFilter (historique) {
-      return historique.filter(event => this.libelleOperation[event.opa_type] !== undefined).map(event => {
-        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.opa_type]}
+      return historique.filter(event => this.operations[event.opa_type] !== undefined).map(event => {
+        return {'date': this.formatDate(event.opa_date), 'nature': this.operations[event.opa_type]}
       })
     }
   },
