@@ -90,14 +90,23 @@
                     <td>Ce véhicule a eu <span class="info_red">un sinistre déclaré</span> en {{v.sinistre}}</br>
                       <span v-if="v.apte !== false">  et <span class="info_red">déclaré apte à circuler</span> en {{v.apte}}</span>
                     </td>
-                    <td class="color-info_2 bold_4">Demander le rapport d'expert et la(es) facture(s)</td>
+                    <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
                   </tr>
                   <tr v-if="v.administratif.synthese === false">
-                    <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
+                    <td><i class="fa fa-clipboard-check fa-2x pr-10"></i></td>
                     <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>
                       (gages, opposition, vol,...)</td>
                     <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
                   </tr>
+                  <tr v-for="(entry, index) in v.administratif.synthese" :key="index">
+                    <td><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></td>
+                    <td> {{ synthese[entry].text }} </td>
+                    <td class="color-info_2 bold_4" v-if="synthese[entry].link === undefined"> {{ synthese[entry].adv }} </td>
+                    <td v-else><a :href="synthese[entry].link" class="btn btn-animated btn-default btn-sm"
+                       target="_blank">{{ synthese[entry].adv }}</a>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
             </div>
@@ -526,18 +535,60 @@ export default {
   },
   data () {
     return {
-      libelleOperation: {
-        'CHANG_TIT_NORMAL': 'Changement de titulaire',
-        'DECLARATION_CESSION': 'Cession',
-        'DECLARATION_ACHAT': 'Achat',
-        'IMMAT_NORMALE': 'Immatriculation',
-        'REMISE_LOT_TITRE': 'Remise lot',
-        'MODIF_ADRESSE': 'Changement d\'adresse',
-        'IMMAT_NORMALE_PREM_VO': 'Immatriculation à l\'étranger',
-        'DEC_VE': 'Déclaration de véhicule endommagé',
-        'PREM_RAP_VE': 'Premier rapport d\'expert',
-        'REIMMAT_ETRANGER': 'Ré-immatriculation à l\'étrager',
-        'SEC_RAP_VE': 'Second rapport d\'expert'
+      synthese: {
+        'ove': {
+          'icon': 'fa-thumbs-down',
+          'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
+        },
+        'otci': {
+          'icon': 'fa-ban',
+          'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
+          'adv': 'Comprendre les oppositions',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
+        },
+        'suspension': {
+          'icon': 'fa-ban',
+          'text': 'Le véhicule a été retiré de la circulation (certificat susepndu)',
+          'adv': 'retrait et remise en circulation',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+        },
+        'perte_ci': {
+          'icon': 'fa-search',
+          'text': 'Le certificat d\'immatriculation a fait l\'objet d\'une déclaration de perte',
+          'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
+        },
+        'annulation_ci': {
+          'icon': 'fa-ban',
+          'text': 'Le certificat a été annulé',
+          'adv': 'retrait et remise en circulation',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+        },
+        'vehicule_vole': {
+          'icon': 'fa-eye',
+          'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
+          'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
+        },
+        'vole_ci': {
+          'icon': 'fa-search',
+          'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
+          'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
+        },
+        'saisie': {
+          'icon': 'fa-gavel',
+          'text': 'Le véhicule est saisi et ne peut être vendu',
+          'adv': 'Seule une mainlevée du créancier ou un juge peut permettre la vente de ce véhicule'
+        },
+        'gage': {
+          'icon': 'fa-gavel',
+          'text': 'Le véhicule est gagé et ne peut être vendu en l\'état',
+          'adv': 'Demandez un certificat de non-gage, une fois que le gage est levé.'
+        },
+        'duplicata': {
+          'icon': 'fa-copy',
+          'text': 'La carte grise est un duplicata',
+          'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
+        }
       },
       plaque: 'AA-086-FS',
       vin: 'VF32M8HZA9Y044370',
@@ -758,6 +809,8 @@ export default {
       this.v.administratif.titre.vol = veh.ci_vole
       this.v.administratif.titre.perte = veh.perte_ci
       this.v.administratif.titre.duplicata = veh.duplicata
+
+      this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
       this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
       // ci-dessous : encore à valider
