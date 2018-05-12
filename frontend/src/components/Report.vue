@@ -814,9 +814,9 @@ export default {
       this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
       this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
-      // ci-dessous : encore à valider
-      this.v.sinistre = veh.historique.some(e => e.nature === 'INSCRIRE_OTCI') ? veh.historique.filter(e => e.nature === 'INSCRIRE_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
-      this.v.apte = veh.historique.some(e => e.nature === 'LEVER_OTCI') ? veh.historique.filter(e => e.nature === 'LEVER_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
+      // ci-dessous : interprétation à confirmer
+      this.v.sinistre = veh.historique.some(e => e.opa_type === 'INSCRIRE_OVE') ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
+      this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
 
       this.display = true
     })
