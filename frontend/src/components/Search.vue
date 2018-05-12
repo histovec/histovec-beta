@@ -181,9 +181,6 @@ export default {
     }
   },
   computed: {
-    orderedProjects () {
-      return this.$lodash.sortBy(this.projects)
-    },
     weekNumber () {
       return '19'
       // let d = new Date()
