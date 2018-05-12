@@ -93,7 +93,7 @@
                     <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
                   </tr>
                   <tr v-if="v.administratif.synthese === false">
-                    <td><i class="fa fa-clipboard-check fa-2x pr-10"></i></td>
+                    <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
                     <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>
                       (gages, opposition, vol,...)</td>
                     <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
