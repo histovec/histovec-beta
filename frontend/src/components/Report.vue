@@ -758,8 +758,8 @@ export default {
       var veh = this.decrypt(key, encrypted)
       this.vin = veh.vin
       this.v.ctec.vin = veh.vin
-      this.plaque = veh.plaque_immat
-      this.v.plaque = veh.plaque_immat
+      this.plaque = veh.plaq_immat
+      this.v.plaque = veh.plaq_immat
       this.v.ctec.couleur = veh.couleur
       this.v.ctec.cnit = veh.num_cnit
       this.v.ctec.tvv = veh.tvv
