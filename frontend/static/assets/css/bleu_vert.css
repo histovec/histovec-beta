@@ -8,14 +8,14 @@
 	text-align:left;
 }
 .title_spec{
-	font-size:30px;
+	font-size:50px;
 	font-weight:400;
 	padding:0 0 0 0;
 	letter-spacing:6px;
 }
 .slogan{
 	font-style:italic;
-	letter-spacing:0.13em;
+	letter-spacing:0.25em;
 	margin:-12px 0 0 0;
 }
 .p-h-10 {
@@ -64,7 +64,6 @@ mark, .mark {
 }
 .text-default {
     color: #2aa4a5;
-	font-family:pacifico;
 }
 .table.table-colored {
     border-bottom-color: #2aa4a5;

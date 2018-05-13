@@ -37,7 +37,7 @@
             <li><a href="#vtab2" role="tab" data-toggle="tab"><i class="fa fa-car pr-10"></i>Véhicule</a></li>
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
-            <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Opération Historique</a></li>
+            <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
             <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
@@ -90,7 +90,7 @@
                     <td>Ce véhicule a eu <span class="info_red">un sinistre déclaré</span> en {{v.sinistre}}</br>
                       <span v-if="v.apte !== false">  et <span class="info_red">déclaré apte à circuler</span> en {{v.apte}}</span>
                     </td>
-                    <td class="color-info_2 bold_4">Demander le rapport d'expert et la(es) facture(s)</td>
+                    <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
                   </tr>
                   <tr v-if="v.administratif.synthese === false">
                     <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
@@ -98,6 +98,15 @@
                       (gages, opposition, vol,...)</td>
                     <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
                   </tr>
+                  <tr v-for="(entry, index) in v.administratif.synthese" :key="index">
+                    <td><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></td>
+                    <td> {{ synthese[entry].text }} </td>
+                    <td class="color-info_2 bold_4" v-if="synthese[entry].link === undefined"> {{ synthese[entry].adv }} </td>
+                    <td v-else><a :href="synthese[entry].link" class="btn btn-animated btn-default btn-sm"
+                       target="_blank">{{ synthese[entry].adv }}</a>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
             </div>
@@ -526,18 +535,60 @@ export default {
   },
   data () {
     return {
-      libelleOperation: {
-        'CHANG_TIT_NORMAL': 'Changement de titulaire',
-        'DECLARATION_CESSION': 'Cession',
-        'DECLARATION_ACHAT': 'Achat',
-        'IMMAT_NORMALE': 'Immatriculation',
-        'REMISE_LOT_TITRE': 'Remise lot',
-        'MODIF_ADRESSE': 'Changement d\'adresse',
-        'IMMAT_NORMALE_PREM_VO': 'Immatriculation à l\'étranger',
-        'DEC_VE': 'Déclaration de véhicule endommagé',
-        'PREM_RAP_VE': 'Premier rapport d\'expert',
-        'REIMMAT_ETRANGER': 'Ré-immatriculation à l\'étrager',
-        'SEC_RAP_VE': 'Second rapport d\'expert'
+      synthese: {
+        'ove': {
+          'icon': 'fa-thumbs-down',
+          'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
+        },
+        'otci': {
+          'icon': 'fa-ban',
+          'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
+          'adv': 'Comprendre les oppositions',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
+        },
+        'suspension': {
+          'icon': 'fa-ban',
+          'text': 'Le véhicule a été retiré de la circulation (certificat susepndu)',
+          'adv': 'retrait et remise en circulation',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+        },
+        'perte_ci': {
+          'icon': 'fa-search',
+          'text': 'Le certificat d\'immatriculation a fait l\'objet d\'une déclaration de perte',
+          'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
+        },
+        'annulation_ci': {
+          'icon': 'fa-ban',
+          'text': 'Le certificat a été annulé',
+          'adv': 'retrait et remise en circulation',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+        },
+        'vehicule_vole': {
+          'icon': 'fa-eye',
+          'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
+          'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
+        },
+        'vole_ci': {
+          'icon': 'fa-search',
+          'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
+          'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
+        },
+        'saisie': {
+          'icon': 'fa-gavel',
+          'text': 'Le véhicule est saisi et ne peut être vendu',
+          'adv': 'Seule une mainlevée du créancier ou un juge peut permettre la vente de ce véhicule'
+        },
+        'gage': {
+          'icon': 'fa-gavel',
+          'text': 'Le véhicule est gagé et ne peut être vendu en l\'état',
+          'adv': 'Demandez un certificat de non-gage, une fois que le gage est levé.'
+        },
+        'duplicata': {
+          'icon': 'fa-copy',
+          'text': 'La carte grise est un duplicata',
+          'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
+        }
       },
       plaque: 'AA-086-FS',
       vin: 'VF32M8HZA9Y044370',
@@ -605,8 +656,8 @@ export default {
         mentions: 'Aucun élément dans la liste.',
         titulaire: {
           nature: 'Titulaire',
-          identite: 'PRBUISNESS 123456789',
-          adresse: '38, avenue Guy Mocquet, 75000 Paris'
+          identite: 'P******* 123***789',
+          adresse: '75000'
         },
         certificat: {
           premier: '16/06/2008',
@@ -679,8 +730,8 @@ export default {
       ].join('/')
     },
     histoFilter (historique) {
-      return historique.filter(event => this.libelleOperation[event.opa_type] !== undefined).map(event => {
-        return {'date': this.formatDate(event.opa_date), 'nature': this.libelleOperation[event.opa_type]}
+      return historique.filter(event => this.operations[event.opa_type] !== undefined).map(event => {
+        return {'date': this.formatDate(event.opa_date), 'nature': this.operations[event.opa_type]}
       })
     }
   },
@@ -707,8 +758,8 @@ export default {
       var veh = this.decrypt(key, encrypted)
       this.vin = veh.vin
       this.v.ctec.vin = veh.vin
-      this.plaque = veh.plaque_immat
-      this.v.plaque = veh.plaque_immat
+      this.plaque = veh.plaq_immat
+      this.v.plaque = veh.plaq_immat
       this.v.ctec.couleur = veh.couleur
       this.v.ctec.cnit = veh.num_cnit
       this.v.ctec.tvv = veh.tvv
@@ -748,10 +799,11 @@ export default {
       this.v.age_veh = veh.age_annee
 
       this.v.administratif.gages = veh.gage
-      this.v.administratif.suspensions = veh.suspension
+      this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
       // opposition et procédure à valider
       this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
-      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.annulation_ci === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule saisi, certificat annulé') // mapping à valider
+      // pour l'instant aucun véhicule saisi dans les échantillons
+      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
       this.v.administratif.vol = veh.vehicule_vole
 
       // vol : les informations viennent-elles de foves ?
@@ -759,10 +811,12 @@ export default {
       this.v.administratif.titre.perte = veh.perte_ci
       this.v.administratif.titre.duplicata = veh.duplicata
 
+      this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
+
       this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
-      // ci-dessous : encore à valider
-      this.v.sinistre = veh.historique.some(e => e.nature === 'INSCRIRE_OTCI') ? veh.historique.filter(e => e.nature === 'INSCRIRE_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
-      this.v.apte = veh.historique.some(e => e.nature === 'LEVER_OTCI') ? veh.historique.filter(e => e.nature === 'LEVER_OTCI').map(e => this.formatDate(e.date).replace(/.*\//, ''))[0] : false
+      // ci-dessous : interprétation à confirmer
+      this.v.sinistre = veh.historique.some(e => e.opa_type === 'INSCRIRE_OVE') ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
+      this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
 
       this.display = true
     })

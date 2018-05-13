@@ -9,6 +9,7 @@ import Vue from 'vue'
 
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
+import operations from './assets/json/libelle_operations.json'
 
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
@@ -24,6 +25,7 @@ Vue.mixin({
     return {
       apiUrl: apiConf.api.url.replace('<APP>', process.env.APP),
       localization: localization,
+      operations: operations,
       lang: localization.default
     }
   },
