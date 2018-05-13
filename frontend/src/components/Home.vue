@@ -45,10 +45,9 @@
               									data-endspeed="600" style=" word-wrap: break-word;">
 Des affaires récentes mettant en
 lumière des véhicules gravement endommagés remis
-en circulation <br/> alors qu’ils étaient dangereux. <br/> La mesure n°16 du CISR du 9 janvier 2018
-prévoit le renforcement de l’information
-des consommateurs sur  <br/> l’état des
-véhicules qu’ils se préparent à acquérir en pouvant consulter l'historique des véhicules </div>
+en circulation <br/> alors qu’ils étaient dangereux. <br/> HistoVec permet le renforcement de l’information
+des consommateurs sur l’état des véhicules <br/>
+véhicules en offrant la consultation de leur historique </div>
                   <!-- LAYER NR. 4
                   <div class="tp-caption sfb fadeout small_white"
               									data-x="left"
