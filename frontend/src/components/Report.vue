@@ -656,8 +656,8 @@ export default {
         mentions: 'Aucun élément dans la liste.',
         titulaire: {
           nature: 'Titulaire',
-          identite: 'PRBUISNESS 123456789',
-          adresse: '38, avenue Guy Mocquet, 75000 Paris'
+          identite: 'P******* 123***789',
+          adresse: '75000'
         },
         certificat: {
           premier: '16/06/2008',
