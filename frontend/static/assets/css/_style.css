@@ -1,8 +1,36 @@
 @charset "utf-8";
 /* CSS Document */
 
+.text-defaut{
+	color:#2aa4a5;
+}
+.text-defaut-i-g{
+	color:#2aa4a5;
+	font-style:italic;
+	font-weight:400;
+}
+.text-defaut-g{
+	color:#2aa4a5;
+	font-weight:600;
+}
+
+#logo{
+	padding:20px 0 0 0;
+}
+.logo_p_v{
+	padding:25px 0 0 15px;
+}
+.separator {
+  width:100%;
+  margin:0 auto 15px;
+  position:relative;
+  height:1px;
+  -webkit-backface-visibility:hidden;
+  -webkit-transform:translateZ(0) scale(1, 1);
+}
+
 .full_screen {
-  background:url(../../assets/images/full_screen_1.jpg) no-repeat center center fixed;
+ /* background:url(../../assets/images/tableau_de_bord/full_screen_1.jpg) no-repeat center center fixed; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
@@ -15,7 +43,6 @@
 	color: #999999;
 	text-align:center;
 	padding:15px 0 0 0;
-
 }
 .title-logo {
 	background-image:url("../images/logo_dsic_250.png");
@@ -297,20 +324,25 @@ hr.style1{
 
 }
 .transbox_2 {
-	padding-top:100px;
-	margin:30px;
+	padding:40px 10px 0 10px;
+	margin:70px;
 	font-family:Pacifico;
 	font-weight:400;
 	font-size:4em;
 	color:#E6E6E6;
-	text-shadow:0.040em 0.040em 0px #333;  
+	text-shadow:0.070em 0.070em 0px #333;  
 	text-transform: none;
 }
 .transbox_3 {
-	font-size:1.7em;
+	font-size:1.5em;
+	font-weight:500;
 	color:#fff;
 	text-shadow:0.060em 0.060em 0px #000; 
-
+}
+.transbox_4 {
+	background:#ecb306;
+	padding:0 10px 3px 10px;
+ 	border-radius: 5px;
 }
 /* -------------------- fin affichage texte slider -------------------- */
 
@@ -453,4 +485,27 @@ hr.style1{
   .full-text-container p {
     margin-bottom: 10px;
   }
+}
+.shadow_spec,
+.shadow_spec-narrow {
+  position:relative;
+  background-color:#ffffff;
+}
+.shadow_spec:hover{
+  box-shadow: 0 0 0 0;
+  cursor:auto;
+}
+.light-gray-bg.shadow_spec,
+.light-gray-bg.shadow_spec-narrow {
+  background-color:#fafafa;
+}
+.bordered_spec {
+  border:1px solid #ddd;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+  box-shadow: 1px 1px 3px #aaa;
+}
+.dark-bg .bordered_spec {
+  border:1px solid #555555;
 }

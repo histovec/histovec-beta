@@ -1569,6 +1569,16 @@ h5 + .separator {
   padding-right:40px;
 }
 
+.pv-10 {
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+.pv-15 {
+  padding-top:15px;
+  padding-bottom:15px;
+}
+
 .pv-20 {
   padding-top:20px;
   padding-bottom:20px;
@@ -1932,7 +1942,7 @@ h5 + .separator {
   display:block;
   margin:0px auto;
   text-align:center;
-  margin-bottom:80px;
+  margin-bottom:20px;
   line-height:1;
   width:135px;
   position:relative;
@@ -4469,29 +4479,29 @@ fieldset[disabled] .form-control {
   position:relative;
   background-color:#ffffff;
 }
-
+.shadow:hover{
+  box-shadow: 0 0 0 0;
+  cursor:auto;
+}
 .light-gray-bg.shadow,
 .light-gray-bg.shadow-narrow {
   background-color:#fafafa;
 }
-
 .bordered {
-  border:1px solid #f1f1f1;
+  border:1px solid #ddd;
   -webkit-border-radius:3px;
   -moz-border-radius:3px;
   border-radius:3px;
+  box-shadow: 1px 1px 3px #aaa;
 }
-
 .dark-bg .bordered {
   border:1px solid #555555;
 }
-
 .shadow *,
 .shadow-narrow * {
   position:relative;
   z-index:3;
 }
-
 .shadow:before,
 .shadow-narrow:before {
   position:absolute;
@@ -4503,7 +4513,6 @@ fieldset[disabled] .form-control {
   background-color:#ffffff;
   z-index:2;
 }
-
 .light-gray-bg.shadow:before,
 .light-gray-bg.shadow-narrow:before {
   background-color:#fafafa;
@@ -4526,12 +4535,10 @@ fieldset[disabled] .form-control {
   -o-transition:all 0.3s ease-in-out;
   transition:all 0.3s ease-in-out;
 }
-
 .shadow-narrow:after {
   width:90%;
   margin-left:-45%;
 }
-
 .shadow:hover:after,
 .shadow-narrow:hover:after {
   bottom:10px;
@@ -7454,8 +7461,8 @@ h6.media-heading {
 
 .clients .client-image {
   text-align:center;
-  width:80px;
-  height:80px;
+  width:auto; /* 80px */
+  height:auto; /* 80px */
   margin:5px;
   display:inline-block;
 }
@@ -8065,13 +8072,15 @@ h6.media-heading {
   width:100%;
   position:relative;
   padding:0;
-  
+
 }
 
 .slider-banner-fullscreen,
 .slider-banner-fullwidth {
   width:100%;
   position:relative;
+  max-height: 250px;
+  height: 250px;
 }
 
 .slider-banner-container ul.slides,
