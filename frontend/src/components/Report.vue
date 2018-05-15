@@ -598,6 +598,7 @@ export default {
       conf: [],
       elasticsearch: null,
       v: {
+        date_update: '10/05/2018',
         nb_proprietaires: 3,
         plaque: 'AA-555-AA',
         etranger: true,
