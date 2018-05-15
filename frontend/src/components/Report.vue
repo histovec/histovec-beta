@@ -399,15 +399,19 @@
               <!-- debut mentions particuliéres : à supprimer ultérieurement ? selon validation comité Histovec -->
               <!-- <table class="table table-striped table-responsive">
                 <tbody>
-                  <tr>
+                  <div class="row">
                     <td>
                       <h6>Mentions particulières</h6></td>
-                  </tr>
-                  <tr>
+                  </div>
+                  <div class="separator"></div>
+
+                  <div class="row">
                     <td>
                       <div class="alert alert-info" role="alert">{{ v.mentions }}</div>
                     </td>
-                  </tr>
+                  </div>
+                  <div class="separator"></div>
+
                 </tbody>
               </table> -->
               <!-- fin mentions particuliéres -->
