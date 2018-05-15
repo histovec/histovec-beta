@@ -557,8 +557,8 @@ export default {
           // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
         },
         'perte_ci': {
-          'icon': 'fa-search',
-          'text': 'Le certificat d\'immatriculation a fait l\'objet d\'une déclaration de perte',
+          'icon': 'fa-exclamation-triangle',
+          'text': 'La carte grise a fait l\'objet d\'une déclaration de perte',
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         },
         'annulation_ci': {
