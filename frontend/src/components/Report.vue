@@ -518,20 +518,19 @@
             </div>
             <div class="tab-pane fade" id="vtab5">
               <!-- debut tableau operation historique -->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w250">
-                      <h6>Date</h6></td>
-                    <td class="rd_w500">
-                      <h6>Nature</h6></td>
-                  </tr>
-                  <tr v-for="(entry, index) in v.historique" :key="index">
-                    <td class="rd_w250">{{ entry.date }}</td>
-                    <td class="info_red">{{ entry.nature }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-sm-4"><span class="txt-small-12"><h6>Date</h6></span></div>
+                <div class="col-sm-8"><span class="bold txt-small-12"><h6>Opération</h6></span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div v-for="(entry, index) in v.historique" :key="index">
+                <div class="row">
+                  <div class="col-sm-4"><span class="txt-small-12">{{ entry.date }}</span></div>
+                  <div class="col-sm-8"><span class="info_red txt-small-12">{{ entry.nature }}</span></div>
+                </div>
+                <div class="separator pv-5"></div>
+              </div>
               <!-- fin tableau operation historique -->
             </div>
             <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">

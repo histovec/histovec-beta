@@ -1569,6 +1569,11 @@ h5 + .separator {
   padding-right:40px;
 }
 
+.pv-5 {
+  padding-top:5px;
+  padding-bottom:5px;
+}
+
 .pv-10 {
   padding-top:10px;
   padding-bottom:10px;
