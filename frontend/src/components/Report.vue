@@ -551,10 +551,10 @@ export default {
           // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
         'suspension': {
-          'icon': 'fa-ban',
-          'text': 'Le véhicule a été retiré de la circulation (certificat susepndu)',
-          'adv': 'retrait et remise en circulation',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+          'icon': 'fa-minus-circle',
+          'text': 'L\'autorisation de circulation de ce véhicule a été suspendue',
+          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation'
+          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
         },
         'perte_ci': {
           'icon': 'fa-search',
