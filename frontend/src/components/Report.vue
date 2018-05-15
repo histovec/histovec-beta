@@ -59,20 +59,20 @@
                   </tr>
                   <tr>
                     <td><i class="fa fa-car fa-2x pr-10"></i></td>
-                    <td><span class="info_red">{{ v.marque }} {{ v.ctec.modele }}</span></br>
+                    <td><span class="info_red">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                       Puissance fiscale : <span class="bold">{{ v.ctec.puissance.cv }} ch</span></td>
                     <td class="trait_left" rowspan="7">&nbsp;</td>
-                    <td><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation"
+                    <td><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre carte grise"
                         data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez ici au simulateur de calcul<i class="fa fa-calculator"></i></a></td>
                   </tr>
                   <tr>
                     <td><i class="fa fa-address-card fa-2x pr-10"></i></td>
-                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><span class="info_red txt-small">éme</span>                      propriétaire</td>
+                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup>                      propriétaire</td>
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
                     <td><i class="fa fa-first-order fa-2x pr-10"></i></td>
-                    <td>Premiére immatriculation le <span class="info_red">{{ v.certificat.premier }}</span></td>
+                    <td>Premiére immatriculation le <span class="text-warning">{{ v.certificat.premier }}</span></td>
                     <td>&nbsp;</td>
                   </tr>
                   <!-- <tr>
