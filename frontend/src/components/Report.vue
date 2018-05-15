@@ -562,10 +562,9 @@ export default {
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         },
         'annulation_ci': {
-          'icon': 'fa-ban',
-          'text': 'Le certificat a été annulé',
-          'adv': 'retrait et remise en circulation',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+          'icon': 'fa-minus-circle',
+          'text': 'La carte grise a été annulée',
+          'adv': 'Ce véhicule ne peut pas être vendu en l\'état'
         },
         'vehicule_vole': {
           'icon': 'fa-eye',
