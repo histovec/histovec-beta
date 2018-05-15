@@ -43,7 +43,8 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <div class="tab-pane fade in active" id="vtab1">
-              <h6 class="title">Resumé</h6>
+              <h6 class="title">Résumé</h6>
+              <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
               <table class="table table-responsive">
                 <tbody>
                   <tr>
