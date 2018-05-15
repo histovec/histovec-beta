@@ -417,134 +417,104 @@
               <!-- fin mentions particuliéres -->
             </div>
             <div class="tab-pane fade" id="vtab3">
-              <h6 class="title">Titulaire et co-titulaires</h6>
+              <h6 class="title">Titulaire</h6>
               <!-- debut titulaire et co-titulaire -->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w300">Nature</td>
-                    <td class="info_red rd_w500">{{ v.titulaire.nature }}</td>
-                  </tr>
-                  <tr>
-                    <td>Identité</td>
-                    <td class="info_red">{{ v.titulaire.identite }}</td>
-                  </tr>
-                  <tr>
-                    <td>Adresse</td>
-                    <td class="info_red">{{ v.titulaire.adresse }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Nature</span></div>
+                <div class="col-sm-7"><span class="txt-small-12">{{ v.titulaire.nature }}</span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Identité</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.identite }}</span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Adresse</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.adresse }}</span></div>
+              </div>
+              <div class="separator"></div>
               <!-- fin tableau titulaire et co-titulaire -->
               <h6 class="title">Carte grise</h6>
               <!-- debut tableau carte grise -->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w300">Date de première immatriculation</td>
-                    <td class="info_red rd_w500">{{ v.certificat.premier }}</td>
-                  </tr>
-                  <tr>
-                    <td>Date de la carte grise actuelle</td>
-                    <td class="info_red">{{ v.certificat.courant }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.premier }}</span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Date de la carte grise actuelle</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.courant }}</span></div>
+              </div>
+              <div class="separator"></div>
               <!-- debut tableau situation administrative -->
             </div>
             <div class="tab-pane fade" id="vtab4">
-              <div class="col-sm-6">
-                <h6 class="title">Gages</h6>
-                <!-- debut tableau gages -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.gages }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau gages -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Oppositions</h6>
-                <!-- debut tableau oppositions -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.oppositions }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau oppositions -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Suspensions</h6>
-                <!-- debut tableau suspensions -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.suspensions }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau suspensions -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Procédures</h6>
-                <!-- debut tableau procédures -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.procedures }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau procédures -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Véhicule</h6>
-                <!-- debut tableau véhicule -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td>Etat de vol</td>
-                      <td class="info_red">{{ v.administratif.vol }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau véhicule -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Etat de la carte grise</h6>
-                <!-- debut tableau titre -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td>Etat de vol</td>
-                      <td class="info_red">{{ v.administratif.titre.vol }}</td>
-                    </tr>
-                    <tr>
-                      <td>Etat de perte</td>
-                      <td class="info_red">{{ v.administratif.titre.perte }}</td>
-                    </tr>
-                    <tr>
-                      <td>Duplicata</td>
-                      <td class="info_red">{{ v.administratif.titre.duplicata }}</td>
-                    </tr>
-                    <!-- <tr>
-                      <td>Remise du titre</td>
-                      <td class="info_red">{{ v.administratif.titre.remise }}</td>
-                    </tr> -->
-                  </tbody>
-                </table>
-                <!-- fin tableau titre -->
-              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <h6 class="title">Gages</h6>
+                  <!-- debut tableau gages -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.gages }}</span>
+                    <div class="separator-2"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Oppositions</h6>
+                  <!-- debut tableau oppositions -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.oppositions }}</span>
+                    <div class="separator-2"></div>
+                  </div>
+                  <!-- fin tableau oppositions -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Suspensions</h6>
+                  <!-- debut tableau suspensions -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.suspensions }}</span>
+                    <div class="separator-2"></div>
+                  </div>
+                  <!-- fin tableau suspensions -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Procédures</h6>
+                  <!-- debut tableau procédures -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.procedures }}</span>
+                    <div class="separator"></div>
+                  </div>
+                  <!-- fin tableau procédures -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Véhicule</h6>
+                  <!-- debut tableau véhicule -->
+                  <div class="col-sm-4"><span class="txt-small-12">Etat de vol</span></div>
+                  <div class="col-sm-3"><span class="info_red txt-small-12">{{ v.administratif.vol }}</span></div>
+                  <!-- fin tableau véhicule -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Etat de la carte grise</h6>
+                  <!-- debut tableau titre -->
+                  <div class="col-sm-5"><span class="txt-small-12">Etat de vol</span></div>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.vol }}</span></div>
+                  <div class="col-sm-5"><span class="txt-small-12">Etat de perte</span></div>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.perte }}</span></div>
+                  <div class="col-sm-5"><span class="txt-small-12">Duplicata</span></div>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.duplicata }}</span></div>
+                </div>
+            <!-- <div class="row">
+                      <div class="col-sm-6"><span class="txt-small-12">Remise du titre</span></div>
+                      <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.administratif.titre.remise }}</span></div>
+                    </div>
+                  <div class="separator"></div>
+ -->
               <!-- debut bouton imprimer csa detaille -->
-              <div class="col-sm-6">
-                <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
+                <div class="col-sm-12">
+                  <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
                   data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </button>
-              </div>
+                </div>
               <!-- fin bouton imprimer csa detaille -->
+              </div>
             </div>
             <div class="tab-pane fade" id="vtab5">
               <!-- debut tableau operation historique -->
