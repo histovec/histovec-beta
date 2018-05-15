@@ -100,7 +100,7 @@
                       (gages, opposition, vol,...)</td>
                     <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
                   </tr>
-                  <tr v-for="(entry, index) in v.administratif.synthese" :key="index">
+                  <tr class="info_red" v-for="(entry, index) in v.administratif.synthese" :key="index">
                     <td><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></td>
                     <td> {{ synthese[entry].text }} </td>
                     <td class="color-info_2 bold_4" v-if="synthese[entry].link === undefined"> {{ synthese[entry].adv }} </td>
