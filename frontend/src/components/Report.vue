@@ -354,8 +354,8 @@
                 </tbody>
               </table>
               <!-- fin tableau titulaire et co-titulaire -->
-              <h6 class="title">Certificat d'Immatriculation</h6>
-              <!-- debut tableau certificat d'immatriculation -->
+              <h6 class="title">Carte grise</h6>
+              <!-- debut tableau carte grise -->
               <table class="table table-striped table-responsive">
                 <tbody>
                   <tr>
@@ -363,7 +363,7 @@
                     <td class="info_red rd_w500">{{ v.certificat.premier }}</td>
                   </tr>
                   <tr>
-                    <td>Date du certificat d'immatriculation actuel</td>
+                    <td>Date de la carte grise actuelle</td>
                     <td class="info_red">{{ v.certificat.courant }}</td>
                   </tr>
                 </tbody>
@@ -433,7 +433,7 @@
                 <!-- fin tableau véhicule -->
               </div>
               <div class="col-sm-6">
-                <h6 class="title">Etat du Certificat d'Immatriculation</h6>
+                <h6 class="title">Etat de la carte grise</h6>
                 <!-- debut tableau titre -->
                 <table class="table table-responsive">
                   <tbody>
