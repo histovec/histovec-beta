@@ -582,9 +582,9 @@ export default {
           'adv': 'Seule une mainlevée du créancier ou un juge peut permettre la vente de ce véhicule'
         },
         'gage': {
-          'icon': 'fa-gavel',
-          'text': 'Le véhicule est gagé et ne peut être vendu en l\'état',
-          'adv': 'Demandez un certificat de non-gage, une fois que le gage est levé.'
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Le véhicule est gagé',
+          'adv': 'Un véhicule gagé peut être acheté, avec transfert du gage'
         },
         'duplicata': {
           'icon': 'fa-copy',
