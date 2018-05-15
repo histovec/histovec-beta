@@ -93,7 +93,8 @@
                     </td>
                     <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
                   </tr>
-                  <tr v-if="v.administratif.synthese === false">
+                  <!-- bug fix -->
+                  <tr v-if="v.administratif.synthese.length === 0">
                     <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
                     <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>
                       (gages, opposition, vol,...)</td>
