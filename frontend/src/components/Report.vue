@@ -572,7 +572,7 @@ export default {
           'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
         },
         'vole_ci': {
-          'icon': 'fa-search',
+          'icon': 'fa-exclamation-triangle',
           'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
           'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
         },
