@@ -567,7 +567,7 @@ export default {
           'adv': 'Ce véhicule ne peut pas être vendu en l\'état'
         },
         'vehicule_vole': {
-          'icon': 'fa-eye',
+          'icon': 'fa-minus-circle',
           'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
           'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
         },
