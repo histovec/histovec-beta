@@ -80,7 +80,7 @@
                     <td><span class="info_red">48.210 km</span> Relevé au dernier contrôle technique du <span class="info_red">21/04/2016</span></td>
                     <td class="color-info_2 bold_4">Un contrôle technique de moins de 6 mois doit être fourni</td>
                   </tr> -->
-                  <tr v-if="v.etranger">
+                  <tr v-if="v.etranger !== 'NON'">
                     <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
                     <td>Ce véhicule a été <span class="info_red">immatriculé dans un autre pays</span></td>
                     <td class="color-info_2 bold_4">Vérifier les options incluses qui peuvent être différentes</td>
