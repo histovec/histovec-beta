@@ -43,7 +43,8 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <div class="tab-pane fade in active" id="vtab1">
-              <h6 class="title">Resumé</h6>
+              <h6 class="title">Résumé</h6>
+              <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
               <table class="table table-responsive">
                 <tbody>
                   <tr>
@@ -58,20 +59,20 @@
                   </tr>
                   <tr>
                     <td><i class="fa fa-car fa-2x pr-10"></i></td>
-                    <td><span class="info_red">{{ v.marque }} {{ v.ctec.modele }}</span></br>
+                    <td><span class="info_red">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                       Puissance fiscale : <span class="bold">{{ v.ctec.puissance.cv }} ch</span></td>
                     <td class="trait_left" rowspan="7">&nbsp;</td>
-                    <td><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation"
+                    <td><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre carte grise"
                         data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez ici au simulateur de calcul<i class="fa fa-calculator"></i></a></td>
                   </tr>
                   <tr>
                     <td><i class="fa fa-address-card fa-2x pr-10"></i></td>
-                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><span class="info_red txt-small">éme</span>                      propriétaire</td>
+                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup>                      propriétaire</td>
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
                     <td><i class="fa fa-first-order fa-2x pr-10"></i></td>
-                    <td>Premiére immatriculation le <span class="info_red">{{ v.certificat.premier }}</span></td>
+                    <td>Premiére immatriculation le <span class="text-warning">{{ v.certificat.premier }}</span></td>
                     <td>&nbsp;</td>
                   </tr>
                   <!-- <tr>
@@ -79,9 +80,9 @@
                     <td><span class="info_red">48.210 km</span> Relevé au dernier contrôle technique du <span class="info_red">21/04/2016</span></td>
                     <td class="color-info_2 bold_4">Un contrôle technique de moins de 6 mois doit être fourni</td>
                   </tr> -->
-                  <tr v-if="v.etranger">
+                  <tr v-if="v.etranger !== 'NON'">
                     <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
-                    <td>Ce véhicule a été <span class="info_red">immatriculé dans un autre pays</span></td>
+                    <td>Ce véhicule a été <span class="info_red">importé</span></td>
                     <td class="color-info_2 bold_4">Vérifier les options incluses qui peuvent être différentes</td>
                   </tr>
                   <tr v-if="v.sinistre !== false">
@@ -92,13 +93,14 @@
                     </td>
                     <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
                   </tr>
-                  <tr v-if="v.administratif.synthese === false">
+                  <!-- bug fix -->
+                  <tr v-if="v.administratif.synthese.length === 0">
                     <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
                     <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>
                       (gages, opposition, vol,...)</td>
                     <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
                   </tr>
-                  <tr v-for="(entry, index) in v.administratif.synthese" :key="index">
+                  <tr class="info_red" v-for="(entry, index) in v.administratif.synthese" :key="index">
                     <td><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></td>
                     <td> {{ synthese[entry].text }} </td>
                     <td class="color-info_2 bold_4" v-if="synthese[entry].link === undefined"> {{ synthese[entry].adv }} </td>
@@ -352,8 +354,8 @@
                 </tbody>
               </table>
               <!-- fin tableau titulaire et co-titulaire -->
-              <h6 class="title">Certificat d'Immatriculation</h6>
-              <!-- debut tableau certificat d'immatriculation -->
+              <h6 class="title">Carte grise</h6>
+              <!-- debut tableau carte grise -->
               <table class="table table-striped table-responsive">
                 <tbody>
                   <tr>
@@ -361,7 +363,7 @@
                     <td class="info_red rd_w500">{{ v.certificat.premier }}</td>
                   </tr>
                   <tr>
-                    <td>Date du certificat d'immatriculation actuel</td>
+                    <td>Date de la carte grise actuelle</td>
                     <td class="info_red">{{ v.certificat.courant }}</td>
                   </tr>
                 </tbody>
@@ -431,7 +433,7 @@
                 <!-- fin tableau véhicule -->
               </div>
               <div class="col-sm-6">
-                <h6 class="title">Etat du Certificat d'Immatriculation</h6>
+                <h6 class="title">Etat de la carte grise</h6>
                 <!-- debut tableau titre -->
                 <table class="table table-responsive">
                   <tbody>
@@ -537,52 +539,52 @@ export default {
     return {
       synthese: {
         'ove': {
-          'icon': 'fa-thumbs-down',
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Ce véhicule a eu un sinistre déclaré',
           'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
-          'icon': 'fa-ban',
+          'icon': 'fa-exclamation-triangle',
           'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
-          'adv': 'Comprendre les oppositions',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
+          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition'
+          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
         'suspension': {
-          'icon': 'fa-ban',
-          'text': 'Le véhicule a été retiré de la circulation (certificat susepndu)',
-          'adv': 'retrait et remise en circulation',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+          'icon': 'fa-minus-circle',
+          'text': 'L\'autorisation de circulation de ce véhicule a été suspendue',
+          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation'
+          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
         },
         'perte_ci': {
-          'icon': 'fa-search',
-          'text': 'Le certificat d\'immatriculation a fait l\'objet d\'une déclaration de perte',
+          'icon': 'fa-exclamation-triangle',
+          'text': 'La carte grise a fait l\'objet d\'une déclaration de perte',
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         },
         'annulation_ci': {
-          'icon': 'fa-ban',
-          'text': 'Le certificat a été annulé',
-          'adv': 'retrait et remise en circulation',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+          'icon': 'fa-minus-circle',
+          'text': 'La carte grise a été annulée',
+          'adv': 'Ce véhicule ne peut pas être vendu en l\'état'
         },
         'vehicule_vole': {
-          'icon': 'fa-eye',
+          'icon': 'fa-minus-circle',
           'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
           'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
         },
         'vole_ci': {
-          'icon': 'fa-search',
+          'icon': 'fa-exclamation-triangle',
           'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
           'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
         },
         'saisie': {
-          'icon': 'fa-gavel',
-          'text': 'Le véhicule est saisi et ne peut être vendu',
+          'icon': 'fa-minus-circle',
+          'text': 'Le véhicule est saisi',
           'adv': 'Seule une mainlevée du créancier ou un juge peut permettre la vente de ce véhicule'
         },
         'gage': {
-          'icon': 'fa-gavel',
-          'text': 'Le véhicule est gagé et ne peut être vendu en l\'état',
-          'adv': 'Demandez un certificat de non-gage, une fois que le gage est levé.'
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Le véhicule est gagé',
+          'adv': 'Un véhicule gagé peut être acheté, avec transfert du gage'
         },
         'duplicata': {
           'icon': 'fa-copy',
@@ -590,20 +592,21 @@ export default {
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         }
       },
-      plaque: 'AA-086-FS',
-      vin: 'VF32M8HZA9Y044370',
+      plaque: 'A*-0**-F*',
+      vin: 'VF32M******44370',
       display: false,
       conf: [],
       elasticsearch: null,
       v: {
+        date_update: '10/05/2018',
         nb_proprietaires: 3,
-        plaque: 'AA-555-AA',
+        plaque: 'A*-0**-F*',
         etranger: true,
         sinistre: '2012',
         apte: 'avril 2012',
         ctec: {
           marque: 'BMW',
-          tvv: '390LVG91AA',
+          tvv: 'MBM5752C9489',
           modele: 'Série 3',
           puissance: {
             cylindres: '1995',
@@ -631,7 +634,7 @@ export default {
             national: 'CI'
           },
           cnit: 'MBM5752C9489',
-          vin: 'WBAVG91040A347052',
+          vin: 'VF32M******44370',
           reception: {
             numero: 'e1*2001/116*0308*08',
             type: 'CE'
@@ -661,7 +664,8 @@ export default {
         },
         certificat: {
           premier: '16/06/2008',
-          courant: '17/06/2016'
+          courant: '17/06/2016',
+          depuis: 9
         },
         administratif: {
           synthese: false,
@@ -809,7 +813,7 @@ export default {
       // vol : les informations viennent-elles de foves ?
       this.v.administratif.titre.vol = veh.ci_vole
       this.v.administratif.titre.perte = veh.perte_ci
-      this.v.administratif.titre.duplicata = veh.duplicata
+      this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
       this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
