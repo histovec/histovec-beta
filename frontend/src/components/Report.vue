@@ -592,8 +592,8 @@ export default {
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         }
       },
-      plaque: 'AA-086-FS',
-      vin: 'VF32M8HZA9Y044370',
+      plaque: 'A*-0**-F*',
+      vin: 'VF32M******44370',
       display: false,
       conf: [],
       elasticsearch: null,
