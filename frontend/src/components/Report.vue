@@ -539,7 +539,8 @@ export default {
     return {
       synthese: {
         'ove': {
-          'icon': 'fa-thumbs-down',
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Ce véhicule a eu un sinistre déclaré',
           'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
