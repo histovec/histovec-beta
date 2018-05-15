@@ -577,8 +577,8 @@ export default {
           'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
         },
         'saisie': {
-          'icon': 'fa-gavel',
-          'text': 'Le véhicule est saisi et ne peut être vendu',
+          'icon': 'fa-minus-circle',
+          'text': 'Le véhicule est saisi',
           'adv': 'Seule une mainlevée du créancier ou un juge peut permettre la vente de ce véhicule'
         },
         'gage': {
