@@ -484,10 +484,10 @@
                       <td>Duplicata</td>
                       <td class="info_red">{{ v.administratif.titre.duplicata }}</td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>Remise du titre</td>
                       <td class="info_red">{{ v.administratif.titre.remise }}</td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
                 <!-- fin tableau titre -->
