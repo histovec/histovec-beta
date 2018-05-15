@@ -43,73 +43,108 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <div class="tab-pane fade in active" id="vtab1">
-              <h6 class="title">Résumé</h6>
-              <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
-              <table class="table table-responsive">
-                <tbody>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td class="rd_w400">&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td class="rd_w300">
-                      <p class="alert alert-icon alert-info" role="alert">
-                        <i class="fa fa-user-circle-o blink_me"></i>Conseils pour l'acheteur
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><i class="fa fa-car fa-2x pr-10"></i></td>
-                    <td><span class="info_red">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-                      Puissance fiscale : <span class="bold">{{ v.ctec.puissance.cv }} ch</span></td>
-                    <td class="trait_left" rowspan="7">&nbsp;</td>
-                    <td><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre carte grise"
-                        data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez ici au simulateur de calcul<i class="fa fa-calculator"></i></a></td>
-                  </tr>
-                  <tr>
-                    <td><i class="fa fa-address-card fa-2x pr-10"></i></td>
-                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup>                      propriétaire</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td><i class="fa fa-first-order fa-2x pr-10"></i></td>
-                    <td>Premiére immatriculation le <span class="text-warning">{{ v.certificat.premier }}</span></td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <!-- <tr>
-                    <td><i class="fa fa-arrows-h fa-2x pr-10"></i></td>
-                    <td><span class="info_red">48.210 km</span> Relevé au dernier contrôle technique du <span class="info_red">21/04/2016</span></td>
-                    <td class="color-info_2 bold_4">Un contrôle technique de moins de 6 mois doit être fourni</td>
-                  </tr> -->
-                  <tr v-if="v.etranger !== 'NON'">
-                    <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
-                    <td>Ce véhicule a été <span class="info_red">importé</span></td>
-                    <td class="color-info_2 bold_4">Vérifier les options incluses qui peuvent être différentes</td>
-                  </tr>
-                  <tr v-if="v.sinistre !== false">
-                    <td><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
-                             {'fa fa-thumbs-down info_red fa-2x pr-10' : v.apte === false}]"></i></td>
-                    <td>Ce véhicule a eu <span class="info_red">un sinistre déclaré</span> en {{v.sinistre}}</br>
-                      <span v-if="v.apte !== false">  et <span class="info_red">déclaré apte à circuler</span> en {{v.apte}}</span>
-                    </td>
-                    <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
-                  </tr>
-                  <!-- bug fix -->
-                  <tr v-if="v.administratif.synthese.length === 0">
-                    <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
-                    <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>
-                      (gages, opposition, vol,...)</td>
-                    <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
-                  </tr>
-                  <tr class="info_red" v-for="(entry, index) in v.administratif.synthese" :key="index">
-                    <td><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></td>
-                    <td> {{ synthese[entry].text }} </td>
-                    <td class="color-info_2 bold_4" v-if="synthese[entry].link === undefined"> {{ synthese[entry].adv }} </td>
-                    <td v-else><a :href="synthese[entry].link" class="btn btn-animated btn-default btn-sm"
-                       target="_blank">{{ synthese[entry].adv }}</a>
-                    </td>
-                  </tr>
-
-                </tbody>
+              <div class="row">
+                <div class="col-md-7">
+                  <h6 class="title p-h-35">Résumé</h6>
+                  <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
+                </div>
+                <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Conseils pour l'acheteur </div>
+              </div>
+              <div class="row">
+                <!-- debut voiture  -->
+                <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
+                <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
+                  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red bold txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
+                  <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
+                  <!-- fin voiture  -->
+              </div>
+                <!-- debut trait separation  -->
+              <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+              <div class="row">
+                  <!-- debut proprietaire  -->
+                <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
+                <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span><br/>
+                  <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup> propriétaire</div>
+                <div class="col-sm-5"></div>
+                <!-- fin proprietaire  -->
+              </div>
+              <!-- debut trait separation  -->
+              <div class="separator-2"></div>
+              <!-- fin trait separation  -->
+              <div class="row">
+                <!-- debut immatriculation  -->
+                <div class="col-sm-1"><i class="fa fa-calendar fa-2x pr-10"></i></div>
+                <div class="col-sm-6"><span class="txt-small-13">Première immatriculation le</span> <span class="info_red txt-small-13">{{ v.certificat.premier }}</span><br/><br/></div>
+                <div class="col-sm-5"></div>
+                <!-- fin immatriculation  -->
+              </div>
+              <!-- debut trait separation  -->
+              <div class="separator-2"></div>
+              <!-- fin trait separation  -->
+              <div v-if="false">
+                <div class="row">
+                  <!-- debut releve  -->
+                  <div class="col-sm-1"><i class="fa fa-arrows-h fa-2x pr-10"></i></div>
+                  <div class="col-sm-6"><span class="info_red txt-small-13">48.210 km</span> <span class="txt-small-13">Relevé au dernier contrôle technique du</span> <span class="info_red txt-small-13">21/04/2016</span> </div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Un contrôle technique de moins de 6 mois doit être fourni</span></div>
+                  <!-- fin releve  -->
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2" v-if="false"></div>
+                <!-- fin trait separation  -->
+              </div>
+              <div v-if="v.etranger !== 'NON'">
+                <div class="row">
+                  <!-- debut immatriculer  -->
+                  <div class="col-sm-1"><i class="fa fa fa-globe fa-2x pr-10"></i></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a été</span> <span class="info_red txt-small-13">importé</span> </div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Vérifier les options incluses qui peuvent être différentes</span></div>
+                  <!-- fin immatriculer  -->
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+              </div>
+              <div v-if="v.sinistre !== false">
+                <div class="row">
+                  <!-- debut sinistre  -->
+                  <div class="col-sm-1"><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
+                               {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"></i></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
+                    <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13">en {{v.apte}}</span></span></div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese.ove.adv }}</span></div>
+                  <!-- fin sinistre  -->
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+              </div>
+              <div v-if="v.administratif.synthese.length === 0">
+                <div class="row">
+                  <!-- debut ras  -->
+                  <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
+                  <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
+                        (gages, opposition, vol,...)</span> </div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Demander au Vendeur un Certificat de Situation Administratif détaillé</span></div>
+                  <!-- fin ras  -->
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+              </div>
+              <div v-for="(entry, index) in v.administratif.synthese" :key="index">
+                <div class="row info_red">
+                  <div class="col-sm-1"><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></div>
+                  <div class="col-sm-6 txt-small-13"> {{ synthese[entry].text }} </div>
+                  <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> {{ synthese[entry].adv }}
+                    <a v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-10"></i> </a>
+                  </div>
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+              </div>
               </table>
             </div>
             <div class="tab-pane fade" id="vtab2">
