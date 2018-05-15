@@ -138,7 +138,7 @@
                   <div class="col-sm-1"><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></div>
                   <div class="col-sm-6 txt-small-13"> {{ synthese[entry].text }} </div>
                   <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> {{ synthese[entry].adv }}
-                    <a v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-10"></i> </a>
+                    <br/><a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                   </div>
                 </div>
                 <!-- debut trait separation  -->
@@ -582,14 +582,14 @@ export default {
         'otci': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
-          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition'
-          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
+          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
         'suspension': {
           'icon': 'fa-minus-circle',
           'text': 'L\'autorisation de circulation de ce véhicule a été suspendue',
-          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation'
-          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
         },
         'perte_ci': {
           'icon': 'fa-exclamation-triangle',
