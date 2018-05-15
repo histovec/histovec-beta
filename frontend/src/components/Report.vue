@@ -545,7 +545,7 @@ export default {
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
-          'icon': 'fa-ban',
+          'icon': 'fa-exclamation-triangle',
           'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
           'adv': 'Comprendre les oppositions',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
