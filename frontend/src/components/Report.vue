@@ -813,7 +813,7 @@ export default {
       // vol : les informations viennent-elles de foves ?
       this.v.administratif.titre.vol = veh.ci_vole
       this.v.administratif.titre.perte = veh.perte_ci
-      this.v.administratif.titre.duplicata = veh.duplicata
+      this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
       this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
