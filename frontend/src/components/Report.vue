@@ -367,32 +367,34 @@
               <div class="separator"></div>
               <!-- fin tableau v.-->
               <!-- debut tableau controle technique -->
-              <table class="table table-striped table-responsive" v-if="beta">
+              <!-- <table class="table table-striped table-responsive" v-if="beta">
                 <tbody>
                   <tr>
                     <td colspan="4">
                       <h6>Contrôle technique</h6></td>
                   </tr>
                   <tr>
-                    <td class="bold">OTC</td>
-                    <td>Résultat</td>
-                    <td><span class="label label-success">{{ v.controle.otc.resultat }}</span></td>
-                    <td>Date du contrôle</td>
-                    <td class="info_red">{{ v.controle.otc.date }}</td>
-                    <td>Fin de validité</td>
-                    <td class="info_red">{{ v.controle.otc.validite }}</td>
+                    <div class="col-sm-2"><span class="bold txt-small-12">OTC</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Résultat</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12"><span class="label label-success">{{ v.controle.otc.resultat }}</span></span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Date du contrôle</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.otc.date }}</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Fin de validité</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.otc.validite }}</span></div>
                   </tr>
+
                   <tr>
-                    <td class="bold">SIV</td>
-                    <td>Résultat</td>
-                    <td><span class="label label-warning">{{ v.controle.siv.resultat }}</span></td>
-                    <td>Date du contrôle</td>
-                    <td class="info_red">{{ v.controle.siv.date }}</td>
-                    <td>Fin de validité</td>
-                    <td class="info_red">{{ v.controle.siv.validite }}</td>
+                    <div class="col-sm-2"><span class="bold txt-small-12">SIV</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Résultat</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12"><span class="label label-warning">{{ v.controle.siv.resultat }}</span></span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Date du contrôle</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.siv.date }}</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Fin de validité</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.siv.validite }}</span></div>
                   </tr>
+
                 </tbody>
-              </table>
+              </table> -->
               <!-- fin tableau controle technique -->
               <!-- debut mentions particuliéres : à supprimer ultérieurement ? selon validation comité Histovec -->
               <!-- <table class="table table-striped table-responsive">
