@@ -82,7 +82,7 @@
                   </tr> -->
                   <tr v-if="v.etranger !== 'NON'">
                     <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
-                    <td>Ce véhicule a été <span class="info_red">immatriculé dans un autre pays</span></td>
+                    <td>Ce véhicule a été <span class="info_red">importé</span></td>
                     <td class="color-info_2 bold_4">Vérifier les options incluses qui peuvent être différentes</td>
                   </tr>
                   <tr v-if="v.sinistre !== false">
