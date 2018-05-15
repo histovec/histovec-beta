@@ -600,13 +600,13 @@ export default {
       v: {
         date_update: '10/05/2018',
         nb_proprietaires: 3,
-        plaque: 'AA-555-AA',
+        plaque: 'A*-0**-F*',
         etranger: true,
         sinistre: '2012',
         apte: 'avril 2012',
         ctec: {
           marque: 'BMW',
-          tvv: '390LVG91AA',
+          tvv: 'MBM5752C9489',
           modele: 'Série 3',
           puissance: {
             cylindres: '1995',
@@ -634,7 +634,7 @@ export default {
             national: 'CI'
           },
           cnit: 'MBM5752C9489',
-          vin: 'WBAVG91040A347052',
+          vin: 'VF32M******44370',
           reception: {
             numero: 'e1*2001/116*0308*08',
             type: 'CE'
