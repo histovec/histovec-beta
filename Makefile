@@ -148,7 +148,7 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network backend elasticsearch frontend-dev
+dev: network elasticsearch frontend-dev
 
 dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 
