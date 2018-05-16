@@ -28,7 +28,12 @@
   -webkit-backface-visibility:hidden;
   -webkit-transform:translateZ(0) scale(1, 1);
 }
-
+.separator-2 {
+  width:50%;
+  margin-bottom:15px;
+  position:relative;
+  height:1px;
+}
 .full_screen {
  /* background:url(../../assets/images/tableau_de_bord/full_screen_1.jpg) no-repeat center center fixed; */
   -webkit-background-size: cover;
@@ -104,6 +109,12 @@ hr.style1{
 }
 .txt-small-11 {
 	font-size:11px;
+}
+.txt-small-12 {
+	font-size:12px;
+}
+.txt-small-13 {
+	font-size:13px;
 }
 .info_red {
 	font-weight:400;

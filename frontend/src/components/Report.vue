@@ -42,444 +42,495 @@
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
+            <!-- /* ----------------- debut synthese ----------------- */ -->
             <div class="tab-pane fade in active" id="vtab1">
-              <h6 class="title">Résumé</h6>
-              <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
-              <table class="table table-responsive">
-                <tbody>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td class="rd_w400">&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td class="rd_w300">
-                      <p class="alert alert-icon alert-info" role="alert">
-                        <i class="fa fa-user-circle-o blink_me"></i>Conseils pour l'acheteur
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><i class="fa fa-car fa-2x pr-10"></i></td>
-                    <td><span class="info_red">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-                      Puissance fiscale : <span class="bold">{{ v.ctec.puissance.cv }} ch</span></td>
-                    <td class="trait_left" rowspan="7">&nbsp;</td>
-                    <td><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre carte grise"
-                        data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez ici au simulateur de calcul<i class="fa fa-calculator"></i></a></td>
-                  </tr>
-                  <tr>
-                    <td><i class="fa fa-address-card fa-2x pr-10"></i></td>
-                    <td>Propriétaire actuel : <span class="info_red">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span> En acquérant ce véhicule vous serez le <span class="info_red">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup>                      propriétaire</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td><i class="fa fa-first-order fa-2x pr-10"></i></td>
-                    <td>Premiére immatriculation le <span class="text-warning">{{ v.certificat.premier }}</span></td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <!-- <tr>
-                    <td><i class="fa fa-arrows-h fa-2x pr-10"></i></td>
-                    <td><span class="info_red">48.210 km</span> Relevé au dernier contrôle technique du <span class="info_red">21/04/2016</span></td>
-                    <td class="color-info_2 bold_4">Un contrôle technique de moins de 6 mois doit être fourni</td>
-                  </tr> -->
-                  <tr v-if="v.etranger !== 'NON'">
-                    <td><i class="fa fa fa-globe fa-2x pr-10"></i></td>
-                    <td>Ce véhicule a été <span class="info_red">importé</span></td>
-                    <td class="color-info_2 bold_4">Vérifier les options incluses qui peuvent être différentes</td>
-                  </tr>
-                  <tr v-if="v.sinistre !== false">
-                    <td><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
-                             {'fa fa-thumbs-down info_red fa-2x pr-10' : v.apte === false}]"></i></td>
-                    <td>Ce véhicule a eu <span class="info_red">un sinistre déclaré</span> en {{v.sinistre}}</br>
-                      <span v-if="v.apte !== false">  et <span class="info_red">déclaré apte à circuler</span> en {{v.apte}}</span>
-                    </td>
-                    <td class="color-info_2 bold_4">{{ synthese.ove.adv }}</td>
-                  </tr>
-                  <!-- bug fix -->
-                  <tr v-if="v.administratif.synthese.length === 0">
-                    <td><i class="fa fa-clipboard fa-2x pr-10"></i></td>
-                    <td><span class="info_red">Rien à signaler</span> du point de vue administratif</br>
-                      (gages, opposition, vol,...)</td>
-                    <td class="color-info_2 bold_4">Demander au Vendeur un Certificat de Situation Administratif détaillé </td>
-                  </tr>
-                  <tr class="info_red" v-for="(entry, index) in v.administratif.synthese" :key="index">
-                    <td><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></td>
-                    <td> {{ synthese[entry].text }} </td>
-                    <td class="color-info_2 bold_4" v-if="synthese[entry].link === undefined"> {{ synthese[entry].adv }} </td>
-                    <td v-else><a :href="synthese[entry].link" class="btn btn-animated btn-default btn-sm"
-                       target="_blank">{{ synthese[entry].adv }}</a>
-                    </td>
-                  </tr>
-
-                </tbody>
-              </table>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-7">
+                    <h6 class="title p-h-35">Résumé</h6>
+                    <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
+                  </div>
+                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Conseils pour l'acheteur </div>
+                </div>
+                <div class="row">
+                  <!-- debut voiture  -->
+                  <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
+                  <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
+                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red bold txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
+                    <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
+                    <!-- fin voiture  -->
+                </div>
+                  <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                  <!-- fin trait separation  -->
+                <div class="row">
+                    <!-- debut proprietaire  -->
+                  <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span><br/>
+                    <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup> propriétaire</div>
+                  <div class="col-sm-5"></div>
+                  <!-- fin proprietaire  -->
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+                <div class="row">
+                  <!-- debut immatriculation  -->
+                  <div class="col-sm-1"><i class="fa fa-calendar fa-2x pr-10"></i></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Première immatriculation le</span> <span class="info_red txt-small-13">{{ v.certificat.premier }}</span><br/><br/></div>
+                  <div class="col-sm-5"></div>
+                  <!-- fin immatriculation  -->
+                </div>
+                <!-- debut trait separation  -->
+                <div class="separator-2"></div>
+                <!-- fin trait separation  -->
+                <div v-if="false">
+                  <div class="row">
+                    <!-- debut releve  -->
+                    <div class="col-sm-1"><i class="fa fa-arrows-h fa-2x pr-10"></i></div>
+                    <div class="col-sm-6"><span class="info_red txt-small-13">48.210 km</span> <span class="txt-small-13">Relevé au dernier contrôle technique du</span> <span class="info_red txt-small-13">21/04/2016</span> </div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Un contrôle technique de moins de 6 mois doit être fourni</span></div>
+                    <!-- fin releve  -->
+                  </div>
+                  <!-- debut trait separation  -->
+                  <div class="separator-2" v-if="false"></div>
+                  <!-- fin trait separation  -->
+                </div>
+                <div v-if="v.etranger !== 'NON'">
+                  <div class="row">
+                    <!-- debut immatriculer  -->
+                    <div class="col-sm-1"><i class="fa fa fa-globe fa-2x pr-10"></i></div>
+                    <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a été</span> <span class="info_red txt-small-13">importé</span> </div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Vérifier les options incluses qui peuvent être différentes</span></div>
+                    <!-- fin immatriculer  -->
+                  </div>
+                  <!-- debut trait separation  -->
+                  <div class="separator-2"></div>
+                  <!-- fin trait separation  -->
+                </div>
+                <div v-if="v.sinistre !== false">
+                  <div class="row">
+                    <!-- debut sinistre  -->
+                    <div class="col-sm-1"><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
+                                 {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"></i></div>
+                    <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
+                      <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13">en {{v.apte}}</span></span></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese.ove.adv }}</span></div>
+                    <!-- fin sinistre  -->
+                  </div>
+                  <!-- debut trait separation  -->
+                  <div class="separator-2"></div>
+                  <!-- fin trait separation  -->
+                </div>
+                <div v-if="v.administratif.synthese.length === 0">
+                  <div class="row">
+                    <!-- debut ras  -->
+                    <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
+                    <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
+                          (gages, opposition, vol,...)</span> </div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Demander au Vendeur un Certificat de Situation Administratif détaillé</span></div>
+                    <!-- fin ras  -->
+                  </div>
+                  <!-- debut trait separation  -->
+                  <div class="separator-2"></div>
+                  <!-- fin trait separation  -->
+                </div>
+                <div v-for="(entry, index) in v.administratif.synthese" :key="index">
+                  <div class="row info_red">
+                    <div class="col-sm-1"><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></div>
+                    <div class="col-sm-6 txt-small-13"> {{ synthese[entry].text }} </div>
+                    <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> {{ synthese[entry].adv }}
+                      <br/><a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
+                    </div>
+                  </div>
+                  <!-- debut trait separation  -->
+                  <div class="separator-2"></div>
+                  <!-- fin trait separation  -->
+                </div>
+              </div>
             </div>
-            <div class="tab-pane fade" id="vtab2">
-              <h6 class="title">Caractéristiques technique</h6>
-              <!-- debut tableau v.-->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w350">Marque</td>
-                    <td class="bold rd_w150">D.1</td>
-                    <td class="info_red rd_w250">{{ v.ctec.marque }}</td>
-                  </tr>
-                  <tr>
-                    <td>Tvv</td>
-                    <td class="bold">D.2</td>
-                    <td class="info_red">{{ v.ctec.tvv }}</td>
-                  </tr>
-                  <tr>
-                    <td>Nom commercial</td>
-                    <td class="bold">D.3</td>
-                    <td class="info_red">{{ v.ctec.modele }}</td>
-                  </tr>
-                  <tr>
-                    <td>Numéro CNIT</td>
-                    <td class="bold">D.2.1</td>
-                    <td class="info_red">{{ v.ctec.cnit }}</td>
-                  </tr>
-                  <tr>
-                    <td>Couleur</td>
-                    <td class="bold">&nbsp;</td>
-                    <td class="info_red">{{ v.ctec.couleur }}</td>
-                  </tr>
-                  <tr>
-                    <td>Type de reception</td>
-                    <td class="bold">&nbsp;</td>
-                    <td class="info_red">CE</td>
-                  </tr>
-                  <tr>
-                    <td class="no-trait-left no-trait-right" colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Numéro d'identification véhicule</td>
-                    <td class="bold">E</td>
-                    <td class="info_red">{{ v.ctec.vin }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>PT technique admissible (kg)</td>
-                    <td class="bold">F.1</td>
-                    <td class="info_red">{{ v.ctec.PT.admissible }}</td>
-                  </tr>
-                  <tr>
-                    <td>PTAC (kg)</td>
-                    <td class="bold">F.2</td>
-                    <td class="info_red">{{ v.ctec.PT.AC }}</td>
-                  </tr>
-                  <tr>
-                    <td>PTRA (kg)</td>
-                    <td class="bold">F.3</td>
-                    <td class="info_red">{{ v.ctec.PT.RA }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>PT en service (kg)</td>
-                    <td class="bold">G</td>
-                    <td class="info_red">{{ v.ctec.PT.service }}</td>
-                  </tr>
-                  <tr>
-                    <td>PTAV (kg)</td>
-                    <td class="bold">G.1</td>
-                    <td class="info_red">{{ v.ctec.PT.AV }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Catégorie (Ce)</td>
-                    <td class="bold">J</td>
-                    <td class="info_red">{{ v.ctec.categorie }}</td>
-                  </tr>
-                  <tr>
-                    <td>Genre (National)</td>
-                    <td class="bold">J.1</td>
-                    <td class="info_red">{{ v.ctec.genre }}</td>
-                  </tr>
-                  <tr>
-                    <td>Carrosserie (Ce)</td>
-                    <td class="bold">J.2</td>
-                    <td class="info_red">{{ v.ctec.carrosserie.ce }}</td>
-                  </tr>
-                  <tr>
-                    <td>Carrosserie (National)</td>
-                    <td class="bold">J.3</td>
-                    <td class="info_red">{{ v.ctec.carrosserie.national }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Numéro de réception</td>
-                    <td class="bold">K</td>
-                    <td class="info_red">{{ v.ctec.reception.numero }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Cylindrée (cm3)</td>
-                    <td class="bold">P.1</td>
-                    <td class="info_red">{{ v.ctec.puissance.cylindres }}</td>
-                  </tr>
-                  <tr>
-                    <td>Puissance nette max (kW)</td>
-                    <td class="bold">P.2</td>
-                    <td class="info_red">{{ v.ctec.puissance.nette }}</td>
-                  </tr>
-                  <tr>
-                    <td>Energie</td>
-                    <td class="bold">P.3</td>
-                    <td class="info_red">{{ v.ctec.energie }}</td>
-                  </tr>
-                  <tr>
-                    <td>Puissance CV</td>
-                    <td class="bold">P.6</td>
-                    <td class="info_red">{{ v.ctec.puissance.cv }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Puissance / masse (kW/kg)</td>
-                    <td class="bold">Q</td>
-                    <td class="info_red">{{ v.ctec.puissance.norm }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Places assises</td>
-                    <td class="bold">S.1</td>
-                    <td class="info_red">{{ v.ctec.places.assis }}</td>
-                  </tr>
-                  <tr>
-                    <td>Pace debout</td>
-                    <td class="bold">S.3</td>
-                    <td class="info_red">{{ v.ctec.places.debout }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>Niveau sonore (db(A))</td>
-                    <td class="bold">U.1</td>
-                    <td class="info_red">{{ v.ctec.db }}</td>
-                  </tr>
-                  <tr>
-                    <td>Vitesse moteur (min-1)</td>
-                    <td class="bold">U.2</td>
-                    <td class="info_red">{{ v.ctec.moteur }}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>CO2 (g/km)</td>
-                    <td class="bold">V.7</td>
-                    <td class="info_red">{{ v.ctec.co2 }}</td>
-                  </tr>
-                  <tr>
-                    <td>Classe environnement (CE)</td>
-                    <td class="bold">V.9</td>
-                    <td class="info_red">{{ v.ctec.environnement }}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <!-- /* ----------------- fin synthese ----------------- */ -->
+            <!-- /* ----------------- debut vehicule ----------------- */ -->
+            <div class="tab-pane fade pr-20" id="vtab2">
+              <div class="row">
+                <div class="col-md-12">
+                  <h6 class="title">Caractéristiques techniques</h6>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Marque</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">D.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.marque }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Tvv</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">D.2</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.tvv }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Nom commercial</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">D.3</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.modele }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Numéro CNIT</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">D.2.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.cnit }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Couleur</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">&nbsp;</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.couleur }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Type de reception</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">&nbsp;</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">CE</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td class="no-trait-left no-trait-right" colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Numéro d'identification véhicule</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">E</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.vin }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">PT technique admissible (kg)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">F.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.admissible }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">PTAC (kg)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">F.2</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.AC }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">PTRA (kg)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">F.3</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.RA }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">PT en service (kg)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">G</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.service }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">PTAV (kg)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">G.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.AV }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Catégorie (Ce)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">J</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.categorie }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Genre (National)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">J.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.genre }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Carrosserie (Ce)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">J.2</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.carrosserie.ce }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Carrosserie (National)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">J.3</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.carrosserie.national }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Numéro de réception</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">K</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.reception.numero }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Cylindrée (cm3)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">P.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.cylindres }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Puissance nette max (kW)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">P.2</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.nette }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Energie</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">P.3</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.energie }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Puissance CV</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">P.6</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.cv }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Puissance / masse (kW/kg)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">Q</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.norm }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Places assises</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">S.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.assis }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Pace debout</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">S.3</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.debout }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Niveau sonore (db(A))</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">U.1</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.db }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Vitesse moteur (min-1)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">U.2</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.moteur }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <td colspan="3">&nbsp;</td>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">CO2 (g/km)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">V.7</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.co2 }}</span></div>
+              </div>
+              <div class="separator"></div>
+              <div class="row">
+                <div class="col-sm-6"><span class="txt-small-12">Classe environnement (CE)</span></div>
+                <div class="col-sm-2"><span class="bold txt-small-12">V.9</span></div>
+                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.environnement }}</span></div>
+              </div>
+              <div class="separator"></div>
               <!-- fin tableau v.-->
               <!-- debut tableau controle technique -->
-              <table class="table table-striped table-responsive" v-if="beta">
+              <!-- <table class="table table-striped table-responsive" v-if="beta">
                 <tbody>
                   <tr>
                     <td colspan="4">
                       <h6>Contrôle technique</h6></td>
                   </tr>
                   <tr>
-                    <td class="bold">OTC</td>
-                    <td>Résultat</td>
-                    <td><span class="label label-success">{{ v.controle.otc.resultat }}</span></td>
-                    <td>Date du contrôle</td>
-                    <td class="info_red">{{ v.controle.otc.date }}</td>
-                    <td>Fin de validité</td>
-                    <td class="info_red">{{ v.controle.otc.validite }}</td>
+                    <div class="col-sm-2"><span class="bold txt-small-12">OTC</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Résultat</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12"><span class="label label-success">{{ v.controle.otc.resultat }}</span></span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Date du contrôle</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.otc.date }}</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Fin de validité</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.otc.validite }}</span></div>
                   </tr>
+
                   <tr>
-                    <td class="bold">SIV</td>
-                    <td>Résultat</td>
-                    <td><span class="label label-warning">{{ v.controle.siv.resultat }}</span></td>
-                    <td>Date du contrôle</td>
-                    <td class="info_red">{{ v.controle.siv.date }}</td>
-                    <td>Fin de validité</td>
-                    <td class="info_red">{{ v.controle.siv.validite }}</td>
+                    <div class="col-sm-2"><span class="bold txt-small-12">SIV</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Résultat</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12"><span class="label label-warning">{{ v.controle.siv.resultat }}</span></span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Date du contrôle</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.siv.date }}</span></div>
+                    <div class="col-sm-6"><span class="txt-small-12">Fin de validité</span></div>
+                    <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.controle.siv.validite }}</span></div>
                   </tr>
+
                 </tbody>
-              </table>
+              </table> -->
               <!-- fin tableau controle technique -->
               <!-- debut mentions particuliéres : à supprimer ultérieurement ? selon validation comité Histovec -->
               <!-- <table class="table table-striped table-responsive">
                 <tbody>
-                  <tr>
+                  <div class="row">
                     <td>
                       <h6>Mentions particulières</h6></td>
-                  </tr>
-                  <tr>
+                  </div>
+                  <div class="separator"></div>
+
+                  <div class="row">
                     <td>
                       <div class="alert alert-info" role="alert">{{ v.mentions }}</div>
                     </td>
-                  </tr>
+                  </div>
+                  <div class="separator"></div>
+
                 </tbody>
               </table> -->
               <!-- fin mentions particuliéres -->
             </div>
             <div class="tab-pane fade" id="vtab3">
-              <h6 class="title">Titulaire et co-titulaires</h6>
+              <h6 class="title">Titulaire</h6>
               <!-- debut titulaire et co-titulaire -->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w300">Nature</td>
-                    <td class="info_red rd_w500">{{ v.titulaire.nature }}</td>
-                  </tr>
-                  <tr>
-                    <td>Identité</td>
-                    <td class="info_red">{{ v.titulaire.identite }}</td>
-                  </tr>
-                  <tr>
-                    <td>Adresse</td>
-                    <td class="info_red">{{ v.titulaire.adresse }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Nature</span></div>
+                <div class="col-sm-7"><span class="txt-small-12">{{ v.titulaire.nature }}</span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Identité</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.identite }}</span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Adresse</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.adresse }}</span></div>
+              </div>
+              <div class="separator"></div>
               <!-- fin tableau titulaire et co-titulaire -->
               <h6 class="title">Carte grise</h6>
               <!-- debut tableau carte grise -->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w300">Date de première immatriculation</td>
-                    <td class="info_red rd_w500">{{ v.certificat.premier }}</td>
-                  </tr>
-                  <tr>
-                    <td>Date de la carte grise actuelle</td>
-                    <td class="info_red">{{ v.certificat.courant }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.premier }}</span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div class="row">
+                <div class="col-sm-5"><span class="txt-small-12">Date de la carte grise actuelle</span></div>
+                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.courant }}</span></div>
+              </div>
+              <div class="separator"></div>
               <!-- debut tableau situation administrative -->
             </div>
             <div class="tab-pane fade" id="vtab4">
-              <div class="col-sm-6">
-                <h6 class="title">Gages</h6>
-                <!-- debut tableau gages -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.gages }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau gages -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Oppositions</h6>
-                <!-- debut tableau oppositions -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.oppositions }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau oppositions -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Suspensions</h6>
-                <!-- debut tableau suspensions -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.suspensions }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau suspensions -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Procédures</h6>
-                <!-- debut tableau procédures -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td class="info_red">{{ v.administratif.procedures }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau procédures -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Véhicule</h6>
-                <!-- debut tableau véhicule -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td>Etat de vol</td>
-                      <td class="info_red">{{ v.administratif.vol }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau véhicule -->
-              </div>
-              <div class="col-sm-6">
-                <h6 class="title">Etat de la carte grise</h6>
-                <!-- debut tableau titre -->
-                <table class="table table-responsive">
-                  <tbody>
-                    <tr>
-                      <td>Etat de vol</td>
-                      <td class="info_red">{{ v.administratif.titre.vol }}</td>
-                    </tr>
-                    <tr>
-                      <td>Etat de perte</td>
-                      <td class="info_red">{{ v.administratif.titre.perte }}</td>
-                    </tr>
-                    <tr>
-                      <td>Duplicata</td>
-                      <td class="info_red">{{ v.administratif.titre.duplicata }}</td>
-                    </tr>
-                    <tr>
-                      <td>Remise du titre</td>
-                      <td class="info_red">{{ v.administratif.titre.remise }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- fin tableau titre -->
-              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <h6 class="title">Gages</h6>
+                  <!-- debut tableau gages -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.gages }}</span>
+                    <div class="separator-2"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Oppositions</h6>
+                  <!-- debut tableau oppositions -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.oppositions }}</span>
+                    <div class="separator-2"></div>
+                  </div>
+                  <!-- fin tableau oppositions -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Suspensions</h6>
+                  <!-- debut tableau suspensions -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.suspensions }}</span>
+                    <div class="separator-2"></div>
+                  </div>
+                  <!-- fin tableau suspensions -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Procédures</h6>
+                  <!-- debut tableau procédures -->
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.procedures }}</span>
+                    <div class="separator"></div>
+                  </div>
+                  <!-- fin tableau procédures -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Véhicule</h6>
+                  <!-- debut tableau véhicule -->
+                  <div class="col-sm-4"><span class="txt-small-12">Etat de vol</span></div>
+                  <div class="col-sm-3"><span class="info_red txt-small-12">{{ v.administratif.vol }}</span></div>
+                  <!-- fin tableau véhicule -->
+                </div>
+                <div class="col-sm-6">
+                  <h6 class="title">Etat de la carte grise</h6>
+                  <!-- debut tableau titre -->
+                  <div class="col-sm-5"><span class="txt-small-12">Etat de vol</span></div>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.vol }}</span></div>
+                  <div class="col-sm-5"><span class="txt-small-12">Etat de perte</span></div>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.perte }}</span></div>
+                  <div class="col-sm-5"><span class="txt-small-12">Duplicata</span></div>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.duplicata }}</span></div>
+                </div>
+            <!-- <div class="row">
+                      <div class="col-sm-6"><span class="txt-small-12">Remise du titre</span></div>
+                      <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.administratif.titre.remise }}</span></div>
+                    </div>
+                  <div class="separator"></div>
+ -->
               <!-- debut bouton imprimer csa detaille -->
-              <div class="col-sm-6">
-                <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
+                <div class="col-sm-12">
+                  <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
                   data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </button>
-              </div>
+                </div>
               <!-- fin bouton imprimer csa detaille -->
+              </div>
             </div>
             <div class="tab-pane fade" id="vtab5">
               <!-- debut tableau operation historique -->
-              <table class="table table-striped table-responsive">
-                <tbody>
-                  <tr>
-                    <td class="rd_w250">
-                      <h6>Date</h6></td>
-                    <td class="rd_w500">
-                      <h6>Nature</h6></td>
-                  </tr>
-                  <tr v-for="(entry, index) in v.historique" :key="index">
-                    <td class="rd_w250">{{ entry.date }}</td>
-                    <td class="info_red">{{ entry.nature }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="row">
+                <div class="col-sm-4"><span class="txt-small-12"><h6>Date</h6></span></div>
+                <div class="col-sm-8"><span class="bold txt-small-12"><h6>Opération</h6></span></div>
+              </div>
+              <div class="separator"></div>
+
+              <div v-for="(entry, index) in v.historique" :key="index">
+                <div class="row">
+                  <div class="col-sm-4"><span class="txt-small-12">{{ entry.date }}</span></div>
+                  <div class="col-sm-8"><span class="info_red txt-small-12">{{ entry.nature }}</span></div>
+                </div>
+                <div class="separator pv-5"></div>
+              </div>
               <!-- fin tableau operation historique -->
             </div>
             <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
@@ -547,14 +598,14 @@ export default {
         'otci': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
-          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition'
-          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
+          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
         'suspension': {
           'icon': 'fa-minus-circle',
           'text': 'L\'autorisation de circulation de ce véhicule a été suspendue',
-          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation'
-          // 'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
+          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
         },
         'perte_ci': {
           'icon': 'fa-exclamation-triangle',
