@@ -534,21 +534,25 @@
               <!-- fin tableau operation historique -->
             </div>
             <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
-              <h6  class="title">Transmettre le rapport</h6>
-              <div class="table table-responsive" style="overflow-x: hidden">
-                <div class="row" style="background: white">
-                  <div class="col-sm-9">
-                    <p> Transmettez le rapport à vos acheteurs potentiels en toute confiance, par mail, SMS ou QR-Code</p>
-                    <p> Ce lien restera valide <b>4 semaines</b> et il vous suffira de revenir ici pour en générer un nouveau </p>
-                    <code> {{url}} </code>
+              <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
+                <div class="row">
+                  <div class="col-md-12 p-h-10">
+                    <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail, sms.<br>
+                      Ce rapport cera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
                     <p class="text-center">
-                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn-sm">Copier <i class="fa fa-copy"></i></button>
-                      <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-dark btn-animated btn-sm">Courriel <i class="fa fa-send"></i></a>
-                      <a :href="'sms://?body=' + smsBody" class="btn radius-30 btn-dark btn-animated btn-sm">Texto <i class="fa fa-mobile fa-2x"></i></a>
+                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier <i class="fa fa-copy"></i></button>
+                      <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
+                      <a :href="'sms://?body=' + smsBody" class="btn radius-30 btn-dark btn-animated btn">Texto <i class="fa fa-mobile fa-2x"></i></a>
                     </p>
                   </div>
-                  <div class="col-sm-2">
-                    <qrcode-vue :value="url" :size="150" level="L"></qrcode-vue>
+                  <div class="row">
+                    <div class="col-md-12">Ou par QR code </div>
+                  </div>
+                  <div class="separator"></div>
+                  <div class="row">
+                    <div class="col-md-12" style="fload: none; margin: 0 auto">
+                      <qrcode-vue :value="url" :size="150" level="L"></qrcode-vue>
+                    </div>
                   </div>
                 </div>
               </div>
