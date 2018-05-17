@@ -168,3 +168,16 @@ ifneq "$(commit)" "$(lastcommit)"
 	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif
+
+build: frontend-build
+
+frontend-stop:
+	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
+
+frontend: network tor
+	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d
+
+
+up: network elasticsearch frontend
+
+

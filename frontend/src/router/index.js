@@ -10,9 +10,9 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
-    {name: 'root', path: '/', redirect: { name: 'home' }},
-    {name: 'home', path: '/home', component: Home},
-    {name: 'search', path: '/search', component: Search},
-    {name: 'report', path: '/report', component: Report}
+    {name: 'root', path: '/histovec/', redirect: { name: 'home' }},
+    {name: 'home', path: '/histovec/home', component: Home},
+    {name: 'search', path: '/histovec/search', component: Search},
+    {name: 'report', path: '/histovec/report', component: Report}
   ]
 })

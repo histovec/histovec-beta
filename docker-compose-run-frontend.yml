@@ -20,14 +20,17 @@ services:
     image: nginx
     container_name: ${APP}-nginx
     volumes:
-      - ${BACKEND}/nginx/nginx-run.conf:/etc/nginx/conf.d/default.conf
+      - ${APP_PATH}/nginx/nginx-run.template:/etc/nginx/conf.d/default.template
+      - ${APP_PATH}/nginx/tor-ip.conf:/etc/nginx/tor-ip.conf
       - ${FRONTEND}/dist:/usr/share/nginx/html
     ports:
       - ${PORT}:80
+    restart: always
+    command: /bin/bash -c '(sed "s/<APP>/${APP}/g" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && nginx -g "daemon off;"'
     restart: always
 
 networks:
   default:
     external:
-      name: matchid
+      name: ${APP}
       

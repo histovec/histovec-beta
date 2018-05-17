@@ -1,5 +1,5 @@
 <template>
-  <div id="histovec">
+  <div id="app">
     <router-view></router-view>
   </div>
 </template>
@@ -23,7 +23,7 @@ window.bus = new Vue()
 Vue.mixin({
   data () {
     return {
-      apiUrl: apiConf.api.url.replace('<APP>', process.env.APP),
+      apiUrl: apiConf.api.url.replace('<APP>', 'process.env.APP'),
       localization: localization,
       operations: operations,
       lang: localization.default
