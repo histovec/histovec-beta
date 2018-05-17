@@ -4,6 +4,14 @@ server {
 
   # frontend (dev, npm server)
   location / {
+    try_files $uri @rew;
+  }
+
+  location @rew {
+    return 302 $scheme://$http_host/<APP>/;
+  }
+
+  location ~ (app.js) {
   	proxy_pass http://frontend-dev:8080;
   }
 
@@ -11,7 +19,7 @@ server {
         proxy_pass http://frontend-dev:8080;
   }
 
-  location /assets {
+  location /<APP>/assets {
     alias /usr/share/nginx/html/assets;
   }
 
