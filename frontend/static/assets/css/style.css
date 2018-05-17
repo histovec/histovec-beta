@@ -3214,6 +3214,7 @@ fieldset[disabled] .btn-default {
 	left:-1px;
 	z-index:1;
 	padding:20px 30px;
+  width:100%;
 }
 .left.vertical .tab-content {
 	border-left-color:#f1f1f1;

@@ -11,7 +11,8 @@
   </div>
   <!-- breadcrumb end -->
   <!-- main-container start -->
-  <div class="container" v-if="this.display">
+
+  <div class="container" v-if="this.result === 'ok'">
     <div class="row">
       <div class="col-lg-12 mb-20">
         <!-- debut vignette -->
@@ -570,7 +571,17 @@
   </div>
   <!-- container -->
 
-  <div class="container" v-else>
+  <div class="container" v-if="this.result === 'wait'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-info text-center" role="alert">  Recherche en cours <i class="fa fa-spinner fa-spin"></i> </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="container" v-if="this.result === 'ko'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
@@ -649,7 +660,7 @@ export default {
       },
       plaque: 'A*-0**-F*',
       vin: 'VF32M******44370',
-      display: false,
+      result: 'wait',
       conf: [],
       elasticsearch: null,
       v: {
@@ -812,6 +823,10 @@ export default {
         }
       }
     }).then(response => {
+      if (response.hits.hits.length === 0) {
+        this.result = 'ko'
+        return
+      }
       var encrypted = response.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
       var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
       var veh = this.decrypt(key, encrypted)
@@ -877,10 +892,11 @@ export default {
       this.v.sinistre = veh.historique.some(e => e.opa_type === 'INSCRIRE_OVE') ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
       this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
 
-      this.display = true
-    })
+      this.result = 'ok'
+    }
+  )
     if (this.$route.query.id === 'test') {
-      this.display = true
+      this.result = 'ok'
     }
   }
 }
