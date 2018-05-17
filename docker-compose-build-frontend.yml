@@ -2,7 +2,7 @@ version: '2'
 
 # this docker configuation intends to build frontend
 # it is supposed that your declared some ENV variables:
-#   - ${FRONTEND} points to HistoVec frontend
+#   - ${FRONTEND} points to ${APP} frontend
 
 services:
   build-frontend:
@@ -11,17 +11,18 @@ services:
       dockerfile: Dockerfile.build
       args:
         proxy: ${http_proxy}
-    image: matchid-frontend:latest
+        app_path: ${APP}
+    image: ${APP}-frontend:latest
     container_name: ${APP}-build-front
     volumes:
-      - ${FRONTEND}/index.html:/matchid/index.html
-      - ${FRONTEND}/.babelrc:/matchid/.babelrc
-      - ${FRONTEND}/.editorconfig:/matchid/.editorconfig
-      - ${FRONTEND}/.eslintignore:/matchid/.eslintignore
-      - ${FRONTEND}/.eslintrc.js:/matchid/.eslintrc.js
-      - ${FRONTEND}/matchIdConfig:/matchid/matchIdConfig/
-      - ${FRONTEND}/config:/matchid/config/
-      - ${FRONTEND}/src:/matchid/src/
-      - ${FRONTEND}/build:/matchid/build/
-      - ${FRONTEND}/static:/matchid/static/
-      - ${FRONTEND}/dist:/matchid/dist/
+      - ${FRONTEND}/index.html:/${APP}/index.html
+      - ${FRONTEND}/.babelrc:/${APP}/.babelrc
+      - ${FRONTEND}/.editorconfig:/${APP}/.editorconfig
+      - ${FRONTEND}/.eslintignore:/${APP}/.eslintignore
+      - ${FRONTEND}/.eslintrc.js:/${APP}/.eslintrc.js
+      - ${FRONTEND}/${APP}Config:/${APP}/${APP}Config/
+      - ${FRONTEND}/config:/${APP}/config/
+      - ${FRONTEND}/src:/${APP}/src/
+      - ${FRONTEND}/build:/${APP}/build/
+      - ${FRONTEND}/static:/${APP}/static/
+      - ${FRONTEND}/dist:/${APP}/dist/
