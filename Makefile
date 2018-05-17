@@ -180,4 +180,5 @@ frontend: network tor
 
 up: network elasticsearch frontend
 
+down: frontend-stop elasticsearch-stop network-stop
 
