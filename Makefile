@@ -33,6 +33,10 @@ vm_max_count		:= $(shell cat /etc/sysctl.conf | egrep vm.max_map_count\s*=\s*262
 dummy               := $(shell touch artifacts)
 include ./artifacts
 
+commit              := $(shell git rev-parse HEAD | cut -c1-8)
+lastcommit          := $(shell touch .lastcommit && cat .lastcommit)
+
+
 DC := 'docker-compose'
 
 install-prerequisites:
@@ -95,9 +99,11 @@ endif
 docker-clean: stop
 	docker container rm ${APP}-build-front ${APP}-nginx
 
-clean: index-purge docker-clean
+frontend-clean:
 	@echo cleaning ${APP} frontend npm dist
 	sudo rm -rf ${FRONTEND}/dist
+
+clean: index-purge docker-clean frontend-clean
 
 network-stop:
 	@echo cleaning ${APP} docker network
@@ -153,10 +159,10 @@ dev: network elasticsearch frontend-dev
 dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 
 
-frontend-build: frontend-download network
-ifneq "$(commit-frontend)" "$(lastcommit-frontend)"
+frontend-build: network
+ifneq "$(commit)" "$(lastcommit)"
 	@echo building ${APP} frontend after new commit
-	@make clean
+	@make frontend-clean
 	@echo building frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist
 	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build
