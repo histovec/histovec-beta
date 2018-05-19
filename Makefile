@@ -22,6 +22,10 @@ export datadir=sample_data
 export datasource=${datadir}/siv.csv.gz.gpg
 export datasource_json=${datadir}/siv.json.gz
 export dataset=siv
+export ES_CHUNK=10000
+export ES_VERBOSE=100000
+export ES_JOBS=2
+export settings={"index": {"number_of_shards": 60, "refresh_interval": "60s", "number_of_replicas": 0}}
 export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "keyword"}}}
 export index_log=${datadir}/index.log.gz
 
@@ -82,12 +86,10 @@ index-create: network elasticsearch
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 else
 	@echo
-	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}
-	@echo
-	@docker exec -it ${APP}-elasticsearch curl -H "Content-Type: application/json" -XPUT localhost:9200/${dataset}/_mapping/${dataset} -d '${mapping}' | sed 's/{"acknowledged":true}/index created with mapping/'
+	@docker exec -it ${APP}-elasticsearch curl -H "Content-Type: application/json" -XPUT localhost:9200/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true}/index created with mapping/'
 	@echo
 	@echo wating a few seconds for index being up
-	@sleep 3
+	@sleep 10
 
 endif
 
@@ -95,6 +97,17 @@ index-load: dataprep index-create
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	zcat ${datasource_json} | split -l 10000 --filter='docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | gzip > ${index_log}
 endif
+
+index-direct-load: index-create
+ifeq ("$(wildcard ${datasource})","")
+		@echo WARNING: missing data source ${datasource}
+endif
+ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
+	# split -l ${ES_CHUNK} --filter=
+	# parallel : parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe
+	gpg -d ${datasource} | gunzip |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | jq -c '.items[].index.result' | awk 'BEGIN{ok=0;ko=0}{if ($$1 == "\"created\"") { ok++ } else {ko++} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko}}'
+endif
+
 
 docker-clean: stop
 	docker container rm ${APP}-build-front ${APP}-nginx
