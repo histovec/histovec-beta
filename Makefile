@@ -25,7 +25,9 @@ export dataset=siv
 export ES_CHUNK=10000
 export ES_VERBOSE=100000
 export ES_JOBS=2
-export settings={"index": {"number_of_shards": 60, "refresh_interval": "60s", "number_of_replicas": 0}}
+export FROM=1
+export PASSPHRASE=CHANGEME
+export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}}
 export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "keyword"}}}
 export index_log=${datadir}/index.log.gz
 
@@ -103,9 +105,9 @@ ifeq ("$(wildcard ${datasource})","")
 		@echo WARNING: missing data source ${datasource}
 endif
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
-	# split -l ${ES_CHUNK} --filter=
-	# parallel : parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe
-	gpg -d ${datasource} | gunzip |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | jq -c '.items[].index.result' | awk 'BEGIN{ok=0;ko=0}{if ($$1 == "\"created\"") { ok++ } else {ko++} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko}}'
+	@# split -l ${ES_CHUNK} --filter=
+	@# parallel : parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d ${datasource} | gunzip | awk 'BEGIN{n = 1;print "decrypting data - injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr"} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | jq -c '.items[].index.result' | awk 'BEGIN{ok=${FROM}-1;ko=0}{if ($$1 == "\"created\"") { ok++ } else {ko++} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko}}'
 endif
 
 
