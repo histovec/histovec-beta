@@ -433,7 +433,7 @@
               <div class="separator"></div>
 
               <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Adresse</span></div>
+                <div class="col-sm-5"><span class="txt-small-12">Code Postal</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.adresse }}</span></div>
               </div>
               <div class="separator"></div>
