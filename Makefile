@@ -151,7 +151,7 @@ ifeq ("$(wildcard ${BACKEND}/esdata/)","")
 	@mkdir -p ${BACKEND}/esdata
 	@chmod 777 ${BACKEND}/esdata/.
 endif
-	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d
+	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
 
 elasticsearch-stop:
 	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
@@ -160,14 +160,14 @@ backend-stop:
 	${DC} -f ${DC_PREFIX}-backend.yml down
 
 backend: network
-	${DC} -f ${DC_PREFIX}-backend.yml up --build -d
+	${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
 
 backend-log:
-	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d
+	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d 2>&1 | grep -v orphan
 
 frontend-dev: network tor
 	@echo docker-compose up frontend for dev
-	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate
+	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
 frontend-dev-stop:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml down
@@ -187,7 +187,7 @@ ifneq "$(commit)" "$(lastcommit)"
 	@make frontend-clean
 	@echo building frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist
-	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build
+	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif
 
@@ -197,10 +197,9 @@ frontend-stop:
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
 
 frontend: network tor
-	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d
+	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
 
 
 up: network elasticsearch frontend
 
 down: frontend-stop elasticsearch-stop network-stop
-
