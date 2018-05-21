@@ -12,6 +12,7 @@ services:
     volumes:
       - ${APP_PATH}/nginx/nginx-run.template:/etc/nginx/conf.d/default.template
       - ${APP_PATH}/nginx/tor-ip.conf:/etc/nginx/tor-ip.conf
+      - ${APP_PATH}/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ${FRONTEND}/dist:/usr/share/nginx/html
     ports:
       - ${PORT}:80
