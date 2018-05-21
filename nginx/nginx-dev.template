@@ -11,7 +11,7 @@ server {
     return 302 $scheme://$http_host/<APP>/;
   }
 
-  location ~ (app.js) {
+  location ~ (__webpack_hmr|app.js) {
   	proxy_pass http://frontend-dev:8080;
   }
 
@@ -23,9 +23,14 @@ server {
     alias /usr/share/nginx/html/assets;
   }
 
-  location ~ .*/(_search).* {
+  location ~ (/<APP>/api/v0/id/.*) {
+    rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /siv/_search?q=id:$1&size=1 break;
     proxy_pass http://elasticsearch:9200;
     proxy_redirect off;
+    proxy_hide_header Content-Type;
+    proxy_set_body '{"_source": "v"}';
+    proxy_set_header content-type "application/json";
+    proxy_method POST;
     proxy_buffering off;
     proxy_http_version 1.1;
 
