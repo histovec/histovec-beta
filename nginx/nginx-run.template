@@ -26,7 +26,7 @@ server {
     alias /usr/share/nginx/html/static/assets;
   }
 
-  location ~ (/<APP>/api/v0/id/.*) {
+  location ~ "^/<APP>/api/v0/id/([A-Za-z0-9_-]{43}=)$" {
     rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /siv/_search?q=id:$1&size=1 break;
     proxy_pass http://elasticsearch:9200;
     proxy_redirect off;
