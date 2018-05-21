@@ -29,7 +29,7 @@ export FROM=1
 export stress=250
 export PASSPHRASE=CHANGEME
 export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}, "analysis": {"analyzer":{"hash":{"type":"custom", "tokenizer": "whitespace"}}}}
-export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "text", "analyzer": "hash"}}}
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "text", "analyzer": "hash"}, "v": {"type": "binary"}}}
 export index_log=${datadir}/index.log.gz
 
 date                := $(shell date -I)
