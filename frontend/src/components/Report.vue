@@ -433,7 +433,7 @@
               <div class="separator"></div>
 
               <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Adresse</span></div>
+                <div class="col-sm-5"><span class="txt-small-12">Code Postal</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.adresse }}</span></div>
               </div>
               <div class="separator"></div>
@@ -593,7 +593,6 @@
 
 <script>
 
-import elasticsearchLib from 'elasticsearch'
 import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
 
@@ -662,7 +661,6 @@ export default {
       vin: 'VF32M******44370',
       result: 'wait',
       conf: [],
-      elasticsearch: null,
       v: {
         date_update: '10/05/2018',
         nb_proprietaires: 3,
@@ -806,95 +804,82 @@ export default {
     }
   },
   created () {
-    this.elasticsearch = {
-      connection: {
-        host: window.location.host
-      }
-    }
-    this.esClient = new elasticsearchLib.Client(this.elasticsearch.connection)
-    this.esClient.search({
-      index: 'siv',
-      size: 1,
-      body: {
-        query: {
-          match: {
-            id: this.$route.query.id
-          }
+    this.$http.get(this.apiUrl + 'id/' + this.$route.query.id)
+      .then(response => {
+        console.log(response)
+        if (response.body.hits.hits.length === 0) {
+          this.result = 'ko'
+          return
         }
+        var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
+        var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
+        var veh = this.decrypt(key, encrypted)
+        console.log(veh)
+        this.vin = veh.vin
+        this.v.ctec.vin = veh.vin
+        this.plaque = veh.plaq_immat
+        this.v.plaque = veh.plaq_immat
+        this.v.ctec.couleur = veh.couleur
+        this.v.ctec.cnit = veh.num_cnit
+        this.v.ctec.tvv = veh.tvv
+        this.v.ctec.reception.type = veh.type_reception
+        this.v.ctec.reception.numero = veh.cveh_num_reception
+        this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
+        this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
+        this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
+        this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
+        this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
+        this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
+        this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
+        this.v.ctec.co2 = veh.CTEC_CO2
+        this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
+        this.v.ctec.marque = veh.marque
+        this.v.ctec.modele = veh.nom_commercial
+        this.v.ctec.genre = veh.CTEC_RLIB_GENRE
+        this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
+        this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
+        this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
+        this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
+        this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
+        this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
+        this.v.ctec.PT.AC = veh.ptac_f2
+        this.v.ctec.PT.RA = veh.ptra_f3
+        this.v.ctec.PT.service = veh.pt_service_g
+        this.v.ctec.PT.AV = veh.ptav_g1
+
+        this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
+        this.v.titulaire.adresse = veh.adr_code_postal_tit
+        this.v.certificat.premier = veh.date_premiere_immat
+        this.v.certificat.courant = veh.date_ci
+        this.v.certificat.depuis = veh.duree_dernier_prop
+
+        this.v.historique = this.histoFilter(veh.historique)
+        this.v.nb_proprietaires = veh.nb_proprietaire
+        this.v.age_veh = veh.age_annee
+
+        this.v.administratif.gages = veh.gage
+        this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
+        // opposition et procédure à valider
+        this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+        // pour l'instant aucun véhicule saisi dans les échantillons
+        this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
+        this.v.administratif.vol = veh.vehicule_vole
+
+        // vol : les informations viennent-elles de foves ?
+        this.v.administratif.titre.vol = veh.ci_vole
+        this.v.administratif.titre.perte = veh.perte_ci
+        this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
+
+        this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
+
+        this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
+        // ci-dessous : interprétation à confirmer
+        this.v.sinistre = veh.historique.some(e => e.opa_type === 'INSCRIRE_OVE') ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
+        this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
+
+        this.result = 'ok'
       }
-    }).then(response => {
-      if (response.hits.hits.length === 0) {
-        this.result = 'ko'
-        return
-      }
-      var encrypted = response.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
-      var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
-      var veh = this.decrypt(key, encrypted)
-      this.vin = veh.vin
-      this.v.ctec.vin = veh.vin
-      this.plaque = veh.plaq_immat
-      this.v.plaque = veh.plaq_immat
-      this.v.ctec.couleur = veh.couleur
-      this.v.ctec.cnit = veh.num_cnit
-      this.v.ctec.tvv = veh.tvv
-      this.v.ctec.reception.type = veh.type_reception
-      this.v.ctec.reception.numero = veh.cveh_num_reception
-      this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
-      this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-      this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
-      this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
-      this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
-      this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
-      this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
-      this.v.ctec.co2 = veh.CTEC_CO2
-      this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
-      this.v.ctec.marque = veh.marque
-      this.v.ctec.modele = veh.nom_commercial
-      this.v.ctec.genre = veh.CTEC_RLIB_GENRE
-      this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-      this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
-      this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
-      this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
-      this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
-      this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
-      this.v.ctec.PT.AC = veh.ptac_f2
-      this.v.ctec.PT.RA = veh.ptra_f3
-      this.v.ctec.PT.service = veh.pt_service_g
-      this.v.ctec.PT.AV = veh.ptav_g1
-
-      this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-      this.v.titulaire.adresse = veh.adr_code_postal_tit
-      this.v.certificat.premier = veh.date_premiere_immat
-      this.v.certificat.courant = veh.date_ci
-      this.v.certificat.depuis = veh.duree_dernier_prop
-
-      this.v.historique = this.histoFilter(veh.historique)
-      this.v.nb_proprietaires = veh.nb_proprietaire
-      this.v.age_veh = veh.age_annee
-
-      this.v.administratif.gages = veh.gage
-      this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
-      // opposition et procédure à valider
-      this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
-      // pour l'instant aucun véhicule saisi dans les échantillons
-      this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
-      this.v.administratif.vol = veh.vehicule_vole
-
-      // vol : les informations viennent-elles de foves ?
-      this.v.administratif.titre.vol = veh.ci_vole
-      this.v.administratif.titre.perte = veh.perte_ci
-      this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
-
-      this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
-
-      this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
-      // ci-dessous : interprétation à confirmer
-      this.v.sinistre = veh.historique.some(e => e.opa_type === 'INSCRIRE_OVE') ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
-      this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
-
-      this.result = 'ok'
-    }
-  )
+    )
     if (this.$route.query.id === 'test') {
       this.result = 'ok'
     }

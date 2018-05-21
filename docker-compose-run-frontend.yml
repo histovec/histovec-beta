@@ -1,19 +1,9 @@
 version: '2'
 
-# this docker configuation is the prod flavor, 
-# it is supposed that your declared some ENV variables:
-#   - ${FRONTEND} points to matchID-frontend (from GitHub, branch 'master')
-#   - ${PROJECTS} points to your projects path
-#   - ${UPLOAD} points to your upload path
-# it only differs from the dev that the code isn't accessible and the frontend code is compiled
-
-# for production use many adaptation still be needed if you use docker
-# - assume you docker images with a custom managed repo
-# - securize nginx routes allowing only stricly needed routes of API
-# - build the static files from node frontend and put them to the nginx
-# - build a cluster for elasticsearch
-# - use real volumes : S3-like storage for configurations (using volumes) of front and back,
-#   and DB-storage for ES volume like SSD volumes (or memory storage still better)
+networks:
+  default:
+    external:
+      name: ${APP}
 
 services:
   nginx:
@@ -29,8 +19,3 @@ services:
     command: /bin/bash -c '(sed "s/<APP>/${APP}/g" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && nginx -g "daemon off;"'
     restart: always
 
-networks:
-  default:
-    external:
-      name: ${APP}
-      
