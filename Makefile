@@ -28,8 +28,8 @@ export ES_JOBS=2
 export FROM=1
 export stress=250
 export PASSPHRASE=CHANGEME
-export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}}
-export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "keyword"}}}
+export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}, "analysis": {"analyzer":{"hash":{"type":"custom", "tokenizer": "whitespace"}}}}
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "text", "analyzer": "hash"}}}
 export index_log=${datadir}/index.log.gz
 
 date                := $(shell date -I)
