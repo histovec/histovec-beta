@@ -116,7 +116,7 @@ endif
 index-stress:
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@echo stress test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | tr ' ' '\n' | parallel --no-notice -j${stress} 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{}' | jq '.took' | awk 'BEGIN{n=0;t=0}{n++;t+=$$1;if ((n%1000)==0) { printf("%s with ${stress} parallel threads, total %d calls, each response takes %.2fms\n",strftime("%Y%m%d-%H:%M"),n,t/n)}}'
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | tr ' ' '\n' | parallel --no-notice -j${stress} 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{}' | grep took | jq '.took' | awk 'BEGIN{n=0;t=0}{n++;t+=$$1;if ((n%1)==0) { printf("%s with ${stress} parallel threads, total %d calls, each response takes %.2fms\n",strftime("%Y%m%d-%H:%M"),n,t/n)}}'
 endif
 
 docker-clean: stop
