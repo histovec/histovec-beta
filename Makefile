@@ -93,9 +93,9 @@ index-status: network elasticsearch
 	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/${dataset}?pretty
 	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/_cat/indices
 
-index-direct-load: index-create
+index-load: index-create
 ifeq ("$(wildcard ${datasource})","")
-		@echo WARNING: missing data source ${datasource}
+	@echo WARNING: missing data source ${datasource}
 endif
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@# split -l ${ES_CHUNK} --filter=
