@@ -123,7 +123,7 @@
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
                 </div>
-                <div v-if="v.administratif.synthese.length === 0">
+                <div v-if="(v.administratif.synthese.length === 0) && (this.v.sinistre === false)">
                   <div class="row">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
@@ -611,7 +611,7 @@ export default {
         },
         'otci': {
           'icon': 'fa-exclamation-triangle',
-          'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
+          'text': 'Le certificat fait l\'objet d\'une opposition temporaire (non lié à un sinistre)',
           'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
