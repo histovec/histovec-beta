@@ -28,8 +28,9 @@ export ES_JOBS=2
 export FROM=1
 export stress=250
 export PASSPHRASE=CHANGEME
-export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}, "analysis": {"analyzer":{"hash":{"type":"custom", "tokenizer": "whitespace"}}}}
-export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "text", "analyzer": "hash"}, "v": {"type": "binary"}}}
+export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}}
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}, "ida3": {"type": "keyword"}, "ida4": {"type": "keyword"}, "ida5": {"type": "keyword"}}}
+
 export index_log=${datadir}/index.log.gz
 
 date                := $(shell date -I)
@@ -71,15 +72,6 @@ ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@sudo chmod +x /usr/local/bin/docker-compose
 endif
 
-dataprep:
-ifeq ("$(wildcard ${datasource})","")
-	@echo WARNING: missing data source ${datasource}
-endif
-ifeq ("$(wildcard ${datasource_json})","")
-	@echo decrypting csv to json for bulk load into elasticsearch, enter your key and wait about 3 minutes
-	@gpg -d ${datasource} | gunzip |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | gzip > ${datasource_json}
-endif
-
 index-purge: network elasticsearch
 	@sleep 3
 	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}'
@@ -97,14 +89,13 @@ else
 
 endif
 
-index-load: dataprep index-create
-ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
-	zcat ${datasource_json} | split -l 10000 --filter='docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | gzip > ${index_log}
-endif
+index-status: network elasticsearch
+	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/${dataset}?pretty
+	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/_cat/indices
 
-index-direct-load: index-create
+index-load: index-create
 ifeq ("$(wildcard ${datasource})","")
-		@echo WARNING: missing data source ${datasource}
+	@echo WARNING: missing data source ${datasource}
 endif
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@# split -l ${ES_CHUNK} --filter=

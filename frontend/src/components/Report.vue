@@ -123,7 +123,7 @@
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
                 </div>
-                <div v-if="v.administratif.synthese.length === 0">
+                <div v-if="(v.administratif.synthese.length === 0) && (this.v.sinistre === false)">
                   <div class="row">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
@@ -611,7 +611,7 @@ export default {
         },
         'otci': {
           'icon': 'fa-exclamation-triangle',
-          'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
+          'text': 'Le certificat fait l\'objet d\'une opposition temporaire (non lié à un sinistre)',
           'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
@@ -636,7 +636,7 @@ export default {
           'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
           'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
         },
-        'vole_ci': {
+        'ci_vole': {
           'icon': 'fa-exclamation-triangle',
           'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
           'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
