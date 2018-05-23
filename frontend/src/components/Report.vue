@@ -636,7 +636,7 @@ export default {
           'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
           'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
         },
-        'vole_ci': {
+        'ci_vole': {
           'icon': 'fa-exclamation-triangle',
           'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
           'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
