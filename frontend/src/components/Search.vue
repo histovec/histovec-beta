@@ -53,14 +53,14 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                              <label for="input" class="control-label">N° SIV</label>
+                              <label for="input" class="control-label">Plaque d'immatriculation</label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
-                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
+                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="N° de formule" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -101,24 +101,24 @@
                           <div class="form-group has-feedback">
                             <label class="control-label">N° SIREN</label>
                             <input type="email" class="form-control"  v-model="siren">
-                            <i class="fa fa-calendar form-control-feedback"></i> </div>
+                            <i class="fa fa-building-o form-control-feedback"></i> </div>
                         </div>
                       </div>
                     </form>
                     <fieldset>
-                      <legend><span class="color-default">Mettre ici un titre</span></legend>
+                      <legend><span class="color-default">Carte grise</span></legend>
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                              <label for="input" class="control-label">N° SIV</label>
+                              <label for="input" class="control-label">Plaque d'immatriculation</label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule</label>
-                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover"  v-model="formule">
+                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="N° de formule" data-original-title="15GB Storage" data-trigger="hover"  v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -181,26 +181,42 @@ export default {
     }
   },
   computed: {
-    weekNumber () {
-      return '19'
-      // let d = new Date()
-      // // Copy date so don't modify original
-      // d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
-      // // Set to nearest Thursday: current date + 4 - current day number
-      // // Make Sunday's day number 7
-      // d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7))
-      // // Get first day of year
-      // var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
-      // // Calculate full weeks to nearest Thursday
-      // var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7)
-      // // Return array of year and week number
-      // return [d.getUTCFullYear(), weekNo]
+    currentWeekNumber () {
+      var instance = new Date()
+
+      // Create a copy of this date object
+      var target = new Date(instance.valueOf())
+
+      // ISO week date weeks start on monday
+      // so correct the day number
+      var dayNr = (instance.getDay() + 6) % 7
+
+      // ISO 8601 states that week 1 is the week
+      // with the first thursday of that year.
+      // Set the target date to the thursday in the target week
+      target.setDate(target.getDate() - dayNr + 3)
+
+      // Store the millisecond value of the target date
+      var firstThursday = target.valueOf()
+
+      // Set the target to the first thursday of the year
+      // First set the target to january first
+      target.setMonth(0, 1)
+      // Not a thursday? Correct the date to the next thursday
+      if (target.getDay() !== 4) {
+        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7)
+      }
+
+      // The currentWeekNumber is the number of weeks between the
+      // first thursday of the year and the thursday in the target week
+      var currentWeekNumber = 1 + Math.ceil((firstThursday - target) / 604800000)
+      return instance.getFullYear() + '' + currentWeekNumber
     },
     id () {
       return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
     },
     code () {
-      return this.hash(this.plaque + this.formule + this.weekNumber)
+      return this.hash(this.plaque + this.formule + this.currentWeekNumber)
     },
     key () {
       return this.hash(this.plaque + this.formule)
@@ -217,10 +233,6 @@ export default {
   },
   created () {
     this.type_personne = this.$route.query.t
-    this.$http.get(this.apiUrl + 'conf')
-      .then(response => {
-        this.conf = Object.keys(response.body)
-      })
   }
 }
 </script>
