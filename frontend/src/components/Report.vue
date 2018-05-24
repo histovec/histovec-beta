@@ -588,6 +588,14 @@
       </div>
     </div>
   </div>
+
+  <div class="container" v-if="this.result === 'invalid'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé</div>
+      </div>
+    </div>
+  </div>
 </section>
 </template>
 
@@ -798,7 +806,9 @@ export default {
       ].join('/')
     },
     histoFilter (historique) {
-      return historique.filter(event => this.operations[event.opa_type] !== undefined).map(event => {
+      let h = historique.filter(event => this.operations[event.opa_type] !== undefined)
+      h = this.$lodash.orderBy(h, ['opa_date'], ['desc'])
+      return h.map(event => {
         return {'date': this.formatDate(event.opa_date), 'nature': this.operations[event.opa_type]}
       })
     }
@@ -874,10 +884,13 @@ export default {
 
         this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
-        this.v.sinistre = veh.historique.some(e => e.opa_type === 'INSCRIRE_OVE') ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
-        this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/.*\//, ''))[0] : false
-
-        this.result = 'ok'
+        this.v.sinistre = veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false
+        this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false
+        if (veh.annulation_ci !== 'NON') {
+          this.result = 'invalid'
+        } else {
+          this.result = 'ok'
+        }
       }
     )
     if (this.$route.query.id === 'test') {
