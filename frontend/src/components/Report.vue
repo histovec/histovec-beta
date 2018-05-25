@@ -10,8 +10,26 @@
     </div>
   </div>
   <!-- breadcrumb end -->
+  <!-- section -->
+  <section class="main-container">
+    <div class="container">
+    <div class="row">
+    <!-- section start -->
+      <section class="dark-translucent-bg fixed-bg pv-40" style="background-image:url(assets/images/acheteur_3.jpg);">
+       <div class="container">
+        <div class="row justify-content-lg-center">
+         <div class="col-lg-12">
+          <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+          <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+         </div>
+        </div>
+       </div>
+      </section>
+    </div>
+   </div>
+  </section>
+  <!-- section -->
   <!-- main-container start -->
-
   <div class="container" v-if="this.result === 'ok'">
     <div class="row">
       <div class="col-lg-12 mb-20">
@@ -68,7 +86,7 @@
                     <!-- debut proprietaire  -->
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
                   <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span><br/>
-                    <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup> propriétaire</div>
+                      <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="txt-small-13">propriétaire</span></div>
                   <div class="col-sm-5"></div>
                   <!-- fin proprietaire  -->
                 </div>
