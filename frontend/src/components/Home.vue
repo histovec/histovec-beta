@@ -12,42 +12,39 @@
                 <!-- slide 1 start -->
                 <li>
                   <!-- main image -->
-                  <img src="assets/images/tableau_de_bord/28.jpg" class="img-responsive" alt="slidebg1" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover">
+                  <img src="assets/images/tableau_de_bord/confiance.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover">
                   <!-- Transparent Background -->
                   <div class="tp-caption dark-translucent-bg"
-              									data-x="center"
-              									data-y="bottom"
-              									data-speed="600"
-              									data-start="0"> </div>
+                       data-x="center"
+                       data-y="bottom"
+                       data-speed="600"
+                       data-start="0"> </div>
                   <!-- LAYER NR. 1 -->
-                  <div class="tp-caption sfb fadeout large_white"
-              									data-x="left"
-              									data-y="20"
-              									data-speed="500"
-              									data-start="1000"
-              									data-easing="easeOutQuad">Protéger les acheteurs d’un véhicule d’occasion </div>
+                  <div class="tp-caption sfb fadeout text-center large_white"
+                       data-x="center"
+                       data-y="40"
+                       data-speed="500"
+                       data-start="1000"
+                       data-easing="easeOutQuad">Confiance </div>
+
                   <!-- LAYER NR. 2 -->
-                  <div class="tp-caption sfb fadeout large_white tp-resizeme hidden-xs"
-              									data-x="left"
-              									data-y="80"
-              									data-speed="500"
-              									data-start="1300"
-              									data-easing="easeOutQuad">
-                    <div class="separator-2 light"></div>
+                  <div class="tp-caption sfb fadeout text-center large_white tp-resizeme hidden-xs"
+                       data-x="center"
+                       data-y="90"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad">
+                    <div class="separator light"></div>
                   </div>
                   <!-- LAYER NR. 3 -->
-                  <div class="tp-caption sfb fadeout medium_white hidden-xs"
-              									data-x="left"
-              									data-y="100"
-              									data-speed="500"
-              									data-start="1300"
-              									data-easing="easeOutQuad"
-              									data-endspeed="600" style=" word-wrap: break-word;">
-Des affaires récentes mettant en
-lumière des véhicules gravement endommagés remis
-en circulation <br/> alors qu’ils étaient dangereux. <br/> HistoVec permet le renforcement de l’information
-des consommateurs sur l’état des véhicules <br/>
-véhicules en offrant la consultation de leur historique </div>
+                  <div class="tp-caption sfb fadeout medium_white text-center hidden-xs"
+                       data-x="center"
+                       data-y="110"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad"
+                       data-endspeed="600">Acheter et vendre en confiance <br>
+                       en partageant l’historique d’un véhicule. </div>
                   <!-- LAYER NR. 4
                   <div class="tp-caption sfb fadeout small_white"
               									data-x="left"
@@ -61,39 +58,38 @@ véhicules en offrant la consultation de leur historique </div>
                 <!-- slide 2 start -->
                 <li>
                   <!-- main image -->
-                  <img src="assets/images/tableau_de_bord/23.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover">
+                  <img src="assets/images/tableau_de_bord/officielle.jpg" class="img-responsive" alt="slidebg1" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover">
                   <!-- Transparent Background -->
                   <div class="tp-caption dark-translucent-bg"
-              									data-x="center"
-              									data-y="bottom"
-              									data-speed="600"
-              									data-start="0"> </div>
+                       data-x="center"
+                       data-y="bottom"
+                       data-speed="600"
+                       data-start="0"> </div>
                   <!-- LAYER NR. 1 -->
-                  <div class="tp-caption sfb fadeout text-center large_white"
-              									data-x="center"
-              									data-y="20"
-              									data-speed="500"
-              									data-start="1000"
-              									data-easing="easeOutQuad">Un service public gratuit </div>
+                  <div class="tp-caption sfb fadeout large_white"
+                       data-x="left"
+                       data-y="40"
+                       data-speed="500"
+                       data-start="1000"
+                       data-easing="easeOutQuad">Officiel </div>
                   <!-- LAYER NR. 2 -->
-                  <div class="tp-caption sfb fadeout text-center large_white tp-resizeme hidden-xs"
-              									data-x="center"
-              									data-y="80"
-              									data-speed="500"
-              									data-start="1300"
-              									data-easing="easeOutQuad">
-                    <div class="separator light"></div>
+                  <div class="tp-caption sfb fadeout large_white tp-resizeme hidden-xs"
+                       data-x="left"
+                       data-y="90"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad">
+                    <div class="separator-2 light"></div>
                   </div>
                   <!-- LAYER NR. 3 -->
-                  <div class="tp-caption sfb fadeout medium_white text-center hidden-xs"
-              									data-x="center"
-              									data-y="100"
-              									data-speed="500"
-              									data-start="1300"
-              									data-easing="easeOutQuad"
-              									data-endspeed="600">Parce que la sécurité doit être accessible à tous, <br/>
-                                l'historique officiel du véhicule peut être fourni gratuitement par le titulaire du véhicule
-                              <br/> à ses acheteurs potentiels </div>
+                  <div class="tp-caption sfb fadeout medium_white hidden-xs"
+                       data-x="left"
+                       data-y="110"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad"
+                       data-endspeed="600">Les données officielles du Ministère de l’Intérieur<br>
+                       du Système d’Immatriculation des Véhicules. </div>
                   <!-- LAYER NR. 4
                   <div class="tp-caption sfb fadeout small_white text-center"
               									data-x="center"
@@ -104,8 +100,98 @@ véhicules en offrant la consultation de leur historique </div>
               									data-endspeed="600"><a href="#" class="btn radius-50 btn-dark btn-animated">Lire la suite... <i class="fa fa-arrow-right"></i></a> <span class="pl-5 pr-5">or</span> <a href="../page-contact.html" class="btn radius-50 btn-default btn-animated">Contact <i class="fa fa-envelope"></i></a> </div>-->
                 </li>
                 <!-- slide 2 end -->
+                <!-- slide 3 start -->
+                <li>
+                  <!-- main image -->
+                  <img src="assets/images/tableau_de_bord/confidentielle.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover">
+                  <!-- Transparent Background -->
+                  <div class="tp-caption dark-translucent-bg"
+                       data-x="center"
+                       data-y="bottom"
+                       data-speed="600"
+                       data-start="0"> </div>
+                  <!-- LAYER NR. 1 -->
+                  <div class="tp-caption sfb fadeout text-center large_white"
+                       data-x="center"
+                       data-y="40"
+                       data-speed="500"
+                       data-start="1000"
+                       data-easing="easeOutQuad">Confidentiel </div>
+                  <!-- LAYER NR. 2 -->
+                  <div class="tp-caption sfb fadeout text-center large_white tp-resizeme hidden-xs"
+                       data-x="center"
+                       data-y="90"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad">
+                    <div class="separator light"></div>
+                  </div>
+                  <!-- LAYER NR. 3 -->
+                  <div class="tp-caption sfb fadeout medium_white text-center hidden-xs"
+                       data-x="center"
+                       data-y="110"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad"
+                       data-endspeed="600">Seul le propriétaire peut partager ses informations<br>
+                    à un acheteur potentiel. </div>
+                  <!-- LAYER NR. 4
+                  <div class="tp-caption sfb fadeout small_white text-center"
+                                                  data-x="center"
+                                                  data-y="260"
+                                                  data-speed="500"
+                                                  data-start="1600"
+                                                  data-easing="easeOutQuad"
+                                                  data-endspeed="600"><a href="#" class="btn radius-50 btn-dark btn-animated">Lire la suite... <i class="fa fa-arrow-right"></i></a> <span class="pl-5 pr-5">or</span> <a href="../page-contact.html" class="btn radius-50 btn-default btn-animated">Contact <i class="fa fa-envelope"></i></a> </div>-->
+                </li>
+                <!-- slide 3 end -->
+                <!-- slide 4 start -->
+                <li>
+                  <!-- main image -->
+                  <img src="assets/images/tableau_de_bord/gratuit.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover">
+                  <!-- Transparent Background -->
+                  <div class="tp-caption dark-translucent-bg"
+                       data-x="center"
+                       data-y="bottom"
+                       data-speed="600"
+                       data-start="0"> </div>
+                  <!-- LAYER NR. 1 -->
+                  <div class="tp-caption sfb fadeout text-center large_white"
+                       data-x="right"
+                       data-y="40"
+                       data-speed="500"
+                       data-start="1000"
+                       data-easing="easeOutQuad">Gratuit </div>
+                  <!-- LAYER NR. 2 -->
+                  <div class="tp-caption sfb fadeout text-center large_white tp-resizeme hidden-xs"
+                       data-x="right"
+                       data-y="90"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad">
+                    <div class="separator-3 light"></div>
+                  </div>
+                  <!-- LAYER NR. 3 -->
+                  <div class="tp-caption sfb fadeout medium_white text-right hidden-xs"
+                       data-x="right"
+                       data-y="110"
+                       data-speed="500"
+                       data-start="1300"
+                       data-easing="easeOutQuad"
+                       data-endspeed="600">Un service public gratuit <br>
+                       pour les propriétaires et les acheteurs. </div>
+                  <!-- LAYER NR. 4
+                  <div class="tp-caption sfb fadeout small_white text-center"
+                        data-x="center"
+                        data-y="260"
+                        data-speed="500"
+                        data-start="1600"
+                        data-easing="easeOutQuad"
+                        data-endspeed="600"><a href="#" class="btn radius-50 btn-dark btn-animated">Lire la suite... <i class="fa fa-arrow-right"></i></a> <span class="pl-5 pr-5">or</span> <a href="../page-contact.html" class="btn radius-50 btn-default btn-animated">Contact <i class="fa fa-envelope"></i></a> </div>-->
+                </li>
+                <!-- slide 4 end -->
               </ul>
-    <!-- #EndLibraryItem --><div class="tp-bannertimer"></div>
+            <!-- #EndLibraryItem --><div class="tp-bannertimer"></div>
             </div>
           </div>
           <!-- slider revolution end -->
@@ -114,43 +200,25 @@ véhicules en offrant la consultation de leur historique </div>
       </div>
       <!-- banner end -->
       <!-- section start -->
-      <section class="light-gray-bg clearfix">
+      <section class="light-gray-bg pv-20 clearfix">
         <div class="container">
-          <div class="row pv-10">
-            <div class="col-lg-3" >
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
-                <!-- debut bouton acheteur -->
+          <div class="row">
+            <div class="col-lg-6" >
+              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
+                <!-- debut bouton vendeur -->
                 <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
-                <!-- fin bouton acheteur -->
+                <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
-                <p> Vendez en <b>transparence</b> : fournissez <b>gratuitement</b> à vos acheteurs potentiels le rapport de l'historique votre véhicule</p>
+                <p>Rassurez vos acheteurs potentiels.</p>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
+            <div class="col-lg-6">
+              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton acheteur -->
-                <a href="acheteur.html" class="btn radius-30 btn-default btn-animated btn-lg">Acheteur <i class="fa fa-user"></i></a>
+                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Acheteur <i class="fa fa-users"></i></router-link>
                 <!-- fin bouton acheteur -->
                 <div class="separator clearfix"></div>
-                <p>Achetez en <b>confiance</b> : demandez au vendeur le rapport <b>officiel</b> et gratuit de l’historique du véhicule</p>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
-                <!-- debut bouton acheteur -->
-                <router-link class="btn radius-30 btn-warning btn-animated btn-lg" :to="{ name: 'search', query: {t: 'pro'}}">Professionnel <i class="fa fa-users"></i></router-link>
-                <!-- fin bouton acheteur -->
-                <div class="separator clearfix"></div>
-                <p> <b>Accélérez</b> vos ventes : renseignez vos acheteurs avec les rapports complets sur vos véhicules</p>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
-                <!-- debut bouton acheteur -->
-                <a href="vendeur.html" class="btn radius-30 btn-danger btn-animated btn-lg">Loueur <i class="fa fa-car"></i></a>
-                <!-- fin bouton acheteur -->
-                <div class="separator clearfix"></div>
-                <p><b>Evaluez</b> votre parc : consultez l'historique complet vos véhicules pour mieux les valoriser et les gérer.</p>
+                <p>Achetez en confiance : demandez au vendeur le rapport.</p>
               </div>
             </div>
           </div>
@@ -164,9 +232,9 @@ véhicules en offrant la consultation de leur historique </div>
             <div class="col-md-12">
               <div class="call-to-action text-center">
                 <div class="row">
-                  <div class="col-sm-8" style="max-height: 200px; ">
-                    <img class="center-block media-object img-responsive" style="filter: blur(2px); object-fit: cover;height:200px; " src="assets/images/rapport.png" alt="immatriculation"/>
-                    <h2 style="font-weight: 600; color: #000d">Consultez un exemple de rapport</h2>
+                  <div class="col-sm-8">
+                    <h2>Consulter un exemple de rapport...</h2>
+                    <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
                   </div>
                   <div class="col-sm-4">
                     <p class="mt-10"><a href="#" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir<i class="fa fa-file-text-o pl-20"></i></a></p>
@@ -186,10 +254,7 @@ véhicules en offrant la consultation de leur historique </div>
               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
               <h4 class="modal-title" id="myLargeModalLabel">Exemple de rapport</h4>
             </div>
-            <div class="modal-body">
-              <p>Consectetur adipisicing elit. Nemo architecto debitis dolorum ullam in ut sint, odit maiores eaque explicabo, repellendus minima soluta sunt! Nisi minima blanditiis voluptate, ut atque.</p>
-              <p>Culpa expedita! Quisquam, itaque officiis nisi nam doloribus explicabo possimus, dolorum alias provident maxime temporibus, enim voluptatibus! Molestias, accusantium cum impedit sint velit exercitationem deserunt, corporis magni provident earum, ullam iusto voluptatem iste animi inventore ab cupiditate quod laborum quasi libero doloremque obcaecati eius. Ut, reprehenderit optio unde accusantium quia qui! Debitis delectus corporis aspernatur nemo aut, odio harum ea repellendus quidem, saepe, incidunt? Assumenda deserunt unde minima aspernatur ducimus velit molestiae, minus eius inventore, dolore temporibus odio distinctio optio.</p>
-            </div>
+            <div class="modal-body"> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" width="889" height="2628"> </div>
             <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
           </div>
         </div>
@@ -235,9 +300,9 @@ véhicules en offrant la consultation de leur historique </div>
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour pour la <span class="bold_6">sécurité routière</span></h2>
+              <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidées par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de céhicules d’oaccasion (cf . <a href="#">dossier de presse</a>) </p>
+              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidées par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
             </div>
           </div>
           <div class="row">
@@ -287,43 +352,25 @@ véhicules en offrant la consultation de leur historique </div>
       <div class="separator"></div>
       <br>
       <!-- section start -->
-      <section class="light-gray-bg pv-30 clearfix">
+      <section class="light-gray-bg pv-20 clearfix">
         <div class="container">
-          <div class="row pv-10">
-            <div class="col-lg-3" >
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
-                <!-- debut bouton acheteur -->
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
+                <!-- debut bouton vendeur -->
                 <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
-                <!-- fin bouton acheteur -->
+                <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
-                <p> Vendez en <b>transparence</b> : fournissez <b>gratuitement</b> à vos acheteurs potentiels le rapport de l'historique votre véhicule</p>
+                <p>Rassurez vos acheteurs potentiels.</p>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
+            <div class="col-lg-6">
+              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton acheteur -->
-                <a href="acheteur.html" class="btn radius-30 btn-default btn-animated btn-lg">Acheteur <i class="fa fa-user"></i></a>
+                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Acheteur <i class="fa fa-users"></i></router-link>
                 <!-- fin bouton acheteur -->
                 <div class="separator clearfix"></div>
-                <p>Achetez en <b>confiance</b> : demandez au vendeur le rapport <b>officiel</b> et gratuit de l’historique du véhicule</p>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
-                <!-- debut bouton acheteur -->
-                <router-link class="btn radius-30 btn-warning btn-animated btn-lg" :to="{ name: 'search', query: {t: 'pro'}}">Professionnel <i class="fa fa-users"></i></router-link>
-                <!-- fin bouton acheteur -->
-                <div class="separator clearfix"></div>
-                <p> <b>Accélérez</b> vos ventes : renseignez vos acheteurs avec les rapports complets sur vos véhicules</p>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="ph-20 pv-15 feature-box bordered_spec shadow_spec text-center ">
-                <!-- debut bouton acheteur -->
-                <a href="vendeur.html" class="btn radius-30 btn-danger btn-animated btn-lg">Loueur <i class="fa fa-car"></i></a>
-                <!-- fin bouton acheteur -->
-                <div class="separator clearfix"></div>
-                <p><b>Evaluez</b> votre parc : consultez l'historique complet vos véhicules pour mieux les valoriser et les gérer.</p>
+                <p>Achetez en confiance : demandez au vendeur le rapport.</p>
               </div>
             </div>
           </div>
