@@ -4,7 +4,7 @@
   <div class="breadcrumb-container">
     <div class="container">
       <ol class="breadcrumb">
-        <li><i class="fa fa-home pr-10"></i><a href="/search">Accueil</a></li>
+        <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
         <li class="active">Résultats</li>
       </ol>
     </div>
@@ -902,13 +902,14 @@ export default {
 
         this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
-        this.v.sinistre = veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => e.opa_type === 'INSCRIRE_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false
+        this.v.sinistre = veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false
         this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false
         if (veh.annulation_ci !== 'NON') {
           this.result = 'invalid'
         } else {
           this.result = 'ok'
         }
+        console.log(this.v)
       }
     )
     if (this.$route.query.id === 'test') {

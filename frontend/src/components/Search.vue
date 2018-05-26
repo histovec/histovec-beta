@@ -2,6 +2,16 @@
 
 
   <div>
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-container">
+      <div class="container">
+        <ol class="breadcrumb">
+          <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
+          <li class="active">Recherche</li>
+        </ol>
+      </div>
+    </div>
+    <!-- breadcrumb end -->
     <section class="main-container">
       <div class="container">
         <div class="row">
