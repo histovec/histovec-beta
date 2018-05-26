@@ -793,7 +793,7 @@ export default {
       return text + this.url.replace('&', '%26')
     },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
+      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
     }
   },
   methods: {

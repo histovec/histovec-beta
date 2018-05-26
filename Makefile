@@ -66,6 +66,18 @@ ifeq ("$(wildcard /usr/bin/docker)","")
         sudo apt-get install -y docker-ce
         @(if (id -Gn ${USER} | grep -vc docker); then sudo usermod -aG docker ${USER} ;fi) > /dev/null
 endif
+ifeq ("$(wildcard /usr/bin/gawk)","")
+	@echo installing gawk
+	@sudo apt-get install -y gawk
+endif	
+ifeq ("$(wildcard /usr/bin/jq)","")
+	@echo installing jq 
+	@sudo apt-get install -y jq
+endif  
+ifeq ("$(wildcard /usr/bin/parallel)","")
+	@echo installing parallel 
+	@sudo apt-get install -y parallel 
+endif  
 ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@echo installing docker-compose
 	@sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
