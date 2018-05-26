@@ -1585,7 +1585,7 @@
 					prenom: {
 						required: "Veuillez spécifier votre Prénom",
 						minlength: "Your name must be longer than 2 characters"
-					},
+					},					
 					email: {
 						required: "Nous avons besoin de votre adresse e-mail pour vous contacter",
 						email: "Please enter a valid email address e.g. name@domain.com"
@@ -1671,7 +1671,7 @@
 					prenom2: {
 						required: "Please specify your name",
 						minlength: "Your name must be longer than 2 characters"
-					},
+					},					
 					email2: {
 						required: "We need your email address to contact you",
 						email: "Please enter a valid email address e.g. name@domain.com"
@@ -1738,7 +1738,7 @@
 					prenom3: {
 						required: true,
 						minlength: 2
-					},
+					},					
 					email3: {
 						required: true,
 						email: true
@@ -1756,7 +1756,7 @@
 					prenom3: {
 						required: "Please specify your name",
 						minlength: "Your name must be longer than 2 characters"
-					},
+					},					
 					email3: {
 						required: "We need your email address to contact you",
 						email: "Please enter a valid email address e.g. name@domain.com"
@@ -1821,7 +1821,7 @@
 					prenom: {
 						required: true,
 						minlength: 2
-					},
+					},					
 					email: {
 						required: true,
 						email: true
