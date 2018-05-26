@@ -909,6 +909,7 @@ export default {
         } else {
           this.result = 'ok'
         }
+        console.log(this.v)
       }
     )
     if (this.$route.query.id === 'test') {
