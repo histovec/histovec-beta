@@ -47,32 +47,48 @@
         <div class="separator-2"></div>
         <!-- page-title end -->
         <div class="contact-form">
-          <form id="contact-form-with-recaptcha" class="margin-clear" role="form">
-            <div class="form-group has-feedback">
-              <label for="name">Nom <span class="color-danger">*</span></label>
-              <input type="text" class="form-control" id="name" name="name" placeholder="">
-              <i class="fa fa-user form-control-feedback"></i> </div>
-            <div class="form-group has-feedback">
-              <label for="prenom">Prénom <span class="color-danger">*</span></label>
-              <input type="text" class="form-control" id="prenom" name="prenom" placeholder="">
-              <i class="fa fa-user form-control-feedback"></i> </div>
-            <div class="form-group has-feedback">
-              <label for="email">Courriel <span class="color-danger">*</span></label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="">
-              <i class="fa fa-envelope form-control-feedback"></i> </div>
-            <div class="form-group has-feedback">
-              <label for="subject">Objet <span class="color-danger">*</span></label>
-              <input type="text" class="form-control" id="subject" name="subject" placeholder="">
-              <i class="fa fa-navicon form-control-feedback"></i> </div>
-            <div class="form-group has-feedback">
-              <label for="message">Message <span class="color-danger">*</span></label>
-              <textarea class="form-control" rows="6" id="message" name="message" placeholder=""></textarea>
-              <i class="fa fa-pencil form-control-feedback"></i> </div>
-            <a href="#" class="btn btn-animated btn-default">Envoyer <i class="fa fa-send-o"></i></a
-          >
+          <form id="contact-form-with-recaptcha" class="margin-clear row" role="form">
+            <div class="col-md-4">
+              <div class="form-group has-feedback">
+                <label for="name">Nom <span class="color-danger">*</span></label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="" v-model="nom">
+                <i class="fa fa-user form-control-feedback"></i>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group has-feedback">
+                <label for="prenom">Prénom <span class="color-danger">*</span></label>
+                <input type="text" class="form-control" id="prenom" name="prenom" placeholder="" v-model="prenom">
+                <i class="fa fa-user form-control-feedback"></i>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group has-feedback">
+                <label for="email">Courriel <span class="color-danger">*</span></label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="" v-model="email">
+                <i class="fa fa-envelope form-control-feedback"></i>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group has-feedback">
+                <label for="subject">Objet <span class="color-danger">*</span></label>
+                <input type="text" class="form-control" id="subject" name="subject" placeholder="" v-model="object">
+                <i class="fa fa-navicon form-control-feedback"></i>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group has-feedback">
+                <label for="message">Message <span class="color-danger">*</span></label>
+                <textarea class="form-control" rows="6" id="message" name="message" placeholder="" v-model="message"></textarea>
+                <i class="fa fa-pencil form-control-feedback"></i>
+              </div>
+            </div>
+            <div class="col-md-12 center">
+              <a :href="mailTo" class="btn btn-animated btn-default">Envoyer <i class="fa fa-send-o"></i></a>
+            </div>
           </form>
         </div>
-      </div>
+    </div>
       <!-- main end -->
     </div>
   </div>
