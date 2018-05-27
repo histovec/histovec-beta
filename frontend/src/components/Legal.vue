@@ -4,8 +4,8 @@
   <div class="breadcrumb-container">
     <div class="container">
       <ol class="breadcrumb">
-        <li><i class="fa fa-home pr-10"></i><a href="index.html">Accueil</a></li>
-        <li class="active">Mentions légale</li>
+        <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
+        <li class="active">Mentions légales</li>
       </ol>
     </div>
   </div>
@@ -53,16 +53,39 @@
               <h5>Directeur de la publication</h5>
               <p>Emmanuel Barbe, délégué interministériel à la Sécurité routière </p>
               <h5>Crédits</h5>
-              <p>La DSR est titulaire des droits relatifs à la propriété intellectuelle des contenus (photographies, vidéos, infographies et autres éléments techniques et graphiques), disponibles sur le site securite-routiere.gouv.fr.</p>
+              <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (photographies, vidéos, infographies et autres éléments techniques et graphiques), disponibles sur le site histovec.gouv.fr.</p>
               <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, contactez-nous.</p>
-              <p>Les contenus présentés sur ce site dans la rubrique Lu sur le web, sont issus d'un flux RSS gérés par la société Semantiweb. Il s'agit d'un flux de contenus issus de duivers site Internet.</p>
               <h5>Conception et réalisation</h5>
+              Conception et réalisation Lab DSIC avec le Bureau des immatriculations (DSR)
               <p></p>
-              <h5>Conception</h5>
+              <h5>Établir un lien avec le site de la Sécurité routière </h5>
+              <h6> Liens hypertextes entrants </h6>
+              Tout site public ou privé est autorisé à établir, sans autorisation préalable, un lien vers les informations diffusées dans ce site.
+              En revanche les pages du site histovec.interieur.gouv.fr ne doivent pas être imbriquées à l’intérieur des pages d’un autre site : rien ne doit méprendre le visiteur sur l’origine d’une page vue.
+              Le ministère de l'Intérieur se réserve le droit de demander la suppression d'un lien qu'elle estime non-conforme à l'objet du site, à ses missions ou plus généralement à l'éthique d'un portail public.
+              L’autorisation de mise en place d’un lien est valable pour tout support, à l’exception de ceux diffusant des informations à caractère polémique, pornographique, xénophobe ou pouvant, dans une plus large mesure porter atteinte à la sensibilité du plus grand nombre
               <p></p>
-              <h5>Réalisation</h5>
-              <p>Établir un lien avec le site de la Sécurité routière </p>
-              <p> Liens hypertextes entrants </p>
+              <h6> Liens hypertextes sortants </h6>
+              Le site indique en permanence l'identité des sites indiqués en lien, et ce sur toutes les pages. Néanmoins, ces pages web dont les adresses URL sont régulièrement vérifiées ne font pas partie du site et par conséquent n'engagent en rien la responsabilité du site histovec.interieur.gouv.fr.
+              <h6>Stabilité des adresses</h6>
+              Nous essayons, autant que faire se peut, de maintenir des adresses URL de page stables. Toutefois, ce site pouvant faire à tout moment l’objet de réorganisations, nous ne pouvons pas garantir la stabilité de l’adresse des pages internes du site.
+              <h6>Droit d’auteur</h6>
+              Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Au terme de l’article L. 122-4 du cCode de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.
+              <h6>Code applicatif open source</h6>
+              Conformément à la <a href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14">loi pour une République numérique</a>, le code de l'application Histovec est libre et opensource, publié sous <a href="https://www.gnu.org/licenses/lgpl-3.0.fr.html">licence LGPL</a>.
+              <h6>Limitations de responsabilité</h6>
+              Le site HistoVec fournit les informations issues du Système d’Immatriculation des Véhicules (SIV).
+              <h6>Accessibilité</h6>
+              Le ministère de l’Intérieur s’efforce de permettre que les internautes puissent avoir accès en continu au site.
+              Néanmoins, l ministère de l’Intérieur se réserve le droit de ne pouvoir garantir l’accessibilité à son site internet et à l’ensemble des téléservices proposés en cas de force majeur (panne, intention technique de maintenance). La responsabilité du ministère ne pourrait être engagée.
+              Site optimisé pour Firefox 45+ et Chrome 50+
+              <h6>Propriété intellectuelle et droits d'utilisation</h6>
+              L'utilisateur s'engage, sous peine de voir sa responsabilité civile et/ou pénale engagée, à ne pas utiliser le site Internet de l’éditeur pour :
+              <ul>
+                <li>transmettre par quelque procédé que ce soit (e-mail ou autres), tout contenu incluant des programmes, des codes, des virus, etc. destinés à détruire ou limiter les fonctionnalités du site Internet de l’éditeur.</li>
+                <li>transmettre par quelque procédé que ce soit dans les services interactifs proposés sur le site Internet de l’éditeur, tout contenu illicite ou nuisible, et notamment des photos ou messages à caractère injurieux, insultant, diffamant, dénigrant, dégradant, raciste, xénophobe, sexiste, pornographique, menaçant ou qui pourrait inciter à la haine ou au harcèlement et qui irait à l'encontre du droit au respect de la vie privée ou sans rapport avec les thèmes proposés,</li>
+                <li>transmettre par quelque procédé que ce soit, tout contenu et notamment des photos violant les droits de la propriété intellectuelle, industrielle, les droits de la personne, etc.</li>
+              </ul>
               <!-- accordion start -->
               <!-- ================ -->
               <div class="panel-group collapse-style-2" id="accordion-2">
