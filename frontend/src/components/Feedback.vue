@@ -97,3 +97,28 @@
 
   </div>
 </template>
+
+<script>
+export default {
+  components: {
+  },
+  data () {
+    return {
+      nom: '',
+      prenom: '',
+      object: '',
+      email: '',
+      message: ''
+    }
+  },
+  computed: {
+    mailTo () {
+      return 'mailto:histovec@interieur.gouv.fr?subject=' + encodeURI('Bug histovec: ' + this.object) + '&body=' + this.mailBody + '&reply-to:' + this.mail
+    },
+    mailBody () {
+      return encodeURI(this.message + '\n' + this.prenom + ' ' + this.nom + '\n')
+    }
+
+  }
+}
+</script>
