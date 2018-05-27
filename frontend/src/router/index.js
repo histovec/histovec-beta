@@ -6,6 +6,7 @@ import Search from '@/components/Search'
 import Report from '@/components/Report'
 import Faq from '@/components/Faq'
 import Legal from '@/components/Legal'
+import Contact from '@/components/Contact'
 import Feedback from '@/components/Feedback'
 
 Vue.use(Router)
@@ -19,6 +20,7 @@ export default new Router({
     {name: 'report', path: '/histovec/report', component: Report},
     {name: 'faq', path: '/histovec/faq', component: Faq},
     {name: 'legal', path: '/histovec/legal', component: Legal},
+    {name: 'contact', path: '/histovec/contact', component: Contact},
     {name: 'feedback', path: '/histovec/feedback', component: Feedback}
   ]
 })
