@@ -83,8 +83,13 @@
                   <i class="fa fa-pencil form-control-feedback"></i>
                 </div>
               </div>
-              <div class="col-md-12 center">
-                <a :href="mailTo" class="btn btn-animated btn-default">Envoyer <i class="fa fa-send-o"></i></a>
+              <div class="col-md-12 centered">
+                <p @click="send()" class="btn btn-animated btn-default">Envoyer
+                  <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
+                                         {'fa-spin fa-spinner' : (status === 'posting')},
+                                         {'fa-check' : (status === 'posted')},
+                                         {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
+                </p>
               </div>
             </form>
           </div>
@@ -107,7 +112,8 @@ export default {
       prenom: '',
       object: '',
       email: '',
-      message: ''
+      message: '',
+      status: 'init'
     }
   },
   computed: {
@@ -117,7 +123,18 @@ export default {
     mailBody () {
       return encodeURI(this.message + '\n' + this.prenom + ' ' + this.nom + '\n')
     }
-
+  },
+  methods: {
+    send () {
+      this.status = 'posting'
+      let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message}
+      this.$http.post(this.apiUrl + 'contact/', data)
+        .then(response => {
+          this.status = 'posted'
+        }, () => {
+          this.status = 'failed'
+        })
+    }
   }
 }
 </script>
