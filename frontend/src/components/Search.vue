@@ -101,14 +101,15 @@
                       </form>
                     </fieldset>
                     <div class="form-group">
-                      <div class="col-xs-offset-4 col-sm-5">
+                      <div class="col-xs-offset-5 col-sm-7">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
                                 :to="{ name: 'report', query: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
-                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a> </div>
+                        <!--
+                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
                       </div>
                   </div>
                 </div>
@@ -158,14 +159,15 @@
                       </form>
                     </fieldset>
                     <div class="form-group">
-                      <div class="col-xs-offset-4 col-sm-5">
+                      <div class="col-xs-offset-5 col-sm-7">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
                                 :to="{ name: 'report', query: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
-                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a> </div>
+                        <!--
+                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
                     </div>
                   </div>
                 </div>
