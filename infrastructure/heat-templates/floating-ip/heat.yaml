@@ -1,0 +1,27 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Floating IP
+resources:
+  bastion_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: floatingip_network_name }
+  front_floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: floatingip_network_name }
+
+parameters:
+  floatingip_network_name:
+    type: string
+
+outputs:
+  bastion_floating_ip_id:
+    value: { get_resource: bastion_floating_ip }
+  bastion_floating_ip_address:
+    value: { get_attr: [ bastion_floating_ip, floating_ip_address ] }
+  front_floating_ip_id:
+    value: { get_resource: front_floating_ip }
+  front_floating_ip_address:
+    value: { get_attr: [ front_floating_ip, floating_ip_address ] }

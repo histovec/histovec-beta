@@ -1,9 +1,14 @@
-# POC Vue.js Histovec
+# Histovec bêta
 
-Ceci est un premier draft quick-and-dirty intégrant la maquette réalisée au Hackathon du MI en décembre 2017 sous Boostrap, et les dernières itérations du début mois d'avril avec des premiers usagers.
-Il intègre deux vues: 
-- la recherche
-- le résultat (rapport)
+Cette application est la version bêta en Vue.js permettant l'édition de rapports dans le cadre de la mesure n°16 du CISR du 9 janvier 2018. Cette version vise à être mise en service au 24 mai 2018 pour une ouverture en test auprès de premiers usagers.
+
+Il intègre trois vues: 
+- Home : page d'introduction du site
+- Search : page de recherche pro ou particulier
+- Report: page de rapport de l'historique du véhicule
+
+## données personnelles
+Les données en base sont intégralement chiffrées en AES256, et les données personnelles hashées (SHA256).
 
 ## composants
 Le POC intègre les composants suivants :
@@ -21,25 +26,37 @@ git clone https://github.com/poc-vue
 git checkout origin/dev
 make dev
 ```
-Rendez-vous sur : http://localhost puis :
-- entrez une plaque et un numéro VIN et appuyez sur recherche
 
 ## changement des données
+
 Pour charger les données (vous devez disposer du fichier `siv.csv.gz.gpg` et de la passphrase.
+Copiez les données dans le répertoire `sample_data` (à créer le cas échéant).
+
+Créer l'index et chargez les données:
+
 ```
 make index-create
 make index-load
 ```
-pour purger l'index elasticsearch
+Ce processus peut prendre un peu de temps (3 à 4 minutes pour 1M de véhicules)
+
+Pour effacer les données :
 ```
 make index-purge
 ```
 
+## tester l'application
+
+- rendez-vous sur : http://localhost:8088 
+- depuis la page d'accueil,  cliquez sur "vendeur" ou "professionnel"
+- sur la parge de recherche (mode "vendeur"), entrez les données de la personnes physique (nom, prénom, date de naissance) ou morale (raison sociale, n° SIREN) et les données identifiantes du véhicule (n° d'immatriculaion, n° de formule)
+- vous obtenez le rapport. Cliquez sur "Transmettre le rapport" pour obtenir les liens à transmettre à l'acheteur. Celui-ci peut êre copié, envoyé par mail, sms ou QR-code.
+
+
 ## limitations
-- fonction de hashage : la fonction de recherche de base à ce stade sur le hash sha1 (=> à migrer vers un sha3 ou autre fonction plus robuste), basé sur la concaténation de la plaque d'immatriculation et le numéro VIN.
-- intégration de boostrap : en attendant la refonte vers Boostrap 4, les composants CSS n'ont pas été intégrés dans la chane de compilation et webpack
 - seul l'environnement docker de dev fonction, la chaîne de compilation n'est pas encore constitutée
-- les données de test étant partielles (en terme de champs), la fonction de recherche
+- les restitutions de la synthèse sont encore partielles
+- le texte de la homepage est encore à revoir
 
 ## source
 Le code a été développé en quelques heures à partir de :

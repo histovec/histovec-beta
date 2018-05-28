@@ -1,3 +1,5 @@
 upload
 artifacts
 sample_data
+infrastructure/heat-templates/CIT/param/*
+infrastructure/heat-templates/floating-ip/param/*

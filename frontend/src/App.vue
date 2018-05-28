@@ -1,5 +1,5 @@
 <template>
-  <div id="histovec">
+  <div id="app">
     <router-view></router-view>
   </div>
 </template>
@@ -9,6 +9,10 @@ import Vue from 'vue'
 
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
+import operations from './assets/json/libelle_operations.json'
+
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 import lodash from 'lodash'
 
@@ -19,8 +23,9 @@ window.bus = new Vue()
 Vue.mixin({
   data () {
     return {
-      apiUrl: apiConf.api.url.replace('<APP>', process.env.APP),
+      apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
+      operations: operations,
       lang: localization.default
     }
   },

@@ -1,325 +1,267 @@
 <template>
-    
-  
-    <section class="container" id="search">
+
+
+  <div>
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-container">
+      <div class="container">
+        <ol class="breadcrumb">
+          <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
+          <li class="active">Recherche</li>
+        </ol>
+      </div>
+    </div>
+    <!-- breadcrumb end -->
+    <section class="main-container">
+      <div class="container">
         <div class="row">
-          <div class="col-md-12"> <img src="assets/images/certificat_immat_2.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"/></div>
-        </div>
-        <span class="row">
-        </span>
-      <div class="row">
-        <div class="col-md-4">
-          <h3 class="title"><span class="text-default">H</span>isto<span class="text-default">V</span>ec </h3>
-          <p>Cette recherche vous permet de connaitre les antécédents du véhicule, le nombre de propriétaires, les données à la première mise en circulation (couleur, cylindrée....).</p>
-          <p>Egalement la vie du véhicule, accidentalité ayant entrainé une mise en hors circulation, utilisation d'un véhicule dans un cadre professionnel (taxi...).</p>
-          <a href="page-about.html" class="btn radius-50 btn-default btn-hvr hvr-shutter-out-horizontal" data-toggle="modal" data-target="#myModal"><i class="fa fa-users  pr-10"></i>En savoir plus...</a>
-          <!-- Modals en savoir plus start -->
-          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                  <h4 class="modal-title" id="myModalLabel">HistoVec</h4>
-                </div>
-                <div class="modal-body">
-                  <p>Consectetur adipisicing elit. Nemo architecto debitis dolorum ullam in ut sint, odit maiores eaque explicabo, repellendus minima soluta sunt! Nisi minima blanditiis voluptate, ut atque.</p>
-                  <p>Culpa expedita! Quisquam, itaque officiis nisi nam doloribus explicabo possimus, dolorum alias provident maxime temporibus, enim voluptatibus! Molestias, accusantium cum impedit sint velit exercitationem deserunt, corporis magni provident earum, ullam iusto voluptatem iste animi inventore ab cupiditate quod laborum quasi libero doloremque obcaecati eius. Ut, reprehenderit optio unde accusantium quia qui! Debitis delectus corporis aspernatur nemo aut, odio harum ea repellendus quidem, saepe, incidunt? Assumenda deserunt unde minima aspernatur ducimus velit molestiae, minus eius inventore, dolore temporibus odio distinctio optio.</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-dark" data-dismiss="modal">Fermer</button>
-                  <button type="button" class="btn btn-sm btn-default">Imprimer</button>
+          <!-- section start -->
+          <section class="dark-translucent-bg fixed-bg pv-30" style="background-image:url(assets/images/recherche_1.jpg);">
+            <div class="container">
+              <div class="row justify-content-lg-center">
+                <div class="col-lg-12">
+                  <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
+                  <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+                  <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidées par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="#">dossier de presse</a>) </p>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Modals en savoir plus end -->
-        </div>
-        <div class="col-md-8">
-          <h3 class="text-center h3_spec">Saississez votre recherche</h3>
-          <form role="form">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group has-feedback">
-                  <label class="control-label">Nom</label>
-                  <input type="text" class="form-control" v-model="nom">
-                  <i class="fa fa-user form-control-feedback"></i> </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group has-feedback">
-                  <label class="control-label">Prénom</label>
-                  <input type="text" class="form-control" v-model="prenom">
-                  <i class="fa fa-user form-control-feedback"></i> </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group has-feedback">
-                  <label class="control-label">Date de naissance</label>
-                  <input type="email" class="form-control" v-model="date_naissance">
-                  <i class="fa fa-calendar form-control-feedback"></i> </div>
-              </div>
-            </div>
-          </form>
-          <form role="form">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group has-feedback">
-                  <label for="input" class="control-label">N° SIV</label>
-                  <input type="text" class="form-control" id="input" v-model="plaque" placeholder="AA-555-AA">
-                  <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group has-feedback plan position_left">
-                  <label for="input" class="control-label">N° VIN</label>
-                  <input type="text" class="form-control pt-popover" id="input" v-model="vin" placeholder="VFS1W2389ASTV3069" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre certificat d'immatriculation" title="Code VIN " data-original-title="15GB Storage" data-trigger="hover">
-                  <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-4 col-sm-3"> 
-                <router-link 
-                  class="btn btn-animated btn-default btn-hvr hvr-shutter-out-horizontal"
-                  :to="{ name: 'result', query: {id: id}}"
-                >
-                  <i class="fa fa-send-o"></i>Rechercher
-                </router-link> 
-              </div>
-            </div>
-          </form>
-          <!-- Modal rechercher start -->
-          <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                  <h4 class="modal-title" id="myLargeModalLabel">Résultats</h4>
-                </div>
-                <div class="modal-body">
-                  <h2><span class="text-default">H</span>isto<span class="text-default">V</span>ec </h2>
-                  <h6>M. DXXXXT Pxxxxe - Immatriculation AA-123-BB</h6>
-                  <div class="separator-2"></div>
-                  <!-- resultat icone start -->
-                  <!-- ================ -->
-                  <section class="main-container">
-                    <div class="container">
-                      <div class="row">
-                        <div class="main col-md-12">
-                          <div class="row">
-                            <div class="col-md-4 ">
-                              <div class="feature-box-2"> <span class="icon without-bg"><i class="fa fa-object-ungroup text-default"></i></span>
-                                <div class="body">
-                                  <h4 class="title">Marque</h4>
-                                  <p>Peugeot</p>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-4 ">
-                              <div class="feature-box-2"> <span class="icon without-bg"><i class="fa fa-car text-default"></i></span>
-                                <div class="body">
-                                  <h4 class="title">Modèle</h4>
-                                  <p>308</p>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-4 ">
-                              <div class="feature-box-2"> <span class="icon without-bg"><i class="fa fa-paint-brush text-default"></i></span>
-                                <div class="body">
-                                  <h4 class="title">Couleur</h4>
-                                  <p>Bleue</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-4 ">
-                              <div class="feature-box-2"> <span class="icon without-bg"><i class="fa fa-cogs text-default"></i></span>
-                                <div class="body">
-                                  <h4 class="title">Cylindrée</h4>
-                                  <p> 2494</p>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-4 ">
-                              <div class="feature-box-2"> <span class="icon without-bg"><i class="fa fa-calendar text-default"></i></span>
-                                <div class="body">
-                                  <h4 class="title">Mise en circulation</h4>
-                                  <p> 07/2016</p>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-4 ">
-                              <div class="feature-box-2"> <span class="icon without-bg"><i class="fa fa-fire text-default"></i></span>
-                                <div class="body">
-                                  <h4 class="title">Carburant</h4>
-                                  <p> Essence</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                  <!-- resultat icone end -->
-                  <div class="separator-2"></div>
-                  <!-- section start -->
-                  <!-- ================ -->
-                  <section>
-                    <div class="container">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <!-- page-title start -->
-                          <!-- ================ -->
-                          <h2><span class="icon without-bg"><i class="fa fa-id-card-o text-default"></i></span> <span class="text-default">H</span><span class="text-lowercase">istorique</span> <span class="text-default">I</span><span class="text-lowercase">mmatriculation</span> </h2>
-                          <div class="separator-2"></div>
-                          <!-- page-title end -->
-                          <!-- pricing tables start -->
-                          <!-- ================ -->
-                          <div class="pricing-tables stripped">
-                            <div class="row grid-space-0">
-                              <!-- pricing table start -->
-                              <!-- ================ -->
-                              <div class="col-sm-4 plan stripped">
-                                <div class="header dark-bg">
-                                  <h3>Privé</h3>
-                                </div>
-                                <ul>
-                                  <li>Professionnel</li>
-                                  <li>Privé</li>
-                                </ul>
-                              </div>
-                              <!-- pricing table end -->
-                              <!-- pricing table start -->
-                              <!-- ================ -->
-                              <div class="col-sm-4 plan stripped">
-                                <div class="header default-bg">
-                                  <h3>Date</h3>
-                                </div>
-                                <ul>
-                                  <li><a href="#" class="pt-popover" data-toggle="popover" data-placement="top" data-content="Effectuée" title="" data-original-title="Immatriculation">06 Janvier 2012</a> </li>
-                                  <li><a href="#" class="pt-popover" data-toggle="popover" data-placement="top" data-content="Effectuée" title="" data-original-title="Immatriculation">05 Avril 2008</a> </li>
-                                </ul>
-                              </div>
-                              <!-- pricing table end -->
-                              <!-- pricing table start -->
-                              <!-- ================ -->
-                              <div class="col-sm-4 plan stripped">
-                                <div class="header dark-bg">
-                                  <h3>Ville</h3>
-                                </div>
-                                <ul>
-                                  <li>Rouen</li>
-                                  <li>Paris</li>
-                                </ul>
-                              </div>
-                            <!-- pricing table end -->
-                            </div>
-                          </div>
-                          <!-- pricing tables end -->
-                        </div>
-                        <div class="col-md-6">
-                          <!-- page-title start -->
-                          <!-- ================ -->
-                          <h2><span class="icon without-bg"><i class="fa fa-check-square-o text-default"></i></span> <span class="text-default">H</span><span class="text-lowercase">istorique</span> <span class="text-default">V</span><span class="text-lowercase">erbalisation</span> </h2>
-                          <div class="separator-2"></div>
-                          <!-- page-title end -->
-                          <!-- pricing tables start -->
-                          <!-- ================ -->
-                          <div class="pricing-tables stripped">
-                            <div class="row grid-space-0">
-                              <!-- pricing table start -->
-                              <!-- ================ -->
-                              <div class="col-sm-4 plan stripped">
-                                <div class="header dark-bg">
-                                  <h3>Situation</h3>
-                                </div>
-                                <ul>
-                                  <li>Rouen</li>
-                                  <li>A13</li>
-                                  <li>Rouen</li>
-                                </ul>
-                              </div>
-                              <!-- pricing table end -->
-                              <!-- pricing table start -->
-                              <!-- ================ -->
-                              <div class="col-sm-4 plan stripped">
-                                <div class="header default-bg">
-                                  <h3>Date</h3>
-                                </div>
-                                <ul>
-                                  <li><a href="#" class="pt-popover" data-toggle="popover" data-placement="top" data-content="Infraction payée" title="" data-original-title="Contravention">15 Mars 2014</a></li>
-                                  <li>19 Juillet 2015</li>
-                                  <li><a href="#" class="pt-popover label-danger" data-toggle="popover" data-placement="top" data-content="Infraction non-payée" title="" data-original-title="Contravention">20 Ocotobre 2016</a></li>
-                                </ul>
-                              </div>
-                              <!-- pricing table end -->
-                              <!-- pricing table start -->
-                              <!-- ================ -->
-                              <div class="col-sm-4 plan stripped">
-                                <div class="header dark-bg">
-                                  <h3>Catégorie</h3>
-                                </div>
-                                <ul>
-                                  <li>Feu rouge</li>
-                                  <li>Vitesse</li>
-                                  <li>Vitesse</li>
-                                </ul>
-                              </div>
-                              <!-- pricing table end -->
-                            </div>
-                          </div>
-                          <!-- pricing tables end -->
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-sm btn-dark" data-dismiss="modal">Fermer</button>
-                  <button type="button" class="btn btn-sm btn-default">Partager</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Modal rechercher end -->
+          </section>
+          <!-- section end -->
+          <!-- debut image fixe
+          <div class="col-md-12"> <img src="assets/images/recherche_1.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"></div>
+            <!-- fin image fixe -->
         </div>
       </div>
-  </section>
-  <!-- section end -->
+    </section>
+
+    <!-- section -->
+    <section class="main-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- tabs start -->
+            <!-- ================ -->
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs style-2" role="tablist">
+              <li :class="[{'active' : type_personne === 'particulier'}]"><a href="#h2tab1" role="tab" data-toggle="tab"><i class="fa fa-user pr-10"></i>Particulier</a></li>
+              <li :class="[{'in active' : type_personne === 'pro'}]"><a href="#h2tab2" role="tab" data-toggle="tab"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane" id="h2tab1" :class="[{'in active' : type_personne === 'particulier'}]">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form role="form">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group has-feedback">
+                            <label class="control-label">Nom</label>
+                            <input type="text" class="form-control" v-model="nom">
+                            <i class="fa fa-user form-control-feedback"></i> </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group has-feedback">
+                            <label class="control-label">Prénom</label>
+                            <input type="text" class="form-control" v-model="prenom">
+                            <i class="fa fa-user form-control-feedback"></i> </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group has-feedback">
+                            <label class="control-label">Date de naissance</label>
+                            <input type="email" class="form-control" v-model="date_naissance">
+                            <i class="fa fa-calendar form-control-feedback"></i> </div>
+                        </div>
+                      </div>
+                    </form>
+                    <fieldset>
+                      <legend><span class="color-default">Carte grise</span></legend>
+                      <form role="form">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                              <label for="input" class="control-label">Plaque d'immatriculation</label>
+                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
+                              <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback plan position_left">
+                              <label for="input" class="control-label">N° de formule</label>
+                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="N° de formule" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
+                              <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-4" v-if="false">
+                            <div class="form-group has-feedback plan position_left">
+                              <label for="input" class="control-label">Date première mise en circulation</label>
+                              <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat">
+                              <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
+                          </div>
+
+                        </div>
+                      </form>
+                    </fieldset>
+                    <div class="form-group">
+                      <div class="col-xs-offset-5 col-sm-7">
+                        <router-link
+                                class="btn btn-animated btn-default btn-sm"
+                                :to="{ name: 'report', query: {id: id, key: key, code: code}}"
+                        >
+                          <i class="fa fa-search"></i>Rechercher
+                        </router-link>
+                        <!--
+                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="h2tab2" :class="[{'in active' : type_personne === 'pro'}]">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form role="form">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group has-feedback">
+                            <label class="control-label">Raison sociale</label>
+                            <input type="text" class="form-control" v-model="raison_sociale">
+                            <i class="fa fa-user form-control-feedback"></i> </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group has-feedback">
+                            <label class="control-label">N° SIREN</label>
+                            <input type="email" class="form-control"  v-model="siren">
+                            <i class="fa fa-building-o form-control-feedback"></i> </div>
+                        </div>
+                      </div>
+                    </form>
+                    <fieldset>
+                      <legend><span class="color-default">Carte grise</span></legend>
+                      <form role="form">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback">
+                              <label for="input" class="control-label">Plaque d'immatriculation</label>
+                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
+                              <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback plan position_left">
+                              <label for="input" class="control-label">N° de formule</label>
+                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="N° de formule" data-original-title="15GB Storage" data-trigger="hover"  v-model="formule">
+                              <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-4" v-if="false">
+                            <div class="form-group has-feedback plan position_left">
+                              <label for="input" class="control-label">Date première mise en circulation</label>
+                              <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Date de première mise en circulation, telle qu'indiquée sur la carte grise" title="Date de première mise en circulation" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat" >
+                              <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
+                          </div>
+                        </div>
+                      </form>
+                    </fieldset>
+                    <div class="form-group">
+                      <div class="col-xs-offset-5 col-sm-7">
+                        <router-link
+                                class="btn btn-animated btn-default btn-sm"
+                                :to="{ name: 'report', query: {id: id, key: key, code: code}}"
+                        >
+                          <i class="fa fa-search"></i>Rechercher
+                        </router-link>
+                        <!--
+                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- tabs end -->
+        </div>
+      </div>
+    </section>
+    <!-- section end -->
+    <div class="container">
+      <div class="row"> </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
 
-import Upload from './Upload'
-
-var sha1 = require('sha1')
+import CryptoJS from 'crypto-js'
 
 export default {
   components: {
-    Upload
   },
   data () {
     return {
+      type_personne: 'particulier',
       nom: '',
+      raison_sociale: '',
       prenom: '',
       date_naissance: '',
       plaque: '',
+      siren: '',
+      formule: '',
+      date_prem_immat: '',
       vin: '',
       conf: []
     }
   },
   computed: {
-    orderedProjects () {
-      return this.$lodash.sortBy(this.projects)
+    currentWeekNumber () {
+      var instance = new Date()
+
+      // Create a copy of this date object
+      var target = new Date(instance.valueOf())
+
+      // ISO week date weeks start on monday
+      // so correct the day number
+      var dayNr = (instance.getDay() + 6) % 7
+
+      // ISO 8601 states that week 1 is the week
+      // with the first thursday of that year.
+      // Set the target date to the thursday in the target week
+      target.setDate(target.getDate() - dayNr + 3)
+
+      // Store the millisecond value of the target date
+      var firstThursday = target.valueOf()
+
+      // Set the target to the first thursday of the year
+      // First set the target to january first
+      target.setMonth(0, 1)
+      // Not a thursday? Correct the date to the next thursday
+      if (target.getDay() !== 4) {
+        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7)
+      }
+
+      // The currentWeekNumber is the number of weeks between the
+      // first thursday of the year and the thursday in the target week
+      var currentWeekNumber = 1 + Math.ceil((firstThursday - target) / 604800000)
+      return instance.getFullYear() + '' + currentWeekNumber
     },
     id () {
-      console.log(this.plaque.replace(/-/g, '') + this.vin)
-      return sha1(this.plaque.replace(/-/g, '') + this.vin)
+      return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
+    },
+    code () {
+      return this.hash(this.plaque + this.formule + this.currentWeekNumber)
+    },
+    key () {
+      return this.hash(this.plaque + this.formule)
+    }
+  },
+  methods: {
+    hash (string) {
+      var hash = string
+      hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
+      hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
+      hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
+      return hash
     }
   },
   created () {
-    this.$http.get(this.apiUrl + 'conf')
-      .then(response => {
-        this.conf = Object.keys(response.body)
-      })
+    this.type_personne = this.$route.query.t
   }
 }
 </script>
