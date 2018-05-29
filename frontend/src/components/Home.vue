@@ -215,7 +215,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton acheteur -->
-                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Acheteur <i class="fa fa-users"></i></router-link>
+                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'buyer' }">Acheteur <i class="fa fa-users"></i></router-link>
                 <!-- fin bouton acheteur -->
                 <div class="separator clearfix"></div>
                 <p>Achetez en confiance : demandez au vendeur le rapport.</p>
@@ -367,7 +367,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton acheteur -->
-                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Acheteur <i class="fa fa-users"></i></router-link>
+                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'buyer' }">Acheteur <i class="fa fa-users"></i></router-link>
                 <!-- fin bouton acheteur -->
                 <div class="separator clearfix"></div>
                 <p>Achetez en confiance : demandez au vendeur le rapport.</p>
