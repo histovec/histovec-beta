@@ -51,7 +51,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 mb-20">
-                    
+                    Vous souhaitez acquérir un véhicule d’occasion, vous avez fait une sélection parmis des annonces, demandez aux vendeurs de partager l'historique de son véhicule.
+                    <br /><br />
+                    HistoVec permet au vendeur de partager à un acheteur intéressé l’historique des faits marquants du véhicule enregistrés dans le fichier national du SIV (Système d’Immatriculation des Véhicules), notamment :
+                    <ul>
+                        <li>date de mise en circulation</li>
+                        <li>changements de propriétaire</li>
+                        <li>sinistres à réparation contrôlée</li>
+                        <li>situation administrative (gage, opposition, vol, …) etc.</li>
+                    </ul>
+                    En acheteur éclairé, vous pourrez prendre votre décision en toute quiétude.
                     <!-- accordion end -->
                 </div>
             </div>
