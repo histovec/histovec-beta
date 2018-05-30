@@ -47,44 +47,49 @@
         <div class="separator-2"></div>
         <!-- page-title end -->
         <div class="contact-form">
-          <form id="contact-form-with-recaptcha" class="margin-clear row" role="form">
+          <form @submit="send" id="contact-form-with-recaptcha" class="margin-clear row" role="form">
             <div class="col-md-4">
-              <div class="form-group has-feedback">
+              <div class="form-group has-feedback" :class="[{'has-error' : (nom === '' && status !== 'init')}]">
                 <label for="name">Nom <span class="color-danger">*</span></label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="" v-model="nom">
                 <i class="fa fa-user form-control-feedback"></i>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="form-group has-feedback">
+              <div class="form-group has-feedback" :class="[{'has-error' : (prenom === '' && status !== 'init')}]">
                 <label for="prenom">Prénom <span class="color-danger">*</span></label>
                 <input type="text" class="form-control" id="prenom" name="prenom" placeholder="" v-model="prenom">
                 <i class="fa fa-user form-control-feedback"></i>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="form-group has-feedback">
+              <div class="form-group has-feedback" :class="[{'has-error' : (email === '' && status !== 'init')}]">
                 <label for="email">Courriel <span class="color-danger">*</span></label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="" v-model="email">
                 <i class="fa fa-envelope form-control-feedback"></i>
               </div>
             </div>
             <div class="col-md-12">
-              <div class="form-group has-feedback">
+              <div class="form-group has-feedback" :class="[{'has-error' : (object === '' && status !== 'init')}]">
                 <label for="subject">Objet <span class="color-danger">*</span></label>
                 <input type="text" class="form-control" id="subject" name="subject" placeholder="" v-model="object">
                 <i class="fa fa-navicon form-control-feedback"></i>
               </div>
             </div>
             <div class="col-md-12">
-              <div class="form-group has-feedback">
+              <div class="form-group has-feedback" :class="[{'has-error' : (message === '' && status !== 'init')}]">
                 <label for="message">Message <span class="color-danger">*</span></label>
                 <textarea class="form-control" rows="6" id="message" name="message" placeholder="" v-model="message"></textarea>
                 <i class="fa fa-pencil form-control-feedback"></i>
               </div>
             </div>
             <div class="col-md-12 center">
-              <a :href="mailTo" class="btn btn-animated btn-default">Envoyer <i class="fa fa-send-o"></i></a>
+              <button type="submit" class="btn btn-animated btn-default">Envoyer
+                <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
+                                         {'fa-spin fa-spinner' : (status === 'posting')},
+                                         {'fa-check' : (status === 'posted')},
+                                         {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
+              </button>
             </div>
           </form>
         </div>
@@ -108,17 +113,26 @@ export default {
       prenom: '',
       object: '',
       email: '',
-      message: ''
+      message: '',
+      status: 'init'
     }
   },
   computed: {
-    mailTo () {
-      return 'mailto:histovec@interieur.gouv.fr?subject=' + encodeURI('Bug histovec: ' + this.object) + '&body=' + this.mailBody + '&reply-to:' + this.mail
-    },
-    mailBody () {
-      return encodeURI(this.message + '\n' + this.prenom + ' ' + this.nom + '\n')
+  },
+  methods: {
+    send: function (e) {
+      this.status = 'posting'
+      if (this.nom && this.prenom && this.object && this.email && this.message) {
+        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message}
+        this.$http.post(this.apiUrl + 'feedback/', data)
+          .then(response => {
+            this.status = 'posted'
+          }, () => {
+            this.status = 'failed'
+          })
+      } else { this.status = 'failed' }
+      e.preventDefault()
     }
-
   }
 }
 </script>
