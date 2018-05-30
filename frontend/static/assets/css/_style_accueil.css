@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--[if IE 9]> <html lang="fr" class="ie9"> <![endif]-->
+<!--[if gt IE 9]> <html lang="fr" class="ie"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="fr">
+	<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Site HistoVec</title>
+<!-- Mobile Meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Favicon -->
+<link rel="shortcut icon" href="assets/images/mi.ico" />
+<!-- Bootstrap core CSS -->
+<link href="accueil/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<!-- debut web fonts -->
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Raleway:700,400,300" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet" type="text/css">
+<!-- fin web fonts -->
+<!-- Bootstrap core CSS -->
+<link href="accueil/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="accueil/Font-Awesome-master/css/font-awesome.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="test_acueil.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet" >
+<link href="assets/css/_style.css" rel="stylesheet" >
+<link href="assets/css/typography-default.css" rel="stylesheet" >
+<link href="assets/css/bleu_vert.css" rel="stylesheet">
+<!-- fin feuilles de style -->
+</head>
+<body class="text-center">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+  <header class="masthead mb-auto">
+    <div class="inner">
+      <h3 class="masthead-brand"></h3>
+      <nav class="nav nav-masthead justify-content-center"> </nav>
+    </div>
+  </header>
+  <main role="main" class="inner cover">
+    <div class="col-12">
+      <h2 class="text-center transbox_2">Historique d'un véhicule</h2>
+      <div class="separator"></div>
+      <p class="text-center transbox_3">Acheter en toute confiance</p>
+      <p class="lead">
+      <div class="container">
+        <div class="row">
+          <!-- debut bouton acheteur -->
+          <div class="col-sm-6 text-center"> <a href="acheteur.html" class="btn radius-30 btn-dark btn-animated btn-lg">Acheteur <i class="fa fa-users"></i></a> </div>
+          <!-- fin bouton acheteur -->
+          <!-- debut bouton vendeurs -->
+          <div class="col-sm-6 text-center">
+            <div class="btn-group">
+              <button type="button" class="btn radius-30 btn-default btn-lg dropdown-toggle" data-toggle="dropdown"> Vendeur </button>
+              <div class="dropdown-menu"> <a class="dropdown-item" href="vendeur.html"><i class="fa fa-user pr-10"></i>Particulier</a> <a class="dropdown-item" href="vendeur.html"><i class="fa fa-building-o pr-10"></i>Entreprise</a> </div>
+            </div>
+          </div>
+          <!-- fin bouton vendeurs -->
+        </div>
+      </div>
+      <div class="container text-center">
+        <div class="row">
+          <!-- debut bouton en savoir plus -->
+          <div class="col-lg-12"> <a href="en_savoir_plus.html" class="btn square btn-warning btn-sm m-g-15"><i class="fa fa-info pr-10"></i>En savoir plus...</a></div>
+          <!-- fin bouton en savoir plus -->
+        </div>
+      </div>
+      </p>
+    </div>
+  </main>
+  <footer class="mastfoot mt-auto">
+    <div class="inner">
+      <p>Copyright &copy; 2018 - Site HistoVec - <a href="mentions_legales.html">Mentions légales</a></p>
+    </div>
+  </footer>
+</div>
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="assets/booststrap_4/popper.min.js"></script>
+<script src="accueil/vendor/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

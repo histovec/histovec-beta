@@ -22,7 +22,15 @@ export datadir=sample_data
 export datasource=${datadir}/siv.csv.gz.gpg
 export datasource_json=${datadir}/siv.json.gz
 export dataset=siv
-export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id": {"type": "keyword"}}}
+export ES_CHUNK=10000
+export ES_VERBOSE=100000
+export ES_JOBS=2
+export FROM=1
+export stress=250
+export PASSPHRASE=CHANGEME
+export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}}
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}, "ida3": {"type": "keyword"}, "ida4": {"type": "keyword"}, "ida5": {"type": "keyword"}}}
+
 export index_log=${datadir}/index.log.gz
 
 date                := $(shell date -I)
@@ -32,6 +40,10 @@ vm_max_count		:= $(shell cat /etc/sysctl.conf | egrep vm.max_map_count\s*=\s*262
 
 dummy               := $(shell touch artifacts)
 include ./artifacts
+
+commit              := $(shell git rev-parse HEAD | cut -c1-8)
+lastcommit          := $(shell touch .lastcommit && cat .lastcommit)
+
 
 DC := 'docker-compose'
 
@@ -54,50 +66,74 @@ ifeq ("$(wildcard /usr/bin/docker)","")
         sudo apt-get install -y docker-ce
         @(if (id -Gn ${USER} | grep -vc docker); then sudo usermod -aG docker ${USER} ;fi) > /dev/null
 endif
+ifeq ("$(wildcard /usr/bin/gawk)","")
+	@echo installing gawk
+	@sudo apt-get install -y gawk
+endif	
+ifeq ("$(wildcard /usr/bin/jq)","")
+	@echo installing jq 
+	@sudo apt-get install -y jq
+endif  
+ifeq ("$(wildcard /usr/bin/parallel)","")
+	@echo installing parallel 
+	@sudo apt-get install -y parallel 
+endif  
 ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@echo installing docker-compose
 	@sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 	@sudo chmod +x /usr/local/bin/docker-compose
 endif
 
-dataprep:
-ifeq ("$(wildcard ${datasource})","")
-	@echo WARNING: missing data source ${datasource}
-endif
-ifeq ("$(wildcard ${datasource_json})","")
-	@echo decrypting csv to json for bulk load into elasticsearch, enter your key and wait about 3 minutes
-	@gpg -d ${datasource} | gunzip |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | gzip > ${datasource_json}
-endif
-
 index-purge: network elasticsearch
-	@docker exec -it ${APP}-elasticsearch curl -XDELETE localhost:9200/${dataset} | sed 's/{"acknowledged":true}/index purged/'
-	@sleep 1
+	@sleep 3
+	@docker exec ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index prepared for deletion\n/;s/.*no such index.*//'
+	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/${dataset} | sed 's/{"acknowledged":true.*/${dataset} index purged\n/;s/.*no such index.*//'
+	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index purged\n/;s/.*no such index.*//'
+	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback purged\n/;s/.*no such index.*//'
 	@echo
 
 index-create: network elasticsearch
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 else
 	@echo
-	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}
-	@echo
-	@docker exec -it ${APP}-elasticsearch curl -H "Content-Type: application/json" -XPUT localhost:9200/${dataset}/_mapping/${dataset} -d '${mapping}' | sed 's/{"acknowledged":true}/index created with mapping/'
+	@docker exec -it ${APP}-elasticsearch curl -s -H "Content-Type: application/json" -XPUT localhost:9200/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true.*/${dataset} index created with mapping\n/'
+	@docker exec -it ${APP}-elasticsearch curl -s -XPUT localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index created\n/'
+	@docker exec -it ${APP}-elasticsearch curl -s -XPUT localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback created\n/'
 	@echo
 	@echo wating a few seconds for index being up
-	@sleep 3
+	@sleep 10
 
 endif
 
-index-load: dataprep index-create
+index-status: network elasticsearch
+	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/${dataset}?pretty
+	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/_cat/indices
+
+index-load: index-create
+ifeq ("$(wildcard ${datasource})","")
+	@echo WARNING: missing data source ${datasource}
+endif
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
-	zcat ${datasource_json} | split -l 10000 --filter='docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | gzip > ${index_log}
+	@# split -l ${ES_CHUNK} --filter=
+	@# parallel : parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d ${datasource} | gunzip | awk 'BEGIN{n = 1;print "decrypting data - injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr"} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | jq -c '.items[].index.result' | awk 'BEGIN{ok=${FROM}-1;ko=0}{if ($$1 == "\"created\"") { ok++ } else {ko++} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko}}'
+	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}'
+endif
+
+index-stress:
+ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
+	@echo stress test
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | tr ' ' '\n' | parallel --no-notice -j${stress} 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{}' | grep took | jq '.took' | awk 'BEGIN{n=0;t=0}{n++;t+=$$1;if ((n%1)==0) { printf("%s with ${stress} parallel threads, total %d calls, each response takes %.2fms\n",strftime("%Y%m%d-%H:%M"),n,t/n)}}'
 endif
 
 docker-clean: stop
 	docker container rm ${APP}-build-front ${APP}-nginx
 
-clean: index-purge docker-clean
+frontend-clean:
 	@echo cleaning ${APP} frontend npm dist
 	sudo rm -rf ${FRONTEND}/dist
+
+clean: index-purge docker-clean frontend-clean
 
 network-stop:
 	@echo cleaning ${APP} docker network
@@ -107,7 +143,7 @@ network: install-prerequisites
 	@docker network create ${APP} 2> /dev/null; true
 
 tor:
-ifeq ("$(wildcard nginx/tor-ip.conf)","") 
+ifeq ("$(wildcard nginx/tor-ip.conf)","")
 	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
 endif
 
@@ -123,7 +159,7 @@ ifeq ("$(wildcard ${BACKEND}/esdata/)","")
 	@mkdir -p ${BACKEND}/esdata
 	@chmod 777 ${BACKEND}/esdata/.
 endif
-	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d
+	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
 
 elasticsearch-stop:
 	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
@@ -132,14 +168,14 @@ backend-stop:
 	${DC} -f ${DC_PREFIX}-backend.yml down
 
 backend: network
-	${DC} -f ${DC_PREFIX}-backend.yml up --build -d
+	${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
 
 backend-log:
-	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d
+	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d 2>&1 | grep -v orphan
 
 frontend-dev: network tor
 	@echo docker-compose up frontend for dev
-	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate
+	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
 frontend-dev-stop:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml down
@@ -148,17 +184,30 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network backend elasticsearch frontend-dev
+dev: network elasticsearch frontend-dev
 
 dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 
 
-frontend-build: frontend-download network
-ifneq "$(commit-frontend)" "$(lastcommit-frontend)"
+frontend-build: network
+ifneq "$(commit)" "$(lastcommit)"
 	@echo building ${APP} frontend after new commit
-	@make clean
+	@make frontend-clean
 	@echo building frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist
-	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build
+	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif
+
+build: frontend-build
+
+frontend-stop:
+	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
+
+frontend: network tor
+	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
+
+
+up: network elasticsearch frontend
+
+down: frontend-stop elasticsearch-stop network-stop

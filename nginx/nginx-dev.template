@@ -4,6 +4,14 @@ server {
 
   # frontend (dev, npm server)
   location / {
+    try_files $uri @rew;
+  }
+
+  location @rew {
+    return 302 $scheme://$http_host/<APP>/;
+  }
+
+  location ~ (__webpack_hmr|app.js) {
   	proxy_pass http://frontend-dev:8080;
   }
 
@@ -11,31 +19,38 @@ server {
         proxy_pass http://frontend-dev:8080;
   }
 
-  location /assets {
+  location /<APP>/assets {
     alias /usr/share/nginx/html/assets;
   }
 
-  # backend RESTful API
-  location ~  (^/<APP>/api/v0/.*) {
-    proxy_pass http://backend:8081;
-    proxy_redirect off;
-    proxy_read_timeout 3600;
-    proxy_send_timeout 600;
-    # Allow large uploads
-    client_max_body_size 0;
-    # Allow protocol upgrade to websocket
-    proxy_http_version 1.1;
-    proxy_next_upstream off;
-    proxy_set_header Host $http_host;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
-
-  location ~ .*/(_search).* {
+  location ~ "^/<APP>/api/v0/id/([A-Za-z0-9_-]{43}=)$" {
+    if ($request_method != GET) {
+       return 403;
+    }
+    rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /siv/_search?q="$1"&size=1 break;
     proxy_pass http://elasticsearch:9200;
     proxy_redirect off;
+    proxy_hide_header Content-Type;
+    proxy_set_body '{"_source": "v"}';
+    proxy_set_header content-type "application/json";
+    proxy_method POST;
     proxy_buffering off;
     proxy_http_version 1.1;
-
   }
+
+  location ~ (^/<APP>/api/v0/(contact|feedback)/) {
+    if ($request_method != POST) {
+       return 403;
+    }
+    rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
+    proxy_pass http://elasticsearch:9200;
+    proxy_redirect off;
+    proxy_hide_header Content-Type;
+    proxy_set_header content-type "application/json";
+    proxy_buffering off;
+    proxy_http_version 1.1;
+  }
+
+
+
 }

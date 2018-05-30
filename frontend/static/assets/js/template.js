@@ -226,7 +226,7 @@
 			$('.slider-banner-container .slider-banner-fullwidth').show().revolution({
 				delay:8000,
 				startwidth:1140,
-				startheight:450,
+				startheight:250,
 
 				navigationArrows:"solo",
 
@@ -324,7 +324,7 @@
 			$('.banner:not(.dark-bg) .slider-banner-container .slider-banner-boxedwidth').show().revolution({
 				delay:8000,
 				startwidth:1140,
-				startheight:450,
+				startheight:250,
 
 				navigationArrows:"solo",
 
@@ -374,7 +374,7 @@
 			$('.banner.dark-bg .slider-banner-container .slider-banner-boxedwidth').show().revolution({
 				delay:8000,
 				startwidth:1140,
-				startheight:450,
+				startheight:250,
 
 				navigationArrows:"solo",
 
@@ -424,7 +424,7 @@
 			$('.slider-banner-container .slider-banner-boxedwidth-no-shadow').show().revolution({
 				delay:8000,
 				startwidth:1140,
-				startheight:450,
+				startheight:250,
 
 				navigationArrows:"solo",
 
@@ -474,7 +474,7 @@
 			$('.banner:not(.dark-bg) .slider-banner-container .slider-banner-boxedwidth-stopped').show().revolution({
 				delay:8000,
 				startwidth:1140,
-				startheight:450,
+				startheight:250,
 
 				navigationArrows:"solo",
 
@@ -524,7 +524,7 @@
 			$('.banner.dark-bg .slider-banner-container .slider-banner-boxedwidth-stopped').show().revolution({
 				delay:8000,
 				startwidth:1140,
-				startheight:450,
+				startheight:250,
 
 				navigationArrows:"solo",
 
@@ -664,7 +664,7 @@
 				sliderLayout:"fullwidth",
 				delay:8000,
 				gridwidth:1140,
-				gridheight:450,
+				gridheight:250,
 				responsiveLevels:[1199,991,767,480],
 				navigation: {
 					onHoverStop: "off",
@@ -742,7 +742,7 @@
 				sliderLayout:"auto",
 				delay:8000,
 				gridwidth:1140,
-				gridheight:450,
+				gridheight:250,
 				responsiveLevels:[1199,991,767,480],
 				shadow: 1,
 				navigation: {
