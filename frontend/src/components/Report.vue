@@ -86,7 +86,7 @@
                     <!-- debut proprietaire  -->
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
                   <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span><br/>
-                      <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_proprietaires + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="txt-small-13">propriétaire</span></div>
+                      <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="txt-small-13">titulaire</span></div>
                   <div class="col-sm-5"></div>
                   <!-- fin proprietaire  -->
                 </div>
@@ -829,6 +829,11 @@ export default {
       return h.map(event => {
         return {'date': this.formatDate(event.opa_date), 'nature': this.operations[event.opa_type]}
       })
+    },
+    calcNbTit (historique) {
+      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
+      let nbTit = historique.filter(event => opTit.includes(event.opa_type))
+      return nbTit.length
     }
   },
   created () {
@@ -883,6 +888,7 @@ export default {
 
         this.v.historique = this.histoFilter(veh.historique)
         this.v.nb_proprietaires = veh.nb_proprietaire
+        this.v.nb_tit = this.calcNbTit(veh.historique)
         this.v.age_veh = veh.age_annee
 
         this.v.administratif.gages = veh.gage
