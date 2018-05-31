@@ -25,4 +25,4 @@ services:
       - ${FRONTEND}/src:/${APP}/src/
       - ${FRONTEND}/build:/${APP}/build/
       - ${FRONTEND}/static:/${APP}/static/
-      - ${FRONTEND}/dist:/${APP}/dist/
+      - ${FRONTEND}/dist-build:/${APP}/dist/
