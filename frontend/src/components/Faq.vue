@@ -167,7 +167,7 @@
           </div>
           <div id="collapseEight-2" class="panel-collapse collapse">
             <div class="panel-body">
-              <UL>Vous pouvez utiliser le formulaire LIEN “signaler une erreur”</UL>
+              <UL>Vous pouvez utiliser le formulaire <a href="feedback">signaler une erreur</a></UL>
             </div>
           </div>
         </div>
@@ -180,8 +180,9 @@
           <div id="collapseNine-2" class="panel-collapse collapse">
             <div class="panel-body">
               <UL>Recopiez exactement les données de la carte grise (nom, prénom, immatriculation, numéro de formule)</UL>
-              <UL> Il se peut aussi qu'il y ai une erreur sur la date de naissance enregistrée dans le S.I.V.</UL>
-              <UL>Vous pouvez nous contacter LIEN  “Contactez-nous”</UL>
+              <UL>Seul les véhicules figurant dant le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consulté dans Histovec</UL>
+              <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le Système d'Immatriculation des Véhicules,</UL>
+              <UL>Vous pouvez <a href="contact">nous contacter</a></UL>
             </div>
           </div>
         </div>
@@ -193,8 +194,7 @@
           </div>
           <div id="collapseTen-2" class="panel-collapse collapse">
             <div class="panel-body">
-              <UL>Le numéro de formule est situé en bas à gauche de Carte Grise. (exemple de numéro de formule 2015XX012345 )</UL>
-              <UL> LIEN “Contactez-nous”</UL>
+              <UL>Le numéro de formule est situé en bas à gauche des Cartes Grises éditées depuis 2009. (exemple de numéro de formule 2015XX012345 )</UL>
             </div>
           </div>
         </div>
@@ -206,7 +206,7 @@
           </div>
           <div id="collapseEleven-2" class="panel-collapse collapse">
             <div class="panel-body">
-              <UL>Vous pouvez les consulter dans LIEN mentions légales.</UL>
+              <UL>Vous pouvez les consulter dans <a href="legal">mentions légales.</a></UL>
             </div>
           </div>
         </div>
