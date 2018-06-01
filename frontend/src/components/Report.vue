@@ -885,7 +885,7 @@ export default {
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
         this.v.titulaire.adresse = veh.adr_code_postal_tit
         this.v.certificat.premier = veh.date_premiere_immat
-        this.v.certificat.courant = veh.date_ci
+        this.v.certificat.courant = veh.date_emission_CI
         this.v.certificat.depuis = veh.duree_dernier_prop
 
         this.v.historique = this.histoFilter(veh.historique)
