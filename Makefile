@@ -15,7 +15,7 @@ export FRONTEND=${APP_PATH}/frontend
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 
-export ES_MEM=512m
+export ES_MEM=2048m
 
 # data prep (data not included in repo)
 export datadir=sample_data
