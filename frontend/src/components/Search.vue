@@ -12,28 +12,26 @@
       </div>
     </div>
     <!-- breadcrumb end -->
-    <section class="main-container">
-      <div class="container">
-        <div class="row">
-          <!-- section start -->
-          <section class="dark-translucent-bg fixed-bg pv-30" style="background-image:url(assets/images/recherche_1.jpg);">
-            <div class="container">
-              <div class="row justify-content-lg-center">
-                <div class="col-lg-12">
-                  <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
-                  <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-                  <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidées par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="#">dossier de presse</a>) </p>
-                </div>
-              </div>
+    <!-- section -->
+<section class="main-container">
+  <div class="container">
+    <div class="row">
+      <!-- section start -->
+      <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.png);">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-lg-12">
+              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
-          </section>
-          <!-- section end -->
-          <!-- debut image fixe
-          <div class="col-md-12"> <img src="assets/images/recherche_1.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"></div>
-            <!-- fin image fixe -->
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <!-- section end -->
+    </div>
+  </div>
+</section>
+<!-- section -->
 
     <!-- section -->
     <section class="main-container">

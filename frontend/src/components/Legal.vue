@@ -53,8 +53,9 @@
               <h5>Directeur de la publication</h5>
               <p>Emmanuel Barbe, délégué interministériel à la Sécurité routière </p>
               <h5>Crédits</h5>
-              <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (photographies, vidéos, infographies et autres éléments techniques et graphiques), disponibles sur le site histovec.gouv.fr.</p>
-              <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, contactez-nous.</p>
+              <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site histovec.gouv.fr.</p>
+              <p>Sauf mention contraire, les photographies et vidéos sont libres de droits, issues du site picjumbo.com.</p> 
+              <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, <a href="contact">contactez-nous.</a></p>
               <h5>Conception et réalisation</h5>
               Conception et réalisation Lab DSIC avec le Bureau des immatriculations (DSR)
               <p></p>
@@ -68,7 +69,7 @@
               <h6> Liens hypertextes sortants </h6>
               Le site indique en permanence l'identité des sites indiqués en lien, et ce sur toutes les pages. Néanmoins, ces pages web dont les adresses URL sont régulièrement vérifiées ne font pas partie du site et par conséquent n'engagent en rien la responsabilité du site histovec.interieur.gouv.fr.
               <h6>Stabilité des adresses</h6>
-              Nous essayons, autant que faire se peut, de maintenir des adresses URL de page stables. Toutefois, ce site pouvant faire à tout moment l’objet de réorganisations, nous ne pouvons pas garantir la stabilité de l’adresse des pages internes du site.
+              Nous essayons de maintenir des adresses URL de page stables. Toutefois, ce site pouvant faire à tout moment l’objet de réorganisations, nous ne pouvons pas garantir la stabilité de l’adresse des pages internes du site.
               <h6>Droit d’auteur</h6>
               Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Au terme de l’article L. 122-4 du cCode de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.
               <h6>Code applicatif open source</h6>

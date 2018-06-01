@@ -15,7 +15,7 @@ export FRONTEND=${APP_PATH}/frontend
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 
-export ES_MEM=512m
+export ES_MEM=2048m
 
 # data prep (data not included in repo)
 export datadir=sample_data
@@ -192,10 +192,10 @@ dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 frontend-build: network
 ifneq "$(commit)" "$(lastcommit)"
 	@echo building ${APP} frontend after new commit
-	@make frontend-clean
 	@echo building frontend in ${FRONTEND}
-	@sudo mkdir -p ${FRONTEND}/dist
+	@sudo mkdir -p ${FRONTEND}/dist-build
 	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/. 
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif
 

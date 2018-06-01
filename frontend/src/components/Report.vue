@@ -11,24 +11,26 @@
   </div>
   <!-- breadcrumb end -->
   <!-- section -->
-  <section class="main-container">
-    <div class="container">
+<section class="main-container">
+  <div class="container">
     <div class="row">
-    <!-- section start -->
-      <section class="dark-translucent-bg fixed-bg pv-40" style="background-image:url(assets/images/acheteur_3.jpg);">
-       <div class="container">
-        <div class="row justify-content-lg-center">
-         <div class="col-lg-12">
-          <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
-          <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-         </div>
+      <!-- section start -->
+      <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.png);">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-lg-12">
+              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+            </div>
+          </div>
         </div>
-       </div>
       </section>
+      <!-- section end -->
     </div>
-   </div>
-  </section>
-  <!-- section -->
+  </div>
+</section>
+<!-- section -->
+
   <!-- main-container start -->
   <div class="container" v-if="this.result === 'ok'">
     <div class="row">
@@ -347,7 +349,7 @@
               </div>
               <div class="separator"></div>
               <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Pace debout</span></div>
+                <div class="col-sm-6"><span class="txt-small-12">Places debout</span></div>
                 <div class="col-sm-2"><span class="bold txt-small-12">S.3</span></div>
                 <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.debout }}</span></div>
               </div>
@@ -528,7 +530,7 @@
                   <div class="separator"></div>
  -->
               <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12">
+                <div class="col-sm-12" v-if="false">
                   <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
                   data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </button>
                 </div>
@@ -883,7 +885,7 @@ export default {
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
         this.v.titulaire.adresse = veh.adr_code_postal_tit
         this.v.certificat.premier = veh.date_premiere_immat
-        this.v.certificat.courant = veh.date_ci
+        this.v.certificat.courant = veh.date_emission_CI
         this.v.certificat.depuis = veh.duree_dernier_prop
 
         this.v.historique = this.histoFilter(veh.historique)
