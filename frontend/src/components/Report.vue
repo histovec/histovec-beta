@@ -59,7 +59,7 @@
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
+            <li v-if="$route.params.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -560,7 +560,7 @@
               </div>
               <!-- fin tableau operation historique -->
             </div>
-            <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
+            <div class="tab-pane fade" id="vtab6" v-if="$route.params.code !== undefined">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
@@ -801,7 +801,7 @@ export default {
       return text + this.url.replace('&', '%26')
     },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
+      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.params.code + '&key=' + this.$route.params.key
     }
   },
   methods: {
@@ -845,7 +845,7 @@ export default {
     }
   },
   created () {
-    this.$http.get(this.apiUrl + 'id/' + this.$route.query.id)
+    this.$http.get(this.apiUrl + 'id/' + ((this.$route.params.id !== undefined) ? this.$route.params.id : this.$route.query.id))
       .then(response => {
         console.log(response)
         if (response.body.hits.hits.length === 0) {
@@ -853,7 +853,7 @@ export default {
           return
         }
         var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
-        var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
+        var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
         var veh = this.decrypt(key, encrypted)
         console.log(veh)
         this.vin = veh.vin
