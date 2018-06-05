@@ -16,6 +16,7 @@ export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 
 export ES_MEM=2048m
+export ES_HOST=elasticsearch
 
 # data prep (data not included in repo)
 export datadir=sample_data
