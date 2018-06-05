@@ -77,7 +77,7 @@
                   <!-- debut voiture  -->
                   <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red bold txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
+                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
                     <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
                     <!-- fin voiture  -->
                 </div>
@@ -461,11 +461,17 @@
               <h6 class="title">Carte grise</h6>
               <!-- debut tableau carte grise -->
               <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span></div>
+                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span><span class="txt-small-12" v-if="v.certificat.etranger"> à l'étranger</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.premier }}</span></div>
               </div>
               <div class="separator"></div>
-
+              <div v-if="v.certificat.etranger">
+                <div class="row" >
+                  <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation en France</span></div>
+                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.siv }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
               <div class="row">
                 <div class="col-sm-5"><span class="txt-small-12">Date de la carte grise actuelle</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.courant }}</span></div>
@@ -885,6 +891,8 @@ export default {
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
         this.v.titulaire.adresse = veh.adr_code_postal_tit
         this.v.certificat.premier = veh.date_premiere_immat
+        this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
+        this.v.certificat.siv = veh.date_premiere_immat_siv
         this.v.certificat.courant = veh.date_emission_CI
         this.v.certificat.depuis = veh.duree_dernier_prop
 
