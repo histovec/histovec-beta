@@ -15,7 +15,7 @@ services:
       - ${FRONTEND}/static:/usr/share/nginx/html
     ports:
       - ${PORT}:80
-    command: /bin/bash -c '(sed "s/<APP>/${APP}/g;s/<dataset>/${dataset}/g;" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && nginx -g "daemon off;"'
+    command: /bin/bash -c '(sed "s/<APP>/${APP}/g;s/<dataset>/${dataset}/g;s/<ES_HOST>/${ES_HOST}/g;" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && nginx -g "daemon off;"'
     restart: always
 
   frontend-dev:
