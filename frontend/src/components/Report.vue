@@ -71,7 +71,7 @@
                     <h6 class="title p-h-35">Résumé</h6>
                     <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
-                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Conseils pour l'acheteur </div>
+                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Remarque </div>
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
@@ -87,9 +87,9 @@
                 <div class="row">
                     <!-- debut proprietaire  -->
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
-                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span><br/>
-                      <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="txt-small-13">titulaire</span></div>
-                  <div class="col-sm-5"></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span>
+                      </div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="color-info_2 bold_4 txt-small-13">propriétaire</span></div>
                   <!-- fin proprietaire  -->
                 </div>
                 <!-- debut trait separation  -->

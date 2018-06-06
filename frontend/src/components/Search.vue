@@ -49,25 +49,25 @@
             <div class="tab-content">
               <div class="tab-pane" id="h2tab1" :class="[{'in active' : type_personne === 'particulier'}]">
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-12"> <span class="info_red txt-small-11">* Champs obligatoire</span>
                     <form role="form">
                       <div class="row">
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Nom</label>
+                            <label class="control-label">Nom <span class="info_red">*</span></label>
                             <input type="text" class="form-control" v-model="nom">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Prénom</label>
+                            <label class="control-label">Prénom <span class="info_red">*</span></label>
                             <input type="text" class="form-control" v-model="prenom">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Date de naissance</label>
-                            <input type="email" class="form-control" v-model="date_naissance">
+                            <label class="control-label">Date de naissance <span class="info_red">*</span></label>
+                            <input type="email" class="form-control" placeholder="xx/xx/xxxx" v-model="date_naissance">
                             <i class="fa fa-calendar form-control-feedback"></i> </div>
                         </div>
                       </div>
@@ -78,23 +78,22 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                              <label for="input" class="control-label">Plaque d'immatriculation</label>
+                              <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red">*</span></label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
-                              <label for="input" class="control-label">N° de formule</label>
-                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le numéro de formule se situe sous le numéro d'immatricualtion" title="N° de formule" data-original-title="15GB Storage" data-trigger="hover" v-model="formule">
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <input type="text" class="form-control" placeholder="A123B456">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
                             <div class="form-group has-feedback plan position_left">
-                              <label for="input" class="control-label">Date première mise en circulation</label>
-                              <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat">
+                              <label for="input" class="control-label">Date première mise en circulation <span class="info_red">*</span></label>
+                              <input type="text" class="form-control" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="Code VIN" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
-
                         </div>
                       </form>
                     </fieldset>
@@ -114,18 +113,18 @@
               </div>
               <div class="tab-pane" id="h2tab2" :class="[{'in active' : type_personne === 'pro'}]">
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-12"> <span class="info_red txt-small-11">* Champs obligatoire</span>
                     <form role="form">
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Raison sociale</label>
+                            <label class="control-label">Nom <span class="info_red">*</span></label>
                             <input type="text" class="form-control" v-model="raison_sociale">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group has-feedback">
-                            <label class="control-label">N° SIREN</label>
+                            <label class="control-label">N° SIREN <span class="info_red">*</span></label>
                             <input type="email" class="form-control"  v-model="siren">
                             <i class="fa fa-building-o form-control-feedback"></i> </div>
                         </div>
@@ -137,20 +136,20 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
-                              <label for="input" class="control-label">Plaque d'immatriculation</label>
+                              <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red">*</span></label>
                               <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
-                              <label for="input" class="control-label">N° de formule</label>
-                              <input type="text" class="form-control pop" placeholder="A123B456" data-toggle="popover" data-placement="top" data-content="Le code VIN se situe à la lettre E sur votre carte grise" title="N° de formule" data-original-title="15GB Storage" data-trigger="hover"  v-model="formule">
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <input type="text" class="form-control" placeholder="A123B456">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
                             <div class="form-group has-feedback plan position_left">
-                              <label for="input" class="control-label">Date première mise en circulation</label>
-                              <input type="text" class="form-control pop" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Date de première mise en circulation, telle qu'indiquée sur la carte grise" title="Date de première mise en circulation" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat" >
+                              <label for="input" class="control-label">Date première mise en circulation <span class="info_red">*</span></label>
+                              <input type="text" class="form-control" placeholder="XX/XX/XXXX" data-toggle="popover" data-placement="top" data-content="Date de première mise en circulation, telle qu'indiquée sur la carte grise" title="Date de première mise en circulation" data-original-title="15GB Storage" data-trigger="hover" v-model="date_prem_immat" >
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                         </div>
@@ -177,6 +176,20 @@
         </div>
       </div>
     </section>
+    <!-- debut modal -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+            <h4 class="modal-title" id="myLargeModalLabel">Information n° de formule</h4>
+          </div>
+          <div class="modal-body"> <img src="assets/images/n-formule.svg" width="250" height="190"></div>
+          <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
+        </div>
+      </div>
+    </div>
+    <!-- fin modal -->
     <!-- section end -->
     <div class="container">
       <div class="row"> </div>
