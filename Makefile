@@ -15,18 +15,20 @@ export FRONTEND=${APP_PATH}/frontend
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 
-export ES_MEM=512m
+export ES_MEM=2048m
+export ES_HOST=elasticsearch
 
 # data prep (data not included in repo)
 export datadir=sample_data
 export datasource=${datadir}/siv.csv.gz.gpg
 export datasource_json=${datadir}/siv.json.gz
 export dataset=siv
-export ES_CHUNK=10000
+export ES_CHUNK=5000
 export ES_VERBOSE=100000
-export ES_JOBS=2
+export ES_JOBS=3
 export FROM=1
-export stress=250
+export stress=10
+export stress_verbose=1000
 export PASSPHRASE=CHANGEME
 export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}}
 export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}, "ida3": {"type": "keyword"}, "ida4": {"type": "keyword"}, "ida5": {"type": "keyword"}}}
@@ -120,10 +122,17 @@ ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/$
 	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}'
 endif
 
+
+index-test:
+ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
+	@echo index test
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel --no-notice -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}' 
+endif
+
 index-stress:
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@echo stress test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | tr ' ' '\n' | parallel --no-notice -j${stress} 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{}' | grep took | jq '.took' | awk 'BEGIN{n=0;t=0}{n++;t+=$$1;if ((n%1)==0) { printf("%s with ${stress} parallel threads, total %d calls, each response takes %.2fms\n",strftime("%Y%m%d-%H:%M"),n,t/n)}}'
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0;print "reading file from line ${FROM}" > "/dev/stderr"}{n++;if (n>${FROM}){print $$1}}' | parallel --no-notice -j${stress} 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{}' | jq -c -r '[.took, .hits.total] | @csv' | awk -F ',' 'BEGIN{n=0;t=0}{n++;t+=$$1;ok+=$$2;if ((n%${stress_verbose})==0) {total+=n; printf("%s with ${stress} parallel threads, total %d calls, %.0f%% hit, each response takes %.2fms\n",strftime("%Y%m%d-%H:%M"),total,ok/n*100,t/n);ok=0;t=0;n=0}}'
 endif
 
 docker-clean: stop
@@ -192,10 +201,10 @@ dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 frontend-build: network
 ifneq "$(commit)" "$(lastcommit)"
 	@echo building ${APP} frontend after new commit
-	@make frontend-clean
 	@echo building frontend in ${FRONTEND}
-	@sudo mkdir -p ${FRONTEND}/dist
+	@sudo mkdir -p ${FRONTEND}/dist-build
 	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/. 
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif
 

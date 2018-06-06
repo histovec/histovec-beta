@@ -27,8 +27,8 @@ server {
     if ($request_method != GET) {
        return 403;
     }
-    rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /siv/_search?q="$1"&size=1 break;
-    proxy_pass http://elasticsearch:9200;
+    rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1 break;
+    proxy_pass http://<ES_HOST>:9200;
     proxy_redirect off;
     proxy_hide_header Content-Type;
     proxy_set_body '{"_source": "v"}';

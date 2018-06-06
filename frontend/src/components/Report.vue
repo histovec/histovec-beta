@@ -59,7 +59,7 @@
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
+            <li v-if="$route.params.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -77,7 +77,7 @@
                   <!-- debut voiture  -->
                   <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red bold txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
+                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
                     <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
                     <!-- fin voiture  -->
                 </div>
@@ -349,7 +349,7 @@
               </div>
               <div class="separator"></div>
               <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Pace debout</span></div>
+                <div class="col-sm-6"><span class="txt-small-12">Places debout</span></div>
                 <div class="col-sm-2"><span class="bold txt-small-12">S.3</span></div>
                 <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.debout }}</span></div>
               </div>
@@ -461,11 +461,17 @@
               <h6 class="title">Carte grise</h6>
               <!-- debut tableau carte grise -->
               <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span></div>
+                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span><span class="txt-small-12" v-if="v.certificat.etranger"> à l'étranger</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.premier }}</span></div>
               </div>
               <div class="separator"></div>
-
+              <div v-if="v.certificat.etranger">
+                <div class="row" >
+                  <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation en France</span></div>
+                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.siv }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
               <div class="row">
                 <div class="col-sm-5"><span class="txt-small-12">Date de la carte grise actuelle</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.courant }}</span></div>
@@ -530,7 +536,7 @@
                   <div class="separator"></div>
  -->
               <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12">
+                <div class="col-sm-12" v-if="false">
                   <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
                   data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </button>
                 </div>
@@ -554,7 +560,7 @@
               </div>
               <!-- fin tableau operation historique -->
             </div>
-            <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
+            <div class="tab-pane fade" id="vtab6" v-if="$route.params.code !== undefined">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
@@ -795,7 +801,7 @@ export default {
       return text + this.url.replace('&', '%26')
     },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
+      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.params.code + '&key=' + this.$route.params.key
     }
   },
   methods: {
@@ -839,7 +845,7 @@ export default {
     }
   },
   created () {
-    this.$http.get(this.apiUrl + 'id/' + this.$route.query.id)
+    this.$http.get(this.apiUrl + 'id/' + ((this.$route.params.id !== undefined) ? this.$route.params.id : this.$route.query.id))
       .then(response => {
         console.log(response)
         if (response.body.hits.hits.length === 0) {
@@ -847,7 +853,7 @@ export default {
           return
         }
         var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
-        var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
+        var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
         var veh = this.decrypt(key, encrypted)
         console.log(veh)
         this.vin = veh.vin
@@ -885,7 +891,9 @@ export default {
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
         this.v.titulaire.adresse = veh.adr_code_postal_tit
         this.v.certificat.premier = veh.date_premiere_immat
-        this.v.certificat.courant = veh.date_ci
+        this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
+        this.v.certificat.siv = veh.date_premiere_immat_siv
+        this.v.certificat.courant = veh.date_emission_CI
         this.v.certificat.depuis = veh.duree_dernier_prop
 
         this.v.historique = this.histoFilter(veh.historique)
