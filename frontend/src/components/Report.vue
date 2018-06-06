@@ -38,7 +38,7 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-window-maximize"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-car"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
           <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
@@ -71,7 +71,7 @@
                     <h6 class="title p-h-35">Résumé</h6>
                     <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
-                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Remarque </div>
+                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Remarques </div>
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
@@ -87,9 +87,9 @@
                 <div class="row">
                     <!-- debut proprietaire  -->
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
-                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span>
-                      </div>
-                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="color-info_2 bold_4 txt-small-13">propriétaire</span></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span></div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="color-info_2 bold_4 txt-small-13">titulaire</span></div>
+
                   <!-- fin proprietaire  -->
                 </div>
                 <!-- debut trait separation  -->
@@ -842,6 +842,17 @@ export default {
       let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
+    },
+    calcCertifDepuis (dateEmissionCi) {
+      var dateEmission = dateEmissionCi.split('/')
+      let today = new Date()
+      let nbMonth = ((today.getFullYear() - dateEmission[2]) * 12) + (today.getMonth() + 1 - dateEmission[1])
+      if (nbMonth <= 12) {
+        return nbMonth + ' mois'
+      } else {
+        let year = today.getFullYear() - dateEmission[2]
+        return (year > 1) ? year + ' ans' : year + ' an'
+      }
     }
   },
   created () {
@@ -894,7 +905,7 @@ export default {
         this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
         this.v.certificat.siv = veh.date_premiere_immat_siv
         this.v.certificat.courant = veh.date_emission_CI
-        this.v.certificat.depuis = veh.duree_dernier_prop
+        this.v.certificat.depuis = this.calcCertifDepuis(veh.date_emission_CI)
 
         this.v.historique = this.histoFilter(veh.historique)
         this.v.nb_proprietaires = veh.nb_proprietaire
