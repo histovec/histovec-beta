@@ -348,39 +348,6 @@
         </div>
       </section>
       <!-- section end -->
-      <!-- section start -->
-      <div class="row">
-        <div class="col-lg-12 text-center pv-20"> <br>
-          <h1 class="title large">Comment ça <span class="text-defaut">marche</span> </h1>
-          <div class="separator"></div>
-        </div>
-        <div class="col-md-4 ">
-          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-desktop"></i></span>
-            <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">1</span> - Identification du véhicule</h4>
-              <p class="m-g-10">Le vendeur renseigne les informations d’identification du véhicule.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ">
-          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-drivers-license-o"></i></span>
-            <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">2</span> - Rapport HistoVec</h4>
-              <p class="m-g-10">Le vendeur consulte son rapport HistoVec et partage le lien à l'acheteur.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ">
-          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-search"></i></span>
-            <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">3</span> - Consulter le rapport</h4>
-              <p class="m-g-10">L’acheteur consulte le rapport HistoVec sur le site officiel de l’administration.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- section end -->
-      <div class="separator"></div>
       <br>
       <!-- section start -->
       <section class="light-gray-bg pv-20 clearfix">
