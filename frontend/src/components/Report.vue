@@ -821,6 +821,11 @@ export default {
         })
       return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8))
     },
+    pad (n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    },
     formatDate (isoDate) {
       let date = new Date(isoDate)
       let mm = date.getMonth() + 1 // getMonth() is zero-based
@@ -911,7 +916,7 @@ export default {
         this.v.ctec.PT.AV = veh.ptav_g1
 
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-        this.v.titulaire.adresse = veh.adr_code_postal_tit
+        this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
         this.v.certificat.premier = veh.date_premiere_immat
         this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
         this.v.certificat.siv = veh.date_premiere_immat_siv
