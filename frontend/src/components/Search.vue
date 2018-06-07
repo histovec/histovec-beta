@@ -159,7 +159,7 @@
                       <div class="col-xs-offset-5 col-sm-7">
                         <router-link
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'report', query: {id: id, key: key, code: code}}"
+                                :to="{ name: 'report', params: {id: id, key: key, code: code}}"
                         >
                           <i class="fa fa-search"></i>Rechercher
                         </router-link>
