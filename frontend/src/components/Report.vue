@@ -38,7 +38,7 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-car"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.affichage_logo " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
           <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
@@ -55,7 +55,7 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#vtab1" role="tab" data-toggle="tab"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li><a href="#vtab2" role="tab" data-toggle="tab"><i class="fa fa-car pr-10"></i>Véhicule</a></li>
+            <li><a href="#vtab2" role="tab" data-toggle="tab"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
-                  <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
+                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                     <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
                     <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
@@ -853,6 +853,17 @@ export default {
         let year = today.getFullYear() - dateEmission[2]
         return (year > 1) ? year + ' ans' : year + ' an'
       }
+    },
+    getLogoVehicule (genre) {
+      let moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
+      let truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
+      let type = 'car'
+      if (moto.includes(genre)) {
+        type = 'motorcycle'
+      } else if (truck.includes(genre)) {
+        type = 'truck'
+      }
+      return type
     }
   },
   created () {
@@ -911,6 +922,7 @@ export default {
         this.v.nb_proprietaires = veh.nb_proprietaire
         this.v.nb_tit = this.calcNbTit(veh.historique)
         this.v.age_veh = veh.age_annee
+        this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
 
         this.v.administratif.gages = veh.gage
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
