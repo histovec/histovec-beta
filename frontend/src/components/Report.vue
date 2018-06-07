@@ -636,6 +636,7 @@ export default {
   },
   data () {
     return {
+      default: 'non disponible',
       synthese: {
         'ove': {
           'icon': 'fa-exclamation-triangle',
@@ -892,10 +893,10 @@ export default {
         this.v.ctec.tvv = veh.tvv
         this.v.ctec.reception.type = veh.type_reception
         this.v.ctec.reception.numero = veh.cveh_num_reception
-        this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
-        this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-        this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
-        this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
+        this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE || this.default
+        this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE || this.default
+        this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV || this.default
+        this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE || this.default
         this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
         this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
         this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
@@ -905,8 +906,8 @@ export default {
         this.v.ctec.modele = veh.nom_commercial
         this.v.ctec.genre = veh.CTEC_RLIB_GENRE
         this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-        this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
-        this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
+        this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT || this.default
+        this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE || this.default
         this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
         this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
         this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
@@ -917,29 +918,28 @@ export default {
 
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
         this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
-        this.v.certificat.premier = veh.date_premiere_immat
+        this.v.certificat.premier = veh.date_premiere_immat || this.default
         this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
-        this.v.certificat.siv = veh.date_premiere_immat_siv
-        this.v.certificat.courant = veh.date_emission_CI
-        this.v.certificat.depuis = this.calcCertifDepuis(veh.date_emission_CI)
+        this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
+        this.v.certificat.courant = veh.date_emission_CI || this.default
+        this.v.certificat.depuis = veh.duree_dernier_prop
 
         this.v.historique = this.histoFilter(veh.historique)
         this.v.nb_proprietaires = veh.nb_proprietaire
         this.v.nb_tit = this.calcNbTit(veh.historique)
         this.v.age_veh = veh.age_annee
-        this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
 
-        this.v.administratif.gages = veh.gage
+        this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
         // opposition et procédure à valider
         this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
         // pour l'instant aucun véhicule saisi dans les échantillons
         this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
-        this.v.administratif.vol = veh.vehicule_vole
+        this.v.administratif.vol = veh.vehicule_vole || this.default
 
         // vol : les informations viennent-elles de foves ?
-        this.v.administratif.titre.vol = veh.ci_vole
-        this.v.administratif.titre.perte = veh.perte_ci
+        this.v.administratif.titre.vol = veh.ci_vole || this.default
+        this.v.administratif.titre.perte = veh.perte_ci || this.default
         this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
         this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
