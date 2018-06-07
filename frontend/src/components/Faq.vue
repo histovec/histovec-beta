@@ -51,7 +51,7 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-12 mb-20">
-      <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, vous pouvez nous écrire en utilisant ce formulaire.</p>
+      <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, vous pouvez nous écrire en utilisant <a href="contact">ce formulaire</a>.</p>
       <!-- accordion start -->
       <!-- ================ -->
       <div class="panel-group collapse-style-2" id="accordion-2">
