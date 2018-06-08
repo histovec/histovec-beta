@@ -38,7 +38,7 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-window-maximize"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.affichage_logo " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
           <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
@@ -55,11 +55,11 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#vtab1" role="tab" data-toggle="tab"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li><a href="#vtab2" role="tab" data-toggle="tab"><i class="fa fa-car pr-10"></i>Véhicule</a></li>
+            <li><a href="#vtab2" role="tab" data-toggle="tab"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li v-if="$route.query.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
+            <li v-if="$route.params.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -71,13 +71,13 @@
                     <h6 class="title p-h-35">Résumé</h6>
                     <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
-                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Conseils pour l'acheteur </div>
+                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Remarques </div>
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
-                  <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
+                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red bold txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
+                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
                     <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
                     <!-- fin voiture  -->
                 </div>
@@ -87,9 +87,9 @@
                 <div class="row">
                     <!-- debut proprietaire  -->
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
-                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} ans</span><br/>
-                      <span class="txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="txt-small-13">titulaire</span></div>
-                  <div class="col-sm-5"></div>
+                  <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span></div>
+                  <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">En acquérant ce véhicule vous serez le</span> <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span><sup class="info_red txt-small">ème</sup> <span class="color-info_2 bold_4 txt-small-13">titulaire</span></div>
+
                   <!-- fin proprietaire  -->
                 </div>
                 <!-- debut trait separation  -->
@@ -461,11 +461,17 @@
               <h6 class="title">Carte grise</h6>
               <!-- debut tableau carte grise -->
               <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span></div>
+                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span><span class="txt-small-12" v-if="v.certificat.etranger"> à l'étranger</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.premier }}</span></div>
               </div>
               <div class="separator"></div>
-
+              <div v-if="v.certificat.etranger">
+                <div class="row" >
+                  <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation en France</span></div>
+                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.siv }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
               <div class="row">
                 <div class="col-sm-5"><span class="txt-small-12">Date de la carte grise actuelle</span></div>
                 <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.courant }}</span></div>
@@ -554,7 +560,7 @@
               </div>
               <!-- fin tableau operation historique -->
             </div>
-            <div class="tab-pane fade" id="vtab6" v-if="$route.query.code !== undefined">
+            <div class="tab-pane fade" id="vtab6" v-if="$route.params.code !== undefined">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
@@ -630,6 +636,7 @@ export default {
   },
   data () {
     return {
+      default: 'non disponible',
       synthese: {
         'ove': {
           'icon': 'fa-exclamation-triangle',
@@ -795,7 +802,7 @@ export default {
       return text + this.url.replace('&', '%26')
     },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.query.code + '&key=' + this.$route.query.key
+      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.params.code + '&key=' + this.$route.params.key
     }
   },
   methods: {
@@ -814,6 +821,11 @@ export default {
           mode: CryptoJS.mode.CBC
         })
       return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8))
+    },
+    pad (n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     },
     formatDate (isoDate) {
       let date = new Date(isoDate)
@@ -836,10 +848,32 @@ export default {
       let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
+    },
+    calcCertifDepuis (dateEmissionCi) {
+      var dateEmission = dateEmissionCi.split('/')
+      let today = new Date()
+      let nbMonth = ((today.getFullYear() - dateEmission[2]) * 12) + (today.getMonth() + 1 - dateEmission[1])
+      if (nbMonth <= 12) {
+        return nbMonth + ' mois'
+      } else {
+        let year = today.getFullYear() - dateEmission[2]
+        return (year > 1) ? year + ' ans' : year + ' an'
+      }
+    },
+    getLogoVehicule (genre) {
+      let moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
+      let truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
+      let type = 'car'
+      if (moto.includes(genre)) {
+        type = 'motorcycle'
+      } else if (truck.includes(genre)) {
+        type = 'truck'
+      }
+      return type
     }
   },
   created () {
-    this.$http.get(this.apiUrl + 'id/' + this.$route.query.id)
+    this.$http.get(this.apiUrl + 'id/' + ((this.$route.params.id !== undefined) ? this.$route.params.id : this.$route.query.id))
       .then(response => {
         console.log(response)
         if (response.body.hits.hits.length === 0) {
@@ -847,7 +881,7 @@ export default {
           return
         }
         var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
-        var key = this.$route.query.key.replace(/-/g, '+').replace(/_/g, '/')
+        var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
         var veh = this.decrypt(key, encrypted)
         console.log(veh)
         this.vin = veh.vin
@@ -859,10 +893,10 @@ export default {
         this.v.ctec.tvv = veh.tvv
         this.v.ctec.reception.type = veh.type_reception
         this.v.ctec.reception.numero = veh.cveh_num_reception
-        this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
-        this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-        this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
-        this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
+        this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE || this.default
+        this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE || this.default
+        this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV || this.default
+        this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE || this.default
         this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
         this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
         this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
@@ -872,8 +906,8 @@ export default {
         this.v.ctec.modele = veh.nom_commercial
         this.v.ctec.genre = veh.CTEC_RLIB_GENRE
         this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-        this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
-        this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
+        this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT || this.default
+        this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE || this.default
         this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
         this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
         this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
@@ -883,9 +917,11 @@ export default {
         this.v.ctec.PT.AV = veh.ptav_g1
 
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-        this.v.titulaire.adresse = veh.adr_code_postal_tit
-        this.v.certificat.premier = veh.date_premiere_immat
-        this.v.certificat.courant = veh.date_emission_CI
+        this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
+        this.v.certificat.premier = veh.date_premiere_immat || this.default
+        this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
+        this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
+        this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = veh.duree_dernier_prop
 
         this.v.historique = this.histoFilter(veh.historique)
@@ -893,17 +929,17 @@ export default {
         this.v.nb_tit = this.calcNbTit(veh.historique)
         this.v.age_veh = veh.age_annee
 
-        this.v.administratif.gages = veh.gage
+        this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
         // opposition et procédure à valider
         this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
         // pour l'instant aucun véhicule saisi dans les échantillons
         this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
-        this.v.administratif.vol = veh.vehicule_vole
+        this.v.administratif.vol = veh.vehicule_vole || this.default
 
         // vol : les informations viennent-elles de foves ?
-        this.v.administratif.titre.vol = veh.ci_vole
-        this.v.administratif.titre.perte = veh.perte_ci
+        this.v.administratif.titre.vol = veh.ci_vole || this.default
+        this.v.administratif.titre.perte = veh.perte_ci || this.default
         this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
         this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')

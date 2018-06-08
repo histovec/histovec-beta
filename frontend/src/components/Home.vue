@@ -89,7 +89,7 @@
                        data-start="1300"
                        data-easing="easeOutQuad"
                        data-endspeed="600">Les données officielles du Ministère de l’Intérieur<br>
-                       du Système d’Immatriculation des Véhicules. </div>
+                       issues du Système d’Immatriculation des Véhicules. </div>
                   <!-- LAYER NR. 4
                   <div class="tp-caption sfb fadeout small_white text-center"
               									data-x="center"
@@ -204,7 +204,7 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-6" >
-              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
+              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center">
                 <!-- debut bouton vendeur -->
                 <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
@@ -224,6 +224,38 @@
           </div>
         </div>
       </section>
+      <!-- section end -->
+      <!-- section start -->
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h1 class="title large">Comment ça <span class="text-defaut">marche</span> </h1>
+          <div class="separator"></div>
+        </div>
+        <div class="col-md-4 ">
+          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-desktop"></i></span>
+            <div class="body">
+              <h4 class="title m-g-10"><span class="text-defaut-g">1</span> - Identification du véhicule</h4>
+              <p class="m-g-10">Le vendeur renseigne les informations d’identification du véhicule.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 ">
+          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-drivers-license-o"></i></span>
+            <div class="body">
+              <h4 class="title m-g-10"><span class="text-defaut-g">2</span> - Rapport HistoVec</h4>
+              <p class="m-g-10">Le vendeur consulte son rapport HistoVec et partage le lien à l'acheteur.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 ">
+          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-search"></i></span>
+            <div class="body">
+              <h4 class="title m-g-10"><span class="text-defaut-g">3</span> - Consulter le rapport</h4>
+              <p class="m-g-10">L’acheteur consulte le rapport HistoVec sur le site officiel de l’administration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- section end -->
       <!-- section start -->
       <div class="dark-bg default-hovered footer-top animated-text">
@@ -274,7 +306,7 @@
               <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon default-bg circle"><i class="fa fa-thumbs-o-up"></i></span>
                 <h3>Officiel</h3>
                 <div class="separator clearfix"></div>
-                <p>Données officilelles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> du Système d’Immatriculation des Véhicules.</p>
+                <p>Données officilelles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du <a href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV">SIV</a></p>
               </div>
             </div>
             <div class="col-lg-4">
@@ -302,7 +334,7 @@
             <div class="col-lg-12">
               <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidées par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
+              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
             </div>
           </div>
           <div class="row">
@@ -316,40 +348,6 @@
         </div>
       </section>
       <!-- section end -->
-      <!-- section start -->
-      <div class="row">
-        <div class="col-lg-12 text-center pv-20"> <br>
-          <h1 class="title large">Comment ça <span class="text-defaut">marche</span> </h1>
-          <div class="separator"></div>
-        </div>
-        <div class="col-md-4 ">
-          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-desktop"></i></span>
-            <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">1</span> - Identification du véhicule</h4>
-              <p class="m-g-10">Le vendeur renseigne les informations d’identification du véhicule.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ">
-          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-drivers-license-o"></i></span>
-            <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">2</span> - Rapport HistoVec</h4>
-              <p class="m-g-10">Le vendeur consulte son rapport HistoVec et partage le lien à l'acheteur.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 ">
-          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon without-bg"><i class="fa fa-search"></i></span>
-            <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">3</span> - Consulter le rapport</h4>
-              <p class="m-g-10">L’acheteur consulte le rapport HistoVec sur le site officiel de l’administration.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- section end -->
-      <br>
-      <div class="separator"></div>
       <br>
       <!-- section start -->
       <section class="light-gray-bg pv-20 clearfix">

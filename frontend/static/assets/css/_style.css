@@ -1,7 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 
-
 h1,
 h2,
 h3,
@@ -337,6 +336,10 @@ img {
 	max-width:100%;
 	height:auto;
 }
+.list-no {
+	list-style:none;
+	padding:0;
+}
 ul {
 	list-style:square;
 }
@@ -667,54 +670,10 @@ tbody {
 	-webkit-box-shadow:none;
 	box-shadow:none;
 }
-.pattern-1 {
-	background-image:url("../images/pattern-1.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
 .pattern-2 {
 	background-image:url("../images/pattern-2.png");
 	background-repeat:repeat;
 	background-position:0 0;
-}
-.pattern-3 {
-	background-image:url("../images/pattern-3.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-4 {
-	background-image:url("../images/pattern-4.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-5 {
-	background-image:url("../images/pattern-5.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-6 {
-	background-image:url("../images/pattern-6.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-7 {
-	background-image:url("../images/pattern-7.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-8 {
-	background-image:url("../images/pattern-8.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-9 {
-	background-image:url("../images/pattern-9.png");
-	background-repeat:repeat;
-	background-position:0 0;
-}
-.pattern-4 .page-wrapper, .pattern-5 .page-wrapper, .pattern-6 .page-wrapper, .pattern-7 .page-wrapper, .pattern-8 .page-wrapper, .pattern-9 .page-wrapper {
-	-webkit-box-shadow:none;
-	box-shadow:none;
 }
 
 /* Small devices (tablets, 768px and up) */
@@ -3332,7 +3291,7 @@ select[multiple].form-control {
 	-webkit-appearance:listbox;
 }
  .form-control::-moz-placeholder {
- color:inherit;
+ color:#bababa;
 }
  .form-control:-ms-input-placeholder {
  color:inherit;
@@ -7561,8 +7520,8 @@ h6.media-heading {
 	color:#2aa4a5;
 	font-weight:600;
 }
-#logo {
-	padding:20px 0 0 0;
+.logo {
+	padding:5px 0 10px 0;
 }
 .logo_p_v {
 	padding:25px 0 0 15px;
@@ -7662,6 +7621,27 @@ hr.style1 {
 }
 .txt-small-13 {
 	font-size:13px;
+}
+.txt-small-14 {
+	font-size:14px;
+}
+.txt-small-15 {
+	font-size:15px;
+}
+.txt-small-16 {
+	font-size:16px;
+}
+.txt-small-17 {
+	font-size:17px;
+}
+.txt-small-18 {
+	font-size:18px;
+}
+.txt-small-19 {
+	font-size:19px;
+}
+.txt-small-20 {
+	font-size:20px;
 }
 .info_red {
 	font-weight:400;
