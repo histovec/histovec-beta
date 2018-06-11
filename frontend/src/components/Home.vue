@@ -269,7 +269,7 @@
                     <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
                   </div>
                   <div class="col-sm-4">
-                    <p class="mt-10"><a href="#" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir<i class="fa fa-file-text-o pl-20"></i></a></p>
+                    <p class="mt-10"><a href="#myLargeModalLabel" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir un specimen<i class="fa fa-file-text-o pl-20"></i></a></p>
                   </div>
                 </div>
               </div>
@@ -278,20 +278,6 @@
         </div>
       </div>
       <!-- section end -->
-      <!-- debut modal -->
-      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
-              <h4 class="modal-title" id="myLargeModalLabel">Exemple de rapport</h4>
-            </div>
-            <div class="modal-body"> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" width="889" height="2628"> </div>
-            <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
-          </div>
-        </div>
-      </div>
-      <!-- fin modal -->
       <!-- section start -->
       <section class="light-gray-bg pv-30 clearfix">
         <div class="container">
