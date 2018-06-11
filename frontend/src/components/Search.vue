@@ -54,7 +54,7 @@
                       <div class="row">
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
-                            <label class="control-label">Nom <span class="info_red">*</span></label>
+                            <label class="control-label">Nom de naissance <span class="info_red">*</span></label>
                             <input type="text" class="form-control" v-model="nom">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
