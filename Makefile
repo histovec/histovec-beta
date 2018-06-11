@@ -12,6 +12,7 @@ export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend
+export LOGS=${APP_PATH}/log
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 
