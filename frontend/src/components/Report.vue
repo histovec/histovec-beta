@@ -928,6 +928,7 @@ export default {
         this.v.nb_proprietaires = veh.nb_proprietaire
         this.v.nb_tit = this.calcNbTit(veh.historique)
         this.v.age_veh = veh.age_annee
+        this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
 
         this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
