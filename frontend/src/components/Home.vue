@@ -206,7 +206,7 @@
             <div class="col-lg-6" >
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center">
                 <!-- debut bouton vendeur -->
-                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
+                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
                 <p>Rassurez vos acheteurs potentiels.</p>
@@ -342,7 +342,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton vendeur -->
-                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
+                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
                 <p>Rassurez vos acheteurs potentiels.</p>
