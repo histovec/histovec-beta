@@ -258,7 +258,7 @@ export default {
     }
   },
   created () {
-    this.type_personne = this.$route.query.t
+    this.type_personne = this.$route.params.t
   }
 }
 </script>
