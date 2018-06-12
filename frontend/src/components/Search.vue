@@ -85,7 +85,7 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#formuleModal" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" class="form-control" placeholder="A123B456">
+                              <input type="text" class="form-control" placeholder="A123B456" v-model="formule">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -258,7 +258,7 @@ export default {
     }
   },
   created () {
-    this.type_personne = this.$route.params.t
+    this.type_personne = this.$route.params.t || 'particulier'
   }
 }
 </script>
