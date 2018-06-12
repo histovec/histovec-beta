@@ -89,7 +89,7 @@
                        data-start="1300"
                        data-easing="easeOutQuad"
                        data-endspeed="600">Les données officielles du Ministère de l’Intérieur<br>
-                       du Système d’Immatriculation des Véhicules. </div>
+                       issues du Système d’Immatriculation des Véhicules. </div>
                   <!-- LAYER NR. 4
                   <div class="tp-caption sfb fadeout small_white text-center"
               									data-x="center"
@@ -204,9 +204,9 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-6" >
-              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
+              <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center">
                 <!-- debut bouton vendeur -->
-                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
+                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
                 <p>Rassurez vos acheteurs potentiels.</p>
@@ -226,99 +226,8 @@
       </section>
       <!-- section end -->
       <!-- section start -->
-      <div class="dark-bg default-hovered footer-top animated-text">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="call-to-action text-center">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2>Consulter un exemple de rapport...</h2>
-                    <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
-                  </div>
-                  <div class="col-sm-4">
-                    <p class="mt-10"><a href="#" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir<i class="fa fa-file-text-o pl-20"></i></a></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- section end -->
-      <!-- debut modal -->
-      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
-              <h4 class="modal-title" id="myLargeModalLabel">Exemple de rapport</h4>
-            </div>
-            <div class="modal-body"> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" width="889" height="2628"> </div>
-            <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
-          </div>
-        </div>
-      </div>
-      <!-- fin modal -->
-      <!-- section start -->
-      <section class="light-gray-bg pv-30 clearfix">
-        <div class="container">
-          <div class="row justify-content-md-center">
-            <div class="col-lg-12">
-              <h2 class="text-center">Nos <strong>garanties !</strong></h2>
-              <div class="separator"></div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon default-bg circle"><i class="fa fa-thumbs-o-up"></i></span>
-                <h3>Officiel</h3>
-                <div class="separator clearfix"></div>
-                <p>Données officilelles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> du Système d’Immatriculation des Véhicules.</p>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="150"> <span class="icon default-bg circle"><i class="fa fa-lock"></i></span>
-                <h3>Confidentiel</h3>
-                <div class="separator clearfix"></div>
-                <p>Seul le <span class="text-defaut text-defaut-i-g">propriétaire</span> peut partager ses informations à un acheteur potentiel.</p>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="200"> <span class="icon default-bg circle"><i class="fa fa-euro"></i></span>
-                <h3>Gratuit</h3>
-                <div class="separator clearfix"></div>
-                <p>Un service public <span class="text-defaut text-defaut-i-g">gratuit</span> pour les propriétaires et les acheteurs.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- section end -->
-      <!-- section start -->
-      <section class="dark-translucent-bg fixed-bg pv-30" style="background-image:url(assets/images/tableau_de_bord/41.jpg);">
-        <div class="container">
-          <div class="row justify-content-lg-center">
-            <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
-              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidées par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="clients-container">
-              <div class="clients">
-                <div class="client-image"> <img src="assets/images/logos_metiers/logo_mi.png" width="63" height="79"></div>
-                <div class="client-image"> <img src="assets/images/logos_metiers/securite_routiere_200.png" width="200" height="153" alt=""> </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- section end -->
-      <!-- section start -->
       <div class="row">
-        <div class="col-lg-12 text-center pv-20"> <br>
+        <div class="col-lg-12 text-center">
           <h1 class="title large">Comment ça <span class="text-defaut">marche</span> </h1>
           <div class="separator"></div>
         </div>
@@ -348,8 +257,83 @@
         </div>
       </div>
       <!-- section end -->
-      <br>
-      <div class="separator"></div>
+      <!-- section start -->
+      <div class="dark-bg default-hovered footer-top animated-text">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="call-to-action text-center">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2>Consulter un exemple de rapport...</h2>
+                    <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
+                  </div>
+                  <div class="col-sm-4">
+                    <p class="mt-10"><a href="#myLargeModalLabel" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir un specimen<i class="fa fa-file-text-o pl-20"></i></a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- section end -->
+      <!-- section start -->
+      <section class="light-gray-bg pv-30 clearfix">
+        <div class="container">
+          <div class="row justify-content-md-center">
+            <div class="col-lg-12">
+              <h2 class="text-center">Nos <strong>garanties !</strong></h2>
+              <div class="separator"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon default-bg circle"><i class="fa fa-thumbs-o-up"></i></span>
+                <h3>Officiel</h3>
+                <div class="separator clearfix"></div>
+                <p>Données officilelles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du <a href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV">SIV</a></p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="150"> <span class="icon default-bg circle"><i class="fa fa-lock"></i></span>
+                <h3>Confidentiel</h3>
+                <div class="separator clearfix"></div>
+                <p>Seul le <span class="text-defaut text-defaut-i-g">propriétaire</span> peut partager ses informations à un acheteur potentiel.</p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="200"> <span class="icon default-bg circle"><i class="fa fa-euro"></i></span>
+                <h3>Gratuit</h3>
+                <div class="separator clearfix"></div>
+                <p>Un service public <span class="text-defaut text-defaut-i-g">gratuit</span> pour les propriétaires et les acheteurs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- section end -->
+      <!-- section start -->
+      <section class="dark-translucent-bg fixed-bg pv-30" style="background-image:url(assets/images/tableau_de_bord/41.jpg);">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-lg-12">
+              <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
+              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="clients-container">
+              <div class="clients">
+                <div class="client-image"> <img src="assets/images/logos_metiers/logo_mi.png" width="63" height="79"></div>
+                <div class="client-image"> <img src="assets/images/logos_metiers/securite_routiere_200.png" width="200" height="153" alt=""> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- section end -->
       <br>
       <!-- section start -->
       <section class="light-gray-bg pv-20 clearfix">
@@ -358,7 +342,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton vendeur -->
-                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', query: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
+                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
                 <p>Rassurez vos acheteurs potentiels.</p>
