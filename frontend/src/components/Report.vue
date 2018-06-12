@@ -663,6 +663,14 @@
     </div>
   </div>
 
+  <div class="container" v-if="this.result === 'error'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau</div>
+      </div>
+    </div>
+  </div>
+
   <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
@@ -1003,6 +1011,8 @@ export default {
           this.result = 'ok'
         }
         console.log(this.v)
+      }, () => {
+        this.result = 'error'
       }
     )
     if (this.$route.query.id === 'test') {
