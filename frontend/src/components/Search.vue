@@ -258,7 +258,7 @@ export default {
     }
   },
   created () {
-    this.type_personne = this.$route.params.t
+    this.type_personne = this.$route.params.t || 'particulier'
   }
 }
 </script>
