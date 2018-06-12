@@ -19,7 +19,10 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></h2>
+              <h2 class="text-center mt-4">
+                <div v-if="$route.params.code !== undefined"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</div>
+                <div v-else><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+              </h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
           </div>
