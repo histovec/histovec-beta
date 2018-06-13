@@ -31,9 +31,9 @@ export FROM=1
 export stress=10
 export stress_verbose=1000
 export PASSPHRASE=CHANGEME
-export settings={"index": {"number_of_shards": 30, "refresh_interval": "60s", "number_of_replicas": 0}}
-export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}, "ida3": {"type": "keyword"}, "ida4": {"type": "keyword"}, "ida5": {"type": "keyword"}}}
-
+export settings={"index": {"number_of_shards": 1, "refresh_interval": "300s", "number_of_replicas": 0}}
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}}}
+export header="idv;ida1;ida2;v"
 export index_log=${datadir}/index.log.gz
 
 date                := $(shell date -I)
