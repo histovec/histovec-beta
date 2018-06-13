@@ -207,6 +207,12 @@ export default {
     }
   },
   computed: {
+    currentMonthNumber () {
+      var date = new Date()
+      date = date.getFullYear() + '' + this.pad(date.getMonth() + 1, 2)
+      console.log(date)
+      return date
+    },
     currentWeekNumber () {
       var instance = new Date()
 
@@ -242,13 +248,18 @@ export default {
       return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
     },
     code () {
-      return this.hash(this.plaque + this.formule + this.currentWeekNumber)
+      return this.hash(this.plaque + this.formule + this.currentMonthNumber)
     },
     key () {
       return this.hash(this.plaque + this.formule)
     }
   },
   methods: {
+    pad (n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    },
     hash (string) {
       var hash = string
       hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
