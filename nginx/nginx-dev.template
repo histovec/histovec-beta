@@ -11,7 +11,7 @@ server {
     return 302 $scheme://$http_host/<APP>/;
   }
 
-  location ~ (__webpack_hmr|app.js) {
+  location ~ (__webpack_hmr|app.js|^/static) {
   	proxy_pass http://frontend-dev:8080;
   }
 
