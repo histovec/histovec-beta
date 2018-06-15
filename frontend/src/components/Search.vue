@@ -21,7 +21,7 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+              <h2 class="text-center mt-4"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
           </div>
@@ -55,19 +55,19 @@
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
                             <label class="control-label">Nom de naissance <span class="info_red">*</span></label>
-                            <input type="text" class="form-control" v-model="nom">
+                            <input type="text" class="form-control" v-model="nom" tabindex="1">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
                             <label class="control-label">Prénom <span class="info_red">*</span></label>
-                            <input type="text" class="form-control" v-model="prenom">
+                            <input type="text" class="form-control" v-model="prenom" tabindex="2">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group has-feedback">
                             <label class="control-label">Date de naissance <span class="info_red">*</span></label>
-                            <input type="email" class="form-control" placeholder="xx/xx/xxxx" v-model="date_naissance">
+                            <input type="email" class="form-control" placeholder="xx/xx/xxxx" v-model="date_naissance" tabindex="3">
                             <i class="fa fa-calendar form-control-feedback"></i> </div>
                         </div>
                       </div>
@@ -79,13 +79,13 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red">*</span></label>
-                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
+                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque" tabindex="4">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#formuleModal" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule">
+                              <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -119,13 +119,13 @@
                         <div class="col-md-6">
                           <div class="form-group has-feedback">
                             <label class="control-label">Nom <span class="info_red">*</span></label>
-                            <input type="text" class="form-control" v-model="raison_sociale">
+                            <input type="text" class="form-control" v-model="raison_sociale" tabindex="1">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group has-feedback">
                             <label class="control-label">N° SIREN <span class="info_red">*</span></label>
-                            <input type="email" class="form-control"  v-model="siren">
+                            <input type="email" class="form-control"  v-model="siren" tabindex="2">
                             <i class="fa fa-building-o form-control-feedback"></i> </div>
                         </div>
                       </div>
@@ -137,13 +137,13 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red">*</span></label>
-                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
+                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque" tabindex="3">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left">
                               <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule">
+                              <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -207,6 +207,12 @@ export default {
     }
   },
   computed: {
+    currentMonthNumber () {
+      var date = new Date()
+      date = date.getFullYear() + '' + this.pad(date.getMonth() + 1, 2)
+      console.log(date)
+      return date
+    },
     currentWeekNumber () {
       var instance = new Date()
 
@@ -242,13 +248,18 @@ export default {
       return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
     },
     code () {
-      return this.hash(this.plaque + this.formule + this.currentWeekNumber)
+      return this.hash(this.plaque + this.formule + this.currentMonthNumber)
     },
     key () {
       return this.hash(this.plaque + this.formule)
     }
   },
   methods: {
+    pad (n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    },
     hash (string) {
       var hash = string
       hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')

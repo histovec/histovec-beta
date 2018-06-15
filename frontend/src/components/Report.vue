@@ -19,7 +19,10 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></h2>
+              <h2 class="text-center mt-4">
+                <div v-if="$route.params.code !== undefined"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</div>
+                <div v-else><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+              </h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
           </div>
@@ -905,14 +908,11 @@ export default {
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
     },
-    calcCertifDepuis (dateEmissionCi) {
-      var dateEmission = dateEmissionCi.split('/')
-      let today = new Date()
-      let nbMonth = ((today.getFullYear() - dateEmission[2]) * 12) + (today.getMonth() + 1 - dateEmission[1])
+    calcCertifDepuis (nbMonth) {
       if (nbMonth <= 12) {
         return nbMonth + ' mois'
       } else {
-        let year = today.getFullYear() - dateEmission[2]
+        let year = Math.ceil(nbMonth / 12)
         return (year > 1) ? year + ' ans' : year + ' an'
       }
     },
@@ -978,7 +978,7 @@ export default {
         this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
         this.v.certificat.courant = veh.date_emission_CI || this.default
-        this.v.certificat.depuis = veh.duree_dernier_prop
+        this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
         this.v.historique = this.histoFilter(veh.historique)
         this.v.nb_proprietaires = veh.nb_proprietaire

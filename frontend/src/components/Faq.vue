@@ -19,7 +19,7 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
           </div>
@@ -179,8 +179,8 @@
           </div>
           <div id="collapseNine-2" class="panel-collapse collapse">
             <div class="panel-body">
-              <UL>Recopiez exactement les données de la carte grise (nom, prénom, immatriculation, numéro de formule)</UL>
-              <UL>Seul les véhicules figurant dant le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consulté dans Histovec</UL>
+              <UL>Recopiez exactement les données de la carte grise (nom, prénom, date de naissance, immatriculation, numéro de formule)</UL>
+              <UL>Seul les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
               <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le Système d'Immatriculation des Véhicules,</UL>
               <UL>Vous pouvez <a href="contact">nous contacter</a></UL>
             </div>
