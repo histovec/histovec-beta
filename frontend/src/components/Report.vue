@@ -656,9 +656,7 @@
     </div>
   </div>
 
-
-
-  <div class="container" v-if="this.result === 'ko'">
+  <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
@@ -666,7 +664,7 @@
     </div>
   </div>
 
-  <div class="container" v-if="this.result === 'error'">
+  <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau</div>
@@ -674,7 +672,31 @@
     </div>
   </div>
 
-  <div class="container" v-if="this.result === 'invalid'">
+  <div class="container" v-if="this.result === 'unavailable'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'tooManyRequests'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'error'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Erreur inconnue. Si l'erreur persiste, merci de remplir le formulaire <a href="feedback">Signaler une erreur</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'cancelled'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé</div>
@@ -1011,8 +1033,17 @@ export default {
         this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
         this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
         console.log(this.v)
-      }, () => {
+      }, (error) => {
         this.result = 'error'
+        if (error.status === 404) {
+          this.result = 'invalid'
+        }
+        if (error.status === 429) {
+          this.result = 'tooManyRequests'
+        }
+        if (error.status === 502) {
+          this.result = 'unavailable'
+        }
       }
     )
     if (this.$route.query.id === 'test') {
