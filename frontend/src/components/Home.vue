@@ -299,7 +299,7 @@
               <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="150"> <span class="icon default-bg circle"><i class="fa fa-lock"></i></span>
                 <h3>Confidentiel</h3>
                 <div class="separator clearfix"></div>
-                <p>Seul le <span class="text-defaut text-defaut-i-g">propriétaire</span> peut partager ses informations à un acheteur potentiel.</p>
+                <p>Seul le <span class="text-defaut text-defaut-i-g">propriétaire</span> peut partager ses informations avec un acheteur potentiel.</p>
               </div>
             </div>
             <div class="col-lg-4">
