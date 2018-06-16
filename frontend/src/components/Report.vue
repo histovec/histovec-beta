@@ -81,7 +81,7 @@
                   <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                   <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
-                    <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
                     <!-- fin voiture  -->
                 </div>
                   <!-- debut trait separation  -->
