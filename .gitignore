@@ -1,5 +1,8 @@
 log
 artifacts
 sample_data
+frontend/dist-build
+frontend/dist
 infrastructure/heat-templates/CIT/param/*
 infrastructure/heat-templates/floating-ip/param/*
+.lastcommit

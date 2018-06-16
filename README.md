@@ -2,7 +2,7 @@
 
 Cette application est la version bêta en Vue.js permettant l'édition de rapports dans le cadre de la mesure n°16 du CISR du 9 janvier 2018. Cette version vise à être mise en service au 24 mai 2018 pour une ouverture en test auprès de premiers usagers.
 
-Il intègre trois vues: 
+Il intègre trois vues:
 - Home : page d'introduction du site
 - Search : page de recherche pro ou particulier
 - Report: page de rapport de l'historique du véhicule
@@ -24,8 +24,12 @@ L'environnement lance de plus un backend Python 3, mais à ce stade inutile.
 ```
 git clone https://github.com/poc-vue
 git checkout origin/dev
-make dev
+make build
+make up
 ```
+Les deux phases `build` et `up` permettent de construire les différents éléments (fichiers et répertoires) et structures nécessaires au fonctionnement d'Hitovec.
+
+Pour stopper l'application, vous pouvez utiliser la commande `make down` qui arrête et supprime les conteneurs.
 
 ## changement des données
 
@@ -47,7 +51,7 @@ make index-purge
 
 ## tester l'application
 
-- rendez-vous sur : http://localhost:8088 
+- rendez-vous sur : http://localhost:8088
 - depuis la page d'accueil,  cliquez sur "vendeur" ou "professionnel"
 - sur la parge de recherche (mode "vendeur"), entrez les données de la personnes physique (nom, prénom, date de naissance) ou morale (raison sociale, n° SIREN) et les données identifiantes du véhicule (n° d'immatriculaion, n° de formule)
 - vous obtenez le rapport. Cliquez sur "Transmettre le rapport" pour obtenir les liens à transmettre à l'acheteur. Celui-ci peut êre copié, envoyé par mail, sms ou QR-code.
