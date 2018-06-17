@@ -260,6 +260,24 @@ export default {
     }
   },
   methods: {
+    onPaste (evt) {
+      let data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
+      if (data.length > 1) {
+        if (evt.target.name === 'nom') {
+          this.nom = data[0]
+          this.prenom = data[1]
+          this.date_naissance = data[2]
+          this.plaque = data[3]
+          this.formule = data[4]
+        }
+        if (evt.target.name === 'raison_sociale') {
+          this.raison_sociale = data[0]
+          this.siren = data[1]
+          this.plaque = data[2]
+          this.formule = data[3]
+        }
+      }
+    },
     pad (n, width, z) {
       z = z || '0'
       n = n + ''
