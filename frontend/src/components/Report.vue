@@ -74,7 +74,7 @@
                     <h6 class="title p-h-35">Résumé</h6>
                     <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
-                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Informations Utiles</div>
+                  <div class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Informations Utiles</div>
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
@@ -778,7 +778,7 @@ export default {
       result: 'wait',
       conf: [],
       v: {
-        date_update: '10/05/2018',
+        date_update: '11/06/2018',
         nb_proprietaires: 3,
         plaque: 'A*-0**-F*',
         etranger: true,
