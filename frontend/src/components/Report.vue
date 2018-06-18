@@ -779,7 +779,13 @@ export default {
       conf: [],
       v: {
         date_update: '11/06/2018',
-        ctec: {},
+        ctec: {
+          reception: {},
+          puissance: {},
+          places: {},
+          carrosserie: {},
+          PT: {}
+        },
         titulaire: {},
         certificat: {},
         administratif: {}
