@@ -1,0 +1,4 @@
+# export auth_id=$(osHVdev container show histovec-docker-images -f value -c account)
+# export token=$(osHVdev token issue -f value -c id)
+
+export $openstackURL = object-store.api.pi.dsic.minint.fr/v1

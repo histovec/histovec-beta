@@ -9,7 +9,7 @@
 export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
-export APP_PATH := $(shell pwd)
+export APP_PATH := $(shell pwd	)
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend
 export LOGS=${APP_PATH}/log
@@ -72,15 +72,15 @@ endif
 ifeq ("$(wildcard /usr/bin/gawk)","")
 	@echo installing gawk
 	@sudo apt-get install -y gawk
-endif	
+endif
 ifeq ("$(wildcard /usr/bin/jq)","")
-	@echo installing jq 
+	@echo installing jq
 	@sudo apt-get install -y jq
-endif  
+endif
 ifeq ("$(wildcard /usr/bin/parallel)","")
-	@echo installing parallel 
-	@sudo apt-get install -y parallel 
-endif  
+	@echo installing parallel
+	@sudo apt-get install -y parallel
+endif
 ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@echo installing docker-compose
 	@sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -127,7 +127,7 @@ endif
 index-test:
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@echo index test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel --no-notice -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}' 
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel --no-notice -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 endif
 
 index-stress:
@@ -206,7 +206,7 @@ ifneq "$(commit)" "$(lastcommit)"
 	@sudo mkdir -p ${FRONTEND}/dist-build
 	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
 	mkdir -p ${FRONTEND}/dist/
-	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/. 
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
 endif
 
@@ -222,3 +222,5 @@ frontend: network tor
 up: network elasticsearch frontend
 
 down: frontend-stop elasticsearch-stop network-stop
+
+include ./infrastructure/Makefile
