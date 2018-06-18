@@ -208,6 +208,7 @@
 <script>
 
 import CryptoJS from 'crypto-js'
+import Shake from 'shake.js'
 
 export default {
   components: {
@@ -321,6 +322,12 @@ export default {
     }
   },
   created () {
+    let myShakeEvent = new Shake({
+      threshold: 15,
+      timeout: 1000
+    })
+    myShakeEvent.start()
+    window.addEventListener('shake', () => { this.active = true }, false)
     if (!window.location.host.match(/(histovec.fr|.gouv.fr$)/)) {
       this.active = true
     }
