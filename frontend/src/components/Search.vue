@@ -1,7 +1,5 @@
 <template>
-
-
-  <div>
+  <div v-shortkey="['ctrl', 'alt', 'h']" @shortkey="active = true">
     <!-- breadcrumb start -->
     <div class="breadcrumb-container">
       <div class="container">
@@ -32,9 +30,31 @@
   </div>
 </section>
 <!-- section -->
-
+<section class="container" v-if="!active">
+  <div class="row justify-content-lg-center">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+      <div>
+        <h4>Vous souhaitez tester Histovec ?</h4>
+        <p> Le service Histovec est actuellement en <strong>test</strong>. L'ouverture de service grand public est prévue pour l'automne. </p>
+        <p> Actuellement, les tests sont conduits avec un <strong> panel restreint d'usagers </strong> (particuliers, concessionnaires, garages).
+            Le service sera élargi progressivement en fonction des retours.
+        </p>
+        <p> Pour faire partie du panel de testeurs, prenez contact avec l'équipe par mail: <strong> <a href="mailto:histovec@interieur.gouv.fr">histovec@interieur.gouv.fr</a> </strong></p>
+        <p> Professionnel, vous souhaitez disposer d'une <strong> api </strong> privilégiée pour un service à valeur ajoutée ? Un tel service est prévu dans une seconde phase du projet -
+            faites nous part de votre intérêt, également par mail.
+        </p>
+        <p>
+          Voici un exemple de rapport que permet de générer Histovec :
+        </p>
+      </div>
+      <div> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" width="889" height="2628"></div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</section>
     <!-- section -->
-    <section class="main-container">
+    <section class="main-container" v-if="active">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -194,6 +214,7 @@ export default {
   },
   data () {
     return {
+      active: false,
       type_personne: 'particulier',
       nom: '',
       raison_sociale: '',
@@ -300,6 +321,9 @@ export default {
     }
   },
   created () {
+    if (!window.location.host.match(/(histovec.fr|.gouv.fr$)/)) {
+      this.active = true
+    }
     this.type_personne = this.$route.params.t || 'particulier'
   }
 }
