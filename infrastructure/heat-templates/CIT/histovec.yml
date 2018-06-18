@@ -97,6 +97,12 @@ parameters:
     description: docker-compse.deb for installation
     default: default
 
+  histovec_image_repo:
+    type: string
+    description: images histovec for installation
+    default: default
+
+
 resources:
   front_router:
     type: OS::Neutron::Router
@@ -241,13 +247,36 @@ resources:
           volume_id: { get_resource: front_vol }
           delete_on_termination: false
       user_data_format: RAW
-      user_data:
+      user_data: { get_resource: postinstall_histovec }
+
+  postinstall_histovec:
+    type: "OS::Heat::MultipartMime"
+    properties:
+      parts:
+        - config: { get_resource: postinstall_docker }
+        - config: { get_resource: prep_deploy }
+
+  postinstall_docker:
+    type: "OS::Heat::SoftwareConfig"
+    properties:
+      group: ungrouped
+      config:
         str_replace:
           template: { get_file: param/front_postconf.sh }
           params:
             $artefact_url: { get_param: artefact_url }
             $docker_image: { get_param: docker_image }
             $docker_compose_image: { get_param: docker_compose_image }
+
+  prep_deploy:
+    type: "OS::Heat::SoftwareConfig"
+    properties:
+      group: ungrouped
+      config:
+        str_replace:
+          template: { get_file: param/deploy_front.sh }
+          params:
+            $histovec_image_repo: { get_param: histovec_image_repo }
 
   front_lien_floatingip:
     type: OS::Neutron::FloatingIPAssociation
@@ -282,3 +311,4 @@ resources:
             $artefact_url: { get_param: artefact_url }
             $docker_image: { get_param: docker_image }
             $docker_compose_image: { get_param: docker_compose_image }
+            $histovec_image_repo: { get_param: histovec_image_repo }
