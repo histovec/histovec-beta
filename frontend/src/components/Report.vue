@@ -789,7 +789,8 @@ export default {
         titulaire: {},
         certificat: {},
         administratif: {
-          synthese: []
+          synthese: [],
+          titre: {}
         }
       }
     }
