@@ -773,103 +773,12 @@ export default {
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         }
       },
-      plaque: 'A*-0**-F*',
-      vin: 'VF32M******44370',
+      plaque: '',
+      vin: '',
       result: 'wait',
       conf: [],
       v: {
         date_update: '11/06/2018',
-        nb_proprietaires: 3,
-        plaque: 'A*-0**-F*',
-        etranger: true,
-        sinistre: '2012',
-        apte: 'avril 2012',
-        ctec: {
-          marque: 'BMW',
-          tvv: 'MBM5752C9489',
-          modele: 'Série 3',
-          puissance: {
-            cylindres: '1995',
-            nette: '130',
-            cv: '',
-            norm: 'Q'
-          },
-          couleur: 'GRIS CLAIR',
-          energie: 'GO',
-          PT: {
-            admissible: '1950',
-            AC: '1950',
-            RA: '3625',
-            service: '1505',
-            AV: '1430'
-          },
-          places: {
-            assis: 5,
-            debout: ''
-          },
-          categorie: 'M1',
-          genre: 'VP',
-          carrosserie: {
-            ce: 'AA',
-            national: 'CI'
-          },
-          cnit: 'MBM5752C9489',
-          vin: 'VF32M******44370',
-          reception: {
-            numero: 'e1*2001/116*0308*08',
-            type: 'CE'
-          },
-          db: '73',
-          moteur: '3000',
-          co2: '128',
-          environnement: '70/220*2003/76EURO4'
-        },
-        controle: {
-          otc: {
-            resultat: 'Accepté',
-            date: '21/04/2016',
-            validite: '20/04/2018'
-          },
-          siv: {
-            resultat: 'Refusé',
-            date: '21/04/2016',
-            validite: '20/04/2018'
-          }
-        },
-        mentions: 'Aucun élément dans la liste.',
-        titulaire: {
-          nature: 'Titulaire',
-          identite: 'P******* 123***789',
-          adresse: '75000'
-        },
-        certificat: {
-          premier: '16/06/2008',
-          courant: '17/06/2016',
-          depuis: 9
-        },
-        administratif: {
-          synthese: false,
-          gages: 'Aucun gage',
-          oppositions: 'Aucune opposition',
-          suspensions: 'Aucune suspension',
-          procedures: 'Aucune procédure',
-          vol: 'non volé',
-          titre: {
-            vol: 'Aucune information',
-            perte: 'Aucune information',
-            duplicata: 'Aucun',
-            remise: 'Aucune information'
-          }
-        },
-        historique: [
-          {date: '17/06/2008', nature: 'Première immatriculation'},
-          {date: '21/01/2009', nature: 'Achat'},
-          {date: '23/10/2009', nature: 'Achat'},
-          {date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
-          {date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
-          {date: '01/02/2012', nature: 'Déclaration, expert no 000000-VE Véhicule techniquement réparable Procédure : Véhicule à réparations contrôlées (VRC)'},
-          {date: '03/03/2012', nature: '1er rapport, expert no 000000-VE Véhicule techniquement réparable'}
-        ]
       }
     }
   },
