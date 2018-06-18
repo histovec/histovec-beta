@@ -152,7 +152,7 @@
                     <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
                     <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
                           (gages, opposition, vol,...)</span> </div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Demander au Vendeur un Certificat de Situation Administratif détaillé</span></div>
+                    <div class="col-sm-5" v-if="false"><span class="color-info_2 bold_4 txt-small-13">Demandez au Vendeur un Certificat de Situation Administratif détaillé</span></div>
                     <!-- fin ras  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -722,7 +722,7 @@ export default {
         'ove': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Ce véhicule a eu un sinistre déclaré',
-          'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
+          'adv': 'Demandez le rapport d\'expert et la(es) facture(s)',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
