@@ -779,6 +779,10 @@ export default {
       conf: [],
       v: {
         date_update: '11/06/2018',
+        ctec: {},
+        titulaire: {},
+        certificat: {},
+        administratif: {}
       }
     }
   },
