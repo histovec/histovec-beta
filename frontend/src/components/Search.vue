@@ -49,7 +49,7 @@
             <div class="tab-content">
               <div class="tab-pane" id="h2tab1" :class="[{'in active' : type_personne === 'particulier'}]">
                 <div class="row">
-                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoire</span>
+                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
                     <form role="form">
                       <div class="row">
                         <div class="col-md-4">
