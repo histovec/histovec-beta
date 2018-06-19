@@ -886,8 +886,9 @@ export default {
         console.log(veh)
         if (veh.annulation_ci !== 'NON') {
           this.result = 'cancelled'
+          return
         } else {
-          this.result = 'ok'
+          this.result = 'error'
         }
         this.vin = veh.vin
         this.v.ctec.vin = veh.vin
@@ -954,6 +955,7 @@ export default {
         // ci-dessous : interprétation à confirmer
         this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
         this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.result = 'ok'
         console.log(this.v)
       }, (error) => {
         this.result = 'error'
