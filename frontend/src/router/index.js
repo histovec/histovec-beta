@@ -9,6 +9,7 @@ import Legal from '@/components/Legal'
 import Contact from '@/components/Contact'
 import Feedback from '@/components/Feedback'
 import Buyer from '@/components/Buyer'
+import NotFound from '@/components/NotFound'
 
 Vue.use(Router)
 
@@ -23,6 +24,7 @@ export default new Router({
     {name: 'legal', path: '/histovec/legal', component: Legal},
     {name: 'contact', path: '/histovec/contact', component: Contact},
     {name: 'feedback', path: '/histovec/feedback', component: Feedback},
-    {name: 'buyer', path: '/histovec/buyer', component: Buyer}
+    {name: 'buyer', path: '/histovec/buyer', component: Buyer},
+    {name: 'notfound', path: '/histovec/*', component: NotFound}
   ]
 })

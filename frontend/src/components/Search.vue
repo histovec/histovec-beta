@@ -1,7 +1,5 @@
 <template>
-
-
-  <div>
+  <div v-shortkey="['ctrl', 'alt', 'h']" @shortkey="active = true">
     <!-- breadcrumb start -->
     <div class="breadcrumb-container">
       <div class="container">
@@ -21,7 +19,7 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+              <h2 class="text-center mt-4"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
           </div>
@@ -32,11 +30,39 @@
   </div>
 </section>
 <!-- section -->
-
+<section class="container" v-if="!active">
+  <div class="row justify-content-lg-center">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+      <div>
+        <h4>Vous souhaitez tester Histovec ?</h4>
+        <p> Le service Histovec est actuellement en <strong>test</strong>. L'ouverture de service grand public est prévue pour l'automne. </p>
+        <p> Actuellement, les tests sont conduits avec un <strong> panel restreint d'usagers </strong> (particuliers, concessionnaires, garages).
+            Le service sera élargi progressivement en fonction des retours.
+        </p>
+        <p> Pour faire partie du panel de testeurs, prenez contact avec l'équipe par mail: <strong> <a href="mailto:histovec@interieur.gouv.fr">histovec@interieur.gouv.fr</a> </strong></p>
+        <p> Professionnel, vous souhaitez disposer d'une <strong> api </strong> privilégiée pour un service à valeur ajoutée ? Un tel service est prévu dans une seconde phase du projet -
+            faites nous part de votre intérêt, également par mail.
+        </p>
+        <p>
+          Voici un exemple de rapport que permet de générer Histovec :
+        </p>
+      </div>
+      <div> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" width="889" height="2628"></div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</section>
     <!-- section -->
-    <section class="main-container">
+    <section class="main-container" v-if="active">
       <div class="container">
         <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+              <div class="alert alert-info alert-icon text-center" role="alert"><i class="fa fa-exclamation-triangle"></i> Seuls les véhicules ayant une plaque au format <strong>AA-123-ZZ</strong> sont consultables pour l'instant </div>
+            </div>
+          </div>
           <div class="col-md-12">
             <!-- tabs start -->
             <!-- ================ -->
@@ -49,25 +75,25 @@
             <div class="tab-content">
               <div class="tab-pane" id="h2tab1" :class="[{'in active' : type_personne === 'particulier'}]">
                 <div class="row">
-                  <div class="col-md-12"> <span class="info_red txt-small-11">* Champs obligatoire</span>
+                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
                     <form role="form">
                       <div class="row">
                         <div class="col-md-4">
-                          <div class="form-group has-feedback">
+                          <div class="form-group has-feedback" :class="[{'has-error' : (nom === '' && status !== 'init')}]">
                             <label class="control-label">Nom de naissance <span class="info_red">*</span></label>
-                            <input type="text" class="form-control" v-model="nom">
+                            <input name="nom" @paste="onPaste" type="text" class="form-control" v-bind:value="nom" v-on:input="nom = $event.target.value.replace(/\t.*/,'')" tabindex="1">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="form-group has-feedback">
+                          <div class="form-group has-feedback" :class="[{'has-error' : (prenom === '' && status !== 'init')}]">
                             <label class="control-label">Prénom <span class="info_red">*</span></label>
-                            <input type="text" class="form-control" v-model="prenom">
+                            <input type="text" class="form-control" v-model="prenom" tabindex="2">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="form-group has-feedback">
+                          <div class="form-group has-feedback" :class="[{'has-error' : (date_naissance === '' && status !== 'init')}]">
                             <label class="control-label">Date de naissance <span class="info_red">*</span></label>
-                            <input type="email" class="form-control" placeholder="xx/xx/xxxx" v-model="date_naissance">
+                            <input type="text" class="form-control" placeholder="xx/xx/xxxx" v-model="date_naissance" tabindex="3">
                             <i class="fa fa-calendar form-control-feedback"></i> </div>
                         </div>
                       </div>
@@ -77,15 +103,15 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group has-feedback">
+                            <div class="form-group has-feedback" :class="[{'has-error' : (plaque === '' && status !== 'init')}]">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red">*</span></label>
-                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque">
+                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque" tabindex="4">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
-                            <div class="form-group has-feedback plan position_left">
-                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" class="form-control" placeholder="A123B456">
+                            <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkFormule) && status !== 'init')}]">
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#formuleModal" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -99,12 +125,13 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-xs-offset-5 col-sm-7">
-                        <router-link
+                        <button @click="onSubmit"
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'report', params: {id: id, key: key, code: code}}"
                         >
-                          <i class="fa fa-search"></i>Rechercher
-                        </router-link>
+                          <i class="fa" :class="[{'fa-search' : (status === 'init')},
+                                    {'fa-spin fa-spinner' : (status === 'posting')},
+                                    {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
+                        </button>
                         <!--
                         <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
                       </div>
@@ -113,19 +140,19 @@
               </div>
               <div class="tab-pane" id="h2tab2" :class="[{'in active' : type_personne === 'pro'}]">
                 <div class="row">
-                  <div class="col-md-12"> <span class="info_red txt-small-11">* Champs obligatoire</span>
+                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="status == 'failed'">* Veuillez renseignez les champs obligatoire</span>
                     <form role="form">
                       <div class="row">
                         <div class="col-md-6">
-                          <div class="form-group has-feedback">
-                            <label class="control-label">Nom <span class="info_red">*</span></label>
-                            <input type="text" class="form-control" v-model="raison_sociale">
+                          <div class="form-group has-feedback" :class="[{'has-error' : (raison_sociale === '' && status !== 'init')}]">
+                            <label class="control-label">Raison sociale <span class="info_red">*</span></label>
+                            <input  name="raison_sociale" @paste="onPaste" type="text" class="form-control" v-bind:value="raison_sociale" v-on:input="raison_sociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
                             <i class="fa fa-user form-control-feedback"></i> </div>
                         </div>
                         <div class="col-md-6">
-                          <div class="form-group has-feedback">
+                          <div class="form-group has-feedback" :class="[{'has-error' : (siren === '' && status !== 'init')}]">
                             <label class="control-label">N° SIREN <span class="info_red">*</span></label>
-                            <input type="email" class="form-control"  v-model="siren">
+                            <input type="email" class="form-control"  v-model="siren" tabindex="2">
                             <i class="fa fa-building-o form-control-feedback"></i> </div>
                         </div>
                       </div>
@@ -135,15 +162,15 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group has-feedback">
+                            <div class="form-group has-feedback" :class="[{'has-error' : (plaque === '' && status !== 'init')}]">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red">*</span></label>
-                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA"  v-model="plaque">
+                              <input type="text" class="form-control" id="input" placeholder="AA-555-AA" v-model="plaque" tabindex="3">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
-                            <div class="form-group has-feedback plan position_left">
+                            <div class="form-group has-feedback plan position_left" :class="[{'has-error' : (formule === '' && status !== 'init')}]">
                               <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" class="form-control" placeholder="A123B456">
+                              <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4" v-if="false">
@@ -157,13 +184,13 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-xs-offset-5 col-sm-7">
-                        <router-link
+                        <button @click="onSubmit"
                                 class="btn btn-animated btn-default btn-sm"
-                                :to="{ name: 'report', query: {id: id, key: key, code: code}}"
                         >
-                          <i class="fa fa-search"></i>Rechercher
-                        </router-link>
-                        <!--
+                          <i class="fa" :class="[{'fa-search' : (status === 'init')},
+                                    {'fa-spin fa-spinner' : (status === 'posting')},
+                                    {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
+                        </button>                        <!--
                         <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
                     </div>
                   </div>
@@ -176,20 +203,6 @@
         </div>
       </div>
     </section>
-    <!-- debut modal -->
-    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
-            <h4 class="modal-title" id="myLargeModalLabel">Information n° de formule</h4>
-          </div>
-          <div class="modal-body"> <img src="assets/images/n-formule.svg" width="250" height="190"></div>
-          <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
-        </div>
-      </div>
-    </div>
-    <!-- fin modal -->
     <!-- section end -->
     <div class="container">
       <div class="row"> </div>
@@ -201,12 +214,14 @@
 <script>
 
 import CryptoJS from 'crypto-js'
+import Shake from 'shake.js'
 
 export default {
   components: {
   },
   data () {
     return {
+      active: false,
       type_personne: 'particulier',
       nom: '',
       raison_sociale: '',
@@ -215,12 +230,22 @@ export default {
       plaque: '',
       siren: '',
       formule: '',
-      date_prem_immat: '',
-      vin: '',
-      conf: []
+      status: 'init'
     }
   },
   computed: {
+    checkFormule () {
+      return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
+    },
+    checkFields () {
+      return ((this.nom && this.prenom && this.date_naissance) || (this.raison_sociale && this.siren)) && this.plaque && this.checkFormule
+    },
+    currentMonthNumber () {
+      var date = new Date()
+      date = date.getFullYear() + '' + this.pad(date.getMonth() + 1, 2)
+      console.log(date)
+      return date
+    },
     currentWeekNumber () {
       var instance = new Date()
 
@@ -256,23 +281,63 @@ export default {
       return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
     },
     code () {
-      return this.hash(this.plaque + this.formule + this.currentWeekNumber)
+      return this.hash(this.plaque + this.formule + this.currentMonthNumber)
     },
     key () {
       return this.hash(this.plaque + this.formule)
     }
   },
   methods: {
+    onPaste (evt) {
+      let data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
+      if (data.length > 1) {
+        if (evt.target.name === 'nom') {
+          this.nom = data[0]
+          this.prenom = data[1]
+          this.date_naissance = data[2]
+          this.plaque = data[3]
+          this.formule = data[4]
+        }
+        if (evt.target.name === 'raison_sociale') {
+          this.raison_sociale = data[0]
+          this.siren = data[1]
+          this.plaque = data[2]
+          this.formule = data[3]
+        }
+      }
+    },
+    pad (n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    },
     hash (string) {
       var hash = string
       hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
       hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
       hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
       return hash
+    },
+    onSubmit () {
+      this.status = 'posting'
+      if (this.checkFields) {
+        this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
+      } else {
+        this.status = 'failed'
+      }
     }
   },
   created () {
-    this.type_personne = this.$route.query.t
+    let myShakeEvent = new Shake({
+      threshold: 15,
+      timeout: 1000
+    })
+    myShakeEvent.start()
+    window.addEventListener('shake', () => { this.active = true }, false)
+    if (!window.location.host.match(/(histovec.fr|.gouv.fr$)/)) {
+      this.active = true
+    }
+    this.type_personne = this.$route.params.t || 'particulier'
   }
 }
 </script>

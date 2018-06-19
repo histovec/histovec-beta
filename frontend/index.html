@@ -16,7 +16,7 @@
 <!-- fin web fonts -->
 <!-- debut feuilles de style -->
 <link href="assets/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
-<link href="assets/Font-Awesome-master/css/font-awesome.min.css" rel="stylesheet">
+<!-- <link href="assets/Font-Awesome-master/css/font-awesome.min.css" rel="stylesheet"> -->
 <link href="assets/css/settings.css" rel="stylesheet">
 <link href="assets/css/_style.css" rel="stylesheet" >
 <link href="assets/css/bleu_vert.css" rel="stylesheet">
@@ -27,91 +27,39 @@
 <div class="scrollToTop circle"><i class="fa fa-angle-up"></i></div>
 <!-- page wrapper start -->
 <div class="page-wrapper">
-  <!-- debut entete -->
-  <div class="header-container">
-    <header class="header">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="header-left clearfix">
-              <!-- debut bandeau -->
-              <div class="logo"><a href="home"><img src="assets/images/histovec-header-mobile.png" class="img-responsive" width="548" height="98"> </a></div>
-              <!-- fin bandeau -->
-            </div>
-          </div>
-          <!-- debut beta -->
-          <div id="no-boot" class="col-xs-1"> <img src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
-          <!-- debut beta -->
-        </div>
-      </div>
-    </header>
-  </div>
-  <!-- fin entete -->
-  <div class="container">
-    <div class="row">
-      <div id="root"></div>
-    </div>
-  </div>
+  <div id="root"></div>
   <!-- section end -->
-  <!-- footer start -->
-  <footer id="footer" class="clearfix dark">
-    <!-- .footer start -->
-    <div class="footer">
-      <div class="container">
-        <div class="footer-inner">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="footer-content">
-                <h4 class="title">Liens utiles</h4>
-                <div class="separator-2"></div>
-                <!-- debut -->
-                <div class="media margin-clear">
-                  <nav>
-                    <ul class="nav nav-pills nav-stacked">
-                      <li><a href="faq">FAQ</a></li>
-                      <li><a href="contact">Contact</a></li>
-                      <li><a href="feedback">Signaler une erreur</a></li>
-                    </ul>
-                  </nav>
-                </div>
-                <!-- fin -->
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="footer-content">
-                <h4 class="title">Un service proposé par</h4>
-                <div class="separator-2"></div>
-                <div class="row grid-space-12">
-                  <div class="col-md-2 p-b-10">
-                    <div class="overlay-container"> <img class="img-responsive" src="assets/images/logos_metiers/logo_mi.png" alt="Ministère de l'Intérieur"> <a href="https://www.interieur.gouv.fr/" target="_blank" class="overlay-link small"></a> </div>
-                  </div>
-                  <div class="col-md-6 p-b-10">
-                    <div class="overlay-container"><img class="img-responsive" src="assets/images/logos_metiers/securite_routiere_120.png" alt="Délégation à la sécurité routière"> <a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites" target="_blank" class="overlay-link small"></a></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- .footer end -->
-    <!-- .subfooter start -->
-    <div class="subfooter">
-      <div class="container">
-        <div class="subfooter-inner">
-          <div class="row">
-            <div class="col-md-12">
-              <p class="text-center">Copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- .subfooter end -->
-  </footer>
-  <!-- footer end -->
 </div>
+
+<!-- debut modal -->
+<div class="modal fade bs-example-modal-lg" id="myLargeModalLabel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+        <h4 class="modal-title">Exemple de rapport</h4>
+      </div>
+      <div class="modal-body"> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" width="889" height="2628"> </div>
+      <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
+    </div>
+  </div>
+</div>
+<!-- fin modal -->
+<!-- debut modal -->
+<div class="modal fade bs-example-modal-sm" id="formuleModal" tabindex="-1" role="dialog" aria-labelledby="formuleModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+        <h4 class="modal-title">Information n° de formule</h4>
+      </div>
+      <div class="modal-body"> <img src="assets/images/n-formule.svg" width="250" height="190"></div>
+      <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" data-dismiss="modal">Fermer <i class="fa fa-close"></i></a> </div>
+    </div>
+  </div>
+</div>
+<!-- fin modal -->
+
 <!-- page-wrapper end -->
 <!-- debut jQuery -->
 <script type="text/javascript" src="assets/js/jquery.js"></script>

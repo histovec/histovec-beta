@@ -11,7 +11,7 @@ server {
     return 302 $scheme://$http_host/<APP>/;
   }
 
-  location ~ (__webpack_hmr|app.js) {
+  location ~ (__webpack_hmr|app.js|^/static) {
   	proxy_pass http://frontend-dev:8080;
   }
 
@@ -27,7 +27,7 @@ server {
     if ($request_method != GET) {
        return 403;
     }
-    rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1 break;
+    rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1 break;
     proxy_pass http://<ES_HOST>:9200;
     proxy_redirect off;
     proxy_hide_header Content-Type;
@@ -38,12 +38,16 @@ server {
     proxy_http_version 1.1;
   }
 
+  location ~ ^/<APP>/api/v0/id/.* {
+    return 404;
+  }
+
   location ~ (^/<APP>/api/v0/(contact|feedback)/) {
     if ($request_method != POST) {
        return 403;
     }
     rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
-    proxy_pass http://elasticsearch:9200;
+    proxy_pass http://<ES_HOST>:9200;
     proxy_redirect off;
     proxy_hide_header Content-Type;
     proxy_set_header content-type "application/json";

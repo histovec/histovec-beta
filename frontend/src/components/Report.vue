@@ -19,7 +19,10 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occassion</span></h2>
+              <h2 class="text-center mt-4">
+                <div v-if="$route.params.code !== undefined"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</div>
+                <div v-else><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+              </h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
           </div>
@@ -38,7 +41,7 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i class="fa fa-car"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.affichage_logo " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
           <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
@@ -55,7 +58,7 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#vtab1" role="tab" data-toggle="tab"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li><a href="#vtab2" role="tab" data-toggle="tab"><i class="fa fa-car pr-10"></i>Véhicule</a></li>
+            <li><a href="#vtab2" role="tab" data-toggle="tab"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
             <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
@@ -71,14 +74,14 @@
                     <h6 class="title p-h-35">Résumé</h6>
                     <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
-                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Remarques </div>
+                  <div class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Informations Utiles</div>
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
-                  <div class="col-sm-1"><i class="fa fa-car fa-2x"></i></div>
+                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-                    <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span> </div>
-                    <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
+                  <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
                     <!-- fin voiture  -->
                 </div>
                   <!-- debut trait separation  -->
@@ -149,7 +152,7 @@
                     <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
                     <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
                           (gages, opposition, vol,...)</span> </div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Demander au Vendeur un Certificat de Situation Administratif détaillé</span></div>
+                    <div class="col-sm-5" v-if="false"><span class="color-info_2 bold_4 txt-small-13">Demandez au Vendeur un Certificat de Situation Administratif détaillé</span></div>
                     <!-- fin ras  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -228,164 +231,212 @@
                 <td colspan="3">&nbsp;</td>
               </div>
               <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">PT technique admissible (kg)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">F.1</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.admissible }}</span></div>
+              <div v-if="v.ctec.PT.admissible">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">PT technique admissible (kg)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">F.1</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.admissible }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">PTAC (kg)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">F.2</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.AC }}</span></div>
+              <div v-if="v.ctec.PT.AC">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">PTAC (kg)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">F.2</span></div>
+                  <div class="col-sm-4" v-if><span class="info_red txt-small-12">{{ v.ctec.PT.AC }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">PTRA (kg)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">F.3</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.RA }}</span></div>
+              <div v-if="v.ctec.PT.RA">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">PTRA (kg)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">F.3</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.RA }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <td colspan="3">&nbsp;</td>
+              <div v-if="v.ctec.PT.admissible || v.ctec.PT.admissible || v.ctec.PT.AC || v.ctec.PT.RA">
+                <div class="row">
+                  <td colspan="3">&nbsp;</td>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">PT en service (kg)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">G</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.service }}</span></div>
+              <div v-if="v.ctec.PT.service">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">PT en service (kg)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">G</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.service }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">PTAV (kg)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">G.1</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.AV }}</span></div>
+              <div v-if="v.ctec.PT.AV">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">PTAV (kg)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">G.1</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.PT.AV }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <td colspan="3">&nbsp;</td>
+              <div v-if="v.ctec.PT.service || v.ctec.PT.AV">
+                <div class="row">
+                  <td colspan="3">&nbsp;</td>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Catégorie (Ce)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">J</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.categorie }}</span></div>
+              <div v-if="v.ctec.categorie">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Catégorie (Ce)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">J</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.categorie }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Genre (National)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">J.1</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.genre }}</span></div>
+              <div v-if="v.ctec.genre">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Genre (National)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">J.1</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.genre }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Carrosserie (Ce)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">J.2</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.carrosserie.ce }}</span></div>
+              <div v-if="v.ctec.carrosserie.ce">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Carrosserie (Ce)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">J.2</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.carrosserie.ce }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Carrosserie (National)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">J.3</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.carrosserie.national }}</span></div>
+              <div v-if="v.ctec.carrosserie.national">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Carrosserie (National)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">J.3</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.carrosserie.national }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <td colspan="3">&nbsp;</td>
-              </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Numéro de réception</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">K</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.reception.numero }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <div class="row">
-                <td colspan="3">&nbsp;</td>
-              </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Cylindrée (cm3)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">P.1</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.cylindres }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Puissance nette max (kW)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">P.2</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.nette }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Energie</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">P.3</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.energie }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Puissance CV</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">P.6</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.cv }}</span></div>
-              </div>
-              <div class="separator"></div>
               <div class="row">
                 <td colspan="3">&nbsp;</td>
               </div>
               <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Puissance / masse (kW/kg)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">Q</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.norm }}</span></div>
+              <div v-if="v.ctec.reception.numero">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Numéro de réception</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">K</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.reception.numero }}</span></div>
+                </div>
+                <div class="separator"></div>
+                <div class="row">
+                  <td colspan="3">&nbsp;</td>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
+              <div v-if="v.ctec.puissance.cylindres">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Cylindrée (cm3)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">P.1</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.cylindres }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
+              <div v-if="v.ctec.puissance.nette">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Puissance nette max (kW)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">P.2</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.nette }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
+              <div v-if="v.ctec.energie">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Energie</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">P.3</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.energie }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
+              <div v-if="v.ctec.puissance.cv">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Puissance CV</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">P.6</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.cv }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
               <div class="row">
                 <td colspan="3">&nbsp;</td>
               </div>
               <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Places assises</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">S.1</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.assis }}</span></div>
+              <div v-if="v.ctec.puissance.norm">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Puissance / masse (kW/kg)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">Q</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.puissance.norm }}</span></div>
+                </div>
+                <div class="separator"></div>
+                <div class="row">
+                  <td colspan="3">&nbsp;</td>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Places debout</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">S.3</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.debout }}</span></div>
+              <div v-if="v.ctec.places.assis">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Places assises</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">S.1</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.assis }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
+              <div v-if="v.ctec.places.debout">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Places debout</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">S.3</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.places.debout }}</span></div>
+                </div>
+                <div class="separator"></div>
+              </div>
               <div class="row">
                 <td colspan="3">&nbsp;</td>
               </div>
               <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Niveau sonore (db(A))</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">U.1</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.db }}</span></div>
+              <div v-if="v.ctec.db">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Niveau sonore (db(A))</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">U.1</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.db }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Vitesse moteur (min-1)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">U.2</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.moteur }}</span></div>
+              <div v-if="v.ctec.moteur">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Vitesse moteur (min-1)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">U.2</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.moteur }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <td colspan="3">&nbsp;</td>
+              <div v-if="v.ctec.db || v.ctec.moteur">
+                <div class="row">
+                  <td colspan="3">&nbsp;</td>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">CO2 (g/km)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">V.7</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.co2 }}</span></div>
+              <div v-if="v.ctec.co2">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">CO2 (g/km)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">V.7</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.co2 }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
-              <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Classe environnement (CE)</span></div>
-                <div class="col-sm-2"><span class="bold txt-small-12">V.9</span></div>
-                <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.environnement }}</span></div>
+              <div v-if="v.ctec.environnement">
+                <div class="row">
+                  <div class="col-sm-6"><span class="txt-small-12">Classe environnement (CE)</span></div>
+                  <div class="col-sm-2"><span class="bold txt-small-12">V.9</span></div>
+                  <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.environnement }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
               <!-- fin tableau v.-->
               <!-- debut tableau controle technique -->
               <!-- <table class="table table-striped table-responsive" v-if="beta">
@@ -605,9 +656,7 @@
     </div>
   </div>
 
-
-
-  <div class="container" v-if="this.result === 'ko'">
+  <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
@@ -616,6 +665,38 @@
   </div>
 
   <div class="container" v-if="this.result === 'invalid'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'unavailable'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'tooManyRequests'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'error'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Erreur inconnue. Si l'erreur persiste, merci de remplir le formulaire <a href="feedback">Signaler une erreur</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'cancelled'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé</div>
@@ -636,11 +717,12 @@ export default {
   },
   data () {
     return {
+      default: 'non disponible',
       synthese: {
         'ove': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Ce véhicule a eu un sinistre déclaré',
-          'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
+          'adv': 'Demandez le rapport d\'expert et la(es) facture(s)',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
@@ -691,103 +773,25 @@ export default {
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         }
       },
-      plaque: 'A*-0**-F*',
-      vin: 'VF32M******44370',
+      plaque: '',
+      vin: '',
       result: 'wait',
       conf: [],
       v: {
-        date_update: '10/05/2018',
-        nb_proprietaires: 3,
-        plaque: 'A*-0**-F*',
-        etranger: true,
-        sinistre: '2012',
-        apte: 'avril 2012',
+        date_update: '11/06/2018',
         ctec: {
-          marque: 'BMW',
-          tvv: 'MBM5752C9489',
-          modele: 'Série 3',
-          puissance: {
-            cylindres: '1995',
-            nette: '130',
-            cv: '',
-            norm: 'Q'
-          },
-          couleur: 'GRIS CLAIR',
-          energie: 'GO',
-          PT: {
-            admissible: '1950',
-            AC: '1950',
-            RA: '3625',
-            service: '1505',
-            AV: '1430'
-          },
-          places: {
-            assis: 5,
-            debout: ''
-          },
-          categorie: 'M1',
-          genre: 'VP',
-          carrosserie: {
-            ce: 'AA',
-            national: 'CI'
-          },
-          cnit: 'MBM5752C9489',
-          vin: 'VF32M******44370',
-          reception: {
-            numero: 'e1*2001/116*0308*08',
-            type: 'CE'
-          },
-          db: '73',
-          moteur: '3000',
-          co2: '128',
-          environnement: '70/220*2003/76EURO4'
+          reception: {},
+          puissance: {},
+          places: {},
+          carrosserie: {},
+          PT: {}
         },
-        controle: {
-          otc: {
-            resultat: 'Accepté',
-            date: '21/04/2016',
-            validite: '20/04/2018'
-          },
-          siv: {
-            resultat: 'Refusé',
-            date: '21/04/2016',
-            validite: '20/04/2018'
-          }
-        },
-        mentions: 'Aucun élément dans la liste.',
-        titulaire: {
-          nature: 'Titulaire',
-          identite: 'P******* 123***789',
-          adresse: '75000'
-        },
-        certificat: {
-          premier: '16/06/2008',
-          courant: '17/06/2016',
-          depuis: 9
-        },
+        titulaire: {},
+        certificat: {},
         administratif: {
-          synthese: false,
-          gages: 'Aucun gage',
-          oppositions: 'Aucune opposition',
-          suspensions: 'Aucune suspension',
-          procedures: 'Aucune procédure',
-          vol: 'non volé',
-          titre: {
-            vol: 'Aucune information',
-            perte: 'Aucune information',
-            duplicata: 'Aucun',
-            remise: 'Aucune information'
-          }
-        },
-        historique: [
-          {date: '17/06/2008', nature: 'Première immatriculation'},
-          {date: '21/01/2009', nature: 'Achat'},
-          {date: '23/10/2009', nature: 'Achat'},
-          {date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
-          {date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
-          {date: '01/02/2012', nature: 'Déclaration, expert no 000000-VE Véhicule techniquement réparable Procédure : Véhicule à réparations contrôlées (VRC)'},
-          {date: '03/03/2012', nature: '1er rapport, expert no 000000-VE Véhicule techniquement réparable'}
-        ]
+          synthese: [],
+          titre: {}
+        }
       }
     }
   },
@@ -821,6 +825,11 @@ export default {
         })
       return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8))
     },
+    pad (n, width, z) {
+      z = z || '0'
+      n = n + ''
+      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    },
     formatDate (isoDate) {
       let date = new Date(isoDate)
       let mm = date.getMonth() + 1 // getMonth() is zero-based
@@ -843,16 +852,24 @@ export default {
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
     },
-    calcCertifDepuis (dateEmissionCi) {
-      var dateEmission = dateEmissionCi.split('/')
-      let today = new Date()
-      let nbMonth = ((today.getFullYear() - dateEmission[2]) * 12) + (today.getMonth() + 1 - dateEmission[1])
+    calcCertifDepuis (nbMonth) {
       if (nbMonth <= 12) {
         return nbMonth + ' mois'
       } else {
-        let year = today.getFullYear() - dateEmission[2]
+        let year = Math.ceil(nbMonth / 12)
         return (year > 1) ? year + ' ans' : year + ' an'
       }
+    },
+    getLogoVehicule (genre) {
+      let moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
+      let truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
+      let type = 'car'
+      if (moto.includes(genre)) {
+        type = 'motorcycle'
+      } else if (truck.includes(genre)) {
+        type = 'truck'
+      }
+      return type
     }
   },
   created () {
@@ -860,13 +877,19 @@ export default {
       .then(response => {
         console.log(response)
         if (response.body.hits.hits.length === 0) {
-          this.result = 'ko'
+          this.result = 'notFound'
           return
         }
         var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
         var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
         var veh = this.decrypt(key, encrypted)
         console.log(veh)
+        if (veh.annulation_ci !== 'NON') {
+          this.result = 'cancelled'
+          return
+        } else {
+          this.result = 'error'
+        }
         this.vin = veh.vin
         this.v.ctec.vin = veh.vin
         this.plaque = veh.plaq_immat
@@ -900,43 +923,51 @@ export default {
         this.v.ctec.PT.AV = veh.ptav_g1
 
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-        this.v.titulaire.adresse = veh.adr_code_postal_tit
-        this.v.certificat.premier = veh.date_premiere_immat
-        this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
-        this.v.certificat.siv = veh.date_premiere_immat_siv
-        this.v.certificat.courant = veh.date_emission_CI
-        this.v.certificat.depuis = this.calcCertifDepuis(veh.date_emission_CI)
+        this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
+        this.v.certificat.premier = veh.date_premiere_immat || this.default
+        this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
+        this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
+        this.v.certificat.courant = veh.date_emission_CI || this.default
+        this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
-        this.v.historique = this.histoFilter(veh.historique)
+        this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
         this.v.nb_proprietaires = veh.nb_proprietaire
-        this.v.nb_tit = this.calcNbTit(veh.historique)
+        this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
         this.v.age_veh = veh.age_annee
+        this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
 
-        this.v.administratif.gages = veh.gage
+        this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
         // opposition et procédure à valider
         this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
         // pour l'instant aucun véhicule saisi dans les échantillons
         this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
-        this.v.administratif.vol = veh.vehicule_vole
+        this.v.administratif.vol = veh.vehicule_vole || this.default
 
         // vol : les informations viennent-elles de foves ?
-        this.v.administratif.titre.vol = veh.ci_vole
-        this.v.administratif.titre.perte = veh.perte_ci
+        this.v.administratif.titre.vol = veh.ci_vole || this.default
+        this.v.administratif.titre.perte = veh.perte_ci || this.default
         this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
         this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
         this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
-        this.v.sinistre = veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false
-        this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false
-        if (veh.annulation_ci !== 'NON') {
-          this.result = 'invalid'
-        } else {
-          this.result = 'ok'
-        }
+        this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.result = 'ok'
         console.log(this.v)
+      }, (error) => {
+        this.result = 'error'
+        if (error.status === 404) {
+          this.result = 'invalid'
+        }
+        if (error.status === 429) {
+          this.result = 'tooManyRequests'
+        }
+        if (error.status === 502) {
+          this.result = 'unavailable'
+        }
       }
     )
     if (this.$route.query.id === 'test') {
