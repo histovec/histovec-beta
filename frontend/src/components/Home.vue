@@ -89,7 +89,7 @@
                     <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
                   </div>
                   <div class="col-sm-4">
-                    <p class="mt-10"><a href="#myLargeModalLabel" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir<i class="fa fa-file-text-o pl-20"></i></a></p>
+                    <p class="mt-10"><a href="#myLargeModalLabel" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir un exemple<i class="fa fa-file-text-o pl-20"></i></a></p>
                   </div>
                 </div>
               </div>
