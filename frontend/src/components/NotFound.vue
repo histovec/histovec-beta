@@ -15,11 +15,13 @@
     <div class="container">
       <div class="row">
         <!-- section start -->
-        <section class="dark-translucent-bg fixed-bg pv-40" style="background-image:url(assets/images/acheteur_3.jpg);">
+        <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.png);">
           <div class="container">
             <div class="row justify-content-lg-center">
               <div class="col-lg-12">
-                <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></h2>
+                <h2 class="text-center mt-4">
+                  <div><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+                </h2>
                 <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
               </div>
             </div>
