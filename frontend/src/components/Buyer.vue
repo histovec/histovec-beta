@@ -10,29 +10,21 @@
             </div>
         </div>
         <!-- breadcrumb end -->
-        <!-- section -->
-        <section class="main-container">
-            <div class="container">
-                <div class="row">
-                    <!-- section start -->
-                    <section class="dark-translucent-bg fixed-bg pv-40" style="background-image:url(assets/images/acheteur_3.jpg);">
-                        <div class="container">
-                            <div class="row justify-content-lg-center">
-                                <div class="col-lg-12">
-                                    <h2 class="text-center mt-4"><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></h2>
-                                    <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <!-- section end -->
-                    <!-- debut image fixe
-                    <div class="col-md-12"> <img src="assets/images/corporate-1-slider-slide-2.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"></div>
-              <!-- fin image fixe -->
-                </div>
+        <!-- section start -->
+        <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.png);">
+          <div class="container">
+            <div class="row justify-content-lg-center">
+              <div class="col-lg-12">
+                <h2 class="text-center mt-4">
+                  <div><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+                </h2>
+                <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+              </div>
             </div>
+          </div>
         </section>
-        <!-- section -->
+        <!-- section end -->
+
         <!-- main-container start -->
         <section class="main-container">
             <div class="container">
