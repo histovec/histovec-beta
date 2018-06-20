@@ -89,7 +89,7 @@
                     <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
                   </div>
                   <div class="col-sm-4">
-                    <p class="mt-10"><a href="#myLargeModalLabel" class="btn btn-animated btn-lg btn-gray" data-toggle="modal" data-target=".bs-example-modal-lg">Voir un exemple<i class="fa fa-file-text-o pl-20"></i></a></p>
+                    <p class="mt-10"><button @click="modal = true" class="btn btn-animated btn-lg btn-gray">Voir un exemple<i class="fa fa-file-text-o pl-20"></i></button></p>
                   </div>
                 </div>
               </div>
@@ -181,5 +181,37 @@
         </div>
       </section>
       <!-- section end --><!-- #BeginLibraryItem "/Library/footer.lbi" --><!-- footer start -->
+      <!-- debut modal -->
+      <div v-if="modal">
+        <transition name="modal">
+          <div class="modal-mask">
+            <div class="modal-wrapper">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" @click="modal = false"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+                    <h6 class="modal-title">Exemple de rapport</h6>
+                  </div>
+                  <div class="modal-body" style="height: 350px; overflow-y: auto;"> <img src="assets/images/exemple_rapport_g.png" class="img-responsive" style="margin: 0 auto;"> </div>
+                  <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" @click="modal = false">Fermer <i class="fa fa-close"></i></a> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
+      <!-- fin modal -->
     </main>
 </template>
+
+<script>
+export default {
+  components: {
+  },
+  data () {
+    return {
+      modal: false
+    }
+  }
+}
+</script>
