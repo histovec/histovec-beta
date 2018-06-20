@@ -28,7 +28,7 @@ html {
 body {
   font-size: 15px;
   line-height: 1.4666666667;
-  color: #777777;
+  color:#555; /* #777777; */
   background-color: #ffffff;
   font-weight: 300;
 }
@@ -3758,7 +3758,7 @@ input[type="radio"], input[type="checkbox"] {
 	background-color:#fafafa;
 }
 .shadow:after, .shadow-narrow:after {
-	content:"";
+	/* content:""; */
 	position:absolute;
 	height:50%;
 	width:96%;

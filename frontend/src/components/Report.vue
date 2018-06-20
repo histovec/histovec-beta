@@ -74,14 +74,14 @@
                     <h6 class="title p-h-35">Résumé</h6>
                     <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
-                  <div class="col-md-4 alert alert-icon alert-info" role="alert"> <i class="fa fa-user-circle-o blink_me"></i>Remarques </div>
+                  <div class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs" role="alert"> <i class="fa fa-info-circle blink_me"></i>Informations utiles</div>
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
                   <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                   <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
-                    <div class="col-sm-5"><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
                     <!-- fin voiture  -->
                 </div>
                   <!-- debut trait separation  -->
@@ -152,7 +152,7 @@
                     <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
                     <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
                           (gages, opposition, vol,...)</span> </div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Demander au Vendeur un Certificat de Situation Administratif détaillé</span></div>
+                    <div class="col-sm-5" v-if="false"><span class="color-info_2 bold_4 txt-small-13">Demandez au Vendeur un Certificat de Situation Administratif détaillé</span></div>
                     <!-- fin ras  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -656,9 +656,7 @@
     </div>
   </div>
 
-
-
-  <div class="container" v-if="this.result === 'ko'">
+  <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
@@ -666,7 +664,7 @@
     </div>
   </div>
 
-  <div class="container" v-if="this.result === 'error'">
+  <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau</div>
@@ -674,7 +672,31 @@
     </div>
   </div>
 
-  <div class="container" v-if="this.result === 'invalid'">
+  <div class="container" v-if="this.result === 'unavailable'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'tooManyRequests'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'error'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Erreur inconnue. Si l'erreur persiste, merci de remplir le formulaire <a href="feedback">Signaler une erreur</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" v-if="this.result === 'cancelled'">
     <div class="row">
       <div class="col-lg-12">
         <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé</div>
@@ -700,7 +722,7 @@ export default {
         'ove': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Ce véhicule a eu un sinistre déclaré',
-          'adv': 'Demander le rapport d\'expert et la(es) facture(s)',
+          'adv': 'Demandez le rapport d\'expert et la(es) facture(s)',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
@@ -751,103 +773,25 @@ export default {
           'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
         }
       },
-      plaque: 'A*-0**-F*',
-      vin: 'VF32M******44370',
+      plaque: '',
+      vin: '',
       result: 'wait',
       conf: [],
       v: {
-        date_update: '10/05/2018',
-        nb_proprietaires: 3,
-        plaque: 'A*-0**-F*',
-        etranger: true,
-        sinistre: '2012',
-        apte: 'avril 2012',
+        date_update: '11/06/2018',
         ctec: {
-          marque: 'BMW',
-          tvv: 'MBM5752C9489',
-          modele: 'Série 3',
-          puissance: {
-            cylindres: '1995',
-            nette: '130',
-            cv: '',
-            norm: 'Q'
-          },
-          couleur: 'GRIS CLAIR',
-          energie: 'GO',
-          PT: {
-            admissible: '1950',
-            AC: '1950',
-            RA: '3625',
-            service: '1505',
-            AV: '1430'
-          },
-          places: {
-            assis: 5,
-            debout: ''
-          },
-          categorie: 'M1',
-          genre: 'VP',
-          carrosserie: {
-            ce: 'AA',
-            national: 'CI'
-          },
-          cnit: 'MBM5752C9489',
-          vin: 'VF32M******44370',
-          reception: {
-            numero: 'e1*2001/116*0308*08',
-            type: 'CE'
-          },
-          db: '73',
-          moteur: '3000',
-          co2: '128',
-          environnement: '70/220*2003/76EURO4'
+          reception: {},
+          puissance: {},
+          places: {},
+          carrosserie: {},
+          PT: {}
         },
-        controle: {
-          otc: {
-            resultat: 'Accepté',
-            date: '21/04/2016',
-            validite: '20/04/2018'
-          },
-          siv: {
-            resultat: 'Refusé',
-            date: '21/04/2016',
-            validite: '20/04/2018'
-          }
-        },
-        mentions: 'Aucun élément dans la liste.',
-        titulaire: {
-          nature: 'Titulaire',
-          identite: 'P******* 123***789',
-          adresse: '75000'
-        },
-        certificat: {
-          premier: '16/06/2008',
-          courant: '17/06/2016',
-          depuis: 9
-        },
+        titulaire: {},
+        certificat: {},
         administratif: {
-          synthese: false,
-          gages: 'Aucun gage',
-          oppositions: 'Aucune opposition',
-          suspensions: 'Aucune suspension',
-          procedures: 'Aucune procédure',
-          vol: 'non volé',
-          titre: {
-            vol: 'Aucune information',
-            perte: 'Aucune information',
-            duplicata: 'Aucun',
-            remise: 'Aucune information'
-          }
-        },
-        historique: [
-          {date: '17/06/2008', nature: 'Première immatriculation'},
-          {date: '21/01/2009', nature: 'Achat'},
-          {date: '23/10/2009', nature: 'Achat'},
-          {date: '18/11/2009', nature: 'Déclaration de Réimmatriculation à l\'étranger'},
-          {date: '03/12/2009', nature: 'Changement de titulaire et réimmatriculation France'},
-          {date: '01/02/2012', nature: 'Déclaration, expert no 000000-VE Véhicule techniquement réparable Procédure : Véhicule à réparations contrôlées (VRC)'},
-          {date: '03/03/2012', nature: '1er rapport, expert no 000000-VE Véhicule techniquement réparable'}
-        ]
+          synthese: [],
+          titre: {}
+        }
       }
     }
   },
@@ -933,13 +877,19 @@ export default {
       .then(response => {
         console.log(response)
         if (response.body.hits.hits.length === 0) {
-          this.result = 'ko'
+          this.result = 'notFound'
           return
         }
         var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
         var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
         var veh = this.decrypt(key, encrypted)
         console.log(veh)
+        if (veh.annulation_ci !== 'NON') {
+          this.result = 'cancelled'
+          return
+        } else {
+          this.result = 'error'
+        }
         this.vin = veh.vin
         this.v.ctec.vin = veh.vin
         this.plaque = veh.plaq_immat
@@ -975,14 +925,14 @@ export default {
         this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
         this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
         this.v.certificat.premier = veh.date_premiere_immat || this.default
-        this.v.certificat.etranger = veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO')
+        this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
-        this.v.historique = this.histoFilter(veh.historique)
+        this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
         this.v.nb_proprietaires = veh.nb_proprietaire
-        this.v.nb_tit = this.calcNbTit(veh.historique)
+        this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
         this.v.age_veh = veh.age_annee
         this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
 
@@ -1003,16 +953,21 @@ export default {
 
         this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
-        this.v.sinistre = veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false
-        this.v.apte = veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false
-        if (veh.annulation_ci !== 'NON') {
-          this.result = 'invalid'
-        } else {
-          this.result = 'ok'
-        }
+        this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.result = 'ok'
         console.log(this.v)
-      }, () => {
+      }, (error) => {
         this.result = 'error'
+        if (error.status === 404) {
+          this.result = 'invalid'
+        }
+        if (error.status === 429) {
+          this.result = 'tooManyRequests'
+        }
+        if (error.status === 502) {
+          this.result = 'unavailable'
+        }
       }
     )
     if (this.$route.query.id === 'test') {
