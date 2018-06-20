@@ -57,17 +57,17 @@
         <div class="vertical">
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#vtab1" role="tab" data-toggle="tab"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li><a href="#vtab2" role="tab" data-toggle="tab"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
-            <li><a href="#vtab3" role="tab" data-toggle="tab"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
-            <li><a href="#vtab4" role="tab" data-toggle="tab"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
-            <li><a href="#vtab5" role="tab" data-toggle="tab"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li v-if="$route.params.code !== undefined"><a href="#vtab6" role="tab" data-toggle="tab"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
+            <li :class="[{'active' : tab === 'abstract'}]"><a class="unclickable" @click="tab = 'abstract'"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
+            <li :class="[{'active' : tab === 'vehicle'}]"><a class="unclickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
+            <li :class="[{'active' : tab === 'holder'}]"><a class="unclickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
+            <li :class="[{'active' : tab === 'situation'}]"><a class="unclickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
+            <li :class="[{'active' : tab === 'history'}]"><a class="unclickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
+            <li :class="[{'active' : tab === 'send'}]" v-if="$route.params.code !== undefined"><a class="unclickable" @click="tab = 'send'"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
             <!-- /* ----------------- debut synthese ----------------- */ -->
-            <div class="tab-pane fade in active" id="vtab1">
+            <div class="tab-pane fade" :class="[{'in active' : tab === 'abstract'}]">
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-md-7">
@@ -175,7 +175,7 @@
             </div>
             <!-- /* ----------------- fin synthese ----------------- */ -->
             <!-- /* ----------------- debut vehicule ----------------- */ -->
-            <div class="tab-pane fade pr-20" id="vtab2">
+            <div class="tab-pane fade pr-20" :class="[{'in active' : tab === 'vehicle'}]">
               <div class="row">
                 <div class="col-md-12">
                   <h6 class="title">Caractéristiques techniques</h6>
@@ -488,7 +488,7 @@
               </table> -->
               <!-- fin mentions particuliéres -->
             </div>
-            <div class="tab-pane fade" id="vtab3">
+            <div class="tab-pane fade" :class="[{'in active' : tab === 'holder'}]">
               <h6 class="title">Titulaire</h6>
               <!-- debut titulaire et co-titulaire -->
               <div class="row">
@@ -530,7 +530,7 @@
               <div class="separator"></div>
               <!-- debut tableau situation administrative -->
             </div>
-            <div class="tab-pane fade" id="vtab4">
+            <div class="tab-pane fade" :class="[{'in active' : tab === 'situation'}]">
               <div class="row">
                 <div class="col-sm-6">
                   <h6 class="title">Gages</h6>
@@ -594,7 +594,7 @@
               <!-- fin bouton imprimer csa detaille -->
               </div>
             </div>
-            <div class="tab-pane fade" id="vtab5">
+            <div class="tab-pane fade" :class="[{'in active' : tab === 'history'}]">
               <!-- debut tableau operation historique -->
               <div class="row">
                 <div class="col-sm-4"><span class="txt-small-12"><h6>Date</h6></span></div>
@@ -611,7 +611,7 @@
               </div>
               <!-- fin tableau operation historique -->
             </div>
-            <div class="tab-pane fade" id="vtab6" v-if="$route.params.code !== undefined">
+            <div class="tab-pane fade" :class="[{'in active' : tab === 'send'}]" v-if="$route.params.code !== undefined">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
@@ -717,6 +717,7 @@ export default {
   },
   data () {
     return {
+      tab: 'abstract',
       default: 'non disponible',
       synthese: {
         'ove': {
