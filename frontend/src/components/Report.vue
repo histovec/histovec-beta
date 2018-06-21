@@ -20,7 +20,7 @@
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
               <h2 class="text-center mt-4">
-                <div v-if="$route.params.code !== undefined"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</div>
+                <div v-if="holder"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</div>
                 <div v-else><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
               </h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
@@ -62,7 +62,7 @@
             <li :class="[{'active' : tab === 'holder'}]"><a class="clickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li :class="[{'active' : tab === 'situation'}]"><a class="clickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li :class="[{'active' : tab === 'history'}]"><a class="clickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li :class="[{'active' : tab === 'send'}]" v-if="$route.params.code !== undefined"><a class="clickable" @click="tab = 'send'"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
+            <li :class="[{'active' : tab === 'send'}]" v-if="holder"><a class="clickable" @click="tab = 'send'"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
@@ -611,7 +611,7 @@
               </div>
               <!-- fin tableau operation historique -->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : tab === 'send'}]" v-if="$route.params.code !== undefined">
+            <div class="tab-pane fade" :class="[{'in active' : tab === 'send'}]" v-if="holder">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
@@ -797,6 +797,9 @@ export default {
     }
   },
   computed: {
+    holder () {
+      return this.$route.params.code !== undefined
+    },
     mailBody () {
       var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
       return text + this.url.replace('&', '%26')
@@ -874,7 +877,7 @@ export default {
     }
   },
   created () {
-    this.$http.get(this.apiUrl + 'id/' + ((this.$route.params.id !== undefined) ? this.$route.params.id : this.$route.query.id))
+    this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
       .then(response => {
         console.log(response)
         if (response.body.hits.hits.length === 0) {
