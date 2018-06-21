@@ -41,8 +41,7 @@
             Le service sera élargi progressivement en fonction des retours.
         </p>
         <p> Pour faire partie du panel de testeurs, prenez contact avec l'équipe par mail: <strong> <a href="mailto:histovec@interieur.gouv.fr">histovec@interieur.gouv.fr</a> </strong></p>
-        <p> Professionnel, vous souhaitez disposer d'une <strong> api </strong> privilégiée pour un service à valeur ajoutée ? Un tel service est prévu dans une seconde phase du projet -
-            faites nous part de votre intérêt, également par mail.
+        <p> Professionnels, vous êtes intéressés ? Prenez contact
         </p>
         <p>
           Voici un exemple de rapport que permet de générer Histovec :
