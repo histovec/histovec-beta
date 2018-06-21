@@ -88,8 +88,10 @@ import Vue from 'vue'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/libelle_operations.json'
+import verbatims from './assets/json/verbatims.json'
 
 import VueClipboard from 'vue-clipboard2'
+
 Vue.use(VueClipboard)
 
 import lodash from 'lodash'
@@ -104,7 +106,9 @@ Vue.mixin({
       apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
       operations: operations,
-      lang: localization.default
+      verbatims: verbatims,
+      lang: localization.default,
+      show: false
     }
   },
   mounted () {
