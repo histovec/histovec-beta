@@ -134,21 +134,19 @@
       </section>
       <!-- section end -->
       <!-- section start -->
-      <section class="dark-translucent-bg fixed-bg pv-30" style="background-image:url(assets/images/tableau_de_bord/41.jpg);">
+      <section class="dark-translucent-bg fixed-bg pv-10" style="height: 300px; background-image:url(assets/images/tableau_de_bord/41.jpg);">
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
-              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-              <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="clients-container">
-              <div class="clients">
-                <div class="client-image"> <img src="assets/images/logos_metiers/logo_mi.png" width="63" height="79"></div>
-                <div class="client-image"> <img src="assets/images/logos_metiers/securite_routiere_200.png" width="200" height="153" alt=""> </div>
-              </div>
+           <h2 class="text-center">Les <strong>usagers</strong> en parlent</h2>
+              <div class="separator with-icon"><i class="fa fa-smile-o bordered"></i></div>
+                <div class="testimonial text-center">
+                  <h3><transition name="slide-fade"><span v-if="verbatim"> {{ verbatims[i].name }}</span></transition></h3>
+                  <div class="testimonial-body">
+                      <p><transition name="slide-fade"><span v-if="verbatim"><blockquote> {{ verbatims[i].comment }} </blockquote></span></transition></p>
+                  </div>
+                </div>
+              </transition>
             </div>
           </div>
         </div>
@@ -210,8 +208,19 @@ export default {
   },
   data () {
     return {
-      modal: false
+      modal: false,
+      i: 0,
+      verbatim: true
     }
+  },
+  created () {
+    setInterval(() => {
+      this.verbatim = false
+      this.i = (this.i + 1) % this.verbatims.length
+      setTimeout(() => {
+        this.verbatim = true
+      }, 1000)
+    }, 5000)
   }
 }
 </script>
