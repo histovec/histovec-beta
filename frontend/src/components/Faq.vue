@@ -60,9 +60,9 @@
         <!-- debut question 1 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Comment utiliser HistoVec ? </a> </h4>
+            <h4 class="panel-title"> <a @click="a = !a" class="clickable" :class="[{'collapsed' : !a }]"> <i class="fa fa-file-text-o pr-10"></i>Comment utiliser HistoVec ? </a> </h4>
           </div>
-          <div id="collapseOne-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : a}]">
             <div class="panel-body">
              <DL><DT>Vous êtes vendeur :</DT>
  						 <DD><OL><LI>sur la page vendeur, remplissez le formulaire pour vous identifier avec les informations demandées, et validez.
@@ -79,9 +79,9 @@
         <!-- debut question 2 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseTwo-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Comment retrouver mon rapport HistoVec ultérieurement ?</a> </h4>
+            <h4 class="panel-title"> <a @click="b = !b" class="clickable" :class="[{'collapsed' : !b }]"> <i class="fa fa-file-text-o pr-10"></i>Comment retrouver mon rapport HistoVec ultérieurement ?</a> </h4>
           </div>
-          <div id="collapseTwo-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : b}]">
             <div class="panel-body">
               <UL>Le rapport généré est consultable pendant une période de 4 semaines aprés sa génération, grâce au lien qui a été fourni par le vendeur.</UL>
             </div>
@@ -91,9 +91,9 @@
         <!-- debut question 3 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseThree-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>A qui s’adresse HistoVec ?</a> </h4>
+            <h4 class="panel-title"> <a @click="c = !c" class="clickable" :class="[{'collapsed' : !c }]"> <i class="fa fa-file-text-o pr-10"></i>A qui s’adresse HistoVec ?</a> </h4>
           </div>
-          <div id="collapseThree-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : c}]">
             <div class="panel-body">
               <DL><DT>Je vends mon véhicule d’occasion :</DT>
                   <DD><UL>HistoVec vous permet de valoriser votre offre en fournissant gratuitement un rapport d’historique officiel qui rassurera vos acheteurs potentiels.</UL></DD>
@@ -111,11 +111,11 @@
         <!-- debut question 4 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseFor-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>D’où proviennent les informations d’HistoVec ?</a> </h4>
+            <h4 class="panel-title"> <a @click="d = !d" class="clickable" :class="[{'collapsed' : !d }]"> <i class="fa fa-file-text-o pr-10"></i>D’où proviennent les informations d’HistoVec ?</a> </h4>
           </div>
-          <div id="collapseFor-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : d}]">
             <div class="panel-body">
-              <UL>Les informations du rapport sont issues du Système d’Informations du Ministère de l’Intérieur.</UL>
+              <UL>Les informations du rapport sont issues du Système d’Immatriculation des Véhicules du Ministère de l’Intérieur.</UL>
             </div>
           </div>
         </div>
@@ -123,9 +123,9 @@
         <!-- debut question 5 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseFive-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?</a> </h4>
+            <h4 class="panel-title"> <a @click="e = !e" class="clickable" :class="[{'collapsed' : !e }]"> <i class="fa fa-file-text-o pr-10"></i>Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?</a> </h4>
           </div>
-          <div id="collapseFive-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : e}]">
             <div class="panel-body">
               <UL>Seul le propriétaire du certificat d’immatriculation peut générer le rapport HistoVec de son véhicule, qu’il choisit de transmettre à des tiers.</UL>
             </div>
@@ -135,12 +135,12 @@
         <!-- debut question 6 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseSix-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Quelles sont les garanties d’HistoVec ?</a> </h4>
+            <h4 class="panel-title"> <a @click="f = !f" class="clickable" :class="[{'collapsed' : !f }]"> <i class="fa fa-file-text-o pr-10"></i>Quelles sont les garanties d’HistoVec ?</a> </h4>
           </div>
-          <div id="collapseSix-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : f}]">
             <div class="panel-body">
               <DL><DT>Officiel :</DT>
-                  <DD><UL>HistoVec est un site produit par le Ministère de l’Intérieur et fournit les données du Système d’Informations du Ministère de l’Intérieur.</UL></DD>
+                  <DD><UL>HistoVec est un site produit par le Ministère de l’Intérieur et fournit les données du Système d’Immatriculation des Véhicules du Ministère de l’Intérieur.</UL></DD>
                   <DT>Confidentiel :</DT>
                   <DD><UL>Seul le propriétaire du certificat d’immatriculation peut générer le rapport HistoVec de son véhicule, qu’il choisit de transmettre à des tiers. </UL></DD>
                   <DT>Gratuit : </DT>
@@ -153,9 +153,9 @@
         <!-- debut question 7 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseSeven-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Est-ce que les informations sont complètes ?</a> </h4>
+            <h4 class="panel-title"> <a @click="g = !g" class="clickable" :class="[{'collapsed' : !g }]"> <i class="fa fa-file-text-o pr-10"></i>Est-ce que les informations sont complètes ?</a> </h4>
           </div>
-          <div id="collapseSeven-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : g}]">
             <div class="panel-body">
               <UL>Seules les informations connues du Ministère de l’Intérieur sont fournies. Par exemple, ne sont enregistrés que les sinistres déclarés à l’assureur et pour lesquels un expert a enregistré une procédure VRC (Véhicule à Réparation Contrôlée).</UL>
             </div>
@@ -165,9 +165,9 @@
         <!-- debut question8 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseEight-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Comment signaler une information manquante ou inexacte ?</a> </h4>
+            <h4 class="panel-title"> <a @click="h = !h" class="clickable" :class="[{'collapsed' : !h }]"> <i class="fa fa-file-text-o pr-10"></i>Comment signaler une information manquante ou inexacte ?</a> </h4>
           </div>
-          <div id="collapseEight-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : h}]">
             <div class="panel-body">
               <UL>Vous pouvez utiliser le formulaire <a href="feedback">signaler une erreur</a></UL>
             </div>
@@ -177,9 +177,9 @@
         <!-- debut question 9 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseNine-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas mon véhicule ?</a> </h4>
+            <h4 class="panel-title"> <a @click="i = !i" class="clickable" :class="[{'collapsed' : !i }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas mon véhicule ?</a> </h4>
           </div>
-          <div id="collapseNine-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : i}]">
             <div class="panel-body">
               <UL>Recopiez exactement les données de la carte grise (nom, prénom, date de naissance, immatriculation, numéro de formule)</UL>
               <UL>Seul les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
@@ -192,11 +192,11 @@
         <!-- debut question 10 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseTen-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
+            <h4 class="panel-title"> <a @click="j = !j" class="clickable" :class="[{'collapsed' : !j }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
           </div>
-          <div id="collapseTen-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : j}]">
             <div class="panel-body">
-              <UL>Le numéro de formule est situé en bas à gauche des Cartes Grises éditées depuis 2009. (exemple de numéro de formule 2015XX012345 )</UL>
+              <UL>Le numéro de formule est situé en bas à gauche des Cartes Grises éditées depuis 2009. Exemple de numéro de formule : 2015XX012345 </UL>
             </div>
           </div>
         </div>
@@ -204,9 +204,9 @@
         <!-- debut question 11 -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseEleven-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
+            <h4 class="panel-title"> <a @click="k = !k" class="clickable" :class="[{'collapsed' : !k }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
           </div>
-          <div id="collapseEleven-2" class="panel-collapse collapse">
+          <div class="panel-collapse collapse" :class="[{'in' : k}]">
             <div class="panel-body">
               <UL>Vous pouvez les consulter dans <a href="legal">mentions légales.</a></UL>
             </div>
@@ -222,3 +222,13 @@
 <!-- container -->
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false, i: false, j: false, k: false, l: false
+    }
+  }
+}
+</script>

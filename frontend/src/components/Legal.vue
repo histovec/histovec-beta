@@ -102,9 +102,9 @@
                 <!-- debut textes de reference -->
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-1" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Textes de référence </a> </h4>
+                    <h4 class="panel-title"> <a @click="a = !a" class="clickable" :class="[{'collapsed' : !a }]"> <i class="fa fa-file-text-o pr-10"></i>Textes de référence </a> </h4>
                   </div>
-                  <div id="collapseOne-1" class="panel-collapse collapse">
+                  <div class="panel-collapse collapse" :class="[{'in' : a}]">
                     <div class="panel-body">
                       <ul class="list">
                         <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.legifrance.gouv.fr/affichCode.do;?idSectionTA=LEGISCTA000032227144&cidTexte=LEGITEXT000006069565" class="no-color" target="_blank">Code de la consommation : articles L131-1 à L131-4<br>
@@ -121,9 +121,9 @@
                 <!-- debut pour en savoir plus -->
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseTwo-2" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Pour en savoir plus </a> </h4>
+                    <h4 class="panel-title"> <a @click="b = !b" class="clickable" :class="[{'collapsed' : !b }]"> <i class="fa fa-file-text-o pr-10"></i>Pour en savoir plus </a> </h4>
                   </div>
-                  <div id="collapseTwo-2" class="panel-collapse collapse">
+                  <div class="panel-collapse collapse" :class="[{'in' : b}]">
                     <div class="panel-body">
                       <ul class="list">
                         <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.cnil.fr/fr/site-web-cookies-et-autres-traceurs" class="no-color" target="_blank">Obligations en cas d'utilisation de cookies et autres traceurs<br>
@@ -136,9 +136,9 @@
                 <!-- debut ou s'informer -->
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                    <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion-2" href="#collapseThree-3" class="collapsed"> <i class="fa fa-file-text-o pr-10"></i>Ou s'informer ? </a> </h4>
+                    <h4 class="panel-title"> <a @click="c = !c" class="clickable" :class="[{'collapsed' : !c }]"> <i class="fa fa-file-text-o pr-10"></i>Ou s'informer ? </a> </h4>
                   </div>
-                  <div id="collapseThree-3" class="panel-collapse collapse">
+                  <div class="panel-collapse collapse" :class="[{'in' : c}]">
                     <div class="panel-body">
                       <ul class="list">
                         <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <span class="bold_5">Direction générale de la concurrence, de la consommation et de la répression des fraudes (DGCCRF</span>)<br>
@@ -162,3 +162,12 @@
   </section>
 </div>
 </template>
+<script>
+export default {
+  data () {
+    return {
+      a: false, b: false, c: false
+    }
+  }
+}
+</script>
