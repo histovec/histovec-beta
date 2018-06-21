@@ -54,7 +54,7 @@
         <div class="col-md-4 ">
           <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible"> <span class="icon without-bg"><i class="fa fa-drivers-license-o"></i></span>
             <div class="body">
-              <h4 class="title m-g-10"><span class="text-defaut-g">1</span> - Identification du titulaire</h4>
+              <h4 class="title m-g-10"><span class="text-defaut-g">1</span> - Identification</h4>
               <p class="m-g-10">Le vendeur renseigne son identité et les informations d’identification du véhicule.</p>
             </div>
           </div>
