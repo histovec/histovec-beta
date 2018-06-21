@@ -57,12 +57,12 @@
         <div class="vertical">
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
-            <li :class="[{'active' : tab === 'abstract'}]"><a class="unclickable" @click="tab = 'abstract'"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li :class="[{'active' : tab === 'vehicle'}]"><a class="unclickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
-            <li :class="[{'active' : tab === 'holder'}]"><a class="unclickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
-            <li :class="[{'active' : tab === 'situation'}]"><a class="unclickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
-            <li :class="[{'active' : tab === 'history'}]"><a class="unclickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li :class="[{'active' : tab === 'send'}]" v-if="$route.params.code !== undefined"><a class="unclickable" @click="tab = 'send'"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
+            <li :class="[{'active' : tab === 'abstract'}]"><a class="clickable" @click="tab = 'abstract'"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
+            <li :class="[{'active' : tab === 'vehicle'}]"><a class="clickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
+            <li :class="[{'active' : tab === 'holder'}]"><a class="clickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
+            <li :class="[{'active' : tab === 'situation'}]"><a class="clickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
+            <li :class="[{'active' : tab === 'history'}]"><a class="clickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
+            <li :class="[{'active' : tab === 'send'}]" v-if="$route.params.code !== undefined"><a class="clickable" @click="tab = 'send'"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">

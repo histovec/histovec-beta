@@ -67,8 +67,8 @@
             <!-- ================ -->
             <!-- Nav tabs -->
             <ul class="nav nav-tabs style-2" role="tablist">
-              <li :class="[{'in active' : type_personne === 'particulier'}]"><a class="unclickable" @click="type_personne = 'particulier'"><i class="fa fa-user pr-10"></i>Particulier</a></li>
-              <li :class="[{'in active' : type_personne === 'pro'}]"><a class="unclickable" @click="type_personne = 'pro'"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
+              <li :class="[{'in active' : type_personne === 'particulier'}]"><a class="clickable" @click="type_personne = 'particulier'"><i class="fa fa-user pr-10"></i>Particulier</a></li>
+              <li :class="[{'in active' : type_personne === 'pro'}]"><a class="clickable" @click="type_personne = 'pro'"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
@@ -109,7 +109,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkFormule) && status !== 'init')}]">
-                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <span @click="modal = true" class="text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </span>
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </a>
                               <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
@@ -168,7 +168,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : (formule === '' && status !== 'init')}]">
-                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <span @click="modal = true" class="text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i></span>
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i></a>
                               <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
