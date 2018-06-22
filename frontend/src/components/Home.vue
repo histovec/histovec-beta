@@ -134,12 +134,12 @@
       </section>
       <!-- section end -->
       <!-- section start -->
-      <section class="dark-translucent-bg fixed-bg pv-10" style="height: 300px; background-image:url(assets/images/tableau_de_bord/41.jpg);">
+      <section class="dark-translucent-bg fixed-bg" style="background-image:url(assets/images/tableau_de_bord/41.jpg);">
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-           <h2 class="text-center">Les <strong>usagers</strong> en parlent</h2>
-              <div class="separator with-icon"><i class="fa fa-smile-o bordered"></i></div>
+           <h2 class="text-center pv-10">Les <strong>usagers</strong> en parlent</h2>
+              <div class="separator"></div>
                 <div class="testimonial text-center">
                   <h3><transition name="slide-fade"><span v-if="verbatim"> {{ verbatims[i].name }}</span></transition></h3>
                   <div class="testimonial-body">
@@ -219,7 +219,7 @@ export default {
       this.i = (this.i + 1) % this.verbatims.length
       setTimeout(() => {
         this.verbatim = true
-      }, 1000)
+      }, 800)
     }, 5000)
   }
 }

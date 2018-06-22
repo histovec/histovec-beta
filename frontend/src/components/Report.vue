@@ -153,8 +153,8 @@
                     <div class="col-sm-1"><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
                                  {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"></i></div>
                     <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
-                      <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13">en {{v.apte}}</span></span></div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese.ove.adv }}</span></div>
+                      <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese[(v.apte ? 'fin_ove' : 'ove')].adv }}</span></div>
                     <!-- fin sinistre  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -735,10 +735,16 @@ export default {
       tab: 'abstract',
       default: 'non disponible',
       synthese: {
+        'fin_ove': {
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Ce véhicule a eu un sinistre déclaré',
+          'adv': 'Demandez le rapport d’expert et la(es) facture(s)',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
+        },
         'ove': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Ce véhicule a eu un sinistre déclaré',
-          'adv': 'Demandez le rapport d\'expert et la(es) facture(s)',
+          'adv': 'Une procédure de réparation contrôlée est en cours',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
@@ -958,7 +964,7 @@ export default {
         this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
         // opposition et procédure à valider
-        this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+        this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
         // pour l'instant aucun véhicule saisi dans les échantillons
         this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
         this.v.administratif.vol = veh.vehicule_vole || this.default
@@ -973,7 +979,7 @@ export default {
         this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
         this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
-        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : (veh.ove === 'NON')) : undefined
         this.result = 'ok'
         console.log(this.v)
       }, (error) => {
