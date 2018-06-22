@@ -44,10 +44,6 @@ vm_max_count		:= $(shell cat /etc/sysctl.conf | egrep vm.max_map_count\s*=\s*262
 dummy               := $(shell touch artifacts)
 include ./artifacts
 
-commit              := $(shell git rev-parse HEAD | cut -c1-8)
-lastcommit          := $(shell touch .lastcommit && cat .lastcommit)
-
-
 DC := 'docker-compose'
 
 install-prerequisites:
@@ -200,15 +196,12 @@ dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
 
 
 frontend-build: network
-ifneq "$(commit)" "$(lastcommit)"
-	@echo building ${APP} frontend after new commit
+	@echo building ${APP} frontend
 	@echo building frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist-build
 	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
 	mkdir -p ${FRONTEND}/dist/
-	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/. 
-	@echo "${commit-frontend}" > ${FRONTEND}/.lastcommit
-endif
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 
 build: frontend-build
 

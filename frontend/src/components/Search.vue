@@ -41,8 +41,7 @@
             Le service sera élargi progressivement en fonction des retours.
         </p>
         <p> Pour faire partie du panel de testeurs, prenez contact avec l'équipe par mail: <strong> <a href="mailto:histovec@interieur.gouv.fr">histovec@interieur.gouv.fr</a> </strong></p>
-        <p> Professionnel, vous souhaitez disposer d'une <strong> api </strong> privilégiée pour un service à valeur ajoutée ? Un tel service est prévu dans une seconde phase du projet -
-            faites nous part de votre intérêt, également par mail.
+        <p> Professionnels, vous êtes intéressés ? Prenez contact
         </p>
         <p>
           Voici un exemple de rapport que permet de générer Histovec :
@@ -68,8 +67,8 @@
             <!-- ================ -->
             <!-- Nav tabs -->
             <ul class="nav nav-tabs style-2" role="tablist">
-              <li :class="[{'active' : type_personne === 'particulier'}]"><a href="#h2tab1" role="tab" data-toggle="tab"><i class="fa fa-user pr-10"></i>Particulier</a></li>
-              <li :class="[{'in active' : type_personne === 'pro'}]"><a href="#h2tab2" role="tab" data-toggle="tab"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
+              <li :class="[{'in active' : type_personne === 'particulier'}]"><a class="clickable" @click="type_personne = 'particulier'"><i class="fa fa-user pr-10"></i>Particulier</a></li>
+              <li :class="[{'in active' : type_personne === 'pro'}]"><a class="clickable" @click="type_personne = 'pro'"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
@@ -110,7 +109,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkFormule) && status !== 'init')}]">
-                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#formuleModal" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </a>
                               <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
@@ -169,7 +168,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : (formule === '' && status !== 'init')}]">
-                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a href="#" class="text-info btn-sm-link" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <label for="input" class="control-label">N° de formule <span class="info_red">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i></a>
                               <input type="text" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
@@ -207,6 +206,26 @@
     <div class="container">
       <div class="row"> </div>
     </div>
+    <!-- debut modal -->
+    <div v-if="modal">
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" @click="modal = false"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+                  <h6 class="modal-title">Information n° de formule</h6>
+                </div>
+                <div class="modal-body" style="height: 250px; overflow-y: auto;"> <img src="assets/images/n-formule.svg" class="img-responsive" style="margin: 0 auto;"> </div>
+                <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" @click="modal = false">Fermer <i class="fa fa-close"></i></a> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
+    <!-- fin modal -->
   </div>
 
 </template>
@@ -221,6 +240,7 @@ export default {
   },
   data () {
     return {
+      modal: false,
       active: false,
       type_personne: 'particulier',
       nom: '',
