@@ -37,8 +37,8 @@
                     <nav>
                       <ul class="nav nav-pills nav-stacked">
                         <li><a href="faq">FAQ</a></li>
-                        <li><a href="contact">Contact</a></li>
-                        <li><a href="feedback">Signaler une erreur</a></li>
+                        <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Contactez%20Histovec'">CONTACT</a></li>
+                        <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">Signaler une erreur</a></li>
                       </ul>
                     </nav>
                   </div>

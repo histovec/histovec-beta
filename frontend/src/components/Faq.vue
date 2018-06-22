@@ -53,7 +53,7 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-12 mb-20">
-      <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, vous pouvez nous écrire en utilisant <a href="contact">ce formulaire</a>.</p>
+      <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Question%20FAQ'">contactez-nous</a></p>
       <!-- accordion start -->
       <!-- ================ -->
       <div class="panel-group collapse-style-2" id="accordion-2">
@@ -169,7 +169,7 @@
           </div>
           <div class="panel-collapse collapse" :class="[{'in' : choice === 'h'}]">
             <div class="panel-body">
-              <UL>Vous pouvez utiliser le formulaire <a href="feedback">signaler une erreur</a></UL>
+              <UL><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">contactez-nous</a></UL>
             </div>
           </div>
         </div>
@@ -181,10 +181,10 @@
           </div>
           <div class="panel-collapse collapse" :class="[{'in' : choice === 'i'}]">
             <div class="panel-body">
-              <UL>Recopiez exactement les données de la carte grise (nom, prénom, date de naissance, immatriculation, numéro de formule)</UL>
+              <UL>Recopiez exactement les données de la carte grise (nom, prénom,immatriculation, numéro de formule) et votre date naissance</UL>
               <UL>Seul les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
               <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le Système d'Immatriculation des Véhicules,</UL>
-              <UL>Vous pouvez <a href="contact">nous contacter</a></UL>
+              <UL><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">contactez-nous</a></UL>
             </div>
           </div>
         </div>
