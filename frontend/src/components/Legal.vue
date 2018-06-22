@@ -56,7 +56,7 @@
               <p>Emmanuel Barbe, délégué interministériel à la Sécurité routière </p>
               <h5>Crédits</h5>
               <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site histovec.interieur.gouv.fr.</p>
-              <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, <a href="contact">contactez-nous.</a></p>
+              <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Demande%20de%20reproduction'">contactez-nous</i></a></p>
               <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com">picjumbo.com</a> et libres de droits.</p>
           <h5>Conception et réalisation</h5>
               Conception et réalisation Lab <a href="https://www.interieur.gouv.fr/Le-ministere/Secretariat-general/Direction-des-systemes-d-information-et-de-communication">DSIC</a> du ministère de l'Intérieur avec le Bureau des immatriculations de la Délégation à la sécurité routière (<a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/qui-sommes-nous/la-delegation-a-la-securite-routiere">DSR</a>)
@@ -133,7 +133,7 @@
                   </div>
                 </div>
                 <!-- fin pour en savoir plus -->
-                <!-- debut ou s'informer -->
+                <!-- debut ou s'informer 
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h4 class="panel-title"> <a @click="choose('c')" class="clickable" :class="[{'collapsed' : choice !== 'c' }]"> <i class="fa fa-file-text-o pr-10"></i>Ou s'informer ? </a> </h4>
@@ -149,7 +149,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- fin ou s'informer -->
+                fin ou s'informer -->
               </div>
               <!-- accordion end -->
             </div>
