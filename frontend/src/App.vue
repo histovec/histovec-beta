@@ -70,7 +70,7 @@
           <div class="subfooter-inner">
             <div class="row">
               <div class="col-md-12">
-                <p class="text-center">Copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
+                <p class="text-center">{{ appName }} version {{ appVersion }} - copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
               </div>
             </div>
           </div>
@@ -85,6 +85,7 @@
 <script>
 import Vue from 'vue'
 
+import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/libelle_operations.json'
@@ -103,6 +104,8 @@ window.bus = new Vue()
 Vue.mixin({
   data () {
     return {
+      appName: process.env.APP,
+      appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
       operations: operations,
