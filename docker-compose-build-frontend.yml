@@ -12,7 +12,12 @@ services:
       args:
         proxy: ${http_proxy}
         app_path: ${APP}
+        app_name: ${APP}
+        app_ver: ${APP_VERSION}
     image: ${APP}-frontend:latest
+    environment:
+      - APP=${APP}
+      - VERSION=${VERSION}
     container_name: ${APP}-build-front
     volumes:
       - ${FRONTEND}/index.html:/${APP}/index.html
