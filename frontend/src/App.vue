@@ -71,6 +71,7 @@
             <div class="row">
               <div class="col-md-12">
                 <p class="text-center">Copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
+                <p class="text-center"><a :href="github_url" target="_blank">histovec/histovec-beta@{{ currentBranch }} version:{{ version }}</a></p>
               </div>
             </div>
           </div>
@@ -92,6 +93,8 @@ import verbatims from './assets/json/verbatims.json'
 
 import VueClipboard from 'vue-clipboard2'
 
+var apiURL = 'https://api.github.com/repos/histovec/histovec-beta/commits?per_page=3&sha='
+
 Vue.use(VueClipboard)
 
 import lodash from 'lodash'
@@ -108,13 +111,45 @@ Vue.mixin({
       operations: operations,
       verbatims: verbatims,
       lang: localization.default,
-      show: false
+      show: false,
+      currentBranch: 'dev',
+      version: '',
+      github_url: ''
     }
   },
   mounted () {
     window.bus.$on('langChange', value => {
       this.lang = value
     })
+  },
+  created: function () {
+    this.fetchData()
+  },
+  watch: {
+    currentBranch: 'fetchData'
+  },
+  filters: {
+    truncate: function (v) {
+      var newline = v.indexOf('\n')
+      return newline > 0 ? v.slice(0, newline) : v
+    },
+    formatDate: function (v) {
+      return v.replace(/T|Z/g, ' ')
+    }
+  },
+  methods: {
+    fetchData: function () {
+      var xhr = new XMLHttpRequest()
+      var self = this
+      xhr.open('GET', apiURL + self.currentBranch)
+      xhr.onload = function () {
+        self.commits = JSON.parse(xhr.responseText)
+        console.log(self.commits[0].html_url)
+        self.version = self.commits[0].sha.slice(0, 7)
+        self.github_url = self.commits[0].html_url
+      }
+      xhr.send()
+    }
   }
 })
 
