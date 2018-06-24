@@ -74,7 +74,8 @@
             <div class="tab-content">
               <div class="tab-pane" id="h2tab1" :class="[{'in active' : type_personne === 'particulier'}]">
                 <div class="row">
-                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
+                  <div class="col-md-12">
+                    <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
                     <fieldset>
                       <legend><span class="color-default">Tutulaire</span></legend>
                       <form role="form">
@@ -82,7 +83,7 @@
                           <div class="col-md-4">
                             <div class="form-group has-feedback" :class="[{'has-error' : (nom === '' && status !== 'init')}]">
                               <label class="control-label">Nom de naissance <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input name="nom" required="required" @paste="onPaste" type="text" class="form-control" v-bind:value="nom" v-on:input="nom = $event.target.value.replace(/\t.*/,'')" tabindex="1">
+                              <input v-focus ref="nom" name="nom" required="required" @paste="onPaste" type="text" class="form-control" v-bind:value="nom" v-on:input="nom = $event.target.value.replace(/\t.*/,'')" tabindex="1">
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4">
@@ -148,7 +149,7 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback" :class="[{'has-error' : (raison_sociale === '' && status !== 'init')}]">
                               <label class="control-label">Raison sociale <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input  name="raison_sociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raison_sociale" v-on:input="raison_sociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
+                              <input name="raison_sociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raison_sociale" v-on:input="raison_sociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
@@ -253,6 +254,13 @@ export default {
       siren: '',
       formule: '',
       status: 'init'
+    }
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
     }
   },
   computed: {
