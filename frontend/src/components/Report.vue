@@ -92,19 +92,29 @@
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
                   <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span></div>
                   <div class="col-sm-5">
-                    <div v-if="holder">
-                      <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
-                      <span class="info_red txt-small-13">{{v.nb_tit}}</span>
-                      <sup v-if="v.nb_tit === 1" class="info_red txt-small">er</sup>
-                      <sup v-if="v.nb_tit > 1" class="info_red txt-small">ème</sup>
-                      <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
+                    <div v-if="(v.etranger === 'NON') && (!v.fni)">
+                      <div v-if="holder">
+                        <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
+                        <span class="info_red txt-small-13">{{v.nb_tit}}</span>
+                        <sup v-if="v.nb_tit === 1" class="info_red txt-small">er</sup>
+                        <sup v-if="v.nb_tit > 1" class="info_red txt-small">ème</sup>
+                        <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
+                      </div>
+                      <div v-if="!holder">
+                        <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
+                        <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
+                        <span class="color-info_2 bold_4 txt-small-13">titulaire(s) en l'achetant vous serez le</span>
+                        <span class="info_red txt-small-13">{{ v.nb_tit + 1}}</span>
+                        <sup class="info_red txt-small">ème</sup>
+                      </div>
                     </div>
-                    <div v-if="!holder">
-                      <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
-                      <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
-                      <span class="color-info_2 bold_4 txt-small-13">titulaire(s) en l'achetant vous serez le</span>
-                      <span class="info_red txt-small-13">{{ v.nb_tit + 1}}</span>
-                      <sup class="info_red txt-small">ème</sup>
+                    <div v-if="(v.etranger === 'NON') && (v.fni)">
+                      <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
+                      <span class="color-info_2 bold_4 txt-small-12"> (immatriculation avant 2009)</span>
+                    </div>
+                    <div v-if="(v.etranger !== 'NON')">
+                      <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
+                      <span class="color-info_2 bold_4 txt-small-12">(immatriculation à l'étranger)</span>
                     </div>
                   </div>
 
@@ -952,6 +962,7 @@ export default {
         this.v.certificat.premier = veh.date_premiere_immat || this.default
         this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
+        this.v.fni = this.v.certificat.premier !== this.v.certificat.siv
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
