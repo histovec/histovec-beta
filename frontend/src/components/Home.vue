@@ -86,7 +86,7 @@
                 <div class="row">
                   <div class="col-sm-8">
                     <h2>Consulter un exemple de rapport...</h2>
-                    <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113"> </h6>
+                    <h6><img src="assets/images/exemple_rapport.png" width="1044" height="113" alt="type véhicule, puissance fiscale, propriétaire actuel, depuis quelle année, nombre de propriétaires"> </h6>
                   </div>
                   <div class="col-sm-4">
                     <p class="mt-10"><button @click="modal = true" class="btn btn-animated btn-lg btn-gray">Voir un exemple<i class="fa fa-file-text-o pl-20"></i></button></p>
@@ -112,7 +112,7 @@
               <div class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" data-animation-effect="fadeInDownSmall" data-effect-delay="100"> <span class="icon default-bg circle"><i class="fa fa-thumbs-o-up"></i></span>
                 <h3>Officiel</h3>
                 <div class="separator clearfix"></div>
-                <p>Données officilelles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du <a href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV">SIV</a></p>
+                <p>Données officilelles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du <a target="_blank" title="Système d'Immatriculation des Véhicules" href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV">SIV</a></p>
               </div>
             </div>
             <div class="col-lg-4">
