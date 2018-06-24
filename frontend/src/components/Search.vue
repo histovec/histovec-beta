@@ -127,9 +127,7 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-xs-offset-5 col-sm-7">
-                        <button @click="onSubmit"
-                                class="btn btn-animated btn-default btn-sm"
-                        >
+                        <button @click="onSubmit" class="btn btn-animated btn-default btn-sm" tabindex="6">
                           <i class="fa" :class="[{'fa-search' : (status === 'init')},
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
@@ -189,9 +187,7 @@
                     </fieldset>
                     <div class="form-group">
                       <div class="col-xs-offset-5 col-sm-7">
-                        <button @click="onSubmit"
-                                class="btn btn-animated btn-default btn-sm"
-                        >
+                        <button @click="onSubmit" class="btn btn-animated btn-default btn-sm" tabindex="5">
                           <i class="fa" :class="[{'fa-search' : (status === 'init')},
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
