@@ -8,13 +8,13 @@
             <div class="col-md-8">
               <div class="header-left clearfix">
                 <!-- debut bandeau -->
-                <div class="logo"><a href="home"><img @click="show = !show" src="assets/images/histovec-header-mobile.png" class="img-responsive" width="548" height="98"> </a></div>
+                <div class="logo"><a href="home"><img alt="accueil" @click="show = !show" src="assets/images/histovec-header-mobile.png" class="img-responsive" width="548" height="98"> </a></div>
                 <!-- fin bandeau -->
               </div>
             </div>
             <!-- debut beta -->
-            <div id="no-boot" class="col-xs-1"> <img src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
-            <!-- debut beta -->
+            <div id="no-boot" class="col-xs-1"> <img alt="version beta" src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
+            <!-- fin beta -->
           </div>
         </div>
       </header>
@@ -54,7 +54,7 @@
                       <div class="overlay-container"> <img class="img-responsive" src="assets/images/logos_metiers/logo_mi.png" alt="Ministère de l'Intérieur"> <a href="https://www.interieur.gouv.fr/" target="_blank" class="overlay-link small"></a> </div>
                     </div>
                     <div class="col-md-6 p-b-10">
-                      <div class="overlay-container"><img class="img-responsive" src="assets/images/logos_metiers/securite_routiere_120.png" alt="Délégation à la sécurité routière"> <a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites" target="_blank" class="overlay-link small"></a></div>
+                      <div class="overlay-container"><img class="img-responsive" src="assets/images/logos_metiers/securite_routiere_120.png" alt="sécurité routière, tous responsables"> <a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites" target="_blank" class="overlay-link small"></a></div>
                     </div>
                   </div>
                 </div>

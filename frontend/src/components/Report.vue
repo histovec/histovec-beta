@@ -46,7 +46,7 @@
           <div class="col-sm-5" v-if="beta">
             <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
           </div>
-          <div class="col-sm-2" v-if="beta"><img class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
+          <div class="col-sm-2" v-if="beta"><img alt="" class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
         </div>
         <!-- fin vignette -->
         <!-- debut trait séparation -->
