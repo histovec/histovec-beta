@@ -29,8 +29,8 @@
         </section>
         <!-- section end -->
         <!-- debut image fixe
-        <div class="col-md-12"> <img src="assets/images/corporate-1-slider-slide-2.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"></div>
-  <!-- fin image fixe -->
+          <div class="col-md-12"> <img src="assets/images/corporate-1-slider-slide-2.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"></div>
+        <!-- fin image fixe -->
       </div>
     </div>
   </section>
@@ -133,7 +133,7 @@
                   </div>
                 </div>
                 <!-- fin pour en savoir plus -->
-                <!-- debut ou s'informer 
+                <!-- debut ou s'informer
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h4 class="panel-title"> <a @click="choose('c')" class="clickable" :class="[{'collapsed' : choice !== 'c' }]"> <i class="fa fa-file-text-o pr-10"></i>Ou s'informer ? </a> </h4>
