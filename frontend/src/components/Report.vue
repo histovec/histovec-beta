@@ -883,7 +883,7 @@ export default {
       })
     },
     calcNbTit (historique) {
-      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
+      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_LOC', 'CHANG_LOC_CVN', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
     },
