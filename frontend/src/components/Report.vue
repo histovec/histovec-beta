@@ -967,7 +967,13 @@ export default {
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
-        this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
+        if ((this.v.certificat.fr !== this.v.certificat.siv) && (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))) {
+          let tmp = veh.historique
+          tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
+          this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
+        } else {
+          this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
+        }
         this.v.nb_proprietaires = veh.nb_proprietaire
         this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
         this.v.age_veh = veh.age_annee
