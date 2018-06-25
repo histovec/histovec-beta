@@ -92,7 +92,8 @@
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
                   <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span></div>
                   <div class="col-sm-5">
-                    <div v-if="(!v.certificat.etranger) && (!v.fni)">
+                    <div v-if="(!v.certificat.etranger)">
+                    <!-- <div v-if="(!v.certificat.etranger) && (!v.fni)"> -->
                       <div v-if="holder">
                         <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
                         <span class="info_red txt-small-13">{{v.nb_tit}}</span>
@@ -108,10 +109,10 @@
                         <sup class="info_red txt-small">ème</sup>
                       </div>
                     </div>
-                    <div v-if="(!v.certificat.etranger) && (v.fni)">
+                    <!-- <div v-if="(!v.certificat.etranger) && (v.fni)">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
                       <span class="color-info_2 bold_4 txt-small-12">(immatriculation avant 2009)</span>
-                    </div>
+                    </div> -->
                     <div v-if="v.certificat.etranger">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
                       <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
