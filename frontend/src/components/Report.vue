@@ -962,7 +962,7 @@ export default {
         this.v.certificat.premier = veh.date_premiere_immat || this.default
         this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
-        this.v.fni = this.v.certificat.premier !== this.v.certificat.siv
+        this.v.fni = (veh.dos_date_conversion_siv !== undefined)
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
