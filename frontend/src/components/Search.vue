@@ -59,7 +59,7 @@
           <div class="col-md-12">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-              <div class="alert alert-info alert-icon text-center" role="alert"><i class="fa fa-exclamation-triangle"></i> Seuls les véhicules ayant une plaque au format <strong>AA-123-ZZ</strong> sont consultables pour l'instant </div>
+              <div class="alert alert-warning alert-icon text-center" role="alert"><i class="fa fa-exclamation-triangle"></i> Seuls les véhicules ayant une plaque au format <strong>AA-123-ZZ</strong> sont consultables pour l'instant </div>
             </div>
           </div>
           <div class="col-md-12">
