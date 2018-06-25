@@ -104,7 +104,7 @@
                       <div v-if="!holder">
                         <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
                         <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
-                        <span class="color-info_2 bold_4 txt-small-13">titulaire(s) en l'achetant vous serez le</span>
+                        <span class="color-info_2 bold_4 txt-small-13">titulaire(s), en l'achetant vous serez le</span>
                         <span class="info_red txt-small-13">{{ v.nb_tit + 1}}</span>
                         <sup class="info_red txt-small">ème</sup>
                       </div>
