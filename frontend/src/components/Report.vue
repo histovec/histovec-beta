@@ -114,7 +114,7 @@
                     </div>
                     <div v-if="(v.etranger !== 'NON')">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
-                      <span class="color-info_2 bold_4 txt-small-12">(immatriculation à l'étranger)</span>
+                      <span class="color-info_2 bold_4 txt-small-12">(véhicule importé)</span>
                     </div>
                   </div>
 
@@ -544,7 +544,7 @@
               <div v-if="v.certificat.etranger">
                 <div class="row" >
                   <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation en France</span></div>
-                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.siv }}</span></div>
+                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.fr }}</span></div>
                 </div>
                 <div class="separator"></div>
               </div>
@@ -883,7 +883,7 @@ export default {
       })
     },
     calcNbTit (historique) {
-      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
+      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_LOC', 'CHANG_LOC_CVN', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
     },
@@ -962,7 +962,8 @@ export default {
         this.v.certificat.premier = veh.date_premiere_immat || this.default
         this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
-        this.v.fni = this.v.certificat.premier !== this.v.certificat.siv
+        this.v.certificat.fr = this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date)
+        this.v.fni = (veh.dos_date_conversion_siv !== undefined)
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
@@ -987,7 +988,7 @@ export default {
 
         this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
-        this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
+        this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
         this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
         this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : (veh.ove === 'NON')) : undefined
