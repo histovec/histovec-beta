@@ -41,12 +41,15 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.affichage_logo " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
-          <div class="col-sm-5" v-if="beta">
-            <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
+          <div class="col-sm-5" v-if="v.vignette_numero !== ''">
+            <div v-bind:class="'alert alert-icon alert-' + v.vignette_numero " role="alert"> <i class="fa fa-info-circle"></i> Eligible vignette Crit'Air {{ v.vignette_numero }} </div>
           </div>
-          <div class="col-sm-2" v-if="beta"><img alt="" class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
+          <div class="col-sm-2" v-if="v.vignette_numero !== ''">
+            <img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/petit/vignette_' + v.vignette_numero + '.png' ">
+          </div>
+
         </div>
         <!-- fin vignette -->
         <!-- debut trait séparation -->
@@ -58,7 +61,7 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
             <li :class="[{'active' : tab === 'abstract'}]"><a class="clickable" @click="tab = 'abstract'"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li :class="[{'active' : tab === 'vehicle'}]"><a class="clickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
+            <li :class="[{'active' : tab === 'vehicle'}]"><a class="clickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' pr-10'" ></i>Véhicule</a></li>
             <li :class="[{'active' : tab === 'holder'}]"><a class="clickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li :class="[{'active' : tab === 'situation'}]"><a class="clickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li :class="[{'active' : tab === 'history'}]"><a class="clickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
@@ -78,7 +81,7 @@
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
-                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
+                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                   <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
                     <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
@@ -896,7 +899,28 @@ export default {
         return (year > 1) ? year + ' ans' : year + ' an'
       }
     },
-    getLogoVehicule (genre) {
+    getVehiculeTypeCarburant (carburant) {
+      // Mapping Carburant
+      let essence = ['ES', 'EH', 'ET', 'FE', 'FH']
+      let diesel = ['GO', 'GA', 'GE', 'GF', 'GG', 'GH', 'PL', 'GQ']
+      let electHydro = ['AC', 'EL', 'H2', 'HE', 'HH']
+      let gaz = ['EG', 'EN', 'EP', 'EQ', 'FG', 'FN', 'G2', 'GN', 'GP', 'GZ', 'NH', 'PH']
+      let hybrideRech = ['EE', 'EM', 'ER', 'FL', 'GL', 'GM', 'NE', 'PE']
+      let typeCarburant = ''
+      if (essence.includes(carburant)) {
+        typeCarburant = 'essence'
+      } else if (diesel.includes(carburant)) {
+        typeCarburant = 'diesel'
+      } else if (electHydro.includes(carburant)) {
+        typeCarburant = 'electrique'
+      } else if (gaz.includes(carburant)) {
+        typeCarburant = 'gaz'
+      } else if (hybrideRech.includes(carburant)) {
+        typeCarburant = 'hybride'
+      }
+      return typeCarburant
+    },
+    getVehiculeLogo (genre) {
       let moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
       let truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
       let type = 'car'
@@ -906,6 +930,101 @@ export default {
         type = 'truck'
       }
       return type
+    },
+    getVignetteNumero (genre, typeCarburant, pollution, dateImmat) {
+      let splitDate = dateImmat.split('/')
+      let dateImmatEn = new Date(splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0])
+
+      // Mapping Genre
+      let motocycle = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'TM', 'QM', 'TQM']
+      let cyclomoteur = ['CYCL', 'CL']
+      let voiture = ['VP']
+      let vehiculeUtilLeger = ['CTTE', 'Deriv-VP', 'VTSU']
+      let poidsLourdsCarBus = ['CAM', 'TRA', 'TRR', 'TCP', 'VASP', 'SREM']
+
+      // Mapping Norme Euro
+      let normeEuro = (pollution) ? pollution.split('EURO') : ''
+      let numeroEuro = (normeEuro !== '' && normeEuro[1] !== undefined) ? normeEuro[1] : ''
+      let vignette = ''
+
+      if (typeCarburant === 'gaz' || typeCarburant === 'hybride') {
+        vignette = 1
+      } else if (typeCarburant === 'electrique') {
+        vignette = 'electrique'
+      } else {
+        if (motocycle.includes(genre) || cyclomoteur.includes(genre)) {
+          if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(genre) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(genre) && dateImmatEn >= new Date('2018-01-01'))) {
+            vignette = 1
+          } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
+            vignette = 2
+          } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn >= new Date('2006-12-31'))) {
+            vignette = 3
+          } else if (dateImmatEn >= new Date('2000-06-01') && dateImmatEn <= new Date('2004-06-30')) {
+            vignette = 4
+          }
+        } else if (voiture.includes(genre)) {
+          if (typeCarburant === 'essence') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 1
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 2
+            } else if (numeroEuro === '2' || numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 3
+            }
+          } else if (typeCarburant === 'diesel') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 2
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 3
+            } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 4
+            } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2000-12-31'))) {
+              vignette = 5
+            }
+          }
+        } else if (vehiculeUtilLeger.includes(genre)) {
+          if (typeCarburant === 'essence') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 1
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 2
+            } else if (numeroEuro === '2' || numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 3
+            }
+          } else if (typeCarburant === 'diesel') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 2
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 3
+            } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 4
+            } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2000-12-31'))) {
+              vignette = 5
+            }
+          }
+        } else if (poidsLourdsCarBus.includes(genre)) {
+          if (typeCarburant === 'essence') {
+            if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
+              vignette = 1
+            } else if (numeroEuro === '5' || (numeroEuro === '' && dateImmatEn >= new Date('2009-10-01') && dateImmatEn <= new Date('2013-12-31'))) {
+              vignette = 2
+            } else if (numeroEuro === '3' || numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2001-10-01') && dateImmatEn <= new Date('2009-09-30'))) {
+              vignette = 3
+            }
+          } else if (typeCarburant === 'diesel') {
+            if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
+              vignette = 2
+            } else if (numeroEuro === '5' || (numeroEuro === '' && dateImmatEn >= new Date('2009-10-01') && dateImmatEn <= new Date('2013-12-31'))) {
+              vignette = 3
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-10-01') && dateImmatEn <= new Date('2009-09-30'))) {
+              vignette = 4
+            } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-10-01') && dateImmatEn <= new Date('2006-09-30'))) {
+              vignette = 5
+            }
+          }
+        }
+      }
+      return vignette
     }
   },
   created () {
@@ -978,7 +1097,8 @@ export default {
         this.v.nb_proprietaires = veh.nb_proprietaire
         this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
         this.v.age_veh = veh.age_annee
-        this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
+        this.v.logo_vehicule = this.getVehiculeLogo(veh.CTEC_RLIB_GENRE)
+        this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
 
         this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
