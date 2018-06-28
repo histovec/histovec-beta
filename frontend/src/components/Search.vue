@@ -77,7 +77,7 @@
                   <div class="col-md-12">
                     <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
                     <fieldset>
-                      <legend><span class="color-default">Tutulaire</span></legend>
+                      <legend><span class="color-default">Titulaire</span></legend>
                       <form role="form">
                         <div class="row">
                           <div class="col-md-4">
@@ -143,7 +143,7 @@
                 <div class="row">
                   <div class="col-md-12"> <span class="info_red txt-small-11" v-if="status == 'failed'">* Veuillez renseignez les champs obligatoire</span>
                     <fieldset>
-                      <legend><span class="color-default">Tutulaire</span></legend>
+                      <legend><span class="color-default">Titulaire</span></legend>
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
