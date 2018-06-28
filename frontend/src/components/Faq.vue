@@ -102,7 +102,7 @@
                       <DT>Je suis un professionnel négociant automobile :</DT>
                       <DD><UL>Fiabilisez et valorisez votre stock de véhicules d’occasion en permettant à votre entreprise et vos clients de vérifier l’historique des véhicules acquis.</UL></DD>
     	                <DT>Je loue ma voiture à des particuliers :</DT>
-                      <DD><UL>Je peux rassurer mes loueurs potentiels en fournissant gratuitement un historique officiel du véhicule.</UL></DD>
+                      <DD><UL>Je peux rassurer mes clients potentiels en fournissant gratuitement un historique officiel du véhicule.</UL></DD>
                   </DL>
                 </div>
               </div>
@@ -115,7 +115,7 @@
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'd'}]">
                 <div class="panel-body">
-                  <UL>Les informations du rapport sont issues du Système d’Immatriculation des Véhicules du Ministère de l’Intérieur.</UL>
+                  <UL>Les informations du rapport sont issues du système d’immatriculation des véhicules (SIV) du ministère de l’intérieur.</UL>
                 </div>
               </div>
             </div>
@@ -140,7 +140,7 @@
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'f'}]">
                 <div class="panel-body">
                   <DL><DT>Officiel :</DT>
-                      <DD><UL>HistoVec est un site produit par le Ministère de l’Intérieur et fournit les données du Système d’Immatriculation des Véhicules du Ministère de l’Intérieur.</UL></DD>
+                      <DD><UL>HistoVec est un site produit par le ministère de l’intérieur et fournit les données du système d’immatriculation des véhicules (SIV).</UL></DD>
                       <DT>Confidentiel :</DT>
                       <DD><UL>Seul le propriétaire du certificat d’immatriculation peut générer le rapport HistoVec de son véhicule, qu’il choisit de transmettre à des tiers. </UL></DD>
                       <DT>Gratuit : </DT>
@@ -183,7 +183,7 @@
                 <div class="panel-body">
                   <UL>Recopiez exactement les données de la carte grise (nom, prénom,immatriculation, numéro de formule) et votre date naissance</UL>
                   <UL>Seul les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
-                  <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le Système d'Immatriculation des Véhicules,</UL>
+                  <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le système d’immatriculation des véhicules (SIV),</UL>
                   <UL><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">contactez-nous</a></UL>
                 </div>
               </div>
@@ -196,7 +196,7 @@
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'j'}]">
                 <div class="panel-body">
-                  <UL>Le numéro de formule est situé en bas à gauche des Cartes Grises éditées depuis 2009. Exemple de numéro de formule : 2015XX012345 </UL>
+                  <UL>Le numéro de formule est situé en bas à gauche de la carte grise. (p. ex. : 2015XX012345)</UL>
                 </div>
               </div>
             </div>
