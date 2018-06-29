@@ -157,14 +157,28 @@
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
                 </div>
-                <div v-if="v.sinistre !== false">
+                <div v-if="v.sinistres.length > 0">
                   <div class="row">
                     <!-- debut sinistre  -->
                     <div class="col-sm-1"><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
                                  {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"></i></div>
-                    <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
-                      <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span></div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese[(v.apte ? 'fin_ove' : 'ove')].adv }}</span></div>
+                    <div class="col-sm-6">
+                      <!-- état - un seul sinistre !-->
+                      <span v-if="v.sinistres.length === 1">
+                        <span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
+                        <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span>
+                      </span>
+                      <!-- état - plusieurs sinistres !-->
+                      <span v-if="v.sinistres.length > 1">
+                        <span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">plusieurs sinistres, </span> <span class="txt-small-13">dont le dernier déclaré en {{v.sinistre}}</span></br>
+                        <span v-if="v.apte !== false"> <span class="txt-small-13">Le véhicule a été</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span>
+                      </span>
+                    </div>
+                    <div class="col-sm-5">
+                      <!-- commentaire: un ou plusieurs sinistres !-->
+                      <span class="color-info_2 bold_4 txt-small-13">{{ synthese[(v.apte ? 'fin_ove' : 'ove')].adv }}</span><br/>
+                      <span class="color-info_2 bold_4 txt-small-13" v-if="v.sinistres.length > 1">{{ synthese.multi_ove.adv }}</span>
+                    </div>
                     <!-- fin sinistre  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -755,7 +769,7 @@ export default {
       synthese: {
         'fin_ove': {
           'icon': 'fa-exclamation-triangle',
-          'text': 'Ce véhicule a eu un sinistre déclaré',
+          'text': 'Ce véhicule a eu un sinistre déclaré, et déclaré apte à circuler',
           'adv': 'Demandez le rapport d’expert et la(es) facture(s)',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
@@ -763,6 +777,12 @@ export default {
           'icon': 'fa-exclamation-triangle',
           'text': 'Ce véhicule a eu un sinistre déclaré',
           'adv': 'Une procédure de réparation contrôlée est en cours',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
+        },
+        'multi_ove': {
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Ce véhicule a eu plusieurs sinistres déclarés',
+          'adv': 'Vous pouvez consulter l\'historique détaillé pour plus de précisions concernant les précédents sinistres',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
@@ -1121,8 +1141,10 @@ export default {
 
         this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
-        this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
-        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : (veh.ove === 'NON')) : undefined
+        this.v.sinistres = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+        this.v.sinistre = this.v.sinistres[0]
+        this.v.aptes = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+        this.v.apte = (veh.historique !== undefined) ? ((this.v.aptes[0] > this.v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
         this.result = 'ok'
         console.log(this.v)
       }, (error) => {
