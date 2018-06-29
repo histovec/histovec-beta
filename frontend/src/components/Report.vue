@@ -957,7 +957,7 @@ export default {
             vignette = 1
           } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
             vignette = 2
-          } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn >= new Date('2006-12-31'))) {
+          } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn <= new Date('2006-12-31'))) {
             vignette = 3
           } else if (dateImmatEn >= new Date('2000-06-01') && dateImmatEn <= new Date('2004-06-30')) {
             vignette = 4
