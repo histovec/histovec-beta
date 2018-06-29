@@ -91,8 +91,7 @@
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
                   <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span></div>
                   <div class="col-sm-5">
-                    <div v-if="(!v.certificat.etranger)">
-                    <!-- <div v-if="(!v.certificat.etranger) && (!v.fni)"> -->
+                    <div v-if="(!v.certificat.etranger) && (v.fni !== 'ko')">
                       <div v-if="holder">
                         <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
                         <span class="info_red txt-small-13">{{v.nb_tit}}</span>
@@ -108,10 +107,10 @@
                         <sup class="info_red txt-small">ème</sup>
                       </div>
                     </div>
-                    <!-- <div v-if="(!v.certificat.etranger) && (v.fni)">
+                    <div v-if="(v.fni === 'ko')">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
                       <span class="color-info_2 bold_4 txt-small-12">(immatriculation avant 2009)</span>
-                    </div> -->
+                    </div>
                     <div v-if="v.certificat.etranger">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
                       <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
@@ -1106,8 +1105,8 @@ export default {
         this.v.certificat.premier = veh.date_premiere_immat || this.default
         this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
-        this.v.certificat.fr = this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date)
-        this.v.fni = (veh.dos_date_conversion_siv !== undefined)
+        this.v.certificat.fr = (this.v.certificat.etranger) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
+        this.v.fni = (veh.dos_date_conversion_siv !== undefined) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
