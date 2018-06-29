@@ -10,6 +10,7 @@ export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
+export APP_VERSION	:= $(shell git describe --tags)
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend
 export LOGS=${APP_PATH}/log
@@ -180,7 +181,7 @@ backend-log:
 	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d 2>&1 | grep -v orphan
 
 frontend-dev: network tor
-	@echo docker-compose up frontend for dev
+	@echo docker-compose up frontend for dev ${VERSION}
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
 frontend-dev-stop:

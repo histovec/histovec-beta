@@ -589,7 +589,7 @@ tbody {
 }
 
 .banner.banner-big-height {
-  min-height: 550px;
+  min-height: 350px; /* 550px; */
   padding-top: 100px;
 }
 
@@ -9329,6 +9329,18 @@ hr.style1 {
 .color-primary {
   color: #337ab7;
 }
+.color-white{
+	color:#fff;
+	text-shadow: 2px 2px 2px #000;
+}
+.color-black{
+	color:#000;
+	text-shadow: 2px 2px 2px black;
+}
+.color-gray{
+	color:#999;
+	text-shadow: 2px 2px 2px black;
+}
 /* -------------------- fin couleur -------------------- */
 /* -------------------- debut gras -------------------- */
 .bold {
@@ -9390,32 +9402,32 @@ hr.style1 {
 
 .alert-0 {
   color: #fff;
-  background-color: #407337;
+  background-color: #008932;
 }
 
 .alert-1 {
   color: #fff;
-  background-color: #7b4787;
+  background-color: #a864a1;
 }
 
 .alert-2 {
-  color: #f6da53;
-  background-color: #edbd37;
+  color: #fff;
+  background-color: #ffed01;
 }
 
 .alert-3 {
   color: #fff;
-  background-color: #e88939;
+  background-color: #f7a701;
 }
 
 .alert-4 {
   color: #fff;
-  background-color: #4a252c;
+  background-color: #95052a;
 }
 
 .alert-5 {
   color: #fff;
-  background-color: #4a4643;
+  background-color: #5d7284;
 }
 /* -------------------- fin alertes -------------------- */
 /* -------------------- debut tableau -------------------- */

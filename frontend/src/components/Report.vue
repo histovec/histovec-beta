@@ -41,12 +41,11 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.affichage_logo " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
-          <div class="col-sm-5" v-if="beta">
-            <div class="alert alert-icon alert-3" role="alert"> <i class="fa fa-info-circle"></i> Vignette Crit'Air - Tous les véhicules <span class="txt-small">100% électrique et hydrogènes</span> </div>
-          </div>
-          <div class="col-sm-2" v-if="beta"><img class="img-responsive" src="assets/images/vignettes_crit_air/petit/vignette_3.png"></div>
+
+
+
         </div>
         <!-- fin vignette -->
         <!-- debut trait séparation -->
@@ -58,7 +57,7 @@
           <!-- Nav tabs -->
           <ul class="nav nav-tabs" role="tablist">
             <li :class="[{'active' : tab === 'abstract'}]"><a class="clickable" @click="tab = 'abstract'"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li :class="[{'active' : tab === 'vehicle'}]"><a class="clickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.affichage_logo + ' pr-10'" ></i>Véhicule</a></li>
+            <li :class="[{'active' : tab === 'vehicle'}]"><a class="clickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' pr-10'" ></i>Véhicule</a></li>
             <li :class="[{'active' : tab === 'holder'}]"><a class="clickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
             <li :class="[{'active' : tab === 'situation'}]"><a class="clickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
             <li :class="[{'active' : tab === 'history'}]"><a class="clickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
@@ -78,7 +77,7 @@
                 </div>
                 <div class="row">
                   <!-- debut voiture  -->
-                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.affichage_logo + ' fa-2x'" ></i></div>
+                  <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                   <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
                     <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
@@ -92,19 +91,30 @@
                   <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
                   <div class="col-sm-6"><span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span></div>
                   <div class="col-sm-5">
-                    <div v-if="holder">
-                      <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
-                      <span class="info_red txt-small-13">{{v.nb_tit}}</span>
-                      <sup v-if="v.nb_tit === 1" class="info_red txt-small">er</sup>
-                      <sup v-if="v.nb_tit > 1" class="info_red txt-small">ème</sup>
-                      <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
+                    <div v-if="(!v.certificat.etranger)">
+                    <!-- <div v-if="(!v.certificat.etranger) && (!v.fni)"> -->
+                      <div v-if="holder">
+                        <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
+                        <span class="info_red txt-small-13">{{v.nb_tit}}</span>
+                        <sup v-if="v.nb_tit === 1" class="info_red txt-small">er</sup>
+                        <sup v-if="v.nb_tit > 1" class="info_red txt-small">ème</sup>
+                        <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
+                      </div>
+                      <div v-if="!holder">
+                        <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
+                        <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
+                        <span class="color-info_2 bold_4 txt-small-13">titulaire(s), en l'achetant vous serez le</span>
+                        <span class="info_red txt-small-13">{{ v.nb_tit + 1}}</span>
+                        <sup class="info_red txt-small">ème</sup>
+                      </div>
                     </div>
-                    <div v-if="!holder">
-                      <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
-                      <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
-                      <span class="color-info_2 bold_4 txt-small-13">titulaire(s) en l'achetant vous serez le</span>
-                      <span class="info_red txt-small-13">{{ v.nb_tit + 1}}</span>
-                      <sup class="info_red txt-small">ème</sup>
+                    <!-- <div v-if="(!v.certificat.etranger) && (v.fni)">
+                      <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
+                      <span class="color-info_2 bold_4 txt-small-12">(immatriculation avant 2009)</span>
+                    </div> -->
+                    <div v-if="v.certificat.etranger">
+                      <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
+                      <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
                     </div>
                   </div>
 
@@ -153,8 +163,8 @@
                     <div class="col-sm-1"><i :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
                                  {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"></i></div>
                     <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
-                      <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13">en {{v.apte}}</span></span></div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese.ove.adv }}</span></div>
+                      <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">{{ synthese[(v.apte ? 'fin_ove' : 'ove')].adv }}</span></div>
                     <!-- fin sinistre  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -185,6 +195,14 @@
                   <!-- debut trait separation  -->
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
+                </div>
+                <div v-if="v.vignette_numero !== ''">
+                  <div class="row">
+                    <!-- debut ras  -->
+                    <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
+                    <div class="col-sm-6"><span class="txt-small-13">Eligible vignette Crit'Air {{ v.vignette_numero }}</span> </div>
+                    <!-- fin ras  -->
+                  </div>
                 </div>
               </div>
             </div>
@@ -534,7 +552,7 @@
               <div v-if="v.certificat.etranger">
                 <div class="row" >
                   <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation en France</span></div>
-                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.siv }}</span></div>
+                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.fr }}</span></div>
                 </div>
                 <div class="separator"></div>
               </div>
@@ -735,10 +753,16 @@ export default {
       tab: 'abstract',
       default: 'non disponible',
       synthese: {
+        'fin_ove': {
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Ce véhicule a eu un sinistre déclaré',
+          'adv': 'Demandez le rapport d’expert et la(es) facture(s)',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
+        },
         'ove': {
           'icon': 'fa-exclamation-triangle',
           'text': 'Ce véhicule a eu un sinistre déclaré',
-          'adv': 'Demandez le rapport d\'expert et la(es) facture(s)',
+          'adv': 'Une procédure de réparation contrôlée est en cours',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
         },
         'otci': {
@@ -867,7 +891,7 @@ export default {
       })
     },
     calcNbTit (historique) {
-      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
+      let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_LOC', 'CHANG_LOC_CVN', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
       let nbTit = historique.filter(event => opTit.includes(event.opa_type))
       return nbTit.length
     },
@@ -879,7 +903,28 @@ export default {
         return (year > 1) ? year + ' ans' : year + ' an'
       }
     },
-    getLogoVehicule (genre) {
+    getVehiculeTypeCarburant (carburant) {
+      // Mapping Carburant
+      let essence = ['ES', 'EH', 'ET', 'FE', 'FH']
+      let diesel = ['GO', 'GA', 'GE', 'GF', 'GG', 'GH', 'PL', 'GQ']
+      let electHydro = ['AC', 'EL', 'H2', 'HE', 'HH']
+      let gaz = ['EG', 'EN', 'EP', 'EQ', 'FG', 'FN', 'G2', 'GN', 'GP', 'GZ', 'NH', 'PH']
+      let hybrideRech = ['EE', 'EM', 'ER', 'FL', 'GL', 'GM', 'NE', 'PE']
+      let typeCarburant = ''
+      if (essence.includes(carburant)) {
+        typeCarburant = 'essence'
+      } else if (diesel.includes(carburant)) {
+        typeCarburant = 'diesel'
+      } else if (electHydro.includes(carburant)) {
+        typeCarburant = 'electrique'
+      } else if (gaz.includes(carburant)) {
+        typeCarburant = 'gaz'
+      } else if (hybrideRech.includes(carburant)) {
+        typeCarburant = 'hybride'
+      }
+      return typeCarburant
+    },
+    getVehiculeLogo (genre) {
       let moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
       let truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
       let type = 'car'
@@ -889,6 +934,101 @@ export default {
         type = 'truck'
       }
       return type
+    },
+    getVignetteNumero (genre, typeCarburant, pollution, dateImmat) {
+      let splitDate = dateImmat.split('/')
+      let dateImmatEn = new Date(splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0])
+
+      // Mapping Genre
+      let motocycle = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'TM', 'QM', 'TQM']
+      let cyclomoteur = ['CYCL', 'CL']
+      let voiture = ['VP']
+      let vehiculeUtilLeger = ['CTTE', 'Deriv-VP', 'VTSU']
+      let poidsLourdsCarBus = ['CAM', 'TRA', 'TRR', 'TCP', 'VASP', 'SREM']
+
+      // Mapping Norme Euro
+      let normeEuro = (pollution) ? pollution.split('EURO') : ''
+      let numeroEuro = (normeEuro !== '' && normeEuro[1] !== undefined) ? normeEuro[1] : ''
+      let vignette = ''
+
+      if (typeCarburant === 'gaz' || typeCarburant === 'hybride') {
+        vignette = 1
+      } else if (typeCarburant === 'electrique') {
+        vignette = 'electrique'
+      } else {
+        if (motocycle.includes(genre) || cyclomoteur.includes(genre)) {
+          if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(genre) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(genre) && dateImmatEn >= new Date('2018-01-01'))) {
+            vignette = 1
+          } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
+            vignette = 2
+          } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn <= new Date('2006-12-31'))) {
+            vignette = 3
+          } else if (dateImmatEn >= new Date('2000-06-01') && dateImmatEn <= new Date('2004-06-30')) {
+            vignette = 4
+          }
+        } else if (voiture.includes(genre)) {
+          if (typeCarburant === 'essence') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 1
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 2
+            } else if (numeroEuro === '2' || numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 3
+            }
+          } else if (typeCarburant === 'diesel') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 2
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 3
+            } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 4
+            } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2000-12-31'))) {
+              vignette = 5
+            }
+          }
+        } else if (vehiculeUtilLeger.includes(genre)) {
+          if (typeCarburant === 'essence') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 1
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 2
+            } else if (numeroEuro === '2' || numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 3
+            }
+          } else if (typeCarburant === 'diesel') {
+            if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
+              vignette = 2
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
+              vignette = 3
+            } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
+              vignette = 4
+            } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2000-12-31'))) {
+              vignette = 5
+            }
+          }
+        } else if (poidsLourdsCarBus.includes(genre)) {
+          if (typeCarburant === 'essence') {
+            if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
+              vignette = 1
+            } else if (numeroEuro === '5' || (numeroEuro === '' && dateImmatEn >= new Date('2009-10-01') && dateImmatEn <= new Date('2013-12-31'))) {
+              vignette = 2
+            } else if (numeroEuro === '3' || numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2001-10-01') && dateImmatEn <= new Date('2009-09-30'))) {
+              vignette = 3
+            }
+          } else if (typeCarburant === 'diesel') {
+            if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
+              vignette = 2
+            } else if (numeroEuro === '5' || (numeroEuro === '' && dateImmatEn >= new Date('2009-10-01') && dateImmatEn <= new Date('2013-12-31'))) {
+              vignette = 3
+            } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-10-01') && dateImmatEn <= new Date('2009-09-30'))) {
+              vignette = 4
+            } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-10-01') && dateImmatEn <= new Date('2006-09-30'))) {
+              vignette = 5
+            }
+          }
+        }
+      }
+      return vignette
     }
   },
   created () {
@@ -946,19 +1086,28 @@ export default {
         this.v.certificat.premier = veh.date_premiere_immat || this.default
         this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
         this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
+        this.v.certificat.fr = this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date)
+        this.v.fni = (veh.dos_date_conversion_siv !== undefined)
         this.v.certificat.courant = veh.date_emission_CI || this.default
         this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
-        this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
+        if ((this.v.certificat.fr !== this.v.certificat.siv) && (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))) {
+          let tmp = veh.historique
+          tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
+          this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
+        } else {
+          this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
+        }
         this.v.nb_proprietaires = veh.nb_proprietaire
         this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
         this.v.age_veh = veh.age_annee
-        this.v.affichage_logo = this.getLogoVehicule(veh.CTEC_RLIB_GENRE)
+        this.v.logo_vehicule = this.getVehiculeLogo(veh.CTEC_RLIB_GENRE)
+        this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
 
         this.v.administratif.gages = veh.gage || this.default
         this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
         // opposition et procédure à valider
-        this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'véhicule endommagé' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+        this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
         // pour l'instant aucun véhicule saisi dans les échantillons
         this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
         this.v.administratif.vol = veh.vehicule_vole || this.default
@@ -970,10 +1119,10 @@ export default {
 
         this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
 
-        this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
+        this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
         // ci-dessous : interprétation à confirmer
         this.v.sinistre = (veh.historique !== undefined) ? (veh.historique.some(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')) ? veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')).map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
-        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : false) : undefined
+        this.v.apte = (veh.historique !== undefined) ? (veh.historique.some(e => e.opa_type === 'LEVER_OVE') ? veh.historique.filter(e => e.opa_type === 'LEVER_OVE').map(e => e.opa_date.replace(/-.*/, ''))[0] : (veh.ove === 'NON')) : undefined
         this.result = 'ok'
         console.log(this.v)
       }, (error) => {

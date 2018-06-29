@@ -8,13 +8,13 @@
             <div class="col-md-8">
               <div class="header-left clearfix">
                 <!-- debut bandeau -->
-                <div class="logo"><a href="home"><img @click="show = !show" src="assets/images/histovec-header-mobile.png" class="img-responsive" width="548" height="98"> </a></div>
+                <div class="logo"><a href="home"><img alt="accueil" @click="show = !show" src="assets/images/histovec-header-mobile.png" class="img-responsive" width="548" height="98"> </a></div>
                 <!-- fin bandeau -->
               </div>
             </div>
             <!-- debut beta -->
-            <div id="no-boot" class="col-xs-1"> <img src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
-            <!-- debut beta -->
+            <div id="no-boot" class="col-xs-1"> <img alt="version beta" src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
+            <!-- fin beta -->
           </div>
         </div>
       </header>
@@ -37,8 +37,8 @@
                     <nav>
                       <ul class="nav nav-pills nav-stacked">
                         <li><a href="faq">FAQ</a></li>
-                        <li><a href="contact">Contact</a></li>
-                        <li><a href="feedback">Signaler une erreur</a></li>
+                        <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'">CONTACT</a></li>
+                        <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">Signaler une erreur</a></li>
                       </ul>
                     </nav>
                   </div>
@@ -54,7 +54,7 @@
                       <div class="overlay-container"> <img class="img-responsive" src="assets/images/logos_metiers/logo_mi.png" alt="Ministère de l'Intérieur"> <a href="https://www.interieur.gouv.fr/" target="_blank" class="overlay-link small"></a> </div>
                     </div>
                     <div class="col-md-6 p-b-10">
-                      <div class="overlay-container"><img class="img-responsive" src="assets/images/logos_metiers/securite_routiere_120.png" alt="Délégation à la sécurité routière"> <a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites" target="_blank" class="overlay-link small"></a></div>
+                      <div class="overlay-container"><img class="img-responsive" src="assets/images/logos_metiers/securite_routiere_120.png" alt="sécurité routière, tous responsables"> <a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites" target="_blank" class="overlay-link small"></a></div>
                     </div>
                   </div>
                 </div>
@@ -70,7 +70,7 @@
           <div class="subfooter-inner">
             <div class="row">
               <div class="col-md-12">
-                <p class="text-center">Copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
+                <p class="text-center">{{ appName }} version {{ appVersion }} - copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
               </div>
             </div>
           </div>
@@ -85,6 +85,7 @@
 <script>
 import Vue from 'vue'
 
+import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/libelle_operations.json'
@@ -103,6 +104,8 @@ window.bus = new Vue()
 Vue.mixin({
   data () {
     return {
+      appName: process.env.APP,
+      appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
       operations: operations,
