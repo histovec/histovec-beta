@@ -59,7 +59,7 @@
               <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Demande%20de%20reproduction'">contactez-nous</i></a></p>
               <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com">picjumbo.com</a> et libres de droits.</p>
           <h5>Conception et réalisation</h5>
-              Conception et réalisation Lab <a href="https://www.interieur.gouv.fr/Le-ministere/Secretariat-general/Direction-des-systemes-d-information-et-de-communication">DSIC</a> du ministère de l'Intérieur avec le Bureau des immatriculations de la Délégation à la sécurité routière (<a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/qui-sommes-nous/la-delegation-a-la-securite-routiere">DSR</a>)
+              Conception et réalisation Lab <a href="https://www.interieur.gouv.fr/Le-ministere/Secretariat-general/Direction-des-systemes-d-information-et-de-communication">DSIC</a> du ministère de l'Intérieur avec le Bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (<a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/qui-sommes-nous/la-delegation-a-la-securite-routiere">DSR</a>)
 
               <h6> Liens hypertextes entrants </h6>
               Tout site public ou privé est autorisé à établir, sans autorisation préalable, un lien vers les informations diffusées dans ce site.
