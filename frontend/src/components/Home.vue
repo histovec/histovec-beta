@@ -1,10 +1,10 @@
 <template>
     <main role="main">
       <!-- section start -->
-<div class="banner banner-big-height padding-bottom-clear" style="background-image:url('assets/images/accueil_1.jpg');background-position: 50% 10%;">
+<div class="banner banner-big-height padding-bottom-clear" style="background-image:url('assets/images/accueil_4.jpg'); background-size: 1200px; background-position: 50% -100px;">
   <div class="container">
     <div class="row justify-content-lg-center">
-      <div class="col-lg-12 text-center pv-20">
+      <div class="col-lg-12 text-center pv-20 pvm0">
         <h1 class="title color-white">Jouez la transparence</h1>
         <p class="text-center color-white txt-small-20">En partageant l'historique du véhicule</p>
       </div>
