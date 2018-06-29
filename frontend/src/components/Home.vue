@@ -1,24 +1,18 @@
 <template>
     <main role="main">
       <!-- section start -->
-      <section class="dark-translucent-bg" style="background-image:url(assets/images/tableau_de_bord/officielle.jpg);" width="1920" height="450">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="call-to-action text-center">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <h2 class="text-center mt-4"><span class="bold_6">L’administration</span> agit pour la <span class="bold_6">sécurité routière</span></h2>
-                    <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-                    <p class="large text-center bold_4">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf . <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- section end -->
+<div class="banner banner-big-height padding-bottom-clear" style="background-image:url('assets/images/accueil_1.jpg');background-position: 50% 10%;">
+  <div class="container">
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-12 text-center pv-20">
+        <h1 class="title color-white">Jouez la transparence</h1>
+        <p class="text-center color-white txt-small-20">En partageant l'historique du véhicule</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- section end -->
+
       <!-- section start -->
       <section class="light-gray-bg pv-20 clearfix">
         <div class="container">
@@ -26,7 +20,7 @@
             <div class="col-lg-6" >
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center">
                 <!-- debut bouton vendeur -->
-                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
+                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
                 <p>Rassurez vos acheteurs potentiels.</p>
@@ -35,7 +29,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton acheteur -->
-                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'buyer' }">Acheteur <i class="fa fa-users"></i></router-link>
+                <router-link class="btn radius-30 btn-warning btn-animated btn-lg" :to="{ name: 'buyer' }">Acheteur <i class="fa fa-users"></i></router-link>
                 <!-- fin bouton acheteur -->
                 <div class="separator clearfix"></div>
                 <p>Achetez en confiance : demandez au vendeur le rapport.</p>
@@ -133,6 +127,15 @@
         </div>
       </section>
       <!-- section end -->
+      <div class="container">
+  <div class="row justify-content-lg-center">
+    <div class="col-lg-12">
+      <h2 class="text-center mt-4">L’administration</span> agit pour la sécurité routière</h2>
+      <p class="large text-center">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf. <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
+    </div>
+  </div>
+</div>
+
       <!-- section start -->
       <section class="dark-translucent-bg fixed-bg" style="background-image:url(assets/images/tableau_de_bord/41.jpg);">
         <div class="container">
@@ -160,7 +163,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton vendeur -->
-                <router-link class="btn radius-30 btn-dark btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
+                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'search', params: {t: 'particulier'}}">Vendeur <i class="fa fa-handshake-o"></i></router-link>
                 <!-- fin bouton vendeur -->
                 <div class="separator clearfix"></div>
                 <p>Rassurez vos acheteurs potentiels.</p>
@@ -169,7 +172,7 @@
             <div class="col-lg-6">
               <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
                 <!-- debut bouton acheteur -->
-                <router-link class="btn radius-30 btn-default btn-animated btn-lg" :to="{ name: 'buyer' }">Acheteur <i class="fa fa-users"></i></router-link>
+                <router-link class="btn radius-30 btn-warning btn-animated btn-lg" :to="{ name: 'buyer' }">Acheteur <i class="fa fa-users"></i></router-link>
                 <!-- fin bouton acheteur -->
                 <div class="separator clearfix"></div>
                 <p>Achetez en confiance : demandez au vendeur le rapport.</p>

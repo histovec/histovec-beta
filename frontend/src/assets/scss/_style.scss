@@ -589,7 +589,7 @@ tbody {
 }
 
 .banner.banner-big-height {
-  min-height: 550px;
+  min-height: 350px; /* 550px; */
   padding-top: 100px;
 }
 
@@ -9328,6 +9328,18 @@ hr.style1 {
 
 .color-primary {
   color: #337ab7;
+}
+.color-white{
+	color:#fff;
+	text-shadow: 2px 2px 2px #000;
+}
+.color-black{
+	color:#000;
+	text-shadow: 2px 2px 2px black;
+}
+.color-gray{
+	color:#999;
+	text-shadow: 2px 2px 2px black;
 }
 /* -------------------- fin couleur -------------------- */
 /* -------------------- debut gras -------------------- */

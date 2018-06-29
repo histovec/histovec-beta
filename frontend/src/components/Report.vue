@@ -43,12 +43,8 @@
           <div class="col-sm-5">
             <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
-          <div class="col-sm-5" v-if="v.vignette_numero !== ''">
-            <div v-bind:class="'alert alert-icon alert-' + v.vignette_numero " role="alert"> <i class="fa fa-info-circle"></i> Eligible vignette Crit'Air {{ v.vignette_numero }} </div>
-          </div>
-          <div class="col-sm-2" v-if="v.vignette_numero !== ''">
-            <img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/petit/vignette_' + v.vignette_numero + '.png' ">
-          </div>
+
+
 
         </div>
         <!-- fin vignette -->
@@ -199,6 +195,14 @@
                   <!-- debut trait separation  -->
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
+                </div>
+                <div v-if="v.vignette_numero !== ''">
+                  <div class="row">
+                    <!-- debut ras  -->
+                    <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
+                    <div class="col-sm-6"><span class="txt-small-13">Eligible vignette Crit'Air {{ v.vignette_numero }}</span> </div>
+                    <!-- fin ras  -->
+                  </div>
                 </div>
               </div>
             </div>
