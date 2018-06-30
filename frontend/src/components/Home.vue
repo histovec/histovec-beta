@@ -137,7 +137,7 @@
 </div>
 
       <!-- section start -->
-      <section class="dark-translucent-bg fixed-bg" style="background-image:url(assets/images/tableau_de_bord/41.jpg);">
+      <section class="dark-translucent-bg fixed-bg" style="background-image:url(assets/images/clavier.jpg);">
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
