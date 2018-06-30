@@ -51,7 +51,7 @@ make index-purge
 
 ## tester l'application
 
-- rendez-vous sur : http://localhost:8088
+- rendez-vous sur : http://localhost:80
 - depuis la page d'accueil,  cliquez sur "vendeur" ou "professionnel"
 - sur la parge de recherche (mode "vendeur"), entrez les données de la personnes physique (nom, prénom, date de naissance) ou morale (raison sociale, n° SIREN) et les données identifiantes du véhicule (n° d'immatriculaion, n° de formule)
 - vous obtenez le rapport. Cliquez sur "Transmettre le rapport" pour obtenir les liens à transmettre à l'acheteur. Celui-ci peut êre copié, envoyé par mail, sms ou QR-code.
