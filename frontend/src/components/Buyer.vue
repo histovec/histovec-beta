@@ -11,7 +11,7 @@
         </div>
         <!-- breadcrumb end -->
         <!-- section start -->
-        <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.png);">
+        <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%">
           <div class="container">
             <div class="row justify-content-lg-center">
               <div class="col-lg-12">
