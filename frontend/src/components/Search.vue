@@ -260,7 +260,9 @@ export default {
     },
     currentMonthNumber () {
       var date = new Date()
-      date = date.getFullYear() + '' + this.pad(date.getMonth() + 1, 2)
+      // patch temporaire pour la continuité du mois (réversibilité à faire mi-juillet)
+      // date = date.getFullYear() + '' + this.pad(date.getMonth() + 1, 2)
+      date = date.getFullYear() + '' + this.pad(date.getMonth(), 2)
       console.log(date)
       return date
     },
