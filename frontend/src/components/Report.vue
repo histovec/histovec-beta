@@ -1072,7 +1072,7 @@ export default {
         this.v.ctec.vin = veh.vin
         this.plaque = veh.plaq_immat
         this.v.plaque = veh.plaq_immat
-        this.v.ctec.couleur = veh.couleur
+        this.v.ctec.couleur = veh.couleur || this.default
         this.v.ctec.cnit = veh.num_cnit
         this.v.ctec.tvv = veh.tvv
         this.v.ctec.reception.type = veh.type_reception
