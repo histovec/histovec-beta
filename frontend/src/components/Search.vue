@@ -67,12 +67,12 @@
             <!-- ================ -->
             <!-- Nav tabs -->
             <ul class="nav nav-tabs style-2" role="tablist">
-              <li :class="[{'in active' : type_personne === 'particulier'}]"><a class="clickable" @click="type_personne = 'particulier'"><i class="fa fa-user pr-10"></i>Particulier</a></li>
-              <li :class="[{'in active' : type_personne === 'pro'}]"><a class="clickable" @click="type_personne = 'pro'"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
+              <li :class="[{'in active' : typePersonne === 'particulier'}]"><a class="clickable" @click="typePersonne = 'particulier'"><i class="fa fa-user pr-10"></i>Particulier</a></li>
+              <li :class="[{'in active' : typePersonne === 'pro'}]"><a class="clickable" @click="typePersonne = 'pro'"><i class="fa fa-building-o pr-10"></i>Entreprise</a></li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane" id="h2tab1" :class="[{'in active' : type_personne === 'particulier'}]">
+              <div class="tab-pane" id="h2tab1" :class="[{'in active' : typePersonne === 'particulier'}]">
                 <div class="row">
                   <div class="col-md-12">
                     <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
@@ -93,9 +93,9 @@
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4">
-                            <div class="form-group has-feedback" :class="[{'has-error' : (date_naissance === '' && status !== 'init')}]">
+                            <div class="form-group has-feedback" :class="[{'has-error' : (dateNaissance === '' && status !== 'init')}]">
                               <label class="control-label">Date de naissance <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="date_naissance" tabindex="3">
+                              <input type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateNaissance" tabindex="3">
                               <i class="fa fa-calendar form-control-feedback"></i> </div>
                           </div>
                         </div>
@@ -133,7 +133,7 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane" id="h2tab2" :class="[{'in active' : type_personne === 'pro'}]">
+              <div class="tab-pane" id="h2tab2" :class="[{'in active' : typePersonne === 'pro'}]">
                 <div class="row">
                   <div class="col-md-12"> <span class="info_red txt-small-11" v-if="status == 'failed'">* Veuillez renseignez les champs obligatoire</span>
                     <fieldset>
@@ -141,9 +141,9 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group has-feedback" :class="[{'has-error' : (raison_sociale === '' && status !== 'init')}]">
+                            <div class="form-group has-feedback" :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]">
                               <label class="control-label">Raison sociale <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input id="organization" name="raison_sociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raison_sociale" v-on:input="raison_sociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
+                              <input id="organization" name="raisonSociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raisonSociale" v-on:input="raisonSociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
@@ -233,14 +233,6 @@ export default {
     return {
       modal: false,
       active: false,
-      type_personne: 'particulier',
-      nom: '',
-      raison_sociale: '',
-      prenom: '',
-      date_naissance: '',
-      plaque: '',
-      siren: '',
-      formule: '',
       status: 'init'
     }
   },
@@ -252,11 +244,75 @@ export default {
     }
   },
   computed: {
+    nom: {
+      get () {
+        return this.$store.state.nom
+      },
+      set (value) {
+        this.$store.commit('updateNom', value)
+      }
+    },
+    prenom: {
+      get () {
+        return this.$store.state.prenom
+      },
+      set (value) {
+        this.$store.commit('updatePrenom', value)
+      }
+    },
+    dateNaissance: {
+      get () {
+        return this.$store.state.dateNaissance
+      },
+      set (value) {
+        this.$store.commit('updateDateNaissance', value)
+      }
+    },
+    raisonSociale: {
+      get () {
+        return this.$store.state.raisonSociale
+      },
+      set (value) {
+        this.$store.commit('updateRaisonSociale', value)
+      }
+    },
+    siren: {
+      get () {
+        return this.$store.state.siren
+      },
+      set (value) {
+        this.$store.commit('updateSiren', value)
+      }
+    },
+    plaque: {
+      get () {
+        return this.$store.state.plaque
+      },
+      set (value) {
+        this.$store.commit('updatePlaque', value)
+      }
+    },
+    formule: {
+      get () {
+        return this.$store.state.formule
+      },
+      set (value) {
+        this.$store.commit('updateFormule', value)
+      }
+    },
+    typePersonne: {
+      get () {
+        return this.$store.state.typePersonne
+      },
+      set (value) {
+        this.$store.commit('updateTypePersonne', value)
+      }
+    },
     checkFormule () {
       return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
     },
     checkFields () {
-      return ((this.nom && this.prenom && this.date_naissance) || (this.raison_sociale && this.siren)) && this.plaque && this.checkFormule
+      return ((this.nom && this.prenom && this.dateNaissance) || (this.raisonSociale && this.siren)) && this.plaque && this.checkFormule
     },
     currentMonthNumber () {
       var date = new Date()
@@ -298,7 +354,7 @@ export default {
       return instance.getFullYear() + '' + currentWeekNumber
     },
     id () {
-      return this.hash(this.raison_sociale + this.siren + this.nom + this.prenom + this.date_naissance + this.plaque + this.formule)
+      return this.hash(this.raisonSociale + this.siren + this.nom + this.prenom + this.dateNaissance + this.plaque + this.formule)
     },
     code () {
       return this.hash(this.plaque + this.formule + this.currentMonthNumber)
@@ -314,12 +370,12 @@ export default {
         if (evt.target.name === 'nom') {
           this.nom = data[0]
           this.prenom = data[1]
-          this.date_naissance = data[2]
+          this.dateNaissance = data[2]
           this.plaque = data[3]
           this.formule = data[4]
         }
-        if (evt.target.name === 'raison_sociale') {
-          this.raison_sociale = data[0]
+        if (evt.target.name === 'raisonSociale') {
+          this.raisonSociale = data[0]
           this.siren = data[1]
           this.plaque = data[2]
           this.formule = data[3]
@@ -341,6 +397,9 @@ export default {
     onSubmit () {
       this.status = 'posting'
       if (this.checkFields) {
+        this.$store.commit('updateV', undefined)
+        this.$store.commit('updateKey', undefined)
+        this.$store.commit('updateCode', undefined)
         this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
       } else {
         this.status = 'failed'
@@ -357,7 +416,7 @@ export default {
     if (!window.location.host.match(/(histovec.fr|.gouv.fr$)/)) {
       this.active = true
     }
-    this.type_personne = this.$route.params.t || 'particulier'
+    this.typePersonne = this.$route.params.t || 'particulier'
   }
 }
 </script>

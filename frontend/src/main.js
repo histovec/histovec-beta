@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import VueResource from 'vue-resource'
 import VueShortkey from 'vue-shortkey'
 
@@ -14,6 +15,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#root',
+  store,
   router,
   template: '<App/>',
   components: { App }
