@@ -856,7 +856,7 @@ export default {
   },
   computed: {
     holder () {
-      return this.$route.params.code !== undefined
+      return (this.$route.params.code !== undefined) || (this.$store.state.code !== undefined)
     },
     mailBody () {
       var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
@@ -867,7 +867,7 @@ export default {
       return text + this.url.replace('&', '%26')
     },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + this.$route.params.code + '&key=' + this.$route.params.key
+      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
     }
   },
   methods: {
@@ -1051,116 +1051,121 @@ export default {
     }
   },
   created () {
-    this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
-      .then(response => {
-        console.log(response)
-        if (response.body.hits.hits.length === 0) {
-          this.result = 'notFound'
-          return
-        }
-        var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
-        var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
-        var veh = this.decrypt(key, encrypted)
-        console.log(veh)
-        if (veh.annulation_ci !== 'NON') {
-          this.result = 'cancelled'
-          return
-        } else {
-          this.result = 'error'
-        }
-        this.vin = veh.vin
-        this.v.ctec.vin = veh.vin
-        this.plaque = veh.plaq_immat
-        this.v.plaque = veh.plaq_immat
-        this.v.ctec.couleur = veh.couleur || this.default
-        this.v.ctec.cnit = veh.num_cnit
-        this.v.ctec.tvv = veh.tvv
-        this.v.ctec.reception.type = veh.type_reception
-        this.v.ctec.reception.numero = veh.cveh_num_reception
-        this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
-        this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-        this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
-        this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
-        this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
-        this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
-        this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
-        this.v.ctec.co2 = veh.CTEC_CO2
-        this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
-        this.v.ctec.marque = veh.marque
-        this.v.ctec.modele = veh.nom_commercial
-        this.v.ctec.genre = veh.CTEC_RLIB_GENRE
-        this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-        this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
-        this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
-        this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
-        this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
-        this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
-        this.v.ctec.PT.AC = veh.ptac_f2
-        this.v.ctec.PT.RA = veh.ptra_f3
-        this.v.ctec.PT.service = veh.pt_service_g
-        this.v.ctec.PT.AV = veh.ptav_g1
-
-        this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-        this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
-        this.v.certificat.premier = veh.date_premiere_immat || this.default
-        this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
-        this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
-        this.v.certificat.fr = (this.v.certificat.etranger) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
-        this.v.fni = (veh.dos_date_conversion_siv !== undefined) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
-        this.v.certificat.courant = veh.date_emission_CI || this.default
-        this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
-
-        if ((this.v.certificat.fr !== this.v.certificat.siv) && (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))) {
-          let tmp = veh.historique
-          tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
-          this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
-        } else {
-          this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
-        }
-        this.v.nb_proprietaires = veh.nb_proprietaire
-        this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
-        this.v.age_veh = veh.age_annee
-        this.v.logo_vehicule = this.getVehiculeLogo(veh.CTEC_RLIB_GENRE)
-        this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
-
-        this.v.administratif.gages = veh.gage || this.default
-        this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
-        // opposition et procédure à valider
-        this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
-        // pour l'instant aucun véhicule saisi dans les échantillons
-        this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
-        this.v.administratif.vol = veh.vehicule_vole || this.default
-
-        // vol : les informations viennent-elles de foves ?
-        this.v.administratif.titre.vol = veh.ci_vole || this.default
-        this.v.administratif.titre.perte = veh.perte_ci || this.default
-        this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
-
-        this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
-
-        this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
-        // ci-dessous : interprétation à confirmer
-        this.v.sinistres = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-        this.v.sinistre = this.v.sinistres[0]
-        this.v.aptes = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-        this.v.apte = (veh.historique !== undefined) ? ((this.v.aptes[0] > this.v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
-        this.result = 'ok'
-        console.log(this.v)
-      }, (error) => {
-        this.result = 'error'
-        if (error.status === 404) {
-          this.result = 'invalid'
-        }
-        if (error.status === 429) {
-          this.result = 'tooManyRequests'
-        }
-        if (error.status === 502) {
-          this.result = 'unavailable'
-        }
-      }
-    )
-    if (this.$route.query.id === 'test') {
+    if (this.$store.state.v) {
+      this.v = this.$store.state.v
       this.result = 'ok'
+    } else {
+      this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
+        .then(response => {
+          console.log(response)
+          if (response.body.hits.hits.length === 0) {
+            this.result = 'notFound'
+            return
+          }
+          var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
+          var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
+          var veh = this.decrypt(key, encrypted)
+          console.log(veh)
+          if (veh.annulation_ci !== 'NON') {
+            this.result = 'cancelled'
+            return
+          } else {
+            this.result = 'error'
+          }
+          this.vin = veh.vin
+          this.v.ctec.vin = veh.vin
+          this.plaque = veh.plaq_immat
+          this.v.plaque = veh.plaq_immat
+          this.v.ctec.couleur = veh.couleur || this.default
+          this.v.ctec.cnit = veh.num_cnit
+          this.v.ctec.tvv = veh.tvv
+          this.v.ctec.reception.type = veh.type_reception
+          this.v.ctec.reception.numero = veh.cveh_num_reception
+          this.v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
+          this.v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
+          this.v.ctec.puissance.cv = veh.CTEC_PUISS_CV
+          this.v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
+          this.v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
+          this.v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
+          this.v.ctec.db = veh.CTEC_NIVEAU_SONORE
+          this.v.ctec.co2 = veh.CTEC_CO2
+          this.v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
+          this.v.ctec.marque = veh.marque
+          this.v.ctec.modele = veh.nom_commercial
+          this.v.ctec.genre = veh.CTEC_RLIB_GENRE
+          this.v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
+          this.v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
+          this.v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
+          this.v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
+          this.v.ctec.energie = veh.CTEC_RLIB_ENERGIE
+          this.v.ctec.PT.admissible = veh.pt_tech_adm_f1
+          this.v.ctec.PT.AC = veh.ptac_f2
+          this.v.ctec.PT.RA = veh.ptra_f3
+          this.v.ctec.PT.service = veh.pt_service_g
+          this.v.ctec.PT.AV = veh.ptav_g1
+
+          this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
+          this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
+          this.v.certificat.premier = veh.date_premiere_immat || this.default
+          this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
+          this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
+          this.v.certificat.fr = (this.v.certificat.etranger) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
+          this.v.fni = (veh.dos_date_conversion_siv !== undefined) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
+          this.v.certificat.courant = veh.date_emission_CI || this.default
+          this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
+
+          if ((this.v.certificat.fr !== this.v.certificat.siv) && (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))) {
+            let tmp = veh.historique
+            tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
+            this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
+          } else {
+            this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
+          }
+          this.v.nb_proprietaires = veh.nb_proprietaire
+          this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
+          this.v.age_veh = veh.age_annee
+          this.v.logo_vehicule = this.getVehiculeLogo(veh.CTEC_RLIB_GENRE)
+          this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
+
+          this.v.administratif.gages = veh.gage || this.default
+          this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
+          // opposition et procédure à valider
+          this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+          // pour l'instant aucun véhicule saisi dans les échantillons
+          this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
+          this.v.administratif.vol = veh.vehicule_vole || this.default
+
+          // vol : les informations viennent-elles de foves ?
+          this.v.administratif.titre.vol = veh.ci_vole || this.default
+          this.v.administratif.titre.perte = veh.perte_ci || this.default
+          this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
+
+          this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
+
+          this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
+          // ci-dessous : interprétation à confirmer
+          this.v.sinistres = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+          this.v.sinistre = this.v.sinistres[0]
+          this.v.aptes = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+          this.v.apte = (veh.historique !== undefined) ? ((this.v.aptes[0] > this.v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
+          this.result = 'ok'
+          console.log(this.v)
+          this.$store.commit('updateV', this.v)
+          this.$store.commit('updateCode', this.$route.params.code)
+          this.$store.commit('updateKey', this.$route.params.key)
+        }, (error) => {
+          this.result = 'error'
+          if (error.status === 404) {
+            this.result = 'invalid'
+          }
+          if (error.status === 429) {
+            this.result = 'tooManyRequests'
+          }
+          if (error.status === 502) {
+            this.result = 'unavailable'
+          }
+        }
+      )
     }
   }
 }
