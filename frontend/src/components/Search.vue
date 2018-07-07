@@ -93,7 +93,7 @@
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-4">
-                            <div class="form-group has-feedback" :class="[{'has-error' : (dateNaissance === '' && status !== 'init')}]">
+                            <div class="form-group has-feedback" :class="[{'has-error' : ((!checkDateNaissance) && status !== 'init')}]">
                               <label class="control-label">Date de naissance <span class="info_red" title="Ce champ est requis.">*</span></label>
                               <input type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateNaissance" tabindex="3">
                               <i class="fa fa-calendar form-control-feedback"></i> </div>
@@ -106,7 +106,7 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group has-feedback" :class="[{'has-error' : (plaque === '' && status !== 'init')}]">
+                            <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
                               <input type="text" required="required" class="form-control" id="plaque" placeholder="AA-555-AA" v-model="plaque" tabindex="4">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
@@ -308,11 +308,17 @@ export default {
         this.$store.commit('updateTypePersonne', value)
       }
     },
+    checkDateNaissance () {
+      return this.dateNaissance.match(/^[0-3][0-9](/|-|\s+)?[0-1][0-9](/|-|\s+)?[1-2][0-9]{3}$/)
+    },
+    checkPlaque () {
+      return this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
+    },
     checkFormule () {
       return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
     },
     checkFields () {
-      return ((this.nom && this.prenom && this.dateNaissance) || (this.raisonSociale && this.siren)) && this.plaque && this.checkFormule
+      return ((this.nom && this.prenom) || (this.raisonSociale && this.siren)) && this.plaque && this.checkFormule
     },
     currentMonthNumber () {
       var date = new Date()
