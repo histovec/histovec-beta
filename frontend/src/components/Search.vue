@@ -309,10 +309,10 @@ export default {
       }
     },
     checkDateNaissance () {
-      return this.dateNaissance.match(/^[0-3][0-9][/][0-1][0-9][/][1-2][0-9]{3}$/)
+      return this.dateNaissance.match(/^[0-3][0-9](/|-|\s+)?[0-1][0-9](/|-|\s+)?[1-2][0-9]{3}$/)
     },
     checkPlaque () {
-      return this.plaque.match(/^[a-zA-Z]{2}[-][0-9]{3}[-][a-zA-Z]{2}$/)
+      return this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
     },
     checkFormule () {
       return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
