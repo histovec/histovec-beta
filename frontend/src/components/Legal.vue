@@ -96,6 +96,38 @@
                 <li>transmettre par quelque procédé que ce soit dans les services interactifs proposés sur le site Internet de l’éditeur, tout contenu illicite ou nuisible, et notamment des photos ou messages à caractère injurieux, insultant, diffamant, dénigrant, dégradant, raciste, xénophobe, sexiste, pornographique, menaçant ou qui pourrait inciter à la haine ou au harcèlement et allant à l'encontre du droit au respect de la vie privée ou sans rapport avec les thèmes proposés,</li>
                 <li>transmettre par quelque procédé que ce soit, tout contenu et notamment des photos violant les droits de la propriété intellectuelle, industrielle, les droits de la personne, etc.</li>
               </ul>
+              <h5>Protection des données personnelles</h5>
+              <h6>Responsable du traitement</h6>
+               Le responsable de traitement est, comme pour le SIV, la délégation à la sécurité routière (DSR).
+              <h6>Finalité du traitement</h6>
+               La finalité du traitement des données personnelles est exclusivement de fournir l’historique du véhicule.
+              <h6>Données personnelles collectées</h6>
+               Les données collectées par HistoVec  lors de la demande du rapport visent à authentifier le titulaire du véhicule en faisant preuve qu’elle dispose de la carte grise du véhicule. ,pour un particulier :
+              <ul>
+                <li>nom (tel que figurant sur le certificat d’immatriculation)</li>
+                <li>prénom (idem) </li>
+                <li>date de naissance (non présent sur le certificat d’immatriculation)</li>
+              </ul>
+              Pour un professionnel, les données d’identification sont :
+              <ul>
+                <li>raison sociale (tel que figurant sur le certificat d’immatriculation)</li>
+                <li>SIREN (idem) </li>
+              </ul>
+              Le titulaire, particulier ou professionnel, identifie son véhicule avec les données suivantes :
+              <ul>
+                <li>numéro d’immatriculation</li>
+                <li>numéro de formule du certificat d’immatriculation (donnée inscrite uniquement sur le titre) </li>
+              </ul>
+              <h6>Mesures de protection des données</h6>
+              Les données personnelles sont protégées par les moyens suivants : 
+              <ul>
+                <li>Aucune donnée nominative du vendeur et du véhicule n’est stockée au-delà de la session : les données personnelles sont combinées puis hachées (SHA256) avant d’être stockées en tant que clé de recherche. </li>
+                <li>Aucune information personnelle n’est affichée sur le site : seules les premières lettres du nom et prénom sont affichées, ainsi que les premières et dernières lettres du numéro d’immatriculation pour permettre à l’utilisateur de vérifier qu’il s’agit bien de la bonne information</li>
+                <li>Les échanges avec le site HistoVec sont sécurisés par le protocole https, et par ailleurs, les données du véhicule sont chiffrées (AES256) en base et ne sont déchiffrées que sur le navigateur, grâce à une combinaison hachée de la plaque et de l'immatriculation</li>
+                <li>Le service est hébergé sur les serveurs du Ministère de l’intérieur</li>
+                <li>L’acheteur consulte le rapport exclusivement à partir du lien, fourni par le vendeur, et dispose exactement du même de rapport que le vendeur</li>
+                <li>Ce lien est temporaire, valable le mois en cours et le suivant.
+              </ul>
               <!-- accordion start -->
               <!-- ================ -->
               <div class="panel-group collapse-style-2" id="accordion-2">
