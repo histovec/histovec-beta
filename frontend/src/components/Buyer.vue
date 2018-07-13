@@ -57,7 +57,26 @@
                 </div>
             </div>
             <!-- row -->
-        </div>
+            <div class="col-md-12 p-h-10">
+              <p>Vous pouvez envoyer un courriel au vendeur en utilisant le bouton ci-dessous. Il s'agit d'un modèle qui peut vous aider, mais vous pouvez utiliser d'autres moyens pour lui faire part de votre demande.<br>
+              <p class="text-center">
+                <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Demander le rapport histovec <i class="fa fa-send"></i></a>
+              </p>
+            </div>
         <!-- container -->
     </div>
 </template>
+
+<script>
+  export default {
+    computed: {
+      mailBody () {
+        var text = encodeURI('Bonjour,\n\nVous vendez un véhicule que je souhaiterai acquérir. Pourriez-vous me communiquer son historique que vous pourrez obtenir en vous connectant sur le service histovec du Ministère de l\'Intérieur ?\n\nCe service est disponible en cliquant sur le lien suivant : ')
+        return text + this.url.replace('&', '%26')
+      },
+      url () {
+        return window.location.protocol + '//' + window.location.host + '/histovec/'
+      }
+    }
+  }
+  </script>
