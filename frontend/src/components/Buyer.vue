@@ -71,7 +71,7 @@
   export default {
     computed: {
       mailBody () {
-        var text = encodeURI('Bonjour,\n\nVous vendez un véhicule que je souhaiterai acquérir. Pourriez-vous me communiquer son historique que vous pourrez obtenir en vous connectant sur le service histovec du Ministère de l\'Intérieur ?\n\nCe service est disponible en cliquant sur le lien suivant : ')
+        var text = encodeURI('Bonjour,\n\nVous vendez un véhicule que je souhaiterais acquérir. Serait--il possible de me communiquer son historique afin que je puisse vérifier que les informations que vous indiquez sont exacts ? Vous pourrez obtenir cet historique en vous connectant sur le service histovec du Ministère de l\'Intérieur. Un lien vous sera alors fourni pour que vous puissez prouver votre bonne foi auprès d'acheteurs comme moi.\n\nCe service est disponible en cliquant sur le lien suivant : ')
         return text + this.url.replace('&', '%26')
       },
       url () {
