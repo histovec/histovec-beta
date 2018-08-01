@@ -64,6 +64,7 @@
               </p>
             </div>
         <!-- container -->
+        </div>
     </div>
 </template>
 
