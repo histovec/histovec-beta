@@ -71,7 +71,7 @@
                 <div class="row">
                   <div class="col-md-7">
                     <h6 class="title p-h-35">Résumé</h6>
-                    <p class="small"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
+                    <p class="small" v-if="false"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
                   <div class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs" role="alert"> <i class="fa fa-info-circle blink_me"></i>Informations utiles</div>
                 </div>
