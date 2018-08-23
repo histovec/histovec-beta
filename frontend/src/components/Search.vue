@@ -232,7 +232,7 @@ export default {
   data () {
     return {
       modal: false,
-      active: false,
+      active: true,
       status: 'init'
     }
   },
