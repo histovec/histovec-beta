@@ -80,7 +80,9 @@
                   <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' fa-2x'" ></i></div>
                   <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
                   <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a></div>
+                  <div class="col-sm-5" v-if="!holder">
+                    <span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a>
+                  </div>
                     <!-- fin voiture  -->
                 </div>
                   <!-- debut trait separation  -->
@@ -184,10 +186,10 @@
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
                 </div>
-                <div v-if="(v.administratif.synthese.length === 0) && (this.v.sinistre === false)">
+                <div v-if="(v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
                   <div class="row">
                     <!-- debut ras  -->
-                    <div class="col-sm-1"><i class="fa fa-clipboard fa-2x"></i></div>
+                    <div class="col-sm-1"><i class="fa fa-check info_green fa-2x"></i></div>
                     <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
                           (gages, opposition, vol,...)</span> </div>
                     <div class="col-sm-5" v-if="false"><span class="color-info_2 bold_4 txt-small-13">Demandez au Vendeur un Certificat de Situation Administratif détaillé</span></div>
@@ -537,11 +539,13 @@
             <div class="tab-pane fade" :class="[{'in active' : tab === 'holder'}]">
               <h6 class="title">Titulaire</h6>
               <!-- debut titulaire et co-titulaire -->
-              <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Nature</span></div>
-                <div class="col-sm-7"><span class="txt-small-12">{{ v.titulaire.nature }}</span></div>
+              <div v-if="v.titulaire.nature !== undefined">
+                <div class="row">
+                  <div class="col-sm-5"><span class="txt-small-12">Nature</span></div>
+                  <div class="col-sm-7"><span class="txt-small-12">{{ v.titulaire.nature }}</span></div>
+                </div>
+                <div class="separator"></div>
               </div>
-              <div class="separator"></div>
 
               <div class="row">
                 <div class="col-sm-5"><span class="txt-small-12">Identité</span></div>
@@ -662,7 +666,7 @@
                 <div class="row">
                   <div class="col-md-12 p-h-10">
                     <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail, sms.<br>
-                      Ce rapport cera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
+                      Ce rapport sera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
                     <p class="text-center">
                       <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier <i class="fa fa-copy"></i></button>
                       <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
@@ -1066,6 +1070,7 @@ export default {
           var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
           var veh = this.decrypt(key, encrypted)
           console.log(veh)
+
           if (veh.annulation_ci !== 'NON') {
             this.result = 'cancelled'
             return
@@ -1103,7 +1108,6 @@ export default {
           this.v.ctec.PT.RA = veh.ptra_f3
           this.v.ctec.PT.service = veh.pt_service_g
           this.v.ctec.PT.AV = veh.ptav_g1
-
           this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
           this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
           this.v.certificat.premier = veh.date_premiere_immat || this.default
