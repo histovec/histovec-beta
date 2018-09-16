@@ -36,6 +36,7 @@ server {
     if ($request_method != GET) {
        return 403;
     }
+    add_header Access-Control-Allow-Origin '$http_origin';
     limit_req zone=api burst=10;
     limit_req_status 429;
     rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1 break;
