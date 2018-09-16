@@ -36,6 +36,7 @@ server {
     if ($request_method != GET) {
        return 403;
     }
+    add_header Access-Control-Allow-Origin '$http_origin';
     limit_req zone=api burst=10;
     limit_req zone=server burst=20 nodelay;
     limit_req_status 429;
