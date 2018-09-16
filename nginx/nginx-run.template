@@ -37,6 +37,7 @@ server {
        return 403;
     }
     limit_req zone=api burst=10;
+    limit_req zone=server burst=20 nodelay;
     limit_req_status 429;
     rewrite "^/.*/id/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1 break;
     proxy_pass http://<ES_HOST>:9200;
@@ -54,6 +55,8 @@ server {
   }
 
   location ~ (^/<APP>/api/v0/(contact|feedback)/) {
+    limit_req zone=api burst=3;
+    limit_req_status 429;
     if ($request_method != POST) {
        return 403;
     }
