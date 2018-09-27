@@ -16,7 +16,8 @@ export default new Vuex.Store({
     formule: '',
     key: undefined,
     code: undefined,
-    v: undefined
+    v: undefined,
+    cookie: undefined
   },
   mutations: {
     updateNom (state, nom) {
@@ -51,6 +52,9 @@ export default new Vuex.Store({
     },
     updateKey (state, key) {
       state.key = key
+    },
+    updateCookie (state, cookie) {
+      state.cookie = cookie
     }
   }
 })
