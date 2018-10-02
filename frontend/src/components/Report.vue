@@ -685,12 +685,11 @@
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
-                    <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail, sms.<br>
+                    <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.<br>
                       Ce rapport sera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
                     <p class="text-center">
-                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier <i class="fa fa-copy"></i></button>
+                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier le lien <i class="fa fa-copy"></i></button>
                       <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
-                      <a :href="'sms://?body=' + smsBody" class="btn radius-30 btn-dark btn-animated btn">Texto <i class="fa fa-mobile fa-2x"></i></a>
                     </p>
                   </div>
                   <div class="row">
