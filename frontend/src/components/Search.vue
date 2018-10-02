@@ -135,7 +135,7 @@
               </div>
               <div class="tab-pane" id="h2tab2" :class="[{'in active' : typePersonne === 'pro'}]">
                 <div class="row">
-                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="status == 'failed'">* Veuillez renseignez les champs obligatoire</span>
+                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="status == 'failed'">* Veuillez renseigner les champs obligatoires</span>
                     <fieldset>
                       <legend><span class="color-default">Titulaire</span></legend>
                       <form role="form">
