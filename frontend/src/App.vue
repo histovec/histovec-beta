@@ -115,10 +115,10 @@ Vue.mixin({
     }
   },
   mounted () {
-    if (this.$cookie.get('cookie') === null) {
-      this.$cookie.set('cookie', this.guid(), 1)
+    if (this.$cookie.get('userId') === null) {
+      this.$cookie.set('userId', this.guid(), 1)
+      this.$store.commit('updateCookie', this.$cookie.get('userId'))
     }
-    this.$store.commit('updateCookie', this.$cookie.get('cookie'))
     window.bus.$on('langChange', value => {
       this.lang = value
     })

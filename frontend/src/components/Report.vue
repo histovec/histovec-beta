@@ -685,12 +685,11 @@
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <div class="col-md-12 p-h-10">
-                    <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail, sms.<br>
+                    <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.<br>
                       Ce rapport sera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
                     <p class="text-center">
-                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier <i class="fa fa-copy"></i></button>
+                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier le lien <i class="fa fa-copy"></i></button>
                       <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
-                      <a :href="'sms://?body=' + smsBody" class="btn radius-30 btn-dark btn-animated btn">Texto <i class="fa fa-mobile fa-2x"></i></a>
                     </p>
                   </div>
                   <div class="row">
@@ -773,6 +772,75 @@
       </div>
     </div>
   </div>
+
+  <!-- debut modal -->
+  <div v-if="modalEval">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-dialog">
+            <div class="modal-content" style="height: 550px; overflow-y: auto;">
+              <div class="modal-header">
+                <button type="button" class="close" @click="modalEval = false">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Fermer</span>
+                </button>
+                <h6 class="modal-title">Votre évaluation</h6>
+              </div>
+              <form @submit="send" id="evaluation-form-with-recaptcha"  role="form">
+                <div class="modal-body">
+                  <span class="info_red txt-small-11" v-if="status == 'failed' && errors.length == 0">* Veuillez renseigner les champs obligatoires<br /></span>
+                  <label>Comment évaluez-vous HistoVec :  <span class="info_red" title="Ce champ est requis.">*</span></label>
+                  <div class="rating position_left p-g-10">
+                    <template v-for="n in ratings" >
+                      <a v-on:click="setNote((ratings.length+1)-n)"
+                         v-on:mouseover="star_over((ratings.length+1)-n)"
+                         v-on:mouseout="star_out"
+                         v-bind:class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
+                         title="Give star"
+                         v-model="note">★</a>
+                    </template>
+                  </div>
+                  <p class="m-h-10">
+                    <label>Vos commentaires ou suggestions :</label>
+                    <textarea class="form-control" id="message" name="message" rows="2" v-model="message"></textarea>
+                  </p>
+                  <br />
+                  <div class="form-group has-feedback" :class="[{'has-error' : (errors.length > 0 && status !== 'init')}]">
+                    <p>
+                    <label>Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ? <i>(L'adresse email ne servira que dans le cadre de cette étude)</i></label>
+                    <span class="info_red txt-small-11" v-if="errors.length > 0">{{ errors[0] }}</span>
+                    <input class="form-control" id="email" name="email" placeholder="name@example.com" v-model="email">
+                    </p>
+                  </div>
+                  <br />
+                  <p>
+                    <label><input type="checkbox" id="showModal" name="showModal" v-model="notShow">
+                    Ne plus afficher</label>
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <span>
+                    <button class="btn btn-animated btn-default">Envoyer
+                      <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
+                                           {'fa-spin fa-spinner' : (status === 'posting')},
+                                           {'fa-check' : (status === 'posted')},
+                                           {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
+                    </button>
+                  </span>
+                  <span>
+                    <a href="#" class="btn btn-animated btn-default" @click="modalEval = false">Fermer <i class="fa fa-close"></i></a>
+                    <!-- <button class="btn btn-animated btn-default" @click="modalEval = false">Fermer <i class="fa fa-close"></i></button>-->
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
+  <!-- fin modal -->
 </section>
 </template>
 
@@ -875,7 +943,17 @@ export default {
           synthese: [],
           titre: {}
         }
-      }
+      },
+      modalEval: false,
+      errors: [],
+      message: '',
+      email: '',
+      notShow: false,
+      status: 'init',
+      temp_value: null,
+      ratings: [1, 2, 3, 4, 5],
+      disabled: false,
+      note: null
     }
   },
   computed: {
@@ -1072,12 +1150,67 @@ export default {
         }
       }
       return vignette
+    },
+    send (e) {
+      this.status = 'posting'
+      if (this.note || this.notShow) {
+        let data = {'message': this.message, 'email': this.email, 'note': this.note}
+        if (!this.note && this.notShow) {
+          this.$cookie.set('evaluation', true, 1)
+          this.status = 'posted'
+          this.modalEval = false
+        } else {
+          if (this.email && !this.isEmailValid()) {
+            this.errors.push('L\'adresse email n\'est pas valide')
+            this.status = 'failed'
+          } else {
+            this.$http.post(this.apiUrl + 'feedback/', data)
+            .then(response => {
+              this.status = 'posted'
+              this.modalEval = false
+              this.$cookie.set('evaluation', true, 1)
+            }, () => {
+              this.status = 'failed'
+            }
+            )
+          }
+        }
+      } else {
+        this.status = 'failed'
+      }
+      e.preventDefault()
+    },
+    isEmailValid () {
+      let reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return reg.test(this.email)
+    },
+    setNote (value) {
+      if (!this.disabled) {
+        this.temp_value = value
+        this.note = value
+      }
+    },
+    star_over (value) {
+      if (!this.disabled) {
+        this.temp_value = this.note
+        this.note = value
+      }
+    },
+    star_out () {
+      if (!this.disabled) {
+        this.note = this.temp_value
+      }
     }
   },
   created () {
     if (this.$store.state.v) {
       this.v = this.$store.state.v
       this.result = 'ok'
+      if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
+        setTimeout(() => {
+          this.modalEval = true
+        }, 60000)
+      }
     } else {
       this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
         .then(response => {
@@ -1085,6 +1218,11 @@ export default {
           if (response.body.hits.hits.length === 0) {
             this.result = 'notFound'
             return
+          }
+          if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
+            setTimeout(() => {
+              this.modalEval = true
+            }, 60000)
           }
           var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
           var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
