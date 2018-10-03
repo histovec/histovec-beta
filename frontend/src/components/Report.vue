@@ -1315,6 +1315,7 @@ export default {
           this.$store.commit('updateV', this.v)
           this.$store.commit('updateCode', this.$route.params.code)
           this.$store.commit('updateKey', this.$route.params.key)
+          this.$store.commit('updateId', this.$route.params.id)
         }, (error) => {
           this.result = 'error'
           if (error.status === 404) {
