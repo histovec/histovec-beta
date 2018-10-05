@@ -403,9 +403,12 @@ export default {
     onSubmit () {
       this.status = 'posting'
       if (this.checkFields) {
-        this.$store.commit('updateV', undefined)
-        this.$store.commit('updateKey', undefined)
-        this.$store.commit('updateCode', undefined)
+        if (this.id !== this.$store.state.id) {
+          this.$store.commit('updateV', undefined)
+          this.$store.commit('updateKey', undefined)
+          this.$store.commit('updateCode', undefined)
+          this.$store.commit('updateId', undefined)
+        }
         this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
       } else {
         this.status = 'failed'

@@ -779,7 +779,7 @@
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-dialog">
-            <div class="modal-content" style="height: 550px; overflow-y: auto;">
+            <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" @click="modalEval = false">
                   <span aria-hidden="true">&times;</span>
@@ -813,25 +813,23 @@
                     <input class="form-control" id="email" name="email" placeholder="name@example.com" v-model="email">
                     </p>
                   </div>
-                  <br />
-                  <p>
-                    <label><input type="checkbox" id="showModal" name="showModal" v-model="notShow">
-                    Ne plus afficher</label>
-                  </p>
                 </div>
                 <div class="modal-footer">
-                  <span>
-                    <button class="btn btn-animated btn-default">Envoyer
-                      <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
-                                           {'fa-spin fa-spinner' : (status === 'posting')},
-                                           {'fa-check' : (status === 'posted')},
-                                           {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
-                    </button>
-                  </span>
-                  <span>
-                    <a href="#" class="btn btn-animated btn-default" @click="modalEval = false">Fermer <i class="fa fa-close"></i></a>
-                    <!-- <button class="btn btn-animated btn-default" @click="modalEval = false">Fermer <i class="fa fa-close"></i></button>-->
-                  </span>
+                  <div class="row">
+                    <div class="col-md-6 m-h-15 position_left">
+                      <label>
+                      <input type="checkbox" id="showModal" name="showModal" v-model="notShow">Ne plus afficher</label>
+                    </div>
+                    <div class="col-md-6">
+                      <a href="#" class="btn btn-animated btn-default m-h-05">Envoyer
+                        <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
+                                               {'fa-spin fa-spinner' : (status === 'posting')},
+                                               {'fa-check' : (status === 'posted')},
+                                               {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
+                      </a>
+                      <button class="btn btn-animated btn-default" @click="modalEval = false">Fermer <i class="fa fa-close"></i></button>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -1315,6 +1313,7 @@ export default {
           this.$store.commit('updateV', this.v)
           this.$store.commit('updateCode', this.$route.params.code)
           this.$store.commit('updateKey', this.$route.params.key)
+          this.$store.commit('updateId', this.$route.params.id)
         }, (error) => {
           this.result = 'error'
           if (error.status === 404) {
