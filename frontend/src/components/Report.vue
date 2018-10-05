@@ -1204,11 +1204,6 @@ export default {
     if (this.$store.state.v) {
       this.v = this.$store.state.v
       this.result = 'ok'
-      if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
-        setTimeout(() => {
-          this.modalEval = true
-        }, 6000000)
-      }
     } else {
       this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
         .then(response => {
@@ -1220,7 +1215,7 @@ export default {
           if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
             setTimeout(() => {
               this.modalEval = true
-            }, 60000)
+            }, 6000000)
           }
           var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
           var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
