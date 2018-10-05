@@ -821,12 +821,12 @@
                       <input type="checkbox" id="showModal" name="showModal" v-model="notShow">Ne plus afficher</label>
                     </div>
                     <div class="col-md-6">
-                      <a href="#" class="btn btn-animated btn-default m-h-05">Envoyer
+                      <button class="btn btn-animated btn-default m-h-05">Envoyer
                         <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
-                                               {'fa-spin fa-spinner' : (status === 'posting')},
-                                               {'fa-check' : (status === 'posted')},
-                                               {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
-                      </a>
+                                           {'fa-spin fa-spinner' : (status === 'posting')},
+                                           {'fa-check' : (status === 'posted')},
+                                           {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
+                      </button>
                       <button class="btn btn-animated btn-default" @click="modalEval = false">Fermer <i class="fa fa-close"></i></button>
                     </div>
                   </div>
