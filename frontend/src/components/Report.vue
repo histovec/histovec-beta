@@ -1207,7 +1207,7 @@ export default {
       if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
         setTimeout(() => {
           this.modalEval = true
-        }, 60000)
+        }, 6000000)
       }
     } else {
       this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
