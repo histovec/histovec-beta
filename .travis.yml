@@ -28,4 +28,9 @@ before_script:
   - docker version
 
 script:
-  - make build
+  - make -f Makefile.deploy build-all-images
+  - make -f Makefile.deploy up-all
+  - make -f Makefile.deploy down-all
+
+after_script:
+  - make -f Makefile.deploy build-dir-clean
