@@ -10,7 +10,7 @@ export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
-export APP_VERSION	:= $(shell git describe --tags)
+export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend
 export LOGS=${APP_PATH}/log
@@ -45,39 +45,39 @@ vm_max_count		:= $(shell cat /etc/sysctl.conf | egrep vm.max_map_count\s*=\s*262
 dummy               := $(shell touch artifacts)
 include ./artifacts
 
-DC := 'docker-compose'
+DC := docker-compose
 
 install-prerequisites:
 ifeq ("$(wildcard /usr/bin/docker)","")
-        echo install docker-ce, still to be tested
-        sudo apt-get update
-        sudo apt-get install \
+	echo install docker-ce, still to be tested
+	sudo apt-get update
+	sudo apt-get install \
         apt-transport-https \
         ca-certificates \
         curl \
         software-properties-common
 
-        curl -fsSL https://download.docker.com/linux/${ID}/gpg | sudo apt-key add -
-        sudo add-apt-repository \
+	curl -fsSL https://download.docker.com/linux/${ID}/gpg | sudo apt-key add -
+	sudo add-apt-repository \
                 "deb https://download.docker.com/linux/ubuntu \
                 `lsb_release -cs` \
                 stable"
-        sudo apt-get update
-        sudo apt-get install -y docker-ce
-        @(if (id -Gn ${USER} | grep -vc docker); then sudo usermod -aG docker ${USER} ;fi) > /dev/null
+	sudo apt-get update
+	sudo apt-get install -y docker-ce
+	@(if (id -Gn ${USER} | grep -vc docker); then sudo usermod -aG docker ${USER} ;fi) > /dev/null
 endif
 ifeq ("$(wildcard /usr/bin/gawk)","")
 	@echo installing gawk
 	@sudo apt-get install -y gawk
-endif	
+endif
 ifeq ("$(wildcard /usr/bin/jq)","")
-	@echo installing jq 
+	@echo installing jq
 	@sudo apt-get install -y jq
-endif  
+endif
 ifeq ("$(wildcard /usr/bin/parallel)","")
-	@echo installing parallel 
-	@sudo apt-get install -y parallel 
-endif  
+	@echo installing parallel
+	@sudo apt-get install -y parallel
+endif
 ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@echo installing docker-compose
 	@sudo curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -124,7 +124,7 @@ endif
 index-test:
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@echo index test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel --no-notice -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}' 
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel --no-notice -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 endif
 
 index-stress:

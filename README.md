@@ -79,3 +79,8 @@ make up
 ## source
 Le code a été développé en quelques heures à partir de :
 https://github.com/rhanka/vue-python-docker-dev-kit
+
+## Etat du code
+
+[![Build Status](https://travis-ci.org/histovec/histovec-beta.svg?branch=dev)](https://travis-ci.org/histovec/histovec-beta)
+
