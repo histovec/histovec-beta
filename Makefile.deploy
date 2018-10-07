@@ -207,3 +207,19 @@ publish-latest:
            done ; \
 	  curl -k -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/ ; \
 	)
+#
+# test up
+#
+SHELL:=/bin/bash
+test-up: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-$(APP)
+	echo "${APP} ${APP_VERSION} up and running"
+
+test-up-$(APP):
+	time bash tests/test-up-$(APP).sh
+test-up-nginx:
+	time bash tests/test-up-nginx.sh
+test-up-elasticsearch: wait-elasticsearch
+	time bash tests/test-up-elasticsearch.sh
+
+wait-elasticsearch:
+	timeout=120 ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/_cat/indices ; ret=$$? ; echo "Wait $$timeout" ; ((timeout--)) ; sleep 1 ; done ; exit $$ret

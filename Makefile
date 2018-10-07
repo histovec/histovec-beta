@@ -16,7 +16,7 @@ export FRONTEND=${APP_PATH}/frontend
 export LOGS=${APP_PATH}/log
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
-
+export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 export ES_MEM=2048m
 export ES_HOST=elasticsearch
 
@@ -93,12 +93,12 @@ index-purge: network elasticsearch
 	@echo
 
 index-create: network elasticsearch
-ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
+ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 else
 	@echo
-	@docker exec -it ${APP}-elasticsearch curl -s -H "Content-Type: application/json" -XPUT localhost:9200/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true.*/${dataset} index created with mapping\n/'
-	@docker exec -it ${APP}-elasticsearch curl -s -XPUT localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index created\n/'
-	@docker exec -it ${APP}-elasticsearch curl -s -XPUT localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback created\n/'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -H "Content-Type: application/json" -XPUT localhost:9200/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true.*/${dataset} index created with mapping\n/'
+	@docker exec -i ${USER_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index created\n/'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback created\n/'
 	@echo
 	@echo wating a few seconds for index being up
 	@sleep 10
@@ -106,8 +106,8 @@ else
 endif
 
 index-status: network elasticsearch
-	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/${dataset}?pretty
-	@docker exec -it ${APP}-elasticsearch curl -XGET localhost:9200/_cat/indices
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -XGET localhost:9200/${dataset}?pretty
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -XGET localhost:9200/_cat/indices
 
 index-load: index-create
 ifeq ("$(wildcard ${datasource})","")
@@ -166,7 +166,7 @@ ifeq ("$(wildcard ${BACKEND}/esdata/)","")
 	@mkdir -p ${BACKEND}/esdata
 	@chmod 777 ${BACKEND}/esdata/.
 endif
-	@docker-compose -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
+	@${DC} -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
 
 elasticsearch-stop:
 	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
