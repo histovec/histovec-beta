@@ -30,6 +30,12 @@ before_script:
 script:
   - make -f Makefile.deploy build-all-images
   - make -f Makefile.deploy up-all
+# create test env
+  - make -f Makefile.deploy wait-elasticsearch
+  - make -f Makefile.deploy index-create
+  - make -f Makefile.deploy index-status
+  - make -f Makefile.deploy test-up
+# teardown
   - make -f Makefile.deploy down-all
 
 after_script:
