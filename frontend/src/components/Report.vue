@@ -773,6 +773,14 @@
     </div>
   </div>
 
+  <div class="container" v-if="this.result === 'invalidKey'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur</div>
+      </div>
+    </div>
+  </div>
+
   <!-- debut modal -->
   <div v-if="modalEval">
     <transition name="modal">
@@ -1205,6 +1213,11 @@ export default {
       this.v = this.$store.state.v
       this.result = 'ok'
     } else {
+      if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+        // Cas des liens acheteur sans KEY
+        this.result = 'invalidKey'
+        return
+      }
       this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
         .then(response => {
           console.log(response)
