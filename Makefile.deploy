@@ -13,6 +13,8 @@ export NPM_REGISTRY = $(shell echo $$NPM_REGISTRY )
 export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
 dollar = $(shell echo \$$)
 
+#
+DC_BUILD_ARGS = --pull --no-cache
 # docker-compose file
 DC_BUILD_FRONTEND     = ${DC_PREFIX}-build-deploy-frontend.yml
 DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-nginx-frontend.yml
@@ -31,8 +33,9 @@ FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION = $(APP)-elasticsearch-latest-image.tar
 FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
 FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
 
-PUBLISH_URL_APP_VERSION = histovec-docker-images/$(APP_VERSION)
-PUBLISH_URL_LATEST_VERSION = histovec-docker-images/latest
+PUBLISH_URL_BASE           = histovec-docker-images
+PUBLISH_URL_APP_VERSION    = $(PUBLISH_URL_BASE)/$(APP_VERSION)
+PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
 
 # Publish configuration
 export openstack_url = $(shell echo $$openstack_url )
@@ -73,7 +76,7 @@ frontend-build-dist: frontend-prepare-build frontend-check-build
 	@echo building ${APP} frontend
 	@echo building frontend in ${FRONTEND}
 	APP="$(APP)" FRONTEND="$(FRONTEND)" http_proxy="$(http_proxy)" NPM_REGISTRY="$(NPM_REGISTRY)" SASS_REGISTRY="$(SASS_REGISTRY)" \
-	  ${DC} -f $(DC_BUILD_FRONTEND) build
+	  ${DC} -f $(DC_BUILD_FRONTEND) build $(DC_BUILD_ARGS)
 
 frontend-prepare-build:
 	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
@@ -132,7 +135,7 @@ elasticsearch-build: elasticsearch-build-image
 elasticsearch-build-image: elasticsearch-check-build
 	@echo building ${APP} elasticsearch
 	${DC} -f $(DC_ELASTICSEARCH) pull
-	${DC} -f $(DC_ELASTICSEARCH) build
+	${DC} -f $(DC_ELASTICSEARCH) build $(DC_BUILD_ARGS)
 
 elasticsearch-check-build:
 	${DC} -f $(DC_ELASTICSEARCH) config -q
@@ -148,7 +151,7 @@ nginx-build-image: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-bu
 	@echo building ${APP} nginx
 #	${DC} -f $(DC_RUN_NGINX_FRONTEND) pull
 	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
-	${DC} -f $(DC_RUN_NGINX_FRONTEND) build
+	${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
 
 nginx-check-build:
 	${DC} -f $(DC_RUN_NGINX_FRONTEND) config -q
@@ -189,7 +192,7 @@ publish-$(APP_VERSION):
            ; do \
             curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_APP_VERSION)/$$file ; \
            done ; \
-	  curl -k -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_APP_VERSION)/ ; \
+	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=${APP_VERSION}/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
 	)
 
 publish-latest:
@@ -205,7 +208,7 @@ publish-latest:
            ; do \
             curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/$$file ; \
            done ; \
-	  curl -k -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/ ; \
+	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=latest/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
 	)
 #
 # test up
