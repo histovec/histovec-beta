@@ -962,7 +962,9 @@ export default {
       ratings: [1, 2, 3, 4, 5],
       disabled: false,
       note: null,
-      notifSuccess: false
+      notifSuccess: false,
+      timerModalEval: 60000,
+      timerNotifSuccess: 2000
     }
   },
   computed: {
@@ -1210,16 +1212,24 @@ export default {
         this.note = this.tempValue
       }
     },
-    showNotifSuccess (e) {
+    showNotifSuccess () {
       this.notifSuccess = true
       setTimeout(() => {
         this.notifSuccess = false
-      }, 2000)
+      }, this.timerNotifSuccess)
+    },
+    showModalEval () {
+      if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
+        setTimeout(() => {
+          this.modalEval = true
+        }, this.timerModalEval)
+      }
     }
   },
   created () {
     if (this.$store.state.v) {
       this.v = this.$store.state.v
+      this.showModalEval()
       this.result = 'ok'
     } else {
       if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
@@ -1234,11 +1244,7 @@ export default {
             this.result = 'notFound'
             return
           }
-          if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
-            setTimeout(() => {
-              this.modalEval = true
-            }, 6000000)
-          }
+          this.showModalEval()
           var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
           var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
           var veh = this.decrypt(key, encrypted)
