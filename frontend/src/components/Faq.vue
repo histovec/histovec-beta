@@ -58,11 +58,11 @@
           <!-- ================ -->
           <div class="panel-group collapse-style-2" id="accordion-2">
             <!-- debut question 1 -->
-            <div class="panel panel-default">
+            <div id="a" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#commentcamarche" @click="choose('a')" class="clickable" :class="[{'collapsed' : choice != 'a'}]"> <i class="fa fa-file-text-o pr-10"></i>Comment utiliser HistoVec ? </a> </h4>
+                <h4 class="panel-title"> <a href="#a" @click="choose('a')" class="clickable" :class="[{'collapsed' : choice != 'a'}]"> <i class="fa fa-file-text-o pr-10"></i>Comment utiliser HistoVec ? </a> </h4>
               </div>
-              <div id="commentcamarche" class="panel-collapse collapse" :class="[{'in' : choice === 'a'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'a'}]">
                 <div class="panel-body">
                  <DL><DT>Vous êtes vendeur :</DT>
      						 <DD><OL><LI>sur la page vendeur, remplissez le formulaire pour vous identifier avec les informations demandées, et validez.
@@ -77,11 +77,11 @@
             </div>
             <!-- fin question 1 -->
             <!-- debut question 2 -->
-            <div class="panel panel-default">
+            <div id="b" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#rapport" @click="choose('b')" class="clickable" :class="[{'collapsed' : choice !== 'b' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment retrouver mon rapport HistoVec ultérieurement ?</a> </h4>
+                <h4 class="panel-title"> <a href="#b" @click="choose('b')" class="clickable" :class="[{'collapsed' : choice !== 'b' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment retrouver mon rapport HistoVec ultérieurement ?</a> </h4>
               </div>
-              <div id="rapport" class="panel-collapse collapse" :class="[{'in' : choice === 'b'}]">
+              <div  class="panel-collapse collapse" :class="[{'in' : choice === 'b'}]">
                 <div class="panel-body">
                   <UL>Le rapport généré est consultable pendant une période de 4 semaines aprés sa génération, grâce au lien qui a été fourni par le vendeur.</UL>
                 </div>
@@ -89,11 +89,11 @@
             </div>
             <!-- fin question 2 -->
             <!-- debut question 3 -->
-            <div class="panel panel-default">
+            <div id="c" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#cible" @click="choose('c')" class="clickable" :class="[{'collapsed' : choice !== 'c' }]"> <i class="fa fa-file-text-o pr-10"></i>A qui s’adresse HistoVec ?</a> </h4>
+                <h4 class="panel-title"> <a href="#c" @click="choose('c')" class="clickable" :class="[{'collapsed' : choice !== 'c' }]"> <i class="fa fa-file-text-o pr-10"></i>A qui s’adresse HistoVec ?</a> </h4>
               </div>
-              <div id="cible" class="panel-collapse collapse" :class="[{'in' : choice === 'c'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'c'}]">
                 <div class="panel-body">
                   <DL><DT>Je vends mon véhicule d’occasion :</DT>
                       <DD><UL>HistoVec vous permet de valoriser votre offre en fournissant gratuitement un rapport d’historique officiel qui rassurera vos acheteurs potentiels.</UL></DD>
@@ -109,11 +109,11 @@
             </div>
             <!-- fin question 3 -->
             <!-- debut question 4 -->
-            <div class="panel panel-default">
+            <div id="d" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#info" @click="choose('d')" class="clickable" :class="[{'collapsed' : choice !== 'd' }]"> <i class="fa fa-file-text-o pr-10"></i>D’où proviennent les informations d’HistoVec ?</a> </h4>
+                <h4 class="panel-title"> <a href="#d" @click="choose('d')" class="clickable" :class="[{'collapsed' : choice !== 'd' }]"> <i class="fa fa-file-text-o pr-10"></i>D’où proviennent les informations d’HistoVec ?</a> </h4>
               </div>
-              <div id="info" class="panel-collapse collapse" :class="[{'in' : choice === 'd'}]">
+              <div  class="panel-collapse collapse" :class="[{'in' : choice === 'd'}]">
                 <div class="panel-body">
                   <UL>Les informations du rapport sont issues du système d’immatriculation des véhicules (SIV) du ministère de l’intérieur.</UL>
                 </div>
@@ -121,11 +121,11 @@
             </div>
             <!-- fin question 4 -->
             <!-- debut question 5 -->
-            <div class="panel panel-default">
+            <div id="e" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#consulter" @click="choose('e')" class="clickable" :class="[{'collapsed' : choice !== 'e' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?</a> </h4>
+                <h4 class="panel-title"> <a href="#e" @click="choose('e')" class="clickable" :class="[{'collapsed' : choice !== 'e' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?</a> </h4>
               </div>
-              <div id="consulter" class="panel-collapse collapse" :class="[{'in' : choice === 'e'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'e'}]">
                 <div class="panel-body">
                   <UL>Seul le propriétaire du certificat d’immatriculation peut générer le rapport HistoVec de son véhicule, qu’il choisit de transmettre à des tiers.</UL>
                 </div>
@@ -133,11 +133,11 @@
             </div>
             <!-- fin question 5 -->
             <!-- debut question 6 -->
-            <div class="panel panel-default">
+            <div id="f" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#garantie" @click="choose('f')" class="clickable" :class="[{'collapsed' : choice !== 'f' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelles sont les garanties d’HistoVec ?</a> </h4>
+                <h4 class="panel-title"> <a href="#f" @click="choose('f')" class="clickable" :class="[{'collapsed' : choice !== 'f' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelles sont les garanties d’HistoVec ?</a> </h4>
               </div>
-              <div id="garantie" class="panel-collapse collapse" :class="[{'in' : choice === 'f'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'f'}]">
                 <div class="panel-body">
                   <DL><DT>Officiel :</DT>
                       <DD><UL>HistoVec est un site produit par le ministère de l’intérieur et fournit les données du système d’immatriculation des véhicules (SIV).</UL></DD>
@@ -151,11 +151,11 @@
             </div>
             <!-- fin question 6 -->
             <!-- debut question 7 -->
-            <div class="panel panel-default">
+            <div id="g" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#complete" @click="choose('g')" class="clickable" :class="[{'collapsed' : choice !== 'g' }]"> <i class="fa fa-file-text-o pr-10"></i>Est-ce que les informations sont complètes ?</a> </h4>
+                <h4 class="panel-title"> <a href="#g" @click="choose('g')" class="clickable" :class="[{'collapsed' : choice !== 'g' }]"> <i class="fa fa-file-text-o pr-10"></i>Est-ce que les informations sont complètes ?</a> </h4>
               </div>
-              <div id="complete" class="panel-collapse collapse" :class="[{'in' : choice === 'g'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'g'}]">
                 <div class="panel-body">
                   <UL>Seules les informations connues du Ministère de l’Intérieur sont fournies. Par exemple, ne sont enregistrés que les sinistres déclarés à l’assureur et pour lesquels un expert a enregistré une procédure VRC (Véhicule à Réparation Contrôlée).</UL>
                 </div>
@@ -163,11 +163,11 @@
             </div>
             <!-- fin question 7 -->
             <!-- debut question8 -->
-            <div class="panel panel-default">
+            <div id="h" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#signaler" @click="choose('h')" class="clickable" :class="[{'collapsed' : choice !== 'h' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment signaler une information manquante ou inexacte ?</a> </h4>
+                <h4 class="panel-title"> <a href="#h" @click="choose('h')" class="clickable" :class="[{'collapsed' : choice !== 'h' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment signaler une information manquante ou inexacte ?</a> </h4>
               </div>
-              <div id="signaler" class="panel-collapse collapse" :class="[{'in' : choice === 'h'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'h'}]">
                 <div class="panel-body">
                   <UL><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">contactez-nous</a></UL>
                 </div>
@@ -175,11 +175,11 @@
             </div>
             <!-- fin question 9 -->
             <!-- debut question 9 -->
-            <div class="panel panel-default">
+            <div id="i" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#vehicule" @click="choose('i')" class="clickable" :class="[{'collapsed' : choice !== 'i' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas mon véhicule ?</a> </h4>
+                <h4 class="panel-title"> <a href="#i" @click="choose('i')" class="clickable" :class="[{'collapsed' : choice !== 'i' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas mon véhicule ?</a> </h4>
               </div>
-              <div id="vehicule" class="panel-collapse collapse" :class="[{'in' : choice === 'i'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'i'}]">
                 <div class="panel-body">
                   <UL>Recopiez exactement les données de la carte grise (nom, prénom,immatriculation, numéro de formule) et votre date naissance</UL>
                   <UL>Seul les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
@@ -190,11 +190,11 @@
             </div>
             <!-- fin question 9 -->
             <!-- debut question 10 -->
-            <div class="panel panel-default">
+            <div id="j" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#formule" @click="choose('j')" class="clickable" :class="[{'collapsed' : choice !== 'j' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
+                <h4 class="panel-title"> <a href="#j" @click="choose('j')" class="clickable" :class="[{'collapsed' : choice !== 'j' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
               </div>
-              <div id="formule" class="panel-collapse collapse" :class="[{'in' : choice === 'j'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'j'}]">
                 <div class="panel-body">
                   <UL>Le numéro de formule est situé en bas à gauche de la carte grise. (p. ex. : 2015XX012345)</UL>
                 </div>
@@ -202,11 +202,11 @@
             </div>
             <!-- fin question 10 -->
             <!-- debut question 11 -->
-            <div class="panel panel-default">
+            <div id="k" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#donnees" @click="choose('k')" class="clickable" :class="[{'collapsed' : choicie !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
+                <h4 class="panel-title"> <a href="#k" @click="choose('k')" class="clickable" :class="[{'collapsed' : choice !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
               </div>
-              <div id="donnees" class="panel-collapse collapse" :class="[{'in' : choice === 'k'}]">
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'k'}]">
                 <div class="panel-body">
                   <UL>Vous pouvez les consulter dans <a href="legal">mentions légales.</a></UL>
                 </div>
@@ -227,7 +227,7 @@
 export default {
   data () {
     return {
-      choice: ''
+      choice: (window.location.href.split('#')[1] !== undefined) ? window.location.href.split('#')[1] : ''
     }
   },
   methods: {
