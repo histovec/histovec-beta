@@ -58,9 +58,9 @@
           <!-- ================ -->
           <div class="panel-group collapse-style-2" id="accordion-2">
             <!-- debut question 1 -->
-            <div class="panel panel-default">
+            <div id="a" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('a')" class="clickable" :class="[{'collapsed' : choice != 'a'}]"> <i class="fa fa-file-text-o pr-10"></i>Comment utiliser HistoVec ? </a> </h4>
+                <h4 class="panel-title"> <a href="#a" @click="choose('a')" class="clickable" :class="[{'collapsed' : choice != 'a'}]"> <i class="fa fa-file-text-o pr-10"></i>Comment utiliser HistoVec ? </a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'a'}]">
                 <div class="panel-body">
@@ -77,11 +77,11 @@
             </div>
             <!-- fin question 1 -->
             <!-- debut question 2 -->
-            <div class="panel panel-default">
+            <div id="b" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('b')" class="clickable" :class="[{'collapsed' : choice !== 'b' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment retrouver mon rapport HistoVec ultérieurement ?</a> </h4>
+                <h4 class="panel-title"> <a href="#b" @click="choose('b')" class="clickable" :class="[{'collapsed' : choice !== 'b' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment retrouver mon rapport HistoVec ultérieurement ?</a> </h4>
               </div>
-              <div class="panel-collapse collapse" :class="[{'in' : choice === 'b'}]">
+              <div  class="panel-collapse collapse" :class="[{'in' : choice === 'b'}]">
                 <div class="panel-body">
                   <UL>Le rapport généré est consultable pendant une période de 4 semaines aprés sa génération, grâce au lien qui a été fourni par le vendeur.</UL>
                 </div>
@@ -89,9 +89,9 @@
             </div>
             <!-- fin question 2 -->
             <!-- debut question 3 -->
-            <div class="panel panel-default">
+            <div id="c" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('c')" class="clickable" :class="[{'collapsed' : choice !== 'c' }]"> <i class="fa fa-file-text-o pr-10"></i>A qui s’adresse HistoVec ?</a> </h4>
+                <h4 class="panel-title"> <a href="#c" @click="choose('c')" class="clickable" :class="[{'collapsed' : choice !== 'c' }]"> <i class="fa fa-file-text-o pr-10"></i>A qui s’adresse HistoVec ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'c'}]">
                 <div class="panel-body">
@@ -109,11 +109,11 @@
             </div>
             <!-- fin question 3 -->
             <!-- debut question 4 -->
-            <div class="panel panel-default">
+            <div id="d" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('d')" class="clickable" :class="[{'collapsed' : choice !== 'd' }]"> <i class="fa fa-file-text-o pr-10"></i>D’où proviennent les informations d’HistoVec ?</a> </h4>
+                <h4 class="panel-title"> <a href="#d" @click="choose('d')" class="clickable" :class="[{'collapsed' : choice !== 'd' }]"> <i class="fa fa-file-text-o pr-10"></i>D’où proviennent les informations d’HistoVec ?</a> </h4>
               </div>
-              <div class="panel-collapse collapse" :class="[{'in' : choice === 'd'}]">
+              <div  class="panel-collapse collapse" :class="[{'in' : choice === 'd'}]">
                 <div class="panel-body">
                   <UL>Les informations du rapport sont issues du système d’immatriculation des véhicules (SIV) du ministère de l’intérieur.</UL>
                 </div>
@@ -121,9 +121,9 @@
             </div>
             <!-- fin question 4 -->
             <!-- debut question 5 -->
-            <div class="panel panel-default">
+            <div id="e" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('e')" class="clickable" :class="[{'collapsed' : choice !== 'e' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?</a> </h4>
+                <h4 class="panel-title"> <a href="#e" @click="choose('e')" class="clickable" :class="[{'collapsed' : choice !== 'e' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'e'}]">
                 <div class="panel-body">
@@ -133,9 +133,9 @@
             </div>
             <!-- fin question 5 -->
             <!-- debut question 6 -->
-            <div class="panel panel-default">
+            <div id="f" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('f')" class="clickable" :class="[{'collapsed' : choice !== 'f' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelles sont les garanties d’HistoVec ?</a> </h4>
+                <h4 class="panel-title"> <a href="#f" @click="choose('f')" class="clickable" :class="[{'collapsed' : choice !== 'f' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelles sont les garanties d’HistoVec ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'f'}]">
                 <div class="panel-body">
@@ -151,9 +151,9 @@
             </div>
             <!-- fin question 6 -->
             <!-- debut question 7 -->
-            <div class="panel panel-default">
+            <div id="g" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('g')" class="clickable" :class="[{'collapsed' : choice !== 'g' }]"> <i class="fa fa-file-text-o pr-10"></i>Est-ce que les informations sont complètes ?</a> </h4>
+                <h4 class="panel-title"> <a href="#g" @click="choose('g')" class="clickable" :class="[{'collapsed' : choice !== 'g' }]"> <i class="fa fa-file-text-o pr-10"></i>Est-ce que les informations sont complètes ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'g'}]">
                 <div class="panel-body">
@@ -163,9 +163,9 @@
             </div>
             <!-- fin question 7 -->
             <!-- debut question8 -->
-            <div class="panel panel-default">
+            <div id="h" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('h')" class="clickable" :class="[{'collapsed' : choice !== 'h' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment signaler une information manquante ou inexacte ?</a> </h4>
+                <h4 class="panel-title"> <a href="#h" @click="choose('h')" class="clickable" :class="[{'collapsed' : choice !== 'h' }]"> <i class="fa fa-file-text-o pr-10"></i>Comment signaler une information manquante ou inexacte ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'h'}]">
                 <div class="panel-body">
@@ -175,9 +175,9 @@
             </div>
             <!-- fin question 9 -->
             <!-- debut question 9 -->
-            <div class="panel panel-default">
+            <div id="i" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('i')" class="clickable" :class="[{'collapsed' : choice !== 'i' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas mon véhicule ?</a> </h4>
+                <h4 class="panel-title"> <a href="#i" @click="choose('i')" class="clickable" :class="[{'collapsed' : choice !== 'i' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas mon véhicule ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'i'}]">
                 <div class="panel-body">
@@ -190,9 +190,9 @@
             </div>
             <!-- fin question 9 -->
             <!-- debut question 10 -->
-            <div class="panel panel-default">
+            <div id="j" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('j')" class="clickable" :class="[{'collapsed' : choice !== 'j' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
+                <h4 class="panel-title"> <a href="#j" @click="choose('j')" class="clickable" :class="[{'collapsed' : choice !== 'j' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'j'}]">
                 <div class="panel-body">
@@ -202,9 +202,9 @@
             </div>
             <!-- fin question 10 -->
             <!-- debut question 11 -->
-            <div class="panel panel-default">
+            <div id="k" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a @click="choose('k')" class="clickable" :class="[{'collapsed' : choicie !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
+                <h4 class="panel-title"> <a href="#k" @click="choose('k')" class="clickable" :class="[{'collapsed' : choice !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'k'}]">
                 <div class="panel-body">
@@ -227,7 +227,7 @@
 export default {
   data () {
     return {
-      choice: ''
+      choice: (window.location.href.split('#')[1] !== undefined) ? window.location.href.split('#')[1] : ''
     }
   },
   methods: {
