@@ -172,14 +172,23 @@ endif
 elasticsearch-stop:
 	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
 
-backend-stop:
-	${DC} -f ${DC_PREFIX}-backend.yml down
+first-backup:
+	@mkdir -p ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` first rsync && \
+		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/. 
+last-backup:
+	@mkdir -p ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` last rsync && \
+		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
 
-backend: network
-	${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
+post-backup:
+	@echo `date +'%Y%m%d_%H:%M'` taring && \
+        	cd ${BACKEND}/backup/ && tar cf `date +%Y%m%d`_histovec.tar esdata/.
+		echo `date +'%Y%m%d_%H:%M'` cleaning tmp dir && \
+		rm -rf ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` backup done in ${BACKEND}/backup/`date +%Y%m%d`_histovec.tar
 
-backend-log:
-	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d 2>&1 | grep -v orphan
+backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
 
 frontend-dev: network tor
 	@echo docker-compose up frontend for dev ${VERSION}
