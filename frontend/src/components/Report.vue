@@ -43,9 +43,6 @@
           <div class="col-sm-5">
             <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
-
-
-
         </div>
         <!-- fin vignette -->
         <!-- debut trait séparation -->
@@ -635,7 +632,7 @@
                       <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.administratif.titre.remise }}</span></div>
                     </div>
                   <div class="separator"></div>
- -->
+              -->
               <!-- debut bouton imprimer csa detaille -->
                 <div class="col-sm-12" v-if="false">
                   <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
@@ -684,11 +681,16 @@
             <div class="tab-pane fade" :class="[{'in active' : tab === 'send'}]" v-if="holder">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
+                  <!-- debut alerte verte -->
+                  <div class="col-md-12" v-if="notifSuccess">
+                    <div class="alert alert-icon alert-success" role="alert"><i class="fa fa-check"></i>Le lien a été copié</div>
+                  </div>
+                  <!-- fin alerte verte -->
                   <div class="col-md-12 p-h-10">
                     <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.<br>
                       Ce rapport sera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
                     <p class="text-center">
-                      <button v-clipboard:copy="url" class="btn radius-30 btn-dark btn-animated btn">Copier le lien <i class="fa fa-copy"></i></button>
+                      <button v-clipboard:copy="url" v-on:click="showNotifSuccess" class="btn radius-30 btn-dark btn-animated btn">Copier le lien <i class="fa fa-copy"></i></button>
                       <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
                     </p>
                   </div>
@@ -773,6 +775,14 @@
     </div>
   </div>
 
+  <div class="container" v-if="this.result === 'invalidKey'">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur</div>
+      </div>
+    </div>
+  </div>
+
   <!-- debut modal -->
   <div v-if="modalEval">
     <transition name="modal">
@@ -794,8 +804,8 @@
                   <div class="rating position_left p-g-10">
                     <template v-for="n in ratings" >
                       <a v-on:click="setNote((ratings.length+1)-n)"
-                         v-on:mouseover="star_over((ratings.length+1)-n)"
-                         v-on:mouseout="star_out"
+                         v-on:mouseover="starOver((ratings.length+1)-n)"
+                         v-on:mouseout="starOut"
                          v-bind:class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
                          title="Give star"
                          v-model="note">★</a>
@@ -948,10 +958,13 @@ export default {
       email: '',
       notShow: false,
       status: 'init',
-      temp_value: null,
+      tempValue: null,
       ratings: [1, 2, 3, 4, 5],
       disabled: false,
-      note: null
+      note: null,
+      notifSuccess: false,
+      timerModalEval: 60000,
+      timerNotifSuccess: 2000
     }
   },
   computed: {
@@ -1184,27 +1197,46 @@ export default {
     },
     setNote (value) {
       if (!this.disabled) {
-        this.temp_value = value
+        this.tempValue = value
         this.note = value
       }
     },
-    star_over (value) {
+    starOver (value) {
       if (!this.disabled) {
-        this.temp_value = this.note
+        this.tempValue = this.note
         this.note = value
       }
     },
-    star_out () {
+    starOut () {
       if (!this.disabled) {
-        this.note = this.temp_value
+        this.note = this.tempValue
+      }
+    },
+    showNotifSuccess () {
+      this.notifSuccess = true
+      setTimeout(() => {
+        this.notifSuccess = false
+      }, this.timerNotifSuccess)
+    },
+    showModalEval () {
+      if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
+        setTimeout(() => {
+          this.modalEval = true
+        }, this.timerModalEval)
       }
     }
   },
   created () {
     if (this.$store.state.v) {
       this.v = this.$store.state.v
+      this.showModalEval()
       this.result = 'ok'
     } else {
+      if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+        // Cas des liens acheteur sans KEY
+        this.result = 'invalidKey'
+        return
+      }
       this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
         .then(response => {
           console.log(response)
@@ -1212,11 +1244,7 @@ export default {
             this.result = 'notFound'
             return
           }
-          if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
-            setTimeout(() => {
-              this.modalEval = true
-            }, 6000000)
-          }
+          this.showModalEval()
           var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
           var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
           var veh = this.decrypt(key, encrypted)
