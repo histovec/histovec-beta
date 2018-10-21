@@ -216,6 +216,15 @@ frontend-build: network
 
 build: frontend-build
 
+update:
+	git pull
+	@echo building ${APP} frontend
+	@echo building frontend in ${FRONTEND}
+	@sudo mkdir -p ${FRONTEND}/dist-build
+	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
+	mkdir -p ${FRONTEND}/dist/
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
+
 frontend-stop:
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
 
