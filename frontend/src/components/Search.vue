@@ -59,10 +59,33 @@
           <div class="col-md-12">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-              <div class="alert alert-warning alert-icon text-center" role="alert"><i class="fa fa-exclamation-triangle"></i> Seuls les véhicules ayant une plaque au format <strong>AA-123-ZZ</strong> sont consultables pour l'instant </div>
+              <div class="text-center" role="alert"> Veuillez sélectionner le format d'immatriculation de votre véhicule: </div>
             </div>
           </div>
+          <br /><br />
           <div class="col-md-12">
+            <div class="col-md-4"> </div>
+            <div class="col-md-2 text-center">
+              <a class="clickable" @click="typeImmatriculation = 'siv'" title="Immatriculation postérieur à 2009"><img class="img-responsive" src="assets/images/nouvelle_plaque_immatriculation_fd_transp.png" width="200" height="44"></a>
+            </div>
+            <div class="col-md-2 text-center">
+              <a class="clickable" @click="typeImmatriculation = 'fni'" title="Immatriculation antérieur à 2009"><img class="img-responsive" src="assets/images/ancienne_plaque_immatriculation_fd_transp.png" width="200" height="44"></a>
+            </div>
+            <div class="col-md-6"> </div>
+          </div>
+          <br /><br />
+          <div class="col-md-12" v-if="typeImmatriculation === ''">
+            <div class="col-md-4"> </div>
+            <div class="col-md-2 text-center">
+              Immatriculation <b>après</b> 2009
+            </div>
+            <div class="col-md-2 text-center">
+              Immatriculation <b>avant</b> 2009
+            </div>
+            <div class="col-md-6"> </div>
+          </div>
+
+          <div class="col-md-12" v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'">
             <!-- tabs start -->
             <!-- ================ -->
             <!-- Nav tabs -->
@@ -101,7 +124,7 @@
                         </div>
                       </form>
                     </fieldset>
-                    <fieldset>
+                    <fieldset v-if="typeImmatriculation === 'siv'">
                       <legend><span class="color-default">Carte grise</span></legend>
                       <form role="form">
                         <div class="row">
@@ -116,6 +139,25 @@
                               <label for="input" class="control-label">N° de formule <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </a>
                               <input type="text" id="formule" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
+                          </div>
+                        </div>
+                      </form>
+                    </fieldset>
+                    <fieldset v-if="typeImmatriculation === 'fni'">
+                      <legend><span class="color-default">Carte grise</span></legend>
+                      <form role="form">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
+                              <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
+                              <input type="text" required="required" class="form-control" id="plaque" placeholder="123 ABC 45" v-model="plaque" tabindex="6">
+                              <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkDateCertificat) && status !== 'init')}]">
+                              <label for="input" class="control-label">Date du certificat d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <input type="text" id="dateCertificat" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="7">
+                              <i class="fa fa-calendar form-control-feedback"></i> </div>
                           </div>
                         </div>
                       </form>
@@ -155,7 +197,7 @@
                         </div>
                       </form>
                     </fieldset>
-                    <fieldset>
+                    <fieldset v-if="typeImmatriculation === 'siv'">
                       <legend><span class="color-default">Carte grise</span></legend>
                       <form role="form">
                         <div class="row">
@@ -170,6 +212,25 @@
                               <label for="input" class="control-label">N° de formule <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i></a>
                               <input type="text" id="formule" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
+                          </div>
+                        </div>
+                      </form>
+                    </fieldset>
+                    <fieldset v-if="typeImmatriculation === 'fni'">
+                      <legend><span class="color-default">Carte grise</span></legend>
+                      <form role="form">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
+                              <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
+                              <input type="text" required="required" class="form-control" id="plaque" placeholder="123 ABC 45" v-model="plaque" tabindex="6">
+                              <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkDateCertificat) && status !== 'init')}]">
+                              <label for="input" class="control-label">Date du certificat d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </a>
+                              <input type="text" id="dateCertificat" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="7">
+                              <i class="fa fa-calendar form-control-feedback"></i> </div>
                           </div>
                         </div>
                       </form>
@@ -308,17 +369,36 @@ export default {
         this.$store.commit('updateTypePersonne', value)
       }
     },
+    typeImmatriculation: {
+      get () {
+        return this.$store.state.typeImmatriculation
+      },
+      set (value) {
+        this.$store.commit('updateTypeImmatriculation', value)
+      }
+    },
+    dateCertificat: {
+      get () {
+        return this.$store.state.dateCertificat
+      },
+      set (value) {
+        this.$store.commit('updateDateCertificat', value)
+      }
+    },
     checkDateNaissance () {
-      return (this.typePersonne === 'particulier') ? this.dateNaissance.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/) : true
+      return this.dateNaissance.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
+    },
+    checkDateCertificat () {
+      return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
     },
     checkPlaque () {
-      return this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
+      return (this.typeImmatriculation === 'fni') ? this.plaque.match(/^[0-9]{3}( |\s+)?[a-zA-Z]{2,3}( |\s+)?[0-9]{2}$/) : this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
     },
     checkFormule () {
       return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
     },
     checkFields () {
-      return ((this.nom && this.prenom) || (this.raisonSociale && this.siren)) && this.checkPlaque && this.checkDateNaissance && this.checkFormule
+      return ((this.nom && this.prenom && this.checkDateNaissance) || (this.raisonSociale && this.siren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
     },
     currentMonthNumber () {
       var date = new Date()
@@ -360,13 +440,13 @@ export default {
       return instance.getFullYear() + '' + currentWeekNumber
     },
     id () {
-      return this.hash(this.raisonSociale + this.siren + this.nom + this.prenom + this.dateNaissance + this.plaque + this.formule)
+      return this.hash(this.raisonSociale + this.siren + this.nom + this.prenom + this.dateNaissance + this.plaque + this.formule + this.dateCertificat)
     },
     code () {
-      return this.hash(this.plaque + this.formule + this.currentMonthNumber)
+      return this.hash(this.plaque + this.formule + this.dateCertificat + this.currentMonthNumber)
     },
     key () {
-      return this.hash(this.plaque + this.formule)
+      return this.hash(this.plaque + this.formule + this.dateCertificat)
     }
   },
   methods: {
