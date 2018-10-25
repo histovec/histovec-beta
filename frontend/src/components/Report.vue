@@ -998,7 +998,7 @@ export default {
           padding: CryptoJS.pad.Pkcs7,
           mode: CryptoJS.mode.CBC
         })
-      return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8))
+      return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
     },
     pad (n, width, z) {
       z = z || '0'
