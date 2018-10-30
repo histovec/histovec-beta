@@ -208,7 +208,7 @@
                   <button type="button" class="close" @click="modal = false"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
                   <h6 class="modal-title">Information n° de formule</h6>
                 </div>
-                <div class="modal-body" style="height: 250px; overflow-y: auto;"> <img alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise" src="assets/images/n-formule.svg" class="img-responsive" style="margin: 0 auto;"> </div>
+                <div class="modal-body" style="height: 250px; overflow-y: auto;"> <img alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise" src="assets/images/n-formule.png" class="img-responsive" style="margin: 0 auto;"> </div>
                 <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" @click="modal = false">Fermer <i class="fa fa-close"></i></a> </div>
               </div>
             </div>
