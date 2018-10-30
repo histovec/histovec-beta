@@ -22,7 +22,8 @@ export ES_HOST=elasticsearch
 
 # data prep (data not included in repo)
 export datadir=sample_data
-export datasource=${datadir}/siv.csv.gz.gpg
+export datasource=${datadir}/siv.csv.gz
+export datasource_crypt=${datadir}/siv.csv.gz.gpg
 export datasource_json=${datadir}/siv.json.gz
 export dataset=siv
 export ES_CHUNK=5000
@@ -116,7 +117,7 @@ endif
 ifeq ("$(shell docker exec -it ${APP}-elasticsearch curl -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l)","1")
 	@# split -l ${ES_CHUNK} --filter=
 	@# parallel : parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d ${datasource} | gunzip | awk 'BEGIN{n = 1;print "decrypting data - injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr"} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | jq -c '.items[].index.result' | awk 'BEGIN{ok=${FROM}-1;ko=0}{if ($$1 == "\"created\"") { ok++ } else {ko++} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko}}'
+	@((zcat ${datasource}) || (gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d ${datasource_crypt} | gunzip)) | awk 'BEGIN{n = 1;print "decrypting data - injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr"} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | parallel --no-notice --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | jq -c '.items[].index.result' | awk 'BEGIN{ok=${FROM}-1;ko=0}{if ($$1 == "\"created\"") { ok++ } else {ko++} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko}}'
 	@docker exec -it ${APP}-elasticsearch curl -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}'
 endif
 
@@ -171,14 +172,23 @@ endif
 elasticsearch-stop:
 	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
 
-backend-stop:
-	${DC} -f ${DC_PREFIX}-backend.yml down
+first-backup:
+	@mkdir -p ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` first rsync && \
+		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/. 
+last-backup:
+	@mkdir -p ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` last rsync && \
+		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
 
-backend: network
-	${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
+post-backup:
+	@echo `date +'%Y%m%d_%H:%M'` taring && \
+        	cd ${BACKEND}/backup/ && tar cf `date +%Y%m%d`_histovec.tar esdata/.
+		echo `date +'%Y%m%d_%H:%M'` cleaning tmp dir && \
+		rm -rf ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` backup done in ${BACKEND}/backup/`date +%Y%m%d`_histovec.tar
 
-backend-log:
-	${DC} -f ${DC_PREFIX}-backend.yml logs --build -d 2>&1 | grep -v orphan
+backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
 
 frontend-dev: network tor
 	@echo docker-compose up frontend for dev ${VERSION}
@@ -205,6 +215,15 @@ frontend-build: network
 	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 
 build: frontend-build
+
+update:
+	git pull
+	@echo building ${APP} frontend
+	@echo building frontend in ${FRONTEND}
+	@sudo mkdir -p ${FRONTEND}/dist-build
+	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
+	mkdir -p ${FRONTEND}/dist/
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 
 frontend-stop:
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
