@@ -74,7 +74,7 @@
               <h6>Droit d’auteur</h6>
               Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Au terme de l’article L. 122-4 du Code de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.
               <h6>Code applicatif open source</h6>
-              Conformément à la <a href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14">loi pour une République numérique</a>, le code de l'application Histovec est libre et opensource, publié sous <a href="https://www.gnu.org/licenses/lgpl-3.0.fr.html">licence LGPL</a>.
+              Conformément à la <a href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14">loi pour une République numérique</a>, le code de l'application Histovec est libre et opensource, publié sous <a href="https://www.gnu.org/licenses/lgpl-3.0.fr.html">licence LGPL</a> sur <a href="https://github.com/histovec/histovec-beta">Github</a>.
               <h6>Limitations de responsabilité</h6>
               Le site HistoVec fournit les informations issues du Système d’Immatriculation des Véhicules (SIV).
               La responsabilité de l'Editeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’Immatriculation des Véhicules, ou d’anomalies de traitement informatique.
