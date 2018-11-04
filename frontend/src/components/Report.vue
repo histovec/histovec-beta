@@ -1165,7 +1165,7 @@ export default {
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
-        let data = {'message': this.message, 'email': this.email, 'note': this.note}
+        let data = {'message': this.message, 'email': this.email, 'note': this.note, 'date': new Date().toUTCString()}
         if (!this.note && this.notShow) {
           this.$cookie.set('evaluation', true, 1)
           this.status = 'posted'
