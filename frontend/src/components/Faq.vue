@@ -181,8 +181,8 @@
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'i'}]">
                 <div class="panel-body">
-                  <UL>Recopiez exactement les données de la carte grise (nom, prénom,immatriculation, numéro de formule) et votre date naissance</UL>
-                  <UL>Seul les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
+                  <UL>Recopiez exactement les données de la carte grise (nom, prénom(s), immatriculation, numéro de formule) et votre date naissance</UL>
+                  <UL>Seuls les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
                   <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le système d’immatriculation des véhicules (SIV),</UL>
                   <UL><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">contactez-nous</a></UL>
                 </div>

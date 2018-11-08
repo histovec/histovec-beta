@@ -88,7 +88,7 @@
                           </div>
                           <div class="col-md-4">
                             <div class="form-group has-feedback" :class="[{'has-error' : (prenom === '' && status !== 'init')}]">
-                              <label class="control-label">Prénom <span class="info_red" title="Ce champ est requis.">*</span></label>
+                              <label class="control-label">Prénom(s) <span class="info_red" title="Ce champ est requis.">*</span></label>
                               <input id="firstname" type="text" required="required" class="form-control" v-model="prenom" tabindex="2">
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
