@@ -57,35 +57,21 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-              <div class="text-center" role="alert"> Veuillez sélectionner le format d'immatriculation de votre véhicule: </div>
+            <div class="text-center" role="alert">
+              <h4 class="title p-b-25"> Veuillez sélectionner le format d'immatriculation de votre véhicule</h4>
             </div>
           </div>
-          <br /><br />
-          <div class="col-md-12">
-            <div class="col-md-4"> </div>
-            <div class="col-md-2 text-center">
-              <a class="clickable" @click="typeImmatriculation = 'siv'" title="Immatriculation postérieur à 2009"><img class="img-responsive" src="assets/images/nouvelle_plaque_immatriculation_fd_transp.png" width="200" height="44"></a>
-            </div>
-            <div class="col-md-2 text-center">
-              <a class="clickable" @click="typeImmatriculation = 'fni'" title="Immatriculation antérieur à 2009"><img class="img-responsive" src="assets/images/ancienne_plaque_immatriculation_fd_transp.png" width="200" height="44"></a>
-            </div>
-            <div class="col-md-6"> </div>
+          <div class="col-xs-6 col-sm-6">
+            <a class="clickable" @click="typeImmatriculation = 'siv'" title="Immatriculation aprés 2009">
+              <img class="img-responsive pull-right" :class="{'opacity-plaque': typeImmatriculation === 'fni' }" src="assets/images/nouvelle_plaque_immatriculation_fd_transp_txt.png" width="200" height="44">
+            </a>
           </div>
-          <br /><br />
-          <div class="col-md-12" v-if="typeImmatriculation === ''">
-            <div class="col-md-4"> </div>
-            <div class="col-md-2 text-center">
-              Immatriculation <b>après</b> 2009
-            </div>
-            <div class="col-md-2 text-center">
-              Immatriculation <b>avant</b> 2009
-            </div>
-            <div class="col-md-6"> </div>
+          <div class="col-xs-6 col-sm-6">
+            <a class="clickable" @click="typeImmatriculation = 'fni'" title="Immatriculation avant 2009">
+              <img class="img-responsive pull-left" :class="{'opacity-plaque': typeImmatriculation === 'siv' }" src="assets/images/ancienne_plaque_immatriculation_fd_transp_txt.png" width="200" height="44">
+            </a>
           </div>
-
-          <div class="col-md-12" v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'">
+          <div class="col-md-12 col-xs-12 p-h-25" v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'">
             <!-- tabs start -->
             <!-- ================ -->
             <!-- Nav tabs -->
