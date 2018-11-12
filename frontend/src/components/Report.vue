@@ -589,7 +589,7 @@
                 <div class="col-sm-6">
                   <h6 class="title">Oppositions</h6>
                   <!-- debut tableau oppositions -->
-                  <div class="col-sm-6"><span class="info_red txt-small-12">{{ v.administratif.oppositions }}</span>
+                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.oppositions }}</span>
                     <div class="separator-2"></div>
                   </div>
                   <!-- fin tableau oppositions -->
@@ -730,7 +730,7 @@
   <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche</div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -738,7 +738,7 @@
   <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau</div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -746,7 +746,7 @@
   <div class="container" v-if="this.result === 'unavailable'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement </div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link> </div>
       </div>
     </div>
   </div>
@@ -754,7 +754,7 @@
   <div class="container" v-if="this.result === 'tooManyRequests'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement </div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -770,7 +770,7 @@
   <div class="container" v-if="this.result === 'cancelled'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé</div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -778,7 +778,7 @@
   <div class="container" v-if="this.result === 'invalidKey'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur</div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -799,7 +799,7 @@
               </div>
               <form @submit="send" id="evaluation-form-with-recaptcha"  role="form">
                 <div class="modal-body">
-                  <span class="info_red txt-small-11" v-if="status == 'failed' && errors.length == 0">* Veuillez renseigner les champs obligatoires<br /></span>
+                  <span class="info_red txt-small-11" v-if="status == 'failed' && errors.length == 0">* Veuillez renseigner les champs obligatoires<br/></span>
                   <label>Comment évaluez-vous HistoVec :  <span class="info_red" title="Ce champ est requis.">*</span></label>
                   <div class="rating position_left p-g-10">
                     <template v-for="n in ratings" >
