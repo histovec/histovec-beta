@@ -230,6 +230,9 @@ export default {
       choice: (window.location.href.split('#')[1] !== undefined) ? window.location.href.split('#')[1] : ''
     }
   },
+  created () {
+    this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
+  },
   methods: {
     choose (id) {
       console.log(this.choice, id)

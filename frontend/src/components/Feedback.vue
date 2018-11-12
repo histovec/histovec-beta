@@ -121,6 +121,9 @@ export default {
   },
   computed: {
   },
+  created () {
+    this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
+  },
   methods: {
     send: function (e) {
       this.status = 'posting'

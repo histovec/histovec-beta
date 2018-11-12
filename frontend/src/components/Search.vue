@@ -416,6 +416,7 @@ export default {
     }
   },
   created () {
+    this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
     let myShakeEvent = new Shake({
       threshold: 15,
       timeout: 1000

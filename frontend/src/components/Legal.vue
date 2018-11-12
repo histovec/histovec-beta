@@ -201,6 +201,9 @@ export default {
       choice: ''
     }
   },
+  created () {
+    this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
+  },
   methods: {
     choose (id) {
       console.log(this.choice, id)
