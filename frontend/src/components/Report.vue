@@ -963,6 +963,7 @@ export default {
       disabled: false,
       note: null,
       notifSuccess: false,
+      timeout: 10000,
       timerModalEval: 60000,
       timerNotifSuccess: 2000
     }
@@ -1228,6 +1229,13 @@ export default {
     }
   },
   created () {
+    setTimeout(() => {
+      if (this.result === 'wait') {
+        this.result = 'error'
+      }
+      this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+    }, this.timeout)
+
     this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(response => {}, () => {})
     if (this.$store.state.v) {
       this.v = this.$store.state.v
