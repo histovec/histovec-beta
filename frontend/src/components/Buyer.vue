@@ -78,6 +78,9 @@
       url () {
         return window.location.protocol + '//' + window.location.host + '/histovec/'
       }
+    },
+    created () {
+      this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
     }
   }
   </script>
