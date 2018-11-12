@@ -127,9 +127,9 @@
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
                         </button>
-                        <!--
-                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
-                      </div>
+                        <router-link class="clickable text-info btn-sm-link" :to="{ name: 'faq'}"><i title="en cas de question sur le formulaire, consultez la FAQ !" class="fa fa-question-circle fa-lg"></i></router-link>
+                       </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -180,8 +180,9 @@
                           <i class="fa" :class="[{'fa-search' : (status === 'init')},
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
-                        </button>                        <!--
-                        <a href="#" class="btn btn-animated btn-default btn-sm pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule." data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </a>--> </div>
+                        </button>
+                        <router-link class="clickable text-info btn-sm-link" :to="{ name: 'faq'}"><i title="en cas de question sur le formulaire, consultez la FAQ !" class="fa fa-question-circle fa-lg"></i></router-link>
+                      </div>
                     </div>
                   </div>
                 </div>
