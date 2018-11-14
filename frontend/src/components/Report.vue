@@ -589,7 +589,9 @@
                 <div class="col-sm-6">
                   <h6 class="title">Oppositions</h6>
                   <!-- debut tableau oppositions -->
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.oppositions }}</span>
+                  <div class="col-sm-12">
+                    <span class="info_red txt-small-12">{{ v.administratif.oppositions }} </span>
+                    <span class="txt-small-12" v-if="v.administratif.pv && holder"><br/>Appelez le 08 21 08 00 31</span>
                     <div class="separator-2"></div>
                   </div>
                   <!-- fin tableau oppositions -->
@@ -730,7 +732,7 @@
   <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -738,7 +740,7 @@
   <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -746,7 +748,7 @@
   <div class="container" v-if="this.result === 'unavailable'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link> </div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link> </div>
       </div>
     </div>
   </div>
@@ -754,7 +756,7 @@
   <div class="container" v-if="this.result === 'tooManyRequests'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -770,7 +772,7 @@
   <div class="container" v-if="this.result === 'cancelled'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -778,7 +780,7 @@
   <div class="container" v-if="this.result === 'invalidKey'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur <router-link class="clickable text-info ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -1340,6 +1342,7 @@ export default {
               this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
               // opposition et procédure à valider
               this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : (veh.otci_pv === 'OUI') ? 'Opposition temporaire (PV en attente)' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+              this.v.administratif.pv = (veh.otci_pv === 'OUI')
               // pour l'instant aucun véhicule saisi dans les échantillons
               this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
               this.v.administratif.vol = veh.vehicule_vole || this.default
