@@ -589,7 +589,9 @@
                 <div class="col-sm-6">
                   <h6 class="title">Oppositions</h6>
                   <!-- debut tableau oppositions -->
-                  <div class="col-sm-12"><span class="info_red txt-small-12">{{ v.administratif.oppositions }}</span>
+                  <div class="col-sm-12">
+                    <span class="info_red txt-small-12">{{ v.administratif.oppositions }} </span>
+                    <span class="txt-small-12" v-if="v.administratif.pv && holder"><br/>Appelez le 08 21 08 00 31</span>
                     <div class="separator-2"></div>
                   </div>
                   <!-- fin tableau oppositions -->
