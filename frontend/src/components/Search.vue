@@ -127,7 +127,7 @@
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
                         </button>
-                        <router-link class="clickable text-info btn-sm-link" :to="{ name: 'faq'}"><i title="en cas de question sur le formulaire, consultez la FAQ !" class="fa fa-question-circle fa-lg"></i></router-link>
+                        <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq'}"><i class="fa fa-question"></i>Besoin d'aide</router-link>
                        </div>
                     </div>
                   </div>
