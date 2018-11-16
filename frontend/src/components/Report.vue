@@ -888,7 +888,7 @@ export default {
         },
         'otci': {
           'icon': 'fa-exclamation-triangle',
-          'text': 'Le certificat fait l\'objet d\'une opposition temporaire (non lié à un sinistre)',
+          'text': 'Le certificat fait l\'objet d\'une opposition temporaire (non liée à un sinistre)',
           'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
