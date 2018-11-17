@@ -162,12 +162,12 @@
                                  {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"></i></div>
                     <div class="col-sm-6">
                       <!-- état - un seul sinistre !-->
-                      <span v-if="v.sinistres.length === 1">
+                      <span v-if="v.sinistres_nb === 1">
                         <span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
                         <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span>
                       </span>
                       <!-- état - plusieurs sinistres !-->
-                      <span v-if="v.sinistres.length > 1">
+                      <span v-if="v.sinistres_nb > 1">
                         <span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">plusieurs sinistres, </span> <span class="txt-small-13">dont le dernier déclaré en {{v.sinistre}}</span></br>
                         <span v-if="v.apte !== false"> <span class="txt-small-13">Le véhicule a été</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span>
                       </span>
@@ -1357,6 +1357,10 @@ export default {
               this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
               // ci-dessous : interprétation à confirmer
               this.v.sinistres = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+              this.v.sinistres_nb = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
+              this.v.sinistres_nb = this.v.sinistres_nb.length === 0 ? 0 : this.v.sinistres_nb.reduce((a, b) => a + b)
+              this.v.sinistres_nb = Math.max(this.v.sinistres_nb % 10, ((this.v.sinistres_nb - (this.v.sinistres_nb % 10)) / 10))
+              console.log(this.v.sinistres_nb)
               this.v.sinistre = this.v.sinistres[0]
               this.v.aptes = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
               this.v.apte = (veh.historique !== undefined) ? ((this.v.aptes[0] > this.v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
