@@ -204,15 +204,38 @@
             <!-- debut question 11 -->
             <div id="k" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#k" @click="choose('k')" class="clickable" :class="[{'collapsed' : choice !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
+                <h4 class="panel-title"> <a href="#k" @click="choose('k')" class="clickable" :class="[{'collapsed' : choice !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Terminologie des opérations historiques ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'k'}]">
+                <div class="panel-body">
+                  <UL><B>- Première immatriculation d'un véhicule neuf,</B> opération d'immatriculation d'un véhicule qui n'a jamais été immatriculé.</UL>
+                  <UL><B>- Première immatriculation à l'étranger,</B> le véhicule a été immatriculé en tant que véhicule neuf à l'étranger.</UL>
+                  <UL><B>- Première immatriculation d'un véhicule importé,</B> véhicule déjà immatriculé à l'étranger qui se fait immatriculer en France pour la première fois.</UL>
+                  <UL><B>- Conversion au nouveau format d'immatriculation,</B> changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD. </UL>
+                  <UL><B>- Cession (vente) par un particulier,</B> véhicule vendu par un particulier.</UL>
+                  <UL><B>- Changement de titulaire,</B> opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.</UL>
+                  <UL><B>- Achat ou reprise par un professionnel,</B>  opération correspondant au moment où un professionnel devient acquéreur du véhicule.</UL>
+                  <UL><B>- Fin d'usage démonstration pour vente du véhicule,</B> véhicule de garage ayant servi de véhicule de démonstration.</UL>
+                  <UL><B>- Opposition au transfert de la carte grise,</B> état bloquant tout changement de titulaire.</UL>
+                  <UL><B>- Procédure de réparation contrôlée,</B> procédure pendant laquelle les réparations sont contrôlées par un expert en automobile.</UL>
+                  <UL><B>- Premier rapport d'expert,</B> rapport de l'expert en automobile qui détermine la dangerosité du véhicule, établit la liste des réparations et en évalue le montant.</UL>
+                  <UL><B>- Second rapport d'expert,</B> rapport de l'expert en automobile qui indique notamment que le véhicule est apte à circuler dans des conditions normales de sécurité.</UL>
+                </div>
+              </div>
+            </div>
+            <!-- fin question 11 -->
+            <!-- debut question 20 -->
+            <div id="z" class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"> <a href="#z" @click="choose('z')" class="clickable" :class="[{'collapsed' : choice !== 'z' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle est la politique de protection des données personnelles ?</a> </h4>
+              </div>
+              <div class="panel-collapse collapse" :class="[{'in' : choice === 'z'}]">
                 <div class="panel-body">
                   <UL>Vous pouvez les consulter dans <a href="legal">mentions légales.</a></UL>
                 </div>
               </div>
             </div>
-            <!-- fin question 11 -->
+            <!-- fin question 20 -->
           </div>
           <!-- accordion end -->
         </div>
