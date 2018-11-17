@@ -892,6 +892,12 @@ export default {
           'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
           'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
         },
+        'otci_ove': {
+          'icon': 'fa-exclamation-triangle',
+          'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
+          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
+          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
+        },
         'suspension': {
           'icon': 'fa-minus-circle',
           'text': 'L\'autorisation de circulation de ce véhicule a été suspendue',
@@ -1352,8 +1358,10 @@ export default {
               this.v.administratif.titre.perte = veh.perte_ci || this.default
               this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
-              this.v.administratif.synthese = [ 'otci', 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
-
+              this.v.administratif.synthese = [ 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
+              if (veh['otci'] === 'OUI') {
+                this.v.administratif.synthese.push(veh['ove'] === 'OUI' ? 'otci_ove' : 'otci')
+              }
               this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
               // ci-dessous : interprétation à confirmer
               this.v.sinistres = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
