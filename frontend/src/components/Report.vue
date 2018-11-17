@@ -106,10 +106,10 @@
                         <sup class="info_red txt-small">ème</sup>
                       </div>
                     </div>
-                    <div v-if="(v.fni === 'ko')">
+                    <!-- <div v-if="(v.fni === 'ko')">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
                       <span class="color-info_2 bold_4 txt-small-12">(immatriculation avant 2009)</span>
-                    </div>
+                    </div> -->
                     <div v-if="v.certificat.etranger">
                       <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
                       <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
