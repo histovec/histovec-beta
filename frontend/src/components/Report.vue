@@ -732,7 +732,7 @@
   <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -740,7 +740,7 @@
   <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -748,7 +748,7 @@
   <div class="container" v-if="this.result === 'unavailable'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link> </div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link> </div>
       </div>
     </div>
   </div>
@@ -756,7 +756,7 @@
   <div class="container" v-if="this.result === 'tooManyRequests'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Trop de requêtes pour le moment. Veuillez réessayer ultérieurement. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -764,7 +764,7 @@
   <div class="container" v-if="this.result === 'error'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Erreur inconnue. Si l'erreur persiste, merci de remplir le formulaire <a href="feedback">Signaler une erreur</a></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Erreur inconnue. Si l'erreur persiste, merci de remplir le formulaire. <router-link class="clickable alert-danger" :to="{ name: 'feedback'}"><em>Signaler une erreur</em> <b class="fa fa-exclamation-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -772,7 +772,7 @@
   <div class="container" v-if="this.result === 'cancelled'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le certificat demandé a été annulé. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -780,7 +780,7 @@
   <div class="container" v-if="this.result === 'invalidKey'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur <router-link class="clickable alert-danger  ph-10" :to="{ name: 'faq'}"><b title="en cas de question, pensez à consulter la FAQ !" class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
