@@ -204,7 +204,7 @@
             <!-- debut question 11 -->
             <div id="k" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#k" @click="choose('k')" class="clickable" :class="[{'collapsed' : choice !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Que signifie les termes des opérations historiques ?</a> </h4>
+                <h4 class="panel-title"> <a href="#k" @click="choose('k')" class="clickable" :class="[{'collapsed' : choice !== 'k' }]"> <i class="fa fa-file-text-o pr-10"></i>Que signifient les termes des opérations historiques ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'k'}]">
                 <div class="panel-body">
