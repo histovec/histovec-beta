@@ -36,7 +36,7 @@
                   <div class="media margin-clear">
                     <nav>
                       <ul class="nav nav-pills nav-stacked">
-                        <li><a href="faq">FAQ</a></li>
+                        <li><a href="faq">Besoin d'aide</a></li>
                         <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'">CONTACT</a></li>
                         <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">Signaler une erreur</a></li>
                       </ul>

@@ -5,7 +5,7 @@
       <div class="container">
         <ol class="breadcrumb">
           <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
-          <li class="active">FAQ</li>
+          <li class="active">Besoin d'aide</li>
         </ol>
       </div>
     </div>
@@ -42,7 +42,7 @@
           <!-- main start -->
           <div class="main col-md-12">
             <!-- page-title start -->
-            <h3 class="title"><span class="text-defaut">F</span>AQ</h3>
+            <h3 class="title"><span class="text-defaut">B</span>esoin d'aide</h3>
             <div class="separator-2"></div>
             <!-- page-title end -->
           </div>
@@ -53,7 +53,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 mb-20">
-          <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Question%20FAQ'">contactez-nous</a></p>
+          <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Besoin%20d%20aide'">contactez-nous</a></p>
           <!-- accordion start -->
           <!-- ================ -->
           <div class="panel-group collapse-style-2" id="accordion-2">
