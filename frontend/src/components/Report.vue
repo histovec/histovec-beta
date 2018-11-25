@@ -63,7 +63,7 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <!-- /* ----------------- debut synthese ----------------- */ -->
-            <div class="tab-pane fade" :class="[{'in active' : tab === 'abstract'}]">
+            <div class="tab-pane fade" :class="[{'in active' : all_tabs || tab === 'abstract'}]">
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-md-7">
@@ -212,16 +212,16 @@
                   <div class="row">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
-                    <div class="col-sm-6"><span class="txt-small-13">Eligible vignette Crit'Air {{ v.vignette_numero }}</span>
-                      <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" href="https://www.certificat-air.gouv.fr/" title="service de délivrance des certificats (nouvelle fenêtre)"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a> </div>
+                    <div class="col-sm-6"><span class="txt-small-13">Eligible vignette Crit'Air {{ v.vignette_numero }}</span> </div>
                     <!-- fin ras  -->
                   </div>
                 </div>
+                <div v-if="all_tabs"><br/></div>
               </div>
             </div>
             <!-- /* ----------------- fin synthese ----------------- */ -->
             <!-- /* ----------------- debut vehicule ----------------- */ -->
-            <div class="tab-pane fade pr-20" :class="[{'in active' : tab === 'vehicle'}]">
+            <div class="tab-pane fade pr-20" :class="[{'in active' : all_tabs || tab === 'vehicle'}]">
               <div class="row">
                 <div class="col-md-12">
                   <h6 class="title">Caractéristiques techniques</h6>
@@ -534,7 +534,7 @@
               </table> -->
               <!-- fin mentions particuliéres -->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : tab === 'holder'}]">
+            <div class="tab-pane fade" :class="[{'in active' : all_tabs || tab === 'holder'}]">
               <h6 class="title">Titulaire</h6>
               <!-- debut titulaire et co-titulaire -->
               <div v-if="v.titulaire.nature !== undefined">
@@ -578,7 +578,7 @@
               <div class="separator"></div>
               <!-- debut tableau situation administrative -->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : tab === 'situation'}]">
+            <div class="tab-pane fade" :class="[{'in active' : all_tabs || tab === 'situation'}]">
               <div class="row">
                 <div class="col-sm-6">
                   <h6 class="title">Gages</h6>
@@ -637,7 +637,9 @@
                   <div class="separator"></div>
               -->
               <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12 pv-20" v-if="holder&&false">
+                <div v-shortkey="['ctrl', 'alt', 'p']" @shortkey="pdf = !pdf"></div>
+                <div v-shortkey="['ctrl', 'alt', 'a']" @shortkey="all_tabs = !all_tabs"></div>
+                <div class="col-sm-12 pv-20" v-if="holder&&pdf">
                   <p class="text-center">
                     L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
                     doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
@@ -651,7 +653,7 @@
               <!-- fin bouton imprimer csa detaille -->
               </div>
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : tab === 'history'}]">
+            <div class="tab-pane fade" :class="[{'in active' : all_tabs || tab === 'history'}]">
               <!-- debut tableau operation historique FR -->
               <div>Historique des opérations en France</div>
               <div class="row">
@@ -688,7 +690,7 @@
 
               <!-- fin tableau operation historique Etranger-->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : tab === 'send'}]" v-if="holder">
+            <div class="tab-pane fade" :class="[{'in active' : all_tabs || tab === 'send'}]" v-if="holder">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <!-- debut alerte verte -->
@@ -876,6 +878,7 @@ export default {
   data () {
     return {
       tab: 'abstract',
+      all_tabs: false,
       default: 'non disponible',
       synthese: {
         'fin_ove': {
@@ -953,6 +956,7 @@ export default {
       plaque: '',
       vin: '',
       result: 'wait',
+      pdf: false,
       conf: [],
       v: {
         date_update: '25/11/2018',
