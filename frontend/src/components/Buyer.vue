@@ -58,7 +58,8 @@
             </div>
             <!-- row -->
             <div class="col-md-12 p-h-10">
-              <p>Vous pouvez envoyer un courriel au vendeur en utilisant le bouton ci-dessous. Il s'agit d'un modèle qui peut vous aider, mais vous pouvez utiliser d'autres moyens pour lui faire part de votre demande.<br>
+              <p>Vous pouvez envoyer un courriel au vendeur en utilisant le bouton ci-dessous. Il s'agit d'un modèle qui peut vous aider, mais vous pouvez utiliser d'autres moyens pour lui faire part de votre demande.</p>
+              <p>Cette option ne fonctionne que si votre navigateur est configuré pour ouvrir les liens couriel. <br>
               <p class="text-center">
                 <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Demander le rapport histovec <i class="fa fa-send"></i></a>
               </p>

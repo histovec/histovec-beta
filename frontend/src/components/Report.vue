@@ -212,7 +212,8 @@
                   <div class="row">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
-                    <div class="col-sm-6"><span class="txt-small-13">Eligible vignette Crit'Air {{ v.vignette_numero }}</span> </div>
+                    <div class="col-sm-6"><span class="txt-small-13">Eligible vignette Crit'Air {{ v.vignette_numero }}</span>
+                      <br/><a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" href="https://www.certificat-air.gouv.fr/"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a> </div>
                     <!-- fin ras  -->
                   </div>
                 </div>
