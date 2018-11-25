@@ -945,7 +945,7 @@ export default {
       result: 'wait',
       conf: [],
       v: {
-        date_update: '11/06/2018',
+        date_update: '25/11/2018',
         ctec: {
           reception: {},
           puissance: {},
