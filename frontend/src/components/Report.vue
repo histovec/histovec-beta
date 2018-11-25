@@ -637,7 +637,7 @@
                   <div class="separator"></div>
               -->
               <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12 pv-20" v-if="holder">
+                <div class="col-sm-12 pv-20" v-if="holder&&false">
                   <p class="text-center">
                     L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
                     doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
