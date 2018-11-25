@@ -148,7 +148,7 @@
                     <!-- debut immatriculer  -->
                     <div class="col-sm-1"><i class="fa fa fa-globe fa-2x pr-10"></i></div>
                     <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a été</span> <span class="info_red txt-small-13">importé</span> </div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Vérifier les options incluses qui peuvent être différentes</span></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13" v-if="!holder">Vérifier les options incluses qui peuvent être différentes</span></div>
                     <!-- fin immatriculer  -->
                   </div>
                   <!-- debut trait separation  -->
@@ -637,9 +637,16 @@
                   <div class="separator"></div>
               -->
               <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12" v-if="false">
-                  <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
-                  data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </button>
+                <div class="col-sm-12 pv-20" v-if="holder&&false">
+                  <p class="text-center">
+                    L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
+                    doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
+                    par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
+                  </p>
+                  <p class="text-center">
+                    <button v-on:click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
+                    data-original-title="CSA" title="CSA"> Imprimer le CSA<i class="fa fa-print"></i> </button>
+                  </p>
                 </div>
               <!-- fin bouton imprimer csa detaille -->
               </div>
@@ -859,6 +866,8 @@
 
 import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
+import Qr from 'qr.js'
+import JsPdf from 'jspdf'
 
 export default {
   components: {
@@ -946,7 +955,7 @@ export default {
       result: 'wait',
       conf: [],
       v: {
-        date_update: '11/06/2018',
+        date_update: '25/11/2018',
         ctec: {
           reception: {},
           puissance: {},
@@ -989,8 +998,12 @@ export default {
       var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec.\n\nRendez-vous sur le lien suivant pour le consulter: \n')
       return text + this.url.replace('&', '%26')
     },
+    baseurl () {
+      // return 'https://histovec.interieur.gouv.fr'
+      return window.location.protocol + '//' + window.location.host
+    },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
+      return this.baseurl + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
     }
   },
   methods: {
@@ -1172,6 +1185,128 @@ export default {
       }
       return vignette
     },
+    generatePDF () {
+      let img = new Image()
+      var pdf = new JsPdf()
+      let self = this
+      img.src = 'assets/images/logo_mi_header.png'
+      img.onload = function () {
+        console.log(img)
+
+        // header with QR code
+
+        let qrcode = Qr(self.url)
+        let cells = qrcode.modules
+
+        cells.forEach(function (row, rdx) {
+          row.forEach(function (cell, cdx) {
+            // console.log(cell, rdx, cdx)
+            if (cell === true) {
+              pdf.rect(170 + cdx * 0.4, 10 + rdx * 0.4, 0.4, 0.4, 'F')
+            }
+          })
+        })
+
+        pdf.setFont('helvetica')
+        pdf.setFontSize(5)
+        pdf.text(169, 35, self.baseurl, null, 90)
+
+        pdf.addImage(img, 'PNG', 82, 10, 46, 24)
+        pdf.setFontType('bold')
+        pdf.setFontSize(20)
+        let offset = 20
+        pdf.text(105, offset + 30, 'Certificat de situation administrative détaillé', null, null, 'center')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        pdf.text(105, offset + 35, '(Article R.322-4 du code de la route)', null, null, 'center')
+
+        // identification du véhicule
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 47, 'Identification du véhicule')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        pdf.text(20, offset + 54, 'Numéro d\'immatriculation du véhicule :')
+        pdf.text(100, offset + 54, self.$store.state.plaque)
+        pdf.text(20, offset + 61, 'Numéro VIN du véhicule (ou numéro de série) :')
+        pdf.text(100, offset + 61, self.v.ctec.vin)
+        pdf.text(20, offset + 68, 'Marque :')
+        pdf.text(100, offset + 68, self.v.ctec.marque)
+
+        // situation administrative
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 80, 'Situation administrative du véhicule')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 87, '- Opposition au transfert du certificat d\'immatriculation (OTCI)')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 92, self.v.administratif.otci)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 99, '- Procédure de réparation contrôlée')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 104, self.v.administratif.ove)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 111, '- Déclaration valant saisie')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 116, self.v.administratif.saisie === 'NON' ? 'Non' : 'Oui')
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 123, '- Gage')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 128, self.v.administratif.gage === 'NON' ? 'Non' : 'Oui')
+
+        // autres elements de situation
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 140, '- Immatriculation suspendue')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 145, self.v.administratif.suspension)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 152, '- Immatriculation annulée')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 157, self.v.administratif.annulation)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 164, '- Véhicule volé')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 169, self.v.administratif.vol === 'NON' ? 'Non' : 'Oui')
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 176, '- Certificat d\'immatriculation volé')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 181, self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui')
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 187, '- Certificat d\'immatriculation perdu')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 192, self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui')
+
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 204, 'Historique du véhicule')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        self.v.historique.forEach(function (o) {
+          pdf.text(20, offset + 211, o.date)
+          pdf.text(40, offset + 211, o.nature)
+          offset = offset + 5
+        })
+
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 223, 'Certificat attestant la situation administrative au :')
+        pdf.setFontSize(10)
+        pdf.setFontType('normal')
+        var date = new Date()
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+        pdf.text(20, offset + 230, date.toLocaleDateString('fr-FR', options) + ' à ' + self.pad(date.getHours(), 2) + 'h' + self.pad(date.getMinutes(), 2))
+
+        pdf.setFontType('italic')
+        pdf.setFontSize(8)
+        pdf.text(15, offset + 242, 'Le QR code en haut de ce certificat, et référant au site ' + self.baseurl + ' permet vous assurer de la conformité des informations')
+        pdf.text(15, offset + 247, 'retranscrites. Ce code sera disponible jusqu\'au changement de titulaire et au plus tard jusqu\'à la fin du mois suivant l\'édition de ce certificat.')
+        pdf.text(15, offset + 252, 'La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours.')
+
+        pdf.save('rapport.pdf')
+      }
+    },
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
@@ -1346,11 +1481,17 @@ export default {
               this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
 
               this.v.administratif.gages = veh.gage || this.default
+              this.v.administratif.suspension = (veh.suspension === 'NON') ? 'Non' : 'Oui'
+              this.v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
               this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
               // opposition et procédure à valider
+              this.v.administratif.otci = (veh.otci === 'NON') ? 'Aucune' : ((veh.otci_pv === 'OUI') ? 'opposition temporaire (PV en attente)' : 'opposition temporaire')
+              this.v.administratif.ove = (veh.ove === 'NON') ? 'Aucune' : 'Oui'
               this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : (veh.otci_pv === 'OUI') ? 'Opposition temporaire (PV en attente)' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
               this.v.administratif.pv = (veh.otci_pv === 'OUI')
               // pour l'instant aucun véhicule saisi dans les échantillons
+              this.v.administratif.saisie = (veh.saisie === 'NON') ? 'Aucune' : 'Oui'
+              this.v.administratif.gage = (veh.gage === 'NON') ? 'Aucun' : 'Oui'
               this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
               this.v.administratif.vol = veh.vehicule_vole || this.default
 
