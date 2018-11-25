@@ -866,6 +866,7 @@
 
 import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
+import Qr from 'qr.js'
 import JsPdf from 'jspdf'
 
 export default {
@@ -997,8 +998,12 @@ export default {
       var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec.\n\nRendez-vous sur le lien suivant pour le consulter: \n')
       return text + this.url.replace('&', '%26')
     },
+    baseurl () {
+      // return 'https://histovec.interieur.gouv.fr'
+      return window.location.protocol + '//' + window.location.host
+    },
     url () {
-      return window.location.protocol + '//' + window.location.host + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
+      return this.baseurl + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
     }
   },
   methods: {
@@ -1188,9 +1193,25 @@ export default {
       img.onload = function () {
         console.log(img)
 
-        // header
-        pdf.addImage(img, 'PNG', 82, 10, 46, 24)
+        // header with QR code
+
+        let qrcode = Qr(self.url)
+        let cells = qrcode.modules
+
+        cells.forEach(function (row, rdx) {
+          row.forEach(function (cell, cdx) {
+            // console.log(cell, rdx, cdx)
+            if (cell === true) {
+              pdf.rect(170 + cdx * 0.4, 10 + rdx * 0.4, 0.4, 0.4, 'F')
+            }
+          })
+        })
+
         pdf.setFont('helvetica')
+        pdf.setFontSize(5)
+        pdf.text(169, 35, self.baseurl, null, 90)
+
+        pdf.addImage(img, 'PNG', 82, 10, 46, 24)
         pdf.setFontType('bold')
         pdf.setFontSize(20)
         let offset = 20
@@ -1279,8 +1300,9 @@ export default {
 
         pdf.setFontType('italic')
         pdf.setFontSize(8)
-        pdf.text(15, offset + 242, 'Le présent certificat est valable pour une durée de 15 jours. Pour une meilleure assurance, vérifiez les données du véhicule')
-        pdf.text(15, offset + 247, 'sur le site https://histovec.interieur.gouv.fr pour la meilleure assurance.')
+        pdf.text(15, offset + 242, 'Le QR code en haut de ce certificat, et référant au site ' + self.baseurl + ' permet vous assurer de la conformité des informations')
+        pdf.text(15, offset + 247, 'retranscrites. Ce code sera disponible jusqu\'au changement de titulaire et au plus tard jusqu\'à la fin du mois suivant l\'édition de ce certificat.')
+        pdf.text(15, offset + 252, 'La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours.')
 
         pdf.save('rapport.pdf')
       }
