@@ -636,8 +636,8 @@
                   <div class="separator"></div>
               -->
               <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12" v-if="false">
-                  <button type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
+                <div class="col-sm-12" v-if="holder">
+                  <button v-on:click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
                   data-original-title="CSA" title="CSA"> Imprimer CSA détaillé<i class="fa fa-print"></i> </button>
                 </div>
               <!-- fin bouton imprimer csa detaille -->
@@ -858,6 +858,7 @@
 
 import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
+import JsPdf from 'jspdf'
 
 export default {
   components: {
@@ -1171,6 +1172,111 @@ export default {
       }
       return vignette
     },
+    generatePDF () {
+      let img = new Image()
+      var pdf = new JsPdf()
+      let self = this
+      img.src = 'assets/images/logo_mi_header.png'
+      img.onload = function () {
+        console.log(img)
+
+        // header
+        pdf.addImage(img, 'PNG', 82, 10, 46, 24)
+        pdf.setFont('helvetica')
+        pdf.setFontType('bold')
+        pdf.setFontSize(20)
+        let offset = 20
+        pdf.text(105, offset + 30, 'Certificat de situation administrative détaillé', null, null, 'center')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        pdf.text(105, offset + 35, '(Article R.322-4 du code de la route)', null, null, 'center')
+
+        // identification du véhicule
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 47, 'Identification du véhicule')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        pdf.text(20, offset + 54, 'Numéro d\'immatriculation du véhicule :')
+        pdf.text(100, offset + 54, self.$store.state.plaque)
+        pdf.text(20, offset + 61, 'Numéro VIN du véhicule (ou numéro de série) :')
+        pdf.text(100, offset + 61, self.v.ctec.vin)
+        pdf.text(20, offset + 68, 'Marque :')
+        pdf.text(100, offset + 68, self.v.ctec.marque)
+
+        // situation administrative
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 80, 'Situation administrative du véhicule')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 87, '- Opposition au transfert du certificat d\'immatriculation (OTCI)')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 92, self.v.administratif.otci)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 99, '- Procédure de réparation contrôlée')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 104, self.v.administratif.ove)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 111, '- Déclaration valant saisie')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 116, self.v.administratif.saisie === 'NON' ? 'Non' : 'Oui')
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 123, '- Gage')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 128, self.v.administratif.gage === 'NON' ? 'Non' : 'Oui')
+
+        // autres elements de situation
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 140, '- Immatriculation suspendue')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 145, self.v.administratif.suspension)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 152, '- Immatriculation annulée')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 157, self.v.administratif.annulation)
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 164, '- Véhicule volé')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 169, self.v.administratif.vol === 'NON' ? 'Non' : 'Oui')
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 176, '- Certificat d\'immatriculation volé')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 181, self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui')
+        pdf.setFontType('bold')
+        pdf.text(20, offset + 187, '- Certificat d\'immatriculation perdu')
+        pdf.setFontType('normal')
+        pdf.text(25, offset + 192, self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui')
+
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 204, 'Historique du véhicule')
+        pdf.setFontType('normal')
+        pdf.setFontSize(10)
+        self.v.historique.forEach(function (o) {
+          pdf.text(20, offset + 211, o.date)
+          pdf.text(40, offset + 211, o.nature)
+          offset = offset + 5
+        })
+
+        pdf.setFontType('bold')
+        pdf.setFontSize(12)
+        pdf.text(15, offset + 223, 'Certificat attestant la situation administrative au :')
+        pdf.setFontSize(10)
+        pdf.setFontType('normal')
+        var date = new Date()
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+        pdf.text(20, offset + 230, date.toLocaleDateString('fr-FR', options) + ' à ' + self.pad(date.getHours(), 2) + 'h' + self.pad(date.getMinutes(), 2))
+
+        pdf.setFontType('italic')
+        pdf.setFontSize(8)
+        pdf.text(15, offset + 242, 'Le présent certificat est valable pour une durée de 15 jours. Pour une meilleure assurance, vérifiez les données du véhicule')
+        pdf.text(15, offset + 247, 'sur le site https://histovec.interieur.gouv.fr pour la meilleure assurance.')
+
+        pdf.save('rapport.pdf')
+      }
+    },
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
@@ -1345,11 +1451,17 @@ export default {
               this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
 
               this.v.administratif.gages = veh.gage || this.default
+              this.v.administratif.suspension = (veh.suspension === 'NON') ? 'Non' : 'Oui'
+              this.v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
               this.v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
               // opposition et procédure à valider
+              this.v.administratif.otci = (veh.otci === 'NON') ? 'Aucune' : ((veh.otci_pv === 'OUI') ? 'opposition temporaire (PV en attente)' : 'opposition temporaire')
+              this.v.administratif.ove = (veh.ove === 'NON') ? 'Aucune' : 'Oui'
               this.v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : (veh.otci_pv === 'OUI') ? 'Opposition temporaire (PV en attente)' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
               this.v.administratif.pv = (veh.otci_pv === 'OUI')
               // pour l'instant aucun véhicule saisi dans les échantillons
+              this.v.administratif.saisie = (veh.saisie === 'NON') ? 'Aucune' : 'Oui'
+              this.v.administratif.gage = (veh.gage === 'NON') ? 'Aucun' : 'Oui'
               this.v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
               this.v.administratif.vol = veh.vehicule_vole || this.default
 
