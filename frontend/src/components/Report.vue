@@ -148,7 +148,7 @@
                     <!-- debut immatriculer  -->
                     <div class="col-sm-1"><i class="fa fa fa-globe fa-2x pr-10"></i></div>
                     <div class="col-sm-6"><span class="txt-small-13">Ce véhicule a été</span> <span class="info_red txt-small-13">importé</span> </div>
-                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13">Vérifier les options incluses qui peuvent être différentes</span></div>
+                    <div class="col-sm-5"><span class="color-info_2 bold_4 txt-small-13" v-if="!holder">Vérifier les options incluses qui peuvent être différentes</span></div>
                     <!-- fin immatriculer  -->
                   </div>
                   <!-- debut trait separation  -->
