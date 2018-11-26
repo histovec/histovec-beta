@@ -28,6 +28,7 @@ before_script:
   - docker version
 
 script:
+  - git fetch --unshallow && git tag -l
   - make -f Makefile.deploy build-all-images
   - make -f Makefile.deploy up-all
 # create test env
