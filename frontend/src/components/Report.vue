@@ -1478,12 +1478,12 @@ export default {
               this.v.certificat.premier = veh.date_premiere_immat || this.default
               this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
               this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
-              this.v.certificat.fr = (this.v.certificat.etranger) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
-              this.v.fni = (veh.dos_date_conversion_siv !== undefined) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
+              this.v.certificat.fr = (this.v.certificat.etranger && (veh.historique !== undefined)) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
+              this.v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
               this.v.certificat.courant = veh.date_emission_CI || this.default
               this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
-              if ((this.v.certificat.fr !== this.v.certificat.siv) && (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))) {
+              if ((this.v.certificat.fr !== this.v.certificat.siv) && ((veh.historique === undefined) || (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
                 let tmp = veh.historique
                 tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
                 this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
