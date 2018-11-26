@@ -201,7 +201,7 @@
                     <div class="col-sm-1"><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></div>
                     <div class="col-sm-6 txt-small-13"> {{ synthese[entry].text }} </div>
                     <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> {{ synthese[entry].adv }}
-                      <br/><a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
+                      <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                     </div>
                   </div>
                   <!-- debut trait separation  -->
@@ -212,8 +212,9 @@
                   <div class="row">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
-                    <div class="col-sm-6"><span class="txt-small-13"> {{ synthese.critair.text }} {{ v.vignette_numero }}</span> </div>
-                    <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> <a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
+                    <div class="col-sm-6"><span class="txt-small-13"> {{ synthese['critair'].text }} {{ v.vignette_numero }}</span> </div>
+                    <div class="col-sm-5 color-info_2 bold_4 txt-small-13">  {{ synthese['critair'].adv }}
+                      <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                     </div>
 
                     <!-- fin ras  -->
@@ -891,6 +892,7 @@ export default {
       synthese: {
         'critair': {
           'text': 'Eligible vignette Crit\'Air',
+          'adv': 'Consultez le site des vignettes Crit\'Air',
           'link': 'https://www.certificat-air.gouv.fr'
         },
         'fin_ove': {
