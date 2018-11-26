@@ -201,7 +201,7 @@
                     <div class="col-sm-1"><i class="fa fa-2x pr-10" :class="synthese[entry].icon"></i></div>
                     <div class="col-sm-6 txt-small-13"> {{ synthese[entry].text }} </div>
                     <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> {{ synthese[entry].adv }}
-                      <br/><a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
+                      <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese[entry].link !== undefined" :href="synthese[entry].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                     </div>
                   </div>
                   <!-- debut trait separation  -->
@@ -212,8 +212,9 @@
                   <div class="row">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
-                    <div class="col-sm-6"><span class="txt-small-13"> {{ synthese.critair.text }} {{ v.vignette_numero }}</span> </div>
-                    <div class="col-sm-5 color-info_2 bold_4 txt-small-13"> <a class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
+                    <div class="col-sm-6"><span class="txt-small-13"> {{ synthese['critair'].text }} {{ v.vignette_numero }}</span> </div>
+                    <div class="col-sm-5 color-info_2 bold_4 txt-small-13">  {{ synthese['critair'].adv }}
+                      <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                     </div>
 
                     <!-- fin ras  -->
@@ -891,6 +892,7 @@ export default {
       synthese: {
         'critair': {
           'text': 'Eligible vignette Crit\'Air',
+          'adv': 'Consultez le site des vignettes Crit\'Air',
           'link': 'https://www.certificat-air.gouv.fr'
         },
         'fin_ove': {
@@ -1478,12 +1480,12 @@ export default {
               this.v.certificat.premier = veh.date_premiere_immat || this.default
               this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
               this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
-              this.v.certificat.fr = (this.v.certificat.etranger) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
-              this.v.fni = (veh.dos_date_conversion_siv !== undefined) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
+              this.v.certificat.fr = (this.v.certificat.etranger && (veh.historique !== undefined)) ? this.formatDate(this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_date) : this.v.certificat.premier
+              this.v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((this.$lodash.orderBy(veh.historique, ['opa_date'])[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
               this.v.certificat.courant = veh.date_emission_CI || this.default
               this.v.certificat.depuis = this.calcCertifDepuis(veh.duree_dernier_tit)
 
-              if ((this.v.certificat.fr !== this.v.certificat.siv) && (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))) {
+              if ((this.v.certificat.fr !== this.v.certificat.siv) && ((veh.historique === undefined) || (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
                 let tmp = veh.historique
                 tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
                 this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
