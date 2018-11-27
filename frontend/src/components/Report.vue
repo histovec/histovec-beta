@@ -1058,7 +1058,7 @@ export default {
     histoFilter (historique) {
       let h = historique.filter(event => this.operations[event.opa_type] !== undefined)
       h = this.$lodash.orderBy(h, ['opa_date'], ['desc'])
-      h = h.filter(event => event.ope_annul === undefined)
+      h = h.filter(event => event.ope_date_annul === undefined)
       return h.map(event => {
         return {'date': this.formatDate(event.opa_date), 'nature': this.operations[event.opa_type]}
       })
