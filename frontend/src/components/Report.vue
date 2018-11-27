@@ -1081,8 +1081,13 @@ export default {
       if (nbMonth <= 18) {
         return nbMonth + ' mois'
       } else {
-        let year = Math.round(nbMonth / 12)
-        return (year > 1) ? year + ' ans' : year + ' an'
+        let year = Math.floor(nbMonth / 12)
+        let month = nbMonth - 12 * year
+        if ((month > 0) && (year < 10)) {
+          return (year > 1) ? year + ' ans et ' + month + ' mois' : year + ' an et ' + month + ' mois'
+        } else {
+          return (year > 1) ? year + ' ans' : year + ' an'
+        }
       }
     },
     getVehiculeTypeCarburant (carburant) {
