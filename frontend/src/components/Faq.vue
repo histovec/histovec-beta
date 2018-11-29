@@ -235,8 +235,7 @@
                   <UL>Propriétaire : il s'agit du propriétaire du bien qu'est le véhicule et qui peut donc le vendre.</UL>
                   <UL>Titulaire : il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</UL>
                   <UL>Le propriétaire du véhicule et titulaire du certificat d'immatriculation sont le plus souvent la même personne, mais peuvent être différents.
-
-C'est pourquoi, Histovec distingue les opérations qui correspondent à la vente du véhicule ("cession/vente par un particulier" et "achat/reprise par un professionnel ") du changement de titulaire.</UL>
+                      C'est pourquoi, Histovec distingue les opérations qui correspondent à la vente du véhicule ("cession/vente par un particulier" et "achat/reprise par un professionnel ") du changement de titulaire.</UL>
                 </div>
               </div>
             </div>
