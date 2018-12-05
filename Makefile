@@ -19,6 +19,12 @@ export DC_PREFIX=${DC_DIR}/docker-compose
 export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 export ES_MEM=2048m
 export ES_HOST=elasticsearch
+export API_USER_LIMIT_RATE=1r/m
+export API_USER_BURST=5 nodelay
+export API_USER_SCOPE=http_x_forwarded_for
+export API_GLOBAL_LIMIT_RATE=5r/s
+export API_GLOBAL_BURST=20 nodelay
+
 
 # data prep (data not included in repo)
 export datadir=sample_data
