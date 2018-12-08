@@ -674,6 +674,13 @@
                 </div>
                 <div class="separator pv-5"></div>
               </div>
+              <div v-if="v.certificat.incertain">
+                <div class="row">
+                  <div class="col-sm-4"><span class="txt-small-12">{{ v.certificat.fr }}</span></div>
+                  <div class="col-sm-8"><span class="info_red txt-small-12"> Première immatriculation (source incertaine)</span></div>
+                </div>
+                <div class="separator pv-5"></div>
+              </div>
               <!-- fin tableau operation historique FR -->
               <br />
               <div v-if="v.certificat.etranger">Historique des opérations à l'étranger</div>
@@ -1497,10 +1504,12 @@ export default {
               this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
               this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
               this.v.certificat.premier = veh.date_premiere_immat || this.default
-              this.v.certificat.etranger = (veh.historique !== undefined) ? veh.historique.some(e => e.opa_type === 'IMMAT_NORMALE_PREM_VO') : undefined
+              // véhicule importé: changement de règle de gestion #406
+              this.v.certificat.etranger = (veh.import === 'OUI')
               this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
               this.v.certificat.fr = (this.v.certificat.etranger && (veh.historique !== undefined)) ? this.formatDate(veh.historique[0].opa_date) : this.v.certificat.premier
               this.v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
+              this.v.certificat.incertain = (this.v.certificat.siv !== this.v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
               this.v.certificat.courant = veh.date_emission_CI || this.default
               this.v.certificat.depuis = this.calcCertifDepuis(this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0].opa_date)
 
@@ -1541,7 +1550,8 @@ export default {
               if (veh['otci'] === 'OUI') {
                 this.v.administratif.synthese.push(veh['ove'] === 'OUI' ? 'otci_ove' : 'otci')
               }
-              this.v.etranger = (veh.import === 'NON') ? (this.v.certificat.etranger ? 'OUI' : 'NON') : [veh.import, veh.imp_imp_immat, veh.pays_import]
+              // véhicule importé : changement de règle de gestion #406
+              this.v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
               // ci-dessous : interprétation à confirmer
               this.v.sinistres = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
               this.v.sinistres_nb = (veh.historique !== undefined) ? (this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
