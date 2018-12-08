@@ -1509,7 +1509,7 @@ export default {
               this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
               this.v.certificat.fr = (this.v.certificat.etranger && (veh.historique !== undefined)) ? this.formatDate(veh.historique[0].opa_date) : this.v.certificat.premier
               this.v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
-              this.v.certificat.incertain = (this.v.certificat.siv !== this.v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
+              this.v.certificat.incertain = !this.v.certificat.etranger && (this.v.certificat.siv !== this.v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
               this.v.certificat.courant = veh.date_emission_CI || this.default
               this.v.certificat.depuis = this.calcCertifDepuis(this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0].opa_date)
 
