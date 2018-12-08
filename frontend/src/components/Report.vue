@@ -1502,7 +1502,7 @@ export default {
               this.v.ctec.PT.service = veh.pt_service_g
               this.v.ctec.PT.AV = veh.ptav_g1
               this.v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-              this.v.titulaire.adresse = this.pad(veh.adr_code_postal_tit, 5)
+              this.v.titulaire.adresse = (veh.adr_code_postal_tit !== undefined) ? this.pad(veh.adr_code_postal_tit, 5) : this.default
               this.v.certificat.premier = veh.date_premiere_immat || this.default
               // véhicule importé: changement de règle de gestion #406
               this.v.certificat.etranger = (veh.import === 'OUI')
