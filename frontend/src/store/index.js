@@ -16,6 +16,7 @@ export default new Vuex.Store({
     plaque: '',
     siren: '',
     formule: '',
+    fniMode: false,
     key: undefined,
     code: undefined,
     v: undefined,
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     id: undefined
   },
   mutations: {
+    updateFniMode (state, fniMode) {
+      state.fniMode = fniMode
+    },
     updateNom (state, nom) {
       state.nom = nom
     },
