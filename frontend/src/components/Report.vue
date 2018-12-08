@@ -1399,7 +1399,7 @@ export default {
       if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
         setTimeout(() => {
           this.modalEval = true
-          this.$http.put(this.apiUrl + 'log/feedback').then(response => {}, () => {})
+          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(response => {}, () => {})
         }, this.timerModalEval)
       }
     }
@@ -1409,27 +1409,27 @@ export default {
       if (this.result === 'wait') {
         this.result = 'error'
       }
-      this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
     }, this.timeout)
 
-    this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(response => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(response => {}, () => {})
     if (this.$store.state.v) {
       this.v = this.$store.state.v
       this.showModalEval()
       this.result = 'cached'
-      this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
     } else {
       if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
         // Cas des liens acheteur sans KEY
         this.result = 'invalidKey'
-        this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
         return
       }
       if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         this.result = 'invalid'
-        this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
       } else {
-        this.$http.get(this.apiUrl + 'id/' + (this.holder ? this.$route.params.id : this.$route.query.id))
+        this.$http.get(this.apiUrl + 'id/' + this.$cookie.get('userId') + '/' + (this.holder ? this.$route.params.id : this.$route.query.id))
           .then(response => {
             console.log(response)
             if (response.body.hits.hits.length === 0) {
