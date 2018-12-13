@@ -208,18 +208,20 @@
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'k'}]">
                 <div class="panel-body">
-                  <UL><B>- Première immatriculation d'un véhicule neuf,</B> opération d'immatriculation d'un véhicule qui n'a jamais été immatriculé.</UL>
-                  <UL><B>- Première immatriculation à l'étranger,</B> le véhicule a été immatriculé en tant que véhicule neuf à l'étranger.</UL>
-                  <UL><B>- Première immatriculation d'un véhicule importé,</B> véhicule déjà immatriculé à l'étranger qui se fait immatriculer en France pour la première fois.</UL>
-                  <UL><B>- Conversion au nouveau format d'immatriculation,</B> changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD. </UL>
-                  <UL><B>- Cession (vente) par un particulier,</B> véhicule vendu par un particulier.</UL>
-                  <UL><B>- Changement de titulaire,</B> opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.</UL>
-                  <UL><B>- Achat ou reprise par un professionnel,</B>  opération correspondant au moment où un professionnel devient acquéreur du véhicule.</UL>
-                  <UL><B>- Fin d'usage démonstration pour vente du véhicule,</B> véhicule de garage ayant servi de véhicule de démonstration.</UL>
-                  <UL><B>- Opposition au transfert de la carte grise,</B> état bloquant tout changement de titulaire.</UL>
-                  <UL><B>- Procédure de réparation contrôlée,</B> procédure pendant laquelle les réparations sont contrôlées par un expert en automobile.</UL>
-                  <UL><B>- Premier rapport d'expert,</B> rapport de l'expert en automobile qui détermine la dangerosité du véhicule, établit la liste des réparations et en évalue le montant.</UL>
-                  <UL><B>- Second rapport d'expert,</B> rapport de l'expert en automobile qui indique notamment que le véhicule est apte à circuler dans des conditions normales de sécurité.</UL>
+                  <UL><span class="bold_6">- Première immatriculation d'un véhicule neuf,</span> opération d'immatriculation d'un véhicule qui n'a jamais été immatriculé.</UL>
+                  <UL><span class="bold_6">- Première immatriculation à l'étranger,</span> le véhicule a été immatriculé en tant que véhicule neuf à l'étranger.</UL>
+                  <UL><span class="bold_6">- Première immatriculation d'un véhicule importé,</span> véhicule déjà immatriculé à l'étranger qui se fait immatriculer en France pour la première fois.</UL>
+		  <UL><span class="bold_6">- Première immatriculation (source incertaine),</span> opération fournie à titre indicatif lorsque aucune opération telle que « Première immatriculation d'un véhicule neuf » ou « Première immatriculation à l'étranger » n'est associée à la date présente dans le fichier.
+Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militaires qui disposaient d'une immatriculation spéciale) ou à l'absence de la donnée dans les anciens fichiers d'immatriculation (p. ex. certains véhicules anciens).</UL>
+                  <UL><span class="bold_6">- Conversion au nouveau format d'immatriculation,</span> changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD. </UL>
+                  <UL><span class="bold_6">- Cession (vente) par un particulier,</span> véhicule vendu par un particulier.</UL>
+                  <UL><span class="bold_6">- Changement de titulaire,</span> opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.</UL>
+                  <UL><span class="bold_6">- Achat ou reprise par un professionnel,</span>  opération correspondant au moment où un professionnel devient acquéreur du véhicule.</UL>
+                  <UL><span class="bold_6">- Fin d'usage démonstration pour vente du véhicule,</span> véhicule de garage ayant servi de véhicule de démonstration.</UL>
+                  <UL><span class="bold_6">- Opposition au transfert de la carte grise,</span> état bloquant tout changement de titulaire.</UL>
+                  <UL><span class="bold_6">- Procédure de réparation contrôlée,</span> procédure pendant laquelle les réparations sont contrôlées par un expert en automobile.</UL>
+                  <UL><span class="bold_6">- Premier rapport d'expert,</span> rapport de l'expert en automobile qui détermine la dangerosité du véhicule, établit la liste des réparations et en évalue le montant.</UL>
+                  <UL><span class="bold_6">- Second rapport d'expert,</span> rapport de l'expert en automobile qui indique notamment que le véhicule est apte à circuler dans des conditions normales de sécurité.</UL>
                 </div>
               </div>
             </div>
@@ -232,8 +234,8 @@
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'l'}]">
                 <div class="panel-body">
                   <UL>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes :</UL>
-                  <UL>Propriétaire : il s'agit du propriétaire du bien qu'est le véhicule et qui peut donc le vendre.</UL>
-                  <UL>Titulaire : il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</UL>
+                  <UL><span class="bold_6">Propriétaire </span>: il s'agit du propriétaire du bien qu'est le véhicule et qui peut donc le vendre.</UL>
+                  <UL><span class="bold_6">Titulaire </span>: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</UL>
                   <UL>Le propriétaire du véhicule et titulaire du certificat d'immatriculation sont le plus souvent la même personne, mais peuvent être différents.
                       C'est pourquoi, Histovec distingue les opérations qui correspondent à la vente du véhicule ("cession/vente par un particulier" et "achat/reprise par un professionnel ") du changement de titulaire.</UL>
                 </div>
