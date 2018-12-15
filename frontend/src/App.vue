@@ -90,9 +90,10 @@ import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/libelle_operations.json'
 import verbatims from './assets/json/verbatims.json'
-
+import VueMask from 'v-mask'
 import VueClipboard from 'vue-clipboard2'
 
+Vue.use(VueMask)
 Vue.use(VueClipboard)
 
 import lodash from 'lodash'
