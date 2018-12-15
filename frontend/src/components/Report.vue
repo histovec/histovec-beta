@@ -1418,7 +1418,7 @@ export default {
             pdf.setFontSize(p.situation1.title.size)
             pdf.text(p.situation1.pos[0], p.situation1.pos[1], 'Situation administrative du véhicule')
             let data = [
-                {key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)', value: self.v.administratif.otci === 'NON' ? 'Non' : 'Oui'},
+                {key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)', value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : 'Oui'},
                 {key: '- Procédure de réparation contrôlée', value: self.v.administratif.ove},
                 {key: '- Déclaration valant saisie', value: self.v.administratif.saisie},
                 {key: '- Gage', value: self.v.administratif.gage}
