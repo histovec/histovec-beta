@@ -1653,12 +1653,12 @@ export default {
               this.v.certificat.etranger = (veh.import === 'OUI')
               this.v.certificat.siv = veh.date_premiere_immat_siv || this.default
               this.v.certificat.fr = (this.v.certificat.etranger && (veh.historique !== undefined)) ? this.formatDate(veh.historique[0].opa_date) : this.v.certificat.premier
-              this.v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'ok' : 'ko') : false
+              this.v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
               this.v.certificat.incertain = !this.v.certificat.etranger && (this.v.certificat.siv !== this.v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
               this.v.certificat.courant = veh.date_emission_CI || this.default
               this.v.certificat.depuis = this.calcCertifDepuis(this.$lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0].opa_date)
 
-              if ((this.v.certificat.fr !== this.v.certificat.siv) && ((veh.historique === undefined) || (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
+              if ((this.v.fni !== true) && (this.v.certificat.fr !== this.v.certificat.siv) && ((veh.historique === undefined) || (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
                 let tmp = veh.historique
                 tmp.push({opa_date: this.v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
                 this.v.historique = (veh.historique !== undefined) ? this.histoFilter(tmp) : []
@@ -1666,7 +1666,7 @@ export default {
                 this.v.historique = (veh.historique !== undefined) ? this.histoFilter(veh.historique) : []
               }
               this.v.nb_proprietaires = veh.nb_proprietaire
-              this.v.nb_tit = (veh.historique !== undefined) ? this.calcNbTit(veh.historique) : undefined
+              this.v.nb_tit = (veh.historique !== undefined) ? (this.calcNbTit(veh.historique) + (this.v.certificat.incertain ? 1 : 0)) : undefined
               this.v.age_veh = veh.age_annee
               this.v.logo_vehicule = this.getVehiculeLogo(veh.CTEC_RLIB_GENRE)
               this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
