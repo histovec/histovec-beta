@@ -388,7 +388,7 @@ export default {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
     },
     checkPlaque () {
-      return (this.typeImmatriculation === 'fni') ? this.plaque.match(/^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?[0-9]{2,3}\s*$/) : this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
+      return (this.typeImmatriculation === 'fni') ? this.plaque.match(/^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/) : this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
     },
     checkFormule () {
       return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
