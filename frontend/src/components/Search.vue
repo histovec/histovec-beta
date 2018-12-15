@@ -111,8 +111,8 @@
                           <div class="col-md-4">
                             <div class="form-group has-feedback" :class="[{'has-error' : ((!checkDateNaissance) && status !== 'init')}]">
                               <label class="control-label">Date de naissance <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input v-if="typeImmatriculation === 'fni'" type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateNaissance" tabindex="2">
-                              <input v-if="typeImmatriculation === 'siv' || !fniMode" type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateNaissance" tabindex="3">
+                              <input v-if="typeImmatriculation === 'fni'" v-mask="'##/##/####'" type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateNaissance" tabindex="2">
+                              <input v-if="typeImmatriculation === 'siv' || !fniMode" v-mask="'##/##/####'" type="text" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateNaissance" tabindex="3">
                               <i class="fa fa-calendar form-control-feedback"></i> </div>
                           </div>
                         </div>
@@ -125,8 +125,8 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input v-if="typeImmatriculation === 'siv'" type="text" required="required" class="form-control" id="plaque" placeholder="AA-555-AA" v-model="plaque" tabindex="4">
-                              <input v-if="typeImmatriculation === 'fni' || !fniMode" type="text" required="required" class="form-control" id="plaque" placeholder="123 ABC 45" v-model="plaque" tabindex="4">
+                              <input v-if="typeImmatriculation === 'siv' || !fniMode" v-mask="'AA-###-AA'" type="text" required="required" class="form-control" id="plaque" placeholder="AA-555-AA" v-model="plaque" tabindex="4">
+                              <input v-if="typeImmatriculation === 'fni'" type="text" required="required" class="form-control" id="plaque" placeholder="123 ABC 45" v-model="plaque" tabindex="4">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i>
                             </div>
                           </div>
@@ -135,12 +135,12 @@
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkFormule && !checkDateCertificat) && status !== 'init')}]">
                               <div v-if="typeImmatriculation === 'siv' || !fniMode">
                                 <label for="input" class="control-label">N° de formule <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link">Où le trouver <i class="fa fa-info-circle fa-lg"></i> </a>
-                                <input type="text" id="formule" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
+                                <input type="text" id="formule" v-mask="'####AA#####'" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="5">
                                 <i class="fa fa-pencil-square-o form-control-feedback"></i>
                               </div>
                               <div v-if="typeImmatriculation === 'fni'">
                                 <label for="input" class="control-label">Date du certificat d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link">Où le trouver<i class="fa fa-info-circle fa-lg"></i> </a>
-                                <input type="text" id="dateCertificat" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="5">
+                                <input type="text" id="dateCertificat" v-mask="'##/##/####'" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="5">
                                 <!-- <input type="text" id="dateCertificat" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="5"> -->
                                 <i class="fa fa-calendar form-control-feedback"></i>
                               </div>
@@ -178,7 +178,7 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback" :class="[{'has-error' : (siren === '' && status !== 'init')}]">
                               <label class="control-label">N° SIREN <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input id="siren" type="text" required="required" class="form-control" v-model="siren" tabindex="2">
+                              <input id="siren" v-mask="'##############'"type="text" required="required" class="form-control" v-model="siren" tabindex="2">
                               <i class="fa fa-building-o form-control-feedback"></i> </div>
                           </div>
                         </div>
@@ -191,13 +191,13 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
                               <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input type="text" required="required" class="form-control" id="plaque" placeholder="AA-555-AA" v-model="plaque" tabindex="3">
+                              <input type="text" required="required" v-mask="'AA-###-AA'" class="form-control" id="plaque" placeholder="AA-555-AA" v-model="plaque" tabindex="3">
                               <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
                           </div>
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : (formule === '' && status !== 'init')}]">
                               <label for="input" class="control-label">N° de formule <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link">Où le trouver <i class="fa fa-info-circle fa-lg"></i></a>
-                              <input type="text" id="formule" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
+                              <input type="text" id="formule" v-mask="'####AA#####'" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
                               <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
                           </div>
                         </div>
@@ -216,7 +216,7 @@
                           <div class="col-md-6">
                             <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkDateCertificat) && status !== 'init')}]">
                               <label for="input" class="control-label">Date du certificat d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link"><i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" id="dateCertificat" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="7">
+                              <input type="text" id="dateCertificat" v-mask="'##/##/####'" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="7">
                               <i class="fa fa-calendar form-control-feedback"></i> </div>
                           </div>
                         </div>
