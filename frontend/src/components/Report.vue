@@ -63,12 +63,12 @@
           <!-- Tab panes -->
           <div class="tab-content">
             <!-- /* ----------------- debut synthese ----------------- */ -->
-            <div class="tab-pane fade" :class="[{'in active' : hidden['all_tabs'] || tab === 'abstract'}]">
+            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'abstract'}]">
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-md-7">
                     <h6 class="title p-h-35">Résumé</h6>
-                    <p class="small" v-if="hidden['date_update']"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
+                    <p class="small" v-if="display['date_update']"> information du ministère de l'Intérieur au {{ v.date_update }}</p>
                   </div>
                   <div class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs" role="alert"> <i class="fa fa-info-circle blink_me"></i>Informations utiles</div>
                 </div>
@@ -220,12 +220,12 @@
                     <!-- fin ras  -->
                   </div>
                 </div>
-                <div v-if="hidden['all_tabs']"><br/></div>
+                <div v-if="display['all_tabs']"><br/></div>
               </div>
             </div>
             <!-- /* ----------------- fin synthese ----------------- */ -->
             <!-- /* ----------------- debut vehicule ----------------- */ -->
-            <div class="tab-pane fade pr-20" :class="[{'in active' : hidden['all_tabs'] || tab === 'vehicle'}]">
+            <div class="tab-pane fade pr-20" :class="[{'in active' : display['all_tabs'] || tab === 'vehicle'}]">
               <div class="row">
                 <div class="col-md-12">
                   <h6 class="title">Caractéristiques techniques</h6>
@@ -538,7 +538,7 @@
               </table> -->
               <!-- fin mentions particuliéres -->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : hidden['all_tabs'] || tab === 'holder'}]">
+            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'holder'}]">
               <h6 class="title">Titulaire</h6>
               <!-- debut titulaire et co-titulaire -->
               <div v-if="v.titulaire.nature !== undefined">
@@ -582,7 +582,7 @@
               <div class="separator"></div>
               <!-- debut tableau situation administrative -->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : hidden['all_tabs'] || tab === 'situation'}]">
+            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'situation'}]">
               <div class="row">
                 <div class="col-sm-6">
                   <h6 class="title">Gages</h6>
@@ -641,10 +641,10 @@
                   <div class="separator"></div>
               -->
               <!-- debut bouton imprimer csa detaille -->
-                <div v-shortkey="['ctrl', 'alt', 'p']" @shortkey="hidden['pdf'] = !hidden['pdf']"></div>
-                <div v-shortkey="['ctrl', 'alt', 'm']" @shortkey="hidden['date_update'] = !hidden['date_update']"></div>
-                <div v-shortkey="['ctrl', 'alt', 'a']" @shortkey="hidden['all_tabs'] = !hidden['all_tabs']"></div>
-                <div class="col-sm-12 pv-20" v-if="holder&&hidden['pdf']">
+                <div v-shortkey="['ctrl', 'alt', 'p']" @shortkey="display['pdf'] = !display['pdf']"></div>
+                <div v-shortkey="['ctrl', 'alt', 'm']" @shortkey="display['date_update'] = !display['date_update']"></div>
+                <div v-shortkey="['ctrl', 'alt', 'a']" @shortkey="display['all_tabs'] = !display['all_tabs']"></div>
+                <div class="col-sm-12 pv-20" v-if="holder&&display['pdf']">
                   <p class="text-center">
                     L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
                     doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
@@ -658,7 +658,7 @@
               <!-- fin bouton imprimer csa detaille -->
               </div>
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : hidden['all_tabs'] || tab === 'history'}]">
+            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'history'}]">
               <!-- debut tableau operation historique FR -->
               <div>Historique des opérations en France</div>
               <div class="row">
@@ -702,7 +702,7 @@
 
               <!-- fin tableau operation historique Etranger-->
             </div>
-            <div class="tab-pane fade" :class="[{'in active' : hidden['all_tabs'] || tab === 'send'}]" v-if="holder">
+            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'send'}]" v-if="holder">
               <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
                 <div class="row">
                   <!-- debut alerte verte -->
@@ -890,10 +890,10 @@ export default {
   data () {
     return {
       tab: 'abstract',
-      hidden: {
+      display: {
         all_tabs: false,
         pdf: false,
-        date_update: false
+        date_update: true
       },
       default: 'non disponible',
       synthese: {
