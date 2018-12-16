@@ -1691,7 +1691,7 @@ export default {
               this.v.administratif.titre.perte = veh.perte_ci || this.default
               this.v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
 
-              this.v.administratif.synthese = [ 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => veh[e] === 'OUI')
+              this.v.administratif.synthese = [ 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => (e !== 'duplicata') ? veh[e] === 'OUI' : ((veh['perte_ci'] === 'OUI') || (veh['ci_vole'] === 'OUI') ? false : veh[e] === 'OUI'))
               if (veh['otci'] === 'OUI') {
                 this.v.administratif.synthese.push(veh['ove'] === 'OUI' ? 'otci_ove' : 'otci')
               }
