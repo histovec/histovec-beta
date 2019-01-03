@@ -274,6 +274,7 @@
 
 import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
+import moment from 'moment'
 
 export default {
   components: {
@@ -400,7 +401,7 @@ export default {
       var date = new Date()
       // patch temporaire pour la continuité du mois (réversibilité à faire mi-juillet)
       // date = date.getFullYear() + '' + this.pad(date.getMonth() + 1, 2)
-      date = date.getFullYear() + '' + this.pad(date.getMonth(), 2)
+      date = moment().add(-7, 'days').format('YYYYMM')
       console.log(date)
       return date
     },
