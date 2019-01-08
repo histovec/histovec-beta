@@ -16,7 +16,7 @@ export default new Vuex.Store({
     plaque: '',
     siren: '',
     formule: '',
-    fniMode: false,
+    fniMode: true,
     key: undefined,
     code: undefined,
     v: undefined,
