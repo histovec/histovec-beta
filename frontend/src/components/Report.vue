@@ -1129,16 +1129,16 @@ export default {
       }
       return type
     },
-    getVignetteNumero (genre, typeCarburant, pollution, dateImmat) {
-      let splitDate = dateImmat.split('/')
+    getVignetteNumero (genre, categorie, typeCarburant, pollution, datePremImmat) {
+      let splitDate = datePremImmat.split('/')
       let dateImmatEn = new Date(splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0])
 
       // Mapping Genre
-      let motocycle = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'TM', 'QM', 'TQM']
-      let cyclomoteur = ['CYCL', 'CL']
-      let voiture = ['VP']
-      let vehiculeUtilLeger = ['CTTE', 'Deriv-VP', 'VTSU']
-      let poidsLourdsCarBus = ['CAM', 'TRA', 'TRR', 'TCP', 'VASP', 'SREM']
+      let voitureParticuliere = ['M1']
+      let vehiculeUtilitaireLegers = ['N1']
+      let motocycle = ['L3e', 'L4e', 'L5e', 'L7e']
+      let cyclomoteur = ['L1e', 'L2e', 'L6e']
+      let poidsLourdsAutobusAutocar = ['M2', 'M3', 'N2', 'N3']
 
       // Mapping Norme Euro
       let normeEuro = (pollution) ? pollution.split('EURO') : ''
@@ -1150,17 +1150,17 @@ export default {
       } else if (typeCarburant === 'electrique') {
         vignette = 'electrique'
       } else {
-        if (motocycle.includes(genre) || cyclomoteur.includes(genre)) {
-          if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(genre) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(genre) && dateImmatEn >= new Date('2018-01-01'))) {
+        if (motocycle.includes(categorie) || cyclomoteur.includes(categorie)) {
+          if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(categorie) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(genre) && dateImmatEn >= new Date('2018-01-01'))) {
             vignette = 1
-          } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
+          } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(categorie) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
             vignette = 2
           } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn <= new Date('2006-12-31'))) {
             vignette = 3
           } else if (dateImmatEn >= new Date('2000-06-01') && dateImmatEn <= new Date('2004-06-30')) {
             vignette = 4
           }
-        } else if (voiture.includes(genre)) {
+        } else if (voitureParticuliere.includes(categorie)) {
           if (typeCarburant === 'essence') {
             if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
               vignette = 1
@@ -1180,7 +1180,7 @@ export default {
               vignette = 5
             }
           }
-        } else if (vehiculeUtilLeger.includes(genre)) {
+        } else if (vehiculeUtilitaireLegers.includes(categorie)) {
           if (typeCarburant === 'essence') {
             if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
               vignette = 1
@@ -1200,7 +1200,7 @@ export default {
               vignette = 5
             }
           }
-        } else if (poidsLourdsCarBus.includes(genre)) {
+        } else if (poidsLourdsAutobusAutocar.includes(categorie)) {
           if (typeCarburant === 'essence') {
             if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
               vignette = 1
@@ -1669,7 +1669,7 @@ export default {
               this.v.nb_tit = (veh.historique !== undefined) ? (this.calcNbTit(veh.historique) + (this.v.certificat.incertain ? 1 : 0)) : undefined
               this.v.age_veh = veh.age_annee
               this.v.logo_vehicule = this.getVehiculeLogo(veh.CTEC_RLIB_GENRE)
-              this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
+              this.v.vignette_numero = this.getVignetteNumero(veh.CTEC_RLIB_GENRE, veh.CTEC_RLIB_CATEGORIE, this.getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
 
               this.v.administratif.gages = veh.gage || this.default
               this.v.administratif.suspension = (veh.suspension === 'NON') ? 'Non' : 'Oui'
