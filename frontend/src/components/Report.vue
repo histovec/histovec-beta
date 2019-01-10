@@ -1328,8 +1328,11 @@ export default {
             },
             historique: {
               render: true,
-              pos: [15, 97],
+              pos: [15, 97, 90],
               inter: 7,
+              limit: 10,
+              maxLengthText: 190,
+              splitText: 65,
               htab: [5, 25, 105, 125],
               title: {
                 type: 'bold',
@@ -1463,9 +1466,26 @@ export default {
             pdf.setFontType(p.historique.content.type)
             pdf.setFontSize(p.historique.content.size)
             let i = 0
+            let cpt = 0
+            let column = 0
             self.v.historique.forEach(function (o) {
-              pdf.text(p.historique.pos[0] + p.historique.htab[0], p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i), o.date)
-              pdf.text(p.historique.pos[0] + p.historique.htab[1], p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), o.nature)
+              if (self.v.historique.length > p.historique.limit && cpt === Math.round((self.v.historique.length / 2))) {
+                // si la limite est atteinte on passe sur 2 colonnes
+                column = p.historique.pos[2] // On passe sur la deuxième colonne
+                i = 0 // on repart du haut du tableau
+              }
+              let splitText = pdf.getTextDimensions(o.nature)
+              pdf.text(p.historique.pos[0] + p.historique.htab[0] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i), o.date)
+              if (splitText.w >= p.historique.maxLengthText && self.v.historique.length > p.historique.limit) {
+                // Si on est dans le cas de double colonne on passe en multiligne
+                let split = pdf.splitTextToSize(o.nature, p.historique.splitText)
+                split.forEach(s => {
+                  pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), s)
+                })
+              } else {
+                pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), o.nature)
+              }
+              cpt++
             })
           } // historique
           if (p.date.render) { // date certificat
