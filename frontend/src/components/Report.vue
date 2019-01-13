@@ -1328,8 +1328,11 @@ export default {
             },
             historique: {
               render: true,
-              pos: [15, 97],
+              pos: [15, 97, 90],
               inter: 7,
+              limit: 10,
+              maxLengthText: 190,
+              splitText: 65,
               htab: [5, 25, 105, 125],
               title: {
                 type: 'bold',
@@ -1413,7 +1416,11 @@ export default {
             pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.marque)
           } // identification du véhicule
           if (p.situation1.render) { // situation administrative
-            p.situation1.pos[1] = p.situation1.pos[1] + p.historique.pos[1] + p.historique.inter + self.v.historique.length * p.historique.content.inter
+            let histoLength = self.v.historique.length
+            if (self.v.historique.length > p.historique.limit) {
+              histoLength = (self.v.historique.length + 5) / 2
+            }
+            p.situation1.pos[1] = p.situation1.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
             pdf.setFontType(p.situation1.title.type)
             pdf.setFontSize(p.situation1.title.size)
             pdf.text(p.situation1.pos[0], p.situation1.pos[1], 'Situation administrative du véhicule')
@@ -1436,7 +1443,11 @@ export default {
             })
           } // situation administrative
           if (p.situation2.render) { // situation administrative 2ème section
-            p.situation2.pos[1] = p.situation2.pos[1] + p.historique.pos[1] + p.historique.inter + self.v.historique.length * p.historique.content.inter
+            let histoLength = self.v.historique.length
+            if (self.v.historique.length > p.historique.limit) {
+              histoLength = (self.v.historique.length + 5) / 2
+            }
+            p.situation2.pos[1] = p.situation2.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
             let data = [
                 {key: '- Immatriculation suspendue', value: self.v.administratif.suspension},
                 {key: '- Immatriculation annulée', value: self.v.administratif.annulation},
@@ -1463,9 +1474,26 @@ export default {
             pdf.setFontType(p.historique.content.type)
             pdf.setFontSize(p.historique.content.size)
             let i = 0
+            let countHisto = 0
+            let column = 0
             self.v.historique.forEach(function (o) {
-              pdf.text(p.historique.pos[0] + p.historique.htab[0], p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i), o.date)
-              pdf.text(p.historique.pos[0] + p.historique.htab[1], p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), o.nature)
+              if (self.v.historique.length > p.historique.limit && countHisto === Math.round((self.v.historique.length / 2))) {
+                // si la limite est atteinte on passe sur 2 colonnes
+                column = p.historique.pos[2] // On passe sur la deuxième colonne
+                i = 0 // on repart du haut du tableau
+              }
+              let splitText = pdf.getTextDimensions(o.nature)
+              pdf.text(p.historique.pos[0] + p.historique.htab[0] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i), o.date)
+              if (splitText.w >= p.historique.maxLengthText && self.v.historique.length > p.historique.limit) {
+                // Si on est dans le cas de double colonne on passe en multiligne
+                let split = pdf.splitTextToSize(o.nature, p.historique.splitText)
+                split.forEach(s => {
+                  pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), s)
+                })
+              } else {
+                pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), o.nature)
+              }
+              countHisto++
             })
           } // historique
           if (p.date.render) { // date certificat
