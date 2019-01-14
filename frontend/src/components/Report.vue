@@ -220,8 +220,8 @@
                   </div>
                   <div class="row" v-if="v.vignette_numero === ''">
                     <!-- debut ras  -->
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-6"><span class="txt-small-13">Votre véhicule ne répond pas aux critères retenus pour l'attribution d'un certificat qualité de l'air</span> </div>
+                    <div class="col-sm-1"><i class="fa fa-ban fa-2x"></i></div>
+                    <div class="col-sm-6"><span class="txt-small-13">Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les informations dont nous disposons sont insuffisantes</span> </div>
                     <div class="col-sm-5 color-info_2 bold_4 txt-small-13">  {{ synthese['critair'].adv }}
                       <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                     </div>
