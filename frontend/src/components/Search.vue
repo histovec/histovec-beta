@@ -258,7 +258,7 @@
                   <h6 class="modal-title">Information n° de formule</h6>
                 </div>
                 <div class="modal-body" style="height: 250px; overflow-y: auto;">
-                  <img alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise" src="assets/images/n-formule.png" class="img-responsive" style="margin: 0 auto;"> </div>
+                  <img alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise" src="assets/images/n-formule.jpg" class="img-responsive" style="margin: 0 auto;"> </div>
                 <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" @click="modal = false">Fermer <i class="fa fa-close"></i></a> </div>
               </div>
             </div>
@@ -272,11 +272,11 @@
                 </div>
                 <div class="modal-body" style="height: 250px; overflow-y: auto;">
                   <h4 class="text-danger bold_6">Carte grise après 2004</h4>
-                  <img src="assets/images/nouvelle_carte_grise.png" class="img-responsive"><br>
+                  <img src="assets/images/nouvelle_carte_grise.jpg" class="img-responsive"><br>
                   <h4 class="text-danger bold_6">Carte grise avant 2004</h4>
-                  <img src="assets/images/carte_grise_avant_2004.png" class="img-responsive"><br>
+                  <img src="assets/images/carte_grise_avant_2004.jpg" class="img-responsive"><br>
                   <h4 class="text-danger bold_6">Carte grise 1970</h4>
-                  <img src="assets/images/carte_grise_1970.png" class="img-responsive">
+                  <img src="assets/images/carte_grise_1970.jpg" class="img-responsive">
                 </div>
                 <div class="modal-footer"> <a href="#" class="btn radius-30 btn btn-animated btn-default" @click="modal = false">Fermer <i class="fa fa-close"></i></a> </div>
               </div>
