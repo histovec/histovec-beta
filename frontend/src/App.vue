@@ -70,7 +70,7 @@
           <div class="subfooter-inner">
             <div class="row">
               <div class="col-md-12">
-                <p class="text-center">{{ appName }} version {{ appVersion }} - copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
+                <p class="text-center">{{ appName }} version bêta {{ appVersion }} - copyright &copy; 2018 <a href="legal">Mentions légales</a></p>
               </div>
             </div>
           </div>
