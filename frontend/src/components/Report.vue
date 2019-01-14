@@ -894,7 +894,7 @@ export default {
       tab: 'abstract',
       display: {
         all_tabs: false,
-        pdf: false,
+        pdf: true,
         date_update: true
       },
       default: 'non disponible',
