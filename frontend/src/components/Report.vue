@@ -643,19 +643,6 @@
                 <div v-shortkey="['ctrl', 'alt', 'p']" @shortkey="display['pdf'] = !display['pdf']"></div>
                 <div v-shortkey="['ctrl', 'alt', 'm']" @shortkey="display['date_update'] = !display['date_update']"></div>
                 <div v-shortkey="['ctrl', 'alt', 'a']" @shortkey="display['all_tabs'] = !display['all_tabs']"></div>
-                <!-- debut bouton imprimer csa detaille -->
-                <div class="col-sm-12 pv-20" v-if="holder&&display['pdf']">
-                  <p class="text-center">
-                    L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
-                    doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
-                    par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
-                  </p>
-                  <p class="text-center">
-                    <button @click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
-                    data-original-title="CSA" title="CSA"> Imprimer le CSA<i class="fa fa-print"></i> </button>
-                  </p>
-                </div>
-              <!-- fin bouton imprimer csa detaille -->
               </div>
             </div>
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'history'}]">
@@ -721,12 +708,27 @@
                   <div class="row">
                     <div class="col-md-12">Ou par QR code </div>
                   </div>
-                  <div class="separator"></div>
+                  <!-- <div class="separator"></div> -->
                   <div class="row">
                     <div class="col-md-12" style="fload: none; margin: 0 auto">
                       <qrcode-vue :value="url" :size="150" level="L"></qrcode-vue>
                     </div>
                   </div>
+                  <!-- debut bouton imprimer csa detaille -->
+                  <div class="row">
+                    <div class="col-sm-12 pv-20" v-if="holder&&display['pdf']">
+                      <p class="text-center">
+                        L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
+                        doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
+                        par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
+                      </p>
+                      <p class="text-center">
+                        <button @click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
+                        data-original-title="CSA" title="CSA"> Imprimer le CSA<i class="fa fa-print"></i> </button>
+                      </p>
+                    </div>
+                  </div>
+                <!-- fin bouton imprimer csa detaille -->
                 </div>
               </div>
             </div>
@@ -892,7 +894,7 @@ export default {
       tab: 'abstract',
       display: {
         all_tabs: false,
-        pdf: false,
+        pdf: true,
         date_update: true
       },
       default: 'non disponible',
