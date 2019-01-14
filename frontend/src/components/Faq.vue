@@ -181,16 +181,22 @@
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'i'}]">
                 <div class="panel-body">
-                  <UL>Recopiez exactement les données de la carte grise (nom, prénom(s), immatriculation, numéro de formule) et votre date naissance</UL>
-                  <UL>Seuls les véhicules figurant dans le Sytème d'Immatriculation des Véhicules depuis 2009 peuvent être consultés dans Histovec</UL>
-                  <UL> Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le système d’immatriculation des véhicules (SIV),</UL>
-                  <UL><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">contactez-nous</a></UL>
+                  <UL>Vérifiez que vous avez saisi très précisément dans les champs du formulaire les informations telles qu'elles figurent sur la carte grise (nom et prénom(s), immatriculation, numéro de formule ou date du certificat d'immatriculation).</UL>
+                  <UL>Pour les anciens numéros d'immatriculation, veillez à bien saisir vos nom et prénom(s) dans le même ordre que celui qui apparaît sur la carte grise.</UL>
+                  <UL>Plaques au format SIV (AA-123-AA): où trouver les informations sur votre carte grise.</UL>
+                  <UL><img class="img-responsive" v-bind:src="'assets/images/aide_siv.png' "></UL>
+                  <br />
+                  <UL>Plaques au format FNI (123 ABC 45): où trouver les informations sur votre carte grise (plusieurs modèles).</UL>
+                  <UL><img class="img-responsive" v-bind:src="'assets/images/aide_fni.png' "></UL>
+                  <br />
+                  <UL>Si vous êtes locataire longue durée du véhicule, essayez avec les informations du titulaire propriétaire (par exemple pour une société de location, cliquez sur l'onglet Entreprise du formulaire pour remplir les informations correspondantes).</UL>
+                  <UL>Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le système d’immatriculation des véhicules (SIV) : <a :href="'mailto:histovec@interieur.gouv.fr?subject=Je%20ne%20trouve%20pas%20mon%20vehicule'">contactez-nous</a>.</UL>
                 </div>
               </div>
             </div>
             <!-- fin question 9 -->
             <!-- debut question 10 -->
-            <div id="j" class="panel panel-default">
+            <div id="j" class="panel panel-default" v-if="false">
               <div class="panel-heading">
                 <h4 class="panel-title"> <a href="#j" @click="choose('j')" class="clickable" :class="[{'collapsed' : choice !== 'j' }]"> <i class="fa fa-file-text-o pr-10"></i>Je ne trouve pas le numéro de formule ?</a> </h4>
               </div>
@@ -229,7 +235,7 @@ Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militai
             <!-- debut question 12 -->
             <div id="l" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#l" @click="choose('l')" class="clickable" :class="[{'collapsed' : choice !== 'l' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle différence y a t'il entre la notion de propiétaire et titulaire ?</a> </h4>
+                <h4 class="panel-title"> <a href="#l" @click="choose('l')" class="clickable" :class="[{'collapsed' : choice !== 'l' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'l'}]">
                 <div class="panel-body">
