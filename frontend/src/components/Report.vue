@@ -706,7 +706,7 @@
                     </p>
                   </div>
                   <div class="row">
-                    <div class="col-md-12">Ou par QR code </div>
+                    <div class="col-md-12">Ou par QR code<p></p></div>
                   </div>
                   <!-- <div class="separator"></div> -->
                   <div class="row">
