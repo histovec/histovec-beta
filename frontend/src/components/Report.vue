@@ -699,7 +699,7 @@
                   <!-- fin alerte verte -->
                   <div class="col-md-12 p-h-10">
                     <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.<br>
-                      Ce rapport sera accessible <b> 4 semaines </b> à partir de l'envoi. <br>
+                      Ce rapport sera accessible jusqu'au {{ validityDate }} <br>
                     <p class="text-center">
                       <button v-clipboard:copy="url" v-on:click="showNotifSuccess" class="btn radius-30 btn-dark btn-animated btn">Copier le lien <i class="fa fa-copy"></i></button>
                       <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
@@ -884,6 +884,7 @@ import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
 import Qr from 'qr.js'
 import JsPdf from 'jspdf'
+import moment from 'moment'
 
 export default {
   components: {
@@ -1013,6 +1014,9 @@ export default {
     }
   },
   computed: {
+    validityDate () {
+      return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
+    },
     holder () {
       return (this.$route.params.code !== undefined) || (this.$store.state.code !== undefined)
     },
@@ -1362,7 +1366,7 @@ export default {
             },
             mentions: {
               render: true,
-              pos: [15, 265],
+              pos: [15, 262],
               inter: 5,
               content: {
                 type: 'italic',
@@ -1512,9 +1516,10 @@ export default {
             pdf.setFontType(p.mentions.content.type)
             pdf.setFontSize(p.mentions.content.size)
             let i = 0
-            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'Le QR code ci-contre renvoie au site ' + self.baseurl + ' - il permet de vous assurer de la conformité des')
-            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'informations retranscrites. Ce code sera disponible jusqu\'au changement de titulaire et au plus tard jusqu\'à la fin du mois')
-            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'suivant l\'édition de ce certificat. La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours.')
+            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours, les données étant susceptibles')
+            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'd\'évoluer. Le QR code ci-contre renvoie au site ' + self.baseurl + ' - il permet de vous assurer de la')
+            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'conformité des informations retranscrites et de leurs mises à jour. Ce code sera disponible jusqu\'au changement de')
+            pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'titulaire et au plus tard jusqu\'au ' + self.validityDate + '. Au-delà, un nouveau rapport devra être généré.')
           } // mentions légales
 
           pdf.save('rapport.pdf')
