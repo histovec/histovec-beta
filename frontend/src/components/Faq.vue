@@ -235,7 +235,7 @@ Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militai
             <!-- debut question 12 -->
             <div id="l" class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"> <a href="#l" @click="choose('l')" class="clickable" :class="[{'collapsed' : choice !== 'l' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle différence y a t'il entre la notion de propiétaire et titulaire ?</a> </h4>
+                <h4 class="panel-title"> <a href="#l" @click="choose('l')" class="clickable" :class="[{'collapsed' : choice !== 'l' }]"> <i class="fa fa-file-text-o pr-10"></i>Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?</a> </h4>
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'l'}]">
                 <div class="panel-body">
