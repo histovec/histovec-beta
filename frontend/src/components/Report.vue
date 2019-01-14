@@ -1411,7 +1411,7 @@ export default {
             pdf.setFontSize(p.id.content.size)
             let i = 1
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro d\'immatriculation du véhicule :')
-            pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.plaque)
+            pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.plaque.toUpperCase())
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro VIN du véhicule (ou numéro de série) :')
             pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.vin)
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Marque :')
