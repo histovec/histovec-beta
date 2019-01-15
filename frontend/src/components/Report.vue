@@ -1278,7 +1278,7 @@ export default {
               render: true,
               pos: [15, 67],
               inter: 7,
-              htab: [5, 85],
+              htab: [5, 85, 100],
               title: {
                 type: 'bold',
                 size: 12
@@ -1334,7 +1334,7 @@ export default {
             },
             historique: {
               render: true,
-              pos: [15, 97, 90],
+              pos: [15, 105, 90],
               inter: 7,
               limit: 10,
               maxLengthText: 190,
@@ -1413,13 +1413,21 @@ export default {
             // content
             pdf.setFontType(p.id.content.type)
             pdf.setFontSize(p.id.content.size)
+            let htab = (self.v.certificat.etranger) ? p.id.htab[2] : p.id.htab[1] // cas immat a l'etranger on agrandit la tabulation
             let i = 1
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro d\'immatriculation du véhicule :')
-            pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.plaque.toUpperCase())
+            pdf.text(p.id.pos[0] + htab, p.id.pos[1] + p.id.inter * (i++), self.$store.state.plaque.toUpperCase())
+            if (self.v.certificat.etranger) {
+              pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Date de première immatriculation du véhicule à l\'étranger :')
+              pdf.text(p.id.pos[0] + htab, p.id.pos[1] + p.id.inter * (i++), self.v.certificat.premier)
+            } else if (self.v.certificat.fr) {
+              pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Date de première immatriculation du véhicule :')
+              pdf.text(p.id.pos[0] + htab, p.id.pos[1] + p.id.inter * (i++), self.v.certificat.fr)
+            }
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro VIN du véhicule (ou numéro de série) :')
-            pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.vin)
+            pdf.text(p.id.pos[0] + htab, p.id.pos[1] + p.id.inter * (i++), self.v.ctec.vin)
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Marque :')
-            pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.marque)
+            pdf.text(p.id.pos[0] + htab, p.id.pos[1] + p.id.inter * (i++), self.v.ctec.marque)
           } // identification du véhicule
           if (p.situation1.render) { // situation administrative
             let histoLength = self.v.historique.length
