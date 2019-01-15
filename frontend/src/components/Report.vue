@@ -1278,7 +1278,7 @@ export default {
               render: true,
               pos: [15, 67],
               inter: 7,
-              htab: [5, 85],
+              htab: [5, 85, 100],
               title: {
                 type: 'bold',
                 size: 12
@@ -1334,7 +1334,7 @@ export default {
             },
             historique: {
               render: true,
-              pos: [15, 97, 90],
+              pos: [15, 105, 90],
               inter: 7,
               limit: 10,
               maxLengthText: 190,
@@ -1416,6 +1416,8 @@ export default {
             let i = 1
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro d\'immatriculation du véhicule :')
             pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.plaque.toUpperCase())
+            pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Date de première immatriculation du véhicule :')
+            pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.certificat.premier)
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro VIN du véhicule (ou numéro de série) :')
             pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.vin)
             pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Marque :')
