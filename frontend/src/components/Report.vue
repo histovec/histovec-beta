@@ -1009,7 +1009,7 @@ export default {
       note: null,
       notifSuccess: false,
       timeout: 10000,
-      timerModalEval: 60000,
+      timerModalEval: 120000,
       timerNotifSuccess: 2000
     }
   },
