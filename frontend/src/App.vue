@@ -13,7 +13,7 @@
               </div>
             </div>
             <!-- debut beta -->
-            <div id="no-boot" class="col-xs-1"> <img alt="version beta" src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
+            <div id="no-boot" class="col-xs-1" v-if="false"> <img alt="version beta" src="assets/images/beta.png" class="img-responsive" width="100" height="100"></div>
             <!-- fin beta -->
           </div>
         </div>
