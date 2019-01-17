@@ -56,10 +56,10 @@
     <section class="main-container" v-if="active">
       <div class="container">
         <div class="row">
-          <div class="col-md-12" v-if="!fniMode">
+          <div class="col-md-12" v-if="typeImmatriculation === ''">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-              <div class="alert alert-warning alert-icon text-center" role="alert"><i class="fa fa-exclamation-triangle"></i> Seuls les véhicules ayant une plaque au format <strong>AA-123-ZZ</strong> sont consultables pour l'instant </div>
+              <div class="alert alert-warning alert-icon text-center" role="alert"><i class="fa fa-exclamation-triangle"></i> Histovec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV).</div>
             </div>
           </div>
           <div class="col-md-12" v-if="fniMode">
