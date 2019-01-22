@@ -220,7 +220,7 @@
 		  <UL><span class="bold_6">- Première immatriculation (source incertaine),</span> opération fournie à titre indicatif lorsque aucune opération telle que « Première immatriculation d'un véhicule neuf » ou « Première immatriculation à l'étranger » n'est associée à la date présente dans le fichier.
 Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militaires qui disposaient d'une immatriculation spéciale) ou à l'absence de la donnée dans les anciens fichiers d'immatriculation (p. ex. certains véhicules anciens).</UL>
                   <UL><span class="bold_6">- Conversion au nouveau format d'immatriculation,</span> changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD. </UL>
-                  <UL><span class="bold_6">- Cession (vente) par un particulier,</span> véhicule vendu par un particulier.</UL>
+                  <UL><span class="bold_6">- Cession (vente du véhicule),</span> véhicule vendu par un particulier ou par un professionnel.</UL>
                   <UL><span class="bold_6">- Changement de titulaire,</span> opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.</UL>
                   <UL><span class="bold_6">- Achat ou reprise par un professionnel,</span>  opération correspondant au moment où un professionnel devient acquéreur du véhicule.</UL>
                   <UL><span class="bold_6">- Fin d'usage démonstration pour vente du véhicule,</span> véhicule de garage ayant servi de véhicule de démonstration.</UL>
