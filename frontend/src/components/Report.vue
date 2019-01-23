@@ -723,8 +723,7 @@
                         par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
                       </p>
                       <p class="text-center">
-                        <button @click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm marg_but pop" data-container="body" data-toggle="popover" data-placement="top" data-content="Le certificat de situation administrative (CSA) est un document délivré par le ministère de l'Intérieur contenant des éléments d'information sur la situation administrative d'un véhicule.<br>Le CSA détaillé fait apparaître l'ensemble des informations relatives à la situation du véhicule."
-                        data-original-title="CSA" title="CSA"> Imprimer le CSA<i class="fa fa-print"></i> </button>
+                        <button @click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm" title="CSA"> Imprimer le CSA<i class="fa fa-print"></i> </button>
                       </p>
                     </div>
                   </div>
