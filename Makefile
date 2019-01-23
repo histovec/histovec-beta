@@ -31,6 +31,7 @@ export API_GLOBAL_BURST=20 nodelay
 export datadir=sample_data
 export data_remote_dir=histovec-data
 export data_remote_files=.*_(siv|ivt)_api_.*
+export data_remote_files_inc=.*_(siv|ivt)_api-inc_.*
 export datasource=${datadir}/siv.csv.gz
 export datasource_crypt=${datadir}/siv.csv.gz.gpg
 export datasource_json=${datadir}/siv.json.gz
@@ -140,6 +141,10 @@ index-create: wait-index-purge
 index-status: wait-elasticsearch
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET localhost:9200/${dataset}?pretty
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET localhost:9200/_cat/indices
+
+source-list:
+	@curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.gz|${data_remote_files_inc}.gz'
+
 
 index-direct-load: wait-index
 	@curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.gz' | \
