@@ -6,7 +6,7 @@ server {
   }
 
   location /google6d56c7b24593249c.html {
-     return 200 "google-site-verification: $uri";
+     return 200 "google-site-verification: google6d56c7b24593249c.html";
   }
 
   location @rew {
