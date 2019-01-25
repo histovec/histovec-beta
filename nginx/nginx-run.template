@@ -9,6 +9,11 @@ server {
      return 200 "google-site-verification: google6d56c7b24593249c.html";
   }
 
+  location /robots.txt {
+    return 200 "User-agent: *\nDisallow: /<APP>/api/\nAllow: /";
+  }
+
+
   location @rew {
     return 302 $scheme://$http_host/<APP>/;
   }
