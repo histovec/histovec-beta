@@ -5,6 +5,10 @@ server {
     try_files $uri @rew;
   }
 
+  location /google6d56c7b24593249c.html {
+     return 200 "google-site-verification: $uri";
+  }
+
   location @rew {
     return 302 $scheme://$http_host/<APP>/;
   }
