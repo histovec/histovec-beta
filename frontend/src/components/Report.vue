@@ -208,15 +208,23 @@
                   <div class="separator-2"></div>
                   <!-- fin trait separation  -->
                 </div>
-                <div v-if="v.vignette_numero !== ''">
-                  <div class="row">
+                <div>
+                  <div class="row" v-if="v.vignette_numero !== ''">
                     <!-- debut ras  -->
                     <div class="col-sm-1"><img class="img-responsive" v-bind:src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png' "></div>
                     <div class="col-sm-6"><span class="txt-small-13"> {{ synthese['critair'].text }} {{ v.vignette_numero }}</span> </div>
                     <div class="col-sm-5 color-info_2 bold_4 txt-small-13">  {{ synthese['critair'].adv }}
                       <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
                     </div>
-
+                    <!-- fin ras  -->
+                  </div>
+                  <div class="row" v-if="v.vignette_numero === ''">
+                    <!-- debut ras  -->
+                    <div class="col-sm-1"><i class="fa fa-ban fa-2x"></i></div>
+                    <div class="col-sm-6"><span class="txt-small-13">Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les informations dont nous disposons sont insuffisantes</span> </div>
+                    <div class="col-sm-5 color-info_2 bold_4 txt-small-13">  {{ synthese['critair'].adv }}
+                      <br/><a target="_blanck" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" v-if="synthese['critair'].link !== undefined" :href="synthese['critair'].link"> En savoir plus <i class="fa fa-external-link pl-5"></i> </a>
+                    </div>
                     <!-- fin ras  -->
                   </div>
                 </div>
@@ -1141,28 +1149,44 @@ export default {
     getVignetteNumero (genre, categorie, typeCarburant, pollution, datePremImmat) {
       let splitDate = datePremImmat.split('/')
       let dateImmatEn = new Date(splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0])
-
-      // Mapping Genre
-      let voitureParticuliere = ['M1']
-      let vehiculeUtilitaireLegers = ['N1']
-      let motocycle = ['L3e', 'L4e', 'L5e', 'L7e']
-      let cyclomoteur = ['L1e', 'L2e', 'L6e']
-      let poidsLourdsAutobusAutocar = ['M2', 'M3', 'N2', 'N3']
-
+      let vignette = ''
       // Mapping Norme Euro
       let normeEuro = (pollution) ? pollution.split('EURO') : ''
       let numeroEuro = (normeEuro !== '' && normeEuro[1] !== undefined) ? normeEuro[1] : ''
-      let vignette = ''
-
+      let voitureParticuliere = []
+      let vehiculeUtilitaireLegers = []
+      let motocycle = []
+      let cyclomoteur = []
+      let poidsLourdsAutobusAutocar = []
       if (typeCarburant === 'gaz' || typeCarburant === 'hybride') {
         vignette = 1
       } else if (typeCarburant === 'electrique') {
         vignette = 'electrique'
       } else {
+        // Mapping Categorie
+        if ((categorie !== '' && categorie !== undefined)) {
+          let categ = categorie.split('-')
+          categorie = categ[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
+          voitureParticuliere = ['M1']
+          vehiculeUtilitaireLegers = ['N1']
+          motocycle = ['L3e', 'L4e', 'L5e', 'L7e']
+          cyclomoteur = ['L1e', 'L2e', 'L6e']
+          poidsLourdsAutobusAutocar = ['M2', 'M3', 'N2', 'N3']
+        } else if (genre !== '') {
+          categorie = genre // Uniquement si la catégorie n'est pas remplie on remplace par genre
+          voitureParticuliere = ['VP']
+          vehiculeUtilitaireLegers = ['CTTE']
+          motocycle = ['QM', 'TM', 'MTL', 'MTT1', 'MTT2', 'MTTE']
+          cyclomoteur = ['CYCL', 'CL']
+          poidsLourdsAutobusAutocar = ['CAM', 'TCP']
+        } else {
+          return vignette
+        }
+
         if (motocycle.includes(categorie) || cyclomoteur.includes(categorie)) {
-          if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(categorie) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(genre) && dateImmatEn >= new Date('2018-01-01'))) {
+          if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(categorie) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(categorie) && dateImmatEn >= new Date('2018-01-01'))) {
             vignette = 1
-          } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(categorie) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(genre) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
+          } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(categorie) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(categorie) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
             vignette = 2
           } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn <= new Date('2006-12-31'))) {
             vignette = 3
