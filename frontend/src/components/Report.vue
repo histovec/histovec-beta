@@ -1165,6 +1165,8 @@ export default {
       } else {
         // Mapping Categorie
         if ((categorie !== '' && categorie !== undefined)) {
+          let categ = categorie.split('-')
+          categorie = categ[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
           voitureParticuliere = ['M1']
           vehiculeUtilitaireLegers = ['N1']
           motocycle = ['L3e', 'L4e', 'L5e', 'L7e']
