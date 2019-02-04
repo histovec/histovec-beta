@@ -1488,7 +1488,8 @@ export default {
                 {key: '- Immatriculation annulée', value: self.v.administratif.annulation},
                 {key: '- Véhicule volé', value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui'},
                 {key: '- Certificat d\'immatriculation volé', value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui'},
-                {key: '- Certificat d\'immatriculation perdu', value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'}
+                {key: '- Certificat d\'immatriculation perdu', value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'},
+                {key: '- Certificat d\'immatriculation duplicata', value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui'}
             ]
             let offset = p.situation2.inter
             data.forEach(d => {
