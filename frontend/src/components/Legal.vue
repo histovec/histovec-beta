@@ -101,7 +101,7 @@
                Le responsable de traitement est, comme pour le SIV, la délégation à la sécurité routière (DSR).
               <h6>Finalité du traitement</h6>
                La finalité du traitement des données personnelles est exclusivement de fournir l’historique du véhicule.
-               <br/>N.B. : Histovec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV).
+               <br/>N.B. : Histovec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV). Ces données sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
                <br/>Le service Histovec est en version bêta, et suit une démarche d'amélioration continue.
                <br/>Les données sont extraites du SIV et publiées chaque début de semaine (et bientôt chaque jour).
                <h6>Données personnelles collectées</h6>
