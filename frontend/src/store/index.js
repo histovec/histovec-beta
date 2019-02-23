@@ -21,7 +21,9 @@ export default new Vuex.Store({
     code: undefined,
     v: undefined,
     cookie: undefined,
-    id: undefined
+    id: undefined,
+    fail: 0,
+    success: 0
   },
   mutations: {
     updateFniMode (state, fniMode) {
@@ -71,6 +73,12 @@ export default new Vuex.Store({
     },
     updateId (state, id) {
       state.id = id
+    },
+    updateFail (state, fail) {
+      state.fail = fail
+    },
+    updateSuccess (state, success) {
+      state.success = success
     }
   }
 })

@@ -1559,7 +1559,7 @@ export default {
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
-        let data = {'message': this.message, 'email': this.email, 'note': this.note, 'date': new Date().toUTCString()}
+        let data = {'message': this.message, 'email': this.email, 'uid': this.$cookie.get('userId'), 'note': this.note, 'date': new Date().toUTCString()}
         if (!this.note && this.notShow) {
           this.$cookie.set('evaluation', true, 1)
           this.status = 'posted'
@@ -1651,7 +1651,32 @@ export default {
             console.log(response)
             if (response.body.hits.hits.length === 0) {
               this.result = 'notFound'
+              this.$store.commit('updateFail', this.$store.state.fail + 1)
               this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+              if ((this.$store.state.fail > 1) && (this.$cookie.get('userId').substring(1, 3) === 'ab')) {
+                let data = {
+                  'nom': this.$store.state.nom,
+                  'prenom': this.$store.state.prenom,
+                  'dateNaissance': this.$store.state.dateNaissance,
+                  'raisonSociale': this.$store.state.raisonSociale,
+                  'siren': this.$store.state.siren,
+                  'dateCertificat': this.$store.state.dateCertificat,
+                  'plaque': this.$store.state.plaque,
+                  'formule': this.$store.state.formule,
+                  'fail': this.$store.state.fail,
+                  'success': this.$store.state.success,
+                  'message': this.message,
+                  'uid': this.$cookie.get('userId'),
+                  'date': new Date().toUTCString()
+                }
+                this.$http.post(this.apiUrl + 'feedback/', data)
+                .then(response => {
+                  console.log('failure report send')
+                }, () => {
+                  console.log('couldn\'t send fail report')
+                }
+                )
+              }
               return
             }
             this.showModalEval()
@@ -1774,6 +1799,7 @@ export default {
               this.v.apte = (veh.historique !== undefined) ? ((this.v.aptes[0] > this.v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
               this.result = 'ok'
               console.log(this.v)
+              this.$store.commit('updateSuccess', this.$store.state.success + 1)
               this.$store.commit('updateV', this.v)
               this.$store.commit('updateCode', this.$route.params.code)
               this.$store.commit('updateKey', this.$route.params.key)
