@@ -246,7 +246,7 @@
               </div>
               <div class="separator"></div>
               <div class="row">
-                <div class="col-sm-6"><span class="txt-small-12">Tvv</span></div>
+                <div class="col-sm-6"><span class="txt-small-12">Type variante version</span></div>
                 <div class="col-sm-2"><span class="bold txt-small-12">D.2</span></div>
                 <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.ctec.tvv }}</span></div>
               </div>
