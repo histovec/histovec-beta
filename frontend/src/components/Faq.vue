@@ -190,7 +190,7 @@
                   <UL><img class="img-responsive" v-bind:src="'assets/images/aide_fni.jpg' "></UL>
                   <br />
                   <UL>Si vous êtes locataire longue durée du véhicule, essayez avec les informations du titulaire propriétaire (par exemple pour une société de location, cliquez sur l'onglet Entreprise du formulaire pour remplir les informations correspondantes).</UL>
-                  <UL>Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le système d’immatriculation des véhicules (SIV) : <a :href="'mailto:histovec@interieur.gouv.fr?subject=Je%20ne%20trouve%20pas%20mon%20vehicule'">contactez-nous</a>.</UL>
+                  <UL>Il se peut aussi qu'il y ait une erreur sur la date de naissance enregistrée dans le système d’immatriculation des véhicules (SIV) : <a :href="'mailto:histovec@interieur.gouv.fr?subject=Je%20ne%20trouve%20pas%20mon%20vehicule&body=' + mailBody">contactez-nous</a>.</UL>
                 </div>
               </div>
             </div>
@@ -273,6 +273,12 @@ Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militai
 
 <script>
 export default {
+  computed: {
+    mailBody () {
+      var text = encodeURI('Bonjour,\n\nL\'équipe HistoVec vous remercie d\'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n Histovec n\'est pas supporté par des navigateurs trop anciens, nous vous conseillons l\'utilisation de versions récentes de Firefox ou chrome.\n\nPour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l\'historique de votre véhicule.\n\nPour un particulier \nNom (de naissance): \nPrénom(s): \nDate de naissance (du titulaire): \nPlaque d\'immatriculation: \nNuméro de formule: \nou\nDate du certificat (FNI avant 2009):\n\nPour une entreprise\nRaison sociale: \nNuméro de siren: \nPlaque d\'immatriculation: \nNuméro de formule:\nou\nDate du certificat (FNI avant 2009):\n\n\nNous pourrons ainsi vous répondre rapidement')
+      return text
+    }
+  },
   data () {
     return {
       choice: (window.location.href.split('#')[1] !== undefined) ? window.location.href.split('#')[1] : ''
