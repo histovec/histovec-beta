@@ -763,7 +763,7 @@
   <div class="container" v-if="this.result === 'notFound'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Désolé, nous n'avons pas trouvé de résultat pour cette recherche. <router-link class="clickable alert-danger" :to="{ name: 'faq',hash:'#i'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
@@ -771,7 +771,7 @@
   <div class="container" v-if="this.result === 'invalid'">
     <div class="row">
       <div class="col-lg-12">
-        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau. <router-link class="clickable alert-danger" :to="{ name: 'faq'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
+        <div class="alert alert-icon alert-danger" role="alert"> <i class="fa fa-warning"></i> Les données entrées sont invalides. Veuillez essayer à nouveau. <router-link class="clickable alert-danger" :to="{ name: 'faq',hash:'#i'}"><em>Besoin d'aide</em> <b class="fa fa-question-circle fa-lg"></b></router-link></div>
       </div>
     </div>
   </div>
