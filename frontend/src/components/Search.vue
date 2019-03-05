@@ -156,7 +156,7 @@
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
                         </button>
-                        <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq'}"><i class="fa fa-question"></i>Besoin d'aide</router-link>
+                        <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq',hash:'#i' }"><i class="fa fa-question"></i>Besoin d'aide</router-link>
                        </div>
                     </div>
                   </div>
@@ -229,7 +229,7 @@
                                     {'fa-spin fa-spinner' : (status === 'posting')},
                                     {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
                         </button>
-                        <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq'}"><i class="fa fa-question"></i>Besoin d'aide</router-link>
+                        <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq',hash:'#i'}"><i class="fa fa-question"></i>Besoin d'aide</router-link>
                       </div>
                     </div>
                   </div>
