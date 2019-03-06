@@ -280,7 +280,7 @@ dev-log:
 
 dev: network elasticsearch frontend-dev
 
-dev-stop: backend-stop elasticsearch-stop frontend-dev-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop network-stop
 
 
 frontend-build: network
