@@ -87,14 +87,14 @@
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <div class="tab-pane" id="h2tab1" :class="[{'in active' : typePersonne === 'particulier'}]">
+              <div class="tab-pane in active" id="h2tab1">
                 <div class="row">
                   <div class="col-md-12">
                     <span class="info_red txt-small-11" v-if="(status == 'failed') && (!checkFields)">* Veuillez renseignez les champs obligatoires</span>
                     <fieldset>
                       <legend><span class="color-default">Titulaire</span></legend>
                       <form role="form">
-                        <div class="row">
+                        <div v-if="typePersonne === 'particulier'" class="row">
                           <div :class="{'col-md-4': typeImmatriculation === 'siv' || !fniMode, 'col-md-8' : typeImmatriculation === 'fni'}">
                             <div class="form-group has-feedback" :class="[{'has-error' : (nom === '' && status !== 'init')}]">
                               <label v-if="typeImmatriculation === 'siv' || !fniMode" class="control-label">Nom de naissance <span class="info_red" title="Ce champ est requis.">*</span></label>
@@ -116,6 +116,20 @@
                               <i class="fa fa-calendar form-control-feedback"></i> </div>
                           </div>
                         </div>
+                        <div  v-if="typePersonne === 'pro'" class="row">
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback" :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]">
+                              <label class="control-label">Raison sociale <span class="info_red" title="Ce champ est requis.">*</span></label>
+                              <input id="organization" name="raisonSociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raisonSociale" v-on:input="raisonSociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
+                              <i class="fa fa-user form-control-feedback"></i> </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group has-feedback" :class="[{'has-error' : (siren === '' && status !== 'init')}]">
+                              <label class="control-label">N° SIREN <span class="info_red" title="Ce champ est requis.">*</span></label>
+                              <input id="siren" v-mask="'##############'"type="text" required="required" class="form-control" v-model="siren" tabindex="2">
+                              <i class="fa fa-building-o form-control-feedback"></i> </div>
+                          </div>
+                        </div>                        
                       </form>
                     </fieldset>
                     <fieldset>
@@ -158,79 +172,6 @@
                         </button>
                         <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq',hash:'#i' }"><i class="fa fa-question"></i>Besoin d'aide</router-link>
                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane" id="h2tab2" :class="[{'in active' : typePersonne === 'pro'}]">
-                <div class="row">
-                  <div class="col-md-12"> <span class="info_red txt-small-11" v-if="status == 'failed'">* Veuillez renseigner les champs obligatoires</span>
-                    <fieldset>
-                      <legend><span class="color-default">Titulaire</span></legend>
-                      <form role="form">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback" :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]">
-                              <label class="control-label">Raison sociale <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input id="organization" name="raisonSociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raisonSociale" v-on:input="raisonSociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
-                              <i class="fa fa-user form-control-feedback"></i> </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback" :class="[{'has-error' : (siren === '' && status !== 'init')}]">
-                              <label class="control-label">N° SIREN <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input id="siren" v-mask="'##############'"type="text" required="required" class="form-control" v-model="siren" tabindex="2">
-                              <i class="fa fa-building-o form-control-feedback"></i> </div>
-                          </div>
-                        </div>
-                      </form>
-                    </fieldset>
-                    <fieldset v-if="typeImmatriculation === 'siv' || !fniMode">
-                      <legend><span class="color-default">Carte grise</span></legend>
-                      <form role="form">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
-                              <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input type="text" required="required" v-mask="'AA-###-AA'" class="form-control" id="plaque" placeholder="AA-555-AA" v-model="plaque" tabindex="3">
-                              <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback plan position_left" :class="[{'has-error' : (formule === '' && status !== 'init')}]">
-                              <label for="input" class="control-label">N° de formule <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link">Où le trouver <i class="fa fa-info-circle fa-lg"></i></a>
-                              <input type="text" id="formule" v-mask="'####AA#####'" required="required" class="form-control" placeholder="2013BZ80335" v-model="formule" tabindex="4">
-                              <i class="fa fa-pencil-square-o form-control-feedback"></i> </div>
-                          </div>
-                        </div>
-                      </form>
-                    </fieldset>
-                    <fieldset v-if="typeImmatriculation === 'fni'">
-                      <legend><span class="color-default">Carte grise</span></legend>
-                      <form role="form">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback" :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]">
-                              <label for="input" class="control-label">Plaque d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input type="text" required="required" class="form-control" id="plaque" placeholder="123 ABC 45" v-model="plaque" tabindex="6">
-                              <i class="fa fa-drivers-license-o form-control-feedback"></i> </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group has-feedback plan position_left" :class="[{'has-error' : ((!checkDateCertificat) && status !== 'init')}]">
-                              <label for="input" class="control-label">Date du certificat d'immatriculation <span class="info_red" title="Ce champ est requis.">*</span></label> <a @click="modal = true" class="clickable text-info btn-sm-link">Où la trouver <i class="fa fa-info-circle fa-lg"></i> </a>
-                              <input type="text" id="dateCertificat" v-mask="'##/##/####'" required="required" class="form-control" placeholder="xx/xx/xxxx" v-model="dateCertificat" tabindex="7">
-                              <i class="fa fa-calendar form-control-feedback"></i> </div>
-                          </div>
-                        </div>
-                      </form>
-                    </fieldset>
-                    <div class="form-group">
-                      <div class="col-xs-offset-5 col-sm-7">
-                        <button @click="onSubmit" class="btn btn-animated btn-default btn-sm" tabindex="5">
-                          <i class="fa" :class="[{'fa-search' : (status === 'init')},
-                                    {'fa-spin fa-spinner' : (status === 'posting')},
-                                    {'fa-exclamation-triangle' : (status === 'failed')}]"></i>Rechercher
-                        </button>
-                        <router-link class="btn btn-animated btn-default btn-sm" :to="{ name: 'faq',hash:'#i'}"><i class="fa fa-question"></i>Besoin d'aide</router-link>
-                      </div>
                     </div>
                   </div>
                 </div>
