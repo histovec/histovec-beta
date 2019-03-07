@@ -456,14 +456,28 @@ export default {
       var currentWeekNumber = 1 + Math.ceil((firstThursday - target) / 604800000)
       return instance.getFullYear() + '' + currentWeekNumber
     },
+    pers_id () {
+      if (this.typePersonne === 'particulier') {
+        return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '') + this.dateNaissance
+      } else {
+        return this.raisonSociale + this.siren
+      }
+    },
+    veh_id () {
+      if (this.typeImmatriculation === 'siv') {
+        return this.plaque + this.formule
+      } else {
+        return this.plaque + this.dateCertificat
+      }
+    },
     id () {
-      return this.hash(this.raisonSociale + this.siren + this.nom + this.prenom + this.dateNaissance + this.plaque + this.formule + this.dateCertificat)
+      return this.hash(this.pers_id + this.veh_id)
     },
     code () {
-      return this.hash(this.plaque + this.formule + this.dateCertificat + this.currentMonthNumber)
+      return this.hash(this.veh_id + this.currentMonthNumber)
     },
     key () {
-      return this.hash(this.plaque + this.formule + this.dateCertificat)
+      return this.hash(this.veh_id)
     }
   },
   methods: {
