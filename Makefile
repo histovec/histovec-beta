@@ -183,7 +183,7 @@ ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'loc
 		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
 endif
 
-index-load: index-create
+index-load: wait-index
 ifeq ("$(wildcard ${datasource})","")
 	@echo WARNING: missing data source ${datasource}
 endif
