@@ -124,9 +124,9 @@
               <h6>Mesures de protection des données</h6>
               Les données personnelles sont protégées par les moyens suivants :
               <ul>
-                <li>Aucune donnée nominative du vendeur et du véhicule n’est stockée au-delà de la session : les données personnelles sont combinées puis hachées (SHA256) avant d’être stockées en tant que clé de recherche. </li>
+                <li>Aucune donnée nominative du vendeur n'est transmise à Histovec : les données personnelles sont combinées puis hachées (SHA256) pour générer une clé de recherche irréversible.</li>
                 <li>Aucune information personnelle n’est affichée sur le site : seules les premières lettres du nom et prénom sont affichées, ainsi que les premières et dernières lettres du numéro d’immatriculation pour permettre à l’utilisateur de vérifier qu’il s’agit bien de la bonne information</li>
-                <li>Les échanges avec le site HistoVec sont sécurisés par le protocole https, et par ailleurs, les données du véhicule sont chiffrées (AES256) en base et ne sont déchiffrées que sur le navigateur, grâce à une combinaison hachée de la plaque et de l'immatriculation</li>
+                <li>Les échanges avec le site HistoVec sont sécurisés par le protocole https. Par ailleurs, les données du véhicule sont chiffrées (AES256) en base et ne sont déchiffrées que sur le navigateur, grâce à une combinaison hachée (plaque et immatriculation)</li>
                 <li>Le service est hébergé sur les serveurs du Ministère de l’intérieur</li>
                 <li>L’acheteur consulte le rapport exclusivement à partir du lien, fourni par le vendeur, et dispose exactement du même de rapport que le vendeur</li>
                 <li>Ce lien est temporaire, valable le mois en cours et le suivant. </li>
