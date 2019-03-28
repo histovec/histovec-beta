@@ -55,7 +55,7 @@
               <h5>Directeur de la publication</h5>
               <p>Emmanuel Barbe, délégué interministériel à la Sécurité routière </p>
               <h5>Crédits</h5>
-              <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site histovec.interieur.gouv.fr.</p>
+              <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site HistoVec.interieur.gouv.fr.</p>
               <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Demande%20de%20reproduction'">contactez-nous</i></a></p>
               <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com">picjumbo.com</a> et libres de droits.</p>
           <h5>Conception et réalisation</h5>
@@ -74,10 +74,10 @@
               <h6>Droit d’auteur</h6>
               Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Au terme de l’article L. 122-4 du Code de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.
               <h6>Code applicatif open source</h6>
-              Conformément à la <a href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14">loi pour une République numérique</a>, le code de l'application Histovec est libre et opensource, publié sous <a href="https://www.gnu.org/licenses/lgpl-3.0.fr.html">licence LGPL</a> sur <a href="https://github.com/histovec/histovec-beta">Github</a>.
+              Conformément à la <a href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14">loi pour une République numérique</a>, le code de l'application HistoVec est libre et opensource, publié sous <a href="https://www.gnu.org/licenses/lgpl-3.0.fr.html">licence LGPL</a> sur <a href="https://github.com/histovec/histovec-beta">Github</a>.
               <h6>Limitations de responsabilité</h6>
               Le site HistoVec fournit les informations issues du Système d’Immatriculation des Véhicules (SIV).
-              La responsabilité de l'Editeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’Immatriculation des Véhicules, ou d’anomalies de traitement informatique.
+              La responsabilité de l'éditeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’Immatriculation des Véhicules, ou d’anomalies de traitement informatique.
               Le droit d’accès, de modification, de rectification et de suppression des données du Système d’Immatriculation des Véhicules s’exerce en justifiant son identité, par voie postale :
               Agence Nationale des Titres Sécurisés
               18 rue Irénée Carré
@@ -101,11 +101,13 @@
                Le responsable de traitement est, comme pour le SIV, la délégation à la sécurité routière (DSR).
               <h6>Finalité du traitement</h6>
                La finalité du traitement des données personnelles est exclusivement de fournir l’historique du véhicule.
-               <br/>N.B. : Histovec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV). Ces données sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
-               <br/>Le service Histovec est en version bêta, et suit une démarche d'amélioration continue.
+               <br/>N.B. : HistoVec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV). Ces données sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
+               <br/>Le service HistoVec est en version bêta, et suit une démarche d'amélioration continue.
                <br/>Les données sont extraites du SIV et publiées chaque début de semaine (et bientôt chaque jour).
-               <h6>Données personnelles collectées</h6>
-               Les données collectées par HistoVec  lors de la demande du rapport visent à authentifier le titulaire du véhicule en faisant preuve qu’elle dispose de la carte grise du véhicule. ,pour un particulier :
+               <h6>Données personnelles utilisées</h6>
+               Les données utitlisées par HistoVec lors de la demande du rapport visent à authentifier le titulaire du véhicule en faisant preuve qu’elle dispose de la carte grise du véhicule. Elles ne font l'objet d'aucune collecte.
+    
+               <br/>Pour un particulier :
               <ul>
                 <li>nom (tel que figurant sur le certificat d’immatriculation)</li>
                 <li>prénom (idem) </li>
@@ -124,7 +126,7 @@
               <h6>Mesures de protection des données</h6>
               Les données personnelles sont protégées par les moyens suivants :
               <ul>
-                <li>Aucune donnée nominative du vendeur n'est transmise à Histovec : les données personnelles sont combinées puis hachées (SHA256) pour générer une clé de recherche irréversible.</li>
+                <li>Aucune donnée nominative du vendeur n'est transmise à HistoVec : les données personnelles sont combinées puis hachées (SHA256) pour générer une clé de recherche irréversible.</li>
                 <li>Aucune information personnelle n’est affichée sur le site : seules les premières lettres du nom et prénom sont affichées, ainsi que les premières et dernières lettres du numéro d’immatriculation pour permettre à l’utilisateur de vérifier qu’il s’agit bien de la bonne information</li>
                 <li>Les échanges avec le site HistoVec sont sécurisés par le protocole https. Par ailleurs, les données du véhicule sont chiffrées (AES256) en base et ne sont déchiffrées que sur le navigateur, grâce à une combinaison hachée (immatriculation et numéro de formule)</li>
                 <li>Le service est hébergé sur les serveurs du Ministère de l’intérieur</li>
