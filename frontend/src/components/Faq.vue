@@ -83,7 +83,7 @@
               </div>
               <div  class="panel-collapse collapse" :class="[{'in' : choice === 'b'}]">
                 <div class="panel-body">
-                  <UL>Le rapport généré est consultable pendant une période de 4 semaines aprés sa génération, grâce au lien qui a été fourni par le vendeur.</UL>
+                  <UL>Le rapport généré est consultable le mois en cours et le mois suivant sa génération, grâce au lien qui a été fourni par le vendeur.</UL>
                 </div>
               </div>
             </div>
@@ -183,10 +183,10 @@
                 <div class="panel-body">
                   <UL>Vérifiez que vous avez saisi très précisément dans les champs du formulaire les informations telles qu'elles figurent sur la carte grise (nom et prénom(s), immatriculation, numéro de formule ou date du certificat d'immatriculation).</UL>
                   <UL>Pour les anciens numéros d'immatriculation, veillez à bien saisir vos nom et prénom(s) dans le même ordre que celui qui apparaît sur la carte grise.</UL>
-                  <UL>Plaques au format SIV (AA-123-AA): où trouver les informations sur votre carte grise.</UL>
+                  <UL>Immatriculation au format SIV (AA-123-AA): où trouver les informations sur votre carte grise.</UL>
                   <UL><img class="img-responsive" v-bind:src="'assets/images/aide_siv.jpg' "></UL>
                   <br />
-                  <UL>Plaques au format FNI (123 ABC 45): où trouver les informations sur votre carte grise (plusieurs modèles).</UL>
+                  <UL>Immatriculation au format FNI (123 ABC 45): où trouver les informations sur votre carte grise (plusieurs modèles).</UL>
                   <UL><img class="img-responsive" v-bind:src="'assets/images/aide_fni.jpg' "></UL>
                   <br />
                   <UL>Si vous êtes locataire longue durée du véhicule, essayez avec les informations du titulaire propriétaire (par exemple pour une société de location, cliquez sur l'onglet Entreprise du formulaire pour remplir les informations correspondantes).</UL>
@@ -275,7 +275,7 @@ Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militai
 export default {
   computed: {
     mailBody () {
-      var text = encodeURI('Bonjour,\n\nL\'équipe HistoVec vous remercie d\'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n Histovec n\'est pas supporté par des navigateurs trop anciens, nous vous conseillons l\'utilisation de versions récentes de Firefox ou chrome.\n\nPour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l\'historique de votre véhicule.\n\nPour un particulier \nNom (de naissance): \nPrénom(s): \nDate de naissance (du titulaire): \nPlaque d\'immatriculation: \nNuméro de formule: \nou\nDate du certificat (FNI avant 2009):\n\nPour une entreprise\nRaison sociale: \nNuméro de siren: \nPlaque d\'immatriculation: \nNuméro de formule:\nou\nDate du certificat (FNI avant 2009):\n\n\nNous pourrons ainsi vous répondre rapidement')
+      var text = encodeURI('Bonjour,\n\nL\'équipe HistoVec vous remercie d\'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n Histovec n\'est pas supporté par des navigateurs trop anciens, nous vous conseillons l\'utilisation de versions récentes de Firefox ou chrome.\n\nPour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l\'historique de votre véhicule.\n\nPour un particulier \nNom (de naissance): \nPrénom(s): \nDate de naissance (du titulaire): \nNuméro d\'immatriculation: \nNuméro de formule: \nou\nDate du certificat (FNI avant 2009):\n\nPour une entreprise\nRaison sociale: \nNuméro de siren: \nNuméro d\'immatriculation: \nNuméro de formule:\nou\nDate du certificat (FNI avant 2009):\n\n\nNous pourrons ainsi vous répondre rapidement')
       return text
     }
   },
