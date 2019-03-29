@@ -62,59 +62,19 @@
           </ul>
           <!-- Tab panes -->
           <div class="tab-content">
-            <!-- /* ----------------- debut synthese ----------------- */ -->
+            <!-- /* ----------------- synthese ----------------- */ -->
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'abstract'}]">
               <abstract :v="v" :holder="holder" :display="display"></abstract>
             </div>
-            <!-- /* ----------------- fin synthese ----------------- */ -->
-            <!-- /* ----------------- debut vehicule ----------------- */ -->
+            <!-- /* ----------------- vehicule ----------------- */ -->
             <div class="tab-pane fade pr-20" :class="[{'in active' : display['all_tabs'] || tab === 'vehicle'}]">
               <tech-chars :v="v"></tech-chars>
             </div>
+            <!-- /* ----------------- titre ----------------- */ -->
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'holder'}]">
-              <h6 class="title">Titulaire</h6>
-              <!-- debut titulaire et co-titulaire -->
-              <div v-if="v.titulaire.nature !== undefined">
-                <div class="row">
-                  <div class="col-sm-5"><span class="txt-small-12">Nature</span></div>
-                  <div class="col-sm-7"><span class="txt-small-12">{{ v.titulaire.nature }}</span></div>
-                </div>
-                <div class="separator"></div>
-              </div>
-
-              <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Identité</span></div>
-                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.identite }}</span></div>
-              </div>
-              <div class="separator"></div>
-
-              <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Code Postal</span></div>
-                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.titulaire.adresse }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <!-- fin tableau titulaire et co-titulaire -->
-              <h6 class="title">Carte grise</h6>
-              <!-- debut tableau carte grise -->
-              <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation</span><span class="txt-small-12" v-if="v.certificat.etranger"> à l'étranger</span></div>
-                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.premier }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <div v-if="v.certificat.etranger">
-                <div class="row" >
-                  <div class="col-sm-5"><span class="txt-small-12">Date de première immatriculation en France</span></div>
-                  <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.fr }}</span></div>
-                </div>
-                <div class="separator"></div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5"><span class="txt-small-12">Date de la carte grise actuelle</span></div>
-                <div class="col-sm-7"><span class="info_red txt-small-12">{{ v.certificat.courant }}</span></div>
-              </div>
-              <div class="separator"></div>
-              <!-- debut tableau situation administrative -->
+              <license :v="v"></license>
             </div>
+            <!-- debut tableau situation administrative -->
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'situation'}]">
               <div class="row">
                 <div class="col-sm-6">
@@ -408,6 +368,7 @@
 import QrcodeVue from 'qrcode.vue'
 import Abstract from './reportParts/Abstract.vue'
 import TechChars from './reportParts/TechChars.vue'
+import License from './reportParts/License.vue'
 import Csa from './reportParts/CSA.vue'
 import moment from 'moment'
 import histovec from '../assets/js/histovec'
@@ -417,6 +378,7 @@ export default {
     QrcodeVue,
     Abstract,
     TechChars,
+    License,
     Csa
   },
   data () {
