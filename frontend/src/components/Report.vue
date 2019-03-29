@@ -880,7 +880,6 @@
 
 <script>
 
-import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
 import csa from './CSA.vue'
 import moment from 'moment'
@@ -900,84 +899,6 @@ export default {
         date_update: true
       },
       default: 'non disponible',
-      synthese: {
-        'critair': {
-          'text': 'Eligible vignette Crit\'Air',
-          'adv': 'Consultez le site des vignettes Crit\'Air',
-          'link': 'https://www.certificat-air.gouv.fr'
-        },
-        'fin_ove': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'Ce véhicule a eu un sinistre déclaré, et déclaré apte à circuler',
-          'adv': 'Demandez le rapport d’expert et la(es) facture(s)',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
-        },
-        'ove': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'Ce véhicule a eu un sinistre déclaré',
-          'adv': 'Une procédure de réparation contrôlée est en cours',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
-        },
-        'multi_ove': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'Ce véhicule a eu plusieurs sinistres déclarés',
-          'adv': 'Vous pouvez consulter l\'historique détaillé pour plus de précisions concernant les précédents sinistres',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1473'
-        },
-        'otci': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'Le certificat fait l\'objet d\'une opposition temporaire (non liée à un sinistre)',
-          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
-        },
-        'otci_ove': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'Le certificat fait l\'objet d\'une opposition temporaire',
-          'adv': 'Ce véhicule pourra être vendu après levée de l\'opposition',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F34107'
-        },
-        'suspension': {
-          'icon': 'fa-minus-circle',
-          'text': 'L\'autorisation de circulation de ce véhicule a été suspendue',
-          'adv': 'Une levée de suspension est nécessaire pour sa remise en circulation',
-          'link': 'https://www.service-public.fr/particuliers/vosdroits/F1754'
-        },
-        'perte_ci': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'La carte grise a fait l\'objet d\'une déclaration de perte',
-          'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
-        },
-        'annulation_ci': {
-          'icon': 'fa-minus-circle',
-          'text': 'La carte grise a été annulée',
-          'adv': 'Ce véhicule ne peut pas être vendu en l\'état'
-        },
-        'vehicule_vole': {
-          'icon': 'fa-minus-circle',
-          'text': 'Le véhicule fait l\'objet d\'un signalement pour vol et ne peut être vendu en l\'état',
-          'adv': 'Le signalement doit être vérifié dans les plus brefs délais avec le commissariat le plus proche'
-        },
-        'ci_vole': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'La carte grise a fait l\'objet d\'une déclaration de vol',
-          'adv': 'Demandez la déclaration de vol. La carte grise fournie doit porter la mention "Duplicata" et la date'
-        },
-        'saisie': {
-          'icon': 'fa-minus-circle',
-          'text': 'Le véhicule est saisi',
-          'adv': 'Seule une mainlevée du créancier ou un juge peut permettre la vente de ce véhicule'
-        },
-        'gage': {
-          'icon': 'fa-exclamation-triangle',
-          'text': 'Le véhicule est gagé',
-          'adv': 'Un véhicule gagé peut être acheté, avec transfert du gage'
-        },
-        'duplicata': {
-          'icon': 'fa-copy',
-          'text': 'La carte grise est un duplicata',
-          'adv': 'La carte grise doit porter la mention "Duplicata" et la date'
-        }
-      },
       plaque: '',
       vin: '',
       result: 'wait',
@@ -1038,27 +959,6 @@ export default {
     }
   },
   methods: {
-    decrypt (key, encrypted) {
-      key = CryptoJS.enc.Base64.parse(key)
-      var rawData = atob(encrypted)
-      let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
-      encrypted = btoa(rawData.substring(16))
-      var decrypted = CryptoJS.AES.decrypt({
-        ciphertext: CryptoJS.enc.Base64.parse(encrypted),
-        salt: ''
-      },
-        key, {
-          iv: iv,
-          padding: CryptoJS.pad.Pkcs7,
-          mode: CryptoJS.mode.CBC
-        })
-      return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
-    },
-    pad (n, width, z) {
-      z = z || '0'
-      n = n + ''
-      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
-    },
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
@@ -1186,7 +1086,7 @@ export default {
             var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
             var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
             try {
-              var veh = this.decrypt(key, encrypted)
+              var veh = histovec.decrypt(key, encrypted)
             } catch (err) {
               console.log(err)
               this.result = 'error'

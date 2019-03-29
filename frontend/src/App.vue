@@ -89,6 +89,7 @@ import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/libelle_operations.json'
+import synthese from './assets/json/synthese.json'
 import verbatims from './assets/json/verbatims.json'
 import VueMask from 'v-mask'
 import VueClipboard from 'vue-clipboard2'
@@ -110,6 +111,7 @@ Vue.mixin({
       apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
       operations: operations,
+      synthese: synthese,
       verbatims: verbatims,
       lang: localization.default,
       show: false
