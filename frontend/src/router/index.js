@@ -4,12 +4,12 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Search from '@/components/Search'
 import Report from '@/components/Report'
-import Faq from '@/components/Faq'
-import Legal from '@/components/Legal'
-import Contact from '@/components/Contact'
-import Feedback from '@/components/Feedback'
-import Buyer from '@/components/Buyer'
-import NotFound from '@/components/NotFound'
+import Faq from '@/components/infos/Faq'
+import Legal from '@/components/infos/Legal'
+import Contact from '@/components/infos/Contact'
+import Feedback from '@/components/infos/Feedback'
+import Buyer from '@/components/infos/Buyer'
+import NotFound from '@/components/infos/NotFound'
 
 Vue.use(Router)
 

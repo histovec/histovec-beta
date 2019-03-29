@@ -881,7 +881,7 @@
 <script>
 
 import QrcodeVue from 'qrcode.vue'
-import csa from './CSA.vue'
+import csa from './reportParts/CSA.vue'
 import moment from 'moment'
 import histovec from '../assets/js/histovec'
 

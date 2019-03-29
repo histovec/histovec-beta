@@ -182,7 +182,7 @@
 import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
 import moment from 'moment'
-import ModalHelper from './ModalHelper.vue'
+import ModalHelper from './infos/ModalHelper.vue'
 
 export default {
   components: {
