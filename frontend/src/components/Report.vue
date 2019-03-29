@@ -880,7 +880,6 @@
 
 <script>
 
-import CryptoJS from 'crypto-js'
 import QrcodeVue from 'qrcode.vue'
 import csa from './CSA.vue'
 import moment from 'moment'
@@ -960,27 +959,6 @@ export default {
     }
   },
   methods: {
-    decrypt (key, encrypted) {
-      key = CryptoJS.enc.Base64.parse(key)
-      var rawData = atob(encrypted)
-      let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
-      encrypted = btoa(rawData.substring(16))
-      var decrypted = CryptoJS.AES.decrypt({
-        ciphertext: CryptoJS.enc.Base64.parse(encrypted),
-        salt: ''
-      },
-        key, {
-          iv: iv,
-          padding: CryptoJS.pad.Pkcs7,
-          mode: CryptoJS.mode.CBC
-        })
-      return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
-    },
-    pad (n, width, z) {
-      z = z || '0'
-      n = n + ''
-      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
-    },
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
@@ -1108,7 +1086,7 @@ export default {
             var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
             var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
             try {
-              var veh = this.decrypt(key, encrypted)
+              var veh = histovec.decrypt(key, encrypted)
             } catch (err) {
               console.log(err)
               this.result = 'error'
