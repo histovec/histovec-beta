@@ -74,148 +74,16 @@
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'holder'}]">
               <license :v="v"></license>
             </div>
-            <!-- debut tableau situation administrative -->
+            <!-- situation administrative -->
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'situation'}]">
-              <div class="row">
-                <div class="col-sm-6">
-                  <h6 class="title">Gages</h6>
-                  <!-- debut tableau gages -->
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.gages }}</span>
-                    <div class="separator-2"></div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <h6 class="title">Oppositions</h6>
-                  <!-- debut tableau oppositions -->
-                  <div class="col-sm-12">
-                    <span class="info_red txt-small-12">{{ v.administratif.oppositions }} </span>
-                    <span class="txt-small-12" v-if="v.administratif.pv && holder"><br/>Appelez le 08 21 08 00 31</span>
-                    <div class="separator-2"></div>
-                  </div>
-                  <!-- fin tableau oppositions -->
-                </div>
-                <div class="col-sm-6">
-                  <h6 class="title">Suspensions</h6>
-                  <!-- debut tableau suspensions -->
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.suspensions }}</span>
-                    <div class="separator-2"></div>
-                  </div>
-                  <!-- fin tableau suspensions -->
-                </div>
-                <div class="col-sm-6">
-                  <h6 class="title">Procédures</h6>
-                  <!-- debut tableau procédures -->
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.procedures }}</span>
-                    <div class="separator"></div>
-                  </div>
-                  <!-- fin tableau procédures -->
-                </div>
-                <div class="col-sm-6">
-                  <h6 class="title">Véhicule</h6>
-                  <!-- debut tableau véhicule -->
-                  <div class="col-sm-4"><span class="txt-small-12">Etat de vol</span></div>
-                  <div class="col-sm-3"><span class="info_red txt-small-12">{{ v.administratif.vol }}</span></div>
-                  <!-- fin tableau véhicule -->
-                </div>
-                <div class="col-sm-6">
-                  <h6 class="title">Etat de la carte grise</h6>
-                  <!-- debut tableau titre -->
-                  <div class="col-sm-5"><span class="txt-small-12">Etat de vol</span></div>
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.vol }}</span></div>
-                  <div class="col-sm-5"><span class="txt-small-12">Etat de perte</span></div>
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.perte }}</span></div>
-                  <div class="col-sm-5"><span class="txt-small-12">Duplicata</span></div>
-                  <div class="col-sm-5"><span class="info_red txt-small-12">{{ v.administratif.titre.duplicata }}</span></div>
-                </div>
-            <!-- <div class="row">
-                      <div class="col-sm-6"><span class="txt-small-12">Remise du titre</span></div>
-                      <div class="col-sm-4"><span class="info_red txt-small-12">{{ v.administratif.titre.remise }}</span></div>
-                    </div>
-                  <div class="separator"></div>
-              -->
-                <div v-shortkey="['ctrl', 'alt', 'p']" @shortkey="display['pdf'] = !display['pdf']"></div>
-                <div v-shortkey="['ctrl', 'alt', 'm']" @shortkey="display['date_update'] = !display['date_update']"></div>
-                <div v-shortkey="['ctrl', 'alt', 'a']" @shortkey="display['all_tabs'] = !display['all_tabs']"></div>
-              </div>
+              <administrative :v="v" :holder="holder" :display="display"></administrative>
             </div>
+            <!-- historique des opérations -->
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'history'}]">
-              <!-- debut tableau operation historique FR -->
-              <div>Historique des opérations en France</div>
-              <div class="row">
-                <div class="col-sm-4"><span class="txt-small-12"><h6>Date</h6></span></div>
-                <div class="col-sm-8"><span class="bold txt-small-12"><h6>Opération</h6></span></div>
-              </div>
-              <div class="separator"></div>
-
-              <div v-for="(entry, index) in v.historique" :key="index">
-                <div class="row">
-                  <div class="col-sm-4"><span class="txt-small-12">{{ entry.date }}</span></div>
-                  <div class="col-sm-8"><span class="info_red txt-small-12">{{ entry.nature }}</span></div>
-                </div>
-                <div class="separator pv-5"></div>
-              </div>
-              <div v-if="v.certificat.incertain">
-                <div class="row">
-                  <div class="col-sm-4"><span class="txt-small-12">{{ v.certificat.fr }}</span></div>
-                  <div class="col-sm-8"><span class="info_red txt-small-12"> Première immatriculation (source incertaine)</span></div>
-                </div>
-                <div class="separator pv-5"></div>
-              </div>
-              <!-- fin tableau operation historique FR -->
-              <br />
-              <div v-if="v.certificat.etranger">Historique des opérations à l'étranger</div>
-              <!-- debut tableau operation historique Etranger -->
-              <div v-if="v.certificat.etranger">
-                <div class="row">
-                  <div class="col-sm-4"><span class="txt-small-12"><h6>Date</h6></span></div>
-                  <div class="col-sm-8"><span class="bold txt-small-12"><h6>Opération</h6></span></div>
-                </div>
-                <div class="separator"></div>
-                <div>
-                  <div class="row">
-                    <div class="col-sm-4"><span class="txt-small-12">{{ v.certificat.premier }}</span></div>
-                    <div class="col-sm-8"><span class="info_red txt-small-12">Première immatriculation à l'étranger</span></div>
-                  </div>
-                  <div class="separator pv-5"></div>
-                </div>
-              </div>
-
-              <!-- fin tableau operation historique Etranger-->
+              <history :v="v"></history>
             </div>
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'send'}]" v-if="holder">
-              <div class="pv-30 ph-20 feature-box bordered_spec text-center" style="background: white">
-                <div class="row">
-                  <!-- debut alerte verte -->
-                  <div class="col-md-12" v-if="notifSuccess">
-                    <div class="alert alert-icon alert-success" role="alert"><i class="fa fa-check"></i>Le lien a été copié</div>
-                  </div>
-                  <!-- fin alerte verte -->
-                  <div class="col-md-12 p-h-10">
-                    <p>Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.<br>
-                      Ce rapport sera accessible jusqu'au {{ validityDate }} <br>
-                    <p class="text-center">
-                      <button v-clipboard:copy="url" v-on:click="showNotifSuccess" class="btn radius-30 btn-dark btn-animated btn">Copier le lien <i class="fa fa-copy"></i></button>
-                      <a :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody" class="btn radius-30 btn-default btn-animated btn">Courriel <i class="fa fa-send"></i></a>
-                    </p>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">Ou par QR code<p></p></div>
-                  </div>
-                  <!-- <div class="separator"></div> -->
-                  <div class="row">
-                    <div class="col-md-12" style="fload: none; margin: 0 auto">
-                      <qrcode-vue :value="url" :size="150" level="L"></qrcode-vue>
-                    </div>
-                  </div>
-                  <!-- debut bouton imprimer csa detaille -->
-                  <div class="row">
-                    <div class="col-sm-12 pv-20" v-if="holder&&display['pdf']">
-                      <csa :v="v" :url="url" :baseurl="baseurl"></csa>
-                    </div>
-                  </div>
-                <!-- fin bouton imprimer csa detaille -->
-                </div>
-              </div>
+              <share :url="url" :baseurl="baseurl"></share>
             </div>
 
           </div>
@@ -365,21 +233,23 @@
 
 <script>
 
-import QrcodeVue from 'qrcode.vue'
 import Abstract from './reportParts/Abstract.vue'
 import TechChars from './reportParts/TechChars.vue'
 import License from './reportParts/License.vue'
-import Csa from './reportParts/CSA.vue'
+import Administrative from './reportParts/Administrative.vue'
+import History from './reportParts/History.vue'
+import Share from './reportParts/Share.vue'
 import moment from 'moment'
 import histovec from '../assets/js/histovec'
 
 export default {
   components: {
-    QrcodeVue,
     Abstract,
     TechChars,
     License,
-    Csa
+    Administrative,
+    History,
+    Share
   },
   data () {
     return {
@@ -420,10 +290,8 @@ export default {
       ratings: [1, 2, 3, 4, 5],
       disabled: false,
       note: null,
-      notifSuccess: false,
       timeout: 10000,
-      timerModalEval: 120000,
-      timerNotifSuccess: 2000
+      timerModalEval: 120000
     }
   },
   computed: {
@@ -499,12 +367,6 @@ export default {
       if (!this.disabled) {
         this.note = this.tempValue
       }
-    },
-    showNotifSuccess () {
-      this.notifSuccess = true
-      setTimeout(() => {
-        this.notifSuccess = false
-      }, this.timerNotifSuccess)
     },
     showModalEval () {
       if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
