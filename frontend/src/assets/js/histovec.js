@@ -41,22 +41,13 @@ function formatDate (isoDate) {
   ].join('/')
 }
 
-function monthDiff (d1, d2) {
-  var months
-  months = (d2.getFullYear() - d1.getFullYear()) * 12
-  months -= d1.getMonth() + 1
-  months += d2.getMonth()
-  // increment months if d2 comes later in its month than d1 in its month
-  if (d2.getDate() >= d1.getDate()) { months++ }
-  return months <= 0 ? 0 : months
-}
-
 function calcCertifDepuis (dateStr) {
   // Si on détecte que la date est au format FR alors on l'a converti
   if (moment(dateStr, 'DD/MM/YYYY', true).isValid()) {
     dateStr = moment(dateStr, 'DD/MM/YYYY').format('YYYY-MM-DD')
   }
-  let nbMonth = monthDiff(new Date(dateStr), new Date())
+  let nbMonth = Math.floor(moment(new Date()).diff(new Date(dateStr), 'months', true))
+
   if (nbMonth <= 18) {
     return nbMonth + ' mois'
   } else {
