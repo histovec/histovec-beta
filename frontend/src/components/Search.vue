@@ -94,13 +94,13 @@
                           </div>
                         </div>
                         <div  v-if="typePersonne === 'pro'" class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-8">
                             <div class="form-group has-feedback" :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]">
                               <label class="control-label">Raison sociale <span class="info_red" title="Ce champ est requis.">*</span></label>
                               <input id="organization" name="raisonSociale" @paste="onPaste" type="text" required="required" class="form-control" v-bind:value="raisonSociale" v-on:input="raisonSociale = $event.target.value.replace(/\t.*/,'')" tabindex="1">
                               <i class="fa fa-user form-control-feedback"></i> </div>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             <div class="form-group has-feedback" :class="[{'has-error' : (siren === '' && status !== 'init')}]">
                               <label class="control-label">N° SIREN <span class="info_red" title="Ce champ est requis.">*</span></label>
                               <input id="siren" v-mask="'##############'"type="text" required="required" class="form-control" v-model="siren" tabindex="2">
