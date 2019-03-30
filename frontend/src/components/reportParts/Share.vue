@@ -38,6 +38,7 @@
 
 import Csa from './CSA.vue'
 import QrcodeVue from 'qrcode.vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -45,13 +46,25 @@ export default {
     Csa
   },
   props: {
+    v: Object,
     url: String,
-    baseurl: String
+    baseurl: String,
+    holder: Boolean,
+    display: Object
   },
   data () {
     return {
       notifSuccess: false,
       timerNotifSuccess: 2000
+    }
+  },
+  computed: {
+    validityDate () {
+      return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
+    },
+    mailBody () {
+      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
+      return text + this.url.replace('&', '%26')
     }
   },
   methods: {

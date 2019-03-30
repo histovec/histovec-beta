@@ -83,7 +83,7 @@
               <history :v="v"></history>
             </div>
             <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'send'}]" v-if="holder">
-              <share :url="url" :baseurl="baseurl"></share>
+              <share :v="v" :url="url" :baseurl="baseurl" :holder="holder" :display="display"></share>
             </div>
 
           </div>
@@ -101,7 +101,7 @@
   <status :status="result"></status>
 
   <!-- debut modal -->
-  <modal-rating :activate="modalActivate"></modal-rating>
+  <modal-rating :activate="modalActivate" :holder="holder"></modal-rating>
   <!-- fin modal -->
 </section>
 </template>
@@ -116,7 +116,6 @@ import History from './reportParts/History.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
 import ModalRating from './feedback/ModalRating.vue'
-import moment from 'moment'
 import histovec from '../assets/js/histovec'
 
 export default {
@@ -160,31 +159,12 @@ export default {
         }
       },
       modalActivate: false,
-      message: '',
-      email: '',
-      notShow: false,
-      status: 'init',
-      tempValue: null,
-      ratings: [1, 2, 3, 4, 5],
-      disabled: false,
-      note: null,
       timeout: 10000
     }
   },
   computed: {
-    validityDate () {
-      return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
-    },
     holder () {
       return (this.$route.params.code !== undefined) || (this.$store.state.code !== undefined)
-    },
-    mailBody () {
-      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
-      return text + this.url.replace('&', '%26')
-    },
-    smsBody () {
-      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec.\n\nRendez-vous sur le lien suivant pour le consulter: \n')
-      return text + this.url.replace('&', '%26')
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
@@ -238,7 +218,6 @@ export default {
                   'formule': this.$store.state.formule,
                   'fail': this.$store.state.fail,
                   'success': this.$store.state.success,
-                  'message': this.message,
                   'uid': this.$cookie.get('userId'),
                   'date': new Date().toUTCString()
                 }

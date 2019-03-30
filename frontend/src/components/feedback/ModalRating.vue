@@ -69,12 +69,21 @@
 
 export default {
   props: {
-    activate: false
+    activate: Boolean,
+    holder: Boolean
   },
   data () {
     return {
       show: false,
       errors: [],
+      status: 'init',
+      notShow: false,
+      ratings: [1, 2, 3, 4, 5],
+      tempValue: null,
+      disabled: false,
+      message: '',
+      email: '',
+      note: null,
       timerModalEval: 120000
     }
   },
