@@ -159,13 +159,6 @@ export default {
         }
       },
       modalActivate: false,
-      message: '',
-      email: '',
-      notShow: false,
-      tempValue: null,
-      ratings: [1, 2, 3, 4, 5],
-      disabled: false,
-      note: null,
       timeout: 10000
     }
   },
@@ -225,7 +218,6 @@ export default {
                   'formule': this.$store.state.formule,
                   'fail': this.$store.state.fail,
                   'success': this.$store.state.success,
-                  'message': this.message,
                   'uid': this.$cookie.get('userId'),
                   'date': new Date().toUTCString()
                 }
