@@ -90,6 +90,7 @@ import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/libelle_operations.json'
 import synthese from './assets/json/synthese.json'
+import messages from './assets/json/messages.json'
 import verbatims from './assets/json/verbatims.json'
 import VueMask from 'v-mask'
 import VueClipboard from 'vue-clipboard2'
@@ -112,6 +113,7 @@ Vue.mixin({
       localization: localization,
       operations: operations,
       synthese: synthese,
+      messages: messages,
       verbatims: verbatims,
       lang: localization.default,
       show: false
