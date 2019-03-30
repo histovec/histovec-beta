@@ -69,12 +69,14 @@
 
 export default {
   props: {
-    activate: false
+    activate: Boolean,
+    holder: Boolean
   },
   data () {
     return {
       show: false,
       errors: [],
+      status: 'init',
       timerModalEval: 120000
     }
   },
