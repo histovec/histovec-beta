@@ -130,7 +130,7 @@
       <div class="container">
   <div class="row justify-content-lg-center">
     <div class="col-lg-12">
-      <h2 class="text-center mt-4">L’administration</span> agit pour la sécurité routière</h2>
+      <h2 class="text-center mt-4">L’administration agit pour la sécurité routière</h2>
       <p class="large text-center">Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion (cf. <a href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf" target="_blank">dossier de presse</a>) </p>
     </div>
   </div>
@@ -141,15 +141,15 @@
         <div class="container">
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
-           <h2 class="text-center pv-10">Les <strong>usagers</strong> en parlent</h2>
-              <div class="separator"></div>
-                <div class="testimonial text-center">
-                  <h3><transition name="slide-fade"><span v-if="verbatim"> {{ verbatims[i].name }}</span></transition></h3>
-                  <div class="testimonial-body">
-                      <p><transition name="slide-fade"><span v-if="verbatim"><blockquote> {{ verbatims[i].comment }} </blockquote></span></transition></p>
-                  </div>
+              <h2 class="text-center pv-10">Les <strong>usagers</strong> en parlent</h2>
+              <div class="separator">
+              </div>
+              <div class="testimonial text-center">
+                <h3><transition name="slide-fade"><span v-if="verbatim"> {{ verbatims[i].name }}</span></transition></h3>
+                <div class="testimonial-body">
+                  <p><transition name="slide-fade"><span v-if="verbatim"><blockquote> {{ verbatims[i].comment }} </blockquote></span></transition></p>
                 </div>
-              </transition>
+              </div>
             </div>
           </div>
         </div>
