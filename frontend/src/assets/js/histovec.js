@@ -329,10 +329,11 @@ function histovec (veh) {
   v.sinistres_nb = (veh.historique !== undefined) ? ($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
   v.sinistres_nb = v.sinistres_nb.length === 0 ? 0 : v.sinistres_nb.reduce((a, b) => a + b)
   v.sinistres_nb = Math.max(v.sinistres_nb % 10, ((v.sinistres_nb - (v.sinistres_nb % 10)) / 10))
-  console.log(v.sinistres_nb)
+  // console.log(v.sinistres_nb)
   v.sinistre = v.sinistres[0]
   v.aptes = (veh.historique !== undefined) ? ($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
   v.apte = (veh.historique !== undefined) ? ((v.aptes[0] > v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
+  /* eslint-disable no-console */
   console.log(v)
   return v
 }

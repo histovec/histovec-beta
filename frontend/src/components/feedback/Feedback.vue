@@ -120,7 +120,7 @@ export default {
   computed: {
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
   },
   methods: {
     send: function (e) {
@@ -128,7 +128,7 @@ export default {
       if (this.nom && this.prenom && this.object && this.email && this.message) {
         let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message, 'userId': this.$cookie.get('userId')}
         this.$http.post(this.apiUrl + 'feedback/', data)
-          .then(response => {
+          .then(() => {
             this.status = 'posted'
           }, () => {
             this.status = 'failed'

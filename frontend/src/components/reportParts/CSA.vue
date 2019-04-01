@@ -32,7 +32,6 @@ export default {
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     },
     generatePDF () {
-      console.log(this.v, this.url)
       let img = new Image()
       let img2 = new Image()
       var pdf = new JsPdf()
