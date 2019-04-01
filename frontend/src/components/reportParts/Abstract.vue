@@ -10,16 +10,23 @@
     <div class="row">
       <!-- debut voiture  -->
       <div class="col-sm-1"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' fa-2x'" ></i></div>
-      <div class="col-sm-6"><span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span></br>
-      <div v-if="v.ctec.puissance.cv">  <span class="txt-small-13">Puissance fiscale :</span> <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span></div> </div>
+      <div class="col-sm-6">
+        <span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span>
+        <br/>
+        <div v-if="v.ctec.puissance.cv">  
+          <span class="txt-small-13">Puissance fiscale :</span>
+          <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span>
+        </div>
+      </div>
       <div class="col-sm-5" v-if="!holder">
         <span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span><br/><a href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" data-container="body" data-toggle="popover" data-placement="top" data-content="Calculez le montant de votre certificat d'immatriculation" data-original-title="Simulateur" title="Simulateur" target="_blank">Accédez au simulateur de calcul<i class="fa fa-external-link pl-10"></i></a>
       </div>
-        <!-- fin voiture  -->
+      <!-- fin voiture  -->
     </div>
-      <!-- debut trait separation  -->
-    <div class="separator-2"></div>
-      <!-- fin trait separation  -->
+    <!-- debut trait separation  -->
+    <div class="separator-2">
+    </div>
+    <!-- fin trait separation  -->
     <div class="row">
         <!-- debut proprietaire  -->
       <div class="col-sm-1"><i class="fa fa-address-card fa-2x pr-10"></i></div>
@@ -50,11 +57,11 @@
           <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
         </div>
       </div>
-
       <!-- fin proprietaire  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2"></div>
+    <div class="separator-2">
+    </div>
     <!-- fin trait separation  -->
     <div class="row">
       <!-- debut immatriculation  -->
@@ -64,7 +71,8 @@
       <!-- fin immatriculation  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2"></div>
+    <div class="separator-2">
+    </div>
     <!-- fin trait separation  -->
     <div v-if="false">
       <div class="row">
@@ -98,13 +106,27 @@
         <div class="col-sm-6">
           <!-- état - un seul sinistre !-->
           <span v-if="v.sinistres_nb === 1">
-            <span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">un sinistre déclaré</span> <span class="txt-small-13">en {{v.sinistre}}</span></br>
-            <span v-if="v.apte !== false"> <span class="txt-small-13">et</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span>
+            <span class="txt-small-13">Ce véhicule a eu </span>
+            <span class="info_red txt-small-13">un sinistre déclaré</span>
+            <span class="txt-small-13">en {{v.sinistre}}</span>
+            <br/>
+            <span v-if="v.apte !== false"> 
+              <span class="txt-small-13">et</span>
+              <span class="info_red txt-small-13">déclaré apte à circuler</span>
+              <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span>
+            </span>
           </span>
           <!-- état - plusieurs sinistres !-->
           <span v-if="v.sinistres_nb > 1">
-            <span class="txt-small-13">Ce véhicule a eu </span> <span class="info_red txt-small-13">plusieurs sinistres, </span> <span class="txt-small-13">dont le dernier déclaré en {{v.sinistre}}</span></br>
-            <span v-if="v.apte !== false"> <span class="txt-small-13">Le véhicule a été</span> <span class="info_red txt-small-13">déclaré apte à circuler</span> <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span></span>
+            <span class="txt-small-13">Ce véhicule a eu </span>
+            <span class="info_red txt-small-13">plusieurs sinistres, </span>
+            <span class="txt-small-13">dont le dernier déclaré en {{v.sinistre}}</span>
+            <br/>
+            <span v-if="v.apte !== false">
+              <span class="txt-small-13">Le véhicule a été</span>
+              <span class="info_red txt-small-13">déclaré apte à circuler</span>
+              <span class="txt-small-13" v-if="v.apte !== true">en {{v.apte}}</span>
+            </span>
           </span>
         </div>
         <div class="col-sm-5">
@@ -121,9 +143,16 @@
     <div v-if="(v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
       <div class="row">
         <!-- debut ras  -->
-        <div class="col-sm-1"><i class="fa fa-check info_green fa-2x"></i></div>
-        <div class="col-sm-6"><span class="info_red txt-small-13">Rien à signaler</span> <span class="txt-small-13">du point de vue administratif</br>
-              (gages, opposition, vol,...)</span> </div>
+        <div class="col-sm-1">
+          <i class="fa fa-check info_green fa-2x"></i>
+        </div>
+        <div class="col-sm-6">
+          <span class="info_red txt-small-13">Rien à signaler</span>
+          <span class="txt-small-13">du point de vue administratif
+            <br/>
+            (gages, opposition, vol,...)
+          </span>
+        </div>
         <div class="col-sm-5" v-if="false"><span class="color-info_2 bold_4 txt-small-13">Demandez au Vendeur un Certificat de Situation Administratif détaillé</span></div>
         <!-- fin ras  -->
       </div>

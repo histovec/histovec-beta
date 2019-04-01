@@ -18,7 +18,7 @@ VOLUME /$app_path/config
 RUN npm config `echo $proxy | sed 's/^$/delete proxy/;s/\(\S\S*\)/set proxy \1/'`
 RUN npm i npm@latest -g
 RUN npm install --verbose
-#RUN npm audit fix --force
+RUN npm audit fix #--force
 
 #COPY . .
 

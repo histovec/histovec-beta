@@ -17,14 +17,16 @@
                   <span class="info_red txt-small-11" v-if="status == 'failed' && errors.length == 0">* Veuillez renseigner les champs obligatoires<br/></span>
                   <label>Comment évaluez-vous HistoVec :  <span class="info_red" title="Ce champ est requis.">*</span></label>
                   <div class="rating position_left p-g-10">
-                    <template v-for="n in ratings" >
+                    <span v-for="n in ratings" v-bind:key="n" >
                       <a v-on:click="setNote((ratings.length+1)-n)"
                          v-on:mouseover="starOver((ratings.length+1)-n)"
                          v-on:mouseout="starOut"
                          v-bind:class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
                          title="Give star"
-                         v-model="note">★</a>
-                    </template>
+                         >
+                         ★
+                      </a>
+                    </span>
                   </div>
                   <p class="m-h-10">
                     <label>Vos commentaires ou suggestions :</label>

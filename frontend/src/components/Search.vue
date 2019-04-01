@@ -11,25 +11,25 @@
     </div>
     <!-- breadcrumb end -->
     <!-- section -->
-<section class="main-container">
-  <div class="container">
-    <div class="row">
-      <!-- section start -->
-      <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%">
-        <div class="container">
-          <div class="row justify-content-lg-center">
-            <div class="col-lg-12">
-              <h2 class="text-center mt-4"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</h2>
-              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+    <section class="main-container">
+      <div class="container">
+        <div class="row">
+          <!-- section start -->
+          <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%">
+            <div class="container">
+              <div class="row justify-content-lg-center">
+                <div class="col-lg-12">
+                  <h2 class="text-center mt-4"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</h2>
+                  <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
+          <!-- section end -->
         </div>
-      </section>
-      <!-- section end -->
-    </div>
-  </div>
-</section>
-<!-- section -->
+      </div>
+    </section>
+    <!-- section -->
     <section class="main-container">
       <div class="container">
         <div class="row">
@@ -103,7 +103,7 @@
                           <div class="col-md-4">
                             <div class="form-group has-feedback" :class="[{'has-error' : (siren === '' && status !== 'init')}]">
                               <label class="control-label">N° SIREN <span class="info_red" title="Ce champ est requis.">*</span></label>
-                              <input id="siren" v-mask="'##############'"type="text" required="required" class="form-control" v-model="siren" tabindex="2">
+                              <input id="siren" v-mask="'##############'" type="text" required="required" class="form-control" v-model="siren" tabindex="2">
                               <i class="fa fa-building-o form-control-feedback"></i> </div>
                           </div>
                         </div>                        
@@ -154,7 +154,6 @@
                 </div>
               </div>
             </div>
-
           </div>
           <!-- tabs end -->
         </div>
@@ -162,16 +161,17 @@
     </section>
     <!-- section end -->
     <div class="container">
-      <div class="row"> </div>
+      <div class="row">
+      </div>
     </div>
     <!-- debut modal -->
-      <modal-helper
-        v-if="modal"
-        @close="modal = false"
-        :typeImmatriculation="typeImmatriculation"
-        :fniMode="fniMode"
-      ></modal-helper>
-    </div>
+    <modal-helper
+      v-if="modal"
+      @close="modal = false"
+      :typeImmatriculation="typeImmatriculation"
+      :fniMode="fniMode"
+    >
+    </modal-helper>
     <!-- fin modal -->
   </div>
 

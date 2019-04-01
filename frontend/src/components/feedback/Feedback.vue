@@ -20,7 +20,8 @@
           <div class="row justify-content-lg-center">
             <div class="col-lg-12">
               <h2 class="text-center mt-4">
-                <div><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+                <div>
+                  <span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
               </h2>
               <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
             </div>
@@ -28,9 +29,6 @@
         </div>
       </section>
       <!-- section end -->
-      <!-- debut image fixe
-      <div class="col-md-12"> <img src="assets/images/corporate-1-slider-slide-2.jpg" class="img-responsive" alt="slidebg2" data-bgposition="center top" data-bgrepeat="no-repeat" data-bgfit="cover"></div>
-<!-- fin image fixe -->
     </div>
   </div>
 </section>
