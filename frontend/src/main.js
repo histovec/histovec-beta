@@ -15,7 +15,7 @@ Vue.use(VueCookie)
 
 Vue.config.productionTip = false
 
-window.addEventListener('beforeunload', function (event) {
+window.addEventListener('beforeunload', function () {
   var apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '')
   navigator.sendBeacon(apiUrl + 'log/exit')
 }, false)

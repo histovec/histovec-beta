@@ -104,7 +104,7 @@ export default {
             this.status = 'failed'
           } else {
             this.$http.post(this.apiUrl + 'feedback/', data)
-            .then(response => {
+            .then(() => {
               this.status = 'posted'
               this.show = false
               this.$cookie.set('evaluation', true, 1)
@@ -144,13 +144,13 @@ export default {
       if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
         setTimeout(() => {
           this.show = true
-          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(response => {}, () => {})
+          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(() => {}, () => {})
         }, this.timerModalEval)
       }
     }
   },
   watch: {
-    activate (newVal, oldVal) {
+    activate (newVal) {
       if (newVal === true) {
         this.showModalEval()
       }
