@@ -97,7 +97,7 @@ export default {
         if (!this.note && this.notShow) {
           this.$cookie.set('evaluation', true, 1)
           this.status = 'posted'
-          this.modalEval = false
+          this.show = false
         } else {
           if (this.email && !this.isEmailValid()) {
             this.errors.push('L\'adresse email n\'est pas valide')
@@ -106,7 +106,7 @@ export default {
             this.$http.post(this.apiUrl + 'feedback/', data)
             .then(response => {
               this.status = 'posted'
-              this.modalEval = false
+              this.show = false
               this.$cookie.set('evaluation', true, 1)
             }, () => {
               this.status = 'failed'
