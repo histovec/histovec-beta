@@ -9,3 +9,4 @@ infrastructure/heat-templates/floating-ip/param/*
 histovec-build
 *.tar.gz
 *.tar
+client/node_modules
