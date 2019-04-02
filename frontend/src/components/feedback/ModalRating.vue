@@ -97,16 +97,16 @@ export default {
         if (!this.note && this.notShow) {
           this.$cookie.set('evaluation', true, 1)
           this.status = 'posted'
-          this.modalEval = false
+          this.show = false
         } else {
           if (this.email && !this.isEmailValid()) {
             this.errors.push('L\'adresse email n\'est pas valide')
             this.status = 'failed'
           } else {
             this.$http.post(this.apiUrl + 'feedback/', data)
-            .then(response => {
+            .then(() => {
               this.status = 'posted'
-              this.modalEval = false
+              this.show = false
               this.$cookie.set('evaluation', true, 1)
             }, () => {
               this.status = 'failed'
@@ -144,13 +144,13 @@ export default {
       if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
         setTimeout(() => {
           this.show = true
-          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(response => {}, () => {})
+          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(() => {}, () => {})
         }, this.timerModalEval)
       }
     }
   },
   watch: {
-    activate (newVal, oldVal) {
+    activate (newVal) {
       if (newVal === true) {
         this.showModalEval()
       }

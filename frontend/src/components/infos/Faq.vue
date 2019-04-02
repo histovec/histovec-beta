@@ -62,15 +62,15 @@
               </div>
               <div class="panel-collapse collapse" :class="[{'in' : choice === 'a'}]">
                 <div class="panel-body">
-                 <DL><DT>Vous êtes vendeur :</DT>
-     						 <DD><OL><LI>sur la page vendeur, remplissez le formulaire pour vous identifier avec les informations demandées, et validez.
-     						 <UL>Note : s’il s’agit d’un véhicule d’entreprise, cliquez sur l’onglet “Entreprise”</UL></LI>
-     						<LI>le rapport du véhicule est affiché. Vous pouvez consulter les différentes sections sur le menu de gauche.</LI>
-     						<LI>vous pouvez transmettre le lien vers le rapport à un tiers en cliquant sur le menu “Transmettre le rapport”.</LI></OL></DD>
-     						<DT>Vous êtes acheteur :</DT>
-     						<DD><UL>Demandez au vendeur de vous transmettre le lien vers le rapport en le générant sur le site Histovec.</UL></DD>
-     						</DL>
-     						</div>
+                  <DL><DT>Vous êtes vendeur :</DT>
+                  <DD><OL><LI>sur la page vendeur, remplissez le formulaire pour vous identifier avec les informations demandées, et validez.
+                  <UL>Note : s’il s’agit d’un véhicule d’entreprise, cliquez sur l’onglet “Entreprise”</UL></LI>
+                  <LI>le rapport du véhicule est affiché. Vous pouvez consulter les différentes sections sur le menu de gauche.</LI>
+                  <LI>vous pouvez transmettre le lien vers le rapport à un tiers en cliquant sur le menu “Transmettre le rapport”.</LI></OL></DD>
+                  <DT>Vous êtes acheteur :</DT>
+                  <DD><UL>Demandez au vendeur de vous transmettre le lien vers le rapport en le générant sur le site Histovec.</UL></DD>
+                  </DL>
+                </div>
               </div>
             </div>
             <!-- fin question 1 -->
@@ -99,7 +99,7 @@
                       <DD><UL>HistoVec vous permet de vous informer, de faire un choix éclairé sur les véhicules sélectionnés et d’éviter les mauvaises surprises.</UL></DD>
                       <DT>Je suis un professionnel négociant automobile :</DT>
                       <DD><UL>Fiabilisez et valorisez votre stock de véhicules d’occasion en permettant à votre entreprise et vos clients de vérifier l’historique des véhicules acquis.</UL></DD>
-    	                <DT>Je loue ma voiture à des particuliers :</DT>
+                      <DT>Je loue ma voiture à des particuliers :</DT>
                       <DD><UL>Je peux rassurer mes clients potentiels en fournissant gratuitement un historique officiel du véhicule.</UL></DD>
                   </DL>
                 </div>
@@ -215,7 +215,7 @@
                   <UL><span class="bold_6">- Première immatriculation d'un véhicule neuf,</span> opération d'immatriculation d'un véhicule qui n'a jamais été immatriculé.</UL>
                   <UL><span class="bold_6">- Première immatriculation à l'étranger,</span> le véhicule a été immatriculé en tant que véhicule neuf à l'étranger.</UL>
                   <UL><span class="bold_6">- Première immatriculation d'un véhicule importé,</span> véhicule déjà immatriculé à l'étranger qui se fait immatriculer en France pour la première fois.</UL>
-		  <UL><span class="bold_6">- Première immatriculation (source incertaine),</span> opération fournie à titre indicatif lorsque aucune opération telle que « Première immatriculation d'un véhicule neuf » ou « Première immatriculation à l'étranger » n'est associée à la date présente dans le fichier.
+                  <UL><span class="bold_6">- Première immatriculation (source incertaine),</span> opération fournie à titre indicatif lorsque aucune opération telle que « Première immatriculation d'un véhicule neuf » ou « Première immatriculation à l'étranger » n'est associée à la date présente dans le fichier.
 Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militaires qui disposaient d'une immatriculation spéciale) ou à l'absence de la donnée dans les anciens fichiers d'immatriculation (p. ex. certains véhicules anciens).</UL>
                   <UL><span class="bold_6">- Conversion au nouveau format d'immatriculation,</span> changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD. </UL>
                   <UL><span class="bold_6">- Cession (vente du véhicule),</span> véhicule vendu par un particulier ou par un professionnel.</UL>
@@ -283,11 +283,10 @@ export default {
     }
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(response => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
   },
   methods: {
     choose (id) {
-      console.log(this.choice, id)
       if (this.choice === id) {
         this.choice = ''
       } else {

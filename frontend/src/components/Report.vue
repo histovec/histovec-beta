@@ -41,7 +41,7 @@
         <!-- debut vignette -->
         <div class="row">
           <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule " ></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
+            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
           </div>
         </div>
         <!-- fin vignette -->
@@ -179,33 +179,34 @@ export default {
       if (this.result === 'wait') {
         this.result = 'error'
       }
-      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
     }, this.timeout)
 
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(response => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(() => {}, () => {})
     if (this.$store.state.v) {
       this.v = this.$store.state.v
       this.modalActivate = true
       this.result = 'cached'
-      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
     } else {
       if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
         // Cas des liens acheteur sans KEY
         this.result = 'invalidKey'
-        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
         return
       }
       if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         this.result = 'invalid'
-        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
       } else {
         this.$http.get(this.apiUrl + 'id/' + this.$cookie.get('userId') + '/' + (this.holder ? this.$route.params.id : this.$route.query.id))
           .then(response => {
+            /* eslint-disable no-console */
             console.log(response)
             if (response.body.hits.hits.length === 0) {
               this.result = 'notFound'
               this.$store.commit('updateFail', this.$store.state.fail + 1)
-              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
               if ((this.$store.state.fail > 1) && (this.$cookie.get('userId').substring(1, 3) === 'ab')) {
                 let data = {
                   'nom': this.$store.state.nom,
@@ -222,7 +223,7 @@ export default {
                   'date': new Date().toUTCString()
                 }
                 this.$http.post(this.apiUrl + 'feedback/', data)
-                .then(response => {
+                .then(() => {
                   console.log('failure report send')
                 }, () => {
                   console.log('couldn\'t send fail report')
@@ -239,14 +240,14 @@ export default {
             } catch (err) {
               console.log(err)
               this.result = 'error'
-              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
               return
             }
             console.log(veh)
 
             if (veh.annulation_ci !== 'NON') {
               this.result = 'cancelled'
-              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
               return
             } else {
               this.result = 'error'
@@ -262,7 +263,7 @@ export default {
             } catch (err) {
               console.log(err)
             }
-            this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+            this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
           }, (error) => {
             this.result = 'error'
             if (error.status === 404) {
@@ -274,7 +275,7 @@ export default {
             if (error.status === 502) {
               this.result = 'unavailable'
             }
-            this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(response => {}, () => {})
+            this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
           }
         )
       }
