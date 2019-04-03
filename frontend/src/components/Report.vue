@@ -1,109 +1,212 @@
 <template>
-<section id="result">
-  <!-- breadcrumb start -->
-  <div class="breadcrumb-container">
-    <div class="container">
-      <ol class="breadcrumb">
-        <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
-        <li class="active">Résultats</li>
-      </ol>
-    </div>
-  </div>
-  <!-- breadcrumb end -->
-  <!-- section -->
-<section class="main-container">
-  <div class="container">
-    <div class="row">
-      <!-- section start -->
-      <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%">
-        <div class="container">
-          <div class="row justify-content-lg-center">
-            <div class="col-lg-12">
-              <h2 class="text-center mt-4">
-                <div v-if="holder"><span class="bold_6">Rassurez</span> vos acheteurs potentiels</div>
-                <div v-else><span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
-              </h2>
-              <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- section end -->
-    </div>
-  </div>
-</section>
-<!-- section -->
-
-  <!-- main-container start -->
-  <div class="container" v-if="(this.result === 'ok') || (this.result === 'cached')">
-    <div class="row">
-      <div class="col-lg-12 mb-20">
-        <!-- debut vignette -->
-        <div class="row">
-          <div class="col-sm-5">
-            <div class="alert alert-icon alert-info" role="alert"> <i v-bind:class="'fa fa-' + v.logo_vehicule"></i> Numéro - Plaque d'immatriculation : {{ v.plaque }}</div>
-          </div>
-        </div>
-        <!-- fin vignette -->
-        <!-- debut trait séparation -->
-        <div class="separator-2"></div>
-        <!-- fin trait séparation -->
-        <!-- debut nouvelle info -->
-        <!-- Tabs start -->
-        <div class="vertical">
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs" role="tablist">
-            <li :class="[{'active' : tab === 'abstract'}]"><a class="clickable" @click="tab = 'abstract'"><i class="fa fa-refresh pr-10"></i> Synthèse</a></li>
-            <li :class="[{'active' : tab === 'vehicle'}]"><a class="clickable" @click="tab = 'vehicle'"><i v-bind:class="'fa fa-' + v.logo_vehicule + ' pr-10'" ></i>Véhicule</a></li>
-            <li :class="[{'active' : tab === 'holder'}]"><a class="clickable" @click="tab = 'holder'"><i class="fa fa-address-card pr-10"></i>Titulaire & Titre</a></li>
-            <li :class="[{'active' : tab === 'situation'}]"><a class="clickable" @click="tab = 'situation'"><i class="fa fa-clipboard pr-10"></i> Situation administrative</a></li>
-            <li :class="[{'active' : tab === 'history'}]"><a class="clickable" @click="tab = 'history'"><i class="fa fa-calculator pr-10"></i> Historique des opérations </a></li>
-            <li :class="[{'active' : tab === 'send'}]" v-if="holder"><a class="clickable" @click="tab = 'send'"><i class="fa fa-send pr-10"></i> Transmettre le rapport</a></li>
-          </ul>
-          <!-- Tab panes -->
-          <div class="tab-content">
-            <!-- /* ----------------- synthese ----------------- */ -->
-            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'abstract'}]">
-              <abstract :v="v" :holder="holder" :display="display"></abstract>
-            </div>
-            <!-- /* ----------------- vehicule ----------------- */ -->
-            <div class="tab-pane fade pr-20" :class="[{'in active' : display['all_tabs'] || tab === 'vehicle'}]">
-              <tech-chars :v="v"></tech-chars>
-            </div>
-            <!-- /* ----------------- titre ----------------- */ -->
-            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'holder'}]">
-              <license :v="v"></license>
-            </div>
-            <!-- situation administrative -->
-            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'situation'}]">
-              <administrative :v="v" :holder="holder" :display="display"></administrative>
-            </div>
-            <!-- historique des opérations -->
-            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'history'}]">
-              <history :v="v"></history>
-            </div>
-            <div class="tab-pane fade" :class="[{'in active' : display['all_tabs'] || tab === 'send'}]" v-if="holder">
-              <share :v="v" :url="url" :baseurl="baseurl" :holder="holder" :display="display"></share>
-            </div>
-
-          </div>
-        </div>
-        <!-- tabs end -->
-        <!-- debut trait de séparation -->
-        <hr class="style1">
-        <!-- fin trait de séparation -->
+  <section id="result">
+    <div class="breadcrumb-container">
+      <div class="container">
+        <ol class="breadcrumb">
+          <li>
+            <i class="fa fa-home pr-10"></i><a href="home">Accueil</a>
+          </li>
+          <li class="active">
+            Résultats
+          </li>
+        </ol>
       </div>
     </div>
-    <!-- row -->
-  </div>
-  <!-- container -->
 
-  <status :status="result"></status>
+    <section class="main-container">
+      <div class="container">
+        <div class="row">
+          <!-- section start -->
+          <section
+            class="dark-translucent-bg"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+          >
+            <div class="container">
+              <div class="row justify-content-lg-center">
+                <div class="col-lg-12">
+                  <h2 class="text-center mt-4">
+                    <div v-if="holder">
+                      <span class="bold_6">Rassurez</span> vos acheteurs potentiels
+                    </div>
+                    <div v-else>
+                      <span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span>
+                    </div>
+                  </h2>
+                  <div class="separator with-icon">
+                    <i class="fa fa-car bordered"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- section end -->
+        </div>
+      </div>
+    </section>
 
-  <!-- debut modal -->
-  <modal-rating :activate="modalActivate" :holder="holder"></modal-rating>
-  <!-- fin modal -->
-</section>
+    <div 
+      v-if="(result === 'ok') || (result === 'cached')"
+      class="container"
+    >
+      <div class="row">
+        <div class="col-lg-12 mb-20">
+          <!-- debut vignette -->
+          <div class="row">
+            <div class="col-sm-5">
+              <div 
+                class="alert alert-icon alert-info" 
+                role="alert"
+              >
+                <i :class="'fa fa-' + v.logo_vehicule"></i>
+                Numéro - Plaque d'immatriculation : {{ v.plaque }}
+              </div>
+            </div>
+          </div>
+          <!-- fin vignette -->
+          <!-- debut trait séparation -->
+          <div class="separator-2"></div>
+          <!-- fin trait séparation -->
+          <!-- debut nouvelle info -->
+          <!-- Tabs start -->
+          <div class="vertical">
+            <!-- Nav tabs -->
+            <ul 
+              class="nav nav-tabs" 
+              role="tablist"
+            >
+              <li :class="[{'active' : tab === 'abstract'}]">
+                <a 
+                  class="clickable"
+                  @click="tab = 'abstract'"
+                >
+                  <i class="fa fa-refresh pr-10"></i>
+                  Synthèse
+                </a>
+              </li>
+              <li :class="[{'active' : tab === 'vehicle'}]">
+                <a 
+                  class="clickable"
+                  @click="tab = 'vehicle'"
+                >
+                  <i :class="'fa fa-' + v.logo_vehicule + ' pr-10'"></i>
+                  Véhicule
+                </a>
+              </li>
+              <li :class="[{'active' : tab === 'holder'}]">
+                <a
+                  class="clickable"
+                  @click="tab = 'holder'"
+                >
+                  <i class="fa fa-address-card pr-10"></i>
+                  Titulaire &amp; Titre
+                </a>
+              </li>
+              <li :class="[{'active' : tab === 'situation'}]">
+                <a 
+                  class="clickable"
+                  @click="tab = 'situation'"
+                >
+                  <i class="fa fa-clipboard pr-10"></i>
+                  Situation administrative
+                </a>
+              </li>
+              <li :class="[{'active' : tab === 'history'}]">
+                <a
+                  class="clickable"
+                  @click="tab = 'history'"
+                >
+                  <i class="fa fa-calculator pr-10"></i>
+                  Historique des opérations
+                </a>
+              </li>
+              <li
+                v-if="holder"
+                :class="[{'active' : tab === 'send'}]"
+              >
+                <a
+                  class="clickable"
+                  @click="tab = 'send'"
+                >
+                  <i class="fa fa-send pr-10"></i>
+                  Transmettre le rapport
+                </a>
+              </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <!-- /* ----------------- synthese ----------------- */ -->
+              <div
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'abstract'}]"
+              >
+                <abstract 
+                  :v="v"
+                  :holder="holder"
+                >
+                </abstract>
+              </div>
+              <!-- /* ----------------- vehicule ----------------- */ -->
+              <div
+                class="tab-pane fade pr-20"
+                :class="[{'in active' : display['all_tabs'] || tab === 'vehicle'}]"
+              >
+                <tech-chars :v="v"></tech-chars>
+              </div>
+              <!-- /* ----------------- titre ----------------- */ -->
+              <div
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'holder'}]"
+              >
+                <license :v="v"></license>
+              </div>
+              <!-- situation administrative -->
+              <div
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'situation'}]"
+              >
+                <administrative
+                  :v="v"
+                  :holder="holder"
+                >
+                </administrative>
+              </div>
+              <!-- historique des opérations -->
+              <div 
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'history'}]"
+              >
+                <history :v="v"></history>
+              </div>
+              <div
+                v-if="holder"
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'send'}]" 
+              >
+                <share
+                  :v="v"
+                  :url="url"
+                  :baseurl="baseurl"
+                  :holder="holder"
+                >
+                </share>
+              </div>
+            </div>
+          </div>
+          <!-- tabs end -->
+          <!-- debut trait de séparation -->
+          <hr class="style1">
+          <!-- fin trait de séparation -->
+        </div>
+      </div>
+      <!-- row -->
+    </div>
+    <status :status="result"></status>
+    <modal-rating
+      :activate="modalActivate"
+      :holder="holder"
+    >
+    </modal-rating>
+  </section>
 </template>
 
 <script>
@@ -132,11 +235,6 @@ export default {
   data () {
     return {
       tab: 'abstract',
-      display: {
-        all_tabs: false,
-        pdf: true,
-        date_update: true
-      },
       default: 'non disponible',
       plaque: '',
       vin: '',
