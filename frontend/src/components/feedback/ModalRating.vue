@@ -156,7 +156,7 @@ export default {
       message: '',
       email: '',
       note: null,
-      timerModalEval: 1200
+      timerModalEval: 120000
     }
   },
   watch: {
