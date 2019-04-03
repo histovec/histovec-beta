@@ -1,10 +1,23 @@
 <template>
-  <div class="container" v-if="(status !== 'ok') && (status !== 'cached')">
+  <div 
+    v-if="(status !== 'ok') && (status !== 'cached')"
+    class="container"
+  >
     <div class="row">
       <div class="col-lg-12">
-        <div :class="alertClass" role="alert"> <i :class="icon"></i>  {{message}} 
-          <router-link v-if="refDisplay" class="clickable alert-danger" :to="{ name: ref, hash:'#i'}">
-            <em>{{refMessage}}</em> <b :class="refIcon"></b>
+        <div
+          :class="alertClass"
+          role="alert"
+        >
+          <i :class="icon"></i>
+          {{ message }} 
+          <router-link
+            v-if="refDisplay"
+            class="clickable alert-danger"
+            :to="{ name: ref, hash:'#i'}"
+          >
+            <em>{{ refMessage }}</em>
+            <b :class="refIcon"></b>
           </router-link>
         </div>
       </div>
@@ -12,11 +25,13 @@
   </div>
 </template>
 
-
 <script>
 export default {
   props: {
-    status: String
+    status: {
+      type: String,
+      default: 'unknown'
+    }
   },
   computed: {
     message () {
