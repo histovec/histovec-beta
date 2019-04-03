@@ -1,25 +1,31 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+
+import Home from '@/components/Home'
+import Search from '@/components/Search'
+import Report from '@/components/Report'
+import Faq from '@/components/infos/Faq'
+import Legal from '@/components/infos/Legal'
+import Contact from '@/components/feedback/Contact'
+import Feedback from '@/components/feedback/Feedback'
+import Buyer from '@/components/infos/Buyer'
+import NotFound from '@/components/infos/NotFound'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+  // base: process.env.BASE_URL, // TODO: Use this
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
+    { name: 'root', path: '/histovec/', redirect: { name: 'home' }, meta: { title: 'Histovec - Accueil' } },
+    { name: 'home', path: '/histovec/home', component: Home, meta: { title: 'Histovec - Accueil' } },
+    { name: 'search', path: '/histovec/search', component: Search, meta: { title: 'Histovec - Recherche' } },
+    { name: 'report', path: '/histovec/report', component: Report, meta: { title: 'Histovec - Rapport' } },
+    { name: 'faq', path: '/histovec/faq', component: Faq, meta: { title: 'Histovec - FAQ' } },
+    { name: 'legal', path: '/histovec/legal', component: Legal, meta: { title: 'Histovec - Mentions Légales' } },
+    { name: 'contact', path: '/histovec/contact', component: Contact, meta: { title: 'Histovec - Contact' } },
+    { name: 'feedback', path: '/histovec/feedback', component: Feedback, meta: { title: 'Histovec - Signaler un erreur' } },
+    { name: 'buyer', path: '/histovec/buyer', component: Buyer, meta: { title: 'Histovec - Acheteur' } },
+    { name: 'notfound', path: '/histovec/*', component: NotFound, meta: { title: 'Histovec - Page non trouvée' } }
   ]
 })
