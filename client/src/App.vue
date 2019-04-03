@@ -206,5 +206,3 @@ export default {
   name: 'App'
 }
 </script>
-
-<style lang="scss" src="./assets/scss/style.scss"></style>
