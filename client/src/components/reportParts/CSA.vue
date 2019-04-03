@@ -1,14 +1,19 @@
 <template>
   <div>
     <p class="text-center">
-    L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
-    doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
-    par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
+      L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
+      doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
+      par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
     </p>
     <p class="text-center">
-      <button @click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm" title="CSA"> 
+      <button
+        type="button"
+        class="btn btn-animated btn-default btn-sm"
+        title="CSA"
+        @click="generatePDF"
+      >
         Imprimer le CSA
-        <i class="fa fa-print"></i> 
+        <i class="fa fa-print"></i>
       </button>
     </p>
   </div>
@@ -21,9 +26,18 @@ import Qr from 'qr.js'
 
 export default {
   props: {
-    v: Object,
-    url: String,
-    baseurl: String
+    v: {
+      type: Object,
+      default: () => {}
+    },
+    url: {
+      type: String,
+      default: ''
+    },
+    baseurl: {
+      type: String,
+      default: ''
+    }
   },
   methods: {
     pad (n, width, z) {
@@ -236,10 +250,10 @@ export default {
             pdf.setFontSize(p.situation1.title.size)
             pdf.text(p.situation1.pos[0], p.situation1.pos[1], 'Situation administrative du véhicule')
             let data = [
-                {key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)', value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : 'Oui'},
-                {key: '- Procédure de réparation contrôlée', value: self.v.administratif.ove},
-                {key: '- Déclaration valant saisie', value: self.v.administratif.saisie},
-                {key: '- Gage', value: self.v.administratif.gage}
+              { key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)', value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : 'Oui' },
+              { key: '- Procédure de réparation contrôlée', value: self.v.administratif.ove },
+              { key: '- Déclaration valant saisie', value: self.v.administratif.saisie },
+              { key: '- Gage', value: self.v.administratif.gage }
             ]
             let offset = p.situation1.inter
             data.forEach(d => {
@@ -260,12 +274,12 @@ export default {
             }
             p.situation2.pos[1] = p.situation2.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
             let data = [
-                {key: '- Immatriculation suspendue', value: self.v.administratif.suspension},
-                {key: '- Immatriculation annulée', value: self.v.administratif.annulation},
-                {key: '- Véhicule volé', value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui'},
-                {key: '- Certificat d\'immatriculation volé', value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui'},
-                {key: '- Certificat d\'immatriculation perdu', value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'},
-                {key: '- Certificat d\'immatriculation duplicata', value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui'}
+              { key: '- Immatriculation suspendue', value: self.v.administratif.suspension },
+              { key: '- Immatriculation annulée', value: self.v.administratif.annulation },
+              { key: '- Véhicule volé', value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui' },
+              { key: '- Certificat d\'immatriculation volé', value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui' },
+              { key: '- Certificat d\'immatriculation perdu', value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui' },
+              { key: '- Certificat d\'immatriculation duplicata', value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui' }
             ]
             let offset = p.situation2.inter
             data.forEach(d => {

@@ -16,11 +16,11 @@ function decrypt (key, encrypted) {
     ciphertext: CryptoJS.enc.Base64.parse(encrypted),
     salt: ''
   },
-    key, {
-      iv: iv,
-      padding: CryptoJS.pad.Pkcs7,
-      mode: CryptoJS.mode.CBC
-    })
+  key, {
+    iv: iv,
+    padding: CryptoJS.pad.Pkcs7,
+    mode: CryptoJS.mode.CBC
+  })
   return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
 }
 
@@ -211,7 +211,7 @@ function histoFilter (historique) {
   let h = historique.filter(event => operations[event.opa_type] !== undefined)
   h = $lodash.orderBy(h, ['opa_date'], ['desc'])
   return h.map(event => {
-    return {'date': formatDate(event.opa_date), 'nature': operations[event.opa_type]}
+    return { 'date': formatDate(event.opa_date), 'nature': operations[event.opa_type] }
   })
 }
 
@@ -283,11 +283,11 @@ function histovec (veh) {
   v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
   v.certificat.courant = veh.date_emission_CI || missing
   // v.certificat.depuis = (calcCertifDepuis($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0].opa_date) || calcCertifDepuis(veh.date_premiere_immat))
-  v.certificat.depuis = calcCertifDepuis(($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
+  v.certificat.depuis = calcCertifDepuis(($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || { 'opa_date': veh.date_premiere_immat }).opa_date)
 
   if ((v.fni !== true) && (v.certificat.fr !== v.certificat.siv) && ((veh.historique === undefined) || (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
     let tmp = veh.historique
-    tmp.push({opa_date: v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
+    tmp.push({ opa_date: v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI' })
     v.historique = (veh.historique !== undefined) ? histoFilter(tmp) : []
   } else {
     v.historique = (veh.historique !== undefined) ? histoFilter(veh.historique) : []
