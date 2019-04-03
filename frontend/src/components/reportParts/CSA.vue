@@ -1,12 +1,17 @@
 <template>
   <div>
     <p class="text-center">
-    L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
-    doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
-    par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
+      L'article R.322-4 du code de la route, précise que la remise du certificat d'immatriculation
+      doit être accompagnée d'un certificat de situation administrative détaillé (CSA), établi depuis moins de quinze jours
+      par le ministre de l'intérieur, attestant à sa date d'édition de la situation administrative du véhicule.
     </p>
     <p class="text-center">
-      <button @click="generatePDF" type="button" class="btn btn-animated btn-default btn-sm" title="CSA"> 
+      <button
+        type="button"
+        class="btn btn-animated btn-default btn-sm"
+        title="CSA"
+        @click="generatePDF"
+      > 
         Imprimer le CSA
         <i class="fa fa-print"></i> 
       </button>
@@ -21,9 +26,18 @@ import Qr from 'qr.js'
 
 export default {
   props: {
-    v: Object,
-    url: String,
-    baseurl: String
+    v: {
+      type: Object,
+      default: () => {}
+    },
+    url: {
+      type: String,
+      default: ''
+    },
+    baseurl: {
+      type: String,
+      default: ''
+    }
   },
   methods: {
     pad (n, width, z) {
