@@ -4,8 +4,13 @@
     <div class="breadcrumb-container">
       <div class="container">
         <ol class="breadcrumb">
-          <li><i class="fa fa-home pr-10"></i><a href="home">Accueil</a></li>
-          <li class="active">Mentions légales</li>
+          <li>
+            <i class="fa fa-home pr-10"></i>
+            <a href="home">Accueil</a>
+          </li>
+          <li class="active">
+            Mentions légales
+          </li>
         </ol>
       </div>
     </div>
@@ -15,15 +20,21 @@
       <div class="container">
         <div class="row">
           <!-- section start -->
-          <section class="dark-translucent-bg" style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%">
+          <section
+            class="dark-translucent-bg"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+          >
             <div class="container">
               <div class="row justify-content-lg-center">
                 <div class="col-lg-12">
                   <h2 class="text-center mt-4">
                     <div>
-                      <span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span></div>
+                      <span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span>
+                    </div>
                   </h2>
-                  <div class="separator with-icon"><i class="fa fa-car bordered"></i></div>
+                  <div class="separator with-icon">
+                    <i class="fa fa-car bordered"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -40,7 +51,9 @@
           <!-- main start -->
           <div class="main col-md-12">
             <!-- page-title start -->
-            <h3 class="title"><span class="text-defaut">M</span>entions légales</h3>
+            <h3 class="title">
+              <span class="text-defaut">M</span>entions légales
+            </h3>
             <div class="separator-2"></div>
             <!-- page-title end -->
           </div>
@@ -54,14 +67,15 @@
                 <p>Emmanuel Barbe, délégué interministériel à la Sécurité routière </p>
                 <h5>Crédits</h5>
                 <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site HistoVec.interieur.gouv.fr.</p>
-                <p>Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. 
+                <p>
+                  Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. 
                   En application du code de la propriété intellectuelle, toute reproduction ou représentation 
                   partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des 
                   titulaires de droits. Pour toute demande de reproduction, 
                   <a :href="'mailto:histovec@interieur.gouv.fr?subject=Demande%20de%20reproduction'">contactez-nous</a>
                 </p>
                 <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com">picjumbo.com</a> et libres de droits.</p>
-            <h5>Conception et réalisation</h5>
+                <h5>Conception et réalisation</h5>
                 Conception et réalisation Lab <a href="https://www.interieur.gouv.fr/Le-ministere/Secretariat-general/Direction-des-systemes-d-information-et-de-communication">DSIC</a> du ministère de l'Intérieur avec le Bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (<a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/qui-sommes-nous/la-delegation-a-la-securite-routiere">DSR</a>)
 
                 <h6> Liens hypertextes entrants </h6>
@@ -104,16 +118,19 @@
                 Le responsable de traitement est, comme pour le SIV, la délégation à la sécurité routière (DSR).
                 <h6>Finalité du traitement</h6>
                 La finalité du traitement des données personnelles est exclusivement de fournir l’historique du véhicule.
-                <br/>N.B. : HistoVec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV). Ces données sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
-                <br/>Le service HistoVec est en version bêta, et suit une démarche d'amélioration continue.
-                <br/>Les données sont extraites du SIV et publiées chaque début de semaine (et bientôt chaque jour).
+                <br />
+                N.B. : HistoVec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV). Ces données sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
+                <br />
+                Le service HistoVec est en version bêta, et suit une démarche d'amélioration continue.
+                <br />
+                Les données sont extraites du SIV et publiées chaque début de semaine (et bientôt chaque jour).
                 <h6>Données personnelles utilisées</h6>
                 Les données utitlisées par HistoVec lors de la demande du rapport visent à authentifier le titulaire du véhicule en faisant preuve qu’elle dispose de la carte grise du véhicule. Elles ne font l'objet d'aucune collecte.
-      
-                <br/>Pour un particulier :
+                <br />
+                Pour un particulier :
                 <ul>
                   <li>nom (tel que figurant sur le certificat d’immatriculation)</li>
-                  <li>prénom (idem) </li>
+                  <li>prénom (idem)</li>
                   <li>date de naissance (non présent sur le certificat d’immatriculation)</li>
                 </ul>
                 Pour un professionnel, les données d’identification sont :
@@ -138,21 +155,80 @@
                 </ul>
                 <!-- accordion start -->
                 <!-- ================ -->
-                <div class="panel-group collapse-style-2" id="accordion-2">
+                <div 
+                  id="accordion-2"
+                  class="panel-group collapse-style-2" 
+                >
                   <!-- debut textes de reference -->
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <h4 class="panel-title"> <a @click="choose('a')" class="clickable" :class="[{'collapsed' : choice !== 'a' }]"> <i class="fa fa-file-text-o pr-10"></i>Textes de référence </a> </h4>
+                      <h4 class="panel-title">
+                        <a 
+                          class="clickable"
+                          :class="[{'collapsed' : choice !== 'a' }]"
+                          @click="choose('a')"
+                        >
+                          <i class="fa fa-file-text-o pr-10"></i>
+                          Textes de référence
+                        </a>
+                      </h4>
                     </div>
-                    <div class="panel-collapse collapse" :class="[{'in' : choice === 'a'}]">
+                    <div 
+                      class="panel-collapse collapse"
+                      :class="[{'in' : choice === 'a'}]"
+                    >
                       <div class="panel-body">
                         <ul class="list">
-                          <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.legifrance.gouv.fr/affichCode.do;?idSectionTA=LEGISCTA000032227144&cidTexte=LEGITEXT000006069565" class="no-color" target="_blank">Code de la consommation : articles L131-1 à L131-4<br>
-                            <span class="txt-small-11 p-d-15">Obligation générale d'information précontractuelle</span></a></li>
-                          <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.legifrance.gouv.fr/affichCode.do?idSectionTA=LEGISCTA000032807114&cidTexte=LEGITEXT000006069565" class="no-color" target="_blank">Code de la consommation : article R111-1<br>
-                            <span class="txt-small-11 p-d-15">Obligation générale d'information précontractuelle</span></a></li>
-                          <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000024042423&cidTexte=LEGITEXT000005789847" class="no-color" target="_blank">Loi n°2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique : articles 19 et 20</a></li>
-                          <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000023711900&cidTexte=LEGITEXT000005789847" class="no-color" target="_blank">Loi n°2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique : article 6</a></li>
+                          <li class="retr_pl_sit p-d-40">
+                            <i class="fa fa-check-square-o color-info"></i> 
+                            <a
+                              href="https://www.legifrance.gouv.fr/affichCode.do;?idSectionTA=LEGISCTA000032227144&cidTexte=LEGITEXT000006069565"
+                              class="no-color"
+                              target="_blank"
+                            >
+                              Code de la consommation : articles L131-1 à L131-4
+                              <br />
+                              <span class="txt-small-11 p-d-15">
+                                Obligation générale d'information précontractuelle
+                              </span>
+                            </a>
+                          </li>
+                          <li class="retr_pl_sit p-d-40">
+                            <i class="fa fa-check-square-o color-info"></i>
+                            <a
+                              href="https://www.legifrance.gouv.fr/affichCode.do?idSectionTA=LEGISCTA000032807114&cidTexte=LEGITEXT000006069565"
+                              class="no-color"
+                              target="_blank"
+                            >
+                              Code de la consommation : article R111-1
+                              <br />
+                              <span class="txt-small-11 p-d-15">
+                                Obligation générale d'information précontractuelle
+                              </span>
+                            </a>
+                          </li>
+                          <li class="retr_pl_sit p-d-40">
+                            <i class="fa fa-check-square-o color-info"></i> 
+                            <a
+                              href="https://www.legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000024042423&cidTexte=LEGITEXT000005789847"
+                              class="no-color"
+                              target="_blank"
+                            >
+                              Loi n°2004-575 du 21 juin 2004 pour la confiance dans
+                              l'économie numérique : articles 19 et 20
+                            </a>
+                          </li>
+                          <li class="retr_pl_sit p-d-40">
+                            <i class="fa fa-check-square-o color-info"></i>
+                            <a 
+                              href="https://www.legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000023711900&cidTexte=LEGITEXT000005789847"
+                              class="no-color"
+                              target="_blank"
+                            >
+                              Loi n°2004-575 du 21 juin 2004 pour la confiance dans
+                              l'économie numérique : article 6
+                            </a>
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -161,13 +237,37 @@
                   <!-- debut pour en savoir plus -->
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <h4 class="panel-title"> <a @click="choose('b')" class="clickable" :class="[{'collapsed' : choice !== 'b' }]"> <i class="fa fa-file-text-o pr-10"></i>Pour en savoir plus </a> </h4>
+                      <h4 class="panel-title">
+                        <a 
+                          class="clickable"
+                          :class="[{'collapsed' : choice !== 'b' }]"
+                          @click="choose('b')"
+                        >
+                          <i class="fa fa-file-text-o pr-10"></i>
+                          Pour en savoir plus 
+                        </a>
+                      </h4>
                     </div>
-                    <div class="panel-collapse collapse" :class="[{'in' : choice === 'b'}]">
+                    <div 
+                      class="panel-collapse collapse"
+                      :class="[{'in' : choice === 'b'}]"
+                    >
                       <div class="panel-body">
                         <ul class="list">
-                          <li class="retr_pl_sit p-d-40"><i class="fa fa-check-square-o color-info"></i> <a href="https://www.cnil.fr/fr/site-web-cookies-et-autres-traceurs" class="no-color" target="_blank">Obligations en cas d'utilisation de cookies et autres traceurs<br>
-                            <span class="txt-small-11 p-d-15">Commission nationale de l'informatique et des libertés (Cnil)</span></a></li>
+                          <li class="retr_pl_sit p-d-40">
+                            <i class="fa fa-check-square-o color-info"></i>
+                            <a 
+                              href="https://www.cnil.fr/fr/site-web-cookies-et-autres-traceurs" 
+                              class="no-color" 
+                              target="_blank"
+                            >
+                              Obligations en cas d'utilisation de cookies et autres traceurs
+                              <br />
+                              <span class="txt-small-11 p-d-15">
+                                Commission nationale de l'informatique et des libertés (Cnil)
+                              </span>
+                            </a>
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -202,6 +302,7 @@
     </section>
   </div>
 </template>
+
 <script>
 export default {
   data () {

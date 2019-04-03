@@ -6,38 +6,90 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" @click="show = false">
+                <button
+                  type="button"
+                  class="close"
+                  @click="show = false"
+                >
                   <span aria-hidden="true">&times;</span>
                   <span class="sr-only">Fermer</span>
                 </button>
-                <h6 class="modal-title">Votre évaluation</h6>
+                <h6 class="modal-title">
+                  Votre évaluation
+                </h6>
               </div>
-              <form @submit="send" id="evaluation-form-with-recaptcha"  role="form">
+              <form 
+                id="evaluation-form-with-recaptcha"
+                role="form"
+                @submit="send"
+              >
                 <div class="modal-body">
-                  <span class="info_red txt-small-11" v-if="status == 'failed' && errors.length == 0">* Veuillez renseigner les champs obligatoires<br/></span>
-                  <label>Comment évaluez-vous HistoVec :  <span class="info_red" title="Ce champ est requis.">*</span></label>
+                  <span
+                    v-if="status == 'failed' && errors.length == 0"
+                    class="info_red txt-small-11"
+                  >
+                    * Veuillez renseigner les champs obligatoires
+                    <br />
+                  </span>
+                  <label>
+                    Comment évaluez-vous HistoVec :  
+                    <span 
+                      class="info_red"
+                      title="Ce champ est requis."
+                    >
+                      *
+                    </span>
+                  </label>
                   <div class="rating position_left p-g-10">
-                    <span v-for="n in ratings" v-bind:key="n" >
-                      <a v-on:click="setNote((ratings.length+1)-n)"
-                         v-on:mouseover="starOver((ratings.length+1)-n)"
-                         v-on:mouseout="starOut"
-                         v-bind:class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
-                         title="Give star"
-                         >
-                         ★
+                    <span
+                      v-for="n in ratings"
+                      :key="n"
+                    >
+                      <a 
+                        :class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
+                        title="Give star"
+                        @click="setNote((ratings.length+1)-n)"
+                        @mouseover="starOver((ratings.length+1)-n)"
+                        @mouseout="starOut"
+                      >
+                        ★
                       </a>
                     </span>
                   </div>
                   <p class="m-h-10">
                     <label>Vos commentaires ou suggestions :</label>
-                    <textarea class="form-control" id="message" name="message" rows="2" v-model="message"></textarea>
+                    <textarea
+                      id="message"
+                      v-model="message"
+                      name="message"
+                      rows="2"
+                      class="form-control"
+                    >
+                    </textarea>
                   </p>
                   <br />
-                  <div class="form-group has-feedback" :class="[{'has-error' : (errors.length > 0 && status !== 'init')}]">
+                  <div
+                    class="form-group has-feedback"
+                    :class="[{'has-error' : (errors.length > 0 && status !== 'init')}]"
+                  >
                     <p>
-                    <label>Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ? <i>(L'adresse email ne servira que dans le cadre de cette étude)</i></label>
-                    <span class="info_red txt-small-11" v-if="errors.length > 0">{{ errors[0] }}</span>
-                    <input class="form-control" id="email" name="email" placeholder="name@example.com" v-model="email">
+                      <label>
+                        Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ? 
+                        <i>(L'adresse email ne servira que dans le cadre de cette étude)</i>
+                      </label>
+                      <span
+                        v-if="errors.length > 0"
+                        class="info_red txt-small-11"
+                      >
+                        {{ errors[0] }}
+                      </span>
+                      <input
+                        id="email"
+                        v-model="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="name@example.com"
+                      >
                     </p>
                   </div>
                 </div>
@@ -45,16 +97,34 @@
                   <div class="row">
                     <div class="col-md-6 m-h-15 position_left">
                       <label>
-                      <input type="checkbox" id="showModal" name="showModal" v-model="notShow">Ne plus afficher</label>
+                        <input
+                          id="showModal"
+                          v-model="notShow"
+                          name="showModal"
+                          type="checkbox"
+                        >
+                        Ne plus afficher
+                      </label>
                     </div>
                     <div class="col-md-6">
-                      <button class="btn btn-animated btn-default m-h-05">Envoyer
-                        <i class="fa" :class="[{'fa-send-o' : (status === 'init')},
-                                           {'fa-spin fa-spinner' : (status === 'posting')},
-                                           {'fa-check' : (status === 'posted')},
-                                           {'fa-exclamation-triangle' : (status === 'failed')}]"></i>
+                      <button class="btn btn-animated btn-default m-h-05">
+                        Envoyer
+                        <i 
+                          class="fa"
+                          :class="[{'fa-send-o' : (status === 'init')},
+                                   {'fa-spin fa-spinner' : (status === 'posting')},
+                                   {'fa-check' : (status === 'posted')},
+                                   {'fa-exclamation-triangle' : (status === 'failed')}]"
+                        >
+                        </i>
                       </button>
-                      <button class="btn btn-animated btn-default" @click="show = false">Fermer <i class="fa fa-close"></i></button>
+                      <button 
+                        class="btn btn-animated btn-default"
+                        @click="show = false"
+                      >
+                        Fermer
+                        <i class="fa fa-close"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -86,9 +156,16 @@ export default {
       message: '',
       email: '',
       note: null,
-      timerModalEval: 120000
+      timerModalEval: 1200
     }
   },
+  watch: {
+    activate (newVal) {
+      if (newVal === true) {
+        this.showModalEval()
+      }
+    }
+  },  
   methods: {
     send (e) {
       this.status = 'posting'
@@ -146,13 +223,6 @@ export default {
           this.show = true
           this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(() => {}, () => {})
         }, this.timerModalEval)
-      }
-    }
-  },
-  watch: {
-    activate (newVal) {
-      if (newVal === true) {
-        this.showModalEval()
       }
     }
   }
