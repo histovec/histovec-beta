@@ -19,3 +19,6 @@ services:
         hard: -1
     volumes:
       - ${BACKEND}/esdata/:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    

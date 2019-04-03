@@ -24,7 +24,7 @@ Vue.config.productionTip = false
 const appName = process.env.VUE_APP_NAME || 'histovec'
 
 window.addEventListener('beforeunload', function () {
-  var apiUrl = apiConf.api.url.replace(appName, process.env.APP).replace(/"/g, '')
+  var apiUrl = apiConf.api.url.replace('<APP>', appName).replace(/"/g, '')
   navigator.sendBeacon(apiUrl + 'log/exit')
 }, false)
 
