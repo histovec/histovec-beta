@@ -1,0 +1,5 @@
+export { default as Buyer } from './Buyer'
+export { default as Faq } from './Faq'
+export { default as Legal } from './Legal'
+export { default as ModalHelper } from './ModalHelper'
+export { default as NotFound } from './NotFound'

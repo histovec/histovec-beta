@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from '@/components/Home'
-import Search from '@/components/Search'
-import Report from '@/components/Report'
-import Faq from '@/components/infos/Faq'
-import Legal from '@/components/infos/Legal'
-import Contact from '@/components/feedback/Contact'
-import Feedback from '@/components/feedback/Feedback'
-import Buyer from '@/components/infos/Buyer'
-import NotFound from '@/components/infos/NotFound'
+import {
+  Home,
+  Search,
+  Report,
+  Faq,
+  Legal,
+  Contact,
+  Feedback,
+  Buyer,
+  NotFound
+} from '@/components'
 
 Vue.use(Router)
 
