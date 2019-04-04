@@ -67,9 +67,9 @@
           <p>Voici les questions les plus fréquemment posées. Si vous ne trouvez pas dans cette liste la réponse à votre interrogation, <a :href="'mailto:histovec@interieur.gouv.fr?subject=Besoin%20d%20aide'">contactez-nous</a></p>
           <!-- accordion start -->
           <!-- ================ -->
-          <div 
+          <div
             id="accordion-2"
-            class="panel-group collapse-style-2" 
+            class="panel-group collapse-style-2"
           >
             <!-- debut question 1 -->
             <div
@@ -124,6 +124,7 @@
                     href="#b"
                     class="clickable"
                     :class="[{'collapsed' : choice !== 'b' }]"
+                    @click="choose('b')"
                   >
                     <i class="fa fa-file-text-o pr-10"></i>
                     Comment retrouver mon rapport HistoVec ultérieurement ?
@@ -351,7 +352,7 @@
                   <UL>Pour les anciens numéros d'immatriculation, veillez à bien saisir vos nom et prénom(s) dans le même ordre que celui qui apparaît sur la carte grise.</UL>
                   <UL>Immatriculation au format SIV (AA-123-AA): où trouver les informations sur votre carte grise.</UL>
                   <UL>
-                    <img 
+                    <img
                       class="img-responsive"
                       src="assets/images/aide_siv.jpg"
                     />
@@ -372,7 +373,7 @@
             </div>
             <!-- fin question 9 -->
             <!-- debut question 10 -->
-            <div 
+            <div
               v-if="false"
               id="j"
               class="panel panel-default"
@@ -407,7 +408,7 @@
             >
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a 
+                  <a
                     href="#k"
                     class="clickable"
                     :class="[{'collapsed' : choice !== 'k' }]"
@@ -418,7 +419,7 @@
                   </a>
                 </h4>
               </div>
-              <div 
+              <div
                 class="panel-collapse collapse"
                 :class="[{'in' : choice === 'k'}]"
               >
@@ -448,7 +449,7 @@
             >
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a 
+                  <a
                     href="#l"
                     class="clickable"
                     :class="[{'collapsed' : choice !== 'l' }]"
@@ -459,7 +460,7 @@
                   </a>
                 </h4>
               </div>
-              <div 
+              <div
                 class="panel-collapse collapse"
                 :class="[{'in' : choice === 'l'}]"
               >
@@ -474,13 +475,13 @@
                 </div>
               </div>
             </div>
-            <div 
+            <div
               id="z"
               class="panel panel-default"
             >
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a 
+                  <a
                     href="#z"
                     class="clickable"
                     :class="[{'collapsed' : choice !== 'z' }]"
@@ -491,7 +492,7 @@
                   </a>
                 </h4>
               </div>
-              <div 
+              <div
                 class="panel-collapse collapse"
                 :class="[{'in' : choice === 'z'}]"
               >
@@ -522,7 +523,7 @@ export default {
       var text = encodeURI('Bonjour,\n\nL\'équipe HistoVec vous remercie d\'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n Histovec n\'est pas supporté par des navigateurs trop anciens, nous vous conseillons l\'utilisation de versions récentes de Firefox ou chrome.\n\nPour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l\'historique de votre véhicule.\n\nPour un particulier \nNom (de naissance): \nPrénom(s): \nDate de naissance (du titulaire): \nNuméro d\'immatriculation: \nNuméro de formule: \nou\nDate du certificat (FNI avant 2009):\n\nPour une entreprise\nRaison sociale: \nNuméro de siren: \nNuméro d\'immatriculation: \nNuméro de formule:\nou\nDate du certificat (FNI avant 2009):\n\n\nNous pourrons ainsi vous répondre rapidement')
       return text
     }
-  },  
+  },
   created () {
     this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
   },
