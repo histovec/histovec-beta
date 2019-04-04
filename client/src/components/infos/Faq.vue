@@ -124,6 +124,7 @@
                     href="#b"
                     class="clickable"
                     :class="[{'collapsed' : choice !== 'b' }]"
+                    @click="choose('b')"
                   >
                     <i class="fa fa-file-text-o pr-10"></i>
                     Comment retrouver mon rapport HistoVec ultérieurement ?
