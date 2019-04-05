@@ -338,13 +338,13 @@ import HomeBanner from '@/components/HomeBanner'
 
 export default {
   components: {
-    HomeBanner
+    HomeBanner,
   },
   data () {
     return {
       modal: false,
       i: 0,
-      verbatim: true
+      verbatim: true,
     }
   },
   created () {
@@ -356,6 +356,6 @@ export default {
         this.verbatim = true
       }, 800)
     }, 5000)
-  }
+  },
 }
 </script>

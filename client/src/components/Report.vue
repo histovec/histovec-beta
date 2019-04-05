@@ -19,7 +19,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -230,7 +230,7 @@ export default {
     History,
     Share,
     Status,
-    ModalRating
+    ModalRating,
   },
   data () {
     return {
@@ -247,17 +247,17 @@ export default {
           puissance: {},
           places: {},
           carrosserie: {},
-          PT: {}
+          PT: {},
         },
         titulaire: {},
         certificat: {},
         administratif: {
           synthese: [],
-          titre: {}
-        }
+          titre: {},
+        },
       },
       modalActivate: false,
-      timeout: 10000
+      timeout: 10000,
     }
   },
   computed: {
@@ -270,7 +270,7 @@ export default {
     },
     url () {
       return this.baseurl + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
-    }
+    },
   },
   created () {
     setTimeout(() => {
@@ -318,7 +318,7 @@ export default {
                   'fail': this.$store.state.fail,
                   'success': this.$store.state.success,
                   'uid': this.$cookie.get('userId'),
-                  'date': new Date().toUTCString()
+                  'date': new Date().toUTCString(),
                 }
                 this.$http.post(this.apiUrl + 'feedback/', data)
                   .then(() => {
@@ -378,7 +378,7 @@ export default {
           )
       }
     }
-  }
+  },
 }
 </script>
 

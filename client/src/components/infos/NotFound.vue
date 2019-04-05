@@ -21,7 +21,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -80,6 +80,6 @@
 export default {
   created () {
     this.$http.put(this.apiUrl + 'log/404/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
-  }
+  },
 }
 </script>

@@ -30,8 +30,8 @@ export default {
   props: {
     status: {
       type: String,
-      default: 'unknown'
-    }
+      default: 'unknown',
+    },
   },
   computed: {
     message () {
@@ -54,7 +54,7 @@ export default {
     },
     refIcon () {
       return this.messages[this.status] ? (this.messages[this.status].ref ? this.messages[this.status].ref.icon : this.messages.default.ref.icon) : this.messages.default.ref.icon
-    }
-  }
+    },
+  },
 }
 </script>

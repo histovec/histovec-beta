@@ -12,10 +12,15 @@ module.exports = {
     proxy: {
       '/histovec/api': {
         pathRewrite: {
-          '^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$': '/siv/_search?q="$1"&size=1&terminate_after=1'
+          '^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$': '/siv/_search?q="$1"&size=1&terminate_after=1',
         },
-        target: VUE_APP_URL_API || 'http://localhost:9200'
-      }
-    }
-  }
+        target: VUE_APP_URL_API || 'http://localhost:9200',
+      },
+    },
+  },
+
+  pluginOptions: {
+    lintStyleOnBuild: false,
+    stylelint: {},
+  },
 }

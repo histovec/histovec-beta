@@ -142,7 +142,7 @@
 export default {
   props: {
     activate: Boolean,
-    holder: Boolean
+    holder: Boolean,
   },
   data () {
     return {
@@ -156,7 +156,7 @@ export default {
       message: '',
       email: '',
       note: null,
-      timerModalEval: 1200
+      timerModalEval: 1200,
     }
   },
   watch: {
@@ -164,7 +164,7 @@ export default {
       if (newVal === true) {
         this.showModalEval()
       }
-    }
+    },
   },
   methods: {
     send (e) {
@@ -224,8 +224,8 @@ export default {
           this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(() => {}, () => {})
         }, this.timerModalEval)
       }
-    }
-  }
+    },
+  },
 }
 
 </script>

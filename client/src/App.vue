@@ -179,8 +179,8 @@ Vue.mixin({
         beta: false,
         all_tabs: false,
         pdf: true,
-        date_update: true
-      }
+        date_update: true,
+      },
     }
   },
   created () {
@@ -198,11 +198,11 @@ Vue.mixin({
     },
     s4 () {
       return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-    }
-  }
+    },
+  },
 })
 
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>

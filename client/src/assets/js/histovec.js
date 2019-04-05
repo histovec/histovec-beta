@@ -14,12 +14,12 @@ function decrypt (key, encrypted) {
   encrypted = btoa(rawData.substring(16))
   var decrypted = CryptoJS.AES.decrypt({
     ciphertext: CryptoJS.enc.Base64.parse(encrypted),
-    salt: ''
+    salt: '',
   },
   key, {
     iv: iv,
     padding: CryptoJS.pad.Pkcs7,
-    mode: CryptoJS.mode.CBC
+    mode: CryptoJS.mode.CBC,
   })
   return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
 }
@@ -37,7 +37,7 @@ function formatDate (isoDate) {
 
   return [(dd > 9 ? '' : '0') + dd,
     (mm > 9 ? '' : '0') + mm,
-    date.getFullYear()
+    date.getFullYear(),
   ].join('/')
 }
 
@@ -229,14 +229,14 @@ function histovec (veh) {
       puissance: {},
       places: {},
       carrosserie: {},
-      PT: {}
+      PT: {},
     },
     titulaire: {},
     certificat: {},
     administratif: {
       synthese: [],
-      titre: {}
-    }
+      titre: {},
+    },
   }
   // filtre l'historique des opérations annulées
   veh.historique = (veh.historique === undefined) ? [] : veh.historique.filter(event => event.ope_date_annul === undefined)

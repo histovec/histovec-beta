@@ -337,10 +337,10 @@ export default {
   props: {
     v: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
-    holder: Boolean
-  }
+    holder: Boolean,
+  },
 }
 
 </script>

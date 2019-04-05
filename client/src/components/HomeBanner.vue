@@ -22,9 +22,9 @@ import homeBannerBgImgUrl from '@/assets/img/accueil_4.jpg'
 export default {
   data () {
     return {
-      homeBannerBgImgUrl
+      homeBannerBgImgUrl,
     }
-  }
+  },
 }
 </script>
 

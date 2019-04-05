@@ -22,7 +22,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -515,14 +515,14 @@
 export default {
   data () {
     return {
-      choice: (window.location.href.split('#')[1] !== undefined) ? window.location.href.split('#')[1] : ''
+      choice: (window.location.href.split('#')[1] !== undefined) ? window.location.href.split('#')[1] : '',
     }
   },
   computed: {
     mailBody () {
       var text = encodeURI('Bonjour,\n\nL\'équipe HistoVec vous remercie d\'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n Histovec n\'est pas supporté par des navigateurs trop anciens, nous vous conseillons l\'utilisation de versions récentes de Firefox ou chrome.\n\nPour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l\'historique de votre véhicule.\n\nPour un particulier \nNom (de naissance): \nPrénom(s): \nDate de naissance (du titulaire): \nNuméro d\'immatriculation: \nNuméro de formule: \nou\nDate du certificat (FNI avant 2009):\n\nPour une entreprise\nRaison sociale: \nNuméro de siren: \nNuméro d\'immatriculation: \nNuméro de formule:\nou\nDate du certificat (FNI avant 2009):\n\n\nNous pourrons ainsi vous répondre rapidement')
       return text
-    }
+    },
   },
   created () {
     this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
@@ -534,7 +534,7 @@ export default {
       } else {
         this.choice = id
       }
-    }
-  }
+    },
+  },
 }
 </script>

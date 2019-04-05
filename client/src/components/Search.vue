@@ -19,7 +19,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -515,19 +515,19 @@ import ModalHelper from './infos/ModalHelper.vue'
 
 export default {
   components: {
-    ModalHelper
+    ModalHelper,
   },
   directives: {
     focus: {
       inserted: function (el) {
         el.focus()
-      }
-    }
+      },
+    },
   },
   data () {
     return {
       modal: false,
-      status: 'init'
+      status: 'init',
     }
   },
   computed: {
@@ -537,7 +537,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateFniMode', value)
-      }
+      },
     },
     nom: {
       get () {
@@ -545,7 +545,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateNom', value)
-      }
+      },
     },
     prenom: {
       get () {
@@ -553,7 +553,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updatePrenom', value)
-      }
+      },
     },
     dateNaissance: {
       get () {
@@ -561,7 +561,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateDateNaissance', value)
-      }
+      },
     },
     raisonSociale: {
       get () {
@@ -569,7 +569,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateRaisonSociale', value)
-      }
+      },
     },
     siren: {
       get () {
@@ -577,7 +577,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateSiren', value)
-      }
+      },
     },
     plaque: {
       get () {
@@ -585,7 +585,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updatePlaque', value)
-      }
+      },
     },
     formule: {
       get () {
@@ -593,7 +593,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateFormule', value)
-      }
+      },
     },
     typePersonne: {
       get () {
@@ -601,7 +601,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateTypePersonne', value)
-      }
+      },
     },
     typeImmatriculation: {
       get () {
@@ -609,7 +609,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateTypeImmatriculation', value)
-      }
+      },
     },
     dateCertificat: {
       get () {
@@ -617,7 +617,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateDateCertificat', value)
-      }
+      },
     },
     checkDateNaissance () {
       return this.dateNaissance.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
@@ -661,13 +661,13 @@ export default {
     },
     key () {
       return this.hash(this.veh_id)
-    }
+    },
   },
   created () {
     this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
     let myShakeEvent = new Shake({
       threshold: 15,
-      timeout: 1000
+      timeout: 1000,
     })
     myShakeEvent.start()
     window.addEventListener('shake', () => { this.active = true }, false)
@@ -733,8 +733,8 @@ export default {
       } else {
         this.status = 'failed'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div
     class="pv-30 ph-20 feature-box bordered_spec text-center"
-    style="background: white"
+    style="background: white;"
   >
     <div class="row">
       <!-- debut alerte verte -->
@@ -52,7 +52,7 @@
       <div class="row">
         <div
           class="col-md-12"
-          style="fload: none; margin: 0 auto"
+          style="fload: none; margin: 0 auto;"
         >
           <qrcode-vue
             :value="url"
@@ -90,27 +90,27 @@ import moment from 'moment'
 export default {
   components: {
     QrcodeVue,
-    Csa
+    Csa,
   },
   props: {
     v: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     url: {
       type: String,
-      default: ''
+      default: '',
     },
     baseurl: {
       type: String,
-      default: ''
+      default: '',
     },
-    holder: Boolean
+    holder: Boolean,
   },
   data () {
     return {
       notifSuccess: false,
-      timerNotifSuccess: 2000
+      timerNotifSuccess: 2000,
     }
   },
   computed: {
@@ -120,7 +120,7 @@ export default {
     mailBody () {
       var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
       return text + this.url.replace('&', '%26')
-    }
+    },
   },
   methods: {
     showNotifSuccess () {
@@ -128,8 +128,8 @@ export default {
       setTimeout(() => {
         this.notifSuccess = false
       }, this.timerNotifSuccess)
-    }
-  }
+    },
+  },
 }
 
 </script>

@@ -109,13 +109,13 @@ export default {
     fniMode: Boolean,
     typeImmatriculation: {
       type: String,
-      default: 'siv'
-    }
+      default: 'siv',
+    },
   },
   methods: {
     close () {
       this.$emit('close')
-    }
-  }
+    },
+  },
 }
 </script>

@@ -10,7 +10,7 @@ import {
   Contact,
   Feedback,
   Buyer,
-  NotFound
+  NotFound,
 } from '@/components'
 
 Vue.use(Router)
@@ -23,11 +23,11 @@ export default new Router({
       name: 'root',
       path: '/',
       redirect: {
-        name: 'home'
+        name: 'home',
       },
       meta: {
-        title: 'Histovec - Accueil'
-      }
+        title: 'Histovec - Accueil',
+      },
     },
 
     {
@@ -35,8 +35,8 @@ export default new Router({
       path: '/home',
       component: Home,
       meta: {
-        title: 'Histovec - Accueil'
-      }
+        title: 'Histovec - Accueil',
+      },
     },
 
     {
@@ -44,8 +44,8 @@ export default new Router({
       path: '/search',
       component: Search,
       meta: {
-        title: 'Histovec - Recherche'
-      }
+        title: 'Histovec - Recherche',
+      },
     },
 
     {
@@ -53,8 +53,8 @@ export default new Router({
       path: '/report',
       component: Report,
       meta: {
-        title: 'Histovec - Rapport'
-      }
+        title: 'Histovec - Rapport',
+      },
     },
 
     {
@@ -62,8 +62,8 @@ export default new Router({
       path: '/faq',
       component: Faq,
       meta: {
-        title: 'Histovec - FAQ'
-      }
+        title: 'Histovec - FAQ',
+      },
     },
 
     {
@@ -71,8 +71,8 @@ export default new Router({
       path: '/legal',
       component: Legal,
       meta: {
-        title: 'Histovec - Mentions Légales'
-      }
+        title: 'Histovec - Mentions Légales',
+      },
     },
 
     {
@@ -80,8 +80,8 @@ export default new Router({
       path: '/contact',
       component: Contact,
       meta: {
-        title: 'Histovec - Contact'
-      }
+        title: 'Histovec - Contact',
+      },
     },
 
     {
@@ -89,8 +89,8 @@ export default new Router({
       path: '/feedback',
       component: Feedback,
       meta: {
-        title: 'Histovec - Signaler un erreur'
-      }
+        title: 'Histovec - Signaler un erreur',
+      },
     },
 
     {
@@ -98,8 +98,8 @@ export default new Router({
       path: '/buyer',
       component: Buyer,
       meta: {
-        title: 'Histovec - Acheteur'
-      }
+        title: 'Histovec - Acheteur',
+      },
     },
 
     {
@@ -107,8 +107,8 @@ export default new Router({
       path: '/*',
       component: NotFound,
       meta: {
-        title: 'Histovec - Page non trouvée'
-      }
-    }
-  ]
+        title: 'Histovec - Page non trouvée',
+      },
+    },
+  ],
 })

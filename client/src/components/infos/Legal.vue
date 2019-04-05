@@ -22,7 +22,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -306,7 +306,7 @@
 export default {
   data () {
     return {
-      choice: ''
+      choice: '',
     }
   },
   created () {
@@ -319,7 +319,7 @@ export default {
       } else {
         this.choice = id
       }
-    }
-  }
+    },
+  },
 }
 </script>

@@ -28,16 +28,16 @@ export default {
   props: {
     v: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     url: {
       type: String,
-      default: ''
+      default: '',
     },
     baseurl: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   methods: {
     pad (n, width, z) {
@@ -64,20 +64,20 @@ export default {
               img: {
                 pos: [170, 257],
                 size: [0.4, 0.4, 0.4, 0.4],
-                type: 'F'
+                type: 'F',
               },
               logo: {
-                pos: [170, 241, 24, 15]
+                pos: [170, 241, 24, 15],
               },
               text: {
                 pos: [169, 282],
                 rot: 90,
-                size: 5
-              }
+                size: 5,
+              },
             },
             marianne: {
               render: true,
-              pos: [82, 10, 46, 24]
+              pos: [82, 10, 46, 24],
             },
             title: {
               render: true,
@@ -88,8 +88,8 @@ export default {
               inter: 5,
               sub: {
                 type: 'normal',
-                size: 10
-              }
+                size: 10,
+              },
             },
             id: {
               render: true,
@@ -98,12 +98,12 @@ export default {
               htab: [5, 85, 100],
               title: {
                 type: 'bold',
-                size: 12
+                size: 12,
               },
               content: {
                 type: 'normal',
-                size: 10
-              }
+                size: 10,
+              },
             },
             situation1: {
               render: true,
@@ -112,20 +112,20 @@ export default {
               htab: [5, 10, 105, 110],
               title: {
                 type: 'bold',
-                size: 12
+                size: 12,
               },
               key: {
                 type: 'bold',
                 size: 10,
                 inter: 4,
-                intra: 4
+                intra: 4,
               },
               value: {
                 type: 'normal',
                 size: 10,
                 inter: 8,
-                intra: 4
-              }
+                intra: 4,
+              },
             },
             situation2: {
               render: true,
@@ -134,20 +134,20 @@ export default {
               htab: [5, 10],
               title: {
                 type: 'bold',
-                size: 12
+                size: 12,
               },
               key: {
                 type: 'bold',
                 size: 10,
                 inter: 4,
-                intra: 4
+                intra: 4,
               },
               value: {
                 type: 'normal',
                 size: 10,
                 inter: 6,
-                intra: 4
-              }
+                intra: 4,
+              },
             },
             historique: {
               render: true,
@@ -159,13 +159,13 @@ export default {
               htab: [5, 25, 105, 125],
               title: {
                 type: 'bold',
-                size: 12
+                size: 12,
               },
               content: {
                 type: 'normal',
                 size: 10,
-                inter: 5
-              }
+                inter: 5,
+              },
             },
             date: {
               render: true,
@@ -174,12 +174,12 @@ export default {
               inter: 7,
               title: {
                 type: 'bold',
-                size: 12
+                size: 12,
               },
               content: {
                 type: 'normal',
-                size: 10
-              }
+                size: 10,
+              },
             },
             mentions: {
               render: true,
@@ -187,9 +187,9 @@ export default {
               inter: 5,
               content: {
                 type: 'italic',
-                size: 8
-              }
-            }
+                size: 8,
+              },
+            },
           }
 
           // rendering
@@ -253,7 +253,7 @@ export default {
               { key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)', value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : 'Oui' },
               { key: '- Procédure de réparation contrôlée', value: self.v.administratif.ove },
               { key: '- Déclaration valant saisie', value: self.v.administratif.saisie },
-              { key: '- Gage', value: self.v.administratif.gage }
+              { key: '- Gage', value: self.v.administratif.gage },
             ]
             let offset = p.situation1.inter
             data.forEach(d => {
@@ -279,7 +279,7 @@ export default {
               { key: '- Véhicule volé', value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui' },
               { key: '- Certificat d\'immatriculation volé', value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui' },
               { key: '- Certificat d\'immatriculation perdu', value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui' },
-              { key: '- Certificat d\'immatriculation duplicata', value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui' }
+              { key: '- Certificat d\'immatriculation duplicata', value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui' },
             ]
             let offset = p.situation2.inter
             data.forEach(d => {
@@ -345,8 +345,8 @@ export default {
           pdf.save('rapport.pdf')
         }
       }
-    }
-  }
+    },
+  },
 }
 
 </script>

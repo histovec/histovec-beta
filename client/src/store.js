@@ -23,7 +23,7 @@ export default new Vuex.Store({
     cookie: undefined,
     id: undefined,
     fail: 0,
-    success: 0
+    success: 0,
   },
   mutations: {
     updateFniMode (state, fniMode) {
@@ -79,6 +79,6 @@ export default new Vuex.Store({
     },
     updateSuccess (state, success) {
       state.success = success
-    }
-  }
+    },
+  },
 })

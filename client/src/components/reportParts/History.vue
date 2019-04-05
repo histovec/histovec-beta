@@ -75,9 +75,9 @@ export default {
   props: {
     v: {
       type: Object,
-      default: () => {}
-    }
-  }
+      default: () => {},
+    },
+  },
 }
 
 </script>
