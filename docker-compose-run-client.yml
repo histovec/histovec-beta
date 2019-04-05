@@ -21,6 +21,8 @@ services:
         NPM_AUDIT_DRY_RUN: ${NPM_AUDIT_DRY_RUN}
         CLIENT_BUILD_TARGET: candidat
         APP_VERSION: ${APP_VERSION}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+
     image: ${APP}-nginx:${APP_VERSION}
     container_name: ${APP}-nginx
     environment:
