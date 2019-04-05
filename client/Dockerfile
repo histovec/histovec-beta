@@ -7,6 +7,7 @@ ARG https_proxy
 ARG npm_registry
 ARG sass_registry
 ARG no_proxy
+ARG MIRROR_DEBIAN
 
 # Base dir /app
 WORKDIR /app
@@ -20,7 +21,14 @@ RUN if [ ! -z "$http_proxy" ] ; then \
         npm config set no-proxy $no_proxy; \
    fi ; \
    [ -z "$npm_registry" ] || npm config set registry=$npm_registry; \
-   [ -z "$sass_registry" ] || npm config set sass_binary_site=$sass_registry;
+   [ -z "$sass_registry" ] || npm config set sass_binary_site=$sass_registry; \
+   buildDeps="git" ; \
+    echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
+     sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list ; \
+   apt-get update -qq && \
+   apt-get install -qy --no-install-recommends $buildDeps ; \
+   git config --global url."https://".insteadOf git://
+
 
 ################################
 # Step 2: "development" target #
