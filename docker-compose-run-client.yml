@@ -19,7 +19,6 @@ services:
         sass_registry: ${SASS_REGISTRY}
         CYPRESS_DOWNLOAD_MIRROR: ${CYPRESS_DOWNLOAD_MIRROR}
         NPM_AUDIT_DRY_RUN: ${NPM_AUDIT_DRY_RUN}
-        CLIENT_BUILD_TARGET: candidat
         APP_VERSION: ${APP_VERSION}
         MIRROR_DEBIAN: ${MIRROR_DEBIAN}
 

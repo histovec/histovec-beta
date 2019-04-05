@@ -85,6 +85,9 @@ RUN npm --no-git-tag-version version ${APP_VERSION} && \
 
 # Deliver the dist folder with Nginx
 FROM nginx:stable
+ENV APP ${APP}
+ENV dataset ${dataset}
+ENV ES_HOST ${ES_HOST}
 COPY --from=production /app/dist /usr/share/nginx/html
 COPY nginx/nginx-run.template /etc/nginx/conf.d/default.template
 COPY nginx/nginx.template /etc/nginx/nginx.template

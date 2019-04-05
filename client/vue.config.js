@@ -5,6 +5,8 @@ const VUE_APP_URL_API = 'http://' + apiHost + (apiPort ? ':' + apiPort : '')
 
 module.exports = {
   publicPath: '/histovec',
+  assetsDir: 'static',
+  indexPath: './histovec/index.html',
   outputDir: 'dist',
 
   devServer: {
