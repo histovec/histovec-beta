@@ -19,16 +19,18 @@ DC_BUILD_ARGS = --pull --no-cache
 DC_BUILD_FRONTEND     = ${DC_PREFIX}-build-deploy-frontend.yml
 DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-nginx-frontend.yml
 DC_ELASTICSEARCH      = ${DC_PREFIX}-elasticsearch.yml
+DC_BUILD_CLIENT       = ${DC_PREFIX}-run-client.yml
+DC_RUN_CLIENT         = ${DC_PREFIX}-run-client.yml
 
 # builded file
 FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
 FILE_FRONTEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-frontend-dist.tar.gz
 FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
 
-FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
-FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
-FILE_IMAGE_ELASTICSEARCH_APP_VERSION = $(APP)-elasticsearch-$(APP_VERSION)-image.tar
-FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION = $(APP)-elasticsearch-latest-image.tar
+FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar.gz
+FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar.gz
+FILE_IMAGE_ELASTICSEARCH_APP_VERSION = $(APP)-elasticsearch-$(APP_VERSION)-image.tar.gz
+FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION = $(APP)-elasticsearch-latest-image.tar.gz
 
 FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
 FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
@@ -48,9 +50,9 @@ export openstack_token = $(shell echo $$openstack_token )
 
 build-all: build-dir build-archive build-all-images save-images
 
-save-images: elasticsearch-save-image nginx-save-image
+save-images: elasticsearch-save-image client-save-image
 
-build-all-images: build-dir frontend-build-all nginx-build elasticsearch-build
+build-all-images: build-dir client-build elasticsearch-build
 
 build-archive: clean-archive build-dir
 	@echo "Build $(APP) $(APP)-$(APP_VERSION) archive"
@@ -107,7 +109,7 @@ frontend-clean-dist:
 frontend-clean-dist-archive:
 	@rm -rf $(FILE_FRONTEND_DIST_APP_VERSION)
 
-clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image
+clean-image: client-clean-image elasticsearch-clean-image
 
 frontend-clean-image:
 	@( ${DC} -f $(DC_BUILD_FRONTEND) config | \
@@ -142,8 +144,33 @@ elasticsearch-check-build:
 
 elasticsearch-save-image:
 	elasticsearch_image_name=$$(${DC} -f $(DC_ELASTICSEARCH) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.elasticsearch.image); \
-	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) $$elasticsearch_image_name ; \
-	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) $$elasticsearch_image_name
+	  docker image save $elasticsearch_image_name | gzip -9c > $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) ; \
+	  cp $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION)
+
+client-build: client-build-image
+
+client-build-image: client-check-build
+	@echo building ${APP} client
+	${DC} -f $(DC_BUILD_CLIENT) build $(DC_BUILD_ARGS)
+
+client-save-image:
+	nginx_image_name=$$(${DC} -f $(DC_APP_FRONT_CANDIDAT_BUILD_PROD) config | python -c 'import sys, yaml, json; cfg = json.loads(json.dumps(yaml.load(sys.stdin), sys.stdout, indent=4)); print cfg["services"]["nginx"]["image"]') ; \
+          docker image save $$nginx_image_name | gzip -9c > $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) && \
+          cp $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION)
+
+client-clean-image:
+	nginx_image_name=$$(${DC} -f $(DC_APP_FRONT_CANDIDAT_BUILD_PROD) config | python -c 'import sys, yaml, json; cfg = json.loads(json.dumps(yaml.load(sys.stdin), sys.stdout, indent=4)); print cfg["services"]["nginx"]["image"]') ; \
+          docker rmi $$nginx_image_name || true
+
+client-check-build:
+	${DC} -f $(DC_BUILD_CLIENT) config -q
+
+client-up:
+	@${DC} -f $(DC_RUN_CLIENT) up -d 2>&1 | grep -v orphan
+client-stop:
+	@${DC} -f $(DC_RUN_CLIENT) down
+client-down:
+	@${DC} -f $(DC_RUN_CLIENT) stop
 
 nginx-build: nginx-build-image
 
@@ -163,9 +190,9 @@ nginx-save-image:
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
 
-up-all: network-all elasticsearch frontend-nginx
+up-all: network-all elasticsearch client-up
 
-down-all: frontend-nginx-stop elasticsearch-stop network-stop
+down-all: client-down elasticsearch-stop network-stop
 
 network-all: install-prerequisites
 	@docker network create --opt com.docker.network.driver.mtu=1450 ${APP} 2> /dev/null; true

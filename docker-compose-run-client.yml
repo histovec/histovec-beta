@@ -1,0 +1,39 @@
+# production mode
+version: '3.5'
+
+networks:
+  default:
+    external:
+      name: ${APP}
+
+services:
+  nginx:
+    build:
+      context: client
+      dockerfile: Dockerfile
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${http_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        sass_registry: ${SASS_REGISTRY}
+        CYPRESS_DOWNLOAD_MIRROR: ${CYPRESS_DOWNLOAD_MIRROR}
+        NPM_AUDIT_DRY_RUN: ${NPM_AUDIT_DRY_RUN}
+        CLIENT_BUILD_TARGET: candidat
+        APP_VERSION: ${APP_VERSION}
+    image: ${APP}-nginx:${APP_VERSION}
+    container_name: ${APP}-nginx
+    environment:
+      - APP=${APP}
+      - ES_HOST=${ES_HOST}
+      - dataset=${dataset}
+      - API_USER_BURST
+      - API_GLOBAL_BURST
+      - API_GLOBAL_LIMIT_RATE
+      - API_USER_LIMIT_RATE
+      - API_USER_SCOPE
+    volumes:
+      - ${LOGS}/nginx:/var/log/nginx/
+    ports:
+      - ${PORT}:80
+    restart: always
