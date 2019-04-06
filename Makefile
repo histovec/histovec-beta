@@ -82,23 +82,27 @@ ifeq ("$(wildcard /usr/bin/docker /usr/local/bin/docker)","")
 	sudo apt-get install -y docker-ce
 	@(if (id -Gn ${USER} | grep -vc docker); then sudo usermod -aG docker ${USER} ;fi) > /dev/null
 endif
-ifeq ("$(wildcard /usr/bin/gawk /usr/local/bin/gawk)","")
-	@echo installing gawk
-	@sudo apt-get install -y gawk
-endif
-ifeq ("$(wildcard /usr/bin/jq /usr/local/bin/jq)","")
-	@echo installing jq
-	@sudo apt-get install -y jq
-endif
-ifeq ("$(wildcard /usr/bin/parallel /usr/local/bin/parallel)","")
-	@echo installing parallel
-	@sudo apt-get install -y parallel
-endif
 ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@echo installing docker-compose
 	@sudo curl -s -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 	@sudo chmod +x /usr/local/bin/docker-compose
 endif
+
+install-prerequisites-injection:
+ifeq ("$(wildcard /usr/bin/gawk /usr/local/bin/gawk)","")
+	@echo installing gawk
+	@(sudo apt-get install -y gawk || sudo brew install gawk) && echo awk successfully installed 
+
+endif
+ifeq ("$(wildcard /usr/bin/jq /usr/local/bin/jq)","")
+	@echo installing jq
+	@(sudo apt-get install -y jq || sudo brew install jq) && echo jq successfully installed
+endif
+ifeq ("$(wildcard /usr/bin/parallel /usr/local/bin/parallel)","")
+	@echo installing parallel
+	@(sudo apt-get install -y parallel || sudo brew install parallel) && echo parallel successfully installed
+endif
+
 
 wait-elasticsearch: elasticsearch
 	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/_cat/indices > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for elasticsearch to start $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
@@ -148,7 +152,7 @@ source-list:
 check-rights:
 	@curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.gz|${data_remote_files_inc}.gz' | wc -l
 
-index-direct-load: wait-index
+index-direct-load: install-prerequisites-injection wait-index
 	@curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.gz' | \
 		parallel -j${ES_JOBS} '(>&2 echo {});curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o -' | gunzip | \
 		awk 'BEGIN{n = 1;print "injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "read " n " lines" > "/dev/stderr";} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e 'use Digest::SHA "sha256_base64"; $$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {@values=split(/;/,$$_);$$id=substr(sha256_base64(@values[0]),0,20);print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\", \"_id\": \"$$id\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",@values))."}\n";}}' | \
@@ -157,7 +161,7 @@ index-direct-load: wait-index
 		jq -c '.items[]' | awk 'BEGIN{ok=${FROM}-1;ko=0;lastko=""}{if ($$0 ~ "\"result\":\"created\"") { ok++ } else {ko++;lastko=$$0} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko; if (ko>0) {print "last error was : " lastko; lastko="" }}}'
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
-index-direct-update: index-unlock
+index-direct-update: install-prerequisites-injection index-unlock
 	@for date in `curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep "${data_remote_files_inc}" | sed 's/_.*//' | sort | uniq | sort -n`; \
 		do for action in delete update create; \
 			  do echo processing bulk $$action from $$date; \
@@ -174,16 +178,14 @@ index-direct-update: index-unlock
 		done
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
-
-
-index-direct-check:
+index-direct-check: install-prerequisites-injection wait-elasticsearch
 ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
 	@(curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.md5' | \
 		xargs -I{} curl -s -k -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o - | awk 'BEGIN{n=0}{n+=$$1}END{print n}' && \
 		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
 endif
 
-index-load: wait-index
+index-load: install-prerequisites-injection wait-index
 ifeq ("$(wildcard ${datasource})","")
 	@echo WARNING: missing data source ${datasource}
 endif
