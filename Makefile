@@ -14,6 +14,7 @@ export APP_PATH := $(shell pwd)
 export APP_VERSION := $(shell bash ./ci/version.sh 2>&- || cat VERSION)
 export BACKEND=${APP_PATH}/backend
 export FRONTEND=${APP_PATH}/frontend
+export CLIENT=${APP_PATH}/client
 export LOGS=${APP_PATH}/log
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
@@ -268,8 +269,18 @@ post-backup:
 backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
 
 frontend-dev: network tor
-	@echo docker-compose up frontend for dev ${VERSION}
+	@echo docker-compose up frontend for dev ${APP_VERSION}
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+client-dev: network
+	@echo docker-compose up client for dev ${APP_VERSION}
+	${DC} -f ${DC_PREFIX}-dev-client.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+client-dev-stop:
+	${DC} -f ${DC_PREFIX}-dev-client.yml down
+
+client-dev-log:
+	${DC} -f ${DC_PREFIX}-dev-client.yml logs
 
 frontend-dev-stop:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml down
@@ -278,9 +289,9 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network elasticsearch frontend-dev
+dev: network elasticsearch client-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop network-stop
+dev-stop: elasticsearch-stop client-dev-stop network-stop
 
 
 frontend-build: network

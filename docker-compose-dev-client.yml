@@ -1,0 +1,121 @@
+# development mode
+version: '3.5'
+
+services:
+  nginx-dev:
+    image: nginx
+    container_name: ${APP}-nginx-dev
+    depends_on:
+      - frontend-dev
+    volumes:
+      - ${CLIENT}/nginx/nginx-dev.template:/etc/nginx/conf.d/default.template
+      - ${CLIENT}/nginx/tor-ip.conf:/etc/nginx/tor-ip.conf
+      - ${CLIENT}/nginx/nginx.template:/etc/nginx/nginx.template
+      - ${CLIENT}/public/static:/usr/share/nginx/html
+    ports:
+      - ${PORT}:80
+    command: /bin/bash -c '(sed "s/<APP>/${APP}/g;s/<dataset>/${dataset}/g;s/<ES_HOST>/${ES_HOST}/g;s|<API_USER_BURST>|${API_USER_BURST}|g;s|<API_GLOBAL_BURST>|${API_GLOBAL_BURST}|g;" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf) && (sed "s|<API_GLOBAL_LIMIT_RATE>|${API_GLOBAL_LIMIT_RATE}|;s|<API_USER_LIMIT_RATE>|${API_USER_LIMIT_RATE}|g;s|<API_USER_SCOPE>|${API_USER_SCOPE}|g" < /etc/nginx/nginx.template > /etc/nginx/nginx.conf) && nginx -g "daemon off;"'
+    restart: always
+
+  frontend-dev:
+    build:
+      target: development
+      context: client
+      dockerfile: Dockerfile
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${http_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        sass_registry: ${SASS_REGISTRY}
+        CYPRESS_DOWNLOAD_MIRROR: ${CYPRESS_DOWNLOAD_MIRROR}
+        NPM_AUDIT_DRY_RUN: ${NPM_AUDIT_DRY_RUN}
+        APP_VERSION: ${APP_VERSION}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+    image: ${APP}-frontend-dev:${APP_VERSION}
+    container_name: ${APP}-frontend-dev
+    volumes:
+      - ${CLIENT}/tests:/app/tests
+      - ${CLIENT}/src:/app/src
+      - ${CLIENT}/public:/app/public
+      - ${CLIENT}/.storybook:/app/.storybook
+      - ${CLIENT}/vue.config.js:/app/vue.config.js
+#      - ./jsconfig.json:/app/jsconfig.json
+      - ${CLIENT}/babel.config.js:/app/babel.config.js
+      - ${CLIENT}/cypress.json:/app/cypress.json
+      # - .:/app:delegated
+      - ${CLIENT}/package.json:/app/package.json
+      - ${CLIENT}/package-lock.json:/app/package-lock.json
+      # this is a workaround to prevent host node_modules from accidently getting mounted in container
+      # in case you want to use node/npm both outside container for test/lint etc. and also inside container
+      # this will overwrite the default node_modules dir in container so it won't conflict with our
+      # /opt/node_modules location. Thanks to PR from @brnluiz
+      # - notused:/app/node_modules
+#    env_file:
+#      - ${cnf:-.env}
+    environment:
+      - APP=${APP}
+      - ES_HOST=${ES_HOST}
+      - dataset=${dataset}
+      - API_USER_BURST
+      - API_GLOBAL_BURST
+      - API_GLOBAL_LIMIT_RATE
+      - API_USER_LIMIT_RATE
+      - API_USER_SCOPE
+    ports:
+      - "8080:8080"
+      
+  storybook:
+    image: ${APP}-storybook:${APP_VERSION}
+    container_name: ${APP}-storybook
+    build:
+      target: storybook
+      context: client
+      dockerfile: Dockerfile
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${http_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        sass_registry: ${SASS_REGISTRY}
+        CYPRESS_DOWNLOAD_MIRROR: ${CYPRESS_DOWNLOAD_MIRROR}
+        NPM_AUDIT_DRY_RUN: ${NPM_AUDIT_DRY_RUN}
+        APP_VERSION: ${APP_VERSION}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+    volumes:
+      - ${CLIENT}/tests:/app/tests
+      - ${CLIENT}/src:/app/src
+      - ${CLIENT}/public:/app/public
+      - ${CLIENT}/.storybook:/app/.storybook
+      - ${CLIENT}/vue.config.js:/app/vue.config.js
+#      - ./jsconfig.json:/app/jsconfig.json
+      - ${CLIENT}/babel.config.js:/app/babel.config.js
+      - ${CLIENT}/cypress.json:/app/cypress.json
+      # - .:/app:delegated
+      - ${CLIENT}/package.json:/app/package.json
+      # - ./package-lock.json:/app/package-lock.json
+      # this is a workaround to prevent host node_modules from accidently getting mounted in container
+      # in case you want to use node/npm both outside container for test/lint etc. and also inside container
+      # this will overwrite the default node_modules dir in container so it won't conflict with our
+      # /opt/node_modules location. Thanks to PR from @brnluiz
+      # - notused:/app/node_modules
+#    env_file:
+#      - ${cnf:-.env}
+    environment:
+      - APP=${APP}
+      - ES_HOST=${ES_HOST}
+      - dataset=${dataset}
+      - API_USER_BURST
+      - API_GLOBAL_BURST
+      - API_GLOBAL_LIMIT_RATE
+      - API_USER_LIMIT_RATE
+      - API_USER_SCOPE
+    ports:
+      - "${STORY_PORT:-6007}:6007"
+volumes:
+  notused:
+
+networks:
+  default:
+    external:
+      name: ${APP}
