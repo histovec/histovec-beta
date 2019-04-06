@@ -7,6 +7,18 @@
 
 SHELL:=/bin/bash
 
+ifeq ($(OS),Windows_NT)
+    uname_S := Windows
+else
+    uname_S := $(shell uname -s)
+endif
+
+ifeq ($(uname_S),Linux)
+    INSTALL := sudo apt-get install -y
+else
+    INSTALL := brew install
+endif
+
 export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
@@ -90,17 +102,17 @@ endif
 
 install-prerequisites-injection:
 ifeq ("$(wildcard /usr/bin/gawk /usr/local/bin/gawk)","")
-	@echo installing gawk
-	@(sudo apt-get install -y gawk || sudo brew install gawk) && echo awk successfully installed 
+	@echo installing gawk with ${INSTALL}, as needed for data injection
+	@${INSTALL} gawk
 
 endif
 ifeq ("$(wildcard /usr/bin/jq /usr/local/bin/jq)","")
-	@echo installing jq
-	@(sudo apt-get install -y jq || sudo brew install jq) && echo jq successfully installed
+	@echo installing jq with ${INSTALL}, as needed for data injection
+	@${INSTALL} jq
 endif
 ifeq ("$(wildcard /usr/bin/parallel /usr/local/bin/parallel)","")
-	@echo installing parallel
-	@(sudo apt-get install -y parallel || sudo brew install parallel) && echo parallel successfully installed
+	@echo installing parallel with ${INSTALL}, as needed for data injection
+	@${INSTALL} parallel
 endif
 
 
