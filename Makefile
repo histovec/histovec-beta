@@ -18,7 +18,7 @@ export LOGS=${APP_PATH}/log
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
 export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
-export ES_MEM=2048m
+export ES_MEM=512m
 export ES_HOST=elasticsearch
 export MAX_MAP_COUNT=262144
 export API_USER_LIMIT_RATE=1r/m
