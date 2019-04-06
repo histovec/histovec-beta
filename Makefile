@@ -248,8 +248,7 @@ endif
 
 vm_max:
 ifeq ("$(vm_max_count)", "")
-	@echo updating vm.max_map_count $(vm_max_count) to 262144
-	@if [ `uname -s` = "Darwin" ];then echo detected Darwin;else sudo sysctl -w vm.max_map_count=262144;fi
+	@if [ ${uname_S} == "Darwin" ]; then echo "WARNING: detected Darwin - vm.map_max_count=262144 settings can't be checked and correctly set. You should set it manually within your Docker virtual machine. This setting has to be set for elasticsearch."; else sudo sysctl -w vm.max_map_count=262144;fi
 endif
 
 elasticsearch: vm_max network
