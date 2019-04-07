@@ -19,6 +19,7 @@ http {
     limit_req_zone $<API_USER_SCOPE> zone=log:1m rate=5r/s;
     limit_req_zone $<API_USER_SCOPE> zone=api:2m rate=<API_USER_LIMIT_RATE>;
     limit_req_zone $server_addr zone=server:2m rate=<API_GLOBAL_LIMIT_RATE>;
+    limit_req_zone $server_addr zone=write:2m rate=<API_WRITE_LIMIT_RATE>;
 
     add_header X-Frame-Options SAMEORIGIN;
     add_header X-Content-Type-Options nosniff;

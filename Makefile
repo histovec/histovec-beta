@@ -38,6 +38,8 @@ export API_USER_BURST=3 nodelay
 export API_USER_SCOPE=http_x_forwarded_for
 export API_GLOBAL_LIMIT_RATE=5r/s
 export API_GLOBAL_BURST=20 nodelay
+export API_WRITE_LIMIT_RATE=10r/m
+export API_WRITE_BURST=20 nodelay
 
 
 # data prep (data not included in repo)
