@@ -68,10 +68,10 @@
                 <h5>Crédits</h5>
                 <p>Le ministère de l'Intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site HistoVec.interieur.gouv.fr.</p>
                 <p>
-                  Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. 
-                  En application du code de la propriété intellectuelle, toute reproduction ou représentation 
-                  partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des 
-                  titulaires de droits. Pour toute demande de reproduction, 
+                  Ces éléments sont couverts par des droits de propriété intellectuelle de tiers.
+                  En application du code de la propriété intellectuelle, toute reproduction ou représentation
+                  partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des
+                  titulaires de droits. Pour toute demande de reproduction,
                   <a :href="'mailto:histovec@interieur.gouv.fr?subject=Demande%20de%20reproduction'">contactez-nous</a>
                 </p>
                 <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com">picjumbo.com</a> et libres de droits.</p>
@@ -155,15 +155,15 @@
                 </ul>
                 <!-- accordion start -->
                 <!-- ================ -->
-                <div 
+                <div
                   id="accordion-2"
-                  class="panel-group collapse-style-2" 
+                  class="panel-group collapse-style-2"
                 >
                   <!-- debut textes de reference -->
                   <div class="panel panel-default">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a 
+                        <a
                           class="clickable"
                           :class="[{'collapsed' : choice !== 'a' }]"
                           @click="choose('a')"
@@ -173,14 +173,14 @@
                         </a>
                       </h4>
                     </div>
-                    <div 
+                    <div
                       class="panel-collapse collapse"
                       :class="[{'in' : choice === 'a'}]"
                     >
                       <div class="panel-body">
                         <ul class="list">
                           <li class="retr_pl_sit p-d-40">
-                            <i class="fa fa-check-square-o color-info"></i> 
+                            <i class="fa fa-check-square-o color-info"></i>
                             <a
                               href="https://www.legifrance.gouv.fr/affichCode.do;?idSectionTA=LEGISCTA000032227144&cidTexte=LEGITEXT000006069565"
                               class="no-color"
@@ -208,7 +208,7 @@
                             </a>
                           </li>
                           <li class="retr_pl_sit p-d-40">
-                            <i class="fa fa-check-square-o color-info"></i> 
+                            <i class="fa fa-check-square-o color-info"></i>
                             <a
                               href="https://www.legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000024042423&cidTexte=LEGITEXT000005789847"
                               class="no-color"
@@ -220,7 +220,7 @@
                           </li>
                           <li class="retr_pl_sit p-d-40">
                             <i class="fa fa-check-square-o color-info"></i>
-                            <a 
+                            <a
                               href="https://www.legifrance.gouv.fr/affichTexteArticle.do?idArticle=LEGIARTI000023711900&cidTexte=LEGITEXT000005789847"
                               class="no-color"
                               target="_blank"
@@ -238,17 +238,17 @@
                   <div class="panel panel-default">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a 
+                        <a
                           class="clickable"
                           :class="[{'collapsed' : choice !== 'b' }]"
                           @click="choose('b')"
                         >
                           <i class="fa fa-file-text-o pr-10"></i>
-                          Pour en savoir plus 
+                          Pour en savoir plus
                         </a>
                       </h4>
                     </div>
-                    <div 
+                    <div
                       class="panel-collapse collapse"
                       :class="[{'in' : choice === 'b'}]"
                     >
@@ -256,9 +256,9 @@
                         <ul class="list">
                           <li class="retr_pl_sit p-d-40">
                             <i class="fa fa-check-square-o color-info"></i>
-                            <a 
-                              href="https://www.cnil.fr/fr/site-web-cookies-et-autres-traceurs" 
-                              class="no-color" 
+                            <a
+                              href="https://www.cnil.fr/fr/site-web-cookies-et-autres-traceurs"
+                              class="no-color"
                               target="_blank"
                             >
                               Obligations en cas d'utilisation de cookies et autres traceurs

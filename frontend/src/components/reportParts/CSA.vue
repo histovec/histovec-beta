@@ -11,9 +11,9 @@
         class="btn btn-animated btn-default btn-sm"
         title="CSA"
         @click="generatePDF"
-      > 
+      >
         Imprimer le CSA
-        <i class="fa fa-print"></i> 
+        <i class="fa fa-print"></i>
       </button>
     </p>
   </div>

@@ -31,8 +31,8 @@
                     <div>
                       <span class="bold_6">
                         Achetez
-                      </span> 
-                      en confiance un 
+                      </span>
+                      en confiance un
                       <span class="bold_6">
                         véhicule d'occasion
                       </span>
@@ -75,7 +75,7 @@
                     :class="[{'has-error' : (nom === '' && status !== 'init')}]"
                   >
                     <label for="name">
-                      Nom 
+                      Nom
                       <span class="color-danger">
                         *
                       </span>
@@ -146,7 +146,7 @@
                         *
                       </span>
                     </label>
-                    <input 
+                    <input
                       id="subject"
                       v-model="object"
                       type="text"
@@ -181,13 +181,13 @@
                   </div>
                 </div>
                 <div class="col-md-12 center">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     class="btn btn-animated btn-default"
                   >
                     Envoyer
-                    <i 
-                      class="fa" 
+                    <i
+                      class="fa"
                       :class="[{'fa-send-o' : (status === 'init')},
                                {'fa-spin fa-spinner' : (status === 'posting')},
                                {'fa-check' : (status === 'posted')},
