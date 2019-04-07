@@ -18,7 +18,7 @@
                   Votre évaluation
                 </h6>
               </div>
-              <form 
+              <form
                 id="evaluation-form-with-recaptcha"
                 role="form"
                 @submit="send"
@@ -32,8 +32,8 @@
                     <br />
                   </span>
                   <label>
-                    Comment évaluez-vous HistoVec :  
-                    <span 
+                    Comment évaluez-vous HistoVec :
+                    <span
                       class="info_red"
                       title="Ce champ est requis."
                     >
@@ -45,7 +45,7 @@
                       v-for="n in ratings"
                       :key="n"
                     >
-                      <a 
+                      <a
                         :class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
                         title="Give star"
                         @click="setNote((ratings.length+1)-n)"
@@ -74,7 +74,7 @@
                   >
                     <p>
                       <label>
-                        Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ? 
+                        Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
                         <i>(L'adresse email ne servira que dans le cadre de cette étude)</i>
                       </label>
                       <span
@@ -109,7 +109,7 @@
                     <div class="col-md-6">
                       <button class="btn btn-animated btn-default m-h-05">
                         Envoyer
-                        <i 
+                        <i
                           class="fa"
                           :class="[{'fa-send-o' : (status === 'init')},
                                    {'fa-spin fa-spinner' : (status === 'posting')},
@@ -118,7 +118,7 @@
                         >
                         </i>
                       </button>
-                      <button 
+                      <button
                         class="btn btn-animated btn-default"
                         @click="show = false"
                       >
@@ -165,7 +165,7 @@ export default {
         this.showModalEval()
       }
     }
-  },  
+  },
   methods: {
     send (e) {
       this.status = 'posting'

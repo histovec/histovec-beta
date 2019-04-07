@@ -27,7 +27,7 @@
       <div class="col-sm-6">
         <span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span>
         <br />
-        <div v-if="v.ctec.puissance.cv">  
+        <div v-if="v.ctec.puissance.cv">
           <span class="txt-small-13">Puissance fiscale :</span>
           <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span>
         </div>
@@ -38,10 +38,10 @@
       >
         <span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span>
         <br />
-        <a 
-          href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil" 
-          class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding" 
-          title="Simulateur" 
+        <a
+          href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
+          class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+          title="Simulateur"
           target="_blank"
         >
           Accédez au simulateur de calcul
@@ -165,7 +165,7 @@
             <span class="info_red txt-small-13">un sinistre déclaré</span>
             <span class="txt-small-13">en {{ v.sinistre }}</span>
             <br />
-            <span v-if="v.apte !== false"> 
+            <span v-if="v.apte !== false">
               <span class="txt-small-13">et</span>
               <span class="info_red txt-small-13">déclaré apte à circuler</span>
               <span
@@ -185,7 +185,7 @@
             <span v-if="v.apte !== false">
               <span class="txt-small-13">Le véhicule a été</span>
               <span class="info_red txt-small-13">déclaré apte à circuler</span>
-              <span 
+              <span
                 v-if="v.apte !== true"
                 class="txt-small-13"
               >
@@ -243,7 +243,7 @@
       <div class="row info_red">
         <div class="col-sm-1">
           <i
-            class="fa fa-2x pr-10" 
+            class="fa fa-2x pr-10"
             :class="synthese[entry].icon"
           >
           </i>
@@ -314,7 +314,7 @@
           {{ synthese['critair'].adv }}
           <br />
           <a
-            v-if="synthese['critair'].link !== undefined" 
+            v-if="synthese['critair'].link !== undefined"
             :href="synthese['critair'].link"
             target="_blanck"
             class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
