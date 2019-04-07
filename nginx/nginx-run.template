@@ -85,13 +85,15 @@ server {
     return 404;
   }
 
-  location ~ (^/<APP>/api/v0/(contact|feedback)/) {
-    limit_req zone=api burst=3;
+  location ~ (^/<APP>/api/v0/feedback/) {
+    limit_req zone=api burst=<API_USER_BURST>;
+    limit_req zone=write burst=<API_WRITE_BURST>;
+    
     limit_req_status 429;
     if ($request_method != POST) {
        return 403;
     }
-    rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
+    rewrite "^/.*/(feedback)/$" /$1/_doc break;
     proxy_pass http://<ES_HOST>:9200;
     proxy_redirect off;
     proxy_hide_header Content-Type;

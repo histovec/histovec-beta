@@ -24,6 +24,8 @@ services:
       - API_GLOBAL_LIMIT_RATE
       - API_USER_LIMIT_RATE
       - API_USER_SCOPE
+      - API_WRITE_LIMIT_RATE
+      - API_WRITE_BURST
     volumes:
       - ${LOGS}/nginx:/var/log/nginx/
     ports:
