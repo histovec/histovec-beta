@@ -44,7 +44,7 @@
       </div>
     </section>
 
-    <div 
+    <div
       v-if="(result === 'ok') || (result === 'cached')"
       class="container"
     >
@@ -53,8 +53,8 @@
           <!-- debut vignette -->
           <div class="row">
             <div class="col-sm-5">
-              <div 
-                class="alert alert-icon alert-info" 
+              <div
+                class="alert alert-icon alert-info"
                 role="alert"
               >
                 <i :class="'fa fa-' + v.logo_vehicule"></i>
@@ -70,12 +70,12 @@
           <!-- Tabs start -->
           <div class="vertical">
             <!-- Nav tabs -->
-            <ul 
-              class="nav nav-tabs" 
+            <ul
+              class="nav nav-tabs"
               role="tablist"
             >
               <li :class="[{'active' : tab === 'abstract'}]">
-                <a 
+                <a
                   class="clickable"
                   @click="tab = 'abstract'"
                 >
@@ -84,7 +84,7 @@
                 </a>
               </li>
               <li :class="[{'active' : tab === 'vehicle'}]">
-                <a 
+                <a
                   class="clickable"
                   @click="tab = 'vehicle'"
                 >
@@ -102,7 +102,7 @@
                 </a>
               </li>
               <li :class="[{'active' : tab === 'situation'}]">
-                <a 
+                <a
                   class="clickable"
                   @click="tab = 'situation'"
                 >
@@ -139,7 +139,7 @@
                 class="tab-pane fade"
                 :class="[{'in active' : display['all_tabs'] || tab === 'abstract'}]"
               >
-                <abstract 
+                <abstract
                   :v="v"
                   :holder="holder"
                 >
@@ -171,7 +171,7 @@
                 </administrative>
               </div>
               <!-- historique des opérations -->
-              <div 
+              <div
                 class="tab-pane fade"
                 :class="[{'in active' : display['all_tabs'] || tab === 'history'}]"
               >
@@ -180,7 +180,7 @@
               <div
                 v-if="holder"
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'send'}]" 
+                :class="[{'in active' : display['all_tabs'] || tab === 'send'}]"
               >
                 <share
                   :v="v"

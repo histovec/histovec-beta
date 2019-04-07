@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     v-if="(status !== 'ok') && (status !== 'cached')"
     class="container"
   >
@@ -10,7 +10,7 @@
           role="alert"
         >
           <i :class="icon"></i>
-          {{ message }} 
+          {{ message }}
           <router-link
             v-if="refDisplay"
             class="clickable alert-danger"

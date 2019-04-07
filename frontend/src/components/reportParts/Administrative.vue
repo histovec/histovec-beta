@@ -88,8 +88,8 @@
           <span class="info_red txt-small-12">{{ v.administratif.titre.duplicata }}</span>
         </div>
       </div>
-      <div 
-        v-shortkey="['ctrl', 'alt', 'p']" 
+      <div
+        v-shortkey="['ctrl', 'alt', 'p']"
         @shortkey="display['pdf'] = !display['pdf']"
       >
       </div>

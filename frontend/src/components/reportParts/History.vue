@@ -13,8 +13,8 @@
     </div>
     <div class="separator"></div>
 
-    <div 
-      v-for="(entry, index) in v.historique" 
+    <div
+      v-for="(entry, index) in v.historique"
       :key="index"
     >
       <div class="row">
