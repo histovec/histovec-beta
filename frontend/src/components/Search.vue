@@ -83,8 +83,8 @@
               <img
                 class="img-responsive pull-right"
                 :class="{'opacity-plaque': typeImmatriculation === 'fni' }"
-                src="assets/images/nouvelle_plaque_immatriculation_fd_transp_txt.png" 
-                width="200" 
+                src="assets/images/nouvelle_plaque_immatriculation_fd_transp_txt.png"
+                width="200"
                 height="44"
               >
             </a>
@@ -192,7 +192,7 @@
                               <input
                                 id="lastname"
                                 ref="nom"
-                                v-model="nom" 
+                                v-model="nom"
                                 v-focus
                                 name="nom"
                                 required="required"
@@ -309,7 +309,7 @@
                               :class="[{'has-error' : (siren === '' && status !== 'init')}]"
                             >
                               <label class="control-label">
-                                N° SIREN 
+                                N° SIREN
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -329,7 +329,7 @@
                               <i class="fa fa-building-o form-control-feedback"></i>
                             </div>
                           </div>
-                        </div>                        
+                        </div>
                       </form>
                     </fieldset>
                     <fieldset>
@@ -341,7 +341,7 @@
                               class="form-group has-feedback"
                               :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]"
                             >
-                              <label 
+                              <label
                                 for="input"
                                 class="control-label"
                               >
@@ -424,7 +424,7 @@
                                   for="input"
                                   class="control-label"
                                 >
-                                  Date du certificat d'immatriculation 
+                                  Date du certificat d'immatriculation
                                   <span
                                     class="info_red"
                                     title="Ce champ est requis."

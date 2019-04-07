@@ -27,7 +27,7 @@
                 class="btn radius-30 btn-default btn-animated btn-lg"
                 :to="{ name: 'search', params: {t: 'particulier'}}"
               >
-                Vendeur 
+                Vendeur
                 <i class="fa fa-handshake-o"></i>
               </router-link>
               <!-- fin bouton vendeur -->
@@ -40,7 +40,7 @@
           <div class="col-lg-6">
             <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
               <!-- debut bouton acheteur -->
-              <router-link 
+              <router-link
                 class="btn radius-30 btn-warning btn-animated btn-lg"
                 :to="{ name: 'buyer' }"
               >
@@ -60,7 +60,7 @@
     <div class="row">
       <div class="col-lg-12 text-center">
         <h1 class="title large">
-          Comment ça <span class="text-defaut">marche</span> 
+          Comment ça <span class="text-defaut">marche</span>
         </h1>
         <div class="separator"></div>
       </div>
@@ -152,7 +152,7 @@
         </div>
         <div class="row">
           <div class="col-lg-4">
-            <div 
+            <div
               class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall"
               data-animation-effect="fadeInDownSmall"
               data-effect-delay="100"
@@ -163,8 +163,8 @@
               </h3>
               <div class="separator clearfix"></div>
               <p>
-                Données officielles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du 
-                <a 
+                Données officielles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du
+                <a
                   target="_blank"
                   title="Système d'Immatriculation des Véhicules"
                   href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV"
@@ -175,7 +175,7 @@
             </div>
           </div>
           <div class="col-lg-4">
-            <div 
+            <div
               class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall"
               data-animation-effect="fadeInDownSmall"
               data-effect-delay="150"
@@ -191,9 +191,9 @@
             </div>
           </div>
           <div class="col-lg-4">
-            <div 
-              class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall" 
-              data-animation-effect="fadeInDownSmall" 
+            <div
+              class="pv-30 ph-20 feature-box bordered shadow text-center object-non-visible animated object-visible fadeInDownSmall"
+              data-animation-effect="fadeInDownSmall"
               data-effect-delay="200"
             >
               <span class="icon default-bg circle"><i class="fa fa-euro"></i></span>
@@ -217,14 +217,14 @@
           </h2>
           <p class="large text-center">
             Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion
-            (cf. 
-            <a 
+            (cf.
+            <a
               href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf"
               target="_blank"
             >
               dossier de presse
             </a>
-            ) 
+            )
           </p>
         </div>
       </div>
@@ -309,7 +309,7 @@
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button 
+                  <button
                     type="button"
                     class="close"
                     @click="modal = false"
@@ -328,7 +328,7 @@
                     src="assets/images/exemple_rapport_g.png"
                     class="img-responsive"
                     style="margin: 0 auto;"
-                  > 
+                  >
                 </div>
                 <div class="modal-footer">
                   <a
@@ -338,7 +338,7 @@
                   >
                     Fermer
                     <i class="fa fa-close"></i>
-                  </a> 
+                  </a>
                 </div>
               </div>
             </div>

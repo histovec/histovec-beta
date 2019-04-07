@@ -8,7 +8,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button 
+              <button
                 type="button"
                 class="close"
                 @click="close()"
@@ -19,24 +19,24 @@
                 Information n° de formule
               </h6>
             </div>
-            <div 
+            <div
               class="modal-body"
               style="height: 250px; overflow-y: auto;"
             >
-              <img 
-                alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise" 
+              <img
+                alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise"
                 src="assets/images/n-formule.jpg"
                 class="img-responsive"
                 style="margin: 0 auto;"
               >
             </div>
             <div class="modal-footer">
-              <a 
+              <a
                 class="btn radius-30 btn btn-animated btn-default"
                 @click="close()"
               >
                 Fermer <i class="fa fa-close"></i>
-              </a> 
+              </a>
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button 
+              <button
                 type="button"
                 class="close"
                 @click="close()"
@@ -74,7 +74,7 @@
               <h4 class="text-danger bold_6">
                 Carte grise avant 2004
               </h4>
-              <img 
+              <img
                 src="assets/images/carte_grise_avant_2004.jpg"
                 class="img-responsive"
               >
@@ -88,13 +88,13 @@
               >
             </div>
             <div class="modal-footer">
-              <a 
-                class="btn radius-30 btn btn-animated btn-default" 
+              <a
+                class="btn radius-30 btn btn-animated btn-default"
                 @click="close()"
               >
                 Fermer
                 <i class="fa fa-close"></i>
-              </a> 
+              </a>
             </div>
           </div>
         </div>
