@@ -1,15 +1,15 @@
 <template>
   <div
-    class="pv-30 ph-20 feature-box bordered_spec text-center" 
+    class="pv-30 ph-20 feature-box bordered_spec text-center"
     style="background: white"
   >
     <div class="row">
       <!-- debut alerte verte -->
-      <div 
+      <div
         v-if="notifSuccess"
         class="col-md-12"
       >
-        <div 
+        <div
           class="alert alert-icon alert-success"
           role="alert"
         >
@@ -21,11 +21,11 @@
         <p>
           Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.
           <br />
-          Ce rapport sera accessible jusqu'au {{ validityDate }} 
+          Ce rapport sera accessible jusqu'au {{ validityDate }}
           <br />
         </p>
         <p class="text-center">
-          <button 
+          <button
             v-clipboard:copy="url"
             class="btn radius-30 btn-dark btn-animated btn"
             @click="showNotifSuccess"
@@ -64,9 +64,9 @@
       </div>
       <!-- debut bouton imprimer csa detaille -->
       <div class="row">
-        <div 
+        <div
           v-if="holder&&display['pdf']"
-          class="col-sm-12 pv-20" 
+          class="col-sm-12 pv-20"
         >
           <csa
             :v="v"

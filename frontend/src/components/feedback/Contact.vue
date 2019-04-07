@@ -20,7 +20,7 @@
         <div class="row">
           <!-- section start -->
           <section
-            class="dark-translucent-bg" 
+            class="dark-translucent-bg"
             style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
           >
             <div class="container">
@@ -122,7 +122,7 @@
                     :class="[{'has-error' : (object === '' && status !== 'init')}]"
                   >
                     <label for="subject">Objet <span class="color-danger">*</span></label>
-                    <input 
+                    <input
                       id="subject"
                       v-model="object"
                       name="subject"
@@ -134,7 +134,7 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <div 
+                  <div
                     class="form-group has-feedback"
                     :class="[{'has-error' : (message === '' && status !== 'init')}]"
                   >
@@ -142,8 +142,8 @@
                     <textarea
                       id="message"
                       v-model="message"
-                      name="message" 
-                      rows="6" 
+                      name="message"
+                      rows="6"
                       class="form-control"
                       placeholder=""
                     >
@@ -152,13 +152,13 @@
                   </div>
                 </div>
                 <div class="col-md-12 centered">
-                  <button 
+                  <button
                     type="submit"
                     class="btn btn-animated btn-default"
                   >
                     Envoyer
-                    <i 
-                      class="fa" 
+                    <i
+                      class="fa"
                       :class="[{'fa-send-o' : (status === 'init')},
                                {'fa-spin fa-spinner' : (status === 'posting')},
                                {'fa-check' : (status === 'posted')},

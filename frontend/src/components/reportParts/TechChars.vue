@@ -80,7 +80,7 @@
     </div>
     <div class="separator"></div>
     <div class="row">
-      <td 
+      <td
         class="no-trait-left no-trait-right"
         colspan="3"
       >
