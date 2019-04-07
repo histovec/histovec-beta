@@ -93,7 +93,7 @@ server {
     if ($request_method != POST) {
        return 403;
     }
-    rewrite "^/.*/feedback/$" /$1/_doc break;
+    rewrite "^/.*/(feedback)/$" /$1/_doc break;
     proxy_pass http://<ES_HOST>:9200;
     proxy_redirect off;
     proxy_hide_header Content-Type;
