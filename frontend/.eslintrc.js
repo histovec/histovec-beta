@@ -18,6 +18,6 @@ module.exports = {
     'vue/html-self-closing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    quotes: ['error', 'single', { avoidEscape: true }],
+    quotes: ['error', 'single'],
   },
 };
