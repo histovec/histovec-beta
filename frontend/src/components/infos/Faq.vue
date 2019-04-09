@@ -83,7 +83,7 @@
 
 <script>
 import Accordion from '@/components/infos/Accordion'
-import faqContent from './faq'
+import faqContent from './faq-content'
 
 export default {
   components: {
