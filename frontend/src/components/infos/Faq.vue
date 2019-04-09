@@ -75,6 +75,46 @@
             >contactez-nous</a>
           </p>
           <!-- accordion start -->
+          <ul class="panel-group collapse-style-2">
+            <accordion-item
+              title="Comment utiliser HistoVec?"
+              :active="true"
+              @click="choose('a')"
+            >
+              <dl>
+                <dt>Vous êtes vendeur :</dt>
+                <dd>
+                  <ol>
+                    <li>
+                      sur la page vendeur, remplissez le formulaire pour vous
+                      identifier avec les informations demandées, et validez.
+                      <p class="indented">
+                        Note : s’il s’agit d’un véhicule d’entreprise, cliquez
+                        sur l’onglet “Entreprise”
+                      </p>
+                    </li>
+                    <li>
+                      le rapport du véhicule est affiché. Vous pouvez consulter
+                      les différentes sections sur le menu de gauche.
+                    </li>
+                    <li>
+                      vous pouvez transmettre le lien vers le rapport à un tiers
+                      en cliquant sur le menu “Transmettre le rapport”.
+                    </li>
+                  </ol>
+                </dd>
+                <dt>Vous êtes acheteur :</dt>
+                <dd>
+                  <p class="indented">
+                    Demandez au vendeur de vous transmettre le lien vers le
+                    rapport en le générant sur le site Histovec.
+                  </p>
+                </dd>
+              </dl>
+            </accordion-item>
+          </ul>
+          <!-- accordion end -->
+          <!-- accordion start -->
           <!-- ================ -->
           <ul
             id="accordion-2"
@@ -599,8 +639,9 @@
                     devient acquéreur du véhicule.
                   </p>
                   <p class="indented">
-                    <strong>- Fin d'usage démonstration pour vente du
-                      véhicule,</strong>
+                    <strong>
+                      - Fin d'usage démonstration pour vente du véhicule,
+                    </strong>
                     véhicule de garage ayant servi de véhicule de démonstration.
                   </p>
                   <p class="indented">
@@ -650,6 +691,10 @@
                 :class="[{ in: choice === 'l' }]"
               >
                 <div class="panel-body">
+                  <p class="indented">
+                    Propriétaire du véhicule et titulaire du certificat
+                    d'immatriculation sont deux notions différentes :
+                  </p>
                   <p class="indented">
                     Propriétaire du véhicule et titulaire du certificat
                     d'immatriculation sont deux notions différentes :
@@ -715,7 +760,12 @@
 </template>
 
 <script>
+import AccordionItem from '@/components/infos/AccordionItem'
 export default {
+  components: {
+    AccordionItem,
+  },
+
   data() {
     return {
       choice:
@@ -724,6 +774,7 @@ export default {
           : '',
     }
   },
+
   computed: {
     mailBody() {
       var text = encodeURI(
@@ -732,6 +783,7 @@ export default {
       return text
     },
   },
+
   created() {
     this.$http
       .put(
@@ -743,6 +795,7 @@ export default {
       )
       .then(() => {}, () => {})
   },
+
   methods: {
     choose(id) {
       if (this.choice === id) {
