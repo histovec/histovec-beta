@@ -344,6 +344,24 @@ const faqContent = [
         <a href="legal">mentions légales.</a>
       </p>
     `
+  },
+  {
+    title: 'Que dois-je faire pour vendre mon véhicule ?',
+    body: `
+    <p class="indented">
+    Vendre un véhicule vous impose de remettre certains documents au nouveau propriétaire
+    et d'avertir l'administration via un téléservice. Afin de connaitre les conditions préalables
+    à la vente ainsi que les démarches à entreprendre, nous vous invitons à consulter
+    le site du <a href="https://www.service-public.fr/particuliers/vosdroits/F1707">Service Public</a>
+    </p>
+    <p class="indented">
+      Ce que vous pouvez faire grâce à HistoVec:
+    </p>
+    <ul>
+      <li>Transmettre l'historique administratif du véhicule à l'acheteur (en cliquant sur Transmettre le rapport) ;</li>
+      <li>Télécharger le certificat de situation administrative détaillé (CSA ; téléchargeable en cliquant sur Transmettre le rapport).</li>
+    </ul>
+    `
   }
 ]
 
