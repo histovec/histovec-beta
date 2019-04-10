@@ -183,7 +183,7 @@ Vue.mixin({
     }
   },
   created () {
-    if (this.$cookie.get('userId') === null) {
+    if (this.$cookie && this.$cookie.get('userId') === null) {
       this.$cookie.set('userId', this.guid(), 1)
       this.$store.commit('updateCookie', this.$cookie.get('userId'))
     }
