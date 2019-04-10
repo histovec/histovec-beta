@@ -4,14 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import VueResource from 'vue-resource'
-import VueShortkey from 'vue-shortkey'
-import VueCookie from 'vue-cookie'
-import apiConf from './assets/json/backend.json'
+import './plugins'
 
-Vue.use(VueResource)
-Vue.use(VueShortkey)
-Vue.use(VueCookie)
+import apiConf from './assets/json/backend.json'
 
 Vue.config.productionTip = false
 
