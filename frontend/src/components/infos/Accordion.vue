@@ -24,10 +24,14 @@ export default {
       type: Array,
       required: true,
     },
+    initialActive: {
+      type: String,
+      default: '',
+    }
   },
 
   data() {
-    return { active: undefined }
+    return { active: this.initialActive }
   },
 
   methods: {

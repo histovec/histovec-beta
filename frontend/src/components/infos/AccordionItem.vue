@@ -9,7 +9,7 @@
           :href="`#${id}`"
           class="clickable"
           :class="[{ collapsed: !active }]"
-          @click="$emit('click', id)"
+          @click.prevent="$emit('click', id)"
         >
           <i
             class="fa pr-10"
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import slugify from 'slugify'
+import slugify from '@sindresorhus/slugify'
 
 export default {
   props: {
