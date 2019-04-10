@@ -23,10 +23,8 @@
       class="panel-collapse collapse"
       :class="{ in: active }"
     >
-      <div
-        class="panel-body"
-        v-html="body"
-      >
+      <!-- eslint-disable-next-line vue/max-attributes-per-line vue/no-v-html -->
+      <div class="panel-body" v-html="body">
         <slot></slot>
       </div>
     </div>
