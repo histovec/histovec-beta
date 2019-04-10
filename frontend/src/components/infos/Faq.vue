@@ -72,7 +72,11 @@
               :href="'mailto:histovec@interieur.gouv.fr?subject=Besoin%20d%20aide'"
             >contactez-nous</a>
           </p>
-          <accordion :content="faqContent" />
+          <accordion
+            :content="faqContent"
+            :initial-active="activeQuestion"
+            @click="highlightQuestion"
+          />
         </div>
       </div>
       <!-- row -->
@@ -84,6 +88,7 @@
 <script>
 import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
+import delay from 'delay'
 
 export default {
   components: {
@@ -93,10 +98,7 @@ export default {
   data() {
     return {
       faqContent,
-      choice:
-        window.location.href.split('#')[1] !== undefined
-          ? window.location.href.split('#')[1]
-          : '',
+      activeQuestion: this.$route.hash.substring(1),
     }
   },
 
@@ -109,7 +111,11 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
+    if (this.activeQuestion) {
+      this.highlightQuestion(this.activeQuestion)
+    }
+
     this.$http
       .put(
         this.apiUrl +
@@ -118,17 +124,18 @@ export default {
           '/' +
           this.$route.path.replace(/^\/\w+\//, ''),
       )
-      .then(() => {}, () => {})
+      .catch(() => {})
   },
 
   methods: {
-    choose(id) {
-      if (this.choice === id) {
-        this.choice = ''
-      } else {
-        this.choice = id
-      }
-    },
+    async highlightQuestion(id) {
+      const hash = `#${id}`
+      this.activeQuestion = id
+      await delay(10)
+      this.$scrollTo(hash)
+      this.$router.push({ name: 'faq', hash })
+    }
   },
+
 }
 </script>

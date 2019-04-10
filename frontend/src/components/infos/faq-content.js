@@ -1,4 +1,4 @@
-import slugify from 'slugify'
+import slugify from '@sindresorhus/slugify'
 
 import aideSIV from '@/assets/img/aide_siv.jpg'
 import aideFNI from '@/assets/img/aide_fni.jpg'
