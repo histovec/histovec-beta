@@ -135,13 +135,13 @@
                 </ul>
                 Pour un professionnel, les données d’identification sont :
                 <ul>
-                  <li>raison sociale (tel que figurant sur le certificat d’immatriculation)</li>
-                  <li>SIREN (idem) </li>
+                  <li>raison sociale (telle que figurant sur le certificat d’immatriculation)</li>
+                  <li>SIREN (non présent sur le certificat d'immatriculation) </li>
                 </ul>
                 Le titulaire, particulier ou professionnel, identifie son véhicule avec les données suivantes :
                 <ul>
                   <li>numéro d’immatriculation</li>
-                  <li>numéro de formule du certificat d’immatriculation (donnée inscrite uniquement sur le titre) </li>
+                  <li>numéro de formule du certificat d’immatriculation pour les plaques du type AA-123-AA ou date du certificat d'immatriculation pour les plaques du type 123 ABC 45 (donnée inscrite uniquement sur le titre)  </li>
                 </ul>
                 <h6>Mesures de protection des données</h6>
                 Les données personnelles sont protégées par les moyens suivants :

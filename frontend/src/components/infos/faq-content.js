@@ -315,10 +315,6 @@ const faqContent = [
         d'immatriculation sont deux notions différentes :
       </p>
       <p class="indented">
-        Propriétaire du véhicule et titulaire du certificat
-        d'immatriculation sont deux notions différentes :
-      </p>
-      <p class="indented">
         <strong>Propriétaire</strong>: il s'agit du propriétaire du
         bien qu'est le véhicule et qui peut donc le vendre.
       </p>
