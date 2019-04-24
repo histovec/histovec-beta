@@ -278,9 +278,9 @@ function histovec (veh) {
   // véhicule importé: changement de règle de gestion #406
   v.certificat.etranger = (veh.import === 'OUI')
   v.certificat.siv = veh.date_premiere_immat_siv || missing
-  v.certificat.fr = (v.certificat.etranger && (veh.historique !== undefined)) ? formatDate(veh.historique[0].opa_date) : v.certificat.premier
-  v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
-  v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
+  v.certificat.fr = (v.certificat.etranger && (veh.historique.length > 0)) ? formatDate(veh.historique[0].opa_date) : v.certificat.premier
+  v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique.length > 0)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
+  v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && ((veh.historique.length === 0) || (veh.historique[0].opa_type !== 'IMMAT_NORMALE'))
   v.certificat.courant = veh.date_emission_CI || missing
   v.certificat.depuis = calcCertifDepuis((orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
 
