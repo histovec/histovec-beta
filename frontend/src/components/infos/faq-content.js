@@ -1,4 +1,5 @@
-import slugify from '@sindresorhus/slugify'
+// import slugify from '@sindresorhus/slugify'
+import slugify from '@/assets/js/slugify.js'
 
 import aideSIV from '@/assets/img/aide_siv.jpg'
 import aideFNI from '@/assets/img/aide_fni.jpg'
@@ -363,5 +364,5 @@ const faqContent = [
 
 export default faqContent.map(content => ({
   ...content,
-  id: slugify(content.title),
+  id: slugify(content.title)
 }))
