@@ -115,13 +115,29 @@
               </div>
               <div class="col-md-4">
                 <div class="footer-content">
-                  <h4 class="title">Réseaux sociaux</h4>
+                  <h4 class="title">
+                    Réseaux sociaux
+                  </h4>
                   <div class="separator-2"></div>
                   <ul class="social-links circle animated-effect-1">
-                    <li class="facebook"><a href="https://www.facebook.com/Histovec/" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></li>
-                    <li class="twitter"><a href="https://twitter.com/histovec" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></li>
-                    <!-- <li class="linkedin"><a href="#" title="linkedin"><i class="fa fa-linkedin"></i></a></li>
-                    <li class="googleplus"><a href="#" title="google-plus"><i class="fa fa-google-plus"></i></a></li> -->
+                    <li class="facebook">
+                      <a
+                        href="https://www.facebook.com/Histovec/"
+                        target="_blank"
+                        title="facebook"
+                      >
+                        <i class="fa fa-facebook"></i>
+                      </a>
+                    </li>
+                    <li class="twitter">
+                      <a
+                        href="https://twitter.com/histovec"
+                        target="_blank"
+                        title="twitter"
+                      >
+                        <i class="fa fa-twitter"></i>
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
