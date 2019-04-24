@@ -54,7 +54,7 @@
         <div class="container">
           <div class="footer-inner">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="footer-content">
                   <h4 class="title">
                     Liens utiles
@@ -73,14 +73,14 @@
                   <!-- fin -->
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="footer-content">
                   <h4 class="title">
                     Un service proposé par
                   </h4>
                   <div class="separator-2"></div>
                   <div class="row grid-space-12">
-                    <div class="col-md-2 p-b-10">
+                    <div class="col-md-3 p-b-10 p-g-17">
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
@@ -95,7 +95,7 @@
                         </a>
                       </div>
                     </div>
-                    <div class="col-md-6 p-b-10">
+                    <div class="col-md-6 p-b-10 m-h-17">
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
@@ -111,6 +111,34 @@
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="footer-content">
+                  <h4 class="title">
+                    Réseaux sociaux
+                  </h4>
+                  <div class="separator-2"></div>
+                  <ul class="social-links circle animated-effect-1">
+                    <li class="facebook">
+                      <a
+                        href="https://www.facebook.com/Histovec/"
+                        target="_blank"
+                        title="facebook"
+                      >
+                        <i class="fa fa-facebook"></i>
+                      </a>
+                    </li>
+                    <li class="twitter">
+                      <a
+                        href="https://twitter.com/histovec"
+                        target="_blank"
+                        title="twitter"
+                      >
+                        <i class="fa fa-twitter"></i>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>

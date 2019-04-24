@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import slugify from '@sindresorhus/slugify'
+// import slugify from '@sindresorhus/slugify'
+import slugify from '@/assets/js/slugify.js'
 
 export default {
   props: {
@@ -56,7 +57,7 @@ export default {
   data() {
     return {
       iconClass: `fa-${this.icon || 'file-text-o'}`,
-      id: slugify(this.title),
+      id: slugify(this.title)
     }
   },
 }

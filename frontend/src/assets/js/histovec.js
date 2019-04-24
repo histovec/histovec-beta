@@ -1,5 +1,5 @@
 import moment from 'moment'
-import $lodash from 'lodash'
+import orderBy from 'lodash.orderby'
 import operations from '../json/libelle_operations.json'
 import CryptoJS from 'crypto-js'
 
@@ -209,7 +209,7 @@ function getVignetteNumero (genre, categorie, typeCarburant, pollution, datePrem
 
 function histoFilter (historique) {
   let h = historique.filter(event => operations[event.opa_type] !== undefined)
-  h = $lodash.orderBy(h, ['opa_date'], ['desc'])
+  h = orderBy(h, ['opa_date'], ['desc'])
   return h.map(event => {
     return {'date': formatDate(event.opa_date), 'nature': operations[event.opa_type]}
   })
@@ -241,7 +241,7 @@ function histovec (veh) {
   // filtre l'historique des opérations annulées
   veh.historique = (veh.historique === undefined) ? [] : veh.historique.filter(event => event.ope_date_annul === undefined)
   // réordonne l'historique des opérations
-  veh.historique = $lodash.orderBy(veh.historique, ['opa_date'])
+  veh.historique = orderBy(veh.historique, ['opa_date'])
   v.date_update = veh.date_update || v.date_update
   v.ctec.vin = veh.vin
   v.plaque = veh.plaq_immat
@@ -282,8 +282,7 @@ function histovec (veh) {
   v.fni = ((veh.dos_date_conversion_siv !== undefined) && (veh.historique !== undefined)) ? ((veh.historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
   v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && (veh.historique[0].opa_type !== 'IMMAT_NORMALE')
   v.certificat.courant = veh.date_emission_CI || missing
-  // v.certificat.depuis = (calcCertifDepuis($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0].opa_date) || calcCertifDepuis(veh.date_premiere_immat))
-  v.certificat.depuis = calcCertifDepuis(($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
+  v.certificat.depuis = calcCertifDepuis((orderBy(veh.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
 
   if ((v.fni !== true) && (v.certificat.fr !== v.certificat.siv) && ((veh.historique === undefined) || (!veh.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
     let tmp = veh.historique
@@ -325,13 +324,13 @@ function histovec (veh) {
   // véhicule importé : changement de règle de gestion #406
   v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
   // ci-dessous : interprétation à confirmer
-  v.sinistres = (veh.historique !== undefined) ? ($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-  v.sinistres_nb = (veh.historique !== undefined) ? ($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
+  v.sinistres = (veh.historique !== undefined) ? (orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+  v.sinistres_nb = (veh.historique !== undefined) ? (orderBy(veh.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
   v.sinistres_nb = v.sinistres_nb.length === 0 ? 0 : v.sinistres_nb.reduce((a, b) => a + b)
   v.sinistres_nb = Math.max(v.sinistres_nb % 10, ((v.sinistres_nb - (v.sinistres_nb % 10)) / 10))
   // console.log(v.sinistres_nb)
   v.sinistre = v.sinistres[0]
-  v.aptes = (veh.historique !== undefined) ? ($lodash.orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+  v.aptes = (veh.historique !== undefined) ? (orderBy(veh.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
   v.apte = (veh.historique !== undefined) ? ((v.aptes[0] > v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
   /* eslint-disable no-console */
   console.log(v)

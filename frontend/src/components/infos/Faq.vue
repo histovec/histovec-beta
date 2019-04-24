@@ -73,7 +73,7 @@
             >contactez-nous</a>
           </p>
           <accordion
-            :content="faqContent"
+            :content="faqContent(mailBody)"
             :initial-active="activeQuestion"
             @click="highlightQuestion"
           />
