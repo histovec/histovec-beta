@@ -17,7 +17,7 @@
   },
   "notFound": "Désolé, nous n'avons pas trouvé de résultat pour cette recherche.",
   "invalid": "Les données entrées sont invalides. Veuillez essayer à nouveau.",
-  "cancelled": "Le certificat demandé a été annulé.",
+  "cancelled": "Le certificat demandé a été annulé. Une procédure de destruction du véhicule est en cours.",
   "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
   "invalidKey": "Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur.",
   "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
