@@ -64,7 +64,13 @@
                   <div class="media margin-clear">
                     <nav>
                       <ul class="nav nav-pills nav-stacked">
-                        <li><a href="faq">Besoin d'aide</a></li>
+                        <li>
+                          <router-link
+                            :to="{ name: 'faq' }"
+                          >
+                            Besoin d'aide
+                          </router-link>
+                        </li>
                         <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'">CONTACT</a></li>
                         <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">Signaler une erreur</a></li>
                       </ul>
