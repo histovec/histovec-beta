@@ -16,7 +16,7 @@
     "delay": "^4.2.0",
     "font-awesome": "^4.7.0",
     "jspdf": "1.4.1",
-    "lodash": "^4.17.4",
+    "lodash.orderby": "^4.6.0",
     "moment": "^2.18.1",
     "qr.js": "^0.0.0",
     "qrcode.vue": "^1.6.0",
