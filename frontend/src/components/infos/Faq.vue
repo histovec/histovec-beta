@@ -104,10 +104,57 @@ export default {
 
   computed: {
     mailBody() {
-      var text = encodeURI(
-        'Bonjour,\n\nL\'équipe HistoVec vous remercie d\'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n Histovec n\'est pas supporté par des navigateurs trop anciens, nous vous conseillons l\'utilisation de versions récentes de Firefox ou chrome.\n\nPour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l\'historique de votre véhicule.\n\nPour un particulier \nNom (de naissance): \nPrénom(s): \nDate de naissance (du titulaire): \nNuméro d\'immatriculation: \nNuméro de formule: \nou\nDate du certificat (FNI avant 2009):\n\nPour une entreprise\nRaison sociale: \nNuméro de siren: \nNuméro d\'immatriculation: \nNuméro de formule:\nou\nDate du certificat (FNI avant 2009):\n\n\nNous pourrons ainsi vous répondre rapidement',
-      )
-      return text
+      var header =
+        `Bonjour,\n\
+        \n\
+        L'équipe HistoVec vous remercie d'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n\
+        Histovec n'est pas supporté par des navigateurs trop anciens, nous vous conseillons l'utilisation de versions récentes de Firefox ou chrome.\n\
+        \n\
+        Pour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l'historique de votre véhicule.\n\
+        \n\
+        Catégorie du véhicule: ${this.$store.state.typePersonne === 'pro' ? 'professionnel' : 'particulier'}\n\
+        Type d'immatriculation: ${this.$store.state.typeImmatriculation === 'fni' ? 'avant 2009' : 'après 2009'}\n\
+        \n`
+      var body =
+        (this.$store.state.typePersonne === 'particulier') ? (
+          this.$store.state.typeImmatriculation === 'fni' ?
+            `\
+            Nom (de naissance) et prénom(s): ${this.$store.state.nom + this.$store.state.prenom}\n\
+            Date de naissance (du titulaire): ${this.$store.state.dateNaissance}\n\
+            Numéro d'immatriculation: ${this.$store.state.plaque}\n\
+            Date du certificat: ${this.$store.state.dateCertificat}\n
+            `
+            :
+            `\
+            Nom (de naissance): ${this.$store.state.nom}\n\
+            Prénom(s): ${this.$store.state.prenom}\n\
+            Date de naissance (du titulaire): ${this.$store.state.dateNaissance}\n\
+            Numéro d'immatriculation: ${this.$store.state.plaque}\n\
+            Numéro de formule: ${this.$store.state.formule}\n\
+            `
+          ) : (
+            this.$store.state.typeImmatriculation === 'fni' ?
+              `\
+              Raison sociale: ${this.$store.state.raisonSociale}\n\
+              Numéro de siren: ${this.$store.state.siren}\n\
+              Numéro d'immatriculation: ${this.$store.state.plaque}\n\
+              Date du certificat: ${this.$store.state.dateCertificat}\n
+              `
+              :
+              `\
+              Raison sociale: ${this.$store.state.raisonSociale}\n\
+              Numéro de siren: ${this.$store.state.siren}\n\
+              Numéro d'immatriculation: ${this.$store.state.plaque}\n\
+              Numéro de formule: ${this.$store.state.formule}\n\
+              `
+          )
+      var footer =
+        `\n\
+        Numéro de session HistoVec: ${this.$cookie.get('userId')}\n\
+        \n\
+        \n\
+        Nous pourrons ainsi vous répondre rapidement`
+      return encodeURI(header + body + footer)
     },
   },
 
