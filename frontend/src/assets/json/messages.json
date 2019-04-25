@@ -6,6 +6,7 @@
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
+      "hash": "#je-ne-trouve-pas-mon-vehicule",
       "icon": "fa fa-question-circle fa-lg"
     }
   },
@@ -21,12 +22,5 @@
   "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
   "invalidKey": "Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur.",
   "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
-  "error": {
-    "msg": "Erreur inconnue. Si l'erreur persiste, merci de remplir le formulaire : ",
-    "ref": {
-      "msg": "Signaler une erreur",
-      "route": "feedback",
-      "icon": "fa fa-exclamation-circle fa-lg"
-    }
-  }
+  "error": "Erreur inconnue - sollicitez nous."
 }
