@@ -14,7 +14,7 @@
           <router-link
             v-if="refDisplay"
             class="clickable alert-danger"
-            :to="{ name: ref, hash:'#i'}"
+            :to="{ name: ref, hash: refHash }"
           >
             <em>{{ refMessage }}</em>
             <b :class="refIcon"></b>
@@ -48,6 +48,9 @@ export default {
     },
     ref () {
       return this.messages[this.status] ? ((this.messages[this.status].ref !== undefined) ? this.messages[this.status].ref.route : this.messages.default.ref.route) : this.messages.default.ref.route
+    },
+    refHash () {
+      return this.messages[this.status] ? ((this.messages[this.status].ref !== undefined) ? this.messages[this.status].ref.hash : this.messages.default.ref.hash) : this.messages.default.ref.route
     },
     refMessage () {
       return this.messages[this.status] ? (this.messages[this.status].ref ? this.messages[this.status].ref.msg : this.messages.default.ref.msg) : this.messages.default.ref.msg
