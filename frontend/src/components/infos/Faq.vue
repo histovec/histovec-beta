@@ -89,6 +89,7 @@
 import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
 import delay from 'delay'
+import { detect } from 'detect-browser'
 
 export default {
   components: {
@@ -104,6 +105,7 @@ export default {
 
   computed: {
     mailBody() {
+      var browser = detect()
       var header =
         `Bonjour,\n\
         \n\
@@ -151,6 +153,7 @@ export default {
       var footer =
         `\n\
         Numéro de session HistoVec: ${this.$cookie.get('userId')}\n\
+        Navigateur: ${browser.name} ${browser.version} ${browser.os}\n\
         \n\
         \n\
         Nous pourrons ainsi vous répondre rapidement`
