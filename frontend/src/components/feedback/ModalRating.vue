@@ -159,6 +159,11 @@ export default {
       timerModalEval: 120000
     }
   },
+  computed: {
+    filteredMessage () {
+      return this.message.normalize('NFD').replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ')
+    }
+  },
   watch: {
     activate (newVal) {
       if (newVal === true) {
@@ -170,7 +175,7 @@ export default {
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
-        let data = {'message': this.message, 'email': this.email, 'uid': this.$cookie.get('userId'), 'note': this.note, 'date': new Date().toUTCString(), 'holder': this.holder}
+        let data = {'message': this.filteredMessage, 'email': this.email, 'uid': this.$cookie.get('userId'), 'note': this.note, 'date': new Date().toUTCString(), 'holder': this.holder}
         if (!this.note && this.notShow) {
           this.$cookie.set('evaluation', true, 1)
           this.status = 'posted'
