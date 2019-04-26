@@ -30,6 +30,8 @@ http {
     add_header Referrer-Policy "same-origin";
     add_header Feature-Policy "geolocation none;midi none;notifications none;push none;sync-xhr none;microphone none;camera none;magnetometer none;gyroscope self;speaker self;vibrate none;fullscreen self;payment none;";
 
+    client_max_body_size 2k;
+
     # log text
     log_format main '$http_x_forwarded_for - $remote_addr - $remote_user [$time_local] '
     	'"$request" $status $body_bytes_sent '
