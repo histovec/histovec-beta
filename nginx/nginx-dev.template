@@ -75,7 +75,7 @@ server {
 
   location ~ (^/<APP>/api/v0/(contact|feedback)/) {
     if ($request_method != POST) {
-       return 403;
+       return 405;
     }
     rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
     proxy_pass http://<ES_HOST>:9200;

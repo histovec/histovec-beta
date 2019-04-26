@@ -43,7 +43,7 @@ server {
 
   location ~ "^/<APP>/api/v0/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" {
     if ($request_method != GET) {
-       return 403;
+       return 405;
     }
     add_header Access-Control-Allow-Origin '$http_origin';
     limit_req zone=api burst=<API_USER_BURST>;
@@ -62,7 +62,7 @@ server {
 
   location ~ "^/<APP>/api/v0/log/exit" {
     if ($request_method != POST) {
-       return 403;
+       return 405;
     }
     limit_req zone=log burst=80 nodelay;
     limit_req_status 429;
