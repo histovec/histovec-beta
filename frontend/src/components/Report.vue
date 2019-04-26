@@ -299,7 +299,7 @@ export default {
       } else {
         this.$http.get(this.apiUrl + 'id/' + this.$cookie.get('userId') + '/' + (this.holder ? this.$route.params.id : this.$route.query.id))
           .then(response => {
-            /* eslint-disable no-console */
+            /* eslint-disable-next-line no-console */
             console.log(response)
             if (response.body.hits.hits.length === 0) {
               this.result = 'notFound'
@@ -322,8 +322,10 @@ export default {
                 }
                 this.$http.post(this.apiUrl + 'feedback/', data)
                 .then(() => {
+                  /* eslint-disable-next-line no-console */
                   console.log('failure report send')
                 }, () => {
+                  /* eslint-disable-next-line no-console */
                   console.log('couldn\'t send fail report')
                 }
                 )
@@ -336,11 +338,13 @@ export default {
             try {
               var veh = histovec.decrypt(key, encrypted)
             } catch (err) {
+              /* eslint-disable-next-line no-console */
               console.log(err)
               this.result = 'error'
               this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
               return
             }
+            /* eslint-disable-next-line no-console */
             console.log(veh)
 
             if (veh.annulation_ci !== 'NON') {
@@ -359,6 +363,7 @@ export default {
               this.$store.commit('updateKey', this.$route.params.key)
               this.$store.commit('updateId', this.$route.params.id)
             } catch (err) {
+              /* eslint-disable-next-line no-console */
               console.log(err)
             }
             this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
