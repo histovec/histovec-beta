@@ -64,6 +64,7 @@
                       name="message"
                       rows="2"
                       class="form-control"
+                      maxlength="1000"
                     >
                     </textarea>
                   </p>
