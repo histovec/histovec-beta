@@ -73,7 +73,7 @@ server {
 
   location ~ "^/<APP>/api/v0/log/.*" {
     if ($request_method != PUT) {
-       return 403;
+       return 405;
     }
     limit_req zone=log burst=80 nodelay;
     limit_req_status 429;
@@ -91,7 +91,7 @@ server {
     
     limit_req_status 429;
     if ($request_method != POST) {
-       return 403;
+       return 405;
     }
     rewrite "^/.*/(feedback)/$" /$1/_doc break;
     proxy_pass http://<ES_HOST>:9200;

@@ -36,7 +36,7 @@ server {
     #    return 403;
     #man}
     if ($request_method != GET) {
-       return 403;
+       return 405;
     }
     rewrite "^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1 break;
     # rewrite "^/.*/id/.*/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
@@ -55,7 +55,7 @@ server {
 
   location ~ "^/<APP>/api/v0/log/exit" {
     if ($request_method != POST) {
-       return 403;
+       return 405;
     }
     default_type application/json;
     return 200 '{"status":"ok"}';
@@ -63,7 +63,7 @@ server {
 
   location ~ "^/<APP>/api/v0/log/.*" {
     if ($request_method != PUT) {
-       return 403;
+       return 405;
     }
     default_type application/json;
     return 200 '{"status":"ok"}';
