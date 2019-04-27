@@ -23,6 +23,11 @@ RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
     sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list ; \
     apt-get update -qq
 
+# install git in case of github deps
+RUN buildDeps="git" ; \
+   apt-get install -qy --no-install-recommends $buildDeps ; \
+   git config --global url."https://".insteadOf git://
+
 # use proxy & private npm registry
 RUN if [ ! -z "$http_proxy" ] ; then \
         npm config delete proxy; \
