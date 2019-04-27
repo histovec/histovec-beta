@@ -30,7 +30,6 @@ RUN if [ ! -z "$http_proxy" ] ; then \
    [ -z "$npm_registry" ] || npm config set registry=$npm_registry; \
    [ -z "$sass_registry" ] || npm config set sass_binary_site=$sass_registry;
 
-RUN npm config `echo $proxy | sed 's/^$/delete proxy/;s/\(\S\S*\)/set proxy \1/'`
 RUN npm i npm@latest -g
 RUN npm install
 RUN npm audit fix --registry=https://registry.npmjs.org
