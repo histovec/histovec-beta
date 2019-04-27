@@ -15,7 +15,7 @@
     "delay": "^4.2.0",
     "detect-browser": "^4.5.0",
     "font-awesome": "^4.7.0",
-    "jspdf": "1.4.1",
+    "jspdf": "1.5.3",
     "lodash.orderby": "^4.6.0",
     "moment": "^2.18.1",
     "qr.js": "^0.0.0",
