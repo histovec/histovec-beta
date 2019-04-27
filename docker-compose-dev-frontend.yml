@@ -23,7 +23,12 @@ services:
       context: ${FRONTEND}
       dockerfile: Dockerfile.dev
       args:
-        proxy: ${http_proxy}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        sass_registry: ${SASS_REGISTRY}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
         app_path: /${APP}
         app_name: ${APP}
         app_ver: ${APP_VERSION}
