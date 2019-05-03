@@ -674,7 +674,7 @@ export default {
     if (!window.location.host.match(/(histovec.fr|.gouv.fr$)/)) {
       this.active = true
     }
-    this.typePersonne = this.$store.state.typePersonne || this.$route.params.t || 'particulier'
+    this.typePersonne = this.$store.state.identity.typePersonne || this.$route.params.t || 'particulier'
   },
   methods: {
     onPaste (evt) {
