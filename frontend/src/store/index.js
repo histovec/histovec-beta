@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import histovec from './modules/histovec.js'
 import identity from './modules/identity.js'
+import VuexPersistence from 'vuex-persist'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.sessionStorage
+})
 
 Vue.use(Vuex)
 
@@ -34,5 +39,6 @@ export default new Vuex.Store({
   modules: {
     identity,
     histovec
-  }
+  },
+  plugins: [vuexLocal.plugin]
 })
