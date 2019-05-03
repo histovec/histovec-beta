@@ -227,7 +227,7 @@ export default {
       if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
         setTimeout(() => {
           this.show = true
-          this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + 'feedback').then(() => {}, () => {})
+          this.$store.dispatch('log', 'feedback')
         }, this.timerModalEval)
       }
     }

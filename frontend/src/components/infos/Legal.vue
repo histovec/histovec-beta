@@ -311,7 +311,7 @@ export default {
     }
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
+    this.$store.dispatch('log', this.$route.path)
   },
   methods: {
     choose (id) {

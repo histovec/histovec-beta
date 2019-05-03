@@ -168,7 +168,8 @@ export default {
     }
   },
   async log (path, uid) {
-    const json = await apiClient.put('log', `${apiPaths.log}/${uid}/${path}`)
+    let p = path.replace(/^\/\w+\//, '')
+    const json = await apiClient.put('log', `${apiPaths.log}/${uid}/${p}`)
     return json
   },
   async sendFeedback (feedback) {

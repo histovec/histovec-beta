@@ -296,10 +296,10 @@ export default {
   },
   created () {
     setTimeout(() => {
-      this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.status).then(() => {}, () => {})
+      this.$store.dispatch('log', this.$route.path + '/' + this.status)
     }, this.timeout)
 
-    this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(() => {}, () => {})
+    this.$store.dispatch('log', this.$route.path + '/' + (this.holder ? 'holder' : 'buyer'))
 
     if (this.id !== undefined) {
       this.$store.commit('updateId', this.id)

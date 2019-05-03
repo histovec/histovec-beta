@@ -165,16 +165,7 @@ export default {
     if (this.activeQuestion) {
       this.highlightQuestion(this.activeQuestion)
     }
-
-    this.$http
-      .put(
-        this.apiUrl +
-          'log/' +
-          localStorage.getItem('userId') +
-          '/' +
-          this.$route.path.replace(/^\/\w+\//, ''),
-      )
-      .catch(() => {})
+    this.$store.dispatch('log', this.$route.path)
   },
 
   methods: {
