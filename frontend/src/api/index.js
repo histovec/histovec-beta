@@ -3,7 +3,7 @@ import apiConf from '@/assets/json/backend.json'
 import CryptoJS from 'crypto-js'
 import store from '../store'
 
-const apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '')
+const apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '').replace(/\/$/, '')
 
 const apiPaths = {
   log: `${apiUrl}/log`,
