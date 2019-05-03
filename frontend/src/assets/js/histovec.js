@@ -231,6 +231,11 @@ function calcNbTit (historique) {
 }
 
 function histovec (veh) {
+  if (veh === undefined) {
+    return false
+  } else if (veh.annulation_ci === 'OUI') {
+    return veh
+  }
   let v = {
     date_update: '25/11/2018',
     ctec: {
