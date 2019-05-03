@@ -224,7 +224,9 @@ import histovec from '../assets/js/histovec'
 const statusFromCode = {
   404: 'invalid',
   429: 'tooManyRequests',
-  502: 'unavailable'
+  502: 'unavailable',
+  503: 'unavailable',
+  504: 'unavailable',
 }
 
 export default {
