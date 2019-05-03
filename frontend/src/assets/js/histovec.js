@@ -9,19 +9,28 @@ const missing = 'non disponible'
 
 function decrypt (key, encrypted) {
   key = CryptoJS.enc.Base64.parse(key)
-  var rawData = atob(encrypted)
+  let rawData = atob(encrypted)
   let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
   encrypted = btoa(rawData.substring(16))
-  var decrypted = CryptoJS.AES.decrypt({
-    ciphertext: CryptoJS.enc.Base64.parse(encrypted),
-    salt: ''
-  },
-    key, {
-      iv: iv,
-      padding: CryptoJS.pad.Pkcs7,
-      mode: CryptoJS.mode.CBC
-    })
-  return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
+  let decrypted
+  try {
+    decrypted = CryptoJS.AES.decrypt({
+      ciphertext: CryptoJS.enc.Base64.parse(encrypted),
+      salt: ''
+    },
+      key, {
+        iv: iv,
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+      })
+  } catch (e) {
+    throw new Error('decrypt_error')
+  }
+  try {
+    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
+  } catch (e) {
+    throw new Error('invalid_json')
+  }
 }
 
 function pad (n, width, z) {
