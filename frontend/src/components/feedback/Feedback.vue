@@ -224,13 +224,13 @@ export default {
   computed: {
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
   },
   methods: {
     send: function (e) {
       this.status = 'posting'
       if (this.nom && this.prenom && this.object && this.email && this.message) {
-        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message, 'userId': this.$cookie.get('userId')}
+        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message, 'userId': localStorage.getItem('userId')}
         this.$http.post(this.apiUrl + 'feedback/', data)
           .then(() => {
             this.status = 'posted'

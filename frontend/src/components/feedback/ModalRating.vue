@@ -176,9 +176,9 @@ export default {
     send (e) {
       this.status = 'posting'
       if (this.note || this.notShow) {
-        let data = {'message': this.filteredMessage, 'email': this.email, 'uid': this.$cookie.get('userId'), 'note': this.note, 'date': new Date().toUTCString(), 'holder': this.holder}
+        let data = {'message': this.filteredMessage, 'email': this.email, 'uid': localStorage.getItem('userId'), 'note': this.note, 'date': new Date().toUTCString(), 'holder': this.holder}
         if (!this.note && this.notShow) {
-          this.$cookie.set('evaluation', true, 1)
+          localStorage.setItem('evaluation', true, 1)
           this.status = 'posted'
           this.show = false
         } else {
@@ -190,7 +190,7 @@ export default {
             .then(() => {
               this.status = 'posted'
               this.show = false
-              this.$cookie.set('evaluation', true, 1)
+              localStorage.setItem('evaluation', true, 1)
             }, () => {
               this.status = 'failed'
             }
@@ -224,10 +224,10 @@ export default {
       }
     },
     showModalEval () {
-      if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
+      if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
         setTimeout(() => {
           this.show = true
-          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(() => {}, () => {})
+          this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + 'feedback').then(() => {}, () => {})
         }, this.timerModalEval)
       }
     }

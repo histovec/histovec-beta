@@ -24,12 +24,12 @@
     "v-mask": "^1.3.3",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.3.0",
-    "vue-cookie": "^1.1.4",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.6",
     "vue-scrollto": "^2.15.0",
     "vue-shortkey": "^3.1.7",
-    "vuex": "^3.1.0"
+    "vuex": "^3.1.0",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^9.5.1",

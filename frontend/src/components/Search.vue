@@ -664,7 +664,7 @@ export default {
     }
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
     let myShakeEvent = new Shake({
       threshold: 15,
       timeout: 1000

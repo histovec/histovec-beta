@@ -195,7 +195,7 @@ export default {
   computed: {
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
+    this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
   },
   methods: {
     send: function (e) {

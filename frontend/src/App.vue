@@ -217,9 +217,8 @@ Vue.mixin({
     }
   },
   created () {
-    if (this.$cookie && this.$cookie.get('userId') === null) {
-      this.$cookie.set('userId', this.guid(), 1)
-      this.$store.commit('updateCookie', this.$cookie.get('userId'))
+    if (localStorage.getItem('userId') === null) {
+      localStorage.setItem('userId', this.guid(), 1)
     }
     window.bus.$on('langChange', value => {
       this.lang = value

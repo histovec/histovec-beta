@@ -152,7 +152,7 @@ export default {
           )
       var footer =
         `\n\
-        Numéro de session HistoVec: ${this.$cookie.get('userId')}\n\
+        Numéro de session HistoVec: ${localStorage.getItem('userId')}\n\
         Navigateur: ${browser.name} ${browser.version} ${browser.os}\n\
         \n\
         \n\
@@ -170,7 +170,7 @@ export default {
       .put(
         this.apiUrl +
           'log/' +
-          this.$cookie.get('userId') +
+          localStorage.getItem('userId') +
           '/' +
           this.$route.path.replace(/^\/\w+\//, ''),
       )
