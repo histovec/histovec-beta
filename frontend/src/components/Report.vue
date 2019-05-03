@@ -45,7 +45,7 @@
     </section>
 
     <div
-      v-if="(result === 'ok') || (result === 'cached')"
+      v-if="status === 'ok'"
       class="container"
     >
       <div class="row">
@@ -200,7 +200,7 @@
       </div>
       <!-- row -->
     </div>
-    <status :status="result"></status>
+    <status :status="status"></status>
     <modal-rating
       :activate="modalActivate"
       :holder="holder"
@@ -221,6 +221,12 @@ import Status from './reportParts/Status.vue'
 import ModalRating from './feedback/ModalRating.vue'
 import histovec from '../assets/js/histovec'
 
+const statusFromCode = {
+  404: 'invalid',
+  429: 'tooManyRequests',
+  502: 'unavailable'
+}
+
 export default {
   components: {
     Abstract,
@@ -238,31 +244,45 @@ export default {
       default: 'non disponible',
       plaque: '',
       vin: '',
-      result: 'wait',
       conf: [],
-      v: {
-        date_update: '25/11/2018',
-        ctec: {
-          reception: {},
-          puissance: {},
-          places: {},
-          carrosserie: {},
-          PT: {}
-        },
-        titulaire: {},
-        certificat: {},
-        administratif: {
-          synthese: [],
-          titre: {}
-        }
-      },
       modalActivate: false,
       timeout: 10000
     }
   },
   computed: {
+    id () {
+      return this.holder ? this.$route.params.id : this.$route.query.id
+    },
+    key () {
+      let k = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
+      return (k !== undefined) ? k.replace(/-/g, '+').replace(/_/g, '/') : undefined
+    },
+    status () {
+      if (this.$store.state.histovec.v) {
+        if (this.$store.state.histovec.v.annulation_ci === 'OUI') {
+          return 'cancelled'
+        }
+        return 'ok'
+      } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+        return 'invalidKey'
+      } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
+        return 'invalid'
+      } else if (this.$store.state.api.fetching.histovec) {
+          return 'wait'
+      } else if (this.$store.state.api.http.histovec !== 200) {
+        return statusFromCode[this.$store.state.api.http.histovec]
+      } else if (!this.$store.state.api.hit.histovec) {
+        return 'notFound'
+      } else if (!this.$store.state.api.decrypted.histovec) {
+        return 'error'
+      }
+      return 'error'
+    },
+    v () {
+      return histovec.histovec(this.$store.state.histovec.v)
+    },
     holder () {
-      return (this.$route.params.code !== undefined) || (this.$store.state.code !== undefined)
+      return (this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined)
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
@@ -274,113 +294,33 @@ export default {
   },
   created () {
     setTimeout(() => {
-      if (this.result === 'wait') {
-        this.result = 'error'
-      }
-      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
+      this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.status).then(() => {}, () => {})
     }, this.timeout)
 
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(() => {}, () => {})
-    if (this.$store.state.v) {
-      this.v = this.$store.state.v
-      this.modalActivate = true
-      this.result = 'cached'
-      this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-    } else {
-      if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-        // Cas des liens acheteur sans KEY
-        this.result = 'invalidKey'
-        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-        return
-      }
-      if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
-        this.result = 'invalid'
-        this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-      } else {
-        this.$http.get(this.apiUrl + 'id/' + this.$cookie.get('userId') + '/' + (this.holder ? this.$route.params.id : this.$route.query.id))
-          .then(response => {
-            /* eslint-disable-next-line no-console */
-            console.log(response)
-            if (response.body.hits.hits.length === 0) {
-              this.result = 'notFound'
-              this.$store.commit('updateFail', this.$store.state.fail + 1)
-              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-              if ((this.$store.state.fail > 1) && (this.$cookie.get('userId').substring(1, 3) === 'ab')) {
-                let data = {
-                  'nom': this.$store.state.nom,
-                  'prenom': this.$store.state.prenom,
-                  'dateNaissance': this.$store.state.dateNaissance,
-                  'raisonSociale': this.$store.state.raisonSociale,
-                  'siren': this.$store.state.siren,
-                  'dateCertificat': this.$store.state.dateCertificat,
-                  'plaque': this.$store.state.plaque,
-                  'formule': this.$store.state.formule,
-                  'fail': this.$store.state.fail,
-                  'success': this.$store.state.success,
-                  'uid': this.$cookie.get('userId'),
-                  'date': new Date().toUTCString()
-                }
-                this.$http.post(this.apiUrl + 'feedback/', data)
-                .then(() => {
-                  /* eslint-disable-next-line no-console */
-                  console.log('failure report send')
-                }, () => {
-                  /* eslint-disable-next-line no-console */
-                  console.log('couldn\'t send fail report')
-                }
-                )
-              }
-              return
-            }
-            this.modalActivate = true
-            var encrypted = response.body.hits.hits[0]._source.v.replace(/-/g, '+').replace(/_/g, '/')
-            var key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key).replace(/-/g, '+').replace(/_/g, '/')
-            try {
-              var veh = histovec.decrypt(key, encrypted)
-            } catch (err) {
-              /* eslint-disable-next-line no-console */
-              console.log(err)
-              this.result = 'error'
-              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-              return
-            }
-            /* eslint-disable-next-line no-console */
-            console.log(veh)
+    this.$http.put(this.apiUrl + 'log/' + localStorage.getItem('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + (this.holder ? 'holder' : 'buyer')).then(() => {}, () => {})
 
-            if (veh.annulation_ci !== 'NON') {
-              this.result = 'cancelled'
-              this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-              return
-            } else {
-              this.result = 'error'
-            }
-            try {
-              this.v = histovec.histovec(veh)
-              this.result = 'ok'
-              this.$store.commit('updateSuccess', this.$store.state.success + 1)
-              this.$store.commit('updateV', this.v)
-              this.$store.commit('updateCode', this.$route.params.code)
-              this.$store.commit('updateKey', this.$route.params.key)
-              this.$store.commit('updateId', this.$route.params.id)
-            } catch (err) {
-              /* eslint-disable-next-line no-console */
-              console.log(err)
-            }
-            this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-          }, (error) => {
-            this.result = 'error'
-            if (error.status === 404) {
-              this.result = 'invalid'
-            }
-            if (error.status === 429) {
-              this.result = 'tooManyRequests'
-            }
-            if (error.status === 502) {
-              this.result = 'unavailable'
-            }
-            this.$http.put(this.apiUrl + 'log/' + this.$route.path.replace(/^\/\w+\//, '') + '/' + this.result).then(() => {}, () => {})
-          }
-        )
+    if (this.id !== undefined) {
+      this.$store.commit('updateId', this.id)
+    }
+    if (this.key !== undefined) {
+      this.$store.commit('updateKey', this.key)
+    }
+    if (this.$route.params.code !== undefined) {
+      this.$store.commit('updateCode', this.key)
+    }
+    this.getHistoVec()
+  },  
+  methods: {
+    getHistoVec () {
+      if (this.$store.state.v) {
+        // déjà en cache
+        return
+      } else {
+        if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+          // Cas des liens acheteur sans KEY
+          return
+        }
+        this.$store.dispatch('getHistoVec')
       }
     }
   }

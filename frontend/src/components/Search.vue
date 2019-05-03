@@ -533,7 +533,7 @@ export default {
   computed: {
     fniMode: {
       get () {
-        return this.$store.state.fniMode
+        return this.$store.state.identity.fniMode
       },
       set (value) {
         this.$store.commit('updateFniMode', value)
@@ -541,7 +541,7 @@ export default {
     },
     nom: {
       get () {
-        return this.$store.state.nom
+        return this.$store.state.identity.nom
       },
       set (value) {
         this.$store.commit('updateNom', value)
@@ -549,7 +549,7 @@ export default {
     },
     prenom: {
       get () {
-        return this.$store.state.prenom
+        return this.$store.state.identity.prenom
       },
       set (value) {
         this.$store.commit('updatePrenom', value)
@@ -557,7 +557,7 @@ export default {
     },
     dateNaissance: {
       get () {
-        return this.$store.state.dateNaissance
+        return this.$store.state.identity.dateNaissance
       },
       set (value) {
         this.$store.commit('updateDateNaissance', value)
@@ -565,7 +565,7 @@ export default {
     },
     raisonSociale: {
       get () {
-        return this.$store.state.raisonSociale
+        return this.$store.state.identity.raisonSociale
       },
       set (value) {
         this.$store.commit('updateRaisonSociale', value)
@@ -573,7 +573,7 @@ export default {
     },
     siren: {
       get () {
-        return this.$store.state.siren
+        return this.$store.state.identity.siren
       },
       set (value) {
         this.$store.commit('updateSiren', value)
@@ -581,7 +581,7 @@ export default {
     },
     plaque: {
       get () {
-        return this.$store.state.plaque
+        return this.$store.state.identity.plaque
       },
       set (value) {
         this.$store.commit('updatePlaque', value)
@@ -589,7 +589,7 @@ export default {
     },
     formule: {
       get () {
-        return this.$store.state.formule
+        return this.$store.state.identity.formule
       },
       set (value) {
         this.$store.commit('updateFormule', value)
@@ -597,7 +597,7 @@ export default {
     },
     typePersonne: {
       get () {
-        return this.$store.state.typePersonne
+        return this.$store.state.identity.typePersonne
       },
       set (value) {
         this.$store.commit('updateTypePersonne', value)
@@ -605,7 +605,7 @@ export default {
     },
     typeImmatriculation: {
       get () {
-        return this.$store.state.typeImmatriculation
+        return this.$store.state.identity.typeImmatriculation
       },
       set (value) {
         this.$store.commit('updateTypeImmatriculation', value)
@@ -613,7 +613,7 @@ export default {
     },
     dateCertificat: {
       get () {
-        return this.$store.state.dateCertificat
+        return this.$store.state.identity.dateCertificat
       },
       set (value) {
         this.$store.commit('updateDateCertificat', value)
