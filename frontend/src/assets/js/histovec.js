@@ -1,6 +1,8 @@
 import moment from 'moment'
 import orderBy from 'lodash.orderby'
-import operations from '../json/libelle_operations.json'
+import operations from '../json/operations.json'
+import suspensions from '../json/suspensions.json'
+
 
 export default { histovec }
 
@@ -209,6 +211,8 @@ function histovec (veh) {
   } else if (veh.annulation_ci === 'OUI') {
     return veh
   }
+  /* eslint-disable-next-line no-console */
+  console.log(veh)
   let v = {
     date_update: '25/11/2018',
     ctec: {
@@ -226,10 +230,10 @@ function histovec (veh) {
     }
   }
   // filtre l'historique des opérations annulées
-  v.historique = veh.historique
-  v.historique = (v.historique === undefined) ? [] : v.historique.filter(event => event.ope_date_annul === undefined)
+  let historique = veh.historique
+  historique = (historique === undefined) ? [] : historique.filter(event => event.ope_date_annul === undefined)
   // réordonne l'historique des opérations
-  v.historique = orderBy(v.historique, ['opa_date'])
+  historique = orderBy(historique, ['opa_date'])
   v.date_update = veh.date_update || v.date_update
   v.ctec.vin = veh.vin
   v.plaque = veh.plaq_immat
@@ -266,21 +270,21 @@ function histovec (veh) {
   // véhicule importé: changement de règle de gestion #406
   v.certificat.etranger = (veh.import === 'OUI')
   v.certificat.siv = veh.date_premiere_immat_siv || missing
-  v.certificat.fr = (v.certificat.etranger && (v.historique.length > 0)) ? formatDate(v.historique[0].opa_date) : v.certificat.premier
-  v.fni = ((veh.dos_date_conversion_siv !== undefined) && (v.historique.length > 0)) ? ((v.historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
-  v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && ((v.historique.length === 0) || (veh.historique[0].opa_type !== 'IMMAT_NORMALE'))
+  v.certificat.fr = (v.certificat.etranger && (historique.length > 0)) ? formatDate(historique[0].opa_date) : v.certificat.premier
+  v.fni = ((veh.dos_date_conversion_siv !== undefined) && (historique.length > 0)) ? ((historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
+  v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && ((historique.length === 0) || (historique[0].opa_type !== 'IMMAT_NORMALE'))
   v.certificat.courant = veh.date_emission_CI || missing
-  v.certificat.depuis = calcCertifDepuis((orderBy(v.historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
+  v.certificat.depuis = calcCertifDepuis((orderBy(historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
 
-  if ((v.fni !== true) && (v.certificat.fr !== v.certificat.siv) && ((v.historique === undefined) || (!v.historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
-    let tmp = v.historique
+  if ((v.fni !== true) && (v.certificat.fr !== v.certificat.siv) && ((historique === undefined) || (!historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
+    let tmp = historique
     tmp.push({opa_date: v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
-    v.historique = (v.historique !== undefined) ? histoFilter(tmp) : []
+    v.historique = (historique !== undefined) ? histoFilter(tmp) : []
   } else {
-    v.historique = (v.historique !== undefined) ? histoFilter(v.historique) : []
+    v.historique = (historique !== undefined) ? histoFilter(historique) : []
   }
   v.nb_proprietaires = veh.nb_proprietaire
-  v.nb_tit = (v.historique !== undefined) ? (calcNbTit(v.historique) + (v.certificat.incertain ? 1 : 0)) : undefined
+  v.nb_tit = (historique !== undefined) ? (calcNbTit(historique) + (v.certificat.incertain ? 1 : 0)) : undefined
   v.age_veh = veh.age_annee
   v.logo_vehicule = getVehiculeLogo(veh.CTEC_RLIB_GENRE)
   v.vignette_numero = getVignetteNumero(veh.CTEC_RLIB_GENRE, veh.CTEC_RLIB_CATEGORIE, getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
@@ -288,11 +292,12 @@ function histovec (veh) {
   v.administratif.gages = veh.gage || missing
   v.administratif.suspension = (veh.suspension === 'NON') ? 'Non' : 'Oui'
   v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
-  v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
+  v.administratif.suspensions = (veh.suspension === 'NON') ? 'NON' : ((veh.suspensions === undefined) ? 'certificat annulé' : veh.suspensions.map(s => suspensions[s]).join(', '))
+  // v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
   // opposition et procédure à valider
   v.administratif.otci = (veh.otci === 'NON') ? 'Aucune' : ((veh.otci_pv === 'OUI') ? 'opposition temporaire (PV en attente)' : 'opposition temporaire')
   v.administratif.ove = (veh.ove === 'NON') ? 'Aucune' : 'Oui'
-  v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : (veh.otci_pv === 'OUI') ? 'Opposition temporaire (PV en attente)' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
+  v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : (veh.otci_pv === 'OUI') ? 'Opposition temporaire (PV en attente)' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'Procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
   v.administratif.pv = (veh.otci_pv === 'OUI')
   // pour l'instant aucun véhicule saisi dans les échantillons
   v.administratif.saisie = (veh.saisie === 'NON') ? 'Aucune' : 'Oui'
@@ -312,15 +317,15 @@ function histovec (veh) {
   // véhicule importé : changement de règle de gestion #406
   v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
   // ci-dessous : interprétation à confirmer
-  v.sinistres = (v.historique !== undefined) ? (orderBy(v.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-  v.sinistres_nb = (v.historique !== undefined) ? (orderBy(v.historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
+  v.sinistres = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+  v.sinistres_nb = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
   v.sinistres_nb = v.sinistres_nb.length === 0 ? 0 : v.sinistres_nb.reduce((a, b) => a + b)
   v.sinistres_nb = Math.max(v.sinistres_nb % 10, ((v.sinistres_nb - (v.sinistres_nb % 10)) / 10))
   // console.log(v.sinistres_nb)
   v.sinistre = v.sinistres[0]
-  v.aptes = (v.historique !== undefined) ? (orderBy(v.historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-  v.apte = (v.historique !== undefined) ? ((v.aptes[0] > v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
-  /* eslint-disable no-console */
+  v.aptes = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
+  v.apte = (historique !== undefined) ? ((v.aptes[0] > v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
+  /* eslint-disable-next-line no-console */
   console.log(v)
   return v
 }
