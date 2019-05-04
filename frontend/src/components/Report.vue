@@ -301,7 +301,7 @@ export default {
       this.$store.commit('updateKey', this.key)
     }
     if (this.$route.params.code !== undefined) {
-      this.$store.commit('updateCode', this.code)
+      this.$store.commit('updateCode', this.$route.params.code)
     }
     this.getHistoVec()
   },  
