@@ -1,84 +1,75 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import histovec from './modules/histovec.js'
+import identity from './modules/identity.js'
+import VuexPersistence from 'vuex-persist'
+
+import api from '@/api'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.sessionStorage
+})
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
-    typePersonne: 'particulier',
-    typeImmatriculation: '',
-    nom: '',
-    raisonSociale: '',
-    prenom: '',
-    dateNaissance: '',
-    dateCertificat: '',
-    plaque: '',
-    siren: '',
-    formule: '',
-    fniMode: true,
-    key: undefined,
-    code: undefined,
-    v: undefined,
-    cookie: undefined,
-    id: undefined,
-    fail: 0,
-    success: 0
+    logCounter: 0,
+    api: {
+      fetching: {},
+      http: {},
+      json: {},
+      hit: {},
+      decrypted: {},
+      hits: {},
+      noHits: {},
+      error: {}
+    },
+    feedback: {},
+    contact: {}
   },
   mutations: {
-    updateFniMode (state, fniMode) {
-      state.fniMode = fniMode
+    updateApiStatus (state, update) {
+      Object.keys(update).forEach( status => {
+        let apiName = Object.keys(update[status])[0]
+        Vue.set(this.state.api[status], apiName, update[status][apiName])
+      })
     },
-    updateNom (state, nom) {
-      state.nom = nom
+    initApiStatus (state, apiName) {
+      ['http', 'json', 'hit', 'error'].forEach(key => Vue.set(this.state.api[key], apiName, undefined))
+      Vue.set(this.state.api.fetching, apiName, true)
     },
-    updatePrenom (state, prenom) {
-      state.prenom = prenom
+    updateLogCounter (state) {
+      state.logCounter++
     },
-    updateRaisonSociale (state, raisonSociale) {
-      state.raisonSociale = raisonSociale
+    updateFeedback (state, feedback) {
+      state.feedback = feedback
     },
-    updateSiren (state, siren) {
-      state.siren = siren
-    },
-    updateDateNaissance (state, dateNaissance) {
-      state.dateNaissance = dateNaissance
-    },
-    updateDateCertificat (state, dateCertificat) {
-      state.dateCertificat = dateCertificat
-    },
-    updatePlaque (state, plaque) {
-      state.plaque = plaque
-    },
-    updateFormule (state, formule) {
-      state.formule = formule
-    },
-    updateTypePersonne (state, typePersonne) {
-      state.typePersonne = typePersonne
-    },
-    updateTypeImmatriculation (state, typeImmatriculation) {
-      state.typeImmatriculation = typeImmatriculation
-    },
-    updateV (state, v) {
-      state.v = v
-    },
-    updateCode (state, code) {
-      state.code = code
-    },
-    updateKey (state, key) {
-      state.key = key
-    },
-    updateCookie (state, cookie) {
-      state.cookie = cookie
-    },
-    updateId (state, id) {
-      state.id = id
-    },
-    updateFail (state, fail) {
-      state.fail = fail
-    },
-    updateSuccess (state, success) {
-      state.success = success
+    updateContact (state, contact) {
+      state.contact = contact
     }
-  }
+  },
+  actions: {
+    async log ({ commit }, path) {
+      await api.log(path, localStorage.getItem('userId'))
+      commit('updateLogCounter')
+    },
+    async sendFeedback ({ commit }, feedback) {
+      await api.sendFeedback(feedback)
+      commit('updateFeedback')
+    },
+    async sendContact ({ commit }, contact) {
+      await api.sendContact(contact)
+      commit('updateContact')
+    },
+    initApiStatus ({ commit }, apiName) {
+      commit('initApiStatus', apiName)
+    }
+  },
+  modules: {
+    identity,
+    histovec
+  },
+  plugins: [vuexLocal.plugin]
 })

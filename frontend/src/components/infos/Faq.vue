@@ -152,7 +152,7 @@ export default {
           )
       var footer =
         `\n\
-        Numéro de session HistoVec: ${this.$cookie.get('userId')}\n\
+        Numéro de session HistoVec: ${localStorage.getItem('userId')}\n\
         Navigateur: ${browser.name} ${browser.version} ${browser.os}\n\
         \n\
         \n\
@@ -165,16 +165,7 @@ export default {
     if (this.activeQuestion) {
       this.highlightQuestion(this.activeQuestion)
     }
-
-    this.$http
-      .put(
-        this.apiUrl +
-          'log/' +
-          this.$cookie.get('userId') +
-          '/' +
-          this.$route.path.replace(/^\/\w+\//, ''),
-      )
-      .catch(() => {})
+    this.$store.dispatch('log', this.$route.path)
   },
 
   methods: {

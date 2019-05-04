@@ -217,28 +217,33 @@ export default {
       prenom: '',
       object: '',
       email: '',
-      message: '',
-      status: 'init'
+      message: ''
     }
   },
   computed: {
+    status () {
+      if (this.nom && this.prenom && this.object && this.email && this.message) {
+        if (this.$store.api.fetching.feedback) {
+          return 'posting'
+        } else if (this.$store.state.api.http.histovec !== 201) {
+          return 'failed'
+        } else {
+          return 'posted'
+        }
+      } else {
+        return 'init'
+      }
+    }
   },
   created () {
-    this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + this.$route.path.replace(/^\/\w+\//, '')).then(() => {}, () => {})
+    this.$store.dispatch('log', this.$route.path)
   },
   methods: {
-    send: function (e) {
-      this.status = 'posting'
+    async send () {
       if (this.nom && this.prenom && this.object && this.email && this.message) {
-        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message, 'userId': this.$cookie.get('userId')}
-        this.$http.post(this.apiUrl + 'feedback/', data)
-          .then(() => {
-            this.status = 'posted'
-          }, () => {
-            this.status = 'failed'
-          })
-      } else { this.status = 'failed' }
-      e.preventDefault()
+        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message, 'userId': localStorage.getItem('userId')}
+        await this.$store.dispatch('sendFeedback', data)
+      }
     }
   }
 }

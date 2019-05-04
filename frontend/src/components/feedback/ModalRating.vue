@@ -24,13 +24,6 @@
                 @submit="send"
               >
                 <div class="modal-body">
-                  <span
-                    v-if="status == 'failed' && errors.length == 0"
-                    class="info_red txt-small-11"
-                  >
-                    * Veuillez renseigner les champs obligatoires
-                    <br />
-                  </span>
                   <label>
                     Comment évaluez-vous HistoVec :
                     <span
@@ -41,6 +34,13 @@
                     </span>
                   </label>
                   <div class="rating position_left p-g-10">
+                    <span
+                      v-if="errors.includes('note')"
+                      class="info_red txt-small-11"
+                    >
+                      {{ errorMessage['note'] }}
+                      <br />
+                    </span>
                     <span
                       v-for="n in ratings"
                       :key="n"
@@ -71,7 +71,7 @@
                   <br />
                   <div
                     class="form-group has-feedback"
-                    :class="[{'has-error' : (errors.length > 0 && status !== 'init')}]"
+                    :class="[{'has-error' : (errors.includes('email'))}]"
                   >
                     <p>
                       <label>
@@ -79,10 +79,10 @@
                         <i>(L'adresse email ne servira que dans le cadre de cette étude)</i>
                       </label>
                       <span
-                        v-if="errors.length > 0"
+                        v-if="errors.includes('email')"
                         class="info_red txt-small-11"
                       >
-                        {{ errors[0] }}
+                        {{ errorMessage['email'] }}
                       </span>
                       <input
                         id="email"
@@ -108,6 +108,13 @@
                       </label>
                     </div>
                     <div class="col-md-6">
+                      <span
+                        v-if="errors.includes('api')"
+                        class="info_red txt-small-11"
+                      >
+                        {{ errorMessage['api'] }}
+                        <br />
+                      </span>
                       <button class="btn btn-animated btn-default m-h-05">
                         Envoyer
                         <i
@@ -147,9 +154,12 @@ export default {
   },
   data () {
     return {
+      errorMessage: {
+        'email': 'L\'adresse email n\'est pas valide',
+        'note': 'L\'évaluation est obligatoire',
+        'api': 'Service indisponible, votre retour n\'a pas pu être pris en compte'
+      },
       show: false,
-      errors: [],
-      status: 'init',
       notShow: false,
       ratings: [1, 2, 3, 4, 5],
       tempValue: null,
@@ -157,12 +167,39 @@ export default {
       message: '',
       email: '',
       note: null,
+      clicked: false,
       timerModalEval: 120000
     }
   },
   computed: {
     filteredMessage () {
       return this.message.normalize('NFD').replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ')
+    },
+    errors () {
+      let errorList = []
+      if (this.clicked && (!this.note)) {
+        errorList.push('note')
+      }
+      if (this.clicked && this.email && !this.isEmailValid()) {
+        errorList.push('email')
+      }
+      if (this.clicked && this.$store.state.api && this.$store.state.api.http.feedback && (this.$store.state.api.http.feedback !== 201)) {
+        errorList.push('api')
+      }
+      return errorList
+    },
+    status () {
+      if (this.clicked) {
+        if (this.errors.length > 0) {
+          return 'failed'
+        } else if (this.$store.state.api && this.$store.state.api.fetching.feedback) {
+          return 'posting'
+        } else {
+          return 'posted'
+        }
+      } else {
+        return 'init'
+      }
     }
   },
   watch: {
@@ -172,35 +209,42 @@ export default {
       }
     }
   },
+  created () {
+    if (this.activate) {
+      this.showModalEval()
+    }
+  },
   methods: {
-    send (e) {
-      this.status = 'posting'
-      if (this.note || this.notShow) {
-        let data = {'message': this.filteredMessage, 'email': this.email, 'uid': this.$cookie.get('userId'), 'note': this.note, 'date': new Date().toUTCString(), 'holder': this.holder}
-        if (!this.note && this.notShow) {
-          this.$cookie.set('evaluation', true, 1)
-          this.status = 'posted'
+    async send (e) {
+      e.preventDefault()
+      this.$store.dispatch('initApiStatus', 'feedback')
+      this.clicked = true
+      if (this.notShow) {
+          localStorage.setItem('evaluation', true, 1)
+          this.show = false
+          return
+      }
+      if (this.errors.length > 0) {
+          setTimeout(() => this.clicked = false, 3000)
+          return
+      }
+      if (this.note) {
+        let data = {
+          'message': this.filteredMessage, 
+          'email': this.email, 
+          'uid': localStorage.getItem('userId'), 
+          'note': this.note,
+          'date': new Date().toUTCString(), 
+          'holder': this.holder
+        }
+        await this.$store.dispatch('sendFeedback', data)
+        if (this.$store.state.api.http.feedback === 201) {
+          localStorage.setItem('evaluation', true, 1)
           this.show = false
         } else {
-          if (this.email && !this.isEmailValid()) {
-            this.errors.push('L\'adresse email n\'est pas valide')
-            this.status = 'failed'
-          } else {
-            this.$http.post(this.apiUrl + 'feedback/', data)
-            .then(() => {
-              this.status = 'posted'
-              this.show = false
-              this.$cookie.set('evaluation', true, 1)
-            }, () => {
-              this.status = 'failed'
-            }
-            )
-          }
+          this.clicked = true
         }
-      } else {
-        this.status = 'failed'
       }
-      e.preventDefault()
     },
     isEmailValid () {
       let reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -224,10 +268,10 @@ export default {
       }
     },
     showModalEval () {
-      if (this.$cookie.get('evaluation') === 'false' || this.$cookie.get('evaluation') === null) {
+      if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
         setTimeout(() => {
           this.show = true
-          this.$http.put(this.apiUrl + 'log/' + this.$cookie.get('userId') + '/' + 'feedback').then(() => {}, () => {})
+          this.$store.dispatch('log', 'feedback')
         }, this.timerModalEval)
       }
     }
