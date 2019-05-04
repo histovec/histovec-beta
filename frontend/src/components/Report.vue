@@ -290,7 +290,7 @@ export default {
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      return this.baseurl + '/histovec/report?id=' + (this.$store.state.code || this.$route.params.code) + '&key=' + (this.$store.state.key || this.$route.params.key)
+      return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.histovec.code || this.$route.params.code) + '&key=' + encodeURIComponent(this.$store.state.histovec.key || this.$route.params.key)
     }
   },
   created () {
@@ -301,7 +301,7 @@ export default {
       this.$store.commit('updateKey', this.key)
     }
     if (this.$route.params.code !== undefined) {
-      this.$store.commit('updateCode', this.key)
+      this.$store.commit('updateCode', this.code)
     }
     this.getHistoVec()
   },  
