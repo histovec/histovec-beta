@@ -1,37 +1,10 @@
 import moment from 'moment'
 import orderBy from 'lodash.orderby'
 import operations from '../json/libelle_operations.json'
-import CryptoJS from 'crypto-js'
 
-export default { histovec, decrypt }
+export default { histovec }
 
 const missing = 'non disponible'
-
-function decrypt (key, encrypted) {
-  key = CryptoJS.enc.Base64.parse(key)
-  let rawData = atob(encrypted)
-  let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
-  encrypted = btoa(rawData.substring(16))
-  let decrypted
-  try {
-    decrypted = CryptoJS.AES.decrypt({
-      ciphertext: CryptoJS.enc.Base64.parse(encrypted),
-      salt: ''
-    },
-      key, {
-        iv: iv,
-        padding: CryptoJS.pad.Pkcs7,
-        mode: CryptoJS.mode.CBC
-      })
-  } catch (e) {
-    throw new Error('decrypt_error')
-  }
-  try {
-    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
-  } catch (e) {
-    throw new Error('invalid_json')
-  }
-}
 
 function pad (n, width, z) {
   z = z || '0'
