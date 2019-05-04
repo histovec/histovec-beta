@@ -723,7 +723,7 @@ export default {
     onSubmit () {
       this.status = 'posting'
       if (this.checkFields) {
-        if (this.id !== this.$store.state.id) {
+        if (this.id !== this.$store.state.histovec.id) {
           this.$store.commit('updateV', undefined)
           this.$store.commit('updateKey', undefined)
           this.$store.commit('updateCode', undefined)

@@ -249,7 +249,7 @@ export default {
         pdf.setFontSize(p.id.content.size)
         let i = 1
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro d\'immatriculation du véhicule :')
-        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.plaque.toUpperCase())
+        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.identity.plaque.toUpperCase())
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Date de première immatriculation du véhicule :')
         pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.certificat.premier)
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro VIN du véhicule (ou numéro de série) :')
@@ -267,10 +267,22 @@ export default {
         pdf.setFontSize(p.situation1.title.size)
         pdf.text(p.situation1.pos[0], p.situation1.pos[1], 'Situation administrative du véhicule')
         let data = [
-            {key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)', value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : 'Oui'},
-            {key: '- Procédure de réparation contrôlée', value: self.v.administratif.ove},
-            {key: '- Déclaration valant saisie', value: self.v.administratif.saisie},
-            {key: '- Gage', value: self.v.administratif.gage}
+            {
+              key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
+              value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : (self.v.administratif.pv ? 'PV en attente' : 'Oui')
+            },
+            {
+              key: '- Procédure de réparation contrôlée',
+              value: ((self.v.administratif.ove !== 'Aucune') || (this.$store.state.histovec.v.suspensions && this.$store.state.histovec.v.suspensions.includes('PVE')) ? 'Oui' : 'Aucune')
+            },
+            {
+              key: '- Déclaration valant saisie',
+              value: self.v.administratif.saisie
+            },
+            {
+              key: '- Gage',
+              value: self.v.administratif.gage
+            }
         ]
         let offset = p.situation1.inter
         data.forEach(d => {
@@ -291,12 +303,30 @@ export default {
         }
         p.situation2.pos[1] = p.situation2.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
         let data = [
-            {key: '- Immatriculation suspendue', value: self.v.administratif.suspension},
-            {key: '- Immatriculation annulée', value: self.v.administratif.annulation},
-            {key: '- Véhicule volé', value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui'},
-            {key: '- Certificat d\'immatriculation volé', value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui'},
-            {key: '- Certificat d\'immatriculation perdu', value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'},
-            {key: '- Certificat d\'immatriculation duplicata', value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui'}
+            {
+              key: '- Immatriculation suspendue',
+              value: (self.v.administratif.suspension !== 'Non') ? self.v.administratif.suspensions.join(', ') : 'Non'
+            },
+            {
+              key: '- Immatriculation annulée', 
+              value: self.v.administratif.annulation
+            },
+            {
+              key: '- Véhicule volé',
+              value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui'
+            },
+            {
+              key: '- Certificat d\'immatriculation volé',
+              value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui'
+            },
+            {
+              key: '- Certificat d\'immatriculation perdu',
+              value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'
+            },
+            {
+              key: '- Certificat d\'immatriculation duplicata',
+              value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui'
+            }
         ]
         let offset = p.situation2.inter
         data.forEach(d => {

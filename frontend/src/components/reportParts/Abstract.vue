@@ -148,7 +148,7 @@
       <div class="separator-2"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="v.sinistres.length > 0">
+    <div v-if="(v.sinistres.length > 0) || ($store.state.histovec.v.suspensions && $store.state.histovec.v.suspensions.includes('PVE'))">
       <div class="row">
         <!-- debut sinistre  -->
         <div class="col-sm-1">
@@ -160,10 +160,15 @@
         </div>
         <div class="col-sm-6">
           <!-- état - un seul sinistre !-->
-          <span v-if="v.sinistres_nb === 1">
+          <span v-if="v.sinistres_nb === 1 || ((v.sinistres_nb === 0) && $store.state.histovec.v.suspensions && $store.state.histovec.v.suspensions.includes('PVE'))">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">un sinistre déclaré</span>
-            <span class="txt-small-13">en {{ v.sinistre }}</span>
+            <span
+              v-if="v.sinistres_nb === 1"
+              class="txt-small-13"
+            >
+              en {{ v.sinistre }}
+            </span>
             <br />
             <span v-if="v.apte !== false">
               <span class="txt-small-13">et</span>

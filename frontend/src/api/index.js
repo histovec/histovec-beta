@@ -29,11 +29,15 @@ const decrypt = (encrypted, key) => {
         mode: CryptoJS.mode.CBC
       })
   } catch (e) {
+  /* eslint-disable-next-line no-console */
+    console.log(encrypted, e)
     throw new Error('decrypt_error')
   }
   try {
     return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
   } catch (e) {
+    /* eslint-disable-next-line no-console */
+    console.log(decrypted.toString(CryptoJS.enc.Utf8), e)
     throw new Error('invalid_json')
   }
 }
