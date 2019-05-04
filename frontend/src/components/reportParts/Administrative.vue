@@ -6,7 +6,7 @@
           Gages
         </h6>
         <!-- debut tableau gages -->
-        <div class="col-sm-5">
+        <div class="col-sm-12">
           <span class="info_red txt-small-12">{{ v.administratif.gages }}</span>
           <div class="separator-2"></div>
         </div>
@@ -34,8 +34,13 @@
           Suspensions
         </h6>
         <!-- debut tableau suspensions -->
-        <div class="col-sm-5">
-          <span class="info_red txt-small-12">{{ v.administratif.suspensions }}</span>
+        <div class="col-sm-12">
+          <div
+            v-for="(suspension, index) in v.administratif.suspensions"
+            :key="index"
+          >
+            <span class="info_red txt-small-12">{{ suspension }}</span>
+          </div>
           <div class="separator-2"></div>
         </div>
         <!-- fin tableau suspensions -->
@@ -45,12 +50,14 @@
           Procédures
         </h6>
         <!-- debut tableau procédures -->
-        <div class="col-sm-5">
+        <div class="col-sm-12">
           <span class="info_red txt-small-12">{{ v.administratif.procedures }}</span>
-          <div class="separator"></div>
+          <div class="separator-2"></div>
         </div>
         <!-- fin tableau procédures -->
       </div>
+    </div>
+    <div class="row">
       <div class="col-sm-6">
         <h6 class="title">
           Véhicule
