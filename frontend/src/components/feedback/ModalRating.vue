@@ -113,7 +113,7 @@
                         class="info_red txt-small-11"
                       >
                         {{ errorMessage['api'] }}
-                        <br/>
+                        <br />
                       </span>
                       <button class="btn btn-animated btn-default m-h-05">
                         Envoyer
