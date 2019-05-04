@@ -284,7 +284,7 @@ export default {
       return histovec.histovec(this.$store.state.histovec.v)
     },
     holder () {
-      return (this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined)
+      return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined))
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
@@ -295,12 +295,6 @@ export default {
     }
   },
   created () {
-    setTimeout(() => {
-      this.$store.dispatch('log', this.$route.path + '/' + this.status)
-    }, this.timeout)
-
-    this.$store.dispatch('log', this.$route.path + '/' + (this.holder ? 'holder' : 'buyer'))
-
     if (this.id !== undefined) {
       this.$store.commit('updateId', this.id)
     }
@@ -313,16 +307,22 @@ export default {
     this.getHistoVec()
   },  
   methods: {
-    getHistoVec () {
-      if (this.$store.state.v) {
+    async getHistoVec () {
+      if (this.$store.state.histovec.v) {
         // déjà en cache
+        await this.$store.dispatch('log', 
+          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
       } else {
         if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-          // Cas des liens acheteur sans KEY
+          await this.$store.dispatch('log', 
+            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalidKey')
           return
         }
-        this.$store.dispatch('getHistoVec')
+        await this.$store.dispatch('getHistoVec')
+        await this.$store.dispatch('log', 
+          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status)
+        return
       }
     }
   }

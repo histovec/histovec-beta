@@ -15,10 +15,16 @@ export default {
       state.code = code
     },
     updateKey (state, key) {
-      state.key = key
+      if (key !== state.key) {
+        state.key = key
+        state.v = undefined
+      }
     },
     updateId (state, id) {
-      state.id = id
+      if (id !== state.id) {
+        state.id = id
+        state.v = undefined
+      }
     }
   },
   actions: {
