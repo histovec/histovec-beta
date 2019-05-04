@@ -62,6 +62,9 @@ export default new Vuex.Store({
     async sendContact ({ commit }, contact) {
       await api.sendContact(contact)
       commit('updateContact')
+    },
+    initApiStatus ({ commit }, apiName) {
+      commit('initApiStatus', apiName)
     }
   },
   modules: {
