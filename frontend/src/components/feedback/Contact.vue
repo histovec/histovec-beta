@@ -198,18 +198,11 @@ export default {
     this.$store.dispatch('log', this.$route.path)
   },
   methods: {
-    send: function (e) {
-      this.status = 'posting'
+    async send () {
       if (this.nom && this.prenom && this.object && this.email && this.message) {
-        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message}
-        this.$http.post(this.apiUrl + 'contact/', data)
-          .then(() => {
-            this.status = 'posted'
-          }, () => {
-            this.status = 'failed'
-          })
-      } else { this.status = 'failed' }
-      e.preventDefault()
+        let data = {'nom': this.nom, 'prenom': this.prenom, 'object': this.object, 'email': this.email, 'message': this.message, 'userId': localStorage.getItem('userId')}
+        await this.$store.dispatch('sendFeedback', data)
+      }
     }
   }
 }

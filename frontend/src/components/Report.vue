@@ -202,7 +202,7 @@
     </div>
     <status :status="status"></status>
     <modal-rating
-      :activate="modalActivate"
+      :activate="status === 'ok'"
       :holder="holder"
     >
     </modal-rating>
@@ -247,7 +247,6 @@ export default {
       plaque: '',
       vin: '',
       conf: [],
-      modalActivate: false,
       timeout: 10000
     }
   },

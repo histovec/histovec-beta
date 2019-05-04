@@ -25,7 +25,9 @@ export default new Vuex.Store({
       hits: {},
       noHits: {},
       error: {}
-    }
+    },
+    feedback: {},
+    contact: {}
   },
   mutations: {
     updateApiStatus (state, update) {
@@ -40,12 +42,26 @@ export default new Vuex.Store({
     },
     updateLogCounter (state) {
       state.logCounter++
+    },
+    updateFeedback (state, feedback) {
+      state.feedback = feedback
+    },
+    updateContact (state, contact) {
+      state.contact = contact
     }
   },
   actions: {
     async log ({ commit }, path) {
       await api.log(path, localStorage.getItem('userId'))
       commit('updateLogCounter')
+    },
+    async sendFeedback ({ commit }, feedback) {
+      await api.sendFeedback(feedback)
+      commit('updateFeedback')
+    },
+    async sendContact ({ commit }, contact) {
+      await api.sendContact(contact)
+      commit('updateContact')
     }
   },
   modules: {

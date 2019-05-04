@@ -172,6 +172,11 @@ export default {
       }
     }
   },
+  created () {
+    if (this.activate) {
+      this.showModalEval()
+    }
+  },
   methods: {
     send (e) {
       this.status = 'posting'

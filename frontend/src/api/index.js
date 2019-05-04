@@ -176,5 +176,10 @@ export default {
     const json = await apiClient.post('feedback', `${apiPaths.feedback}/`, {
       body: JSON.stringify(feedback)})
     return json
+  },
+  async sendContact (contact) {
+    const json = await apiClient.post('feedback', `${apiPaths.contact}/`, {
+      body: JSON.stringify(contact)})
+    return json
   }
 }
