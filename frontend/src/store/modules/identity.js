@@ -1,5 +1,8 @@
+import Vue from 'vue'
+
 export default {
   state: {
+    formOptions: undefined,
     typePersonne: 'particulier',
     typeImmatriculation: '',
     nom: '',
@@ -10,9 +13,28 @@ export default {
     plaque: '',
     siren: '',
     formule: '',
-    fniMode: true,
+    fniMode: true
   },
   mutations: {
+    initFormOptions (state, formOptions) {
+      state.formOptions = formOptions
+    },
+    updateFormOptions (state, update) {
+      Object.keys(update).forEach( keyPathString => {
+        let o = state.formOptions
+        const value = update[keyPathString]
+        let keyPathArray = keyPathString.split('.')
+        for (let i = 0, n = keyPathArray.length - 1; i < n; ++i) {
+          let k = keyPathArray[i]
+          if (k in o) {
+            o = o[k]
+          } else {
+            throw new Error(`updateFormOptions error: path ${keyPathString} not found in formOptions`)
+          }
+        }
+        Vue.set(o, keyPathArray[keyPathArray.length - 1], value)
+      })
+    },
     updateFniMode (state, fniMode) {
       state.fniMode = fniMode
     },
