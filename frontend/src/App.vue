@@ -183,10 +183,10 @@ import operations from './assets/json/operations.json'
 import synthese from './assets/json/synthese.json'
 import messages from './assets/json/messages.json'
 import verbatims from './assets/json/verbatims.json'
-import VueMask from 'v-mask'
+import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
 
-Vue.use(VueMask)
+Vue.use(VueTheMask)
 Vue.use(VueClipboard)
 
 import lodash from 'lodash'
