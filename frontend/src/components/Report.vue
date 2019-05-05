@@ -218,7 +218,7 @@ import Administrative from './reportParts/Administrative.vue'
 import History from './reportParts/History.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
-import ModalRating from './feedback/ModalRating.vue'
+import ModalRating from './forms/ModalRating.vue'
 import histovec from '../assets/js/histovec'
 
 const statusFromCode = {

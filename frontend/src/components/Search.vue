@@ -234,41 +234,12 @@
                             </div>
                           </div>
                           <div class="col-md-4">
-                            <div
-                              class="form-group has-feedback"
-                              :class="[{'has-error' : ((!checkDateNaissance) && status !== 'init')}]"
+                            <search-field
+                              form-id="dateNaissance"
+                              :option="typeImmatriculation"
+                              :active="status !== 'init'"
                             >
-                              <label class="control-label">
-                                Date de naissance
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <input
-                                v-if="typeImmatriculation === 'fni'"
-                                v-model="dateNaissance"
-                                v-mask="'##/##/####'"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                placeholder="xx/xx/xxxx"
-                                tabindex="2"
-                              >
-                              <input
-                                v-if="typeImmatriculation === 'siv' || !fniMode"
-                                v-model="dateNaissance"
-                                v-mask="'##/##/####'"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                placeholder="xx/xx/xxxx"
-                                tabindex="3"
-                              >
-                              <i class="fa fa-calendar form-control-feedback"></i>
-                            </div>
+                            </search-field>
                           </div>
                         </div>
                         <div
@@ -337,45 +308,12 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <div
-                              class="form-group has-feedback"
-                              :class="[{'has-error' : ((!checkPlaque) && status !== 'init')}]"
+                            <search-field 
+                              form-id="plaque"
+                              :option="typeImmatriculation"
+                              :active="status !== 'init'"
                             >
-                              <label
-                                for="input"
-                                class="control-label"
-                              >
-                                Plaque d'immatriculation
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <input
-                                v-if="typeImmatriculation === 'siv' || !fniMode"
-                                id="plaque"
-                                v-model="plaque"
-                                v-mask="'AA-###-AA'"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                placeholder="AA-555-AA"
-                                tabindex="4"
-                              >
-                              <input
-                                v-if="typeImmatriculation === 'fni'"
-                                id="plaque"
-                                v-model="plaque"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                placeholder="123 ABC 45"
-                                tabindex="4"
-                              >
-                              <i class="fa fa-drivers-license-o form-control-feedback"></i>
-                            </div>
+                            </search-field>
                           </div>
                           <div class="col-md-6">
                             <div
@@ -512,10 +450,75 @@ import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
 import moment from 'moment'
 import ModalHelper from './infos/ModalHelper.vue'
+import SearchField from './forms/SearchField.vue'
+
+const formInitialOptions = {
+  default: {
+    required: true,
+    requiredTitle: 'Ce champ est requis.',
+    maskTitle: 'désactiver le contrôle',
+    maskTitleAlt: 'ré-activer le contrôle',
+    type: 'text'
+  },
+  plaque: {
+    siv: {
+      label: 'Plaque d\'immatriculation',
+      model: 'plaque',
+      masked: true,
+      mask: 'AA-###-AA',
+      maskAlt: 'XXXXXXX',
+      maskTitle: 'désactiver le contrôle pour les plaques particulières',
+      check: /^[a-zA-Z]{1,2}(-|\s+)?[0-9]{2,3}(-|\s+)?[a-zA-Z]{1,2}$/,
+      placeholder: 'AA-123-AA',
+      placeholderAlt: 'AA123AA ou A123A ou AA123A',
+      icon: 'fa-drivers-license-o',
+      tabindex: '4'
+    },
+    fni: {
+      label: 'Plaque d\'immatriculation',
+      model: 'plaque',
+      masked: true,
+      mask: '### AAA ##',
+      maskAlt: 'XXXXXXXX',
+      maskTitle: 'désactiver le contrôle pour les plaques particulières',
+      check: /^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/,
+      placeholder: '123 ABC 45',
+      placeholderAlt: '1234ABC45 ou 123ABC45 ou 12ABC45 ou 12AB45',
+      icon: 'fa-drivers-license-o',
+      tabindex: '4'
+    }
+  },
+  dateNaissance: {
+    siv: {
+      label: 'Date de naissance',
+      model: 'dateNaissance',
+      masked: true,
+      mask: '##/##/####',
+      maskAlt: '####',
+      check: /^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/,
+      maskTitle: 'désactiver le contrôle si année de naissnce seule',
+      placeholder: 'xx/xx/xxxx',
+      placeholderAlt: '19xx',
+      tabindex: '3'
+    },
+    fni: {
+      label: 'Date de naissance',
+      model: 'dateNaissance',
+      masked: true,
+      mask: '##/##/####',
+      maskAlt: '####',
+      maskTitle: 'désactiver le contrôle si année de naissnce seule',
+      placeholder: 'xx/xx/xxxx',
+      placeholderAlt: '19xx',
+      tabindex: '2'
+    }
+  }
+}
 
 export default {
   components: {
-    ModalHelper
+    ModalHelper,
+    SearchField
   },
   directives: {
     focus: {
@@ -531,6 +534,14 @@ export default {
     }
   },
   computed: {
+    formOptions: {
+      get () {
+        return this.$store.state.identity.formOptions
+      },
+      set (value) {
+        this.$store.commit('initFormOptions', value)
+      }
+    },
     fniMode: {
       get () {
         return this.$store.state.identity.fniMode
@@ -620,16 +631,20 @@ export default {
       }
     },
     checkDateNaissance () {
-      return this.dateNaissance.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
+      return this.dateNaissance.match(/^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/)
     },
     checkDateCertificat () {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
     },
     checkPlaque () {
-      return (this.typeImmatriculation === 'fni') ? this.plaque.match(/^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/) : this.plaque.match(/^[a-zA-Z]{2}(-|\s+)?[0-9]{3}(-|\s+)?[a-zA-Z]{2}$/)
+      if (this.typeImmatriculation === 'fni') {
+        return this.plaque.match(/^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/)
+      } else {
+        return this.plaque.match(/^[a-zA-Z]{1,2}(-|\s+)?[0-9]{2,3}(-|\s+)?[a-zA-Z]{1,2}$/)
+      }
     },
     checkFormule () {
-      return this.formule.match(/^\d{4}[a-zA-Z]{2}\d{5}$/)
+      return this.formule.match(/^(\d{2,4}[a-zA-Z]{2}\d{5}|)$/)
     },
     checkFields () {
       return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni') && this.checkDateNaissance) || (this.raisonSociale && this.siren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
@@ -664,6 +679,13 @@ export default {
     }
   },
   created () {
+    if (this.typeImmatriculation === undefined) {
+      this.typeImmatriculation = 'siv'
+    }
+    if (this.formOptions === undefined) {
+      this.formOptions = formInitialOptions
+    }
+
     this.$store.dispatch('log', this.$route.path)
     let myShakeEvent = new Shake({
       threshold: 15,
