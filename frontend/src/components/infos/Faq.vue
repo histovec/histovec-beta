@@ -105,59 +105,65 @@ export default {
 
   computed: {
     mailBody() {
-      var browser = detect()
-      var header =
-        `Bonjour,\n\
+      const browser = detect()
+      const header =
+        'Bonjour\n\
+        L’équipe HistoVec vous remercie d’avoir utilisé notre service.\n\
+        Votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n\
+        Histovec n’est pas supporté par des navigateurs trop anciens, \n\
+        nous vous conseillons l’utilisation de versions récentes de Firefox ou chrome.\n\
         \n\
-        L'équipe HistoVec vous remercie d'avoir utilisé le site, votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n\
-        Histovec n'est pas supporté par des navigateurs trop anciens, nous vous conseillons l'utilisation de versions récentes de Firefox ou chrome.\n\
-        \n\
-        Pour vous aider, nous avons besoin des informations que vous avez utilisé pour consulter l'historique de votre véhicule.\n\
-        \n\
-        Catégorie du véhicule: ${this.$store.state.typePersonne === 'pro' ? 'professionnel' : 'particulier'}\n\
-        Type d'immatriculation: ${this.$store.state.typeImmatriculation === 'fni' ? 'avant 2009' : 'après 2009'}\n\
-        \n`
-      var body =
-        (this.$store.state.typePersonne === 'particulier') ? (
-          this.$store.state.typeImmatriculation === 'fni' ?
+        Pour vous aider nous avons besoin des informations que vous avez utilisé\n\
+        pour consulter l’historique de votre véhicule.\n\
+        \n'
+      const typePersonne = this.$store.state.identity.typePersonne === 'pro' ?
+        'Catégorie du véhicule: professionnel\n' : 'Catégorie du véhicule: particulier\n'
+      const typeImmatriculation = this.$store.state.identity.typeImmatriculation === 'fni' ?
+        'Type d’immatriculation: avant 2009\n\n' : 'Type d’immatriculation: après 2009\n\n'
+      const identity =
+        (this.$store.state.identity.typePersonne === 'particulier') ? (
+          this.$store.state.identity.typeImmatriculation === 'fni' ?
             `\
-            Nom (de naissance) et prénom(s): ${this.$store.state.nom + this.$store.state.prenom}\n\
-            Date de naissance (du titulaire): ${this.$store.state.dateNaissance}\n\
-            Numéro d'immatriculation: ${this.$store.state.plaque}\n\
-            Date du certificat: ${this.$store.state.dateCertificat}\n
+            Nom (de naissance) et prénom(s): ${this.$store.state.identity.nom + this.$store.state.identity.prenom}\n\
+            Date de naissance (du titulaire): ${this.$store.state.identity.dateNaissance}\n\
+            Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
+            Date du certificat: ${this.$store.state.identity.dateCertificat}\n
             `
             :
             `\
-            Nom (de naissance): ${this.$store.state.nom}\n\
-            Prénom(s): ${this.$store.state.prenom}\n\
-            Date de naissance (du titulaire): ${this.$store.state.dateNaissance}\n\
-            Numéro d'immatriculation: ${this.$store.state.plaque}\n\
-            Numéro de formule: ${this.$store.state.formule}\n\
+            Nom (de naissance): ${this.$store.state.identity.nom}\n\
+            Prénom(s): ${this.$store.state.identity.prenom}\n\
+            Date de naissance (du titulaire): ${this.$store.state.identity.dateNaissance}\n\
+            Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
+            Numéro de formule: ${this.$store.state.identity.formule}\n\
             `
           ) : (
-            this.$store.state.typeImmatriculation === 'fni' ?
+            this.$store.state.identity.typeImmatriculation === 'fni' ?
               `\
-              Raison sociale: ${this.$store.state.raisonSociale}\n\
-              Numéro de siren: ${this.$store.state.siren}\n\
-              Numéro d'immatriculation: ${this.$store.state.plaque}\n\
-              Date du certificat: ${this.$store.state.dateCertificat}\n
+              Raison sociale: ${this.$store.state.identity.raisonSociale}\n\
+              Numéro de siren: ${this.$store.state.identity.siren}\n\
+              Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
+              Date du certificat: ${this.$store.state.identity.dateCertificat}\n
               `
               :
               `\
-              Raison sociale: ${this.$store.state.raisonSociale}\n\
-              Numéro de siren: ${this.$store.state.siren}\n\
-              Numéro d'immatriculation: ${this.$store.state.plaque}\n\
-              Numéro de formule: ${this.$store.state.formule}\n\
+              Raison sociale: ${this.$store.state.identity.raisonSociale}\n\
+              Numéro de siren: ${this.$store.state.identity.siren}\n\
+              Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
+              Numéro de formule: ${this.$store.state.identity.formule}\n\
               `
           )
-      var footer =
+      const tech =
         `\n\
         Numéro de session HistoVec: ${localStorage.getItem('userId')}\n\
         Navigateur: ${browser.name} ${browser.version} ${browser.os}\n\
+        `
+      const footer =
+        '\n\
         \n\
-        \n\
-        Nous pourrons ainsi vous répondre rapidement`
-      return encodeURI(header + body + footer)
+        Nous pourrons ainsi vous répondre rapidement'
+      let mail = header + typePersonne + typeImmatriculation + identity + tech + footer
+      return encodeURIComponent(mail)
     },
   },
 

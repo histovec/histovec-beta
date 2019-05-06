@@ -477,7 +477,7 @@ const formInitialOptions = {
     fni: {
       label: 'Plaque d\'immatriculation',
       model: 'plaque',
-      masked: true,
+      masked: false,
       mask: '### AAA ##',
       maskAlt: 'XXXXXXXX',
       maskTitle: 'désactiver le contrôle pour les plaques particulières',

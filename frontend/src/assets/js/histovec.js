@@ -292,7 +292,7 @@ function histovec (veh) {
   v.administratif.gages = veh.gage || missing
   v.administratif.suspension = (veh.suspension === 'NON') ? 'Non' : 'Oui'
   v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
-  v.administratif.suspensions = (veh.suspension === 'NON') ? ['NON'] : ((veh.suspensions === undefined) ? 'certificat annulé' : veh.suspensions.map(s => suspensions[s]))
+  v.administratif.suspensions = (veh.suspension === 'NON') ? ['NON'] : ((veh.suspensions === undefined) ? ['certificat annulé'] : veh.suspensions.map(s => suspensions[s]))
   // v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
   // opposition et procédure à valider
   v.administratif.otci = (veh.otci === 'NON') ? 'Aucune' : ((veh.otci_pv === 'OUI') ? 'opposition temporaire (PV en attente)' : 'opposition temporaire')

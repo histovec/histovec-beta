@@ -16,7 +16,8 @@
         *
       </span>
     </label>
-    <i 
+    <i
+      v-if="false"
       class="pull-right m-l-15 fa"
       :class="{ 
         'fa-lock': masked,
@@ -27,6 +28,7 @@
     >
     </i>
     <input
+      v-if="masked"
       :id="formId"
       v-model="model"
       v-mask="mask"
@@ -36,7 +38,17 @@
       :placeholder="placeholder"
       :tabindex="tabindex"
     >
-    <i 
+    <input
+      v-if="!masked"
+      :id="formId"
+      v-model="model"
+      :type="type"
+      :required="required"
+      class="form-control"
+      :placeholder="placeholder"
+      :tabindex="tabindex"
+    >
+    <i
       v-if="icon"
       class="fa form-control-feedback"
       :class="icon"
