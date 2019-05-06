@@ -28,7 +28,7 @@
     >
     </i>
     <input
-      v-if="masked"
+      v-if="masked && ((typeof mask) === 'string')"
       :id="formId"
       v-model="model"
       v-mask="mask"
@@ -37,6 +37,17 @@
       class="form-control"
       :placeholder="placeholder"
       :tabindex="tabindex"
+    >
+    <input
+      v-if="masked && ((typeof mask) !== 'string')"
+      :id="formId"
+      v-model="model"
+      :type="type"
+      :required="required"
+      class="form-control"
+      :placeholder="placeholder"
+      :tabindex="tabindex"
+      @input="applyMask"
     >
     <input
       v-if="!masked"
@@ -58,6 +69,7 @@
 </template>
 
 <script>
+import masks from  '@/assets/js/masks'
 
 export default {
   props: {
@@ -107,13 +119,24 @@ export default {
     tabindex () { return this.options.tabindex },
     icon () { return this.options.icon },
     placeholder () { return this.masked ? this.options.placeholder : this.options.placeholderAlt },
-    mask () { return this.masked ? this.options.mask : this.options.maskAlt },
+    mask () {
+      if (this.options.mask in masks) {
+        return masks[this.options.mask]
+      } else {
+        return this.options.mask
+      }
+    },
     checkForm () { return this.model.match(this.options.check) }
   },
   methods: {
     toggleMask () {
       const lockKeyPath = this.option ? `${this.formId}.${this.option}.masked` : `${this.formId}.masked`
       this.$store.commit('updateFormOptions', { [lockKeyPath]: !this.masked })
+    },
+    applyMask (evt) {
+      if (!evt.isTrusted) return
+      let el = evt.currentTarget
+      this.model = this.mask(el.value)
     }
   }
 }
