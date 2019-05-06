@@ -16,7 +16,8 @@
         *
       </span>
     </label>
-    <i v-if="false"
+    <i
+      v-if="false"
       class="pull-right m-l-15 fa"
       :class="{ 
         'fa-lock': masked,
