@@ -9,7 +9,7 @@ ARG app_path
 ARG app_name
 ARG app_ver
 ENV APP ${APP}
-ENV APP_VERSION ${APP_VERSION}
+ENV APP_VERSION ${app_ver}
 
 # update debian w/proxy & mirror
 RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
@@ -22,8 +22,7 @@ RUN buildDeps="git" ; \
    git config --global url."https://".insteadOf git://
 
 WORKDIR /$app_path
-COPY package.json.template .
-RUN cat package.json.template | sed "s/<APP>/${app_name}/;s/<VERSION>/${app_ver}/" > package.json
+COPY package.json .
 VOLUME /$app_path/src
 VOLUME /$app_path/build
 VOLUME /$app_path/config
@@ -40,6 +39,7 @@ RUN if [ ! -z "$http_proxy" ] ; then \
    [ -z "$sass_registry" ] || npm config set sass_binary_site=$sass_registry;
 
 RUN npm i npm@latest -g
+RUN npm --no-git-tag-version version ${APP_VERSION}
 RUN npm install
 RUN npm audit fix
 
