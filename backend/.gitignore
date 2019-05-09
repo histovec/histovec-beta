@@ -1,6 +1,4 @@
 esdata
-pgdata
-upload
+redis
 .lastcommit
 log
-projects

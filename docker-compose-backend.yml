@@ -1,22 +1,42 @@
-version: '2'
+version: '3.7'
 
 services:
   backend:
+    image: ${APP}-backend
     build:
       context: ${BACKEND}
+      target: ${EXEC_ENV}
+      dockerfile: Dockerfile
       args:
-        proxy: ${http_proxy}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
         app_path: /${APP}
         app_name: ${APP}
-    image: ${APP}-backend:latest
+        app_ver: ${APP_VERSION}
     container_name: ${APP}-backend
+    environment:
+      - NODE_ENV=${EXEC_ENV}
+      - APP=${APP}
+      - APP_VERSION=${APP_VERSION}
+      - REDIS_URL=redis://cache
+      - ES_URL=${ES_HOST}:${ES_PORT}
+      - ES_INDEX=${ES_INDEX}
+      - SMTP_SERVER=${SMTP_SERVER}
+      - SMTP_PORT=${SMTP_PORT}
+      - MAIL_FROM=${MAIL_FROM}
     volumes:
-      - ${BACKEND}/code/:/${APP}/code/
-      - ${BACKEND}/conf/:/${APP}/conf/
-      - ${BACKEND}/log:/log/
-      - ${BACKEND}/upload:/upload/
-
+      - ${BACKEND}/src:/${APP}/src/
+      - /${APP}/node_modules
     restart: always
+    links:
+      - redis
+
+  redis:
+    image: redis
+    container_name: cache
 
 networks:
   default:

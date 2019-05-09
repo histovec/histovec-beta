@@ -50,7 +50,6 @@ server {
     proxy_http_version 1.1;
     # sub_filter_types '*';
     # sub_filter '{}' '';
-
   }
 
   location ~ "^/<APP>/api/v0/log/exit" {
@@ -79,6 +78,15 @@ server {
     }
     rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
     proxy_pass http://<ES_HOST>:9200;
+    proxy_redirect off;
+    proxy_hide_header Content-Type;
+    proxy_set_header content-type "application/json";
+    proxy_buffering off;
+    proxy_http_version 1.1;
+  }
+
+  location ~ "^/<APP>/api/v1/" {
+    proxy_pass http://backend:8000;
     proxy_redirect off;
     proxy_hide_header Content-Type;
     proxy_set_header content-type "application/json";

@@ -32,6 +32,7 @@ export DC_PREFIX=${DC_DIR}/docker-compose
 export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 export ES_MEM=512m
 export ES_HOST=elasticsearch
+export ES_PORT=9200
 export MAX_MAP_COUNT=262144
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
@@ -80,6 +81,7 @@ include ./artifacts
 
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
 DC := docker-compose
+export ES_INDEX=${dataset}
 
 install-prerequisites:
 ifeq ("$(wildcard /usr/bin/docker /usr/local/bin/docker)","")
@@ -297,10 +299,9 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network elasticsearch frontend-dev
+dev: network elasticsearch backend-dev frontend-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop network-stop
-
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop network-stop
 
 frontend-build: network
 	@echo building ${APP} frontend
@@ -327,7 +328,13 @@ frontend-stop:
 frontend: network tor
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
 
-
 up: network elasticsearch frontend
+
+backend-dev:
+	@echo docker-compose up backend for dev ${VERSION}
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+backend-dev-stop:
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 down: frontend-stop elasticsearch-stop network-stop
