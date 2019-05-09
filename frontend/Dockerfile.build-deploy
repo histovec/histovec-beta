@@ -9,7 +9,7 @@ ARG app_path
 ARG app_name
 ARG app_ver
 ENV APP ${APP}
-ENV APP_VERSION ${APP_VERSION}
+ENV APP_VERSION ${app_ver}
 
 # update debian w/proxy & mirror
 RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \

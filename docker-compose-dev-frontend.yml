@@ -37,7 +37,6 @@ services:
     environment:
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
-    container_name: ${APP}-frontend-dev
     volumes:
       - ${FRONTEND}/index.html:/${APP}/index.html
       - ${FRONTEND}/.babelrc:/${APP}/.babelrc
@@ -47,6 +46,7 @@ services:
       - ${FRONTEND}/config:/${APP}/config/
       - ${FRONTEND}/src:/${APP}/src/
       - ${FRONTEND}/build:/${APP}/build/
+      - /${APP}/node_modules
 
 networks:
   default:
