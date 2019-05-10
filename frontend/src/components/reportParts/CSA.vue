@@ -22,6 +22,7 @@
 
 <script>
 
+import moment from 'moment'
 import JsPdf from 'jspdf'
 import Qr from 'qr.js'
 
@@ -51,6 +52,11 @@ export default {
           url: 'assets/images/histovec-logo-droite-name.png'
         }
       }
+    }
+  },
+  computed: {
+    validityDate () {
+      return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
     }
   },
   created () {
