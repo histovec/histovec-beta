@@ -29,7 +29,7 @@ const decrypt = (encrypted, key) => {
         mode: CryptoJS.mode.CBC
       })
   } catch (e) {
-  /* eslint-disable-next-line no-console */
+    /* eslint-disable-next-line no-console */
     console.log(encrypted, e)
     throw new Error('decrypt_error')
   }
@@ -74,6 +74,8 @@ const checkValidJson = async (apiName, response) => {
 }
 
 const checkValidSearch = async (apiName, response) => {
+  // check if valid elasticsearch result
+  // and return only first result
   let json  
   try {
     if (response.success) {
@@ -116,7 +118,43 @@ const checkValidSearch = async (apiName, response) => {
     return {
       success: false,
       status: response.status,
-      error: { 'search': e }
+      error: { search: e }
+    }
+  }
+}
+
+const decryptSearch = async (apiName, response, objectPath, key) => {
+  let encrypted
+  try {
+    if (response.success) {
+      encrypted = await response.hit[objectPath].replace(/-/g, '+').replace(/_/g, '/')
+      const decrypted = decrypt(encrypted, key)
+      store.commit('updateApiStatus', {
+        decrypted: { [apiName]: true }
+      })
+      return {
+        success: true,
+        decrypted: decrypted
+      }
+    } else {
+      await store.commit('updateApiStatus', {
+        decrypted: { [apiName]: false }
+      })
+      return {
+        success: false,
+        status: response.status,
+        error: response.error || 'decrypt_invalid_search'
+      }
+    }
+  } catch (error) {
+    store.commit('updateApiStatus', {
+      decrypted: { [apiName]: false },
+      error: { [apiName]: { decrypt: error } }
+    })
+    return {
+      success: false,
+      error: { decrypt: error },
+      decrypted: {}
     }
   }
 }
@@ -129,6 +167,7 @@ export const fetchInit = (apiName, url, options) => {
 export const fetchClient = (apiName, url, options) => fetchInit(apiName, url, options).then(resp => checkStatus(apiName, resp))
 export const jsonClient = (apiName, url, options) => fetchClient(apiName, url, options).then(resp => checkValidJson(apiName, resp))
 export const searchClient = (apiName, url, options) => jsonClient(apiName, url, options).then(resp => checkValidSearch(apiName, resp))
+export const encryptedClient = (apiName, url, objectPath, key, options) => searchClient(apiName,url, options).then(resp => decryptSearch(apiName, resp, objectPath, key))
 
 const jsonHeader = {
   'Content-Type': 'application/json',
@@ -142,33 +181,22 @@ const apiClient = {
     jsonClient(apiName, url, { ...options, headers: jsonHeader, method: 'PUT' })
   ),  
   search: (apiName, url, options) => (
-    searchClient(apiName, url, { ...options, headers: jsonHeader, method: 'GET' })
+    searchClient(apiName, url, { ...options, headers: jsonHeader, method: 'POST' })
+  ),
+  decrypt: (apiName, url, objectPath, key, options) => (
+    encryptedClient(apiName, url, objectPath, key, options)
   )
 }
 
 export default {
-  async getHistoVec (id, key, uid) {   
+  async getHistoVec (id, key, uid) {
     const apiName = 'histovec'
-    let encrypted = await apiClient.search(apiName, `${apiPaths[apiName]}/${uid}/${id}`)
-    try {
-      encrypted = encrypted.hit.v.replace(/-/g, '+').replace(/_/g, '/')
-      const decrypted = decrypt(encrypted, key)
-      store.commit('updateApiStatus', { 
-        decrypted: { [apiName]: true }
-      })
-      return {
-        success: true,
-        v: decrypted
-      }
-    } catch (e) {
-      store.commit('updateApiStatus', { 
-        decrypted: { [apiName]: false },
-        error: { [apiName]: { decrypt: e } }
-      })
-      return {
-        success: false,
-        v: {}
-      }      
+    let response = await apiClient.decrypt(apiName, `${apiPaths[apiName]}/${uid}/${id}`, 'v', key)
+    /* eslint-disable-next-line no-console */
+    console.log(response)
+    return {
+      success: response.success,
+      v: (response.decrypted || {})
     }
   },
   async log (path, uid) {
