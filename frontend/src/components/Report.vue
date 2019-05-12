@@ -173,7 +173,6 @@
               <div
                 class="tab-pane fade pr-20"
                 :class="[{'in active' : display['all_tabs'] || tab === 'vehicle'}]"
-                style="position: relative; height:40vh; width:100vw"
               >
                 <tech-chars :v="v"></tech-chars>
               </div>
