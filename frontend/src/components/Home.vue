@@ -244,15 +244,15 @@
             <div class="testimonial text-center">
               <h3>
                 <transition name="slide-fade">
-                  <span v-if="verbatim"> {{ verbatims[i].name }}</span>
+                  <span v-if="verbatim">
+                    <blockquote> {{ verbatims[i].comment }} </blockquote>
+                  </span>
                 </transition>
               </h3>
               <div class="testimonial-body">
                 <p>
                   <transition name="slide-fade">
-                    <span v-if="verbatim">
-                      <blockquote> {{ verbatims[i].comment }} </blockquote>
-                    </span>
+                    <span v-if="verbatim"> {{ verbatims[i].name }}</span>
                   </transition>
                 </p>
               </div>
