@@ -368,7 +368,7 @@ export default {
       setTimeout(() => {
         this.verbatim = true
       }, 800)
-    }, 5000)
+    }, 8000)
   }
 }
 </script>
