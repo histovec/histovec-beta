@@ -1,11 +1,11 @@
 import Elasticsearch from 'elasticsearch'
+import { config } from '../config'
 
-console.log(process.env)
+console.log(config)
 
 export default { 
   Client : new Elasticsearch.Client({
-    host: `${process.env.ES_URL}`
-  }),
-  defaultIndex: `${process.env.ES_INDEX}`
+    host: config.esUrl
+  })
 }
 

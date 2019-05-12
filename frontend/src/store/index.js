@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import histovec from './modules/histovec.js'
 import identity from './modules/identity.js'
+import otc from './modules/otc.js'
 import VuexPersistence from 'vuex-persist'
 
 import api from '@/api'
@@ -69,7 +70,8 @@ export default new Vuex.Store({
   },
   modules: {
     identity,
-    histovec
+    histovec,
+    otc
   },
   plugins: [vuexLocal.plugin]
 })

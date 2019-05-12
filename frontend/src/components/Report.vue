@@ -120,6 +120,18 @@
                 </a>
               </li>
               <li
+                v-if="display.otc"
+                :class="[{'active' : tab === 'otc'}]"
+              >
+                <a
+                  class="clickable"
+                  @click="tab = 'otc'"
+                >
+                  <i class="fa fa-cogs pr-10"></i>
+                  Contrôles techniques
+                </a>
+              </li>
+              <li
                 v-if="holder"
                 :class="[{'active' : tab === 'send'}]"
               >
@@ -178,6 +190,12 @@
                 <history :v="v"></history>
               </div>
               <div
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'otc'}]"
+              >
+                <o-t-c :ct="ct"></o-t-c>
+              </div>
+              <div
                 v-if="holder"
                 class="tab-pane fade"
                 :class="[{'in active' : display['all_tabs'] || tab === 'send'}]"
@@ -216,6 +234,7 @@ import TechChars from './reportParts/TechChars.vue'
 import License from './reportParts/License.vue'
 import Administrative from './reportParts/Administrative.vue'
 import History from './reportParts/History.vue'
+import OTC from './reportParts/OTC.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
 import ModalRating from './forms/ModalRating.vue'
@@ -236,6 +255,7 @@ export default {
     License,
     Administrative,
     History,
+    OTC,
     Share,
     Status,
     ModalRating
@@ -285,6 +305,9 @@ export default {
     holder () {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined))
     },
+    ct () {
+      return this.$store.state.otc.ct || []
+    },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
       return window.location.protocol + '//' + window.location.host
@@ -318,7 +341,10 @@ export default {
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalidKey')
           return
         }
-        await this.$store.dispatch('getHistoVec')
+        await this.$store.dispatch('getHistoVec', this.display.otc)
+        if (this.display.otc) {
+          await this.$store.dispatch('getOTC')
+        }
         await this.$store.dispatch('log', 
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status)
         return

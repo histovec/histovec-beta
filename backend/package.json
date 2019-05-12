@@ -32,6 +32,7 @@
   "author": "Ministère de l'intérieur",
   "license": "GPLv3",
   "dependencies": {
+    "axios": "^0.18.0",
     "crypto-js": "^3.1.9-1",
     "cross-env": "^5.2.0",
     "delay": "^4.2.0",

@@ -25,6 +25,8 @@ export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
 export BACKEND=${APP_PATH}/backend
+export BACKEND_PORT=8000
+export BACKEND_SECRET=%ch4NGM3!
 export FRONTEND=${APP_PATH}/frontend
 export LOGS=${APP_PATH}/log
 export DC_DIR=${APP_PATH}
@@ -33,6 +35,10 @@ export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 export ES_MEM=512m
 export ES_HOST=elasticsearch
 export ES_PORT=9200
+export OTC_SCHEME=http
+export OTC_HOST=otc
+export OTC_PORT=9000
+export OTC_API=otc
 export MAX_MAP_COUNT=262144
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
@@ -299,9 +305,9 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network elasticsearch backend-dev frontend-dev
+dev: network elasticsearch backend-dev frontend-dev otc-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop otc-dev-stop network-stop
 
 frontend-build: network
 	@echo building ${APP} frontend
@@ -336,5 +342,12 @@ backend-dev:
 
 backend-dev-stop:
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
+
+otc-dev:
+	@echo docker-compose up otc simulator for dev ${VERSION}
+	@${DC} -f ${DC_PREFIX}-otc.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+otc-dev-stop:
+	@${DC} -f ${DC_PREFIX}-otc.yml down
 
 down: frontend-stop elasticsearch-stop network-stop

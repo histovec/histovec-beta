@@ -19,11 +19,13 @@ services:
     container_name: ${APP}-backend
     environment:
       - NODE_ENV=${EXEC_ENV}
+      - BACKEND_PORT=${BACKEND_PORT}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
       - REDIS_URL=redis://cache
       - ES_URL=${ES_HOST}:${ES_PORT}
       - ES_INDEX=${ES_INDEX}
+      - OTC_URL=${OTC_SCHEME}://${OTC_HOST}:${OTC_PORT}/${OTC_API}
       - SMTP_SERVER=${SMTP_SERVER}
       - SMTP_PORT=${SMTP_PORT}
       - MAIL_FROM=${MAIL_FROM}

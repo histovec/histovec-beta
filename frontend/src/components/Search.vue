@@ -742,14 +742,12 @@ export default {
       hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
       return hash
     },
-    onSubmit () {
+    async onSubmit () {
       this.status = 'posting'
       if (this.checkFields) {
         if (this.id !== this.$store.state.histovec.id) {
-          this.$store.commit('updateV', undefined)
-          this.$store.commit('updateKey', undefined)
-          this.$store.commit('updateCode', undefined)
-          this.$store.commit('updateId', undefined)
+          await this.$store.commit('cleanHistoVec')
+          await this.$store.commit('cleanOTC')
         }
         this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
       } else {

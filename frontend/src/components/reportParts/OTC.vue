@@ -1,0 +1,79 @@
+<template>
+  <div>
+    <div>
+      Contrôles techniques
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <span class="txt-small-12"><h6>Date</h6></span>
+      </div>
+      <div class="col-sm-4">
+        <span class="bold txt-small-12"><h6>Nature</h6></span>
+      </div>
+      <div class="col-sm-4">
+        <span class="bold txt-small-12"><h6>Résultat</h6></span>
+      </div>
+      <div class="col-sm-2">
+        <span class="bold txt-small-12"><h6>Km</h6></span>
+      </div>
+    </div>
+    <div class="separator"></div>
+
+    <div
+      v-for="(entry, index) in controlesTechniques"
+      :key="index"
+    >
+      <div class="row">
+        <div class="col-sm-2">
+          <span class="txt-small-12">{{ entry.date }}</span>
+        </div>
+        <div class="col-sm-4">
+          <span class="info_red txt-small-12">{{ entry.nature }}</span>
+        </div>
+        <div class="col-sm-4">
+          <span class="info_red txt-small-12">{{ entry.resultat }}</span>
+        </div>
+        <div class="col-sm-2">
+          <span class="info_red txt-small-12">{{ entry.km }}</span>
+        </div>        
+      </div>
+      <div class="separator pv-5"></div>
+    </div>
+    <!-- fin tableau operation historique FR -->
+  </div>
+</template>
+
+<script>
+
+import labels from '@/assets/json/otc.json'
+import orderBy from 'lodash.orderby'
+
+export default {
+  props: {
+    ct: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  computed: {
+    controlesTechniques () {
+      if (this.ct.length > 0) {
+        return orderBy(this.ct.map((controle) => this.labelize(controle)), ['date'], ['desc'])
+      } else {
+        return []
+      }
+    },
+  },
+  methods: {
+    labelize (controle) {
+      return {
+        date: controle.ct_date,
+        nature: labels.nature[controle.ct_nature],
+        resultat: labels.resultat[controle.ct_resultat],
+        km: controle.ct_km
+      }
+    }
+  }
+}
+
+</script>
