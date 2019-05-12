@@ -45,14 +45,14 @@
 
 <script>
 
-import labels from '@/assets/json/otc.json'
+import labels from '@/assets/json/techControl.json'
 import orderBy from 'lodash.orderby'
 
 export default {
   props: {
     ct: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     }
   },
   computed: {

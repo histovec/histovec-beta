@@ -747,7 +747,7 @@ export default {
       if (this.checkFields) {
         if (this.id !== this.$store.state.histovec.id) {
           await this.$store.commit('cleanHistoVec')
-          await this.$store.commit('cleanOTC')
+          await this.$store.commit('cleanTechControl')
         }
         this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
       } else {

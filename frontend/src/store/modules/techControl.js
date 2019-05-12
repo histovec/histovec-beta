@@ -12,13 +12,13 @@ export default {
     updateToken (state, token) {
       state.token = token
     },
-    cleanOTC (state) {
+    cleanTechControl (state) {
       state.ct = undefined
       state.token = undefined
     }
   },
   actions: {
-    async getOTC ({ commit, state, rootState }) {
+    async getTechControl ({ commit, state, rootState }) {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.otc) {
         return
       }

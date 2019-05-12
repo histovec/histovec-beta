@@ -306,7 +306,7 @@ export default {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined))
     },
     ct () {
-      return this.$store.state.otc.ct || []
+      return this.$store.state.techControl.ct || []
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
@@ -343,7 +343,7 @@ export default {
         }
         await this.$store.dispatch('getHistoVec', this.display.otc)
         if (this.display.otc) {
-          await this.$store.dispatch('getOTC')
+          await this.$store.dispatch('getTechControl')
         }
         await this.$store.dispatch('log', 
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status)
