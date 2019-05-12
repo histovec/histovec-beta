@@ -213,7 +213,8 @@ Vue.mixin({
         beta: false,
         all_tabs: false,
         pdf: true,
-        date_update: true
+        date_update: true,
+        otc: false
       }
     }
   },
