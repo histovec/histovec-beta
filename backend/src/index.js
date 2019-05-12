@@ -27,5 +27,4 @@ elasticsearch.Client.search({
   .catch(error => {
     techLogger.error(`Server could not connect to elasticsearch, exiting`)
     techLogger.error(error)
-    exit
   })

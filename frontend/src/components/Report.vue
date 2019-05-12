@@ -120,7 +120,7 @@
                 </a>
               </li>
               <li
-                v-if="display.otc"
+                v-if="display.otc && (ct.length > 0)"
                 :class="[{'active' : tab === 'otc'}]"
               >
                 <a
@@ -129,6 +129,18 @@
                 >
                   <i class="fa fa-cogs pr-10"></i>
                   Contrôles techniques
+                </a>
+              </li>
+              <li
+                v-if="display.otc && display.otc_graph && (ct.length > 1)"
+                :class="[{'active' : tab === 'otc_graph'}]"
+              >
+                <a
+                  class="clickable"
+                  @click="tab = 'otc_graph'"
+                >
+                  <i class="fa fa-line-chart pr-10"></i>
+                  Kilomètres
                 </a>
               </li>
               <li
@@ -193,7 +205,21 @@
                 class="tab-pane fade"
                 :class="[{'in active' : display['all_tabs'] || tab === 'otc'}]"
               >
-                <o-t-c :ct="ct"></o-t-c>
+                <tech-control
+                  v-if="ct.length > 0"
+                  :ct="ct"
+                >
+                </tech-control>
+              </div>
+              <div
+                v-if="tab === 'otc_graph'"
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'otc_graph'}]"
+              >
+                <tech-control-graph
+                  :ct="ct"
+                >
+                </tech-control-graph>
               </div>
               <div
                 v-if="holder"
@@ -234,7 +260,8 @@ import TechChars from './reportParts/TechChars.vue'
 import License from './reportParts/License.vue'
 import Administrative from './reportParts/Administrative.vue'
 import History from './reportParts/History.vue'
-import OTC from './reportParts/OTC.vue'
+import TechControl from './reportParts/TechControl.vue'
+import TechControlGraph from './reportParts/TechControlGraph.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
 import ModalRating from './forms/ModalRating.vue'
@@ -255,7 +282,8 @@ export default {
     License,
     Administrative,
     History,
-    OTC,
+    TechControl,
+    TechControlGraph,
     Share,
     Status,
     ModalRating
@@ -306,7 +334,7 @@ export default {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined))
     },
     ct () {
-      return this.$store.state.otc.ct || []
+      return this.$store.state.techControl.ct || []
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
@@ -343,7 +371,7 @@ export default {
         }
         await this.$store.dispatch('getHistoVec', this.display.otc)
         if (this.display.otc) {
-          await this.$store.dispatch('getOTC')
+          await this.$store.dispatch('getTechControl')
         }
         await this.$store.dispatch('log', 
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status)

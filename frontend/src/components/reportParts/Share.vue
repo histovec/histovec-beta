@@ -68,12 +68,12 @@
           v-if="holder&&display['pdf']"
           class="col-sm-12 pv-20"
         >
-          <csa
+          <administrative-certificate
             :v="v"
             :url="url"
             :baseurl="baseurl"
           >
-          </csa>
+          </administrative-certificate>
         </div>
       </div>
     <!-- fin bouton imprimer csa detaille -->
@@ -83,14 +83,14 @@
 
 <script>
 
-import Csa from './CSA.vue'
+import AdministrativeCertificate from './AdministrativeCertificate.vue'
 import QrcodeVue from 'qrcode.vue'
 import moment from 'moment'
 
 export default {
   components: {
     QrcodeVue,
-    Csa
+    AdministrativeCertificate
   },
   props: {
     v: {

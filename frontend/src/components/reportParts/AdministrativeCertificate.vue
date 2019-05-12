@@ -10,7 +10,7 @@
         v-if="imagesLoading === 0"
         type="button"
         class="btn btn-animated btn-default btn-sm"
-        title="CSA"
+        title="certificat de situation administrative"
         @click="generatePDF"
       >
         Imprimer le CSA
