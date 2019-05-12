@@ -1,18 +1,14 @@
 import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
-
 import { loggerStream } from './util/logger'
 import routes from './routes'
-
-import npmVersion from '../package.json'
+import { config } from './config'
 
 const app = express()
 
-export const apiPrefix = `/${process.env.APP}/api/v1`
-
-app.get(`${apiPrefix}/version`, function (req, res) {
-  res.send(npmVersion.version)
+app.get(`${config.apiPrefix}/version`, function (req, res) {
+  res.send(config.version)
 })
 
 const formatAsNginx =
@@ -22,6 +18,6 @@ app.use(morgan(formatAsNginx, { stream: loggerStream }))
 app.use(bodyParser.json({ limit: '2kb' }))
 app.use(bodyParser.urlencoded({ limit: '2kb', extended: false }))
 
-app.use(apiPrefix, routes)
+app.use(config.apiPrefix, routes)
 
 export default app

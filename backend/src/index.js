@@ -5,10 +5,12 @@ import redis from './db/redis'
 import elasticsearch from './db/elasticsearch'
 import { techLogger } from './util'
 
-const PORT = process.env.PORT || 8000
+import { config } from './config'
+
+const PORT = config.port || 8000
 
 elasticsearch.Client.search({
-  index: elasticsearch.defaultIndex,
+  index: config.esIndex,
   q: 'version',
   size: '1'
 }).then(() => {
