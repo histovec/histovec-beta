@@ -214,7 +214,8 @@ Vue.mixin({
         all_tabs: false,
         pdf: true,
         date_update: true,
-        otc: false
+        otc: false,
+        otc_graph: false
       }
     }
   },
