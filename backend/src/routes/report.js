@@ -1,4 +1,6 @@
 import elasticsearch from '../db/elasticsearch'
+import { sign, checkSigned } from '../util/crypto'
+import { config } from '../config'
 
 function checkUuid (uuid) {
   return uuid ? uuid.match(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/) : false
