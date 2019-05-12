@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  otc:
+    image: otc-fake 
+    build:
+      context: otc-fake
+      dockerfile: Dockerfile
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+    container_name: otc-fake
+    restart: always
+
+networks:
+  default:
+    external:
+      name: ${APP}
