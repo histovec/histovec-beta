@@ -10,15 +10,18 @@ function checkId (id) {
   return id ? id.match(/[A-Za-z0-9_-]{43}=/) : false
 }
 
-function addStreamEvent(res, json) {
+function addStreamEvent(res, id, status, json) {
+  res.write(`id: ${id}\n`)
+  res.write(`event: ${status}\n`)
   res.write(`data: ${JSON.stringify(json)}\n\n`)
 }
 
-function endStreamEvent(res) {
-  res.write('data: END-OF-STREAM')
+function endStreamEvent(res, status, json) {
+  addStreamEvent(res, 'end-of-stream', status, json)
+  res.end()
 }
 
-async function searchSIV(id, uuid) {
+async function searchHistoVec(id, uuid) {
   try {
     if (checkUuid(uuid) && checkId(id)) {
       const response = await elasticsearch.Client.search({

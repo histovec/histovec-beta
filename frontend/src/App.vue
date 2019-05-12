@@ -201,6 +201,7 @@ Vue.mixin({
       appName: process.env.APP,
       appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
+      apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
       operations: operations,
       synthese: synthese,
