@@ -22,5 +22,17 @@
   "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
   "invalidKey": "Le lien transmis est incomplet : veuillez redemander le lien complet à votre vendeur.",
   "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
+  "decryptError": "Problème dans l'ouverture du rapport sécurisé - sollicitez nous.",
+  "decryptErrorBuyer": {
+    "msg": "Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide : veuillez redemander le lien ou le QR-code à votre vendeur.",
+    "class": "alert alert-icon alert-danger",
+    "icon": "fa fa-warning",
+    "ref": {
+      "msg": "Besoin d'aide",
+      "route": "faq",
+      "hash": "#acheteur-le-lien-fourni-ne-fonctionne-pas",
+      "icon": "fa fa-question-circle fa-lg"
+    }
+  },
   "error": "Erreur inconnue - sollicitez nous."
 }

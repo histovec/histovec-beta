@@ -37,15 +37,22 @@ const decrypt = (encrypted, key) => {
       })
   } catch (e) {
     /* eslint-disable-next-line no-console */
-    console.log(encrypted, e)
-    throw new Error('decrypt_error')
+    console.log('decrypt_error', e)
+    throw new Error(`decrypt_error: ${e}`)
   }
   try {
-    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"'))
+    decrypted = decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"')
   } catch (e) {
     /* eslint-disable-next-line no-console */
-    console.log(decrypted.toString(CryptoJS.enc.Utf8), e)
-    throw new Error('invalid_json')
+    console.log('decrypt_toString_failure', e)
+    throw new Error(`decrypt_toString_failure: ${e}`)
+  }
+  try {
+    return JSON.parse(decrypted)
+  } catch (e) {
+    /* eslint-disable-next-line no-console */
+    console.log('decrypt_JSON_parse_error', e)
+    throw new Error(`decrypt_JSON_parse_error: ${e}`)
   }
 }
 
@@ -158,7 +165,7 @@ const decryptHit = async (apiName, response, objectPath, key) => {
   } catch (error) {
     store.commit('updateApiStatus', {
       decrypted: { [apiName]: false },
-      error: { [apiName]: { decrypt: error } }
+      error: { [apiName]: { decrypt: error.toString() } }
     })
     return {
       success: false,

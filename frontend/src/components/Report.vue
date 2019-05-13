@@ -323,7 +323,7 @@ export default {
       } else if (!this.$store.state.api.hit.histovec) {
         return 'notFound'
       } else if (!this.$store.state.api.decrypted.histovec) {
-        return 'error'
+        return this.holder ? 'decryptError' : 'decryptErrorBuyer'
       }
       return 'error'
     },
