@@ -353,6 +353,22 @@ export default function (mailBody) {
         <li>Télécharger le certificat de situation administrative détaillé (CSA ; téléchargeable en cliquant sur Transmettre le rapport).</li>
       </ul>
       `
+    },
+    {
+      title: 'Acheteur: le lien fourni ne fonctionne pas',
+      body: `
+      <p class="indented">
+      Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas.
+      </p>
+      <p class="indented">
+      Si HistoVec signale <b>"Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide"</b>:
+      Il convient de demander une nouvelle fois le lien au titulaire du véhicule. la clé figurant dans le lien a été tronquée ou mal copiée. Un envoi du QR-Code pourrait facilier la tranmission
+      du rapport. 
+      </p>
+      <p class="indented">
+      Si jamais le problème persite avec votre vendeur : <a href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur%20de%20lien%20invalide">contactez-nous</a>
+      </p>
+      `
     }
   ]
 
