@@ -341,7 +341,8 @@ export default {
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.histovec.code || this.$route.params.code) + '&key=' + encodeURIComponent(this.$store.state.histovec.key || this.$route.params.key)
+      let urlKey = (this.$store.state.histovec.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
+      return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.histovec.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },
   created () {
