@@ -3,13 +3,13 @@ import Vuex from 'vuex'
 import histovec from './modules/histovec.js'
 import identity from './modules/identity.js'
 import techControl from './modules/techControl.js'
-// import VuexPersistence from 'vuex-persist'
+import VuexPersistence from 'vuex-persist'
 
 import api from '@/api'
 
-// const vuexLocal = new VuexPersistence({
-//   storage: window.sessionStorage
-// })
+const vuexLocal = new VuexPersistence({
+  storage: window.sessionStorage
+})
 
 Vue.use(Vuex)
 
@@ -73,5 +73,5 @@ export default new Vuex.Store({
     histovec,
     techControl
   },
-  // plugins: [vuexLocal.plugin]
+  plugins: [vuexLocal.plugin]
 })
