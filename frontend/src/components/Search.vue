@@ -730,11 +730,6 @@ export default {
         }
       }
     },
-    pad (n, width, z) {
-      z = z || '0'
-      n = n + ''
-      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
-    },
     hash (string) {
       var hash = string
       hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
