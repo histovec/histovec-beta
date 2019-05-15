@@ -1,7 +1,7 @@
 // redis-client.js
 import redis from 'redis'
-
-const client = redis.createClient(process.env.REDIS_URL)
+import { config } from '../config'
+const client = redis.createClient(config.redisUrl)
 
 export default {
   async getAsync () { await client.get.bind(client) },
