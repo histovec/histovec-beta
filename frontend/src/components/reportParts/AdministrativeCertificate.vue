@@ -77,7 +77,7 @@ export default {
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     },
     generatePDF () {
-      var pdf = new JsPdf()
+      var pdf = new JsPdf({compress: true})
       let self = this
       // globall params
       pdf.setFont('helvetica')
