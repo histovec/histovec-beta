@@ -12,7 +12,7 @@ export default {
     updateToken (state, token) {
       state.token = token
     },
-    cleanTechControl (state) {
+    clearTechControl (state) {
       state.ct = undefined
       state.token = undefined
     }

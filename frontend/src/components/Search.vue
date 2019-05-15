@@ -402,7 +402,7 @@
                       </form>
                     </fieldset>
                     <div class="form-group">
-                      <div class="col-xs-offset-5 col-sm-7">
+                      <div class="col-sm-offset-4 col-sm-7">
                         <button
                           class="btn btn-animated btn-default btn-sm"
                           tabindex="6"
@@ -417,6 +417,13 @@
                           </i>
                           Rechercher
                         </button>
+                        <a
+                          class="btn btn-animated btn-default btn-sm"
+                          @click="clearAll()"
+                        >
+                          Effacer
+                          <i class="fa fa-close"></i>
+                        </a>
                         <router-link
                           class="btn btn-animated btn-default btn-sm"
                           :to="{ name: 'faq',hash:'#i' }"
@@ -737,6 +744,14 @@ export default {
         }
       }
     },
+    async clearReports () {
+      await this.$store.commit('clearHistoVec')
+      await this.$store.commit('clearTechControl')
+    },
+    async clearAll () {
+      await this.$store.commit('clearIdentity')
+      this.clearReports()
+    },
     hash (string) {
       var hash = string
       hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
@@ -748,8 +763,7 @@ export default {
       this.status = 'posting'
       if (this.checkFields) {
         if (this.id !== this.$store.state.histovec.id) {
-          await this.$store.commit('cleanHistoVec')
-          await this.$store.commit('cleanTechControl')
+          this.clearReports()
         }
         this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
       } else {

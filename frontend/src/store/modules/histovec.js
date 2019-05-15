@@ -26,7 +26,7 @@ export default {
         state.v = undefined
       }
     },
-    cleanHistoVec (state) {
+    clearHistoVec (state) {
       state.v = undefined
       state.key = undefined
       state.code = undefined
