@@ -60,6 +60,19 @@ Cette option ne fonctionne que si votre navigateur est configuré pour ouvrir le
 
 </noscript>
 
+<script>
+  setTimeout(function(){
+    document.getElementById("infoNotWorking").style.display = "block";
+  }, 8000);
+</script>
+<style>
+  #infoNotWorking {
+    text-align: center;
+    font-size: 1em;
+    display: none;
+  }
+</style>
+
 <body class="front-page boxed pattern-2">
 
 
@@ -67,34 +80,12 @@ Cette option ne fonctionne que si votre navigateur est configuré pour ouvrir le
 <div class="scrollToTop circle"><i class="fa fa-angle-up"></i></div>
 <!-- page wrapper start -->
 <div class="page-wrapper">
-  <div id="root"></div>
-  <!-- section end -->
+  <div id="root">
+    <div id="infoNotWorking">
+      Si vous voyez ce message, c'est que le chargement d'HistoVec n'est pas terminé ou bien que votre navigateur est incompatible.
+      <br>
+      Les navigateurs supportés sont : Edge >= 15, Chrome >= 49, Firefox >= 51, Safari >=11, Opera >= 37
+    </div>
+  </div>
 </div>
-
-<!-- page-wrapper end -->
-<!-- debut jQuery -->
-<!-- <script type="text/javascript" src="assets/js/jquery.js"></script> -->
-<!-- <script type="text/javascript" src="assets/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script> -->
-<!-- <script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
-<script>
-$(".pop").popover({ trigger: "manual" , html: true, animation:false})
-    .on("mouseenter", function () {
-        var _this = this;
-        $(this).popover("show");
-        $(".popover").on("mouseleave", function () {
-            $(_this).popover('hide');
-        });
-    }).on("mouseleave", function () {
-        var _this = this;
-        setTimeout(function () {
-            if (!$(".popover:hover").length) {
-                $(_this).popover("hide");
-            }
-        }, 500);
-})
-</script> -->
 </html>

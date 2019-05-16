@@ -22,7 +22,7 @@ RUN buildDeps="git" ; \
    git config --global url."https://".insteadOf git://
 
 WORKDIR /$app_path
-COPY package.json .
+COPY package.json .babelrc .editorconfig .eslintignore .eslintrc.js ./
 
 # use proxy & private npm registry
 RUN if [ ! -z "$http_proxy" ] ; then \
