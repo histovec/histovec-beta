@@ -60,6 +60,19 @@ Cette option ne fonctionne que si votre navigateur est configuré pour ouvrir le
 
 </noscript>
 
+<script>
+  setTimeout(function(){
+    document.getElementById("infoNotWorking").style.display = "block";
+  }, 3000);
+</script>
+<style>
+  #infoNotWorking {
+    text-align: center;
+    font-size: 1em;
+    display: none;
+  }
+</style>
+
 <body class="front-page boxed pattern-2">
 
 
@@ -67,8 +80,13 @@ Cette option ne fonctionne que si votre navigateur est configuré pour ouvrir le
 <div class="scrollToTop circle"><i class="fa fa-angle-up"></i></div>
 <!-- page wrapper start -->
 <div class="page-wrapper">
-  <div id="root"></div>
-  <!-- section end -->
+  <div id="root">
+    <div id="infoNotWorking">
+      Votre navigateur ne semble pas compatible avec Histovec...
+      <br>
+      Les navigateurs supportés : Edge >= 15, Chrome >= 49, Firefox >= 51, Safari >=11, Opera >= 37
+    </div>
+  </div>
 </div>
 
 <!-- page-wrapper end -->
