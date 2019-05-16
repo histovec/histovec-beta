@@ -9,7 +9,9 @@
               <div class="header-left clearfix">
                 <!-- debut bandeau -->
                 <div class="logo">
-                  <a href="home">
+                  <router-link
+                    :to="{ name: 'home' }"
+                  >
                     <img
                       alt="accueil"
                       src="assets/images/histovec-header-mobile.png"
@@ -18,7 +20,7 @@
                       height="98"
                       @click="show = !show"
                     >
-                  </a>
+                  </router-link>
                 </div>
                 <!-- fin bandeau -->
               </div>

@@ -16,6 +16,16 @@ export default {
     fniMode: true
   },
   mutations: {
+    clearIdentity (state) {
+      state.nom = ''
+      state.raisonSociale = ''
+      state.prenom = ''
+      state.dateNaissance = ''
+      state.dateCertificat = ''
+      state.plaque = ''
+      state.siren = ''
+      state.formule = ''
+    },
     initFormOptions (state, formOptions) {
       state.formOptions = formOptions
     },

@@ -1,7 +1,8 @@
 import axios from 'axios'
 import elasticsearch from '../db/elasticsearch'
-import { sign, checkSigned } from '../util/crypto'
+import { sign, checkSigned, encrypt, decrypt } from '../util/crypto'
 import { config } from '../config'
+import redis from '../db/redis'
 
 function checkUuid (uuid) {
   return uuid ? uuid.match(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/) : false
@@ -139,8 +140,23 @@ export async function getOTC (req, res) {
       message: 'Not authentified'
     })
   } else {
+    let ct = await redis.getAsync(req.body.code)
+    console.log(ct)
+    if (ct) {
+      try {
+        ct = decrypt(ct, req.body.key)
+        res.status(200).json({
+          success: true,
+          ct: response.ct
+        })
+      } catch (e) {
+        console.log(`cache_decrypt_error: ${e}`)
+      }
+    }
     let response = await searchOTC(req.body.plaque)
     if (response.status === 200) {
+      console.log(await redis.setAsync(req.body.code, encrypt(response.ct, req.body.key)))
+      console.log(await redis.getAsync(req.body.code))
       res.status(200).json({
         success: true,
         ct: response.ct
