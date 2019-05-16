@@ -22,7 +22,7 @@ RUN buildDeps="git" ; \
    git config --global url."https://".insteadOf git://
 
 WORKDIR /$app_path
-COPY package.json .
+COPY package.json .babelrc .editorconfig .eslintignore .eslintrc.js ./
 VOLUME /$app_path/src
 VOLUME /$app_path/build
 VOLUME /$app_path/config
