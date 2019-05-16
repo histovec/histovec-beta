@@ -8,11 +8,13 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "format": "prettier-eslint --write 'src/**/*.js' 'src/**/*.vue'"
   },
   "dependencies": {
     "bootstrap": "3.4.1",
     "chart.js": "^2.8.0",
+    "core-js": "^2.6.5",
     "crypto-js": "^3.1.9-1",
     "delay": "^4.2.0",
     "detect-browser": "^4.5.0",
@@ -23,6 +25,7 @@
     "moment": "^2.24.0",
     "qr.js": "^0.0.0",
     "qrcode.vue": "^1.6.1",
+    "regenerator-runtime": "^0.13.2",
     "shake.js": "^1.2.2",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.3.0",
@@ -35,14 +38,21 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "@vue/babel-preset-app": "^3.7.0",
     "autoprefixer": "^9.5.1",
-    "babel-core": "^6.26.3",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.26.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-dynamic-import-node": "^2.2.0",
     "chalk": "^2.4.2",
     "connect-history-api-fallback": "^1.6.0",
     "copy-webpack-plugin": "^5.0.3",
@@ -52,7 +62,7 @@
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-node": "^9.0.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.2.2",
@@ -64,9 +74,8 @@
     "html-webpack-plugin": "^3.2.0",
     "http-proxy-middleware": "^0.19.1",
     "js-beautify": "1.10.0",
-    "vue-chartjs": "^3.4.2",
     "node-sass": "^4.12.0",
-    "open": "^6.2.0",
+    "open": "^6.3.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "ora": "^3.4.0",
     "rimraf": "^2.6.3",
@@ -74,13 +83,14 @@
     "semver": "^6.0.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
+    "vue-chartjs": "^3.4.2",
     "vue-loader": "^15.7.0",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.31.0",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-dev-middleware": "^3.6.2",
-    "webpack-hot-middleware": "^2.24.4",
+    "webpack-dev-middleware": "^3.7.0",
+    "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^4.2.1"
   },
   "engines": {
@@ -88,6 +98,10 @@
     "npm": ">= 6.9.0"
   },
   "browserslist": [
-    "> 0.1%"
+    "Chrome >= 49",
+    "Firefox >= 45",
+    "Safari >= 10",
+    "Edge >= 13",
+    "ie >= 10"
   ]
 }

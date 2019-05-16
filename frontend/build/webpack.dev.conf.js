@@ -21,7 +21,7 @@ module.exports = merge(baseWebpackConfig, {
   devServer: {
     hot: true,
     watchOptions: {
-    poll: true
+      poll: true
     }
   },
   plugins: [
