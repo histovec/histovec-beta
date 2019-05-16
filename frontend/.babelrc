@@ -1,9 +1,21 @@
 {
   "presets": [
-    ["env", { "modules": false }],
+    ["env", {
+      "modules": false,
+      "targets": {
+        "ie": 11,
+        "browsers": [
+          "> 0.25%",
+          "not dead"
+        ],
+      },
+      "include": ["transform-es2015-block-scoping"]
+    }],
     "stage-2"
   ],
-  "plugins": ["transform-runtime"],
+  "plugins": [
+    "transform-runtime"
+    ],
   "comments": false,
   "env": {
     "test": {
