@@ -173,7 +173,7 @@ export default {
   },
   computed: {
     filteredMessage () {
-      return this.message.normalize('NFD').replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ')
+      return this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ')
     },
     errors () {
       let errorList = []
@@ -215,6 +215,13 @@ export default {
     }
   },
   methods: {
+    normalize (string) {
+      try {
+        return string.normalize('NFD')
+      } catch (e) {
+        return string.replace(/[\u0300-\u036f]*/g, '')
+      }
+    },
     async send (e) {
       e.preventDefault()
       this.$store.dispatch('initApiStatus', 'feedback')

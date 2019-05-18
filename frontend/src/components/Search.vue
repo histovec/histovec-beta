@@ -752,9 +752,16 @@ export default {
       await this.$store.commit('clearIdentity')
       this.clearReports()
     },
+    normalize (string) {
+      try {
+        return string.normalize('NFD')
+      } catch (e) {
+        return string.replace(/[\u0300-\u036f]*/g, '')
+      }
+    },
     hash (string) {
       var hash = string
-      hash = hash.normalize('NFD').toLowerCase().replace(/[^0-9a-z]/g, '')
+      hash = this.normalize(hash).toLowerCase().replace(/[^0-9a-z]/g, '')
       hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
       hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
       return hash
