@@ -55,16 +55,16 @@ export default {
       }
       return
     },
-    async getHistoVecAndOtc ({ commit, state, rootState}) {
-      if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.otc )) {
-        return
-      }
-      await api.getHistoVecAndOtc(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
-        {
-          histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
-          otc: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })
-        }
-      )
-    }
+    // async getHistoVecAndOtc ({ commit, state, rootState}) {
+    //   if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.otc )) {
+    //     return
+    //   }
+    //   await api.getHistoVecAndOtc(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
+    //     {
+    //       histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
+    //       otc: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })
+    //     }
+    //   )
+    // }
   }
 }
