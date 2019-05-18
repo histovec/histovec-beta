@@ -57,7 +57,7 @@ const decrypt = (encrypted, key) => {
 }
 
 const checkStatus = async (apiName, response) => {
-  await store.commit('updateApiStatus', { 
+  await store.commit('updateApiStatus', {
     http: { [apiName]: response.status },
     fetching: { [apiName]: false }
   })
@@ -75,7 +75,7 @@ const checkValidJson = async (apiName, response) => {
       json: json
     }
   } catch (e) {
-    await store.commit('updateApiStatus', { 
+    await store.commit('updateApiStatus', {
       json: { [apiName]: false },
       error: { [apiName]: { 'json': e } }
     })
@@ -90,7 +90,7 @@ const checkValidJson = async (apiName, response) => {
 const checkValidSearch = async (apiName, response) => {
   // check if valid elasticsearch result
   // and return only first result
-  let json  
+  let json
   try {
     if (response.success) {
       json = await response.json
@@ -104,7 +104,7 @@ const checkValidSearch = async (apiName, response) => {
           status: response.status
         }
       } else {
-        await store.commit('updateApiStatus', { 
+        await store.commit('updateApiStatus', {
           hit: { [apiName]: true },
           hits: { [apiName]: (store.state.api.hits[apiName] || 0 ) + 1 }
         })
@@ -115,7 +115,7 @@ const checkValidSearch = async (apiName, response) => {
         }
       }
     } else {
-      await store.commit('updateApiStatus', { 
+      await store.commit('updateApiStatus', {
         hit: { [apiName]: false }
       })
       return {
@@ -125,7 +125,7 @@ const checkValidSearch = async (apiName, response) => {
       }
     }
   } catch (e) {
-    await store.commit('updateApiStatus', { 
+    await store.commit('updateApiStatus', {
       hit: { [apiName]: false },
       error: { [apiName]: { 'search': e } }
     })
@@ -256,7 +256,7 @@ const apiClient = {
   ),
   put: (apiName, url, options) => (
     jsonClient(apiName, url, { ...options, headers: jsonHeader, method: 'PUT' })
-  ),  
+  ),
   search: (apiName, url, options) => (
     searchClient(apiName, url, { ...options, headers: jsonHeader, method: 'POST' })
   ),
