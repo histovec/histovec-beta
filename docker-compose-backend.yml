@@ -22,7 +22,8 @@ services:
       - BACKEND_PORT=${BACKEND_PORT}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
-      - REDIS_URL=redis://cache
+      - REDIS_URL=${REDIS_URL}
+      - REDIS_PERSIST=${REDIS_PERSIST}
       - ES_URL=${ES_HOST}:${ES_PORT}
       - ES_INDEX=${ES_INDEX}
       - OTC_URL=${OTC_SCHEME}://${OTC_HOST}:${OTC_PORT}/${OTC_API}

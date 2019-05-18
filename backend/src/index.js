@@ -14,7 +14,7 @@ elasticsearch.Client.search({
   q: 'version',
   size: '1'
 }).then(() => {
-  redis.getAsync()
+  redis.getAsync('')
     .then(() => {
       http.createServer(app).listen(PORT, '0.0.0.0')
       techLogger.info(`Server running at http://0.0.0.0:${PORT}/`)

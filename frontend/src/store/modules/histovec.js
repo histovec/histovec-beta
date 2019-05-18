@@ -40,28 +40,31 @@ export default {
       }
       let response
       if (future) {
-        response = await api.getHistoVecV1(state.id, state.key, localStorage.getItem('userId'))
+        response = await api.getHistoVecV1(state.code || state.id, state.key, localStorage.getItem('userId'))
       } else {
-        response = await api.getHistoVec(state.id, state.key, localStorage.getItem('userId'))
+        response = await api.getHistoVec(state.code || state.id, state.key, localStorage.getItem('userId'))
       }
       if (response.success) {
         commit('updateV', response.v)
         if (response.token) {
           commit('updateToken', response.token)
         }
+        if (response.otcId) {
+          commit('updateOtcId', response.otcId)
+        }
       }
       return
     },
-    async getHistoVecAndOtc ({ commit, state, rootState}) {
-      if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.otc )) {
-        return
-      }
-      await api.getHistoVecAndOtc(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
-        {
-          histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
-          otc: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })
-        }
-      )
-    }
+    // async getHistoVecAndOtc ({ commit, state, rootState}) {
+    //   if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.otc )) {
+    //     return
+    //   }
+    //   await api.getHistoVecAndOtc(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
+    //     {
+    //       histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
+    //       otc: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })
+    //     }
+    //   )
+    // }
   }
 }

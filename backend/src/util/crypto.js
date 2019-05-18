@@ -27,17 +27,9 @@ export function checkSigned (message, key, signature) {
 }
 
 export function encrypt (json, key) {
-  key = CryptoJS.enc.Base64.parse(key)
-  let iv  = CryptoJS.lib.WordArray.random(16);
-  let encrypted
   try {
-    encrypted = CryptoJS.AES.encrypt(JSON.stringify(json),
-      key, {
-        iv: iv,
-        padding: CryptoJS.pad.Pkcs7,
-        mode: CryptoJS.mode.CBC
-      })
-    return encrypted
+    let encrypted = CryptoJS.AES.encrypt(JSON.stringify(json), key)
+    return encrypted.toString()
   } catch (e) {
     /* eslint-disable-next-line no-console */
     console.log('encrypt_error', e)
@@ -45,29 +37,25 @@ export function encrypt (json, key) {
   }
 }
 
+function atob (str) {
+  return Buffer.from(str, 'base64').toString('binary');
+}
+
+function btoa (str) {
+  return Buffer.from(str.toString(), 'binary').toString('base64')
+}
+
 export function decrypt (encrypted, key) {
-  key = CryptoJS.enc.Base64.parse(key)
-  let rawData = atob(encrypted)
-  let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
-  encrypted = btoa(rawData.substring(16))
   let decrypted
   try {
-    decrypted = CryptoJS.AES.decrypt({
-      ciphertext: CryptoJS.enc.Base64.parse(encrypted),
-      salt: ''
-    },
-      key, {
-        iv: iv,
-        padding: CryptoJS.pad.Pkcs7,
-        mode: CryptoJS.mode.CBC
-      })
+    decrypted = CryptoJS.AES.decrypt(encrypted, key)
   } catch (e) {
     /* eslint-disable-next-line no-console */
     console.log('decrypt_error', e)
     throw new Error(`decrypt_error: ${e}`)
   }
   try {
-    decrypted = decrypted.toString(CryptoJS.enc.Utf8).replace(/: (0[0-9]+)/g, ': "$1"')
+    decrypted = decrypted.toString(CryptoJS.enc.Utf8)
   } catch (e) {
     /* eslint-disable-next-line no-console */
     console.log('decrypt_toString_failure', e)
@@ -77,7 +65,10 @@ export function decrypt (encrypted, key) {
     return JSON.parse(decrypted)
   } catch (e) {
     /* eslint-disable-next-line no-console */
-    console.log('decrypt_JSON_parse_error', e)
-    throw new Error(`decrypt_JSON_parse_error: ${e}`)
+    return decrypted
   }
+}
+
+export function hash (string) {
+  return CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
 }

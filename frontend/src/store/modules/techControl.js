@@ -22,7 +22,7 @@ export default {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.otc) {
         return
       }
-      const response = await api.getOTC(rootState.histovec.id, state.token, rootState.identity.plaque, localStorage.getItem('userId'))
+      const response = await api.getOTC(rootState.histovec.code || rootState.histovec.id, state.token, rootState.histovec.key, rootState.histovec.otcId, localStorage.getItem('userId'))
       if (response.success) {
         commit('updateCT', response.ct)
       }

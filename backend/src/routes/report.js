@@ -1,6 +1,6 @@
 import axios from 'axios'
 import elasticsearch from '../db/elasticsearch'
-import { sign, checkSigned, encrypt, decrypt } from '../util/crypto'
+import { sign, checkSigned, encrypt, decrypt, hash } from '../util/crypto'
 import { config } from '../config'
 import redis from '../db/redis'
 
@@ -111,9 +111,7 @@ async function searchOTC(plaque) {
 }
 
 export async function getHistoVec (req, res) {
-  console.log(req)
   let response = await searchHistoVec(req.body.id, req.body.uuid)
-  console.log(response)
   if (response.status === 200) {
     res.status(200).json({
       success: true,
@@ -129,49 +127,48 @@ export async function getHistoVec (req, res) {
       source: 'histovec',
       message: response.message
     })
-  }  
+  }
 }
 
 export async function getOTC (req, res) {
-  console.log(req.body)
   if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
     res.status(401).json({
       success: false,
       message: 'Not authentified'
     })
   } else {
-    let ct = await redis.getAsync(req.body.code)
-    console.log(ct)
+    let ct = await redis.getAsync(hash(req.body.id))
     if (ct) {
       try {
+        console.log('cached', req.body.id)
         ct = decrypt(ct, req.body.key)
         res.status(200).json({
           success: true,
-          ct: response.ct
+          ct: ct
         })
       } catch (e) {
         console.log(`cache_decrypt_error: ${e}`)
       }
-    }
-    let response = await searchOTC(req.body.plaque)
-    if (response.status === 200) {
-      console.log(await redis.setAsync(req.body.code, encrypt(response.ct, req.body.key)))
-      console.log(await redis.getAsync(req.body.code))
-      res.status(200).json({
-        success: true,
-        ct: response.ct
-      })
     } else {
-      res.status(response.status).json({
-        success: false,
-        message: response.message
-      })
+      let response = await searchOTC(req.body.otcIds)
+      if (response.status === 200) {
+        await redis.setAsync(hash(req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
+        res.status(200).json({
+          success: true,
+          ct: response.ct
+        })
+      } else {
+        res.status(response.status).json({
+          success: false,
+          message: response.message
+        })
+      }
     }
   }
 }
 
 
-export async function streamedReport (req, res) {  
+export async function streamedReport (req, res) {
   res.set({
     "Content-Type": "text/event-stream",
     "Cache-Control": "no-cache",
@@ -182,7 +179,7 @@ export async function streamedReport (req, res) {
   try {
     let response = await searchHistoVec(req.header('Histovec-Id'), req.header('Histovec-Uuid'))
     addStreamEvent(res, 'histovec', response.status, response)
-  
+
     if (response.status === 200) {
       response = await searchOTC(req.header('Histovec-Plaque'))
       addStreamEvent(res, 'otc', response.status, response)
