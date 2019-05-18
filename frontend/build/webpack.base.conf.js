@@ -54,7 +54,7 @@ module.exports = {
         exclude: function(modulePath) {
           return (
             /node_modules/.test(modulePath) &&
-            !/node_modules\/@sindresorhus/.test(modulePath)
+            ! /node_modules\/whatwg-fetch/.test(modulePath)
           )
         },
       },
