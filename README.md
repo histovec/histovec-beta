@@ -84,3 +84,48 @@ https://github.com/rhanka/vue-python-docker-dev-kit
 
 [![Build Status](https://travis-ci.org/histovec/histovec-beta.svg?branch=dev)](https://travis-ci.org/histovec/histovec-beta)
 
+
+## compatibilité navigateur
+
+En affichage, ok jusqu'au search :
+
+  - ie 11, 10
+  - safari 10.1, 9, 8, 7 (pas de tests au-dela)
+  - ko :
+  - ie 9, ie 8 (page blanche)
+
+Le message de susbstitution ne s'affiche plus :
+
+  - ie 9, ie 8 (il s'affichait avant, examen en cours)
+
+Tests complémentaires formulaire (hors copier coller: fonctionne plus ou moins sur lambdatest indépendemment d'histovec)
+
+  - ie 11: ok
+  - ie 10: ko (non bloquant) : le controle de la date de recherche et de la plaque ne fonctionnent pas
+  - safari 10.1: ok
+  - safari 9: ok
+
+Test recherche:
+
+  - ie 11: la bascule sur la recherche ne fonctionne pas (le bouton recherche de la page search mouline)
+  - ie 10: la bascule sur la recherche ne fonctionne pas (le bouton recherche de la page search mouline)
+  - safari 9: la bascule sur la recherche ne fonctionne pas (le bouton recherche de la page search mouline)
+
+Manque le polyfill "normalize" pour ces versions de navigateurs (au moins pour ie11, via console de debug)
+
+Test du rapport:
+
+  - safari 10.1: ok
+
+Test de l'envoi rapport (copié & QR code, mailto non configuré)
+
+    safari 10.1: ok
+
+Test CSA:
+
+    safari 10.1 : ok
+
+Test rapport acheteur:
+
+    safari 10.1: ok
+
