@@ -88,7 +88,7 @@
 <script>
 import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
-import delay from 'delay'
+// import delay from 'delay'
 import { detect } from 'detect-browser'
 
 export default {
@@ -178,9 +178,11 @@ export default {
     async highlightQuestion(id) {
       const hash = `#${id}`
       this.activeQuestion = id
-      await delay(10)
-      this.$scrollTo(hash)
-      this.$router.push({ name: 'faq', hash })
+      // await delay(10)
+      setTimeout(() => {
+        this.$scrollTo(hash)
+        this.$router.push({ name: 'faq', hash })
+      }, 10)
     }
   },
 
