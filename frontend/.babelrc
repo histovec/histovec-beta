@@ -1,29 +1,12 @@
 {
   "presets": [
-    ["env", {
-      "modules": false,
-      "targets": {
-        "browsers": [
-          "> 0.25%",
-          "not dead",
-          "ie >= 8"
-        ],
-      },
-      "include": [
-        "transform-es2015-arrow-functions",
-        "transform-es2015-block-scoping",
-        "transform-es2015-parameters"
-      ]
-    }],
-    "stage-2"
+    ["@vue/app"]
   ],
-  "plugins": [
-    "transform-runtime"
-    ],
+  "plugins": ["@babel/plugin-transform-runtime"],
   "comments": false,
   "env": {
     "test": {
-      "presets": ["env", "stage-2"],
+      "presets": ["@vue/app"],
       "plugins": [ "istanbul" ]
     }
   }
