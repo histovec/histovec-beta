@@ -49,6 +49,9 @@ export default {
         if (response.token) {
           commit('updateToken', response.token)
         }
+        if (response.otcId) {
+          commit('updateOtcId', response.otcId)
+        }
       }
       return
     },
