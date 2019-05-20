@@ -182,6 +182,7 @@ import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
 import operations from './assets/json/operations.json'
+import usages from './assets/json/usages.json'
 import synthese from './assets/json/synthese.json'
 import messages from './assets/json/messages.json'
 import verbatims from './assets/json/verbatims.json'
@@ -206,6 +207,7 @@ Vue.mixin({
       apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.APP).replace(/"/g, ''),
       localization: localization,
       operations: operations,
+      usages: usages,
       synthese: synthese,
       messages: messages,
       verbatims: verbatims,

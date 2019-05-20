@@ -54,6 +54,52 @@
     <div class="separator-2">
     </div>
     <!-- fin trait separation  -->
+    <!-- debut trait separation  -->
+    <div v-if="v.usage">
+      <div
+        v-for="(entry, index) in v.usage"
+        :key="index"
+      >
+        <div
+          v-if="usages[entry]"
+          class="row"
+        >
+          <!-- debut voiture  -->
+          <div class="col-sm-1">
+            <i :class="'fa ' + usages[entry].icon + ' fa-2x'"></i>
+          </div>
+          <div class="col-sm-6">
+            <span class="txt-small-13">Usage:</span>
+            <span class="info_red txt-small-13"> {{ usages[entry].text }} </span>
+            <br />
+          </div>
+          <div
+            v-if="usages[entry].adv"
+            class="col-sm-5"
+          >
+            <span class="color-info_2 bold_4 txt-small-13">{{ usages[entry].adv }}</span>
+            <br />
+            <a
+              v-if="usages[entry].adv"
+              :href="usages[entry].link"
+              class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+              :title="usages[entry].adv"
+              target="_blank"
+            >
+              En savoir plus
+              <i class="fa fa-external-link pl-10"></i>
+            </a>
+          </div>
+          <!-- fin voiture  -->
+        </div>
+        <div
+          v-if="usages[entry]"
+          class="separator-2"
+        >
+        </div>
+      </div>
+    </div>
+    <!-- fin trait separation  -->
     <div class="row">
       <!-- debut proprietaire  -->
       <div class="col-sm-1">
@@ -305,10 +351,10 @@
         <!-- fin ras  -->
       </div>
       <div
-        v-if="v.vignette_numero === ''"
+        v-if="(v.vignette_numero === '') && !(v.usage && v.usage.includes('COL'))"
         class="row"
       >
-        <!-- debut ras  -->
+        <!-- debut pas de critair  -->
         <div class="col-sm-1">
           <i class="fa fa-ban fa-2x"></i>
         </div>
