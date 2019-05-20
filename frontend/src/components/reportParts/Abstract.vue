@@ -54,6 +54,45 @@
     <div class="separator-2">
     </div>
     <!-- fin trait separation  -->
+    <div
+      v-if="v.usage && usages[v.usage]"
+      class="row"
+    >
+      <!-- debut voiture  -->
+      <div class="col-sm-1">
+        <i :class="'fa ' + usages[v.usage].icon + ' fa-2x'"></i>
+      </div>
+      <div class="col-sm-6">
+          <span class="txt-small-13">Usage:</span>
+        <span class="info_red txt-small-13"> {{ usages[v.usage].text }} </span>
+        <br />
+      </div>
+      <div
+        v-if="usages[v.usage].adv"
+        class="col-sm-5"
+      >
+        <span class="color-info_2 bold_4 txt-small-13">{{ usages[v.usage].adv }}</span>
+        <br />
+        <a
+          v-if="usages[v.usage].adv"
+          :href="usages[v.usage].link"
+          class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+          :title="usages[v.usage].adv"
+          target="_blank"
+        >
+          En savoir plus
+          <i class="fa fa-external-link pl-10"></i>
+        </a>
+      </div>
+      <!-- fin voiture  -->
+    </div>
+    <!-- debut trait separation  -->
+    <div
+      v-if="v.usage && usages[v.usage]"
+      class="separator-2"
+    >
+    </div>
+    <!-- fin trait separation  -->
     <div class="row">
       <!-- debut proprietaire  -->
       <div class="col-sm-1">
