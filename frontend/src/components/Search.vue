@@ -414,8 +414,8 @@
                             <i
                               class="fa"
                               :class="[{'fa-search' : (status === 'init')},
-                                      {'fa-spin fa-spinner' : (status === 'posting')},
-                                      {'fa-exclamation-triangle' : (status === 'failed')}]"
+                                       {'fa-spin fa-spinner' : (status === 'posting')},
+                                       {'fa-exclamation-triangle' : (status === 'failed')}]"
                             >
                             </i>
                             Rechercher
