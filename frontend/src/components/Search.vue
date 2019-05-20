@@ -402,35 +402,43 @@
                       </form>
                     </fieldset>
                     <div class="form-group">
-                      <div class="col-sm-offset-4 col-sm-7">
-                        <button
-                          class="btn btn-animated btn-default btn-sm"
-                          tabindex="6"
-                          @click="onSubmit"
-                        >
-                          <i
-                            class="fa"
-                            :class="[{'fa-search' : (status === 'init')},
-                                     {'fa-spin fa-spinner' : (status === 'posting')},
-                                     {'fa-exclamation-triangle' : (status === 'failed')}]"
+                      <div class="row">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-2">
+                          <button
+                            class="btn btn-animated btn-default btn-sm btn-block"
+                            tabindex="6"
+                            @click="onSubmit"
                           >
-                          </i>
-                          Rechercher
-                        </button>
-                        <a
-                          class="btn btn-animated btn-default btn-sm"
-                          @click="clearAll()"
-                        >
-                          Effacer
-                          <i class="fa fa-close"></i>
-                        </a>
-                        <router-link
-                          class="btn btn-animated btn-default btn-sm"
-                          :to="{ name: 'faq',hash:'#i' }"
-                        >
-                          <i class="fa fa-question"></i>
-                          Besoin d'aide
-                        </router-link>
+                            <i
+                              class="fa"
+                              :class="[{'fa-search' : (status === 'init')},
+                                       {'fa-spin fa-spinner' : (status === 'posting')},
+                                       {'fa-exclamation-triangle' : (status === 'failed')}]"
+                            >
+                            </i>
+                            Rechercher
+                          </button>
+                        </div>
+                        <div class="col-sm-2">
+                          <button
+                            class="btn btn-animated btn-default btn-sm btn-block"
+                            @click="clearAll()"
+                          >
+                            Effacer
+                            <i class="fa fa-close"></i>
+                          </button>
+                        </div>
+                        <div class="col-sm-2">
+                          <router-link
+                            class="btn btn-animated btn-default btn-sm btn-block"
+                            :to="{ name: 'faq',hash:'#i' }"
+                          >
+                            <i class="fa fa-question"></i>
+                            Besoin d'aide
+                          </router-link>
+                        </div>
                       </div>
                     </div>
                   </div>
