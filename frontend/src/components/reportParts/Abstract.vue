@@ -351,10 +351,10 @@
         <!-- fin ras  -->
       </div>
       <div
-        v-if="v.vignette_numero === ''"
+        v-if="(v.vignette_numero === '') && !(v.usage && v.usage.includes('COL'))"
         class="row"
       >
-        <!-- debut ras  -->
+        <!-- debut pas de critair  -->
         <div class="col-sm-1">
           <i class="fa fa-ban fa-2x"></i>
         </div>
