@@ -62,35 +62,18 @@
           </qrcode-vue>
         </div>
       </div>
-      <!-- debut bouton imprimer csa detaille -->
-      <div class="row">
-        <div
-          v-if="holder&&display['pdf']"
-          class="col-sm-12 pv-20"
-        >
-          <administrative-certificate
-            :v="v"
-            :url="url"
-            :baseurl="baseurl"
-          >
-          </administrative-certificate>
-        </div>
-      </div>
-    <!-- fin bouton imprimer csa detaille -->
     </div>
   </div>
 </template>
 
 <script>
 
-import AdministrativeCertificate from './AdministrativeCertificate.vue'
 import QrcodeVue from 'qrcode.vue'
 import moment from 'moment'
 
 export default {
   components: {
-    QrcodeVue,
-    AdministrativeCertificate
+    QrcodeVue
   },
   props: {
     v: {
