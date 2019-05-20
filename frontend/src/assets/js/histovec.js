@@ -326,7 +326,11 @@ function histovec (veh) {
   v.aptes = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
   v.apte = (historique !== undefined) ? ((v.aptes[0] > v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
   try {
-    v.usage = JSON.parse(veh.usage)
+    if (typeof veh.usage === 'string') {
+      v.usage = JSON.parse(veh.usage)
+    } else {
+      v.usage = veh.usage
+    }
   } catch (e) {
     v.usage = undefined
   }
