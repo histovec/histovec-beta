@@ -149,6 +149,18 @@
                 </a>
               </li>
               <li
+                v-if="holder&&display['pdf']"
+                :class="[{'active' : tab === 'csa'}]"
+              >
+                <a
+                  class="clickable"
+                  @click="tab = 'csa'"
+                >
+                  <i class="fa fa-print pr-10"></i>
+                  Certificat de situation administrative
+                </a>
+              </li>
+              <li
                 v-if="holder"
                 :class="[{'active' : tab === 'send'}]"
               >
@@ -239,6 +251,18 @@
                 >
                 </share>
               </div>
+              <div
+                v-if="holder&&display['pdf']"
+                class="tab-pane fade"
+                :class="[{'in active' : display['all_tabs'] || tab === 'csa'}]"
+              >
+                <administrative-certificate
+                  :v="v"
+                  :url="url"
+                  :baseurl="baseurl"
+                >
+                </administrative-certificate>
+              </div>
             </div>
           </div>
           <!-- tabs end -->
@@ -267,6 +291,7 @@ import Administrative from './reportParts/Administrative.vue'
 import History from './reportParts/History.vue'
 import TechControl from './reportParts/TechControl.vue'
 import TechControlGraph from './reportParts/TechControlGraph.vue'
+import AdministrativeCertificate from './reportParts/AdministrativeCertificate.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
 import ModalRating from './forms/ModalRating.vue'
@@ -289,6 +314,7 @@ export default {
     History,
     TechControl,
     TechControlGraph,
+    AdministrativeCertificate,
     Share,
     Status,
     ModalRating
