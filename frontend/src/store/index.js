@@ -53,12 +53,12 @@ export default new Vuex.Store({
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
         let apiName = Object.keys(update[status])[0]
-        Vue.set(this.state.api[status], apiName, update[status][apiName])
+        Vue.set(state.api[status], apiName, update[status][apiName])
       })
     },
     initApiStatus (state, apiName) {
-      ['http', 'json', 'hit', 'error'].forEach(key => Vue.set(this.state.api[key], apiName, undefined))
-      Vue.set(this.state.api.fetching, apiName, true)
+      ['http', 'json', 'hit', 'error'].forEach(key => Vue.set(state.api[key], apiName, undefined))
+      Vue.set(state.api.fetching, apiName, true)
     },
     updateLogCounter (state) {
       state.logCounter++
