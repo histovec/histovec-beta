@@ -95,21 +95,6 @@
           <span class="info_red txt-small-12">{{ v.administratif.titre.duplicata }}</span>
         </div>
       </div>
-      <div
-        v-shortkey="['ctrl', 'alt', 'p']"
-        @shortkey="display['pdf'] = !display['pdf']"
-      >
-      </div>
-      <div
-        v-shortkey="['ctrl', 'alt', 'm']"
-        @shortkey="display['date_update'] = !display['date_update']"
-      >
-      </div>
-      <div
-        v-shortkey="['ctrl', 'alt', 'a']"
-        @shortkey="display['all_tabs'] = !display['all_tabs']"
-      >
-      </div>
     </div>
   </div>
 </template>
