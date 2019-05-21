@@ -40,9 +40,9 @@ export default {
       }
       let response
       if (future) {
-        response = await api.getHistoVecV1(state.code || state.id, state.key, localStorage.getItem('userId'))
+        response = await api.getHistoVecV1(state.id, state.key, localStorage.getItem('userId'))
       } else {
-        response = await api.getHistoVec(state.code || state.id, state.key, localStorage.getItem('userId'))
+        response = await api.getHistoVec(state.id, state.key, localStorage.getItem('userId'))
       }
       if (response.success) {
         commit('updateV', response.v)

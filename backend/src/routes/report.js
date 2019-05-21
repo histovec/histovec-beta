@@ -137,7 +137,7 @@ export async function getOTC (req, res) {
       message: 'Not authentified'
     })
   } else {
-    let ct = await redis.getAsync(hash(req.body.id))
+    let ct = await redis.getAsync(hash(req.body.code || req.body.id))
     if (ct) {
       try {
         console.log('cached', req.body.id)
@@ -152,7 +152,7 @@ export async function getOTC (req, res) {
     } else {
       let response = await searchOTC(req.body.otcIds)
       if (response.status === 200) {
-        await redis.setAsync(hash(req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
+        await redis.setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
         res.status(200).json({
           success: true,
           ct: response.ct

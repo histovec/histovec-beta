@@ -293,10 +293,10 @@ export default {
       v: (response.decrypted.v || {})
     }
   },
-  async getOTC (id, token, key, otcId, uuid) {
+  async getOTC (id, code, token, key, otcId, uuid) {
     const apiName = 'otc'
     const options = {
-      body: JSON.stringify({id: id, token: token, key: key, otcId: otcId, uuid: uuid})
+      body: JSON.stringify({id: id, code: code, token: token, key: key, otcId: otcId, uuid: uuid})
     }
     let response = await apiClient.post(apiName, `${apiPaths[apiName]}`, options)
     return {
