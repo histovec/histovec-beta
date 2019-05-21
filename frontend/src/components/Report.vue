@@ -299,7 +299,7 @@ import histovec from '../assets/js/histovec'
 
 const statusFromCode = {
   'holder': {
-    405: 'invalid',
+    400: 'invalid',
     404: 'notFound',
     429: 'tooManyRequests',
     502: 'unavailable',
@@ -307,7 +307,7 @@ const statusFromCode = {
     504: 'unavailable',
   },
   'buyer': {
-    405: 'invalidBuyer',
+    400: 'invalidBuyer',
     404: 'notFoundBuyer',
     429: 'tooManyRequests',
     502: 'unavailable',

@@ -82,7 +82,7 @@ server {
   }
 
   location ~ ^/<APP>/api/v0/id/.* {
-    return 405;
+    return 400;
   }
 
   location ~ (^/<APP>/api/v0/feedback/) {
