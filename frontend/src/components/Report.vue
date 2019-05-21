@@ -298,7 +298,8 @@ import ModalRating from './forms/ModalRating.vue'
 import histovec from '../assets/js/histovec'
 
 const statusFromCode = {
-  404: 'invalid',
+  405: 'invalid',
+  404: 'notFound',
   429: 'tooManyRequests',
   502: 'unavailable',
   503: 'unavailable',
