@@ -27,19 +27,38 @@ export default new Vuex.Store({
       noHits: {},
       error: {}
     },
+    display: {
+      beta: false,
+      allTabs: false,
+      pdf: true,
+      updateDate: true,
+      otc: false,
+      otcGraph: false
+    },
+    displayEnabler: {
+      allTabs: ['ctrl', 'alt', 'a'],
+      beta: ['ctrl', 'alt', 'b'],
+      pdf: ['ctrl', 'alt', 'p'],
+      updateDate: ['ctrl', 'alt', 'u'],
+      otc: ['ctrl', 'alt', 'o'],
+      otcGraph: ['ctrl', 'alt', 'g'],
+    },
     feedback: {},
     contact: {}
   },
   mutations: {
+    toggleDisplay (state, key) {
+      Vue.set(state.display, key, !state.display[key])
+    },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
         let apiName = Object.keys(update[status])[0]
-        Vue.set(this.state.api[status], apiName, update[status][apiName])
+        Vue.set(state.api[status], apiName, update[status][apiName])
       })
     },
     initApiStatus (state, apiName) {
-      ['http', 'json', 'hit', 'error'].forEach(key => Vue.set(this.state.api[key], apiName, undefined))
-      Vue.set(this.state.api.fetching, apiName, true)
+      ['http', 'json', 'hit', 'error'].forEach(key => Vue.set(state.api[key], apiName, undefined))
+      Vue.set(state.api.fetching, apiName, true)
     },
     updateLogCounter (state) {
       state.logCounter++

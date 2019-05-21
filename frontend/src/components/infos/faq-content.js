@@ -358,13 +358,26 @@ export default function (mailBody) {
       title: 'Acheteur: le lien fourni ne fonctionne pas',
       body: `
       <p class="indented">
-      Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas.
+      Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas. Les cas suivants peuvent être rencontrés :
       </p>
       <p class="indented">
-      Si HistoVec signale <b>"Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide"</b>:
-      Il convient de demander une nouvelle fois le lien au titulaire du véhicule. la clé figurant dans le lien a été tronquée ou mal copiée. Un envoi du QR-Code pourrait facilier la tranmission
-      du rapport. 
+      1. Le lien a été probablement mal copié ou transmis - HistoVec vous signale alors une erreur:
       </p>
+      <ul class="indented">
+        <li> Le lien transmis est incomplet </li>
+        <li> Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide </li>
+      </ul>
+      <p class="indented">
+      <br />Pensez à l'alternative de l'envoi par QR-Code si les mails n'ont pas permis d'aboutir.
+      </p>
+      <p class="indented">
+      2. Le rapport n'existe pas, ou n'est plus disponible pour des raison de sécurité - HistoVec vous signale alors une erreur:
+      </p>
+      <ul class="indented">
+          <li> Le rapport ne semble pas ou plus disponible </li>
+        </ul>
+      </p>
+      <p class="indented"> <b> Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur </b> </p>
       <p class="indented">
       Si jamais le problème persite avec votre vendeur : <a href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur%20de%20lien%20invalide">contactez-nous</a>
       </p>

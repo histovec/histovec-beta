@@ -1,6 +1,16 @@
 <template>
   <div id="app">
     <!-- debut entete -->
+    <div
+      v-for="(entry, index) in $store.state.displayEnabler"
+      :key="index"
+    >
+      <div
+        v-shortkey="$store.state.displayEnabler[index]"
+        @shortkey="$store.commit('toggleDisplay', index)"
+      >
+      </div>
+    </div>
     <div class="header-container">
       <header class="header">
         <div class="container">
@@ -27,7 +37,7 @@
             </div>
             <!-- debut beta -->
             <div
-              v-if="display['beta']"
+              v-if="$store.state.display['beta']"
               id="no-boot"
               class="col-xs-1"
             >
@@ -212,15 +222,7 @@ Vue.mixin({
       messages: messages,
       verbatims: verbatims,
       lang: localization.default,
-      show: false,
-      display: {
-        beta: false,
-        all_tabs: false,
-        pdf: true,
-        date_update: true,
-        otc: false,
-        otc_graph: false
-      }
+      show: false
     }
   },
   created () {

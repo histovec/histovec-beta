@@ -125,7 +125,7 @@
                 </a>
               </li>
               <li
-                v-if="display.otc && (ct.length > 0)"
+                v-if="$store.state.display.otc && (ct.length > 0)"
                 :class="[{'active' : tab === 'otc'}]"
               >
                 <a
@@ -137,19 +137,19 @@
                 </a>
               </li>
               <li
-                v-if="display.otc && display.otc_graph && (ct.length > 1)"
-                :class="[{'active' : tab === 'otc_graph'}]"
+                v-if="$store.state.display.otc && $store.state.display.otcGraph && (ct.length > 1)"
+                :class="[{'active' : tab === 'otcGraph'}]"
               >
                 <a
                   class="clickable"
-                  @click="tab = 'otc_graph'"
+                  @click="tab = 'otcGraph'"
                 >
                   <i class="fa fa-line-chart pr-10"></i>
                   Kilomètres
                 </a>
               </li>
               <li
-                v-if="holder&&display['pdf']"
+                v-if="holder&&$store.state.display.pdf"
                 :class="[{'active' : tab === 'csa'}]"
               >
                 <a
@@ -178,7 +178,7 @@
               <!-- /* ----------------- synthese ----------------- */ -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'abstract'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'abstract'}]"
               >
                 <abstract
                   :v="v"
@@ -189,21 +189,21 @@
               <!-- /* ----------------- vehicule ----------------- */ -->
               <div
                 class="tab-pane fade pr-20"
-                :class="[{'in active' : display['all_tabs'] || tab === 'vehicle'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'vehicle'}]"
               >
                 <tech-chars :v="v"></tech-chars>
               </div>
               <!-- /* ----------------- titre ----------------- */ -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'holder'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'holder'}]"
               >
                 <license :v="v"></license>
               </div>
               <!-- situation administrative -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'situation'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'situation'}]"
               >
                 <administrative
                   :v="v"
@@ -214,13 +214,13 @@
               <!-- historique des opérations -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'history'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'history'}]"
               >
                 <history :v="v"></history>
               </div>
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'otc'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'otc'}]"
               >
                 <tech-control
                   v-if="ct.length > 0"
@@ -229,9 +229,9 @@
                 </tech-control>
               </div>
               <div
-                v-if="tab === 'otc_graph'"
+                v-if="tab === 'otcGraph'"
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'otc_graph'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'otcGraph'}]"
               >
                 <tech-control-graph
                   :ct="ct"
@@ -241,7 +241,7 @@
               <div
                 v-if="holder"
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'send'}]"
+                :class="[{'in active' : $store.state.display.allTabs || tab === 'send'}]"
               >
                 <share
                   :v="v"
@@ -252,9 +252,9 @@
                 </share>
               </div>
               <div
-                v-if="holder&&display['pdf']"
+                v-if="holder&&$store.state.display.pdf"
                 class="tab-pane fade"
-                :class="[{'in active' : display['all_tabs'] || tab === 'csa'}]"
+                :class="[{'in active' : tab === 'csa'}]"
               >
                 <administrative-certificate
                   :v="v"
@@ -298,11 +298,22 @@ import ModalRating from './forms/ModalRating.vue'
 import histovec from '../assets/js/histovec'
 
 const statusFromCode = {
-  404: 'invalid',
-  429: 'tooManyRequests',
-  502: 'unavailable',
-  503: 'unavailable',
-  504: 'unavailable',
+  'holder': {
+    400: 'invalid',
+    404: 'notFound',
+    429: 'tooManyRequests',
+    502: 'unavailable',
+    503: 'unavailable',
+    504: 'unavailable',
+  },
+  'buyer': {
+    400: 'invalidBuyer',
+    404: 'notFoundBuyer',
+    429: 'tooManyRequests',
+    502: 'unavailable',
+    503: 'unavailable',
+    504: 'unavailable'
+  }
 }
 
 export default {
@@ -344,18 +355,17 @@ export default {
         }
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-        return 'invalidKey'
+        return 'invalidBuyer'
       } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         return 'invalid'
       } else if (this.$store.state.api.fetching.histovec ||
-                (this.$store.state.api.http.histovec === undefined) ||
-                (this.$store.state.api.hit.histovec === undefined) ||
-                (this.$store.state.api.decrypted.histovec === undefined)) {
+                (this.$store.state.api.http.histovec === undefined)) {
           return 'wait'
       } else if (this.$store.state.api.http.histovec !== 200) {
-        return statusFromCode[this.$store.state.api.http.histovec]
+        return this.holder ? statusFromCode.holder[this.$store.state.api.http.histovec] :
+                             statusFromCode.buyer[this.$store.state.api.http.histovec]
       } else if (!this.$store.state.api.hit.histovec) {
-        return 'notFound'
+        return this.holder ? 'notFound' : 'notFoundBuyer'
       } else if (!this.$store.state.api.decrypted.histovec) {
         return this.holder ? 'decryptError' : 'decryptErrorBuyer'
       }
@@ -390,26 +400,26 @@ export default {
       this.$store.commit('updateCode', this.$route.params.code)
     }
     this.getHistoVec()
-  },  
+  },
   methods: {
     async getHistoVec () {
       if (this.$store.state.histovec.v) {
         // déjà en cache
-        await this.$store.dispatch('log', 
+        await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
       } else {
         if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-          await this.$store.dispatch('log', 
-            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalidKey')
+          await this.$store.dispatch('log',
+            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
-        await this.$store.dispatch('getHistoVec', this.display.otc)
-        if (this.display.otc) {
+        await this.$store.dispatch('getHistoVec', this.$store.state.display.otc)
+        if (this.status === 'ok' && this.$store.state.display.otc) {
           await this.$store.dispatch('getTechControl')
         }
-        await this.$store.dispatch('log', 
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status)
+        await this.$store.dispatch('log',
+          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
         return
       }
     }

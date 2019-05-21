@@ -143,7 +143,7 @@ const decryptHit = async (apiName, response, objectPath, key) => {
   try {
     if (response.success) {
       decrypted = await response.json
-      encrypted = decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
+      encrypted = decrypted[objectPath] && decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
       decrypted[objectPath] = decrypt(encrypted, key)
       store.commit('updateApiStatus', {
         decrypted: { [apiName]: true }
@@ -277,7 +277,7 @@ export default {
     let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths[apiName].get}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
-      v: (response.decrypted.v || {})
+      v: ((response.decrypted && response.decrypted.v) || {})
     }
   },
   async getHistoVecV1 (id, key, uuid) {
@@ -289,8 +289,8 @@ export default {
     let response = await apiClient.decrypt(apiName, `${apiPaths[apiName].post}`, 'v', key, options)
     return {
       success: response.success,
-      token: response.decrypted.token,
-      v: (response.decrypted.v || {})
+      token: response.decrypted && response.decrypted.token,
+      v: (response.decrypted && response.decrypted.v || {})
     }
   },
   async getOTC (id, code, token, key, otcId, uuid) {

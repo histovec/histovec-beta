@@ -6,7 +6,7 @@
           Résumé
         </h6>
         <p
-          v-if="display['date_update']"
+          v-if="$store.state.display.updateDate"
           class="small"
         >
           information du ministère de l'Intérieur au {{ v.date_update }}
@@ -377,7 +377,7 @@
         <!-- fin ras  -->
       </div>
     </div>
-    <div v-if="display['all_tabs']">
+    <div v-if="$store.state.display.allTabs">
       <br />
     </div>
   </div>
