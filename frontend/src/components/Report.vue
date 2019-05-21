@@ -417,7 +417,7 @@ export default {
           return
         }
         await this.$store.dispatch('getHistoVec', this.$store.state.display.otc)
-        if (this.$store.state.display.otc) {
+        if (this.status === 'ok' && this.$store.state.display.otc) {
           await this.$store.dispatch('getTechControl')
         }
         await this.$store.dispatch('log',
