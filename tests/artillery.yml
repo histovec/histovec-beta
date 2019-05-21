@@ -1,0 +1,40 @@
+config:
+  environments:
+    development:
+      target: "http://nginx-dev"
+      phases:
+        - duration: 60
+          arrivalRate: 100
+      payload:
+        path: sample_data/load_test.csv
+        fields:
+          - idv
+scenarios:
+  - flow:
+    # - get:
+    #     url: /histovec/api/v0/id/8ebf2ad7-ec0f-f4d5-d974-995e07f199cf/{{ idv }}
+    - post:
+        url: /histovec/api/v1/id
+        json:
+          uuid: 8ebf2ad7-ec0f-f4d5-d974-995e07f199cf
+          id: "{{ idv }}"
+        capture:
+          - json: "$.token"
+            as: "token"
+          - json: "$.v"
+            as: "v"
+    - log: "histovec: {{ token }}"
+    - post:
+        url: /histovec/api/v1/otc
+        json:
+          uuid: 8ebf2ad7-ec0f-f4d5-d974-995e07f199cf
+          id: "{{ idv }}"
+          code: "{{ idv }}"
+          key: "eetuDnUDIB7AsbOibYClLxSz2pPWSP2kyj2qWn0REpY="
+          token: "{{ token }}"
+          otcId: "{{ token }}"
+        capture:
+          json: "$.ct"
+          as: "ct"
+    - log: "otc: {{ ct }}"
+

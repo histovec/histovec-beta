@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  artillery:
+    image: ${APP}-artillery
+    build:
+      context: ./tests/
+      dockerfile: Dockerfile
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        npm_registry: ${NPM_REGISTRY}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+    container_name: ${APP}-artillery
+    volumes:
+      - ./sample_data/:/artillery/sample_data/
+      - ./tests/artillery.yml:/artillery/artillery.yml
+
+networks:
+  default:
+    external:
+      name: ${APP}
