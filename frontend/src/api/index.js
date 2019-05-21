@@ -143,7 +143,7 @@ const decryptHit = async (apiName, response, objectPath, key) => {
   try {
     if (response.success) {
       decrypted = await response.json
-      encrypted = decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
+      encrypted = decrypted[objectPath] && decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
       decrypted[objectPath] = decrypt(encrypted, key)
       store.commit('updateApiStatus', {
         decrypted: { [apiName]: true }
