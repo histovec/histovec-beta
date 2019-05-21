@@ -355,7 +355,7 @@ export default {
         }
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-        return 'invalidKey'
+        return 'invalidBuyer'
       } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         return 'invalid'
       } else if (this.$store.state.api.fetching.histovec ||
@@ -402,18 +402,18 @@ export default {
       this.$store.commit('updateCode', this.$route.params.code)
     }
     this.getHistoVec()
-  },  
+  },
   methods: {
     async getHistoVec () {
       if (this.$store.state.histovec.v) {
         // déjà en cache
-        await this.$store.dispatch('log', 
+        await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
       } else {
         if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-          await this.$store.dispatch('log', 
-            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalidKey')
+          await this.$store.dispatch('log',
+            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
         await this.$store.dispatch('getHistoVec', this.$store.state.display.otc)
