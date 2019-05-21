@@ -277,7 +277,7 @@ export default {
     let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths[apiName].get}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
-      v: (response.decrypted.v || {})
+      v: ((response.decrypted && response.decrypted.v) || {})
     }
   },
   async getHistoVecV1 (id, key, uuid) {
