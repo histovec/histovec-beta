@@ -298,12 +298,22 @@ import ModalRating from './forms/ModalRating.vue'
 import histovec from '../assets/js/histovec'
 
 const statusFromCode = {
-  405: 'invalid',
-  404: 'notFound',
-  429: 'tooManyRequests',
-  502: 'unavailable',
-  503: 'unavailable',
-  504: 'unavailable',
+  'holder': {
+    405: 'invalid',
+    404: 'notFound',
+    429: 'tooManyRequests',
+    502: 'unavailable',
+    503: 'unavailable',
+    504: 'unavailable',
+  },
+  'buyer': {
+    405: 'invalidBuyer',
+    404: 'notFoundBuyer',
+    429: 'tooManyRequests',
+    502: 'unavailable',
+    503: 'unavailable',
+    504: 'unavailable'
+  }
 }
 
 export default {
@@ -354,9 +364,10 @@ export default {
                 (this.$store.state.api.decrypted.histovec === undefined)) {
           return 'wait'
       } else if (this.$store.state.api.http.histovec !== 200) {
-        return statusFromCode[this.$store.state.api.http.histovec]
+        return this.holder ? statusFromCode.holder[this.$store.state.api.http.histovec] :
+                             statusFromCode.buyer[this.$store.state.api.http.histovec]
       } else if (!this.$store.state.api.hit.histovec) {
-        return 'notFound'
+        return this.holder ? 'notFound' : 'notFoundBuyer'
       } else if (!this.$store.state.api.decrypted.histovec) {
         return this.holder ? 'decryptError' : 'decryptErrorBuyer'
       }
@@ -409,8 +420,8 @@ export default {
         if (this.$store.state.display.otc) {
           await this.$store.dispatch('getTechControl')
         }
-        await this.$store.dispatch('log', 
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status)
+        await this.$store.dispatch('log',
+          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
         return
       }
     }

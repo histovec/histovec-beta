@@ -34,5 +34,27 @@
       "icon": "fa fa-question-circle fa-lg"
     }
   },
+  "invalidBuyer": {
+    "msg": "Le lien fourni n'est pas valide: veuillez redemander le lien ou le QR-code à votre vendeur.",
+    "class": "alert alert-icon alert-danger",
+    "icon": "fa fa-warning",
+    "ref": {
+      "msg": "Besoin d'aide",
+      "route": "faq",
+      "hash": "#acheteur-le-lien-fourni-ne-fonctionne-pas",
+      "icon": "fa fa-question-circle fa-lg"
+    }
+  },
+  "notFoundBuyer": {
+    "msg": "Le rapport ne semble pas ou plus disponible: veuillez redemander le lien ou le QR-code à votre vendeur.",
+    "class": "alert alert-icon alert-danger",
+    "icon": "fa fa-warning",
+    "ref": {
+      "msg": "Besoin d'aide",
+      "route": "faq",
+      "hash": "#acheteur-le-lien-fourni-ne-fonctionne-pas",
+      "icon": "fa fa-question-circle fa-lg"
+    }
+  },
   "error": "Erreur inconnue - sollicitez nous."
 }
