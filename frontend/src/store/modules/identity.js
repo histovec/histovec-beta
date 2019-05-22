@@ -45,9 +45,6 @@ export default {
         Vue.set(o, keyPathArray[keyPathArray.length - 1], value)
       })
     },
-    updateFniMode (state, fniMode) {
-      state.fniMode = fniMode
-    },
     updateNom (state, nom) {
       state.nom = nom
     },

@@ -29,17 +29,21 @@ export default new Vuex.Store({
     },
     display: {
       beta: false,
+      fniMode: true,
       allTabs: false,
       pdf: true,
       updateDate: true,
+      v1: false,
       otc: false,
       otcGraph: false
     },
     displayEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       beta: ['ctrl', 'alt', 'b'],
+      fniMode: ['ctrl','alt','f'],
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
+      v1: ['ctrl','alt','v'],
       otc: ['ctrl', 'alt', 'o'],
       otcGraph: ['ctrl', 'alt', 'g'],
     },
