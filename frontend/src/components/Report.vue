@@ -414,8 +414,8 @@ export default {
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
-        await this.$store.dispatch('getHistoVec', this.$store.state.display.otc)
-        if (this.status === 'ok' && this.$store.state.display.otc) {
+        await this.$store.dispatch('getHistoVec', this.$store.state.display.v1)
+        if (this.status === 'ok' && this.$store.state.display.v1 && this.$store.state.display.otc) {
           await this.$store.dispatch('getTechControl')
         }
         await this.$store.dispatch('log',

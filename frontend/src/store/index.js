@@ -32,6 +32,7 @@ export default new Vuex.Store({
       allTabs: false,
       pdf: true,
       updateDate: true,
+      v1: false,
       otc: false,
       otcGraph: false
     },
@@ -40,6 +41,7 @@ export default new Vuex.Store({
       beta: ['ctrl', 'alt', 'b'],
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
+      v1: ['ctrl','alt','v'],
       otc: ['ctrl', 'alt', 'o'],
       otcGraph: ['ctrl', 'alt', 'g'],
     },
