@@ -34,7 +34,8 @@ export default new Vuex.Store({
       allTabs: false,
       id: {
         dateNaissance: true,
-        code: false
+        code: false,
+        strongCode: false
       },
       otc: false,
       otcGraph: false,
@@ -48,6 +49,7 @@ export default new Vuex.Store({
       fniMode: ['ctrl','alt','f'],
       'id.dateNaissance': ['ctrl', 'alt', 'd'],
       'id.code': ['ctrl', 'alt', 'c'],
+      'id.strongCode': ['ctrl', 'alt', 'z'],
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
       v1: ['ctrl','alt','v'],
