@@ -653,7 +653,7 @@ export default {
       }
     },
     checkFormule () {
-      return this.formule.match(/^(\d{2,4}[a-zA-Z]{2}\d{5}|)$/)
+      return this.formule.match(/^(\d{2,4}[a-zA-Z]{2}\d{5})$/)
     },
     checkFields () {
       return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni') && this.checkDateNaissance) || (this.raisonSociale && this.siren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
