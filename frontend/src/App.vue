@@ -2,12 +2,12 @@
   <div id="app">
     <!-- debut entete -->
     <div
-      v-for="(entry, index) in $store.state.displayEnabler"
+      v-for="(entry, index) in $store.state.configEnabler"
       :key="index"
     >
       <div
-        v-shortkey="$store.state.displayEnabler[index]"
-        @shortkey="$store.commit('toggleDisplay', index)"
+        v-shortkey="$store.state.configEnabler[index]"
+        @shortkey="$store.commit('toggleConfig', index)"
       >
       </div>
     </div>
@@ -37,7 +37,7 @@
             </div>
             <!-- debut beta -->
             <div
-              v-if="$store.state.display['beta']"
+              v-if="$store.state.config['beta']"
               id="no-boot"
               class="col-xs-1"
             >

@@ -4,6 +4,7 @@ import histovec from './modules/histovec.js'
 import identity from './modules/identity.js'
 import techControl from './modules/techControl.js'
 import VuexPersistence from 'vuex-persist'
+import objectPath from 'object-path'
 
 import api from '@/api'
 
@@ -27,20 +28,28 @@ export default new Vuex.Store({
       noHits: {},
       error: {}
     },
-    display: {
+    config: {
       beta: false,
       fniMode: true,
       allTabs: false,
+      id: {
+        dateNaissance: true,
+        code: false,
+        strongCode: false
+      },
+      otc: false,
+      otcGraph: false,
       pdf: true,
       updateDate: true,
-      v1: false,
-      otc: false,
-      otcGraph: false
+      v1: false
     },
-    displayEnabler: {
+    configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       beta: ['ctrl', 'alt', 'b'],
       fniMode: ['ctrl','alt','f'],
+      'id.dateNaissance': ['ctrl', 'alt', 'd'],
+      'id.code': ['ctrl', 'alt', 'c'],
+      'id.strongCode': ['ctrl', 'alt', 'z'],
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
       v1: ['ctrl','alt','v'],
@@ -51,8 +60,12 @@ export default new Vuex.Store({
     contact: {}
   },
   mutations: {
-    toggleDisplay (state, key) {
-      Vue.set(state.display, key, !state.display[key])
+    toggleConfig (state, key) {
+      let leafPath = key.replace(/^.*\./, '')
+      let rootPath = key.replace(/((.*)\..*|.*)/, '$2')
+      rootPath = rootPath === '' ? 'config' : `config.${rootPath}`
+      let model = objectPath.get(state, rootPath)
+      Vue.set(model, leafPath, !model[leafPath])
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
