@@ -33,7 +33,7 @@ export default new Vuex.Store({
       fniMode: true,
       allTabs: false,
       id: {
-        dateNaissance: false
+        dateNaissance: true
       },
       otc: false,
       otcGraph: false,
