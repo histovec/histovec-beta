@@ -167,7 +167,14 @@
                           v-if="typePersonne === 'particulier'"
                           class="row"
                         >
-                          <div :class="{'col-md-4': typeImmatriculation === 'siv' || !$store.state.config.fniMode, 'col-md-8' : typeImmatriculation === 'fni'}">
+                          <div
+                            :class="{
+                              'col-md-4': ($store.state.config.id.dateNaissance) && (typeImmatriculation === 'siv' || !$store.state.config.fniMode),
+                              'col-md-6': (!$store.state.config.id.dateNaissance) && (typeImmatriculation === 'siv' || !$store.state.config.fniMode),
+                              'col-md-8' : ($store.state.config.id.dateNaissance) && (typeImmatriculation === 'fni'),
+                              'col-md-12' : (!$store.state.config.id.dateNaissance) && (typeImmatriculation === 'fni')
+                            }"
+                          >
                             <div
                               class="form-group has-feedback"
                               :class="[{'has-error' : (nom === '' && status !== 'init')}]"
@@ -214,7 +221,7 @@
                           </div>
                           <div
                             v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode"
-                            class="col-md-4"
+                            :class="$store.state.config.id.dateNaissance ? 'col-md-4' : 'col-md-6'"
                           >
                             <div
                               class="form-group has-feedback"
@@ -240,7 +247,10 @@
                               <i class="fa fa-user form-control-feedback"></i>
                             </div>
                           </div>
-                          <div class="col-md-4">
+                          <div
+                            v-if="$store.state.config.id.dateNaissance"
+                            class="col-md-4"
+                          >
                             <search-field
                               form-id="dateNaissance"
                               :option="typeImmatriculation"
@@ -359,7 +369,7 @@
                                 >
                                 <i class="fa fa-pencil-square-o form-control-feedback"></i>
                               </div>
-                              <div v-if="typeImmatriculation === 'fni'">
+                              <div v-if="typeImmatriculation === 'fni' && $store.state.config.fniMode">
                                 <label
                                   for="input"
                                   class="control-label"
@@ -524,6 +534,7 @@ const formInitialOptions = {
       masked: true,
       mask: '##/##/####',
       maskAlt: '####',
+      check: /^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/,
       maskTitle: 'désactiver le contrôle si année de naissnce seule',
       placeholder: 'xx/xx/xxxx',
       placeholderAlt: '19xx',
@@ -640,7 +651,7 @@ export default {
       }
     },
     checkDateNaissance () {
-      return this.dateNaissance.match(/^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/)
+      return (!this.$store.state.config.id.dateNaissance) || this.dateNaissance.match(/^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/)
     },
     checkDateCertificat () {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)

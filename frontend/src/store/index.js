@@ -32,16 +32,20 @@ export default new Vuex.Store({
       beta: false,
       fniMode: true,
       allTabs: false,
+      id: {
+        dateNaissance: false
+      },
+      otc: false,
+      otcGraph: false,
       pdf: true,
       updateDate: true,
-      v1: false,
-      otc: false,
-      otcGraph: false
+      v1: false
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       beta: ['ctrl', 'alt', 'b'],
       fniMode: ['ctrl','alt','f'],
+      'id.dateNaissance': ['ctrl', 'alt', 'd'],
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
       v1: ['ctrl','alt','v'],
