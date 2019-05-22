@@ -27,7 +27,7 @@ export default new Vuex.Store({
       noHits: {},
       error: {}
     },
-    display: {
+    config: {
       beta: false,
       fniMode: true,
       allTabs: false,
@@ -37,7 +37,7 @@ export default new Vuex.Store({
       otc: false,
       otcGraph: false
     },
-    displayEnabler: {
+    configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       beta: ['ctrl', 'alt', 'b'],
       fniMode: ['ctrl','alt','f'],
@@ -52,7 +52,7 @@ export default new Vuex.Store({
   },
   mutations: {
     toggleDisplay (state, key) {
-      Vue.set(state.display, key, !state.display[key])
+      Vue.set(state.config, key, !state.config[key])
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {

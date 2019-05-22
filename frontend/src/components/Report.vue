@@ -125,7 +125,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.display.otc && (ct.length > 0)"
+                v-if="$store.state.config.otc && (ct.length > 0)"
                 :class="[{'active' : tab === 'otc'}]"
               >
                 <a
@@ -137,7 +137,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.display.otc && $store.state.display.otcGraph && (ct.length > 1)"
+                v-if="$store.state.config.otc && $store.state.config.otcGraph && (ct.length > 1)"
                 :class="[{'active' : tab === 'otcGraph'}]"
               >
                 <a
@@ -149,7 +149,7 @@
                 </a>
               </li>
               <li
-                v-if="holder&&$store.state.display.pdf"
+                v-if="holder&&$store.state.config.pdf"
                 :class="[{'active' : tab === 'csa'}]"
               >
                 <a
@@ -178,7 +178,7 @@
               <!-- /* ----------------- synthese ----------------- */ -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'abstract'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'abstract'}]"
               >
                 <abstract
                   :v="v"
@@ -189,21 +189,21 @@
               <!-- /* ----------------- vehicule ----------------- */ -->
               <div
                 class="tab-pane fade pr-20"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'vehicle'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'vehicle'}]"
               >
                 <tech-chars :v="v"></tech-chars>
               </div>
               <!-- /* ----------------- titre ----------------- */ -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'holder'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'holder'}]"
               >
                 <license :v="v"></license>
               </div>
               <!-- situation administrative -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'situation'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'situation'}]"
               >
                 <administrative
                   :v="v"
@@ -214,13 +214,13 @@
               <!-- historique des opérations -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'history'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'history'}]"
               >
                 <history :v="v"></history>
               </div>
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'otc'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'otc'}]"
               >
                 <tech-control
                   v-if="ct.length > 0"
@@ -231,7 +231,7 @@
               <div
                 v-if="tab === 'otcGraph'"
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'otcGraph'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'otcGraph'}]"
               >
                 <tech-control-graph
                   :ct="ct"
@@ -241,7 +241,7 @@
               <div
                 v-if="holder"
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.display.allTabs || tab === 'send'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'send'}]"
               >
                 <share
                   :v="v"
@@ -252,7 +252,7 @@
                 </share>
               </div>
               <div
-                v-if="holder&&$store.state.display.pdf"
+                v-if="holder&&$store.state.config.pdf"
                 class="tab-pane fade"
                 :class="[{'in active' : tab === 'csa'}]"
               >
@@ -414,8 +414,8 @@ export default {
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
-        await this.$store.dispatch('getHistoVec', this.$store.state.display.v1)
-        if (this.status === 'ok' && this.$store.state.display.v1 && this.$store.state.display.otc) {
+        await this.$store.dispatch('getHistoVec', this.$store.state.config.v1)
+        if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.otc) {
           await this.$store.dispatch('getTechControl')
         }
         await this.$store.dispatch('log',

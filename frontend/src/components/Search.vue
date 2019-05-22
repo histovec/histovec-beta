@@ -66,7 +66,7 @@
             </div>
           </div>
           <div
-            v-if="$store.state.display.fniMode"
+            v-if="$store.state.config.fniMode"
             class="col-md-12"
           >
             <div
@@ -79,7 +79,7 @@
             </div>
           </div>
           <div
-            v-if="$store.state.display.fniMode"
+            v-if="$store.state.config.fniMode"
             class="col-xs-6 col-sm-6"
           >
             <a
@@ -97,7 +97,7 @@
             </a>
           </div>
           <div
-            v-if="$store.state.display.fniMode"
+            v-if="$store.state.config.fniMode"
             class="col-xs-6 col-sm-6"
           >
             <a
@@ -115,7 +115,7 @@
             </a>
           </div>
           <div
-            v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni' || !$store.state.display.fniMode"
+            v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni' || !$store.state.config.fniMode"
             class="col-md-12 col-xs-12 p-h-25"
           >
             <!-- tabs start -->
@@ -167,13 +167,13 @@
                           v-if="typePersonne === 'particulier'"
                           class="row"
                         >
-                          <div :class="{'col-md-4': typeImmatriculation === 'siv' || !$store.state.display.fniMode, 'col-md-8' : typeImmatriculation === 'fni'}">
+                          <div :class="{'col-md-4': typeImmatriculation === 'siv' || !$store.state.config.fniMode, 'col-md-8' : typeImmatriculation === 'fni'}">
                             <div
                               class="form-group has-feedback"
                               :class="[{'has-error' : (nom === '' && status !== 'init')}]"
                             >
                               <label
-                                v-if="typeImmatriculation === 'siv' || !$store.state.display.fniMode"
+                                v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode"
                                 class="control-label"
                               >
                                 Nom de naissance
@@ -213,7 +213,7 @@
                             </div>
                           </div>
                           <div
-                            v-if="typeImmatriculation === 'siv' || !$store.state.display.fniMode"
+                            v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode"
                             class="col-md-4"
                           >
                             <div
@@ -315,7 +315,7 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <search-field 
+                            <search-field
                               form-id="plaque"
                               :option="typeImmatriculation"
                               :active="status !== 'init'"
@@ -327,7 +327,7 @@
                               class="form-group has-feedback plan position_left"
                               :class="[{'has-error' : ((!checkFormule && !checkDateCertificat) && status !== 'init')}]"
                             >
-                              <div v-if="typeImmatriculation === 'siv' || !$store.state.display.fniMode">
+                              <div v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode">
                                 <label
                                   for="input"
                                   class="control-label"
@@ -453,7 +453,7 @@
     <!-- debut modal -->
     <modal-helper
       v-if="modal"
-      :fni-mode="$store.state.display.fniMode"
+      :fni-mode="$store.state.config.fniMode"
       :type-immatriculation="typeImmatriculation"
       @close="modal = false"
     >
@@ -712,7 +712,7 @@ export default {
       let data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
       if (data.length > 1) {
         if (evt.target.name === 'nom') {
-          if (this.typeImmatriculation === 'siv' || !this.$store.state.display.fniMode) {
+          if (this.typeImmatriculation === 'siv' || !this.$store.state.config.fniMode) {
             // this.nom = data[0]
             this.prenom = data[1]
             this.dateNaissance = data[2]
@@ -730,7 +730,7 @@ export default {
           // this.raisonSociale = data[0]
           this.siren = data[1]
           this.plaque = data[2]
-          if (this.typeImmatriculation === 'siv' || !this.$store.state.display.fniMode) {
+          if (this.typeImmatriculation === 'siv' || !this.$store.state.config.fniMode) {
             this.formule = data[3]
           }
           if (this.typeImmatriculation === 'fni') {
