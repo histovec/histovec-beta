@@ -4,6 +4,7 @@ import histovec from './modules/histovec.js'
 import identity from './modules/identity.js'
 import techControl from './modules/techControl.js'
 import VuexPersistence from 'vuex-persist'
+import objectPath from 'object-path'
 
 import api from '@/api'
 
@@ -51,8 +52,12 @@ export default new Vuex.Store({
     contact: {}
   },
   mutations: {
-    toggleDisplay (state, key) {
-      Vue.set(state.config, key, !state.config[key])
+    toggleConfig (state, key) {
+      let leafPath = key.replace(/^.*\./, '')
+      let rootPath = key.replace(/((.*)\..*|.*)/, '$2')
+      rootPath = rootPath === '' ? 'config' : `config.${rootPath}`
+      let model = objectPath.get(state, rootPath)
+      Vue.set(model, leafPath, !model[leafPath])
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {

@@ -22,6 +22,7 @@
     "jspdf": "1.4.1",
     "lodash.orderby": "^4.6.0",
     "moment": "^2.24.0",
+    "object-path":"^0.11.4",
     "qr.js": "^0.0.0",
     "qrcode.vue": "^1.6.1",
     "regenerator-runtime": "^0.13.2",

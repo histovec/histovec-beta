@@ -7,7 +7,7 @@
     >
       <div
         v-shortkey="$store.state.configEnabler[index]"
-        @shortkey="$store.commit('toggleDisplay', index)"
+        @shortkey="$store.commit('toggleConfig', index)"
       >
       </div>
     </div>
