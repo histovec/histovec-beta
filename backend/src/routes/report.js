@@ -140,7 +140,7 @@ export async function getOTC (req, res) {
     let ct = await redis.getAsync(hash(req.body.code || req.body.id))
     if (ct) {
       try {
-        console.log('cached', req.body.id)
+        console.log('cached', hash(req.body.code || req.body.id))
         ct = decrypt(ct, req.body.key)
         res.status(200).json({
           success: true,
