@@ -1,0 +1,45 @@
+config:
+  environments:
+    development:
+      target: "http://nginx-dev"
+      phases:
+        - duration: 30
+          arrivalRate: 2
+        - duration: 30
+          arrivalRate: 5
+        - duration: 30
+          arrivalRate: 10
+        - duration: 30
+          arrivalRate: 20
+        - duration: 60
+          arrivalRate: 50
+        - pause: 5
+        - duration: 60
+          arrivalRate: 60
+        - pause: 5
+        - duration: 60
+          arrivalRate: 70
+        - pause: 10
+        - duration: 60
+          arrivalRate: 80
+        - pause: 10
+        - duration: 60
+          arrivalRate: 90
+        - pause: 10
+        - duration: 60
+          arrivalRate: 100
+        - pause: 10
+        - duration: 60
+          arrivalRate: 150
+        - pause: 10
+        - duration: 60
+          arrivalRate: 200
+      payload:
+        path: ids.csv
+        fields:
+          - idv
+scenarios:
+  - name: histovec-v0
+    flow:
+     - get:
+         url: /histovec/api/v0/id/8ebf2ad7-ec0f-f4d5-d974-995e07f199cf/{{ idv }}

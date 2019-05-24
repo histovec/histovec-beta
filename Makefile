@@ -49,7 +49,10 @@ export API_GLOBAL_LIMIT_RATE=5r/s
 export API_GLOBAL_BURST=20 nodelay
 export API_WRITE_LIMIT_RATE=10r/m
 export API_WRITE_BURST=20 nodelay
-
+export PERF=${APP_PATH}/tests/performance
+export PERF_IDS=${PERF}/ids.csv
+export PERF_SCENARIOS:=$(shell ls ${PERF}/scenarios/*)
+export PERF_REPORTS=${PERF}/reports/
 
 # data prep (data not included in repo)
 export datadir=sample_data
@@ -66,8 +69,6 @@ export ES_VERBOSE_UPDATE=1000
 export ES_TIMEOUT=60
 export ES_JOBS=4
 export FROM=1
-export stress=10
-export stress_verbose=1000
 export PASSPHRASE=CHANGEME
 export settings={"index": {"number_of_shards": 1, "refresh_interval": "300s", "number_of_replicas": 0}}
 export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}}}
@@ -140,7 +141,6 @@ wait-index: index-create
 
 wait-index-purge: index-purge
 	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
-
 
 data-download:
 	@mkdir -p ${datadir}
@@ -238,7 +238,16 @@ endif
 index-stress:
 ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $1}')","1")
 	@echo stress test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0;print "reading file from line ${FROM}" > "/dev/stderr"}{n++;if (n>${FROM}){print $$1}}' | parallel -j${stress} 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{}' | jq -c -r '[.took, .hits.total] | @csv' | awk -F ',' 'BEGIN{n=0;t=0}{n++;t+=$$1;ok+=$$2;if ((n%${stress_verbose})==0) {total+=n; printf("%s with ${stress} parallel threads, total %d calls, %.0f%% hit, each response takes %.2fms\n",strftime("%Y%m%d-%H:%M"),total,ok/n*100,t/n);ok=0;t=0;n=0}}'
+	@export PERF_IDS_NB=`wc -l ${PERF_IDS} | awk '{print $1}'` && shuf ${PERF_IDS} | head -$(( ( RANDOM % ( ( ${PERF_IDS_NB} * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
+	@${DC} -f ${DC_PREFIX}-artillery.yml build
+	@for scenario in ${PERF_SCENARIOS};\
+		do export PERF_SCENARIO=$${scenario};\
+			report=reports/`basename $$scenario .yml`.json ;\
+			${DC} -f ${DC_PREFIX}-artillery.yml run artillery run -e development -o $${report} scenario.yml; \
+			${DC} -f ${DC_PREFIX}-artillery.yml run artillery report $${report}; \
+		done
+	@rm ${PERF_IDS}.random
+	#@${DC} -f ${DC_PREFIX}-artillery.yml run report reports/report.json
 endif
 
 docker-clean: stop
