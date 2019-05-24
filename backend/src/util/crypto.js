@@ -70,5 +70,5 @@ export function decrypt (encrypted, key) {
 }
 
 export function hash (string) {
-  return CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
+  return CryptoJS.SHA256(string).toString(CryptoJS.enc.Base64)
 }
