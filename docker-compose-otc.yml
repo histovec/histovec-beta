@@ -12,6 +12,10 @@ services:
         no_proxy: ${no_proxy}
         npm_registry: ${NPM_REGISTRY}
         MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+    environment:
+      - OTC_PORT=${OTC_PORT}
+      - OTC_API=${OTC_API}
+      - OTC_TIMEOUT=${OTC_TIMEOUT}
     container_name: otc-fake
     restart: always
 

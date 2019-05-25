@@ -3,26 +3,35 @@ const service = require('restana')({
   server
 })
 
+const config = {
+  apiPath: process.env.OTC_API,
+  latency: process.env.OTC_LATENCY || 300,
+  port: process.env.OTC_PORT || 9000
+}
+
 const ct = require('./otc_sample.json')
 
 const nb = ct.length
-
-const latency = 1000
 
 function getCT() {
   let response = ct[Math.floor(Math.random() * (nb + 1))]
   return response
 }
 
+function erlangWait() {
+  // Erelang generated response time with lambda = 1 and k = 5
+  return = - ( config.latency / 4 ) * Math.log(Math.random() * Math.random() * Math.random() * Math.random() * Math.random())
+}
+
 async function latencyResSend(res, response, time) {
   return await setTimeout(function(){
-    res.send(response); 
-  }, Math.floor(Math.random() * (latency + 1)));
-} 
+    res.send(response);
+  }, erlangWait() );
+}
 
-service.post('/otc', async (req, res) => {
+service.post(`/${config.apiPath}`, async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   await latencyResSend(res, getCT());
 })
 
-service.start(9000)
+service.start(config.port)
