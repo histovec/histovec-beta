@@ -9,6 +9,7 @@ ARG npm_registry
 ARG MIRROR_DEBIAN
 ARG app_path
 ARG app_name
+ARG port
 
 # Base dir /app
 WORKDIR /$app_path
@@ -16,7 +17,7 @@ WORKDIR /$app_path
 VOLUME /$app_path/src
 
 # Expose the listening port of your app
-EXPOSE 8000
+EXPOSE ${port}
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo "Europe/Paris" > /etc/timezone
 
