@@ -1,14 +1,13 @@
 import { generateKey } from './util/crypto'
 import npmVersion from '../package.json'
 
-const isProduction = process.env.NODE_ENV === 'production'
-
 export const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
   secret: process.env.BACKEND_SECRET || '%Ch4NGm3+',
   appKey: generateKey(process.env.BACKEND_SECRET || '%Ch4NGm3+'),
-  isProduction: process.env.NODE_ENV === 'production',
+  isProd: process.env.NODE_ENV === 'production',
+  isTest: process.env.NODE_ENV === 'test',
   env: process.env.NODE_ENV,
   app: process.env.APP,
   redisUrl: `redis://${process.env.REDIS_URL}`,

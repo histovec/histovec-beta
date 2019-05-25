@@ -1,8 +1,9 @@
 import { createLogger, format, transports } from 'winston'
 const { combine, timestamp, label, printf } = format
+import { config } from '../config'
 
-const isProd = process.env.NODE_ENV === 'production'
-const isTest = process.env.NODE_ENV === 'test'
+const isProd = config.isProd
+const isTest = config.isTest
 
 const TECH_LABEL = 'tech'
 const APP_LABEL = 'app'
