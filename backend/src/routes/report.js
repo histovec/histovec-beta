@@ -83,7 +83,7 @@ async function searchOTC(plaque) {
       {
         url: config.otcUrl,
         method: 'post',
-        timeout: 3000
+        timeout: config.otcTimeout
       },
       {
         plaque: plaque
