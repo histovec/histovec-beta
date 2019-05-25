@@ -14,19 +14,6 @@ config:
         - duration: 60
           arrivalRate: 50
         - pause: 5
-        - duration: 60
-          arrivalRate: 60
-        - pause: 5
-        - duration: 60
-          arrivalRate: 70
-        - pause: 10
-        - duration: 60
-          arrivalRate: 80
-        - pause: 10
-        - duration: 60
-          arrivalRate: 90
-        - pause: 10
-        - duration: 60
           arrivalRate: 100
         - pause: 10
         - duration: 60
@@ -34,6 +21,9 @@ config:
         - pause: 10
         - duration: 60
           arrivalRate: 200
+        - pause: 10
+        - duration: 60
+          arrivalRate: 300
       payload:
         path: ids.csv
         fields:
