@@ -42,6 +42,7 @@ RUN npm i npm@latest -g
 FROM base as development
 ARG app_ver
 ENV APP_VERSION ${app_ver}
+ENV NPM_CONFIG_LOGLEVEL debug
 
 COPY babel.config.js boot-dev.js package.json ./
 # Install app dependencies
@@ -49,7 +50,6 @@ RUN npm --no-git-tag-version version ${APP_VERSION}
 RUN npm install --verbose
 RUN npm audit fix
 
-#CMD ["npm", "start"]
 CMD ["npm","run",  "dev"]
 
 ##########################
