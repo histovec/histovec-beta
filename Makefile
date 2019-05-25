@@ -318,7 +318,7 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network elasticsearch backend-dev frontend-dev otc-dev
+dev: network wait-elasticsearch otc-dev backend-dev frontend-dev
 
 dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop otc-dev-stop network-stop
 
