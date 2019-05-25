@@ -9,6 +9,7 @@ ARG npm_registry
 ARG MIRROR_DEBIAN
 ARG app_path
 ARG app_name
+ARG port
 
 # Base dir /app
 WORKDIR /$app_path
@@ -16,7 +17,7 @@ WORKDIR /$app_path
 VOLUME /$app_path/src
 
 # Expose the listening port of your app
-EXPOSE 8000
+EXPOSE ${port}
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo "Europe/Paris" > /etc/timezone
 
@@ -41,6 +42,7 @@ RUN npm i npm@latest -g
 FROM base as development
 ARG app_ver
 ENV APP_VERSION ${app_ver}
+ENV NPM_CONFIG_LOGLEVEL debug
 
 COPY babel.config.js boot-dev.js package.json ./
 # Install app dependencies
@@ -48,7 +50,6 @@ RUN npm --no-git-tag-version version ${APP_VERSION}
 RUN npm install --verbose
 RUN npm audit fix
 
-#CMD ["npm", "start"]
 CMD ["npm","run",  "dev"]
 
 ##########################
