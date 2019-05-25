@@ -67,6 +67,6 @@ export const appLogger = createLogger({
 
 export const loggerStream = {
   write (message, encoding) {
-    simplestLogger.info(message)
+    simplestLogger.info(message.trim())
   },
 }
