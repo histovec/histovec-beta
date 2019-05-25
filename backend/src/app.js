@@ -7,10 +7,6 @@ import { config } from './config'
 
 const app = express()
 
-app.get(`${config.apiPrefix}/version`, function (req, res) {
-  res.send(config.version)
-})
-
 morgan.token('id', function (req) {
   return req.body.id
 })
