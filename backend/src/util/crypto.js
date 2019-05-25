@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js'
+import { appLogger } from '../util/logger'
 
 const nonce = randomString(10)
 
@@ -31,8 +32,7 @@ export function encrypt (json, key) {
     let encrypted = CryptoJS.AES.encrypt(JSON.stringify(json), key)
     return encrypted.toString()
   } catch (e) {
-    /* eslint-disable-next-line no-console */
-    console.log('encrypt_error', e)
+    appLogger.debug(`encrypt_error: ${e.message}`)
     throw new Error(`encrypt_error: ${e}`)
   }
 }
@@ -50,21 +50,19 @@ export function decrypt (encrypted, key) {
   try {
     decrypted = CryptoJS.AES.decrypt(encrypted, key)
   } catch (e) {
-    /* eslint-disable-next-line no-console */
-    console.log('decrypt_error', e)
+    appLogger.debug(`decrypt_error: ${e.message}`)
     throw new Error(`decrypt_error: ${e}`)
   }
   try {
     decrypted = decrypted.toString(CryptoJS.enc.Utf8)
   } catch (e) {
-    /* eslint-disable-next-line no-console */
-    console.log('decrypt_toString_failure', e)
+    appLogger.debug(`decrypt_toString_failure: ${e.message}`)
     throw new Error(`decrypt_toString_failure: ${e}`)
   }
   try {
     return JSON.parse(decrypted)
   } catch (e) {
-    /* eslint-disable-next-line no-console */
+    appLogger.debug(`decrypt_JSON_parse_error: ${e.message}`)
     return decrypted
   }
 }

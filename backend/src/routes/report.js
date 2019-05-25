@@ -2,6 +2,7 @@ import axios from 'axios'
 import elasticsearch from '../db/elasticsearch'
 import { sign, checkSigned, encrypt, decrypt, hash } from '../util/crypto'
 import { config } from '../config'
+import { appLogger } from '../util/logger'
 import redis from '../db/redis'
 
 function checkUuid (uuid) {
@@ -44,7 +45,7 @@ async function searchHistoVec(id, uuid) {
             v: hit
           }
         } else {
-          console.log('Bad Content')
+          appLogger.warn(`Bad Content in elasticsearch response: ${JSON.stringify(response)}`)
           return {
             status: 500,
             source: 'histovec',
@@ -52,7 +53,7 @@ async function searchHistoVec(id, uuid) {
           }
         }
       } else {
-        console.log('Not Found')
+        appLogger.debug(`No hit in elasticsearch: ${JSON.stringify(response)}`)
         return {
           status: 404,
           source: 'histovec',
@@ -60,7 +61,7 @@ async function searchHistoVec(id, uuid) {
         }
       }
     } else {
-      console.log('Bad Request')
+      appLogger.debug(`Bad request - invalid uuid or id: {'id': '${id}', 'uudi': '${uuid}}'`)
       return {
         status: 400,
         source: 'histovec',
@@ -68,7 +69,11 @@ async function searchHistoVec(id, uuid) {
       }
     }
   } catch (error) {
-    console.log(error.message)
+    appLogger.warn(
+      `Couldn't process elasticsearch response :
+      {'id': '${id}', 'uuid': '${uuid}'}
+      ${error.message}`
+    )
     return {
       status: 500,
       source: 'histovec',
@@ -95,13 +100,18 @@ async function searchOTC(plaque) {
         ct: response.data.ct
       }
     } else {
+      appLogger.warn(`Bad Content in OTC response: ${JSON.stringify(response)}`)
       return {
         status: 500,
         message: 'Bad Content'
       }
     }
   } catch (error) {
-    console.trace(error.message)
+    appLogger.warn(
+      `Couldn't process OTC response :
+      {'plaque': '${plaque}'}
+      ${error.message}`
+    )
     return {
       status: 500,
       message: error.message
@@ -132,6 +142,7 @@ export async function getHistoVec (req, res) {
 
 export async function getOTC (req, res) {
   if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
+    appLogger.debug(`Not authentified - mismatched id and token: {'id': '${req.body.id}', 'token': '${req.body.token}}'`)
     res.status(401).json({
       success: false,
       message: 'Not authentified'
@@ -140,14 +151,17 @@ export async function getOTC (req, res) {
     let ct = await redis.getAsync(hash(req.body.code || req.body.id))
     if (ct) {
       try {
-        console.log('cached', hash(req.body.code || req.body.id))
+        appLogger.debug(`OTC response cached - found following key in Redis: ${hash(req.body.code || req.body.id)}'`)
         ct = decrypt(ct, req.body.key)
         res.status(200).json({
           success: true,
           ct: ct
         })
-      } catch (e) {
-        console.log(`cache_decrypt_error: ${e}`)
+      } catch (error) {
+        appLogger.warn(
+          `Couldn't decrypt cached OTC response:
+          ${error.message}`
+        )
       }
     } else {
       let response = await searchOTC(req.body.otcIds)
@@ -158,6 +172,9 @@ export async function getOTC (req, res) {
           ct: response.ct
         })
       } else {
+        appLogger.debug(
+          `OTC response failed with status ${response.status}: ${response.message}`
+        )
         res.status(response.status).json({
           success: false,
           message: response.message
