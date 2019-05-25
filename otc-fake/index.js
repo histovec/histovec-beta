@@ -20,7 +20,7 @@ function getCT() {
 
 function erlangWait() {
   // Erelang generated response time with lambda = 1 and k = 5
-  return = - ( config.latency / 4 ) * Math.log(Math.random() * Math.random() * Math.random() * Math.random() * Math.random())
+  return - ( config.latency / 4 ) * Math.log(Math.random() * Math.random() * Math.random() * Math.random() * Math.random())
 }
 
 async function latencyResSend(res, response, time) {
