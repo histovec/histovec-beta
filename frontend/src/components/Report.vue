@@ -359,7 +359,9 @@ export default {
       } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         return 'invalid'
       } else if (this.$store.state.api.fetching.histovec ||
-                (this.$store.state.api.http.histovec === undefined)) {
+                (this.$store.state.api.http.histovec === undefined) ||
+                ((this.$store.state.api.hit.histovec === undefined) && (!this.$store.state.config.v1)) ||
+                (this.$store.state.api.decrypted.histovec === undefined)) {
           return 'wait'
       } else if (this.$store.state.api.http.histovec !== 200) {
         return this.holder ? statusFromCode.holder[this.$store.state.api.http.histovec] :
