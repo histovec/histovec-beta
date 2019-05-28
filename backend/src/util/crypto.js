@@ -70,3 +70,12 @@ export function decrypt (encrypted, key) {
 export function hash (string) {
   return CryptoJS.SHA256(string).toString(CryptoJS.enc.Base64)
 }
+
+export function checkUuid (uuid) {
+  return (uuid && typeof uuid === 'string') ? uuid.match(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/) : false
+}
+
+export function checkId (id) {
+  return id ? id.match(/[A-Za-z0-9_-]{43}=/) : false
+}
+
