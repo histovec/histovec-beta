@@ -51,7 +51,7 @@ const decrypt = (encrypted, key) => {
     return JSON.parse(decrypted)
   } catch (e) {
     /* eslint-disable-next-line no-console */
-    console.log('decrypt_JSON_parse_error', e)
+    console.log('decrypt_JSON_parse_error', decrypted, e)
     throw new Error(`decrypt_JSON_parse_error: ${e}`)
   }
 }

@@ -51,7 +51,7 @@ def unpad(s):
 
 
 def encrypt_string(key, string):
-    padded = pad(string.encode('utf8','ignore'))
+    padded = pad(string.encode('utf8'))
     iv = Random.new().read(AES.block_size)
     cipher = AES.new(key, AES.MODE_CBC, iv)
     return (base64.urlsafe_b64encode(iv + cipher.encrypt(padded))).decode('utf8')
