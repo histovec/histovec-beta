@@ -40,7 +40,7 @@ _test_encrypt_decrypt = False
 def pad(s):
     """Return a copy of the given string padded with between 1 and `AES_BLOCK_SIZE` characters to make its length a multiple of `AES_BLOCK_SIZE`"""
     padding_length = AES_BLOCK_SIZE - len(s) % AES_BLOCK_SIZE
-    return s + padding_length * chr(padding_length)
+    return s + padding_length * chr(padding_length).encode('utf8')
 
 
 def unpad(s):
@@ -50,7 +50,7 @@ def unpad(s):
 
 
 def encrypt_string(key, string):
-    padded = pad(string)
+    padded = pad(string.encode('utf8','ignore'))
     iv = Random.new().read(AES.block_size)
     cipher = AES.new(key, AES.MODE_CBC, iv)
     return base64.urlsafe_b64encode(iv + cipher.encrypt(padded))
@@ -103,7 +103,7 @@ def encrypt_df(df):
     if _test_encrypt_decrypt:
         df['v_orig']=df['v']
 
-    df['v']=df.apply(lambda row: encrypt_string(row['key'], row['v'].encode('utf8','ignore')), axis=1)
+    df['v']=df.apply(lambda row: encrypt_string(row['key'], row['v']), axis=1)
 
     if _test_encrypt_decrypt:
 #    df['v_crypt']=df.apply(lambda row: encrypt_string(row['hash2'],row['v']), axis=1)
