@@ -1,7 +1,7 @@
 // redis-client.js
 import redis from 'redis'
 import { promisify } from 'util'
-import { config } from '../config'
+import config from '../config'
 const client = redis.createClient(config.redisUrl)
 client.config("SET", "save", "")
 

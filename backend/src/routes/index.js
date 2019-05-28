@@ -1,7 +1,8 @@
 import express from 'express'
-import { config } from '../config'
-import { getHistoVec, getOTC, streamedReport } from './report'
-// import feedback from './feedback'
+import config from '../config'
+import { getHistoVec, getOTC } from './report'
+// import { streamedReport } from './report'
+
 const router = express.Router()
 
 router.get('/version', (req, res) => res.send({ version: config.version }))

@@ -1,7 +1,7 @@
 import { generateKey } from './util/crypto'
 import npmVersion from '../package.json'
 
-export const config = {
+const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
   secret: process.env.BACKEND_SECRET || '%Ch4NGm3+',
@@ -21,3 +21,6 @@ export const config = {
   mailFrom: process.env.MAIL_FROM,
   apiPrefix: `/${process.env.APP}/api/v1`
 }
+
+
+export default config

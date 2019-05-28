@@ -1,17 +1,9 @@
 import axios from 'axios'
-import elasticsearch from '../db/elasticsearch'
-import { sign, checkSigned, encrypt, decrypt, hash } from '../util/crypto'
-import { config } from '../config'
+import elasticsearch from '../connectors/elasticsearch'
+import { sign, checkSigned, encrypt, decrypt, hash, checkId, checkUuid } from '../util/crypto'
+import config from '../config'
 import { appLogger } from '../util/logger'
-import redis from '../db/redis'
-
-function checkUuid (uuid) {
-  return uuid ? uuid.match(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/) : false
-}
-
-function checkId (id) {
-  return id ? id.match(/[A-Za-z0-9_-]{43}=/) : false
-}
+import redis from '../connectors/redis'
 
 function addStreamEvent(res, id, status, json) {
   res.write(`id: ${id}\n`)
