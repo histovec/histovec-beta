@@ -18,11 +18,13 @@ import numpy as np
 # Config
 SEP=';'
 AES_BLOCK_SIZE = 16
-CHUNK_SIZE = 100          # size of each chunk
+CHUNK_SIZE = 20000         # size of each chunk
 MAX_INPUT_ROWS = None      # number of lines to process in the recipe, None if no limit
 #VERBOSECHUNKSIZE = 10000   # display log every VERBOSECHUNKSIZE line
 NUM_THREADS = 2            # number of parallel threads
-
+CRYPT_OPT_DATENAISSANCE=True
+CRYPT_OPT_STRONGCODE=False
+CRYPT_OPT_CODE=False
 
 COMMON_TRANSFER_SCHEMA = [
     {'name': 'ida1', 'type': 'string'},
@@ -68,14 +70,40 @@ def encrypt_df(df):
     month = datetime.today().strftime('%Y%m')
     prev_month = (datetime.today() - relativedelta(months=1)).strftime('%Y%m')
 
-    df['ida1']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('ascii','ignore')).digest()))
-    df['ida2']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+prev_month).encode('ascii','ignore')).digest()))
+    df.fillna("", inplace=True)
+
+    df['id_personne'] = df['pers_raison_soc_tit'] + df['pers_siren_tit'] + df['pers_nom_naissance_tit']
+    if ('pers_prenom_tit' in list(df)):
+        df['id_personne'] = df['id_personne'] + (df['pers_prenom_tit']) #SIV
+    if (('pers_date_naissance_tit' in list(df)) and (CRYPT_OPT_DATENAISSANCE)):
+        df['id_personne'] = df['id_personne'] + (df['pers_date_naissance_tit'] )
+    df['id_vehicle'] = df['plaq_immat']
+    if ('numero_formule' in list(df)):
+        df['id_vehicle'] = df['id_vehicle'] + df['numero_formule'] #SIV
+    else:
+        df['id_vehicle'] = df['id_vehicle'] + df['date_emission_ci'] #FNI
+
+    df['idv'] = df['id_personne'] + df['id_vehicle']
+    df['ida'] = df['idv'] if CRYPT_OPT_STRONGCODE else df['id_vehicle']
+    df['key'] = df['id_vehicle']
+
+    for col in ['idv', 'ida', 'key']:
+        df[col]=df[col].str.lower()
+        df[col]=df[col].str.replace(r'\W', '')
+    df = df[['idv', 'ida', 'key', 'v']]
+
+    if CRYPT_OPT_CODE:
+        df.drop(['v'], inplace=True)
+    else:
+        df['idv']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x).encode('ascii','ignore')).digest()))
+    df['ida1']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('ascii','ignore')).digest()))
+    df['ida2']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+prev_month).encode('ascii','ignore')).digest()))
     df['key']=df['key'].apply(lambda x: hashlib.sha256(x.encode('ascii','ignore')).digest())
 
     if _test_encrypt_decrypt:
         df['v_orig']=df['v']
 
-    df['v']=df.apply(lambda row: encrypt_string(row['key'], row['v'].encode('ascii','ignore')), axis=1)
+    df['v']=df.apply(lambda row: encrypt_string(row['key'], row['v'].encode('utf8','ignore')), axis=1)
 
     if _test_encrypt_decrypt:
 #    df['v_crypt']=df.apply(lambda row: encrypt_string(row['hash2'],row['v']), axis=1)
@@ -120,7 +148,7 @@ def encrypt_file(input_file, output_file, output_schema=COMMON_TRANSFER_SCHEMA, 
         ]
 
     # Read input dataset as a number of fixed-size dataframes
-    chunks = pd.read_csv(input_file, sep=SEP, iterator=True, chunksize=CHUNK_SIZE, encoding='utf8', usecols=['idv','key','v'])
+    chunks = pd.read_csv(input_file, sep=SEP, iterator=True, chunksize=CHUNK_SIZE, encoding='utf8', dtype={'pers_siren_tit': object})
 
     # Encrypt
     df_list=[encrypt_df(df) for df in chunks]
@@ -128,9 +156,6 @@ def encrypt_file(input_file, output_file, output_schema=COMMON_TRANSFER_SCHEMA, 
     output_ds=pd.concat(df_list)
     # print(output_ds)
     output_ds.to_csv(output_file, sep=SEP, compression='gzip', header=False, index=False)
-
-def id(df):
-    return df
 
 def encrypt_plaq(key, plaintext):
       cipher = XOR.new(key)
