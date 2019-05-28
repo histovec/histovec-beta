@@ -20,7 +20,7 @@ async function searchHistoVec(id, uuid) {
   try {
     if (checkUuid(uuid) && checkId(id)) {
       const response = await elasticsearch.Client.search({
-        index: elasticsearch.defaultIndex,
+        index: config.esHistoVecIndex,
         q: id,
         size: 1,
         terminate_after: 1,
