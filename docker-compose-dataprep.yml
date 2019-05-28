@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  dataprep:
+    image: ${APP}-dataprep
+    build:
+      context: ${DATAPREP}
+      dockerfile: Dockerfile
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        MIRROR_DEBIAN: ${MIRROR_DEBIAN}
+    container_name: ${APP}-dataprep
+    volumes:
+      - ${decrypted_datadir}:/dataprep/decrypted
+      - ${datadir}:/dataprep/encrypted
+      - ${DATAPREP}/crypt.py:/dataprep/crypt.py
+
+networks:
+  default:
+    external:
+      name: ${APP}

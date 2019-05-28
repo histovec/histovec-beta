@@ -51,19 +51,18 @@ export API_GLOBAL_LIMIT_RATE=5r/s
 export API_GLOBAL_BURST=20 nodelay
 export API_WRITE_LIMIT_RATE=10r/m
 export API_WRITE_BURST=20 nodelay
+export DATAPREP=${APP_PATH}/dataprep
 export PERF=${APP_PATH}/tests/performance
 export PERF_IDS=${PERF}/ids.csv
 export PERF_SCENARIOS:=$(shell ls ${PERF}/scenarios/*)
 export PERF_REPORTS=${PERF}/reports/
 
 # data prep (data not included in repo)
-export datadir=sample_data
+export decrypted_datadir=${APP_PATH}/data/decrypted
+export datadir=${APP_PATH}/data/encrypted
 export data_remote_dir=histovec-data
 export data_remote_files=.*_(siv|ivt)_api_.*
 export data_remote_files_inc=.*_(siv|ivt)_api-inc_.*
-export datasource=${datadir}/siv.csv.gz
-export datasource_crypt=${datadir}/siv.csv.gz.gpg
-export datasource_json=${datadir}/siv.json.gz
 export dataset=siv
 export ES_CHUNK=5000
 export ES_VERBOSE=100000
@@ -144,6 +143,10 @@ wait-index: index-create
 wait-index-purge: index-purge
 	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
+data-encrypt:
+	@mkdir -p ${decrypted_datadir} ${datadir}
+	@${DC} -f ${DC_PREFIX}-dataprep.yml up --build
+
 data-download:
 	@mkdir -p ${datadir}
 	@curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}' | xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o ${datadir}/{}
@@ -216,12 +219,9 @@ ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'loc
 endif
 
 index-load: install-prerequisites-injection wait-index
-ifeq ("$(wildcard ${datasource})","")
-	@echo WARNING: missing data source ${datasource}
-endif
 ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
 	@echo using ${zcat} as zcat
-	@((find ${datadir} | egrep '${data_remote_files}.gz' | xargs cat | gunzip ) || (gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d ${datasource_crypt} | gunzip)) | \
+	@(find ${datadir} | egrep '${data_remote_files}.gz' | xargs cat | gunzip ) | \
 		awk 'BEGIN{n = 1;print "injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr";} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| \
 		sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | \
 		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | \
