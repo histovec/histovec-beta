@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from 'winston'
 const { combine, timestamp, label, printf } = format
-import { config } from '../config'
+import config from '../config'
 
 const isProd = config.isProd
 const isTest = config.isTest

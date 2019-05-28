@@ -1,7 +1,7 @@
 import { generateKey } from './util/crypto'
 import npmVersion from '../package.json'
 
-export const config = {
+const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
   secret: process.env.BACKEND_SECRET || '%Ch4NGm3+',
@@ -13,11 +13,25 @@ export const config = {
   redisUrl: `redis://${process.env.REDIS_URL}`,
   redisPersit: process.env.REDIS_PERSIST || 86400,
   esUrl: process.env.ES_URL,
-  esIndex: process.env.ES_INDEX,
+  esHistoVecIndex: process.env.ES_INDEX,
+  esFeedbackIndex: 'feedback',
   otcUrl: process.env.OTC_URL,
   otcTimeout: process.env.OTC_TIMEOUT,
   smtpServer: process.env.SMTP_SERVER,
   smtpPort: process.env.SMTP_PORT,
   mailFrom: process.env.MAIL_FROM,
+  mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`
 }
+
+export const smtpOptions = {
+  host: config.smtpServer,
+  port: config.smtpPort,
+  secure: false,
+  tls: {
+    // do not failed with selfsign certificates
+    rejectUnauthorized: false,
+  },
+}
+
+export default config

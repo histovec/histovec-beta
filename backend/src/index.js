@@ -1,11 +1,11 @@
 import http from 'http'
 
 import app from './app'
-import redis from './db/redis'
-import elasticsearch from './db/elasticsearch'
+import redis from './connectors/redis'
+import elasticsearch from './connectors/elasticsearch'
 import { techLogger } from './util'
 
-import { config } from './config'
+import config from './config'
 
 const PORT = config.port || 8000
 
