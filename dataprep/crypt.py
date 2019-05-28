@@ -93,7 +93,7 @@ def encrypt_df(df):
     df = df[['idv', 'ida', 'key', 'v']]
 
     if CRYPT_OPT_CODE:
-        df.drop(['v'], inplace=True)
+        df.drop(['idv'], inplace=True)
     else:
         df['idv']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x).encode('ascii','ignore')).digest()))
     df['ida1']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('ascii','ignore')).digest()))
@@ -110,7 +110,6 @@ def encrypt_df(df):
         df['v_decrypt']=df.apply(lambda row: decrypt_string(row['hash2'],row['v']), axis=1)
         df['v_test']=df.apply(lambda row: (row['v_decrypt'] == row['v_orig']), axis=1)
 
-    df = df[['ida1','ida2','v']]
     return df
 
 def chunk_row_range(chunk_index):
