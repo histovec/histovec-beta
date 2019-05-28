@@ -20,8 +20,18 @@ const config = {
   smtpServer: process.env.SMTP_SERVER,
   smtpPort: process.env.SMTP_PORT,
   mailFrom: process.env.MAIL_FROM,
+  mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`
 }
 
+export const smtpOptions = {
+  host: config.smtpServer,
+  port: config.smtpPort,
+  secure: false,
+  tls: {
+    // do not failed with selfsign certificates
+    rejectUnauthorized: false,
+  },
+}
 
 export default config

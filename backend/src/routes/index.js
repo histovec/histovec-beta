@@ -1,8 +1,8 @@
 import express from 'express'
 import config from '../config'
 import { getHistoVec, getOTC } from './report'
+import { sendFeedback, sendContact } from './feedback'
 // import { streamedReport } from './report'
-import { sendFeedback } from './feedback'
 
 const router = express.Router()
 
@@ -12,5 +12,6 @@ router.post('/id', getHistoVec)
 router.post('/otc', getOTC)
 // router.get('/stream', streamedReport)
 router.post('/feedback', sendFeedback)
+router.post('/contact', sendContact)
 
 export default router

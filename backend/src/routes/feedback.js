@@ -1,7 +1,9 @@
 import elasticsearch from '../connectors/elasticsearch'
 import config from '../config'
 import { checkUuid } from '../util/crypto'
+import { sendMail } from '../connectors/send-mail'
 import { appLogger } from '../util/logger'
+import { formatContactMail } from '../mail'
 
 export const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -61,7 +63,25 @@ export async function sendFeedback (req, res) {
       message: error.message
     })
   }
-
 }
 
-
+export async function sendContact (req, res) {
+  let errMessage
+  if (!(req.body.email && emailRegex.test(req.body.email))) {
+    errMessage = 'Bad request: "email" field mandatory and must be valid'
+    appLogger.debug(errMessage)
+    res.status(400).json({
+      success: false,
+      message: errMessage
+    })
+  }
+  if (!(req.body.uuid && checkUuid(req.body.uuid))) {
+    errMessage = 'Bad request: "uuid" field mandatory and must be RFC 4122 compliant'
+    appLogger.debug(errMessage)
+    res.status(400).json({
+      success: false,
+      message: errMessage
+    })
+  }
+  sendMail(req.body.email, config.mailTo, formatContactMail(req.body.subject, req.body.message))
+}
