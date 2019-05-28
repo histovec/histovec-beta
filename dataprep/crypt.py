@@ -45,15 +45,16 @@ def pad(s):
 
 def unpad(s):
     """Return a copy of the given string with its padding removed"""
-    padding_length = ord(s[-1])
-    return s[0:-padding_length]
+    string = s.decode('utf8')
+    padding_length = ord(string[-1])
+    return string[0:-padding_length]
 
 
 def encrypt_string(key, string):
     padded = pad(string.encode('utf8','ignore'))
     iv = Random.new().read(AES.block_size)
     cipher = AES.new(key, AES.MODE_CBC, iv)
-    return base64.urlsafe_b64encode(iv + cipher.encrypt(padded))
+    return (base64.urlsafe_b64encode(iv + cipher.encrypt(padded))).decode('utf8')
 
 
 def decrypt_string(key, string):
@@ -87,18 +88,16 @@ def encrypt_df(df):
     df['ida'] = df['idv'] if CRYPT_OPT_STRONGCODE else df['id_vehicle']
     df['key'] = df['id_vehicle']
 
+
     for col in ['idv', 'ida', 'key']:
         df[col]=df[col].str.lower()
         df[col]=df[col].str.replace(r'\W', '')
-    df = df[['idv', 'ida', 'key', 'v']]
 
-    if CRYPT_OPT_CODE:
-        df.drop(['idv'], inplace=True)
-    else:
-        df['idv']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x).encode('ascii','ignore')).digest()))
-    df['ida1']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('ascii','ignore')).digest()))
-    df['ida2']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+prev_month).encode('ascii','ignore')).digest()))
-    df['key']=df['key'].apply(lambda x: hashlib.sha256(x.encode('ascii','ignore')).digest())
+    df['idv']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x).encode('utf8','ignore')).digest()).decode('utf8'))
+    df['ida1']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('utf8','ignore')).digest()).decode('utf8'))
+    df['ida2']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+prev_month).encode('utf8','ignore')).digest()).decode('utf8'))
+    df['key']=df['key'].apply(lambda x: hashlib.sha256(x.encode('utf8')).digest())
+
 
     if _test_encrypt_decrypt:
         df['v_orig']=df['v']
@@ -107,8 +106,15 @@ def encrypt_df(df):
 
     if _test_encrypt_decrypt:
 #    df['v_crypt']=df.apply(lambda row: encrypt_string(row['hash2'],row['v']), axis=1)
-        df['v_decrypt']=df.apply(lambda row: decrypt_string(row['hash2'],row['v']), axis=1)
+        df['v_decrypt']=df.apply(lambda row: decrypt_string(row['key'],row['v']), axis=1)
         df['v_test']=df.apply(lambda row: (row['v_decrypt'] == row['v_orig']), axis=1)
+
+    df['key']=df['key'].apply(lambda x: base64.b64encode(x).decode('utf8'))
+
+    if CRYPT_OPT_CODE:
+        df = df[['ida1', 'ida2', 'v']]
+    else:
+        df = df[['idv', 'ida1', 'ida2', 'v']]
 
     return df
 
@@ -154,7 +160,7 @@ def encrypt_file(input_file, output_file, output_schema=COMMON_TRANSFER_SCHEMA, 
     # print(df_list)
     output_ds=pd.concat(df_list)
     # print(output_ds)
-    output_ds.to_csv(output_file, sep=SEP, compression='gzip', header=False, index=False)
+    output_ds.to_csv(output_file, sep=SEP, compression='gzip', index=False, header=False)
 
 def encrypt_plaq(key, plaintext):
       cipher = XOR.new(key)
