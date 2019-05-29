@@ -26,6 +26,7 @@ RUN pip install `echo $http_proxy | sed 's/\(\S\S*\)/--proxy \1/'` --upgrade pip
 RUN pip install `echo $http_proxy | sed 's/\(\S\S*\)/--proxy \1/'` -r requirements.txt
 
 COPY crypt.py ./
+COPY inject.py ./
 
 ENTRYPOINT [ "python" ]
 CMD ["crypt.py", "decrypted/", "encrypted/"]
