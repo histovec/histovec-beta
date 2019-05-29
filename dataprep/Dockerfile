@@ -21,8 +21,9 @@ RUN apt-get update
 RUN buildDeps="build-essential libssl-dev libffi-dev python-dev" ; \
    apt-get install -qy --no-install-recommends $buildDeps ;
 
+COPY requirements.txt ./
 RUN pip install `echo $http_proxy | sed 's/\(\S\S*\)/--proxy \1/'` --upgrade pip
-RUN pip install `echo $http_proxy | sed 's/\(\S\S*\)/--proxy \1/'` pycrypto pandas numpy
+RUN pip install `echo $http_proxy | sed 's/\(\S\S*\)/--proxy \1/'` -r requirements.txt
 
 COPY crypt.py ./
 
