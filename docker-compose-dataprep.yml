@@ -20,6 +20,5 @@ services:
     volumes:
       - ${decrypted_datadir}:/dataprep/decrypted
       - ${datadir}:/dataprep/encrypted
-      - ${DATAPREP}/crypt.py:/dataprep/crypt.py
 
 
