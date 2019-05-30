@@ -1,5 +1,10 @@
 version: '3.4'
 
+networks:
+  default:
+    external:
+      name: ${APP}
+
 services:
   dataprep:
     image: ${APP}-dataprep
@@ -17,7 +22,4 @@ services:
       - ${datadir}:/dataprep/encrypted
       - ${DATAPREP}/crypt.py:/dataprep/crypt.py
 
-networks:
-  default:
-    external:
-      name: ${APP}
+

@@ -7,7 +7,7 @@ from Crypto.Cipher import AES
 import hashlib
 import logging
 from multiprocessing import Pool
-import sys, os
+import sys, os, re
 import traceback
 import struct
 from datetime import datetime
@@ -174,6 +174,6 @@ def decrypt_plaq(key, ciphertext):
 if __name__ == '__main__':
     input_dir=sys.argv[1]
     output_dir=sys.argv[2]
-    for file in os.listdir(input_dir):
+    for file in [f for f in os.listdir(input_dir) if re.match(r'.*csv.gz$', f)]:
         print(file)
         encrypt_file(os.path.join(input_dir, file), os.path.join(output_dir, file) )
