@@ -147,7 +147,7 @@ wait-index: index-create
 wait-index-purge: index-purge
 	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
-data-encrypt:
+data-encrypt: network
 	@mkdir -p ${decrypted_datadir} ${datadir}
 	@${DC} -f ${DC_PREFIX}-dataprep.yml up --build
 
