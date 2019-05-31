@@ -1,5 +1,10 @@
 version: '3.4'
 
+networks:
+  default:
+    external:
+      name: ${APP}
+
 services:
   dataprep:
     image: ${APP}-dataprep
@@ -16,7 +21,4 @@ services:
       - ${decrypted_datadir}:/dataprep/decrypted
       - ${datadir}:/dataprep/encrypted
 
-networks:
-  default:
-    external:
-      name: ${APP}
+
