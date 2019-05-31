@@ -237,11 +237,11 @@ export default {
       }
       if (this.note) {
         let data = {
-          'message': this.filteredMessage, 
-          'email': this.email, 
-          'uid': localStorage.getItem('userId'), 
+          'message': this.filteredMessage,
+          'email': (this.email === '') ? undefined : this.email,
+          'uuid': localStorage.getItem('userId'),
           'note': this.note,
-          'date': new Date().toUTCString(), 
+          'date': new Date().toUTCString(),
           'holder': this.holder
         }
         await this.$store.dispatch('sendFeedback', data)
