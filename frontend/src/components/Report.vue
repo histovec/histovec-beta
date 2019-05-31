@@ -274,11 +274,13 @@
       <!-- row -->
     </div>
     <status :status="status"></status>
-    <modal-rating
+    <modal-form
+      v-if="modalFormShow"
       :activate="status === 'ok'"
       :holder="holder"
+      :mode="'rating'"
     >
-    </modal-rating>
+    </modal-form>
   </section>
 </template>
 
@@ -294,7 +296,7 @@ import TechControlGraph from './reportParts/TechControlGraph.vue'
 import AdministrativeCertificate from './reportParts/AdministrativeCertificate.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
-import ModalRating from './forms/ModalRating.vue'
+import ModalForm from './forms/ModalForm.vue'
 import histovec from '../assets/js/histovec'
 
 const statusFromCode = {
@@ -328,7 +330,7 @@ export default {
     AdministrativeCertificate,
     Share,
     Status,
-    ModalRating
+    ModalForm
   },
   data () {
     return {
@@ -337,7 +339,9 @@ export default {
       plaque: '',
       vin: '',
       conf: [],
-      timeout: 10000
+      timeout: 10000,
+      modalFormTimer: 120000,
+      modalFormShow: false
     }
   },
   computed: {
@@ -353,6 +357,7 @@ export default {
         if (this.$store.state.histovec.v.annulation_ci === 'OUI') {
           return 'cancelled'
         }
+        this.showModalForm()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
         return 'invalidBuyer'
@@ -423,6 +428,13 @@ export default {
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
         return
+      }
+    },
+    showModalForm () {
+      if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
+        setTimeout(() => {
+          this.modalFormShow = true
+        }, this.modalFormTimer)
       }
     }
   }
