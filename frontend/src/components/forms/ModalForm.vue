@@ -9,7 +9,7 @@
                 <button
                   type="button"
                   class="close"
-                  @click="show = false"
+                  @click="close()"
                 >
                   <span aria-hidden="true">&times;</span>
                   <span class="sr-only">Fermer</span>
@@ -128,7 +128,7 @@
                       </button>
                       <button
                         class="btn btn-animated btn-default"
-                        @click="show = false"
+                        @click="close()"
                       >
                         Fermer
                         <i class="fa fa-close"></i>
@@ -146,11 +146,14 @@
 </template>
 
 <script>
-
 export default {
   props: {
-    activate: Boolean,
-    holder: Boolean
+    holder: Boolean,
+    mode: {
+      type: String,
+      default: 'rating',
+      required: false,
+    }
   },
   data () {
     return {
@@ -159,7 +162,7 @@ export default {
         'note': 'L\'évaluation est obligatoire',
         'api': 'Service indisponible, votre retour n\'a pas pu être pris en compte'
       },
-      show: false,
+      show: true,
       notShow: false,
       ratings: [1, 2, 3, 4, 5],
       tempValue: null,
@@ -168,10 +171,13 @@ export default {
       email: '',
       note: null,
       clicked: false,
-      timerModalEval: 120000
+
     }
   },
   computed: {
+    apiName () {
+      return this.mode === 'rating' ? 'feedback' : 'contact'
+    },
     filteredMessage () {
       return this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ')
     },
@@ -183,7 +189,7 @@ export default {
       if (this.clicked && this.email && !this.isEmailValid()) {
         errorList.push('email')
       }
-      if (this.clicked && this.$store.state.api && this.$store.state.api.http.feedback && (this.$store.state.api.http.feedback !== 201)) {
+      if (this.clicked && this.$store.state.api && this.$store.state.api.http[this.apiName] && (this.$store.state.api.http[this.apiName] !== 201)) {
         errorList.push('api')
       }
       return errorList
@@ -202,17 +208,8 @@ export default {
       }
     }
   },
-  watch: {
-    activate (newVal) {
-      if (newVal === true) {
-        this.showModalEval()
-      }
-    }
-  },
   created () {
-    if (this.activate) {
-      this.showModalEval()
-    }
+    this.$store.dispatch('log', this.apiName)
   },
   methods: {
     normalize (string) {
@@ -222,14 +219,21 @@ export default {
         return string.replace(/[\u0300-\u036f]*/g, '')
       }
     },
-    async send (e) {
-      e.preventDefault()
-      this.$store.dispatch('initApiStatus', 'feedback')
-      this.clicked = true
+    close () {
       if (this.notShow) {
           localStorage.setItem('evaluation', true, 1)
-          this.show = false
-          return
+      }
+      this.show = false
+      return
+    },
+    async send (e) {
+      e.preventDefault()
+      this.$store.dispatch('initApiStatus', this.apiName)
+      this.clicked = true
+      if (this.notShow) {
+        localStorage.setItem('evaluation', true, 1)
+        this.show = false
+        return
       }
       if (this.errors.length > 0) {
           setTimeout(() => this.clicked = false, 3000)
@@ -272,14 +276,6 @@ export default {
     starOut () {
       if (!this.disabled) {
         this.note = this.tempValue
-      }
-    },
-    showModalEval () {
-      if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
-        setTimeout(() => {
-          this.show = true
-          this.$store.dispatch('log', 'feedback')
-        }, this.timerModalEval)
       }
     }
   }
