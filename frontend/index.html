@@ -62,8 +62,11 @@ Cette option ne fonctionne que si votre navigateur est configuré pour ouvrir le
 
 <script>
   setTimeout(function(){
-    document.getElementById("infoNotWorking").style.display = "block";
-  }, 8000);
+    var tmp = document.getElementById("infoNotWorking")
+    if (tmp) {
+      tmp.style.display = "block";
+    }
+  }, 5000);
 </script>
 <style>
   #infoNotWorking {
