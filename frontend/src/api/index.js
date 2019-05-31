@@ -7,16 +7,17 @@ import store from '../store'
 const apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '').replace(/\/$/, '')
 const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.APP).replace(/"/g, '').replace(/\/$/, '')
 
-const apiPaths = {
-  log: `${apiUrl}/log`,
-  histovec: {
-    get: `${apiUrl}/id`,
-    post: `${apiFutureUrl}/id`
-  },
-  feedback: `${apiUrl}/feedback`,
-  contact: `${apiUrl}/contact`,
-  otc: `${apiFutureUrl}/otc`,
-  stream: `${apiFutureUrl}/stream`
+
+const apiPaths = (apiName, future = false) => {
+  let dic = {
+    log: 'log',
+    histovec: 'id',
+    feedback: 'feedback',
+    contact: 'contact',
+    otc: 'otc',
+    stream: 'stream'
+  }
+  return future ? `${apiFutureUrl}/${dic[apiName]}` : `${apiUrl}/${dic[apiName]}`
 }
 
 const decrypt = (encrypted, key) => {
@@ -274,7 +275,7 @@ const apiClient = {
 export default {
   async getHistoVec (id, key, uuid) {
     const apiName = 'histovec'
-    let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths[apiName].get}/${uuid}/${id}`, 'v', key)
+    let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
       v: ((response.decrypted && response.decrypted.v) || {})
@@ -286,7 +287,7 @@ export default {
       method: 'POST',
       body: JSON.stringify({ id: id, uuid: uuid})
     }
-    let response = await apiClient.decrypt(apiName, `${apiPaths[apiName].post}`, 'v', key, options)
+    let response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'v', key, options)
     return {
       success: response.success,
       token: response.decrypted && response.decrypted.token,
@@ -298,7 +299,7 @@ export default {
     const options = {
       body: JSON.stringify({id: id, code: code, token: token, key: key, otcId: otcId, uuid: uuid})
     }
-    let response = await apiClient.post(apiName, `${apiPaths[apiName]}`, options)
+    let response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
     return {
       success: response.success,
       ct: (response.json.ct || {})
@@ -326,17 +327,20 @@ export default {
   //   await apiClient.stream(`${apiPaths[apiName]}`, streamCallbacks, options)
   // },
   async log (path, uid) {
+    const apiName = 'log'
     let p = path.replace(/^\/\w+\//, '')
-    const json = await apiClient.put('log', `${apiPaths.log}/${uid}/${p}`)
+    const json = await apiClient.put(apiName, `${apiPaths(apiName)}/${uid}/${p}`)
     return json
   },
-  async sendFeedback (feedback) {
-    const json = await apiClient.post('feedback', `${apiPaths.feedback}/`, {
+  async sendFeedback (feedback, future=false) {
+    const apiName = 'feedback'
+    const json = await apiClient.post(apiName, `${apiPaths(apiName, future)}/`, {
       body: JSON.stringify(feedback)})
     return json
   },
-  async sendContact (contact) {
-    const json = await apiClient.post('feedback', `${apiPaths.contact}/`, {
+  async sendContact (contact, future=false) {
+    const apiName = 'contact'
+    const json = await apiClient.post(apiName, `${apiPaths(apiName, future)}/`, {
       body: JSON.stringify(contact)})
     return json
   }

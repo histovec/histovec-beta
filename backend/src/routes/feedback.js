@@ -37,7 +37,7 @@ export async function sendFeedback (req, res) {
   let feedback = {
     'message': filterMessage(req.body.message),
     'email': filterEmail(req.body.email),
-    'uid': req.body.uuid,
+    'uuid': req.body.uuid,
     'note': req.body.note,
     'date': new Date().toUTCString(),
     'holder': req.body.holder
@@ -48,7 +48,7 @@ export async function sendFeedback (req, res) {
       type: 'feedback',
       body: feedback
     })
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: "feedback indexed"
     })

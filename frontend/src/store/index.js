@@ -92,12 +92,12 @@ export default new Vuex.Store({
       await api.log(path, localStorage.getItem('userId'))
       commit('updateLogCounter')
     },
-    async sendFeedback ({ commit }, feedback) {
-      await api.sendFeedback(feedback)
+    async sendFeedback ({ state, commit }, feedback) {
+      await api.sendFeedback(feedback, state.config.v1)
       commit('updateFeedback')
     },
-    async sendContact ({ commit }, contact) {
-      await api.sendContact(contact)
+    async sendContact ({ state, commit }, contact) {
+      await api.sendContact(contact, state.config.v1)
       commit('updateContact')
     },
     initApiStatus ({ commit }, apiName) {
