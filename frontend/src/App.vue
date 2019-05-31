@@ -194,7 +194,7 @@ import localization from './assets/json/lang.json'
 import operations from './assets/json/operations.json'
 import usages from './assets/json/usages.json'
 import synthese from './assets/json/synthese.json'
-import messages from './assets/json/messages.json'
+import statusMessages from './assets/json/status.json'
 import verbatims from './assets/json/verbatims.json'
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
@@ -219,7 +219,7 @@ Vue.mixin({
       operations: operations,
       usages: usages,
       synthese: synthese,
-      messages: messages,
+      statusMessages: statusMessages,
       verbatims: verbatims,
       lang: localization.default,
       show: false
