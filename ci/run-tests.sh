@@ -6,7 +6,8 @@ time make -f Makefile.deploy build-all-images || exit $?
 time make -f Makefile.deploy up-all || exit $?
 # create test env
 time make -f Makefile.deploy wait-elasticsearch || exit $?
-time make -f Makefile.deploy index-create || exit $?
+time make -f Makefile.deploy data-encrypt || exit $?
+time make -f Makefile.deploy index-load || exit $?
 time make -f Makefile.deploy index-status || exit $?
 time make -f Makefile.deploy test-up || exit $?
 # teardown
