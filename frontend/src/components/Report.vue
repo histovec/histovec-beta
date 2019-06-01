@@ -274,13 +274,6 @@
       <!-- row -->
     </div>
     <status :status="status"></status>
-    <modal-form
-      v-if="modalFormShow"
-      :activate="status === 'ok'"
-      :holder="holder"
-      :mode="'rating'"
-    >
-    </modal-form>
   </section>
 </template>
 
@@ -296,7 +289,6 @@ import TechControlGraph from './reportParts/TechControlGraph.vue'
 import AdministrativeCertificate from './reportParts/AdministrativeCertificate.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
-import ModalForm from './forms/ModalForm.vue'
 import histovec from '../assets/js/histovec'
 
 const statusFromCode = {
@@ -329,8 +321,7 @@ export default {
     TechControlGraph,
     AdministrativeCertificate,
     Share,
-    Status,
-    ModalForm
+    Status
   },
   data () {
     return {
@@ -340,8 +331,7 @@ export default {
       vin: '',
       conf: [],
       timeout: 10000,
-      modalFormTimer: 120000,
-      modalFormShow: false
+      modalFormTimer: 120000
     }
   },
   computed: {
@@ -433,7 +423,9 @@ export default {
     showModalForm () {
       if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
         setTimeout(() => {
-          this.modalFormShow = true
+          if (!this.$store.state.modalForm) {
+            this.$store.dispatch('toggleModalForm', 'rating')
+          }
         }, this.modalFormTimer)
       }
     }

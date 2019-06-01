@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show">
+  <div v-if="$store.state.modalForm">
     <transition name="modal">
       <div class="modal-mask">
         <div class="modal-wrapper">
@@ -15,15 +15,11 @@
                   <span class="sr-only">Fermer</span>
                 </button>
                 <h6 class="modal-title">
-                  Votre évaluation
+                  {{ title }}
                 </h6>
               </div>
-              <form
-                id="evaluation-form-with-recaptcha"
-                role="form"
-                @submit="send"
-              >
-                <div class="modal-body">
+              <div class="modal-body">
+                <div v-if="mode === 'rating'">
                   <label>
                     Comment évaluez-vous HistoVec :
                     <span
@@ -46,7 +42,7 @@
                       :key="n"
                     >
                       <a
-                        :class="{'is-selected': ((note >= (ratings.length+1)-n) && note != null)}"
+                        :class="{'is-selected': (note && (note >= (ratings.length+1)-n))}"
                         title="Give star"
                         @click="setNote((ratings.length+1)-n)"
                         @mouseover="starOver((ratings.length+1)-n)"
@@ -69,74 +65,169 @@
                     </textarea>
                   </p>
                   <br />
+                </div>
+                <div v-if="mode !== 'rating'">
                   <div
                     class="form-group has-feedback"
-                    :class="[{'has-error' : (errors.includes('email'))}]"
+                    :class="[{'has-error' : (errors.includes('object'))}]"
                   >
-                    <p>
-                      <label>
-                        Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
-                        <i>(L'adresse email ne servira que dans le cadre de cette étude)</i>
-                      </label>
-                      <span
-                        v-if="errors.includes('email')"
-                        class="info_red txt-small-11"
+                    <label>
+                      Objet
+                    </label>
+                    <span
+                      v-if="errors.includes('object')"
+                      class="info_red txt-small-11"
+                    >
+                      {{ errorMessage['object'] }}
+                    </span>
+                    <select
+                      v-model="object"
+                      class="col-sm-12 col-xs-12"
+                    >
+                      <option
+                        disabled
+                        selected
+                        value=""
                       >
-                        {{ errorMessage['email'] }}
-                      </span>
-                      <input
-                        id="email"
-                        v-model="email"
-                        name="email"
+                        Choisissez
+                      </option>
+                      <option
+                        v-for="(entry, index) in objects"
+                        :key="index"
+                      >
+                        {{ entry }}
+                      </option>
+                    </select>
+                    <p><br /></p>
+                  </div>
+                </div>
+                <div
+                  class="form-group has-feedback"
+                  :class="[{'has-error' : (errors.includes('email'))}]"
+                >
+                  <p>
+                    <label v-if="mode === 'rating'">
+                      Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
+                      <i>(L'adresse email ne servira que dans le cadre de l'amélioration du service)</i>
+                    </label>
+                    <label v-else>
+                      Courriel
+                    </label>
+                    <span
+                      v-if="errors.includes('email')"
+                      class="info_red txt-small-11"
+                    >
+                      {{ errorMessage['email'] }}
+                    </span>
+                    <input
+                      id="email"
+                      v-model="email"
+                      name="email"
+                      class="form-control"
+                      placeholder="name@example.com"
+                    >
+                  </p>
+                </div>
+                <div v-if="mode !== 'rating'">
+                  <div class="form-group">
+                    <p class="m-h-10">
+                      <label>Message (optionnel) :</label>
+                      <textarea
+                        id="message"
+                        v-model="message"
+                        name="message"
+                        rows="2"
                         class="form-control"
-                        placeholder="name@example.com"
+                        maxlength="1000"
                       >
+                      </textarea>
                     </p>
                   </div>
-                </div>
-                <div class="modal-footer">
-                  <div class="row">
-                    <div class="col-md-6 m-h-15 position_left">
-                      <label>
-                        <input
-                          id="showModal"
-                          v-model="notShow"
-                          name="showModal"
-                          type="checkbox"
-                        >
-                        Ne plus afficher
-                      </label>
-                    </div>
-                    <div class="col-md-6">
-                      <span
-                        v-if="errors.includes('api')"
-                        class="info_red txt-small-11"
-                      >
-                        {{ errorMessage['api'] }}
-                        <br />
-                      </span>
-                      <button class="btn btn-animated btn-default m-h-05">
-                        Envoyer
-                        <i
-                          class="fa"
-                          :class="[{'fa-send-o' : (status === 'init')},
-                                   {'fa-spin fa-spinner' : (status === 'posting')},
-                                   {'fa-check' : (status === 'posted')},
-                                   {'fa-exclamation-triangle' : (status === 'failed')}]"
-                        >
-                        </i>
-                      </button>
-                      <button
-                        class="btn btn-animated btn-default"
-                        @click="close()"
-                      >
-                        Fermer
-                        <i class="fa fa-close"></i>
-                      </button>
+                  <div
+                    v-if="this.$store.state.histovec.id"
+                  >
+                    <label> Données transmises pour l'assistance </label>
+                    <div class="row txt-small-11">
+                      <div class="col-sm-6 col-xs-6">
+                        <ul v-if="$store.state.identity.typePersonne === 'pro'">
+                          <li> Raison sociale: {{ $store.state.identity.raisonSociale }} </li>
+                          <li> Numéro SIREN: {{ $store.state.identity.siren }} </li>
+                        </ul>
+                        <ul v-else>
+                          <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                            Nom de naissance: {{ $store.state.identity.nom }}
+                          </li>
+                          <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                            Prénom(s): {{ $store.state.identity.prenom }}
+                          </li>
+                          <li v-if="$store.state.identity.typeImmatriculation === 'fni'">
+                            Nom de naissance et prénom(s): {{ $store.state.identity.nom }}
+                          </li>
+                          <li v-if="$store.state.config.id.dateNaissance">
+                            Date de naissance : {{ $store.state.identity.dateNaissance }}
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-sm-6 col-xs-6">
+                        <ul>
+                          <li> Immatriculation: {{ $store.state.identity.plaque }} </li>
+                          <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                            Numéro de formule: {{ $store.state.identity.formule }}
+                          </li>
+                          <li v-else>
+                            Date du certificat : {{ $store.state.identity.dateCertificat }}
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
+              <div class="modal-footer">
+                <div class="row">
+                  <div class="col-md-6 m-h-15 position_left">
+                    <label v-if="mode === 'rating'">
+                      <input
+                        id="showModal"
+                        v-model="notShow"
+                        name="showModal"
+                        type="checkbox"
+                      >
+                      Ne plus afficher
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <span
+                      v-if="errors.includes('api')"
+                      class="info_red txt-small-11"
+                    >
+                      {{ errorMessage['api'] }}
+                      <br />
+                    </span>
+                    <button
+                      class="btn btn-animated btn-default m-h-05"
+                      @click="send"
+                    >
+                      Envoyer
+                      <i
+                        class="fa"
+                        :class="[{'fa-send-o' : (status === 'init')},
+                                 {'fa-spin fa-spinner' : (status === 'posting')},
+                                 {'fa-check' : (status === 'posted')},
+                                 {'fa-exclamation-triangle' : (status === 'failed')}]"
+                      >
+                      </i>
+                    </button>
+                    <button
+                      class="btn btn-animated btn-default"
+                      @click="close()"
+                    >
+                      Fermer
+                      <i class="fa fa-close"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -147,46 +238,91 @@
 
 <script>
 export default {
-  props: {
-    holder: Boolean,
-    mode: {
-      type: String,
-      default: 'rating',
-      required: false,
-    }
-  },
   data () {
     return {
       errorMessage: {
+        'object': 'Veuillez choisir un objet',
         'email': 'L\'adresse email n\'est pas valide',
         'note': 'L\'évaluation est obligatoire',
         'api': 'Service indisponible, votre retour n\'a pas pu être pris en compte'
       },
-      show: true,
       notShow: false,
       ratings: [1, 2, 3, 4, 5],
-      tempValue: null,
+      tempValue: undefined,
       disabled: false,
+      object: '',
       message: '',
       email: '',
-      note: null,
+      note: undefined,
       clicked: false,
-
     }
   },
   computed: {
+    objects () {
+      let o
+      let choices = {
+        'NotFound': {
+          'holder': [
+            'Je ne trouve pas mon véhicule'
+          ],
+          'buyer': [
+            'Le lien transmis ne fonctionne pas'
+          ],
+          'anyOne': []
+        },
+        'Found': {
+          'holder': [
+            'Le certificat administratif détaillé est malformé'
+          ],
+          'buyer': [],
+          'anyOne': [
+            'Problème avec les données de mon véhicule'
+          ],
+        },
+        'anyOne': [
+          'Problème de téléprocédure d\'immatriculation',
+          'Autre problème'
+        ]
+      }
+      if (this.$store.state.histovec.v) {
+        o = choices['Found'][this.who].concat(choices['Found']['anyOne'].concat(choices['anyOne']))
+      } else {
+        o = this.who ? choices['NotFound'][this.who].concat(choices['NotFound']['anyOne'].concat(choices['anyOne'])) : choices['anyOne']
+      }
+      return o.filter((e) => { return e })
+    },
+    who () {
+      return this.$store.state.histovec.id ? (this.$store.state.histovec.code ? 'holder' : 'buyer') : undefined
+    },
+    mode () {
+      return this.$store.state.modalFormMode
+    },
     apiName () {
       return this.mode === 'rating' ? 'feedback' : 'contact'
     },
+    dispatchName () {
+      return this.mode === 'rating' ? 'sendFeedback' : 'sendContact'
+    },
+    title () {
+      let titles = {
+        rating: 'Votre évaluation',
+        contact: 'Contact',
+        error: 'Signaler une erreur'
+      }
+      return titles[this.mode]
+    },
     filteredMessage () {
-      return this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ')
+      return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ') : undefined
     },
     errors () {
       let errorList = []
-      if (this.clicked && (!this.note)) {
+      if (this.clicked && (this.mode !== 'rating') && (this.object === '')) {
+        errorList.push('object')
+      }
+      if (this.clicked && ((this.mode === 'rating') && !this.note)) {
         errorList.push('note')
       }
-      if (this.clicked && this.email && !this.isEmailValid()) {
+      if (this.clicked && (this.email || this.mode !== 'rating') && !this.isEmailValid()) {
         errorList.push('email')
       }
       if (this.clicked && this.$store.state.api && this.$store.state.api.http[this.apiName] && (this.$store.state.api.http[this.apiName] !== 201)) {
@@ -209,7 +345,6 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('log', this.apiName)
   },
   methods: {
     normalize (string) {
@@ -223,7 +358,7 @@ export default {
       if (this.notShow) {
           localStorage.setItem('evaluation', true, 1)
       }
-      this.show = false
+      this.$store.dispatch('toggleModalForm')
       return
     },
     async send (e) {
@@ -232,26 +367,38 @@ export default {
       this.clicked = true
       if (this.notShow) {
         localStorage.setItem('evaluation', true, 1)
-        this.show = false
+        this.$store.dispatch('toggleModalForm')
         return
       }
       if (this.errors.length > 0) {
           setTimeout(() => this.clicked = false, 3000)
           return
-      }
-      if (this.note) {
+      } else {
         let data = {
           'message': this.filteredMessage,
           'email': (this.email === '') ? undefined : this.email,
           'uuid': localStorage.getItem('userId'),
           'note': this.note,
           'date': new Date().toUTCString(),
-          'holder': this.holder
+          'holder': (this.who === 'holder'),
+          'identity': (this.mode === 'rating') ? undefined :
+            {
+              typeImmatriculation: this.$store.state.identity.typeImmatriculation,
+              typePersonne: this.$store.state.identity.typePersonne,
+              nom: this.$store.state.identity.nom,
+              prenom: this.$store.state.identity.prenom,
+              dateNaissance: this.$store.state.identity.dateNaissance,
+              plaque: this.$store.state.identity.plaque,
+              formule: this.$store.state.identity.formule,
+              dateCertificat: this.$store.state.identity.dateCertificat
+            }
         }
-        await this.$store.dispatch('sendFeedback', data)
-        if (this.$store.state.api.http.feedback === 201) {
-          localStorage.setItem('evaluation', true, 1)
-          this.show = false
+        await this.$store.dispatch(this.dispatchName, data)
+        if (this.$store.state.api.http[this.apiName] === 201) {
+          if (this.mode === 'rating') {
+            localStorage.setItem('evaluation', true, 1)
+          }
+          this.$store.dispatch('toggleModalForm')
         } else {
           this.clicked = true
         }
