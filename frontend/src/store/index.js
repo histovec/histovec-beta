@@ -56,6 +56,8 @@ export default new Vuex.Store({
       otc: ['ctrl', 'alt', 'o'],
       otcGraph: ['ctrl', 'alt', 'g'],
     },
+    modalForm: false,
+    modalFormMode: 'contact',
     feedback: {},
     contact: {}
   },
@@ -66,6 +68,12 @@ export default new Vuex.Store({
       rootPath = rootPath === '' ? 'config' : `config.${rootPath}`
       let model = objectPath.get(state, rootPath)
       Vue.set(model, leafPath, !model[leafPath])
+    },
+    toggleModalForm (state) {
+      state.modalForm = !state.modalForm
+    },
+    updateModalFormMode (state, mode) {
+      state.modalFormMode = mode
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
@@ -91,6 +99,13 @@ export default new Vuex.Store({
     async log ({ commit }, path) {
       await api.log(path, localStorage.getItem('userId'))
       commit('updateLogCounter')
+    },
+    async toggleModalForm ({ state, commit, dispatch }, mode) {
+      await commit('toggleModalForm')
+      await commit('updateModalFormMode', mode)
+      if (state.modalForm && mode) {
+        await dispatch('log', mode)
+      }
     },
     async sendFeedback ({ state, commit }, feedback) {
       await api.sendFeedback(feedback, state.config.v1)

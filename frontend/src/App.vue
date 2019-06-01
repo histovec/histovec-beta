@@ -54,6 +54,8 @@
         </div>
       </header>
     </div>
+    <modal-form>
+    </modal-form>
     <!-- fin entete -->
     <router-view></router-view>
     <!-- footer start -->
@@ -83,8 +85,24 @@
                             Besoin d'aide
                           </router-link>
                         </li>
-                        <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'">CONTACT</a></li>
-                        <li><a :href="'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'">Signaler une erreur</a></li>
+                        <li>
+                          <a
+                            :href="$store.state.config.v1 ? undefined : 'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'"
+                            title="Contact"
+                            @click="toggleModalForm('contact')"
+                          >
+                            Contact
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            :href="$store.state.config.v1 ? undefined : 'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'"
+                            title="Signaler une erreur"
+                            @click="toggleModalForm('error')"
+                          >
+                            Signaler une erreur
+                          </a>
+                        </li>
                       </ul>
                     </nav>
                   </div>
@@ -194,10 +212,11 @@ import localization from './assets/json/lang.json'
 import operations from './assets/json/operations.json'
 import usages from './assets/json/usages.json'
 import synthese from './assets/json/synthese.json'
-import messages from './assets/json/messages.json'
+import statusMessages from './assets/json/status.json'
 import verbatims from './assets/json/verbatims.json'
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
+import ModalForm from './components/forms/ModalForm.vue'
 
 Vue.use(VueTheMask)
 Vue.use(VueClipboard)
@@ -219,7 +238,7 @@ Vue.mixin({
       operations: operations,
       usages: usages,
       synthese: synthese,
-      messages: messages,
+      statusMessages: statusMessages,
       verbatims: verbatims,
       lang: localization.default,
       show: false
@@ -244,7 +263,23 @@ Vue.mixin({
 })
 
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    ModalForm
+  },
+  data () {
+    return {
+      modalFormShow: false
+    }
+  },
+  methods: {
+    toggleModalForm (mode) {
+      if (this.$store.state.config.v1) {
+        this.$store.dispatch('toggleModalForm', mode)
+      }
+    }
+  }
+
 }
 </script>
 

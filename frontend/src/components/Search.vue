@@ -251,12 +251,12 @@
                             v-if="$store.state.config.id.dateNaissance"
                             class="col-md-4"
                           >
-                            <search-field
+                            <field
                               form-id="dateNaissance"
                               :option="typeImmatriculation"
                               :active="status !== 'init'"
                             >
-                            </search-field>
+                            </field>
                           </div>
                         </div>
                         <div
@@ -325,12 +325,12 @@
                       <form role="form">
                         <div class="row">
                           <div class="col-md-6">
-                            <search-field
+                            <field
                               form-id="plaque"
                               :option="typeImmatriculation"
                               :active="status !== 'init'"
                             >
-                            </search-field>
+                            </field>
                           </div>
                           <div class="col-md-6">
                             <div
@@ -477,7 +477,7 @@ import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
 import moment from 'moment'
 import ModalHelper from './infos/ModalHelper.vue'
-import SearchField from './forms/SearchField.vue'
+import Field from './forms/Field.vue'
 
 const formInitialOptions = {
   default: {
@@ -546,7 +546,7 @@ const formInitialOptions = {
 export default {
   components: {
     ModalHelper,
-    SearchField
+    Field
   },
   directives: {
     focus: {
