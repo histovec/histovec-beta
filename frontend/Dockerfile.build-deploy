@@ -1,4 +1,4 @@
-FROM node:11-slim
+FROM node:12-slim
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
