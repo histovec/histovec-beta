@@ -237,6 +237,8 @@
 </template>
 
 <script>
+import { detect } from 'detect-browser'
+
 export default {
   data () {
     return {
@@ -381,6 +383,7 @@ export default {
           'note': this.note,
           'date': new Date().toUTCString(),
           'holder': (this.who === 'holder'),
+          'browser': detect(),
           'identity': (this.mode === 'rating') ? undefined :
             {
               typeImmatriculation: this.$store.state.identity.typeImmatriculation,
