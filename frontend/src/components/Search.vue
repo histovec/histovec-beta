@@ -292,30 +292,12 @@
                             </div>
                           </div>
                           <div class="col-md-4">
-                            <div
-                              class="form-group has-feedback"
-                              :class="[{'has-error' : (siren === '' && status !== 'init')}]"
+                            <field
+                              form-id="siren"
+                              :option="typeImmatriculation"
+                              :active="status !== 'init'"
                             >
-                              <label class="control-label">
-                                N° SIREN
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <input
-                                id="siren"
-                                v-model="siren"
-                                v-mask="'##############'"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                tabindex="2"
-                              >
-                              <i class="fa fa-building-o form-control-feedback"></i>
-                            </div>
+                            </field>
                           </div>
                         </div>
                       </form>
@@ -486,6 +468,26 @@ const formInitialOptions = {
     maskTitle: 'désactiver le contrôle',
     maskTitleAlt: 'ré-activer le contrôle',
     type: 'text'
+  },
+  siren: {
+    siv: {
+      label: 'N° SIREN (9 caractères)',
+      model: 'siren',
+      masked: true,
+      mask: '#########',
+      check: /^(\d{9})$/,
+      placeholder: '123456789',
+      tabindex: '2'
+    },
+    fni: {
+      label: 'N° SIREN (9 caractères)',
+      model: 'siren',
+      masked: true,
+      mask: '#########',
+      check: /^[0-9]{9}$/,
+      placeholder: '123456789',
+      tabindex: '2'
+    }
   },
   plaque: {
     siv: {
@@ -666,8 +668,11 @@ export default {
     checkFormule () {
       return this.formule.match(/^(\d{2,4}[a-zA-Z]{2}\d{5})$/)
     },
+    checkSiren () {
+      return this.siren.match(/^\d{9}$/)
+    },
     checkFields () {
-      return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni') && this.checkDateNaissance) || (this.raisonSociale && this.siren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
+      return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni') && this.checkDateNaissance) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
     },
     currentMonthNumber () {
       var date = new Date()
