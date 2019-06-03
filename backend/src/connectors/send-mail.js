@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer'
 import smtpTransport from 'nodemailer-smtp-transport'
 import { htmlToText } from 'nodemailer-html-to-text'
-import config from '../config'
 import { smtpOptions } from '../config'
 import { appLogger, techLogger } from '../util'
 
