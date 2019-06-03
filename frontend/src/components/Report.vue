@@ -423,7 +423,7 @@ export default {
     showModalForm () {
       if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
         setTimeout(() => {
-          if (!this.$store.state.modalForm) {
+          if (!this.$store.state.modalForm && this.$route.path.match(/report/)) {
             this.$store.dispatch('toggleModalForm', 'rating')
           }
         }, this.modalFormTimer)
