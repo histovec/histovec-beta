@@ -71,12 +71,7 @@ export const getHtmlBody = content =>
                                                           <tbody>
                                                               <tr>
                                                                   <td>
-                                                                    <img width="80px" src="https://www.cartaplac.com/images/logo-securite-routiere.jpg" />
-                                                                  </td>
-                                                                  <td class="w580"  width="580" align="center" bgcolor="#64b5f6">
-                                                                      <h2>
-                                                                          HistoVec
-                                                                      </h2>
+                                                                    <img width="548px" src="https://histovec.interieur.gouv.fr/histovec/assets/images/histovec-header-mobile.png" />
                                                                   </td>
                                                               </tr>
                                                               <tr>
@@ -113,7 +108,7 @@ export const getHtmlBody = content =>
                                               <tr>
                                                   <td class="w30"  width="30"></td>
                                                   <td class="w580"  width="580" valign="top">
-                                                      <p align="right" class="pagebottom-content-left"><span style="color:rgba(0,0,0, 0.54)">&copy; 2019 Candilib</span>
+                                                      <p align="right" class="pagebottom-content-left"><span style="color:rgba(0,0,0, 0.54)">&copy; 2019 HistoVec</span>
                                                       </p>
                                                   </td>
 
