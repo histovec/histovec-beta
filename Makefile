@@ -331,9 +331,9 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network wait-elasticsearch otc-dev backend-dev frontend-dev
+dev: network wait-elasticsearch otc-dev smtp-dev backend-dev frontend-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop otc-dev-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop otc-dev-stop smtp-dev-stop network-stop
 
 frontend-build: network
 	@echo building ${APP} frontend
@@ -375,5 +375,12 @@ otc-dev:
 
 otc-dev-stop:
 	@${DC} -f ${DC_PREFIX}-otc.yml down
+
+smtp-dev:
+	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
+	@${DC} -f ${DC_PREFIX}-smtp.yml up -d 2>&1 | grep -v orphan
+
+smpt-dev-stop:
+	@${DC} -f ${DC_PREFIX}-smtp.yml down
 
 down: frontend-stop elasticsearch-stop network-stop
