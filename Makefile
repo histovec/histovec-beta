@@ -380,7 +380,7 @@ smtp-dev:
 	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
 	@${DC} -f ${DC_PREFIX}-smtp.yml up -d 2>&1 | grep -v orphan
 
-smpt-dev-stop:
+smtp-dev-stop:
 	@${DC} -f ${DC_PREFIX}-smtp.yml down
 
 down: frontend-stop elasticsearch-stop network-stop
