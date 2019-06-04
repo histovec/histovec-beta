@@ -6,7 +6,7 @@ ARG no_proxy
 ARG npm_registry
 ARG MIRROR_DEBIAN
 
-WORKDIR /otc
+WORKDIR /utac
 
 EXPOSE 9000
 
@@ -27,6 +27,6 @@ RUN npm i npm@latest -g
 
 RUN npm i restana@2 turbo-http --save
 
-COPY sample_data/otc_sample.json index.js ./
+COPY sample_data/utac_sample.json index.js ./
 
 CMD ["node","index.js"]

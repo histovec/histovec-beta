@@ -14,7 +14,7 @@ const apiPaths = (apiName, future = false) => {
     histovec: 'id',
     feedback: 'feedback',
     contact: 'contact',
-    otc: 'otc',
+    utac: 'utac',
     stream: 'stream'
   }
   return future ? `${apiFutureUrl}/${dic[apiName]}` : `${apiUrl}/${dic[apiName]}`
@@ -294,10 +294,10 @@ export default {
       v: (response.decrypted && response.decrypted.v || {})
     }
   },
-  async getOTC (id, code, token, key, otcId, uuid) {
-    const apiName = 'otc'
+  async getUTAC (id, code, token, key, utacId, uuid) {
+    const apiName = 'utac'
     const options = {
-      body: JSON.stringify({id: id, code: code, token: token, key: key, otcId: otcId, uuid: uuid})
+      body: JSON.stringify({id: id, code: code, token: token, key: key, utacId: utacId, uuid: uuid})
     }
     let response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
     return {
@@ -305,7 +305,7 @@ export default {
       ct: (response.json.ct || {})
     }
   },
-  // async getHistoVecAndOtc(id, key, plaque, uuid, callbacks) {
+  // async getHistoVecAndUtac(id, key, plaque, uuid, callbacks) {
   //   const apiName = 'stream'
   //   const options = {
   //     headers: {
@@ -319,9 +319,9 @@ export default {
   //       decrypt: key,
   //       callback: callbacks.histovec
   //     },
-  //     otc: {
+  //     utac: {
   //       json: true,
-  //       callback: callbacks.otc
+  //       callback: callbacks.utac
   //     }
   //   }
   //   await apiClient.stream(`${apiPaths[apiName]}`, streamCallbacks, options)

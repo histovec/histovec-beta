@@ -19,10 +19,10 @@ export default {
   },
   actions: {
     async getTechControl ({ commit, state, rootState }) {
-      if (rootState.api && rootState.api.fetching && rootState.api.fetching.otc) {
+      if (rootState.api && rootState.api.fetching && rootState.api.fetching.utac) {
         return
       }
-      const response = await api.getOTC(rootState.histovec.id, rootState.histovec.code, state.token, rootState.histovec.key, rootState.histovec.otcId, localStorage.getItem('userId'))
+      const response = await api.getUTAC(rootState.histovec.id, rootState.histovec.code, state.token, rootState.histovec.key, rootState.histovec.utacId, localStorage.getItem('userId'))
       if (response.success) {
         commit('updateCT', response.ct)
       }

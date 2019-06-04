@@ -125,24 +125,24 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.otc && (ct.length > 0)"
-                :class="[{'active' : tab === 'otc'}]"
+                v-if="$store.state.config.utac && (ct.length > 0)"
+                :class="[{'active' : tab === 'utac'}]"
               >
                 <a
                   class="clickable"
-                  @click="tab = 'otc'"
+                  @click="tab = 'utac'"
                 >
                   <i class="fa fa-cogs pr-10"></i>
                   Contrôles techniques
                 </a>
               </li>
               <li
-                v-if="$store.state.config.otc && $store.state.config.otcGraph && (ct.length > 1)"
-                :class="[{'active' : tab === 'otcGraph'}]"
+                v-if="$store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
                   class="clickable"
-                  @click="tab = 'otcGraph'"
+                  @click="tab = 'utacGraph'"
                 >
                   <i class="fa fa-line-chart pr-10"></i>
                   Kilomètres
@@ -220,7 +220,7 @@
               </div>
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'otc'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
               >
                 <tech-control
                   v-if="ct.length > 0"
@@ -229,9 +229,9 @@
                 </tech-control>
               </div>
               <div
-                v-if="tab === 'otcGraph'"
+                v-if="tab === 'utacGraph'"
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'otcGraph'}]"
+                :class="[{'in active' : $store.state.config.allTabs || tab === 'utacGraph'}]"
               >
                 <tech-control-graph
                   :ct="ct"
@@ -412,7 +412,7 @@ export default {
           return
         }
         await this.$store.dispatch('getHistoVec', this.$store.state.config.v1)
-        if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.otc) {
+        if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.utac) {
           await this.$store.dispatch('getTechControl')
         }
         await this.$store.dispatch('log',

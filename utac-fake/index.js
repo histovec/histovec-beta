@@ -4,12 +4,12 @@ const service = require('restana')({
 })
 
 const config = {
-  apiPath: process.env.OTC_API,
-  latency: process.env.OTC_LATENCY || 300,
-  port: process.env.OTC_PORT || 9000
+  apiPath: process.env.UTAC_API,
+  latency: process.env.UTAC_LATENCY || 300,
+  port: process.env.UTAC_PORT || 9000
 }
 
-const ct = require('./otc_sample.json')
+const ct = require('./utac_sample.json')
 
 const nb = ct.length
 

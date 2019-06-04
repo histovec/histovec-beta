@@ -37,8 +37,8 @@ export default new Vuex.Store({
         code: false,
         strongCode: false
       },
-      otc: false,
-      otcGraph: false,
+      utac: false,
+      utacGraph: false,
       pdf: true,
       updateDate: true,
       v1: false
@@ -53,8 +53,8 @@ export default new Vuex.Store({
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
       v1: ['ctrl','alt','v'],
-      otc: ['ctrl', 'alt', 'o'],
-      otcGraph: ['ctrl', 'alt', 'g'],
+      utac: ['ctrl', 'alt', 'o'],
+      utacGraph: ['ctrl', 'alt', 'g'],
     },
     modalForm: false,
     modalFormMode: 'contact',

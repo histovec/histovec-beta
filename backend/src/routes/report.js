@@ -74,13 +74,13 @@ async function searchHistoVec(id, uuid) {
   }
 }
 
-async function searchOTC(plaque) {
+async function searchUTAC(plaque) {
   try {
     const response = await axios(
       {
-        url: config.otcUrl,
+        url: config.utacUrl,
         method: 'post',
-        timeout: config.otcTimeout
+        timeout: config.utacTimeout
       },
       {
         plaque: plaque
@@ -88,11 +88,11 @@ async function searchOTC(plaque) {
     if (response.data && response.data.ct) {
       return {
         status: response.status,
-        source: 'otc',
+        source: 'utac',
         ct: response.data.ct
       }
     } else {
-      appLogger.warn(`Bad Content in OTC response: ${JSON.stringify(response)}`)
+      appLogger.warn(`Bad Content in UTAC response: ${JSON.stringify(response)}`)
       return {
         status: 500,
         message: 'Bad Content'
@@ -100,7 +100,7 @@ async function searchOTC(plaque) {
     }
   } catch (error) {
     appLogger.warn(
-      `Couldn't process OTC response :
+      `Couldn't process UTAC response :
       {'plaque': '${plaque}'}
       ${error.message}`
     )
@@ -132,7 +132,7 @@ export async function getHistoVec (req, res) {
   }
 }
 
-export async function getOTC (req, res) {
+export async function getUTAC (req, res) {
   if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
     appLogger.debug(`Not authentified - mismatched id and token: {'id': '${req.body.id}', 'token': '${req.body.token}}'`)
     res.status(401).json({
@@ -143,7 +143,7 @@ export async function getOTC (req, res) {
     let ct = await redis.getAsync(hash(req.body.code || req.body.id))
     if (ct) {
       try {
-        appLogger.debug(`OTC response cached - found following key in Redis: ${hash(req.body.code || req.body.id)}'`)
+        appLogger.debug(`UTAC response cached - found following key in Redis: ${hash(req.body.code || req.body.id)}'`)
         ct = decrypt(ct, req.body.key)
         res.status(200).json({
           success: true,
@@ -151,12 +151,12 @@ export async function getOTC (req, res) {
         })
       } catch (error) {
         appLogger.warn(
-          `Couldn't decrypt cached OTC response:
+          `Couldn't decrypt cached UTAC response:
           ${error.message}`
         )
       }
     } else {
-      let response = await searchOTC(req.body.otcIds)
+      let response = await searchUTAC(req.body.utacId)
       if (response.status === 200) {
         await redis.setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
         res.status(200).json({
@@ -165,7 +165,7 @@ export async function getOTC (req, res) {
         })
       } else {
         appLogger.debug(
-          `OTC response failed with status ${response.status}: ${response.message}`
+          `UTAC response failed with status ${response.status}: ${response.message}`
         )
         res.status(response.status).json({
           success: false,
@@ -190,8 +190,8 @@ export async function streamedReport (req, res) {
     addStreamEvent(res, 'histovec', response.status, response)
 
     if (response.status === 200) {
-      response = await searchOTC(req.header('Histovec-Plaque'))
-      addStreamEvent(res, 'otc', response.status, response)
+      response = await searchUTAC(req.header('Histovec-Plaque'))
+      addStreamEvent(res, 'utac', response.status, response)
       success = (response.status === 200)
       status = success ? 200 : 206
     } else {
