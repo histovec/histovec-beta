@@ -85,7 +85,7 @@ export async function sendContact (req, res) {
   try {
     res.status(201).json({
       success: true,
-      message: sendContactMail(req.body.email, req.body.subject, req.body)
+      message: await sendContactMail(req.body.email, req.body.subject, req.body)
     })
   } catch (error) {
     res.status(500).json({

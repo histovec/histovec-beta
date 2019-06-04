@@ -19,8 +19,8 @@ const json2html = (json) => {
   }
   return JSON.stringify(json)
 }
-export const sendContactMail = (from, subject, json) => {
-  sendMail({
+export const sendContactMail = async (from, subject, json) => {
+  await sendMail({
     from: from,
     cc: from,
     to: config.mailTo,
