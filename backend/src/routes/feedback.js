@@ -82,5 +82,5 @@ export async function sendContact (req, res) {
       message: errMessage
     })
   }
-  sendContactMail(req.body.email, req.body.subject, req.body.message)
+  sendContactMail(req.body.email, req.body.subject, req.body)
 }
