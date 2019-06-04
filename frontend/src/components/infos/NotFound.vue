@@ -77,9 +77,5 @@
 </template>
 
 <script>
-export default {
-  created () {
-    this.$store.dispatch('log', 'notFound' )
-  }
-}
+export default {}
 </script>

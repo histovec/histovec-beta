@@ -711,7 +711,6 @@ export default {
       this.formOptions = formInitialOptions
     }
 
-    this.$store.dispatch('log', this.$route.path)
     let myShakeEvent = new Shake({
       threshold: 15,
       timeout: 1000

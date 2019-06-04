@@ -474,7 +474,6 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('log', this.$route.path)
     setInterval(() => {
       this.verbatim = false
       this.i = (this.i + 1) % this.verbatims.length

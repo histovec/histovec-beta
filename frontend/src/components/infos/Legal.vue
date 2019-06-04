@@ -310,9 +310,6 @@ export default {
       choice: ''
     }
   },
-  created () {
-    this.$store.dispatch('log', this.$route.path)
-  },
   methods: {
     choose (id) {
       if (this.choice === id) {

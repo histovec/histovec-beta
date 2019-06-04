@@ -171,7 +171,6 @@ export default {
     if (this.activeQuestion) {
       this.highlightQuestion(this.activeQuestion)
     }
-    this.$store.dispatch('log', this.$route.path)
   },
 
   methods: {

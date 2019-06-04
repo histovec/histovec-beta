@@ -289,6 +289,11 @@ export default {
       modalFormShow: false
     }
   },
+  watch:{
+    $route (to){
+      this.$store.dispatch('log', to.path)
+    }
+  },
   methods: {
     toggleModalForm (mode = contact.mode.contact, subject = contact.subject.contact) {
       if (this.$store.state.config.v1) {
@@ -296,7 +301,6 @@ export default {
       }
     }
   }
-
 }
 </script>
 

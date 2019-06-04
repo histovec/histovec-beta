@@ -100,9 +100,6 @@
       url () {
         return window.location.protocol + '//' + window.location.host + '/histovec/'
       }
-    },
-    created () {
-      this.$store.dispatch('log', this.$route.path)
     }
   }
   </script>
