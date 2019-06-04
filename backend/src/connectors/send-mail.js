@@ -1,11 +1,10 @@
 import nodemailer from 'nodemailer'
 import smtpTransport from 'nodemailer-smtp-transport'
 import { htmlToText } from 'nodemailer-html-to-text'
-
 import { smtpOptions } from '../config'
 import { appLogger, techLogger } from '../util'
 
-export const sendMail = async (from, to, { subject, content: html }) => {
+export const sendMail = async ({ from, to, cc, subject, content: html }) => {
   const transporter = nodemailer.createTransport(smtpTransport(smtpOptions))
 
   transporter.use('compile', htmlToText())
@@ -13,6 +12,7 @@ export const sendMail = async (from, to, { subject, content: html }) => {
   const mailOptions = {
     from: from,
     to,
+    cc,
     subject,
     html,
   }

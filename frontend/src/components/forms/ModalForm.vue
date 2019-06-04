@@ -237,6 +237,8 @@
 </template>
 
 <script>
+import { detect } from 'detect-browser'
+
 export default {
   data () {
     return {
@@ -312,7 +314,7 @@ export default {
       return titles[this.mode]
     },
     filteredMessage () {
-      return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ') : undefined
+      return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
     },
     errors () {
       let errorList = []
@@ -381,6 +383,7 @@ export default {
           'note': this.note,
           'date': new Date().toUTCString(),
           'holder': (this.who === 'holder'),
+          'browser': detect(),
           'identity': (this.mode === 'rating') ? undefined :
             {
               typeImmatriculation: this.$store.state.identity.typeImmatriculation,

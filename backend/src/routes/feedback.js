@@ -1,9 +1,8 @@
 import elasticsearch from '../connectors/elasticsearch'
 import config from '../config'
 import { checkUuid } from '../util/crypto'
-import { sendMail } from '../connectors/send-mail'
 import { appLogger } from '../util/logger'
-import { formatContactMail } from '../mail'
+import { sendContactMail } from '../mail'
 
 export const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -83,5 +82,15 @@ export async function sendContact (req, res) {
       message: errMessage
     })
   }
-  sendMail(req.body.email, config.mailTo, formatContactMail(req.body.subject, req.body.message))
+  try {
+    res.status(201).json({
+      success: true,
+      message: await sendContactMail(req.body.email, req.body.subject, req.body)
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
 }
