@@ -314,7 +314,7 @@ export default {
       return titles[this.mode]
     },
     filteredMessage () {
-      return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ').replace(/\s+/,' ') : undefined
+      return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
     },
     errors () {
       let errorList = []
