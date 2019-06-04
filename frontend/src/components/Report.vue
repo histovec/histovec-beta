@@ -6,7 +6,7 @@
           <li>
             <i class="fa fa-home pr-10"></i>
             <router-link
-              :to="{ name: 'home' }"
+              :to="{ name: $routesNames.HOME }"
             >
               Accueil
             </router-link>
@@ -79,207 +79,129 @@
               class="nav nav-tabs"
               role="tablist"
             >
-              <li :class="[{'active' : tab === 'abstract'}]">
-                <a
-                  class="clickable"
-                  @click="tab = 'abstract'"
+              <li :class="[{'active' : $route.name === $routesNames.SYNTHESIS}]">
+                <router-link
+                  :to="{ name: $routesNames.SYNTHESIS }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-refresh pr-10"></i>
                   Synthèse
-                </a>
+                </router-link>
               </li>
-              <li :class="[{'active' : tab === 'vehicle'}]">
-                <a
-                  class="clickable"
-                  @click="tab = 'vehicle'"
+              <li :class="[{'active' : $route.name === $routesNames.VEHICLE}]">
+                <router-link
+                  :to="{ name: $routesNames.VEHICLE }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i :class="'fa fa-' + v.logo_vehicule + ' pr-10'"></i>
                   Véhicule
-                </a>
+                </router-link>
               </li>
-              <li :class="[{'active' : tab === 'holder'}]">
-                <a
-                  class="clickable"
-                  @click="tab = 'holder'"
+              <li :class="[{'active' : $route.name === $routesNames.HOLDER}]">
+                <router-link
+                  :to="{ name: $routesNames.HOLDER }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-address-card pr-10"></i>
                   Titulaire &amp; Titre
-                </a>
+                </router-link>
               </li>
-              <li :class="[{'active' : tab === 'situation'}]">
-                <a
-                  class="clickable"
-                  @click="tab = 'situation'"
+              <li :class="[{'active' : $route.name === $routesNames.ADMINISTRATIVE_STATUS}]">
+                <router-link
+                  :to="{ name: $routesNames.ADMINISTRATIVE_STATUS }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-clipboard pr-10"></i>
                   Situation administrative
-                </a>
+                </router-link>
               </li>
-              <li :class="[{'active' : tab === 'history'}]">
-                <a
-                  class="clickable"
-                  @click="tab = 'history'"
+              <li :class="[{'active' : $route.name === $routesNames.HISTORY}]">
+                <router-link
+                  :to="{ name: $routesNames.HISTORY }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-calculator pr-10"></i>
                   Historique des opérations
-                </a>
+                </router-link>
               </li>
               <li
                 v-if="$store.state.config.utac && (ct.length > 0)"
-                :class="[{'active' : tab === 'utac'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'utac'"
+                :class="[{'active' : $route.name === $routesNames.TECHNICAL_CONTROL}]"
+                >
+                <router-link
+                  :to="{ name: $routesNames.TECHNICAL_CONTROL }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-cogs pr-10"></i>
                   Contrôles techniques
-                </a>
+                </router-link>
               </li>
               <li
                 v-if="$store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
-                :class="[{'active' : tab === 'utacGraph'}]"
+                :class="[{'active' : $route.name === $routesNames.KILOMETERS}]"
               >
-                <a
-                  class="clickable"
-                  @click="tab = 'utacGraph'"
+                <router-link
+                  :to="{ name: $routesNames.KILOMETERS }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-line-chart pr-10"></i>
                   Kilomètres
-                </a>
+                </router-link>
               </li>
               <li
                 v-if="holder&&$store.state.config.pdf"
-                :class="[{'active' : tab === 'csa'}]"
+                :class="[{'active' : $route.name === $routesNames.CSA}]"
               >
-                <a
-                  class="clickable"
-                  @click="tab = 'csa'"
+                <router-link
+                  :to="{ name: $routesNames.CSA }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-print pr-10"></i>
                   Certificat de situation administrative
-                </a>
+                </router-link>
               </li>
               <li
                 v-if="holder"
-                :class="[{'active' : tab === 'send'}]"
+                :class="[{'active' : $route.name === $routesNames.SHARE}]"
               >
-                <a
-                  class="clickable"
-                  @click="tab = 'send'"
+                <router-link
+                  :to="{ name: $routesNames.SHARE }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
                 >
                   <i class="fa fa-send pr-10"></i>
                   Transmettre le rapport
-                </a>
+                </router-link>
               </li>
             </ul>
             <!-- Tab panes -->
             <div class="tab-content">
-              <!-- /* ----------------- synthese ----------------- */ -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'abstract'}]"
+              <router-view
+                class="tab-pane fadein active"
+                :baseurl="baseurl"
+                :ct="ct"
+                :holder="holder"
+                :url="url"
+                :v="v"
               >
-                <abstract
-                  v-if="tab === 'abstract'"
-                  :v="v"
-                  :holder="holder"
-                >
-                </abstract>
-              </div>
-              <!-- /* ----------------- vehicule ----------------- */ -->
-              <div
-                class="tab-pane fade pr-20"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'vehicle'}]"
-              >
-                <tech-chars
-                  v-if="tab === 'vehicle'"
-                  :v="v"
-                >
-                </tech-chars>
-              </div>
-              <!-- /* ----------------- titre ----------------- */ -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'holder'}]"
-              >
-                <license
-                  v-if="tab === 'holder'"
-                  :v="v"
-                >
-                </license>
-              </div>
-              <!-- situation administrative -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'situation'}]"
-              >
-                <administrative
-                  v-if="tab === 'situation'"
-                  :v="v"
-                  :holder="holder"
-                >
-                </administrative>
-              </div>
-              <!-- historique des opérations -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'history'}]"
-              >
-                <history
-                  v-if="tab === 'history'"
-                  :v="v"
-                >
-                </history>
-              </div>
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
-              >
-                <tech-control
-                  v-if="ct.length > 0 && tab === 'utac'"
-                  :ct="ct"
-                >
-                </tech-control>
-              </div>
-              <div
-                v-if="tab === 'utacGraph'"
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'utacGraph'}]"
-              >
-                <tech-control-graph
-                  v-if="tab === 'utacGraph'"
-                  :ct="ct"
-                >
-                </tech-control-graph>
-              </div>
-              <div
-                v-if="holder"
-                class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'send'}]"
-              >
-                <share
-                  v-if="tab === 'send'"
-                  :v="v"
-                  :url="url"
-                  :baseurl="baseurl"
-                  :holder="holder"
-                >
-                </share>
-              </div>
-              <div
-                v-if="holder&&$store.state.config.pdf"
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'csa'}]"
-              >
-                <administrative-certificate
-                  v-if="tab === 'csa'"
-                  :v="v"
-                  :url="url"
-                  :baseurl="baseurl"
-                >
-                </administrative-certificate>
-              </div>
+              </router-view>
             </div>
           </div>
           <!-- tabs end -->
@@ -296,20 +218,12 @@
 
 <script>
 
-import Abstract from './reportParts/Abstract.vue'
-import TechChars from './reportParts/TechChars.vue'
-import License from './reportParts/License.vue'
-import Administrative from './reportParts/Administrative.vue'
-import History from './reportParts/History.vue'
-import TechControl from './reportParts/TechControl.vue'
-import TechControlGraph from './reportParts/TechControlGraph.vue'
-import AdministrativeCertificate from './reportParts/AdministrativeCertificate.vue'
-import Share from './reportParts/Share.vue'
+
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
 
 const statusFromCode = {
-  'holder': {
+  holder: {
     400: 'invalid',
     404: 'notFound',
     429: 'tooManyRequests',
@@ -317,58 +231,58 @@ const statusFromCode = {
     503: 'unavailable',
     504: 'unavailable',
   },
-  'buyer': {
+  buyer: {
     400: 'invalidBuyer',
     404: 'notFoundBuyer',
     429: 'tooManyRequests',
     502: 'unavailable',
     503: 'unavailable',
-    504: 'unavailable'
-  }
+    504: 'unavailable',
+  },
 }
 
 export default {
   components: {
-    Abstract,
-    TechChars,
-    License,
-    Administrative,
-    History,
-    TechControl,
-    TechControlGraph,
-    AdministrativeCertificate,
-    Share,
-    Status
+    Status,
   },
-  data () {
+  data() {
     return {
-      tab: 'abstract',
       default: 'non disponible',
       plaque: '',
       vin: '',
       conf: [],
       timeout: 10000,
-      modalFormTimer: 120000
     }
   },
   computed: {
-    id () {
+    id() {
       return this.holder ? this.$route.params.id : this.$route.query.id
     },
-    key () {
-      let k = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
-      return (k !== undefined) ? k.replace(/-/g, '+').replace(/_/g, '/') : undefined
+    key() {
+      let k =
+        this.$route.params.key !== undefined
+          ? this.$route.params.key
+          : this.$route.query.key
+      return k !== undefined
+        ? k.replace(/-/g, '+').replace(/_/g, '/')
+        : undefined
     },
     status () {
       if (this.$store.state.siv.v) {
         if (this.$store.state.siv.v.annulation_ci === 'OUI') {
           return 'cancelled'
         }
-        this.showModalForm()
         return 'ok'
-      } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+      } else if (
+        !this.holder &&
+        this.$route.query.key === undefined &&
+        this.$route.query.id !== undefined
+      ) {
         return 'invalidBuyer'
-      } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
+      } else if (
+        (this.holder ? this.$route.params.id : this.$route.query.id) ===
+        undefined
+      ) {
         return 'invalid'
       } else if (this.$store.state.api.fetching.siv ||
                 (this.$store.state.api.http.siv === undefined) ||
@@ -394,7 +308,7 @@ export default {
     ct () {
       return this.$store.state.utac.ct || []
     },
-    baseurl () {
+    baseurl() {
       // return 'https://histovec.interieur.gouv.fr'
       return window.location.protocol + '//' + window.location.host
     },
@@ -403,7 +317,7 @@ export default {
       return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },
-  created () {
+  created() {
     if (this.id !== undefined) {
       this.$store.commit('updateId', this.id)
     }
@@ -419,21 +333,41 @@ export default {
     async getSIV () {
       if (this.$store.state.siv.v) {
         // déjà en cache
-        await this.$store.dispatch('log',
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
+        await this.$store.dispatch(
+          'log',
+          this.$route.path +
+            '/' +
+            (this.holder ? 'holder' : 'buyer') +
+            '/cached',
+        )
         return
       } else {
-        if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
-          await this.$store.dispatch('log',
-            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
+        if (
+          !this.holder &&
+          this.$route.query.key === undefined &&
+          this.$route.query.id !== undefined
+        ) {
+          await this.$store.dispatch(
+            'log',
+            this.$route.path +
+              '/' +
+              (this.holder ? 'holder' : 'buyer') +
+              '/invalid',
+          )
           return
         }
         await this.$store.dispatch('getSIV', this.$store.state.config.v1)
         if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.utac) {
           await this.$store.dispatch('getUTAC')
         }
-        await this.$store.dispatch('log',
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
+        await this.$store.dispatch(
+          'log',
+          this.$route.path +
+            '/' +
+            (this.holder ? 'holder' : 'buyer') +
+            '/' +
+            this.status.replace(/Buyer$/, ''),
+        )
         return
       }
     },

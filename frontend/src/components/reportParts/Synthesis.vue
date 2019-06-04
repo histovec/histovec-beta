@@ -377,9 +377,6 @@
         <!-- fin ras  -->
       </div>
     </div>
-    <div v-if="$store.state.config.allTabs">
-      <br />
-    </div>
   </div>
 </template>
 

@@ -19,7 +19,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
-    logCounter: 0,
     api: {
       fetching: {},
       http: {},
@@ -33,7 +32,6 @@ export default new Vuex.Store({
     config: {
       beta: false,
       fniMode: true,
-      allTabs: false,
       id: {
         dateNaissance: true,
         code: false,
@@ -47,24 +45,24 @@ export default new Vuex.Store({
       blocANTS: true
     },
     configEnabler: {
-      allTabs: ['ctrl', 'alt', 'a'],
       beta: ['ctrl', 'alt', 'b'],
-      fniMode: ['ctrl','alt','f'],
+      fniMode: ['ctrl', 'alt', 'f'],
       'id.dateNaissance': ['ctrl', 'alt', 'd'],
       'id.code': ['ctrl', 'alt', 'c'],
       'id.strongCode': ['ctrl', 'alt', 'z'],
       pdf: ['ctrl', 'alt', 'p'],
       updateDate: ['ctrl', 'alt', 'u'],
-      v1: ['ctrl','alt','v'],
+      v1: ['ctrl', 'alt', 'v'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
       blocANTS: ['ctrl', 'alt', 'r'],
     },
+    contact: {},
+    feedback: {},
+    logCounter: 0,
     modalForm: false,
     modalFormMode: contact.mode.contact,
     modalFormSubject: '',
-    feedback: {},
-    contact: {}
   },
   mutations: {
     toggleConfig (state, key) {

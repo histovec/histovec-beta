@@ -206,6 +206,8 @@
 <script>
 import Vue from 'vue'
 
+import * as ROUTES_NAMES from './router/constants/routesNames'
+
 import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
 import localization from './assets/json/lang.json'
@@ -228,6 +230,7 @@ Vue.use(VueClipboard)
 import lodash from 'lodash'
 
 Vue.prototype.$lodash = lodash
+Vue.prototype.$routesNames = ROUTES_NAMES
 
 window.bus = new Vue()
 
@@ -277,6 +280,12 @@ export default {
   },
   data () {
     return {
+      images: {
+        betaPng,
+        histovecHeaderMobilePng,
+        logoMiPng,
+        securiteRoutiere120Png,
+      },
       modalFormShow: false
     }
   },
