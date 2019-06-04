@@ -29,7 +29,7 @@ config:
         fields:
           - idv
 scenarios:
-  - name: histovec-v1-otc
+  - name: histovec-v1-utac
     flow:
     - post:
         url: /histovec/api/v1/id
@@ -42,14 +42,14 @@ scenarios:
           - json: "$.v"
             as: "v"
     - post:
-        url: /histovec/api/v1/otc
+        url: /histovec/api/v1/utac
         json:
           uuid: 8ebf2ad7-ec0f-f4d5-d974-995e07f199cf
           id: "{{ idv }}"
           code: "{{ idv }}"
           key: "eetuDnUDIB7AsbOibYClLxSz2pPWSP2kyj2qWn0REpY="
           token: "{{ token }}"
-          otcId: "{{ token }}"
+          utacId: "{{ token }}"
         capture:
           json: "$.ct"
           as: "ct"

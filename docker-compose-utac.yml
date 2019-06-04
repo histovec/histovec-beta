@@ -1,10 +1,10 @@
 version: '3.4'
 
 services:
-  otc:
-    image: otc-fake 
+  utac:
+    image: utac-fake
     build:
-      context: otc-fake
+      context: utac-fake
       dockerfile: Dockerfile
       args:
         http_proxy: ${http_proxy}
@@ -13,10 +13,10 @@ services:
         npm_registry: ${NPM_REGISTRY}
         MIRROR_DEBIAN: ${MIRROR_DEBIAN}
     environment:
-      - OTC_PORT=${OTC_PORT}
-      - OTC_API=${OTC_API}
-      - OTC_TIMEOUT=${OTC_TIMEOUT}
-    container_name: otc-fake
+      - UTAC_PORT=${UTAC_PORT}
+      - UTAC_API=${UTAC_API}
+      - UTAC_TIMEOUT=${UTAC_TIMEOUT}
+    container_name: utac-fake
     restart: always
 
 networks:

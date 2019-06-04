@@ -49,20 +49,20 @@ export default {
         if (response.token) {
           commit('updateToken', response.token)
         }
-        if (response.otcId) {
-          commit('updateOtcId', response.otcId)
+        if (response.utac_id) {
+          commit('updateUtacId', response.utac_id)
         }
       }
       return
     },
-    // async getHistoVecAndOtc ({ commit, state, rootState}) {
-    //   if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.otc )) {
+    // async getHistoVecAndUtac ({ commit, state, rootState}) {
+    //   if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.utac )) {
     //     return
     //   }
-    //   await api.getHistoVecAndOtc(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
+    //   await api.getHistoVecAndUtac(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
     //     {
     //       histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
-    //       otc: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })
+    //       utac: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })
     //     }
     //   )
     // }

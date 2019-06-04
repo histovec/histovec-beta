@@ -35,12 +35,12 @@ export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 export ES_MEM=512m
 export ES_HOST=elasticsearch
 export ES_PORT=9200
-export OTC_SCHEME=http
-export OTC_HOST=otc
-export OTC_PORT=9000
-export OTC_API=otc
-export OTC_LATENCY=300
-export OTC_TIMEOUT=5000
+export UTAC_SCHEME=http
+export UTAC_HOST=utac
+export UTAC_PORT=9000
+export UTAC_API=utac
+export UTAC_LATENCY=300
+export UTAC_TIMEOUT=5000
 export MAIL_FROM=histovec@fake.mi
 export MAIL_TO=histovec@fake.mi
 export SMTP_SERVER=smtp
@@ -331,9 +331,9 @@ dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network wait-elasticsearch otc-dev smtp-dev backend-dev frontend-dev
+dev: network wait-elasticsearch utac-dev smtp-dev backend-dev frontend-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop otc-dev-stop smtp-dev-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop utac-dev-stop smtp-dev-stop network-stop
 
 frontend-build: network
 	@echo building ${APP} frontend
@@ -369,12 +369,12 @@ backend-dev:
 backend-dev-stop:
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
 
-otc-dev:
-	@echo docker-compose up otc simulator for dev ${VERSION}
-	@${DC} -f ${DC_PREFIX}-otc.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+utac-dev:
+	@echo docker-compose up utac simulator for dev ${VERSION}
+	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
-otc-dev-stop:
-	@${DC} -f ${DC_PREFIX}-otc.yml down
+utac-dev-stop:
+	@${DC} -f ${DC_PREFIX}-utac.yml down
 
 smtp-dev:
 	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
