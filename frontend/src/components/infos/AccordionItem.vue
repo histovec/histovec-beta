@@ -89,8 +89,6 @@ export default {
 
   methods: {
     applyCallbacks () {
-      /* eslint-disable-next-line */
-      console.log(Object.keys(this.callbacks))
       this.callbacks && Object.keys(this.callbacks).length && Object.keys(this.callbacks).forEach((id) => {
         let elem = document.getElementById(id)
         if (elem) {

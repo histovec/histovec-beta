@@ -309,9 +309,11 @@ export default {
       let titles = {
         rating: 'Votre évaluation',
         contact: 'Contact',
-        error: 'Signaler une erreur'
+        error: 'Signaler une erreur',
+        holderNotFound: 'Je ne trouve pas mon véhicule',
+        buyerNotFound: 'Signaler une erreur de lien invalide'
       }
-      return titles[this.mode]
+      return titles[this.mode] || this.mode
     },
     filteredMessage () {
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined

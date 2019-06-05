@@ -6,10 +6,10 @@ import aideFNI from '@/assets/img/aide_fni.jpg'
 import store from '@/store'
 
 const mailSubjects = {
-  'error': 'Signaler une erreur',
-  'holder': 'Je ne trouve pas mon véhicule',
-  'contact': 'contact',
-  'buyer': 'Signaler une erreur de lien invalide'
+  error: 'Signaler une erreur',
+  holderNotFound: 'Je ne trouve pas mon véhicule',
+  contact: 'Contact',
+  buyerNotFound: 'Signaler une erreur de lien invalide'
 }
 
 const contactHook = (id, mode = 'contact', mailBody = undefined) => {
@@ -249,7 +249,7 @@ export default function (mailBody) {
           >contactez-nous</a>.
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, 'holder', mailBody),
+      callbacks: contactHook(`contact_hook_${id++}`, 'holderNotFound', mailBody),
       react: { object: store.state.config, key: 'v1'}
     },
     {
@@ -425,7 +425,7 @@ export default function (mailBody) {
         </a>
       </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, 'buyer'),
+      callbacks: contactHook(`contact_hook_${id++}`, 'buyerNotFound'),
       react: { object: store.state.config, key: 'v1'}
     }
   ]
