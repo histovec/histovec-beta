@@ -6,6 +6,8 @@
       :title="item.title"
       :active="active === item.id"
       :body="item.body"
+      :callbacks="item.callbacks"
+      :react="item.react"
       @click="activate(item.id)"
     />
   </ul>

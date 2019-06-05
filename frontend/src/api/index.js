@@ -1,7 +1,7 @@
 import 'whatwg-fetch'
 import apiConf from '@/assets/json/backend.json'
 import CryptoJS from 'crypto-js'
-import store from '../store'
+import store from '@/store'
 // import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '').replace(/\/$/, '')

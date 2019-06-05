@@ -43,6 +43,16 @@ export default {
       default: '',
       required: false,
     },
+    callbacks: {
+      type: Object,
+      default: function () {return {}},
+      required: false
+    },
+    react: {
+      type: Object,
+      default: function () { return {}},
+      required: false
+    },
     icon: {
       type: String,
       required: false,
@@ -54,12 +64,42 @@ export default {
     },
   },
 
-  data() {
+  data () {
     return {
       iconClass: `fa-${this.icon || 'file-text-o'}`,
       id: slugify(this.title)
     }
   },
+
+  computed: {
+    reactVal () {
+      return this.react.object && this.react.object[this.react.key]
+    }
+  },
+
+  watch: {
+    reactVal (val) {
+      this.applyCallbacks(`${val}`)
+    }
+  },
+
+  mounted () {
+    this.applyCallbacks()
+  },
+
+  methods: {
+    applyCallbacks () {
+      /* eslint-disable-next-line */
+      console.log(Object.keys(this.callbacks))
+      this.callbacks && Object.keys(this.callbacks).length && Object.keys(this.callbacks).forEach((id) => {
+        let elem = document.getElementById(id)
+        if (elem) {
+          this.callbacks[id](elem)
+        }
+      })
+    }
+  }
+
 }
 </script>
 

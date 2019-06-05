@@ -3,8 +3,35 @@ import slugify from '@/assets/js/slugify.js'
 
 import aideSIV from '@/assets/img/aide_siv.jpg'
 import aideFNI from '@/assets/img/aide_fni.jpg'
+import store from '@/store'
+
+const mailSubjects = {
+  'error': 'Signaler une erreur',
+  'holder': 'Je ne trouve pas mon véhicule',
+  'contact': 'contact',
+  'buyer': 'Signaler une erreur de lien invalide'
+}
+
+const contactHook = (id, mode = 'contact', mailBody = undefined) => {
+  return {
+    [id]: (e) => {
+      if (store.state.config.v1) {
+        e.removeAttribute('href')
+        e.onclick = () => { store.dispatch('toggleModalForm', mailSubjects[mode]) }
+      } else {
+        if (mailBody) {
+          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(mailSubjects[mode])}&body=${mailBody}`
+        } else {
+          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(mailSubjects[mode])}`
+        }
+        e.onclick = () => { return }
+      }
+    }
+  }
+}
 
 export default function (mailBody) {
+  let id = 0
   var faqContent = [
     {
       title: 'Comment utiliser HistoVec ?',
@@ -157,9 +184,16 @@ export default function (mailBody) {
       title: 'Comment signaler une information manquante ou inexacte ?',
       body: `
         <p class="indented">
-          <a href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur">contactez-nous</a>
+          <a
+            id="contact_hook_${id}"
+            href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur"
+          >
+            contactez-nous
+          </a>
         </p>
-      `
+      `,
+      callbacks: contactHook(`contact_hook_${id++}`, 'error'),
+      react: { object: store.state.config, key: 'v1'}
     },
     {
       title: 'Je ne trouve pas mon véhicule ?',
@@ -210,10 +244,13 @@ export default function (mailBody) {
           naissance enregistrée dans le système d’immatriculation des
           véhicules (SIV) :
           <a
+            id="contact_hook_${id}"
             href="mailto:histovec@interieur.gouv.fr?subject=Je%20ne%20trouve%20pas%20mon%20vehicule&body=${mailBody}"
           >contactez-nous</a>.
         </p>
-      `
+      `,
+      callbacks: contactHook(`contact_hook_${id++}`, 'holder', mailBody),
+      react: { object: store.state.config, key: 'v1'}
     },
     {
       title: 'Où se trouve le numéro de formule ?',
@@ -379,9 +416,17 @@ export default function (mailBody) {
       </p>
       <p class="indented"> <b> Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur </b> </p>
       <p class="indented">
-      Si jamais le problème persite avec votre vendeur : <a href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur%20de%20lien%20invalide">contactez-nous</a>
+      Si jamais le problème persite avec votre vendeur :
+        <a
+          id="contact_hook_${id}"
+          href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur%20de%20lien%20invalide"
+        >
+          contactez-nous
+        </a>
       </p>
-      `
+      `,
+      callbacks: contactHook(`contact_hook_${id++}`, 'buyer'),
+      react: { object: store.state.config, key: 'v1'}
     }
   ]
 
