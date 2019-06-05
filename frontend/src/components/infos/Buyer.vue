@@ -12,25 +12,10 @@
         </ol>
       </div>
     </div>
-    <section
-      class="dark-translucent-bg"
-      style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+    <handshake-header
+      :hodler="false"
     >
-      <div class="container">
-        <div class="row justify-content-lg-center">
-          <div class="col-lg-12">
-            <h2 class="text-center mt-4">
-              <div>
-                <span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span>
-              </div>
-            </h2>
-            <div class="separator with-icon">
-              <i class="fa fa-car bordered"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </handshake-header>
     <section class="main-container">
       <div class="container">
         <div class="row">
@@ -91,15 +76,21 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      mailBody () {
-        var text = encodeURI('Bonjour,\n\nVous vendez un véhicule que je souhaiterais acquérir. Serait-il possible de me communiquer son historique. Vous pourrez obtenir cet historique en vous connectant sur le service histovec du Ministère de l\'Intérieur. Un lien vous sera alors fourni pour que vous puissiez prouver votre bonne foi auprès d\'acheteurs comme moi.\n\nCe service est disponible en cliquant sur le lien suivant : ')
-        return text + this.url.replace('&', '%26')
-      },
-      url () {
-        return window.location.protocol + '//' + window.location.host + '/histovec/'
-      }
+import HandshakeHeader from './HandshakeHeader.vue'
+
+export default {
+  components: {
+    HandshakeHeader
+  },
+  computed: {
+    mailBody () {
+      var text = encodeURI('Bonjour,\n\nVous vendez un véhicule que je souhaiterais acquérir. Serait-il possible de me communiquer son historique. Vous pourrez obtenir cet historique en vous connectant sur le service histovec du Ministère de l\'Intérieur. Un lien vous sera alors fourni pour que vous puissiez prouver votre bonne foi auprès d\'acheteurs comme moi.\n\nCe service est disponible en cliquant sur le lien suivant : ')
+      return text + this.url.replace('&', '%26')
+    },
+    url () {
+      return window.location.protocol + '//' + window.location.host + '/histovec/'
     }
   }
-  </script>
+}
+
+</script>

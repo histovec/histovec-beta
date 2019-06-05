@@ -16,34 +16,8 @@
     </div>
     <!-- breadcrumb end -->
     <!-- section -->
-    <section class="main-container">
-      <div class="container">
-        <div class="row">
-          <!-- section start -->
-          <section
-            class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
-          >
-            <div class="container">
-              <div class="row justify-content-lg-center">
-                <div class="col-lg-12">
-                  <h2 class="text-center mt-4">
-                    <div>
-                      <strong>Achetez</strong> en confiance un
-                      <strong>véhicule d'occasion</strong>
-                    </div>
-                  </h2>
-                  <div class="separator with-icon">
-                    <i class="fa fa-car bordered"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- section end -->
-        </div>
-      </div>
-    </section>
+    <handshake-header>
+    </handshake-header>
     <!-- section -->
     <!-- main-container start -->
     <section class="main-container">
@@ -86,6 +60,7 @@
 </template>
 
 <script>
+import HandshakeHeader from '@/components/infos/HandshakeHeader'
 import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
 // import delay from 'delay'
@@ -94,6 +69,7 @@ import { detect } from 'detect-browser'
 export default {
   components: {
     Accordion,
+    HandshakeHeader
   },
 
   data() {

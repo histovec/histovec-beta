@@ -19,34 +19,10 @@
       </div>
     </div>
     <!-- breadcrumb end -->
-    <!-- section -->
-    <section class="main-container">
-      <div class="container">
-        <div class="row">
-          <!-- section start -->
-          <section
-            class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
-          >
-            <div class="container">
-              <div class="row justify-content-lg-center">
-                <div class="col-lg-12">
-                  <h2 class="text-center mt-4">
-                    <span class="bold_6">Rassurez</span>
-                    vos acheteurs potentiels
-                  </h2>
-                  <div class="separator with-icon">
-                    <i class="fa fa-car bordered"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- section end -->
-        </div>
-      </div>
-    </section>
-    <!-- section -->
+
+    <handshake-header>
+    </handshake-header>
+
     <section class="main-container">
       <div class="container">
         <div class="row">
@@ -458,6 +434,7 @@
 import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
 import moment from 'moment'
+import HandshakeHeader from './infos/HandshakeHeader.vue'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
 
@@ -547,6 +524,7 @@ const formInitialOptions = {
 
 export default {
   components: {
+    HandshakeHeader,
     ModalHelper,
     Field
   },
