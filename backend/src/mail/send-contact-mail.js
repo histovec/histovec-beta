@@ -28,7 +28,7 @@ export const sendContactMail = async (from, subject, json) => {
     content: getHtmlBody(`
       <b> message </b>: <br />
       <p>
-        ${json.message.replace('\n','<br />')}
+        ${(json.message && json.message.replace('\n','<br />')) || '' }
       </p>
       <br />
       <b> donnée techniques </b>: <br />
