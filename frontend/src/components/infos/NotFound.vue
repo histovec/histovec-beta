@@ -21,7 +21,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            :style="`background-image:url(${images.poigneeDeMainJpg}); background-position: 50% 50%`"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -59,7 +59,7 @@
           <!-- main end -->
           <div class="container">
             <!-- debut image fixe -->
-            <!-- <div class="col-md-12"> <img src="assets/images/panneau-impasse.svg" class="img-responsive" alt="panneau voie sans issue" data-bgposition="center top" data-bgrepeat="no-repeat"></div> -->
+            <!-- <div class="col-md-12"> <img :src="images.panneauImpasseSvg" class="img-responsive" alt="panneau voie sans issue" data-bgposition="center top" data-bgrepeat="no-repeat"></div> -->
             <!-- fin image fixe -->
             <div class="row">
               <div class="col-lg-12 no-margin">
@@ -77,5 +77,19 @@
 </template>
 
 <script>
-export default {}
+import {
+  // panneauImpasseSvg,
+  poigneeDeMainJpg
+} from '../../constants/images'
+
+export default {
+  data () {
+    return {
+      images: {
+        // panneauImpasseSvg,
+        poigneeDeMainJpg
+      }
+    }
+  }
+}
 </script>

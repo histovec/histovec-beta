@@ -5,7 +5,7 @@
         <!-- section start -->
         <section
           class="dark-translucent-bg"
-          :style="'background-image:url(' + handshake + '); background-position: 50% 50%'"
+          :style="`background-image:url(${images.poigneeDeMainJpg}); background-position: 50% 50%`"
         >
           <div class="container">
             <div class="row justify-content-lg-center">
@@ -32,8 +32,9 @@
 </template>
 
 <script>
-
-import handshake from '@/assets/img/poignee_de_main.jpg'
+import {
+  poigneeDeMainJpg,
+} from '../../constants/images'
 
 export default {
   props: {
@@ -45,7 +46,9 @@ export default {
   },
   data() {
     return {
-      handshake: handshake
+      images: {
+        poigneeDeMainJpg
+      }
     }
   }
 }

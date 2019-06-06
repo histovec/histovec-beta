@@ -24,7 +24,7 @@
                   >
                     <img
                       alt="accueil"
-                      src="assets/images/histovec-header-mobile.png"
+                      :src="images.histovecHeaderMobilePng"
                       class="img-responsive"
                       width="548"
                       height="98"
@@ -43,7 +43,7 @@
             >
               <img
                 alt="version beta"
-                src="assets/images/beta.png"
+                :src="images.betaPng"
                 class="img-responsive"
                 width="100"
                 height="100"
@@ -120,7 +120,7 @@
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
-                          src="assets/images/logos_metiers/logo_mi.png"
+                          :src="images.logoMiPng"
                           alt="Ministère de l'Intérieur"
                         >
                         <a
@@ -135,7 +135,7 @@
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
-                          src="assets/images/logos_metiers/securite_routiere_120.png"
+                          :src="images.securiteRoutiere120Png"
                           alt="sécurité routière, tous responsables"
                         >
                         <a
@@ -207,6 +207,12 @@
 import Vue from 'vue'
 
 import * as ROUTES_NAMES from './router/constants/routesNames'
+import {
+  betaPng,
+  histovecHeaderMobilePng,
+  logoMiPng,
+  securiteRoutiere120Png,
+} from './constants/images'
 
 import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'

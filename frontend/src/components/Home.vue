@@ -2,7 +2,7 @@
   <main role="main">
     <div
       class="banner banner-big-height padding-bottom-clear"
-      style="background-image:url('assets/images/accueil_4.jpg'); background-size: 1200px; background-position: 50% -100px;"
+      :style="`background-image:url(${images.accueil4Jpg}); background-size: 1200px; background-position: 50% -100px;`"
     >
       <div class="container">
         <div class="row justify-content-lg-center">
@@ -126,7 +126,7 @@
                   </h2>
                   <h6>
                     <img
-                      src="assets/images/exemple_rapport.png"
+                      :src="images.exempleRapportPng"
                       width="1044"
                       height="113"
                       alt="type véhicule, puissance fiscale, propriétaire actuel, depuis quelle année, nombre de propriétaires"
@@ -241,7 +241,7 @@
     </div>
     <section
       class="dark-translucent-bg fixed-bg"
-      style="background-image:url(assets/images/clavier.jpg);"
+      :style="`background-image:url(${images.clavierJpg});`"
     >
       <div class="container">
         <div class="row justify-content-lg-center">
@@ -438,7 +438,7 @@
                   style="height: 350px; overflow-y: auto;"
                 >
                   <img
-                    src="assets/images/exemple_rapport_g.png"
+                    :src="images.exempleRapportGPng"
                     class="img-responsive"
                     style="margin: 0 auto;"
                   >
@@ -463,6 +463,13 @@
 </template>
 
 <script>
+import {
+  accueil4Jpg,
+  clavierJpg,
+  exempleRapportPng,
+  exempleRapportGPng,
+} from '../constants/images'
+
 export default {
   components: {
   },
@@ -470,7 +477,13 @@ export default {
     return {
       modal: false,
       i: 0,
-      verbatim: true
+      verbatim: true,
+      images: {
+        accueil4Jpg,
+        clavierJpg,
+        exempleRapportPng,
+        exempleRapportGPng,
+      }
     }
   },
   created () {

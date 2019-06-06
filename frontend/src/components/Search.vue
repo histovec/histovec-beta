@@ -66,7 +66,7 @@
               <img
                 class="img-responsive pull-right"
                 :class="{'opacity-plaque': typeImmatriculation === 'fni' }"
-                src="assets/images/nouvelle_plaque_immatriculation_fd_transp_txt.png"
+                :src="images.nouvellePlaqueImmatriculationFdTranspPng"
                 width="200"
                 height="44"
               >
@@ -84,7 +84,7 @@
               <img
                 class="img-responsive pull-left"
                 :class="{'opacity-plaque': typeImmatriculation === 'siv' }"
-                src="assets/images/ancienne_plaque_immatriculation_fd_transp_txt.png"
+                :src="images.anciennePlaqueImmatriculationFdTranspPng"
                 width="200"
                 height="44"
               >
@@ -434,6 +434,12 @@
 import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
 import moment from 'moment'
+
+import {
+  anciennePlaqueImmatriculationFdTranspPng,
+  nouvellePlaqueImmatriculationFdTranspPng
+} from '../constants/images'
+
 import HandshakeHeader from './infos/HandshakeHeader.vue'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
@@ -538,7 +544,11 @@ export default {
   data () {
     return {
       modal: false,
-      status: 'init'
+      status: 'init',
+      images: {
+        anciennePlaqueImmatriculationFdTranspPng,
+        nouvellePlaqueImmatriculationFdTranspPng
+      }
     }
   },
   computed: {

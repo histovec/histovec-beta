@@ -1,8 +1,8 @@
 // import slugify from '@sindresorhus/slugify'
 import slugify from '@/assets/js/slugify.js'
 
-import aideSIV from '@/assets/img/aide_siv.jpg'
-import aideFNI from '@/assets/img/aide_fni.jpg'
+import aideSIV from '@/assets/img/aide-siv.jpg'
+import aideFNI from '@/assets/img/aide-fni.jpg'
 import store from '@/store'
 import contact from '@/assets/json/contact.json'
 

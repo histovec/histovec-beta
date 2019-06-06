@@ -25,7 +25,7 @@
             >
               <img
                 alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise"
-                src="assets/images/n-formule.jpg"
+                :src="images.nFormuleJpg"
                 class="img-responsive"
                 style="margin: 0 auto;"
               >
@@ -67,7 +67,7 @@
                 Carte grise après 2004
               </h4>
               <img
-                src="assets/images/nouvelle_carte_grise.jpg"
+                :src="images.nouvelleCarteGriseJpg"
                 class="img-responsive"
               >
               <br />
@@ -75,7 +75,7 @@
                 Carte grise avant 2004
               </h4>
               <img
-                src="assets/images/carte_grise_avant_2004.jpg"
+                :src="images.carteGriseAvant2004Jpg"
                 class="img-responsive"
               >
               <br />
@@ -83,7 +83,7 @@
                 Carte grise 1970
               </h4>
               <img
-                src="assets/images/carte_grise_1970.jpg"
+                :src="images.carteGrise1970Jpg"
                 class="img-responsive"
               >
             </div>
@@ -104,12 +104,29 @@
 </template>
 
 <script>
+import {
+  carteGriseAvant2004Jpg,
+  carteGrise1970Jpg,
+  nFormuleJpg,
+  nouvelleCarteGriseJpg
+} from '../../constants/images'
+
 export default {
   props: {
     fniMode: Boolean,
     typeImmatriculation: {
       type: String,
       default: 'siv'
+    }
+  },
+  data () {
+    return {
+      images: {
+        carteGriseAvant2004Jpg,
+        carteGrise1970Jpg,
+        nFormuleJpg,
+        nouvelleCarteGriseJpg
+      }
     }
   },
   methods: {

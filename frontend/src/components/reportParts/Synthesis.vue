@@ -329,7 +329,7 @@
         <div class="col-sm-1">
           <img
             class="img-responsive"
-            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png'"
+            :src="vignette35CritAirPng"
           >
         </div>
         <div class="col-sm-6">
@@ -381,6 +381,9 @@
 </template>
 
 <script>
+
+import {getVignette35CritAirPng} from '../../constants/images'
+
 export default {
   props: {
     v: {
@@ -389,8 +392,10 @@ export default {
     },
     holder: Boolean
   },
-  mounted () {
-    this.$store.dispatch('log', `${this.$route.path}/synthesis`)
+  computed: {
+    vignette35CritAirPng() {
+      return getVignette35CritAirPng(this.v.vignette_numero)
+    }
   }
 }
 

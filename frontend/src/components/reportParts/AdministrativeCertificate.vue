@@ -11,7 +11,7 @@
     </p>
     <p class="text-center">
       <button
-        v-if="imagesLoading === 0"
+        v-show="pdfImagesAreLoaded"
         type="button"
         class="btn btn-animated btn-default btn-sm"
         title="certificat de situation administrative"
@@ -30,6 +30,22 @@ import moment from 'moment'
 import JsPdf from 'jspdf'
 import Qr from 'qr.js'
 
+import {histovecLogoDroiteNamePng, logoMiHeaderPng} from '../../constants/images.js'
+
+const createImage = (url) => {
+  let image = new Image()
+  image.src = url
+
+  return new Promise((resolve) => {
+    if (image.complete) {
+      resolve(image)
+    }
+    image.onload = () => {
+      resolve(image)
+    }
+  })
+}
+
 export default {
   props: {
     v: {
@@ -47,15 +63,9 @@ export default {
   },
   data () {
     return {
-      imagesLoading: -1,
-      images: {
-        marianne: {
-          url: 'assets/images/logo_mi_header.png'
-        },
-        histovec: {
-          url: 'assets/images/histovec-logo-droite-name.png'
-        }
-      }
+      pdfImagesAreLoaded: false,
+      logoMiHeader: undefined,
+      histovecLogoDroiteName: undefined,
     }
   },
   computed: {
@@ -63,16 +73,14 @@ export default {
       return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
     }
   },
-  created () {
-    this.imagesLoading = Object.keys(this.images).length
-    Object.keys(this.images).forEach((key) => {
-      this.images[key].status = false
-      this.images[key].img = new Image()
-      this.images[key].img.src = this.images[key].url
-      this.images[key].img.onload = () => {
-        this.imagesLoading = this.imagesLoading - 1
-      }
-    })
+  async mounted () {
+    const [logoMiHeader, histovecLogoDroiteName] = await Promise.all([
+      createImage(logoMiHeaderPng),
+      createImage(histovecLogoDroiteNamePng)
+    ])
+    this.logoMiHeader = logoMiHeader
+    this.histovecLogoDroiteName = histovecLogoDroiteName
+    this.pdfImagesAreLoaded = true
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/csa`)
@@ -83,6 +91,7 @@ export default {
       n = n + ''
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     },
+    // @todo: generate PDF using HTML template for more maintenability.
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
 
@@ -98,7 +107,7 @@ export default {
             size: [0.4, 0.4, 0.4, 0.4],
             type: 'F'
           },
-          logo: {
+          histovecLogoDroiteName: {
             pos: [170, 241, 24, 15]
           },
           text: {
@@ -107,7 +116,7 @@ export default {
             size: 5
           }
         },
-        marianne: {
+        logoMiHeader: {
           render: true,
           pos: [82, 10, 46, 24]
         },
@@ -241,10 +250,10 @@ export default {
         })
         pdf.setFontSize(p.qr.text.size)
         pdf.text(p.qr.text.pos[0], p.qr.text.pos[1], self.baseurl, null, p.qr.text.rot)
-        pdf.addImage(this.images['histovec'].img, 'PNG', p.qr.logo.pos[0], p.qr.logo.pos[1], p.qr.logo.pos[2], p.qr.logo.pos[3])
+        pdf.addImage(this.histovecLogoDroiteName, 'PNG', p.qr.histovecLogoDroiteName.pos[0], p.qr.histovecLogoDroiteName.pos[1], p.qr.histovecLogoDroiteName.pos[2], p.qr.histovecLogoDroiteName.pos[3])
       } // end of QR Code
-      if (p.marianne.render) { // logo Marianne
-        pdf.addImage(this.images['marianne'].img, 'PNG', p.marianne.pos[0], p.marianne.pos[1], p.marianne.pos[2], p.marianne.pos[3])
+      if (p.logoMiHeader.render) { // logo Marianne
+        pdf.addImage(this.logoMiHeader, 'PNG', p.logoMiHeader.pos[0], p.logoMiHeader.pos[1], p.logoMiHeader.pos[2], p.logoMiHeader.pos[3])
       } // end of logo Marianne
       if (p.title.render) { // pdf title
         pdf.setFontType(p.title.type)
