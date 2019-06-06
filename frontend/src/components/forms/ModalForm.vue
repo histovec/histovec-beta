@@ -19,7 +19,7 @@
                 </h6>
               </div>
               <div class="modal-body">
-                <div v-if="mode === 'rating'">
+                <div v-if="mode === contact.mode.rating">
                   <label>
                     Comment évaluez-vous HistoVec :
                     <span
@@ -31,10 +31,10 @@
                   </label>
                   <div class="rating position_left p-g-10">
                     <span
-                      v-if="errors.includes('note')"
+                      v-if="errors.includes(contact.error.note)"
                       class="info_red txt-small-11"
                     >
-                      {{ errorMessage['note'] }}
+                      {{ contact.error.note }}
                       <br />
                     </span>
                     <span
@@ -66,34 +66,29 @@
                   </p>
                   <br />
                 </div>
-                <div v-if="mode !== 'rating'">
+                <div v-if="mode !== contact.mode.rating">
                   <div
                     class="form-group has-feedback"
-                    :class="[{'has-error' : (errors.includes('object'))}]"
+                    :class="[{'has-error' : (errors.includes(contact.error.subject))}]"
                   >
                     <label>
-                      Objet
+                      Sujet
                     </label>
                     <span
-                      v-if="errors.includes('object')"
+                      v-if="errors.includes(contact.error.subject)"
                       class="info_red txt-small-11"
                     >
-                      {{ errorMessage['object'] }}
+                      {{ contact.error.subject }}
                     </span>
                     <select
-                      v-model="object"
+                      v-model="subject"
                       class="col-sm-12 col-xs-12"
                     >
                       <option
-                        disabled
-                        selected
-                        value=""
-                      >
-                        Choisissez
-                      </option>
-                      <option
-                        v-for="(entry, index) in objects"
+                        v-for="(entry, index) in contact.subject"
                         :key="index"
+                        :value="entry"
+                        :disabled="entry === contact.subject.default"
                       >
                         {{ entry }}
                       </option>
@@ -106,7 +101,7 @@
                   :class="[{'has-error' : (errors.includes('email'))}]"
                 >
                   <p>
-                    <label v-if="mode === 'rating'">
+                    <label v-if="mode === contact.mode.rating">
                       Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
                       <i>(L'adresse email ne servira que dans le cadre de l'amélioration du service)</i>
                     </label>
@@ -114,10 +109,10 @@
                       Courriel
                     </label>
                     <span
-                      v-if="errors.includes('email')"
+                      v-if="errors.includes(contact.error.mail)"
                       class="info_red txt-small-11"
                     >
-                      {{ errorMessage['email'] }}
+                      {{ contact.error.mail }}
                     </span>
                     <input
                       id="email"
@@ -128,7 +123,7 @@
                     >
                   </p>
                 </div>
-                <div v-if="mode !== 'rating'">
+                <div v-if="mode !== contact.mode.rating">
                   <div class="form-group">
                     <p class="m-h-10">
                       <label>Message (optionnel) :</label>
@@ -186,7 +181,7 @@
               <div class="modal-footer">
                 <div class="row">
                   <div class="col-md-6 m-h-15 position_left">
-                    <label v-if="mode === 'rating'">
+                    <label v-if="mode === contact.mode.rating">
                       <input
                         id="showModal"
                         v-model="notShow"
@@ -198,10 +193,10 @@
                   </div>
                   <div class="col-md-6">
                     <span
-                      v-if="errors.includes('api')"
+                      v-if="errors.includes(contact.error.api)"
                       class="info_red txt-small-11"
                     >
-                      {{ errorMessage['api'] }}
+                      {{ contact.error.api }}
                       <br />
                     </span>
                     <button
@@ -242,17 +237,10 @@ import { detect } from 'detect-browser'
 export default {
   data () {
     return {
-      errorMessage: {
-        'object': 'Veuillez choisir un objet',
-        'email': 'L\'adresse email n\'est pas valide',
-        'note': 'L\'évaluation est obligatoire',
-        'api': 'Service indisponible, votre retour n\'a pas pu être pris en compte'
-      },
       notShow: false,
       ratings: [1, 2, 3, 4, 5],
       tempValue: undefined,
       disabled: false,
-      object: '',
       message: '',
       email: '',
       note: undefined,
@@ -260,77 +248,45 @@ export default {
     }
   },
   computed: {
-    objects () {
-      let o
-      let choices = {
-        'NotFound': {
-          'holder': [
-            'Je ne trouve pas mon véhicule'
-          ],
-          'buyer': [
-            'Le lien transmis ne fonctionne pas'
-          ],
-          'anyOne': []
-        },
-        'Found': {
-          'holder': [
-            'Le certificat administratif détaillé est malformé'
-          ],
-          'buyer': [],
-          'anyOne': [
-            'Problème avec les données de mon véhicule'
-          ],
-        },
-        'anyOne': [
-          'Problème de téléprocédure d\'immatriculation',
-          'Autre problème'
-        ]
-      }
-      if (this.$store.state.histovec.v) {
-        o = choices['Found'][this.who].concat(choices['Found']['anyOne'].concat(choices['anyOne']))
-      } else {
-        o = this.who ? choices['NotFound'][this.who].concat(choices['NotFound']['anyOne'].concat(choices['anyOne'])) : choices['anyOne']
-      }
-      return o.filter((e) => { return e })
-    },
     who () {
       return this.$store.state.histovec.id ? (this.$store.state.histovec.code ? 'holder' : 'buyer') : undefined
     },
     mode () {
       return this.$store.state.modalFormMode
     },
+    subject: {
+      get () {
+        return this.$store.state.modalFormSubject
+      },
+      set (value) {
+        this.$store.commit('updateModalFormSubject', value)
+      }
+    },
     apiName () {
-      return this.mode === 'rating' ? 'feedback' : 'contact'
+      return this.mode === this.contact.mode.rating ? 'feedback' : 'contact'
     },
     dispatchName () {
-      return this.mode === 'rating' ? 'sendFeedback' : 'sendContact'
+      return this.mode === this.contact.mode.rating ? 'sendFeedback' : 'sendContact'
     },
     title () {
-      let titles = {
-        rating: 'Votre évaluation',
-        contact: 'Contact',
-        error: 'Signaler une erreur',
-        holderNotFound: 'Je ne trouve pas mon véhicule',
-        buyerNotFound: 'Signaler une erreur de lien invalide'
-      }
-      return titles[this.mode] || this.mode
+      return this.mode
     },
     filteredMessage () {
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
     },
     errors () {
       let errorList = []
-      if (this.clicked && (this.mode !== 'rating') && (this.object === '')) {
-        errorList.push('object')
+      if (this.clicked && (this.mode !== this.contact.mode.rating) && (this.subject === this.contact.subject.default)) {
+        errorList.push(this.contact.error.subject)
       }
-      if (this.clicked && ((this.mode === 'rating') && !this.note)) {
-        errorList.push('note')
+      if (this.clicked && ((this.mode === this.contact.mode.rating) && !this.note)) {
+        errorList.push(this.contact.error.note)
       }
-      if (this.clicked && (this.email || this.mode !== 'rating') && !this.isEmailValid()) {
-        errorList.push('email')
+      if (this.clicked && (this.email || this.mode !== this.contact.mode.rating) && !this.isEmailValid()) {
+        errorList.push(this.contact.error.mail)
       }
       if (this.clicked && this.$store.state.api && this.$store.state.api.http[this.apiName] && (this.$store.state.api.http[this.apiName] !== 201)) {
-        errorList.push('api')
+        errorList.push(this.contact.error.api)
       }
       return errorList
     },
@@ -386,7 +342,7 @@ export default {
           'date': new Date().toUTCString(),
           'holder': (this.who === 'holder'),
           'browser': detect(),
-          'identity': (this.mode === 'rating') ? undefined :
+          'identity': (this.mode === this.contact.mode.rating) ? undefined :
             {
               typeImmatriculation: this.$store.state.identity.typeImmatriculation,
               typePersonne: this.$store.state.identity.typePersonne,
@@ -400,7 +356,7 @@ export default {
         }
         await this.$store.dispatch(this.dispatchName, data)
         if (this.$store.state.api.http[this.apiName] === 201) {
-          if (this.mode === 'rating') {
+          if (this.mode === this.contact.mode.rating) {
             localStorage.setItem('evaluation', true, 1)
           }
           this.$store.dispatch('toggleModalForm')

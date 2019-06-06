@@ -424,7 +424,7 @@ export default {
       if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
         setTimeout(() => {
           if (!this.$store.state.modalForm && this.$route.path.match(/report/)) {
-            this.$store.dispatch('toggleModalForm', 'rating')
+            this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.rating } )
           }
         }, this.modalFormTimer)
       }

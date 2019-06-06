@@ -8,6 +8,8 @@ import objectPath from 'object-path'
 
 import api from '@/api'
 
+import contact from '@/assets/json/contact.json'
+
 const vuexLocal = new VuexPersistence({
   storage: window.sessionStorage
 })
@@ -57,7 +59,8 @@ export default new Vuex.Store({
       utacGraph: ['ctrl', 'alt', 'g'],
     },
     modalForm: false,
-    modalFormMode: 'contact',
+    modalFormMode: contact.mode.contact,
+    modalFormSubject: '',
     feedback: {},
     contact: {}
   },
@@ -74,6 +77,9 @@ export default new Vuex.Store({
     },
     updateModalFormMode (state, mode) {
       state.modalFormMode = mode
+    },
+    updateModalFormSubject (state, subject) {
+      state.modalFormSubject = subject
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
@@ -100,9 +106,14 @@ export default new Vuex.Store({
       await api.log(path, localStorage.getItem('userId'))
       commit('updateLogCounter')
     },
-    async toggleModalForm ({ state, commit, dispatch }, mode) {
+    async toggleModalForm ({ state, commit, dispatch }, message ) {
+      let mode = ( message && message.mode ) || contact.mode.contact
+      let subject = ( message && message.subject ) || contact.mode.subject
+      /* eslint-disable-next-line */
+      console.log(message, mode, subject)
       await commit('toggleModalForm')
       await commit('updateModalFormMode', mode)
+      await commit('updateModalFormSubject', subject)
       if (state.modalForm && mode) {
         await dispatch('log', mode)
       }

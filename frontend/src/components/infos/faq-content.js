@@ -4,25 +4,26 @@ import slugify from '@/assets/js/slugify.js'
 import aideSIV from '@/assets/img/aide_siv.jpg'
 import aideFNI from '@/assets/img/aide_fni.jpg'
 import store from '@/store'
+import contact from '@/assets/json/contact.json'
 
-const mailSubjects = {
-  error: 'Signaler une erreur',
-  holderNotFound: 'Je ne trouve pas mon véhicule',
-  contact: 'Contact',
-  buyerNotFound: 'Signaler une erreur de lien invalide'
-}
 
-const contactHook = (id, mode = 'contact', mailBody = undefined) => {
+const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.contact, mailBody = undefined) => {
+  /* eslint-disable-next-line */
+  console.log(id, mode, subject)
   return {
     [id]: (e) => {
       if (store.state.config.v1) {
         e.removeAttribute('href')
-        e.onclick = () => { store.dispatch('toggleModalForm', mailSubjects[mode]) }
+        e.onclick = async () => {
+          /* eslint-disable-next-line */
+          console.log(mode, subject)
+          await store.dispatch('toggleModalForm', { mode: mode, subject: subject })
+        }
       } else {
         if (mailBody) {
-          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(mailSubjects[mode])}&body=${mailBody}`
+          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(subject)}&body=${mailBody}`
         } else {
-          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(mailSubjects[mode])}`
+          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(subject)}`
         }
         e.onclick = () => { return }
       }
@@ -192,7 +193,7 @@ export default function (mailBody) {
           </a>
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, 'error'),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error),
       react: { object: store.state.config, key: 'v1'}
     },
     {
@@ -249,7 +250,7 @@ export default function (mailBody) {
           >contactez-nous</a>.
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, 'holderNotFound', mailBody),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.holderNotFound, mailBody),
       react: { object: store.state.config, key: 'v1'}
     },
     {
@@ -425,7 +426,7 @@ export default function (mailBody) {
         </a>
       </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, 'buyerNotFound'),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.buyerNotFound),
       react: { object: store.state.config, key: 'v1'}
     }
   ]
