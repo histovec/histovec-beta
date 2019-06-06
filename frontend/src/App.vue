@@ -89,7 +89,7 @@
                           <a
                             :href="$store.state.config.v1 ? undefined : 'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'"
                             title="Contact"
-                            @click="toggleModalForm('contact')"
+                            @click="toggleModalForm()"
                           >
                             Contact
                           </a>
@@ -98,7 +98,7 @@
                           <a
                             :href="$store.state.config.v1 ? undefined : 'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'"
                             title="Signaler une erreur"
-                            @click="toggleModalForm('error')"
+                            @click="toggleModalForm(contact.mode.contact, contact.subject.error)"
                           >
                             Signaler une erreur
                           </a>
@@ -213,6 +213,7 @@ import operations from './assets/json/operations.json'
 import usages from './assets/json/usages.json'
 import synthese from './assets/json/synthese.json'
 import statusMessages from './assets/json/status.json'
+import contact from './assets/json/contact.json'
 import verbatims from './assets/json/verbatims.json'
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
@@ -239,6 +240,7 @@ Vue.mixin({
       usages: usages,
       synthese: synthese,
       statusMessages: statusMessages,
+      contact: contact,
       verbatims: verbatims,
       lang: localization.default,
       show: false
@@ -273,9 +275,9 @@ export default {
     }
   },
   methods: {
-    toggleModalForm (mode) {
+    toggleModalForm (mode = contact.mode.contact, subject = contact.subject.contact) {
       if (this.$store.state.config.v1) {
-        this.$store.dispatch('toggleModalForm', mode)
+        this.$store.dispatch('toggleModalForm', { mode: mode, subject: subject })
       }
     }
   }
