@@ -1,2 +1,2 @@
 export * from './body-mail-template'
-export * from './send-contact-mail'
+export * from './send-mail-to-support'

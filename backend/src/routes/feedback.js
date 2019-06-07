@@ -2,7 +2,7 @@ import elasticsearch from '../connectors/elasticsearch'
 import config from '../config'
 import { checkUuid } from '../util/crypto'
 import { appLogger } from '../util/logger'
-import { sendContactMail } from '../mail'
+import { sendMailToSupport } from '../mail'
 
 export const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -47,10 +47,6 @@ export async function sendFeedback (req, res) {
       type: 'feedback',
       body: feedback
     })
-    res.status(201).json({
-      success: true,
-      message: "feedback indexed"
-    })
   } catch (error) {
     appLogger.warn(
       `Couldn't create feedback in elasticsearch :
@@ -62,6 +58,23 @@ export async function sendFeedback (req, res) {
       message: error.message
     })
   }
+  try {
+    await sendMailToSupport(req.body.email, `[Feedback ${req.body.uuid.substring(0,6)} - ${req.body.note}/5]`, req.body)
+  } catch (error) {
+    appLogger.warn(
+      `Couldn't create feedback in elasticsearch :
+      {'body': '${JSON.stringify(req.body)}'}
+      ${error.message}`
+    )
+    res.status(201).json({
+      success: false,
+      message: "feedback indexed but couldn't send mail"
+    })
+  }
+  res.status(201).json({
+    success: true,
+    message: "feedback indexed and mail sent"
+  })
 }
 
 export async function sendContact (req, res) {
@@ -85,7 +98,7 @@ export async function sendContact (req, res) {
   try {
     res.status(201).json({
       success: true,
-      message: await sendContactMail(req.body.email, req.body.subject, req.body)
+      message: await sendMailToSupport(req.body.email, req.body.subject, req.body)
     })
   } catch (error) {
     res.status(500).json({

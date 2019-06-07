@@ -98,7 +98,7 @@
                 </div>
                 <div
                   class="form-group has-feedback"
-                  :class="[{'has-error' : (errors.includes('email'))}]"
+                  :class="[{'has-error' : (errors.includes(contact.error.email))}]"
                 >
                   <p>
                     <label v-if="mode === contact.mode.rating">
@@ -269,7 +269,7 @@ export default {
       return this.mode === this.contact.mode.rating ? 'sendFeedback' : 'sendContact'
     },
     title () {
-      return this.mode
+      return this.contact.title[this.mode]
     },
     filteredMessage () {
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
@@ -303,8 +303,6 @@ export default {
         return 'init'
       }
     }
-  },
-  created () {
   },
   methods: {
     normalize (string) {
