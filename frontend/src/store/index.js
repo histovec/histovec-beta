@@ -43,7 +43,8 @@ export default new Vuex.Store({
       utacGraph: false,
       pdf: true,
       updateDate: true,
-      v1: false
+      v1: false,
+      blocANTS: false
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
@@ -57,6 +58,7 @@ export default new Vuex.Store({
       v1: ['ctrl','alt','v'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
+      blocANTS: ['ctrl', 'alt', 'r'],
     },
     modalForm: false,
     modalFormMode: contact.mode.contact,

@@ -32,8 +32,13 @@
               </router-link>
               <!-- fin bouton vendeur -->
               <div class="separator clearfix"></div>
-              <p>
+              <p v-if="!$store.state.config.blocANTS">
                 Rassurez vos acheteurs potentiels.
+              </p>
+              <p v-if="$store.state.config.blocANTS">
+                <span class="text-defaut text-defaut-i-g">Rassurez</span> vos acheteurs potentiels avec le <span class="text-defaut text-defaut-i-g">rapport</span>
+                <br />
+                et obtenez votre <span class="text-defaut text-defaut-i-g">certificat de non gage</span>.
               </p>
             </div>
           </div>
@@ -49,8 +54,13 @@
               </router-link>
               <!-- fin bouton acheteur -->
               <div class="separator clearfix"></div>
-              <p>
+              <p v-if="!$store.state.config.blocANTS">
                 Achetez en confiance : demandez au vendeur le rapport.
+              </p>
+              <p v-if="$store.state.config.blocANTS">
+                Achetez en <span class="text-defaut text-defaut-i-g">confiance</span> :
+                <br />
+                demandez au vendeur le <span class="text-defaut text-defaut-i-g">rapport</span>.
               </p>
             </div>
           </div>
@@ -263,7 +273,10 @@
     </section>
     <br />
     <section class="light-gray-bg pv-20 clearfix">
-      <div class="container">
+      <div
+        v-if="!$store.state.config.blocANTS"
+        class="container"
+      >
         <div class="row">
           <div class="col-lg-6">
             <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
@@ -297,6 +310,79 @@
               <p>
                 Achetez en confiance : demandez au vendeur le rapport.
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        v-if="$store.state.config.blocANTS"
+        class="container"
+      >
+        <div class="row justify-content-md-center">
+          <div class="col-lg-12">
+            <h2 class="text-center">
+              Bon à savoir
+            </h2>
+            <div class="separator"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-5 col-lg-offset-1">
+            <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec">
+              <div class="text-center">
+                <span class="icon default-bg circle"><i class="fa fa-handshake-o"></i></span>
+                <h3>
+                  Vendeur
+                </h3>
+                <div class="separator clearfix"></div>
+              </div>
+              <div>
+                <p> Documents à fournir à votre acheteur :</p>
+                <ul>
+                  <li>Attestation de machun bidule truc</li>
+                  <li>Attestation de bidouille</li>
+                  <li>Formulaire de jeux de mots</li>
+                </ul>
+                <p>
+                  Pour les obtenir rendez-vous sur l'
+                  <a
+                    target="_blank"
+                    title="Système d'Immatriculation des Véhicules"
+                    href="https://immatriculation.ants.gouv.fr/"
+                  >
+                    ANTS
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec">
+              <div class="text-center">
+                <span class="icon default-bg circle"><i class="fa fa-users"></i></span>
+                <h3>
+                  Acheteur
+                </h3>
+                <div class="separator clearfix"></div>
+              </div>
+              <div>
+                <p> Vous venez d'acquérir votre véhicule, vous devez :</p>
+                <ul>
+                  <li>Faire la demande de changement de titulaire</li>
+                </ul>
+                <br />
+                <br />
+                <p>
+                  Pour ce faire, rendez-vous sur l'
+                  <a
+                    target="_blank"
+                    title="Système d'Immatriculation des Véhicules"
+                    href="https://immatriculation.ants.gouv.fr/"
+                  >
+                    ANTS
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
