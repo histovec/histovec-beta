@@ -1,7 +1,15 @@
 {
   "mode": {
+    "rating": "rating",
+    "contact": "contact"
+  },
+  "title": {
     "rating": "Votre évaluation",
     "contact": "Contact"
+  },
+  "route": {
+    "rating": "feedback",
+    "contact": "contact"
   },
   "subject": {
     "default": "Choisissez",

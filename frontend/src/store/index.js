@@ -111,13 +111,11 @@ export default new Vuex.Store({
     async toggleModalForm ({ state, commit, dispatch }, message ) {
       let mode = ( message && message.mode ) || contact.mode.contact
       let subject = ( message && message.subject ) || contact.mode.subject
-      /* eslint-disable-next-line */
-      console.log(message, mode, subject)
       await commit('toggleModalForm')
       await commit('updateModalFormMode', mode)
       await commit('updateModalFormSubject', subject)
       if (state.modalForm && mode) {
-        await dispatch('log', mode)
+        await dispatch('log', contact.route[mode])
       }
     },
     async sendFeedback ({ state, commit }, feedback) {
