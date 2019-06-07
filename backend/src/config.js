@@ -13,7 +13,7 @@ const config = {
   redisUrl: `redis://${process.env.REDIS_URL}`,
   redisPersit: process.env.REDIS_PERSIST || 86400,
   esUrl: process.env.ES_URL,
-  esHistoVecIndex: process.env.ES_INDEX,
+  esSIVIndex: process.env.ES_INDEX,
   esFeedbackIndex: 'feedback',
   utacUrl: process.env.UTAC_URL,
   utacTimeout: process.env.UTAC_TIMEOUT,
