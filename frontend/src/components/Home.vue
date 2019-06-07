@@ -60,7 +60,7 @@
               <p v-if="$store.state.config.blocANTS">
                 Achetez en <span class="text-defaut text-defaut-i-g">confiance</span> :
                 <br />
-                demandez au vendeur le <span class="text-defaut text-defaut-i-g">rapport</span>.
+                demandez le <span class="text-defaut text-defaut-i-g">rapport</span> au vendeur.
               </p>
             </div>
           </div>
@@ -327,7 +327,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-5 col-lg-offset-1">
+          <div class="col-lg-6">
             <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec">
               <div class="text-center">
                 <span class="icon default-bg circle"><i class="fa fa-handshake-o"></i></span>
@@ -337,26 +337,45 @@
                 <div class="separator clearfix"></div>
               </div>
               <div>
-                <p> Documents à fournir à votre acheteur :</p>
                 <ul>
-                  <li>Attestation de machun bidule truc</li>
-                  <li>Attestation de bidouille</li>
-                  <li>Formulaire de jeux de mots</li>
+                  <li>
+                    Prendre connaissance des démarches
+                    (
+                    <a
+                      href="https://www.service-public.fr/particuliers/vosdroits/F1707"
+                      target="_blank"
+                    >
+                      Service Public
+                    </a>
+                    )
+                  </li>
+                  <li>
+                    Télécharger un certificat de situation administrative
+                    (
+                    <a
+                      href="/histovec/search"
+                      target="_blank"
+                    >
+                      HistoVec
+                    </a>
+                    )
+                  </li>
+                  <li>
+                    Déclarer la cession d'un véhicule
+                    (
+                    <a
+                      href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
+                      target="_blank"
+                    >
+                      ANTS
+                    </a>
+                    )
+                  </li>
                 </ul>
-                <p>
-                  Pour les obtenir rendez-vous sur l'
-                  <a
-                    target="_blank"
-                    title="Système d'Immatriculation des Véhicules"
-                    href="https://immatriculation.ants.gouv.fr/"
-                  >
-                    ANTS
-                  </a>
-                </p>
               </div>
             </div>
           </div>
-          <div class="col-lg-5">
+          <div class="col-lg-6">
             <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec">
               <div class="text-center">
                 <span class="icon default-bg circle"><i class="fa fa-users"></i></span>
@@ -366,22 +385,30 @@
                 <div class="separator clearfix"></div>
               </div>
               <div>
-                <p> Vous venez d'acquérir votre véhicule, vous devez :</p>
                 <ul>
-                  <li>Faire la demande de changement de titulaire</li>
+                  <li>
+                    Prendre connaissance des démarches
+                    (
+                    <a
+                      href="https://www.service-public.fr/particuliers/vosdroits/F24254"
+                      target="_blank"
+                    >
+                      Service Public
+                    </a>
+                    )
+                  </li>
+                  <li>
+                    Faire une demande de changement de titulaire du certificat d'immatriculation
+                    (
+                    <a
+                      href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
+                      target="_blank"
+                    >
+                      ANTS
+                    </a>
+                    )
+                  </li>
                 </ul>
-                <br />
-                <br />
-                <p>
-                  Pour ce faire, rendez-vous sur l'
-                  <a
-                    target="_blank"
-                    title="Système d'Immatriculation des Véhicules"
-                    href="https://immatriculation.ants.gouv.fr/"
-                  >
-                    ANTS
-                  </a>
-                </p>
               </div>
             </div>
           </div>
