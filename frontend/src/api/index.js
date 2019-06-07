@@ -9,15 +9,23 @@ const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.APP).rep
 
 
 const apiPaths = (apiName, future = false) => {
-  let dic = {
-    log: 'log',
-    histovec: 'id',
-    feedback: 'feedback',
-    contact: 'contact',
-    utac: 'utac',
-    stream: 'stream'
+  let apiRoute = {
+    current: {
+      log: 'log',
+      histovec: 'id',
+      feedback: 'feedback',
+      contact: 'contact'
+    },
+    future: {
+      log: 'log',
+      histovec: 'siv',
+      feedback: 'feedback',
+      contact: 'contact',
+      utac: 'utac'
+    }
+    // stream: 'stream'
   }
-  return future ? `${apiFutureUrl}/${dic[apiName]}` : `${apiUrl}/${dic[apiName]}`
+  return future ? `${apiFutureUrl}/${apiRoute.future[apiName]}` : `${apiUrl}/${apiRoute.current[apiName]}`
 }
 
 const decrypt = (encrypted, key) => {

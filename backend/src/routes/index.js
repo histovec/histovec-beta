@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.get('/version', (req, res) => res.send({ version: config.version }))
 router.get('/health', (req, res) => res.send({ status: 'ok' }))
-router.post('/id', getHistoVec)
+router.post('/siv', getHistoVec)
 router.post('/utac', getUTAC)
 // router.get('/stream', streamedReport)
 router.post('/feedback', sendFeedback)
