@@ -59,7 +59,7 @@ export async function sendFeedback (req, res) {
     })
   }
   try {
-    await sendMailToSupport(req.body.email, `[Feedback ${req.note}/5 ${req.uuid}]`, req.body)
+    await sendMailToSupport(req.body.email, `[Feedback ${req.body.uuid.substring(0,6)} - ${req.body.note}/5]`, req.body)
   } catch (error) {
     appLogger.warn(
       `Couldn't create feedback in elasticsearch :
