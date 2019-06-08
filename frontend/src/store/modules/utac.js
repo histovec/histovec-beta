@@ -12,17 +12,17 @@ export default {
     updateToken (state, token) {
       state.token = token
     },
-    clearTechControl (state) {
+    clearUTAC (state) {
       state.ct = undefined
       state.token = undefined
     }
   },
   actions: {
-    async getTechControl ({ commit, state, rootState }) {
+    async getUTAC ({ commit, state, rootState }) {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.utac) {
         return
       }
-      const response = await api.getUTAC(rootState.histovec.id, rootState.histovec.code, state.token, rootState.histovec.key, rootState.histovec.utacId, localStorage.getItem('userId'))
+      const response = await api.getUTAC(rootState.siv.id, rootState.siv.code, state.token, rootState.siv.key, rootState.siv.utacId, localStorage.getItem('userId'))
       if (response.success) {
         commit('updateCT', response.ct)
       }

@@ -4,7 +4,7 @@ import operations from '../json/operations.json'
 import suspensions from '../json/suspensions.json'
 
 
-export default { histovec }
+export default { siv }
 
 const missing = 'non disponible'
 
@@ -205,7 +205,7 @@ function calcNbTit (historique) {
   return nbTit.length
 }
 
-function histovec (veh) {
+function siv (veh) {
   if (veh === undefined) {
     return false
   } else if (veh.annulation_ci === 'OUI') {

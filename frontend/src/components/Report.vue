@@ -289,7 +289,7 @@ import TechControlGraph from './reportParts/TechControlGraph.vue'
 import AdministrativeCertificate from './reportParts/AdministrativeCertificate.vue'
 import Share from './reportParts/Share.vue'
 import Status from './reportParts/Status.vue'
-import histovec from '../assets/js/histovec'
+import siv from '../assets/js/siv'
 
 const statusFromCode = {
   'holder': {
@@ -343,8 +343,8 @@ export default {
       return (k !== undefined) ? k.replace(/-/g, '+').replace(/_/g, '/') : undefined
     },
     status () {
-      if (this.$store.state.histovec.v) {
-        if (this.$store.state.histovec.v.annulation_ci === 'OUI') {
+      if (this.$store.state.siv.v) {
+        if (this.$store.state.siv.v.annulation_ci === 'OUI') {
           return 'cancelled'
         }
         this.showModalForm()
@@ -353,37 +353,37 @@ export default {
         return 'invalidBuyer'
       } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         return 'invalid'
-      } else if (this.$store.state.api.fetching.histovec ||
-                (this.$store.state.api.http.histovec === undefined) ||
-                ((this.$store.state.api.hit.histovec === undefined) && (!this.$store.state.config.v1)) ||
-                (this.$store.state.api.decrypted.histovec === undefined)) {
+      } else if (this.$store.state.api.fetching.siv ||
+                (this.$store.state.api.http.siv === undefined) ||
+                ((this.$store.state.api.hit.siv === undefined) && (!this.$store.state.config.v1)) ||
+                (this.$store.state.api.decrypted.siv === undefined)) {
           return 'wait'
-      } else if (this.$store.state.api.http.histovec !== 200) {
-        return this.holder ? statusFromCode.holder[this.$store.state.api.http.histovec] :
-                             statusFromCode.buyer[this.$store.state.api.http.histovec]
-      } else if (!this.$store.state.api.hit.histovec) {
+      } else if (this.$store.state.api.http.siv !== 200) {
+        return this.holder ? statusFromCode.holder[this.$store.state.api.http.siv] :
+                             statusFromCode.buyer[this.$store.state.api.http.siv]
+      } else if (!this.$store.state.api.hit.siv) {
         return this.holder ? 'notFound' : 'notFoundBuyer'
-      } else if (!this.$store.state.api.decrypted.histovec) {
+      } else if (!this.$store.state.api.decrypted.siv) {
         return this.holder ? 'decryptError' : 'decryptErrorBuyer'
       }
       return 'error'
     },
     v () {
-      return histovec.histovec(this.$store.state.histovec.v)
+      return siv.siv(this.$store.state.siv.v)
     },
     holder () {
-      return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.histovec.code !== undefined))
+      return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
     },
     ct () {
-      return this.$store.state.techControl.ct || []
+      return this.$store.state.utac.ct || []
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      let urlKey = (this.$store.state.histovec.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
-      return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.histovec.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
+      let urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
+      return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },
   created () {
@@ -396,11 +396,11 @@ export default {
     if (this.$route.params.code !== undefined) {
       this.$store.commit('updateCode', this.$route.params.code)
     }
-    this.getHistoVec()
+    this.getSIV()
   },
   methods: {
-    async getHistoVec () {
-      if (this.$store.state.histovec.v) {
+    async getSIV () {
+      if (this.$store.state.siv.v) {
         // déjà en cache
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
@@ -411,9 +411,9 @@ export default {
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
-        await this.$store.dispatch('getHistoVec', this.$store.state.config.v1)
+        await this.$store.dispatch('getSIV', this.$store.state.config.v1)
         if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.utac) {
-          await this.$store.dispatch('getTechControl')
+          await this.$store.dispatch('getUTAC')
         }
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))

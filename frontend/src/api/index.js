@@ -12,13 +12,13 @@ const apiPaths = (apiName, future = false) => {
   let apiRoute = {
     current: {
       log: 'log',
-      histovec: 'id',
+      siv: 'id',
       feedback: 'feedback',
       contact: 'contact'
     },
     future: {
       log: 'log',
-      histovec: 'siv',
+      siv: 'siv',
       feedback: 'feedback',
       contact: 'contact',
       utac: 'utac'
@@ -281,16 +281,16 @@ const apiClient = {
 }
 
 export default {
-  async getHistoVec (id, key, uuid) {
-    const apiName = 'histovec'
+  async getSIV (id, key, uuid) {
+    const apiName = 'siv'
     let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
       v: ((response.decrypted && response.decrypted.v) || {})
     }
   },
-  async getHistoVecV1 (id, key, uuid) {
-    const apiName = 'histovec'
+  async getSIVv1 (id, key, uuid) {
+    const apiName = 'siv'
     const options = {
       method: 'POST',
       body: JSON.stringify({ id: id, uuid: uuid})
