@@ -26,7 +26,7 @@ export default {
         state.v = undefined
       }
     },
-    clearHistoVec (state) {
+    clearSIV (state) {
       state.v = undefined
       state.key = undefined
       state.code = undefined
@@ -34,15 +34,15 @@ export default {
     }
   },
   actions: {
-    async getHistoVec ({ commit, state, rootState }, future) {
-      if (rootState.api && rootState.api.fetching && rootState.api.fetching.histovec) {
+    async getSIV ({ commit, state, rootState }, future) {
+      if (rootState.api && rootState.api.fetching && rootState.api.fetching.siv) {
         return
       }
       let response
       if (future) {
-        response = await api.getHistoVecV1(state.id, state.key, localStorage.getItem('userId'))
+        response = await api.getSIVv1(state.id, state.key, localStorage.getItem('userId'))
       } else {
-        response = await api.getHistoVec(state.id, state.key, localStorage.getItem('userId'))
+        response = await api.getSIV(state.id, state.key, localStorage.getItem('userId'))
       }
       if (response.success) {
         commit('updateV', response.v)
@@ -55,11 +55,11 @@ export default {
       }
       return
     },
-    // async getHistoVecAndUtac ({ commit, state, rootState}) {
+    // async getSIVAndUtac ({ commit, state, rootState}) {
     //   if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.utac )) {
     //     return
     //   }
-    //   await api.getHistoVecAndUtac(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
+    //   await api.getSIVAndUtac(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
     //     {
     //       histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
     //       utac: ((response) => { if (response.success) { commit('uptateCT', response.ct) } })

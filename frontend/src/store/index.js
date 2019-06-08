@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import histovec from './modules/histovec.js'
 import identity from './modules/identity.js'
-import techControl from './modules/techControl.js'
+import siv from './modules/siv.js'
+import utac from './modules/utac.js'
 import VuexPersistence from 'vuex-persist'
 import objectPath from 'object-path'
 
@@ -132,8 +132,8 @@ export default new Vuex.Store({
   },
   modules: {
     identity,
-    histovec,
-    techControl
+    siv,
+    utac
   },
   plugins: [vuexLocal.plugin]
 })

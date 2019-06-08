@@ -283,7 +283,7 @@ export default {
             },
             {
               key: '- Procédure de réparation contrôlée',
-              value: ((self.v.administratif.ove !== 'Aucune') || (this.$store.state.histovec.v.suspensions && this.$store.state.histovec.v.suspensions.includes('PVE')) ? 'Oui' : 'Aucune')
+              value: ((self.v.administratif.ove !== 'Aucune') || (this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE')) ? 'Oui' : 'Aucune')
             },
             {
               key: '- Déclaration valant saisie',
@@ -318,7 +318,7 @@ export default {
               value: (self.v.administratif.suspension !== 'Non') ? self.v.administratif.suspensions.join(', ') : 'Non'
             },
             {
-              key: '- Immatriculation annulée', 
+              key: '- Immatriculation annulée',
               value: self.v.administratif.annulation
             },
             {
