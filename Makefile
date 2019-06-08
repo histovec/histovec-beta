@@ -25,6 +25,10 @@ export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
 export BACKEND=${APP_PATH}/backend
+export NGINX=${APP_PATH}/nginx
+export FRONTEND_DEV_HOST=frontend-dev
+export FRONTEND_DEV_PORT=8080
+export BACKEND_HOST=backend
 export BACKEND_PORT=8000
 export BACKEND_SECRET=%ch4NGM3!
 export FRONTEND=${APP_PATH}/frontend
@@ -46,7 +50,7 @@ export MAIL_TO=histovec@fake.mi
 export SMTP_SERVER=smtp
 export SMTP_PORT=25
 export REDIS_PERSIST=86400
-export REDIS_URL=cache
+export REDIS_URL=redis
 export MAX_MAP_COUNT=262144
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
@@ -322,18 +326,18 @@ backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
 
 frontend-dev: network tor
 	@echo docker-compose up frontend for dev ${VERSION}
-	${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
 frontend-dev-stop:
-	${DC} -f ${DC_PREFIX}-dev-frontend.yml down
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml down
 
 dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
 	${DC} -f ${DC_PREFIX}-backend.yml logs
 
-dev: network wait-elasticsearch utac-dev smtp-dev backend-dev frontend-dev
+dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop utac-dev-stop smtp-dev-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
 
 frontend-build: network
 	@echo building ${APP} frontend
@@ -343,7 +347,7 @@ frontend-build: network
 	mkdir -p ${FRONTEND}/dist/
 	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 
-build: frontend-build
+build: frontend-build backend-build
 
 update:
 	git pull
@@ -360,7 +364,11 @@ frontend-stop:
 frontend: network tor
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
 
-up: network elasticsearch frontend
+up: network elasticsearch backend-start frontend
+	@echo run all services in production mode
+
+up-fake: up utac-fake smtp-fake
+	@echo run fake services for smtp and utac
 
 backend-dev:
 	@echo docker-compose up backend for dev ${VERSION}
@@ -379,18 +387,21 @@ backend-start:
 backend-stop:
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
 
-utac-dev:
+utac-fake-start:
 	@echo docker-compose up utac simulator for dev ${VERSION}
 	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
-utac-dev-stop:
+utac-fake-stop:
 	@${DC} -f ${DC_PREFIX}-utac.yml down
 
-smtp-dev:
+smtp-fake:
 	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
 	@${DC} -f ${DC_PREFIX}-smtp.yml up -d 2>&1 | grep -v orphan
 
-smtp-dev-stop:
+smtp-fake-stop:
 	@${DC} -f ${DC_PREFIX}-smtp.yml down
 
-down: frontend-stop elasticsearch-stop network-stop
+down: frontend-stop elasticsearch-stop network-stop backend-stop
+
+down-fake: down smtp-fake-stop utac-fake-stop
+
