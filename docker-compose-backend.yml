@@ -50,7 +50,7 @@ services:
 
   redis:
     image: redis
-    container_name: cache
+    container_name: ${APP}-cache
 
 networks:
   default:
