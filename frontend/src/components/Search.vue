@@ -756,8 +756,8 @@ export default {
       }
     },
     async clearReports () {
-      await this.$store.commit('clearHistoVec')
-      await this.$store.commit('clearTechControl')
+      await this.$store.commit('clearSIV')
+      await this.$store.commit('clearUTAC')
     },
     async clearAll () {
       await this.$store.commit('clearIdentity')
@@ -780,7 +780,7 @@ export default {
     async onSubmit () {
       this.status = 'posting'
       if (this.checkFields) {
-        if (this.id !== this.$store.state.histovec.id) {
+        if (this.id !== this.$store.state.siv.id) {
           this.clearReports()
         }
         this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})

@@ -16,11 +16,11 @@ function endStreamEvent(res, status, json) {
   res.end()
 }
 
-async function searchHistoVec(id, uuid) {
+async function searchSIV(id, uuid) {
   try {
     if (checkUuid(uuid) && checkId(id)) {
       const response = await elasticsearch.Client.search({
-        index: config.esHistoVecIndex,
+        index: config.esSIVIndex,
         q: id,
         size: 1,
         terminate_after: 1,
@@ -40,7 +40,7 @@ async function searchHistoVec(id, uuid) {
           appLogger.warn(`Bad Content in elasticsearch response: ${JSON.stringify(response)}`)
           return {
             status: 500,
-            source: 'histovec',
+            source: 'siv',
             message: 'Bad Content'
           }
         }
@@ -48,7 +48,7 @@ async function searchHistoVec(id, uuid) {
         appLogger.debug(`No hit in elasticsearch: ${JSON.stringify(response)}`)
         return {
           status: 404,
-          source: 'histovec',
+          source: 'siv',
           message: 'Not Found'
         }
       }
@@ -56,7 +56,7 @@ async function searchHistoVec(id, uuid) {
       appLogger.debug(`Bad request - invalid uuid or id: {'id': '${id}', 'uudi': '${uuid}}'`)
       return {
         status: 400,
-        source: 'histovec',
+        source: 'siv',
         message: 'Bad Request'
       }
     }
@@ -112,13 +112,13 @@ async function searchUTAC(plaque) {
 
 }
 
-export async function getHistoVec (req, res) {
-  let response = await searchHistoVec(req.body.id, req.body.uuid)
+export async function getSIV (req, res) {
+  let response = await searchSIV(req.body.id, req.body.uuid)
   if (response.status === 200) {
     res.status(200).json({
       success: true,
       status: response.status,
-      source: 'histovec',
+      source: 'siv',
       token: response.token,
       v: response.v
     })
@@ -126,7 +126,7 @@ export async function getHistoVec (req, res) {
     res.status(response.status).json({
       success: false,
       status: response.status,
-      source: 'histovec',
+      source: 'siv',
       message: response.message
     })
   }
@@ -177,30 +177,30 @@ export async function getUTAC (req, res) {
 }
 
 
-export async function streamedReport (req, res) {
-  res.set({
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    "Connection": "keep-alive",
-  })
-  let status = 500
-  let success = false
-  try {
-    let response = await searchHistoVec(req.header('Histovec-Id'), req.header('Histovec-Uuid'))
-    addStreamEvent(res, 'histovec', response.status, response)
+// export async function streamedReport (req, res) {
+//   res.set({
+//     "Content-Type": "text/event-stream",
+//     "Cache-Control": "no-cache",
+//     "Connection": "keep-alive",
+//   })
+//   let status = 500
+//   let success = false
+//   try {
+//     let response = await searchSIV(req.header('Histovec-Id'), req.header('Histovec-Uuid'))
+//     addStreamEvent(res, 'histovec', response.status, response)
 
-    if (response.status === 200) {
-      response = await searchUTAC(req.header('Histovec-Plaque'))
-      addStreamEvent(res, 'utac', response.status, response)
-      success = (response.status === 200)
-      status = success ? 200 : 206
-    } else {
-      addStreamEvent(res, 'histovec', response.status, response)
-      status = response.status
-      success = false
-    }
-    endStreamEvent(res, status, { status: status, success: success })
-  } catch (error) {
-    endStreamEvent(res, status, { status: status, success: success, error: error.message })
-  }
-}
+//     if (response.status === 200) {
+//       response = await searchUTAC(req.header('Histovec-Plaque'))
+//       addStreamEvent(res, 'utac', response.status, response)
+//       success = (response.status === 200)
+//       status = success ? 200 : 206
+//     } else {
+//       addStreamEvent(res, 'histovec', response.status, response)
+//       status = response.status
+//       success = false
+//     }
+//     endStreamEvent(res, status, { status: status, success: success })
+//   } catch (error) {
+//     endStreamEvent(res, status, { status: status, success: success, error: error.message })
+//   }
+// }

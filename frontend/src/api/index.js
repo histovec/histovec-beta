@@ -9,15 +9,23 @@ const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.APP).rep
 
 
 const apiPaths = (apiName, future = false) => {
-  let dic = {
-    log: 'log',
-    histovec: 'id',
-    feedback: 'feedback',
-    contact: 'contact',
-    utac: 'utac',
-    stream: 'stream'
+  let apiRoute = {
+    current: {
+      log: 'log',
+      siv: 'id',
+      feedback: 'feedback',
+      contact: 'contact'
+    },
+    future: {
+      log: 'log',
+      siv: 'siv',
+      feedback: 'feedback',
+      contact: 'contact',
+      utac: 'utac'
+    }
+    // stream: 'stream'
   }
-  return future ? `${apiFutureUrl}/${dic[apiName]}` : `${apiUrl}/${dic[apiName]}`
+  return future ? `${apiFutureUrl}/${apiRoute.future[apiName]}` : `${apiUrl}/${apiRoute.current[apiName]}`
 }
 
 const decrypt = (encrypted, key) => {
@@ -273,16 +281,16 @@ const apiClient = {
 }
 
 export default {
-  async getHistoVec (id, key, uuid) {
-    const apiName = 'histovec'
+  async getSIV (id, key, uuid) {
+    const apiName = 'siv'
     let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
       v: ((response.decrypted && response.decrypted.v) || {})
     }
   },
-  async getHistoVecV1 (id, key, uuid) {
-    const apiName = 'histovec'
+  async getSIVv1 (id, key, uuid) {
+    const apiName = 'siv'
     const options = {
       method: 'POST',
       body: JSON.stringify({ id: id, uuid: uuid})
