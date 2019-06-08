@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   backend:
-    image: ${APP}-backend
+    image: ${APP}-backend-${EXEC_ENV}
     build:
       context: ${BACKEND}
       target: ${EXEC_ENV}
@@ -17,7 +17,7 @@ services:
         app_name: ${APP}
         app_ver: ${APP_VERSION}
         port: ${BACKEND_PORT}
-    container_name: ${APP}-backend
+    container_name: ${APP}-backend-${EXEC_ENV}
     environment:
       - NODE_ENV=${EXEC_ENV}
       - BACKEND_PORT=${BACKEND_PORT}
@@ -35,8 +35,9 @@ services:
       - MAIL_TO=${MAIL_TO}
     volumes:
       - ${BACKEND}/src:/${APP}/src/
+      - ${BACKEND}/dist:/${APP}/dist/
       - /${APP}/node_modules
-    restart: always
+    restart: on-failure
     links:
       - redis
     healthcheck:

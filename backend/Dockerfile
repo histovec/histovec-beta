@@ -14,7 +14,8 @@ ARG port
 # Base dir /app
 WORKDIR /$app_path
 
-VOLUME /$app_path/src
+VOLUME /${app_path}/src
+VOLUME /${app_path}/dist
 
 # Expose the listening port of your app
 EXPOSE ${port}
@@ -57,20 +58,24 @@ CMD ["npm","run",  "dev"]
 ##########################
 FROM development as build
 ENV NPM_CONFIG_LOGLEVEL warn
+
+COPY src src/
+
 # Transpile the code with babel
-RUN npm run dev
+CMD ["npm","run",  "build"]
 
 ###############################
 # Step 4: "production" target #
 ###############################
+FROM development as production
 
-FROM build as production
 ARG NPM_AUDIT_DRY_RUN
 ENV NODE_ENV=production
 ARG APP_VERSION
 # Copy the transpiled code to use in production (in /app)
-COPY --from=build /app/dist ./dist
-COPY package.json package-lock.json ./
+COPY dist dist/
+COPY package.json ./
+
 # Install production dependencies and clean cache
 RUN npm --no-git-tag-version version ${APP_VERSION} && \
     npm install --production && \

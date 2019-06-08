@@ -369,6 +369,16 @@ backend-dev:
 backend-dev-stop:
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
 
+backend-build:
+	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-backend.yml up --build --force-recreate backend 2>&1 | grep -v orphan
+
+backend-start:
+	@echo docker-compose up backend for production ${VERSION}
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
+
+backend-stop:
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
+
 utac-dev:
 	@echo docker-compose up utac simulator for dev ${VERSION}
 	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
