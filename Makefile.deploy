@@ -6,7 +6,6 @@
 ##############################################
 
 include Makefile
-d
 
 # docker-compose file
 DC_ELASTICSEARCH      = ${DC_PREFIX}-elasticsearch.yml
@@ -56,19 +55,7 @@ build-dir-clean:
 
 clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image
 
-frontend-clean-image:
-	@( ${DC} -f $(DC_BUILD_FRONTEND) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
-           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
-           docker rmi $$image_name || true ; \
-        done
 
-nginx-clean-image:
-	@( ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
-           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
-           docker rmi $$image_name || true ; \
-        done
 
 elasticsearch-clean-image:
 	@( ${DC} -f $(DC_ELASTICSEARCH) config | \
