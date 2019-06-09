@@ -200,17 +200,17 @@ endif
 ##############################################
 #                  RUN APP                   #
 ##############################################
-# run / stop all services in production mode
+# run / stop all services in qualification (compiled) mode
 up: network elasticsearch backend-start frontend
 	@echo run all services in production mode
 
-down: frontend-stop elasticsearch-stop network-stop backend-stop
+down: frontend-stop elasticsearch-stop backend-stop network-stop
 
 # production mode with fake
-up-fake: up utac-fake smtp-fake
+up-fake: up utac-fake smtp-fake-start
 	@echo run fake services for smtp and utac
 
-down-fake: down smtp-fake-stop utac-fake-stop
+down-fake: smtp-fake-stop utac-fake-stop down
 
 # build for production mode
 build: frontend-build backend-build
