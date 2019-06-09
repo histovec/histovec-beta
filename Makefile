@@ -34,7 +34,7 @@ export DC_PREFIX=${DC_DIR}/docker-compose
 DC := docker-compose
 
 ##############################################
-#        APP configuration section           #
+#         APP configuration section          #
 ##############################################
 export PORT=80
 export APP=histovec
@@ -148,7 +148,16 @@ export PERF_REPORTS=${PERF}/reports/
 dummy               := $(shell touch artifacts)
 include ./artifacts
 
+##############################################
+##############################################
+####           PROCEDURES                 ####
+##############################################
+##############################################
 
+
+##############################################
+#       host configuration procedures        #
+##############################################
 install-prerequisites:
 ifeq ("$(wildcard /usr/bin/docker /usr/local/bin/docker)","")
 	echo install docker-ce, still to be tested
@@ -178,7 +187,6 @@ install-prerequisites-injection:
 ifeq ("$(wildcard /usr/bin/gawk /usr/local/bin/gawk)","")
 	@echo installing gawk with ${INSTALL}, as needed for data injection
 	@${INSTALL} gawk
-
 endif
 ifeq ("$(wildcard /usr/bin/jq /usr/local/bin/jq)","")
 	@echo installing jq with ${INSTALL}, as needed for data injection
@@ -189,28 +197,116 @@ ifeq ("$(wildcard /usr/bin/parallel /usr/local/bin/parallel)","")
 	@${INSTALL} parallel
 endif
 
+##############################################
+#                  RUN APP                   #
+##############################################
+# run / stop all services in production mode
+up: network elasticsearch backend-start frontend
+	@echo run all services in production mode
+
+down: frontend-stop elasticsearch-stop network-stop backend-stop
+
+# production mode with fake
+up-fake: up utac-fake smtp-fake
+	@echo run fake services for smtp and utac
+
+down-fake: down smtp-fake-stop utac-fake-stop
+
+# build for production mode
+build: frontend-build backend-build
+
+update:
+	git pull origin dev
+
+# clean for fresh start
+clean: index-purge docker-clean frontend-clean
+
+docker-clean: stop
+	docker container rm ${APP}-build-front ${APP}-nginx
+
+# development mode
+dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev
+
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
+
+dev-log:
+	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
+	${DC} -f ${DC_PREFIX}-backend.yml logs
+
+# network operations
+network: install-prerequisites
+	@docker network create ${APP} 2> /dev/null; true
+
+network-stop:
+	@echo cleaning ${APP} docker network
+	docker network rm ${APP}
+
+tor:
+ifeq ("$(wildcard nginx/tor-ip.conf)","")
+	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
+endif
+
+##############################################
+#                 frontend                   #
+##############################################
+# production mode
+frontend: network tor
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
+
+frontend-stop:
+	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
+
+# build for production
+frontend-build: network
+	@echo building ${APP} frontend
+	@echo building frontend in ${FRONTEND}
+	@sudo mkdir -p ${FRONTEND}/dist-build && sudo chmod 777 ${FRONTEND}/dist-build/.
+	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
+	mkdir -p ${FRONTEND}/dist/
+	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
+
+# clean build
+frontend-clean:
+	@echo cleaning ${APP} frontend npm dist
+	sudo rm -rf ${FRONTEND}/dist
+
+# development mode
+frontend-dev: network tor
+	@echo docker-compose up frontend for dev ${VERSION}
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+frontend-dev-stop:
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml down
+
+##############################################
+#               elasticsearch                #
+##############################################
+# production and dev mode
+elasticsearch: vm_max network
+ifeq ("$(wildcard ${BACKEND}/esdata/)","")
+	@echo creating elasticsearch data directory
+	@mkdir -p ${BACKEND}/esdata
+	@chmod 777 ${BACKEND}/esdata/.
+endif
+	@${DC} -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
+
+elasticsearch-stop:
+	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
+
+vm_max:
+ifeq ("$(vm_max_count)", "")
+	@if [ ${uname_S} == "Darwin" ]; then echo "WARNING: detected Darwin - vm.map_max_count=262144 settings can't be checked and correctly set. You should set it manually within your Docker virtual machine. This setting has to be set for elasticsearch."; else sudo sysctl -w vm.max_map_count=262144;fi
+endif
 
 wait-elasticsearch: elasticsearch
 	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/_cat/indices > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for elasticsearch to start $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
+# index relative operations
 wait-index: index-create
 	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for ${dataset} index - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
 wait-index-purge: index-purge
 	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
-
-data-encrypt: network
-	@mkdir -p ${decrypted_datadir} ${datadir}
-	@${DC} -f ${DC_PREFIX}-dataprep.yml up --build
-
-data-download: network
-	@mkdir -p ${datadir}
-	@curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}' | xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o ${datadir}/{}
-
-data-check: network
-	@cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs md5sum | sort > checksums1
-	@cd ${datadir} && ls | egrep '${data_remote_files}.md5' | xargs cat | awk '{print $$2 " " $$3}' | sort > checksums2
-	@cd ${datadir} && (diff -wb checksums1 checksums2 && echo data checked) || exit 1
 
 index-purge: wait-elasticsearch
 ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
@@ -235,6 +331,63 @@ index-status: wait-elasticsearch
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET localhost:9200/${dataset}?pretty
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET localhost:9200/_cat/indices
 
+# elasticsearch backup operations
+first-backup:
+	@mkdir -p ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` first rsync && \
+		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
+
+last-backup:
+	@mkdir -p ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` last rsync && \
+		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
+
+post-backup:
+	@echo `date +'%Y%m%d_%H:%M'` taring && \
+		cd ${BACKEND}/backup/ && tar cf `date +%Y%m%d`_histovec.tar esdata/.
+		echo `date +'%Y%m%d_%H:%M'` cleaning tmp dir && \
+		rm -rf ${BACKEND}/backup/esdata && \
+		echo `date +'%Y%m%d_%H:%M'` backup done in ${BACKEND}/backup/`date +%Y%m%d`_histovec.tar
+
+backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
+
+
+##############################################
+#                 data prep                  #
+##############################################
+# dataprep dev mode - crypt anonymized data
+# before inserting it in elasticsearch
+data-encrypt: network
+	@mkdir -p ${decrypted_datadir} ${datadir}
+	@${DC} -f ${DC_PREFIX}-dataprep.yml up --build
+
+# dataprep qualif mode - download data
+# before inserting it in elasticsearch
+data-download: network
+	@mkdir -p ${datadir}
+	@curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}' | xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o ${datadir}/{}
+
+data-check: network
+	@cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs md5sum | sort > checksums1
+	@cd ${datadir} && ls | egrep '${data_remote_files}.md5' | xargs cat | awk '{print $$2 " " $$3}' | sort > checksums2
+	@cd ${datadir} && (diff -wb checksums1 checksums2 && echo data checked) || exit 1
+
+index-load: install-prerequisites-injection wait-index
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}' > /dev/null
+	@(find ${datadir} | egrep '${data_remote_files}.gz' | xargs cat | gunzip ) | \
+		awk 'BEGIN{n = 1;print "injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr";} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| \
+		sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | \
+		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | \
+		jq -c '.items[]' | awk 'BEGIN{ok=${FROM}-1;ko=0;lastko=""}{if ($$0 ~ "\"result\":\"created\"") { ok++ } else {ko++;lastko=$$0} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko; if (ko>0) {print "last error was : " lastko; lastko="" }}}'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
+
+index-check: install-prerequisites-injection wait-elasticsearch
+ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
+		@(cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | wc -l | awk '{print $$1}' && \
+		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
+endif
+
+# dataprep production mode - from swift to elasticsearch
 source-list:
 	@curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.gz|${data_remote_files_inc}.gz'
 
@@ -272,12 +425,6 @@ index-direct-update: install-prerequisites-injection index-unlock
 		done
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
-index-check: install-prerequisites-injection wait-elasticsearch
-ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
-		@(cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | wc -l | awk '{print $$1}' && \
-		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
-endif
-
 index-direct-check: install-prerequisites-injection wait-elasticsearch
 ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
 	@(curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.md5' | \
@@ -285,17 +432,47 @@ ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'loc
 		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
 endif
 
-index-load: install-prerequisites-injection wait-index
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}' > /dev/null
-	@(find ${datadir} | egrep '${data_remote_files}.gz' | xargs cat | gunzip ) | \
-		awk 'BEGIN{n = 1;print "injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr";} n++}' |  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e '$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\"}}\n";$$i=0;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",split(/;/,$$_)))."}\n";}}'| \
-		sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | \
-		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" localhost:9200/_bulk  --data-binary @-;echo ' | \
-		jq -c '.items[]' | awk 'BEGIN{ok=${FROM}-1;ko=0;lastko=""}{if ($$0 ~ "\"result\":\"created\"") { ok++ } else {ko++;lastko=$$0} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko; if (ko>0) {print "last error was : " lastko; lastko="" }}}'
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
+##############################################
+#                  backend                   #
+##############################################
+# production mode
+backend-start:
+	@echo docker-compose up backend for production ${VERSION}
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
 
+backend-stop:
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
 
+# build for production
+backend-build:
+	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-backend.yml up --build --force-recreate backend 2>&1 | grep -v orphan
 
+# development mode
+backend-dev:
+	@echo docker-compose up backend for dev ${VERSION}
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+backend-dev-stop:
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
+
+# fake services for dev and test modes
+utac-fake-start:
+	@echo docker-compose up utac simulator for dev ${VERSION}
+	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+utac-fake-stop:
+	@${DC} -f ${DC_PREFIX}-utac.yml down
+
+smtp-fake:
+	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
+	@${DC} -f ${DC_PREFIX}-smtp.yml up -d 2>&1 | grep -v orphan
+
+smtp-fake-stop:
+	@${DC} -f ${DC_PREFIX}-smtp.yml down
+
+##############################################
+#                   tests                    #
+##############################################
 index-test:
 ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $1}')","1")
 	@echo index test
@@ -314,142 +491,12 @@ ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'loc
 			${DC} -f ${DC_PREFIX}-artillery.yml run artillery report $${report}; \
 		done
 	@rm ${PERF_IDS}.random
-	#@${DC} -f ${DC_PREFIX}-artillery.yml run report reports/report.json
 endif
 
-docker-clean: stop
-	docker container rm ${APP}-build-front ${APP}-nginx
 
-frontend-clean:
-	@echo cleaning ${APP} frontend npm dist
-	sudo rm -rf ${FRONTEND}/dist
 
-clean: index-purge docker-clean frontend-clean
 
-network-stop:
-	@echo cleaning ${APP} docker network
-	docker network rm ${APP}
 
-network: install-prerequisites
-	@docker network create ${APP} 2> /dev/null; true
 
-tor:
-ifeq ("$(wildcard nginx/tor-ip.conf)","")
-	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
-endif
 
-vm_max:
-ifeq ("$(vm_max_count)", "")
-	@if [ ${uname_S} == "Darwin" ]; then echo "WARNING: detected Darwin - vm.map_max_count=262144 settings can't be checked and correctly set. You should set it manually within your Docker virtual machine. This setting has to be set for elasticsearch."; else sudo sysctl -w vm.max_map_count=262144;fi
-endif
-
-elasticsearch: vm_max network
-ifeq ("$(wildcard ${BACKEND}/esdata/)","")
-	@echo creating elasticsearch data directory
-	@mkdir -p ${BACKEND}/esdata
-	@chmod 777 ${BACKEND}/esdata/.
-endif
-	@${DC} -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
-
-elasticsearch-stop:
-	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
-
-first-backup:
-	@mkdir -p ${BACKEND}/backup/esdata && \
-		echo `date +'%Y%m%d_%H:%M'` first rsync && \
-		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
-last-backup:
-	@mkdir -p ${BACKEND}/backup/esdata && \
-		echo `date +'%Y%m%d_%H:%M'` last rsync && \
-		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
-
-post-backup:
-	@echo `date +'%Y%m%d_%H:%M'` taring && \
-		cd ${BACKEND}/backup/ && tar cf `date +%Y%m%d`_histovec.tar esdata/.
-		echo `date +'%Y%m%d_%H:%M'` cleaning tmp dir && \
-		rm -rf ${BACKEND}/backup/esdata && \
-		echo `date +'%Y%m%d_%H:%M'` backup done in ${BACKEND}/backup/`date +%Y%m%d`_histovec.tar
-
-backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
-
-frontend-dev: network tor
-	@echo docker-compose up frontend for dev ${VERSION}
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
-
-frontend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml down
-
-dev-log:
-	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
-	${DC} -f ${DC_PREFIX}-backend.yml logs
-
-dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev
-
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
-
-frontend-build: network
-	@echo building ${APP} frontend
-	@echo building frontend in ${FRONTEND}
-	@sudo mkdir -p ${FRONTEND}/dist-build && sudo chmod 777 ${FRONTEND}/dist-build/.
-	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
-	mkdir -p ${FRONTEND}/dist/
-	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
-
-build: frontend-build backend-build
-
-update:
-	git pull
-	@echo building ${APP} frontend
-	@echo building frontend in ${FRONTEND}
-	@sudo mkdir -p ${FRONTEND}/dist-build
-	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
-	mkdir -p ${FRONTEND}/dist/
-	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
-
-frontend-stop:
-	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
-
-frontend: network tor
-	@${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
-
-up: network elasticsearch backend-start frontend
-	@echo run all services in production mode
-
-up-fake: up utac-fake smtp-fake
-	@echo run fake services for smtp and utac
-
-backend-dev:
-	@echo docker-compose up backend for dev ${VERSION}
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
-
-backend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
-
-backend-build:
-	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-backend.yml up --build --force-recreate backend 2>&1 | grep -v orphan
-
-backend-start:
-	@echo docker-compose up backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
-
-backend-stop:
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
-
-utac-fake-start:
-	@echo docker-compose up utac simulator for dev ${VERSION}
-	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
-
-utac-fake-stop:
-	@${DC} -f ${DC_PREFIX}-utac.yml down
-
-smtp-fake:
-	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
-	@${DC} -f ${DC_PREFIX}-smtp.yml up -d 2>&1 | grep -v orphan
-
-smtp-fake-stop:
-	@${DC} -f ${DC_PREFIX}-smtp.yml down
-
-down: frontend-stop elasticsearch-stop network-stop backend-stop
-
-down-fake: down smtp-fake-stop utac-fake-stop
 
