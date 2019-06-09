@@ -10,7 +10,6 @@ services:
       target: ${EXEC_ENV}
       dockerfile: Dockerfile
       args:
-        app_path: /${APP}
         app_name: ${APP}
         app_ver: ${APP_VERSION}
     container_name: ${APP}-nginx-${EXEC_ENV}
@@ -44,7 +43,8 @@ services:
   frontend-dev:
     build:
       context: ${FRONTEND}
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
+      target: ${EXEC_ENV}
       args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
@@ -55,8 +55,8 @@ services:
         app_path: /${APP}
         app_name: ${APP}
         app_ver: ${APP_VERSION}
-    image: ${APP}-frontend-dev:latest
-    container_name: ${APP}-frontend-dev
+    image: ${APP}-frontend-${EXEC_ENV}:${APP_VERSION}
+    container_name: ${APP}-frontend-${EXEC_ENV}
     environment:
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
