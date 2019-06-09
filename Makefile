@@ -330,7 +330,7 @@ frontend-build: network
 
 nginx-build: nginx-build-image
 
-nginx-build-image: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build
+nginx-build-image: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
 	@echo building ${APP} nginx
 	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
 	export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
