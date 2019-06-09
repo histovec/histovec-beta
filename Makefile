@@ -25,14 +25,6 @@ endif
 
 export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 
-
-##############################################
-#              docker confs                  #
-##############################################
-export DC_DIR=${APP_PATH}
-export DC_PREFIX=${DC_DIR}/docker-compose
-DC := docker-compose
-
 ##############################################
 #         APP configuration section          #
 ##############################################
@@ -42,6 +34,15 @@ export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
 export LOGS=${APP_PATH}/log
+# build options
+export DC_BUILD_ARGS = --pull --no-cache
+export BUILD_DIR=${APP_PATH}/${APP}-build
+export DC_DIR=${APP_PATH}
+export DC_PREFIX=${DC_DIR}/docker-compose
+export DC := docker-compose
+export NPM_REGISTRY = $(shell echo $$NPM_REGISTRY )
+export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
+export dollar = $(shell echo \$$)
 
 # reverse proxy
 export NGINX=${APP_PATH}/nginx
@@ -55,11 +56,17 @@ export API_WRITE_LIMIT_RATE=10r/m
 export API_WRITE_BURST=20 nodelay
 
 ##############################################
-#        frontend (only for dev mode)        #
+#                 frontend                   #
 ##############################################
 export FRONTEND=${APP_PATH}/frontend
 export FRONTEND_DEV_HOST=frontend-dev
 export FRONTEND_DEV_PORT=8080
+# packaging html/js/css dist target
+export FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
+export FILE_FRONTEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-frontend-dist.tar.gz
+export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
+# build options
+export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
 
 ##############################################
 #           elasticsearch confs              #
@@ -72,7 +79,7 @@ export ES_PORT=9200
 # vm_max_count has to be fixed into the vm host
 # or elasticsearch won't start
 export MAX_MAP_COUNT=262144
-vm_max_count		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.max_map_count\s*=\s*262144 && echo true)
+export vm_max_count		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.max_map_count\s*=\s*262144 && echo true)
 
 ##############################################
 #             data prep parameters           #
@@ -105,7 +112,7 @@ export openstack_delay=5
 export openstack_timeout=10
 export openstack_url := $(shell echo $$openstack_url )
 export openstack_auth_id := $(shell echo $$openstack_auth_id )
-export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack_token | tr '\n' ' ' || curl -k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail -s -D - -o out -L -H "Content-Type: application/json" -d '{ "auth": { "identity": { "methods": ["password"], "password": { "user": { "name": "'${OS_USERNAME}'", "domain": { "name": "'${OS_PROJECT_DOMAIN_NAME}'" }, "password": "'${OS_PASSWORD}'" } } } } }' ${OS_AUTH_URL}/auth/tokens | grep X-Subject-Token | awk '{print $$2}' )
+export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack_token | tr '\n' ' ')
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
 
 ##############################################
@@ -143,17 +150,15 @@ export PERF_IDS=${PERF}/ids.csv
 export PERF_SCENARIOS:=$(shell ls ${PERF}/scenarios/*)
 export PERF_REPORTS=${PERF}/reports/
 
-
-
 dummy               := $(shell touch artifacts)
 include ./artifacts
+
 
 ##############################################
 ##############################################
 ####           PROCEDURES                 ####
 ##############################################
 ##############################################
-
 
 ##############################################
 #       host configuration procedures        #
@@ -197,6 +202,7 @@ ifeq ("$(wildcard /usr/bin/parallel /usr/local/bin/parallel)","")
 	@${INSTALL} parallel
 endif
 
+
 ##############################################
 #                  RUN APP                   #
 ##############################################
@@ -214,9 +220,6 @@ down-fake: smtp-fake-stop utac-fake-stop down
 
 # build for production mode
 build: frontend-build backend-build
-
-update:
-	git pull origin dev
 
 # clean for fresh start
 clean: index-purge docker-clean frontend-clean
@@ -246,23 +249,52 @@ ifeq ("$(wildcard nginx/tor-ip.conf)","")
 	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
 endif
 
+update:
+	git pull origin dev
+
 ##############################################
 #                 frontend                   #
 ##############################################
-# production mode
+# qualification (compiled) mode
 frontend: network tor
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
 
 frontend-stop:
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
 
-# build for production
+# build for qualification and production
+frontend-prepare-build:
+	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
+	( cd ${FRONTEND} && tar -zcvf $(FILE_FRONTEND_APP_VERSION) --exclude ${APP}.tar.gz \
+          index.html \
+         .babelrc \
+         .editorconfig \
+         .eslintignore \
+         .eslintrc.js \
+         config \
+         src \
+         build \
+         static )
+
+frontend-check-build:
+	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) config -q
+
+frontend-build-dist: frontend-prepare-build frontend-check-build
+	@echo building ${APP} frontend in ${FRONTEND}
+	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) build $(DC_BUILD_ARGS)
+
+frontend-build-dist-archive:
+	mkdir -p $(BUILD_DIR)
+	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) run -T --rm frontend-build tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION)
+	  cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION)
+	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ; fi
+	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) ; fi
+
 frontend-build: network
-	@echo building ${APP} frontend
-	@echo building frontend in ${FRONTEND}
+	@echo building ${APP} frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist-build && sudo chmod 777 ${FRONTEND}/dist-build/.
-	${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
-	mkdir -p ${FRONTEND}/dist/
+	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
+	@mkdir -p ${FRONTEND}/dist/
 	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 
 # clean build
@@ -309,12 +341,10 @@ wait-index-purge: index-purge
 	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET localhost:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
 index-purge: wait-elasticsearch
-ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
 	@docker exec ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index prepared for deletion\n/;s/.*no such index.*//'
 	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/${dataset} | sed 's/{"acknowledged":true.*/${dataset} index purged\n/;s/.*no such index.*//'
 	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index purged\n/;s/.*no such index.*//'
 	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback purged\n/;s/.*no such index.*//'
-endif
 
 index-unlock: wait-elasticsearch
 	docker exec ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index unlocked\n/;s/.*no such index.*//'
@@ -382,10 +412,8 @@ index-load: install-prerequisites-injection wait-index
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
 index-check: install-prerequisites-injection wait-elasticsearch
-ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
 		@(cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | wc -l | awk '{print $$1}' && \
 		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
-endif
 
 # dataprep production mode - from swift to elasticsearch
 source-list:
@@ -426,11 +454,9 @@ index-direct-update: install-prerequisites-injection index-unlock
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
 index-direct-check: install-prerequisites-injection wait-elasticsearch
-ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}')","1")
 	@(curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.md5' | \
 		xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o - | awk 'BEGIN{n=0}{n+=$$1}END{print n}' && \
 		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
-endif
 
 ##############################################
 #                  backend                   #
@@ -473,14 +499,11 @@ smtp-fake-stop:
 ##############################################
 #                   tests                    #
 ##############################################
-index-test:
-ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $1}')","1")
+index-test: wait-elasticsearch
 	@echo index test
 	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
-endif
 
-index-stress:
-ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}' | grep mapping | wc -l | awk '{print $1}')","1")
+index-stress: wait-elasticsearch
 	@echo stress test
 	@export PERF_IDS_NB=`wc -l ${PERF_IDS} | awk '{print $1}'` && shuf ${PERF_IDS} | head -$(( ( RANDOM % ( ( ${PERF_IDS_NB} * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
 	@${DC} -f ${DC_PREFIX}-artillery.yml build
@@ -491,12 +514,4 @@ ifeq ("$(shell docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'loc
 			${DC} -f ${DC_PREFIX}-artillery.yml run artillery report $${report}; \
 		done
 	@rm ${PERF_IDS}.random
-endif
-
-
-
-
-
-
-
 

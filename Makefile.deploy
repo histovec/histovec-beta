@@ -6,24 +6,11 @@
 ##############################################
 
 include Makefile
+d
 
-export BUILD_DIR=${APP_PATH}/histovec-build
-
-export NPM_REGISTRY = $(shell echo $$NPM_REGISTRY )
-export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
-dollar = $(shell echo \$$)
-
-#
-DC_BUILD_ARGS = --pull --no-cache
 # docker-compose file
-DC_BUILD_FRONTEND     = ${DC_PREFIX}-build-deploy-frontend.yml
 DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-nginx-frontend.yml
 DC_ELASTICSEARCH      = ${DC_PREFIX}-elasticsearch.yml
-
-# builded file
-FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
-FILE_FRONTEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-frontend-dist.tar.gz
-FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
 
 FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
 FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
@@ -71,35 +58,6 @@ build-dir-clean:
 	if [ -d "$(BUILD_DIR)" ] ; then rm -rf $(BUILD_DIR) ; fi
 
 frontend-build-all: network frontend-build-dist frontend-build-dist-archive
-
-frontend-build-dist: frontend-prepare-build frontend-check-build
-	@echo building ${APP} frontend
-	@echo building frontend in ${FRONTEND}
-	APP="$(APP)" FRONTEND="$(FRONTEND)" http_proxy="$(http_proxy)" NPM_REGISTRY="$(NPM_REGISTRY)" SASS_REGISTRY="$(SASS_REGISTRY)" \
-	  ${DC} -f $(DC_BUILD_FRONTEND) build $(DC_BUILD_ARGS)
-
-frontend-prepare-build:
-	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
-	( cd ${FRONTEND} && tar -zcvf $(FILE_FRONTEND_APP_VERSION) --exclude ${APP}.tar.gz \
-          index.html \
-         .babelrc \
-         .editorconfig \
-         .eslintignore \
-         .eslintrc.js \
-         config \
-         src \
-         build \
-         static )
-
-frontend-check-build:
-	${DC} -f $(DC_BUILD_FRONTEND) config -q
-
-frontend-build-dist-archive:
-	APP="$(APP)" FRONTEND="$(FRONTEND)" http_proxy="$(http_proxy)" NPM_REGISTRY="$(NPM_REGISTRY)" SASS_REGISTRY="$(SASS_REGISTRY)" \
-	  ${DC} -f $(DC_BUILD_FRONTEND) run -T --rm build-frontend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION)
-	  cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION)
-	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ; fi
-	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) ; fi
 
 frontend-clean-dist:
 	@rm -rf $(FILE_FRONTEND_APP_VERSION)
