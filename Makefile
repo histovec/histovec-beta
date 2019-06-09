@@ -5,6 +5,10 @@
 # IN THE 'artifacts' FILE, AS NOT COMMITTED  #
 ##############################################
 
+
+##############################################
+#              general OS vars               #
+##############################################
 SHELL:=/bin/bash
 
 ifeq ($(OS),Windows_NT)
@@ -19,39 +23,29 @@ else
     INSTALL := brew install
 endif
 
+export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
+
+
+##############################################
+#              docker confs                  #
+##############################################
+export DC_DIR=${APP_PATH}
+export DC_PREFIX=${DC_DIR}/docker-compose
+DC := docker-compose
+
+##############################################
+#        APP configuration section           #
+##############################################
 export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
-export BACKEND=${APP_PATH}/backend
-export NGINX=${APP_PATH}/nginx
-export FRONTEND_DEV_HOST=frontend-dev
-export FRONTEND_DEV_PORT=8080
-export BACKEND_HOST=backend
-export BACKEND_PORT=8000
-export BACKEND_SECRET=%ch4NGM3!
-export FRONTEND=${APP_PATH}/frontend
 export LOGS=${APP_PATH}/log
-export DC_DIR=${APP_PATH}
-export DC_PREFIX=${DC_DIR}/docker-compose
-export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
-export ES_MEM=512m
-export ES_HOST=elasticsearch
-export ES_PORT=9200
-export UTAC_SCHEME=http
-export UTAC_HOST=utac
-export UTAC_PORT=9000
-export UTAC_API=utac
-export UTAC_LATENCY=300
-export UTAC_TIMEOUT=5000
-export MAIL_FROM=histovec@fake.mi
-export MAIL_TO=histovec@fake.mi
-export SMTP_SERVER=smtp
-export SMTP_PORT=25
-export REDIS_PERSIST=86400
-export REDIS_URL=redis
-export MAX_MAP_COUNT=262144
+
+# reverse proxy
+export NGINX=${APP_PATH}/nginx
+export NGINX_LOGS=${LOGS}/nginx
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
 export API_USER_SCOPE=http_x_forwarded_for
@@ -59,47 +53,101 @@ export API_GLOBAL_LIMIT_RATE=5r/s
 export API_GLOBAL_BURST=20 nodelay
 export API_WRITE_LIMIT_RATE=10r/m
 export API_WRITE_BURST=20 nodelay
-export DATAPREP=${APP_PATH}/dataprep
-export PERF=${APP_PATH}/tests/performance
-export PERF_IDS=${PERF}/ids.csv
-export PERF_SCENARIOS:=$(shell ls ${PERF}/scenarios/*)
-export PERF_REPORTS=${PERF}/reports/
 
-# data prep (data not included in repo)
+##############################################
+#        frontend (only for dev mode)        #
+##############################################
+export FRONTEND=${APP_PATH}/frontend
+export FRONTEND_DEV_HOST=frontend-dev
+export FRONTEND_DEV_PORT=8080
+
+##############################################
+#           elasticsearch confs              #
+#          ES_MEM should be 4096m            #
+#            in production mode              #
+##############################################
+export ES_MEM=512m
+export ES_HOST=elasticsearch
+export ES_PORT=9200
+# vm_max_count has to be fixed into the vm host
+# or elasticsearch won't start
+export MAX_MAP_COUNT=262144
+vm_max_count		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.max_map_count\s*=\s*262144 && echo true)
+
+##############################################
+#             data prep parameters           #
+#    for data injection into elasticsearch   #
+##############################################
+# datasource parameters
 export decrypted_datadir=${APP_PATH}/data/decrypted
+export DATAPREP=${APP_PATH}/dataprep
 export datadir=${APP_PATH}/data/encrypted
-export data_remote_dir=histovec-data
+export data_remote_dir=${APP}-data
 export data_remote_files=.*_(siv|ivt)_api_.*
 export data_remote_files_inc=.*_(siv|ivt)_api-inc_.*
 export dataset=siv
+export FROM=1
+export PASSPHRASE=CHANGEME
+# elasticsearch parameters
+export ES_INDEX=${dataset}
+export settings={"index": {"number_of_shards": 1, "refresh_interval": "300s", "number_of_replicas": 0}}
+export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}}}
 export ES_CHUNK=5000
 export ES_VERBOSE=100000
 export ES_VERBOSE_UPDATE=1000
 export ES_TIMEOUT=60
 export ES_JOBS=4
-export FROM=1
-export PASSPHRASE=CHANGEME
-export settings={"index": {"number_of_shards": 1, "refresh_interval": "300s", "number_of_replicas": 0}}
-export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"idv": {"type": "keyword"}, "ida1": {"type": "keyword"}, "ida2": {"type": "keyword"}}}
 export header="idv;ida1;ida2;v"
-export index_log=${datadir}/index.log.gz
-
-# data source
+# openstack swift source parameters
+# auth token has to be provided before within env
 export openstack_retry=10
 export openstack_delay=5
 export openstack_timeout=10
 export openstack_url := $(shell echo $$openstack_url )
 export openstack_auth_id := $(shell echo $$openstack_auth_id )
 export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack_token | tr '\n' ' ' || curl -k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail -s -D - -o out -L -H "Content-Type: application/json" -d '{ "auth": { "identity": { "methods": ["password"], "password": { "user": { "name": "'${OS_USERNAME}'", "domain": { "name": "'${OS_PROJECT_DOMAIN_NAME}'" }, "password": "'${OS_PASSWORD}'" } } } } }' ${OS_AUTH_URL}/auth/tokens | grep X-Subject-Token | awk '{print $$2}' )
+export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
 
-vm_max_count		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.max_map_count\s*=\s*262144 && echo true)
+##############################################
+#               backend confs                #
+#                 v1+ only                   #
+##############################################
+export BACKEND=${APP_PATH}/backend
+export BACKEND_HOST=backend
+export BACKEND_PORT=8000
+export BACKEND_SECRET=%ch4NGM3!
+export BACKEND_LOGS=${LOGS}/backend
+# mail confs for backend and fake smtp
+# must be overrided for production mode
+export MAIL_FROM=histovec@fake.mi
+export MAIL_TO=histovec@fake.mi
+export SMTP_SERVER=smtp
+export SMTP_PORT=25
+# redis confs for backend and cache of utac data
+export REDIS_PERSIST=86400
+export REDIS_URL=redis
+# utac confs for backend and fake api
+export UTAC_SCHEME=http
+export UTAC_HOST=utac
+export UTAC_PORT=9000
+export UTAC_API=utac
+export UTAC_LATENCY=300
+export UTAC_TIMEOUT=5000
+
+##############################################
+#                 test confs                 #
+##############################################
+# performance test confs
+export PERF=${APP_PATH}/tests/performance
+export PERF_IDS=${PERF}/ids.csv
+export PERF_SCENARIOS:=$(shell ls ${PERF}/scenarios/*)
+export PERF_REPORTS=${PERF}/reports/
+
+
 
 dummy               := $(shell touch artifacts)
 include ./artifacts
 
-export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
-DC := docker-compose
-export ES_INDEX=${dataset}
 
 install-prerequisites:
 ifeq ("$(wildcard /usr/bin/docker /usr/local/bin/docker)","")
