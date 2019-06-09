@@ -44,7 +44,9 @@ export NPM_REGISTRY = $(shell echo $$NPM_REGISTRY )
 export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
 export dollar = $(shell echo \$$)
 
-# reverse proxy
+##############################################
+#              reverse-proxy                 #
+##############################################
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
 export API_USER_LIMIT_RATE=1r/m
@@ -54,6 +56,10 @@ export API_GLOBAL_LIMIT_RATE=5r/s
 export API_GLOBAL_BURST=20 nodelay
 export API_WRITE_LIMIT_RATE=10r/m
 export API_WRITE_BURST=20 nodelay
+# packaging
+FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
+FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
+DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
 
 ##############################################
 #                 frontend                   #
@@ -61,12 +67,12 @@ export API_WRITE_BURST=20 nodelay
 export FRONTEND=${APP_PATH}/frontend
 export FRONTEND_DEV_HOST=frontend-dev
 export FRONTEND_DEV_PORT=8080
-# packaging html/js/css dist target
+# packaging html/js/css & docker targets
 export FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
 export FILE_FRONTEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-frontend-dist.tar.gz
 export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
-# build options
 export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
+
 
 ##############################################
 #           elasticsearch confs              #
@@ -253,9 +259,19 @@ update:
 	git pull origin dev
 
 ##############################################
+#               reverse-proxy                #
+#                    and                     #
 #                 frontend                   #
 ##############################################
+# production mode
+frontend-nginx:
+	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
+
+frontend-nginx-stop:
+	@${DC} -f $(DC_RUN_NGINX_FRONTEND) down
+
 # qualification (compiled) mode
+
 frontend: network tor
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
 
@@ -263,6 +279,8 @@ frontend-stop:
 	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
 
 # build for qualification and production
+frontend-build-all: network frontend-build-dist frontend-build-dist-archive
+
 frontend-prepare-build:
 	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
 	( cd ${FRONTEND} && tar -zcvf $(FILE_FRONTEND_APP_VERSION) --exclude ${APP}.tar.gz \
@@ -290,12 +308,49 @@ frontend-build-dist-archive:
 	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION) ; fi
 
+frontend-clean-dist:
+	@rm -rf $(FILE_FRONTEND_APP_VERSION)
+
+frontend-clean-dist-archive:
+	@rm -rf $(FILE_FRONTEND_DIST_APP_VERSION)
+
+frontend-clean-image:
+	@( ${DC} -f $(DC_BUILD_FRONTEND) config | \
+           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
+           docker rmi $$image_name || true ; \
+        done
+
 frontend-build: network
 	@echo building ${APP} frontend in ${FRONTEND}
 	@sudo mkdir -p ${FRONTEND}/dist-build && sudo chmod 777 ${FRONTEND}/dist-build/.
 	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
 	@mkdir -p ${FRONTEND}/dist/
 	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
+
+nginx-build: nginx-build-image
+
+nginx-build-image: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build
+	@echo building ${APP} nginx
+	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
+	export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
+
+nginx-check-build:
+	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_FRONTEND) config -q
+
+nginx-save-image:
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+        nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker tag $$nginx_image_name $$nginx_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
+
+nginx-clean-image:
+	@( ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
+           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
+           docker rmi $$image_name || true ; \
+        done
 
 # clean build
 frontend-clean:

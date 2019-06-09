@@ -49,7 +49,7 @@ server {
     limit_req zone=api burst=<API_USER_BURST>;
     limit_req zone=server burst=<API_GLOBAL_BURST>;
     limit_req_status 429;
-    rewrite "^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
+    rewrite "^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" /<ES_INDEX>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
     proxy_pass http://<ES_HOST>:9200;
     proxy_redirect off;
     proxy_hide_header Content-Type;
@@ -88,7 +88,7 @@ server {
   location ~ (^/<APP>/api/v0/feedback/) {
     limit_req zone=api burst=<API_USER_BURST>;
     limit_req zone=write burst=<API_WRITE_BURST>;
-    
+
     limit_req_status 429;
     if ($request_method != POST) {
        return 405;
