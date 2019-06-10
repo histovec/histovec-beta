@@ -89,6 +89,10 @@ export ES_PORT=9200
 # or elasticsearch won't start
 export MAX_MAP_COUNT=262144
 export vm_max_count		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.max_map_count\s*=\s*262144 && echo true)
+# build
+export DC_ELASTICSEARCH      = ${DC_PREFIX}-elasticsearch.yml
+export FILE_IMAGE_ELASTICSEARCH_APP_VERSION = $(APP)-elasticsearch-$(APP_VERSION)-image.tar
+export FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION = $(APP)-elasticsearch-latest-image.tar
 
 ##############################################
 #             data prep parameters           #
@@ -393,6 +397,30 @@ endif
 elasticsearch-stop:
 	${DC} -f ${DC_PREFIX}-elasticsearch.yml down
 
+# build elasticsearch image
+elasticsearch-build: elasticsearch-build-image
+
+elasticsearch-build-image: elasticsearch-check-build
+	@echo building ${APP} elasticsearch
+	${DC} -f $(DC_ELASTICSEARCH) pull
+	${DC} -f $(DC_ELASTICSEARCH) build $(DC_BUILD_ARGS)
+
+elasticsearch-check-build:
+	${DC} -f $(DC_ELASTICSEARCH) config -q
+
+elasticsearch-save-image:
+	elasticsearch_image_name=$$(${DC} -f $(DC_ELASTICSEARCH) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.elasticsearch.image); \
+	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) $$elasticsearch_image_name ; \
+	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) $$elasticsearch_image_name
+
+elasticsearch-clean-image:
+	@( ${DC} -f $(DC_ELASTICSEARCH) config | \
+           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
+           docker rmi $$image_name || true ; \
+        done
+
+# mix elasticsearch procedures
 vm_max:
 ifeq ("$(vm_max_count)", "")
 	@if [ ${uname_S} == "Darwin" ]; then echo "WARNING: detected Darwin - vm.map_max_count=262144 settings can't be checked and correctly set. You should set it manually within your Docker virtual machine. This setting has to be set for elasticsearch."; else sudo sysctl -w vm.max_map_count=262144;fi

@@ -46,38 +46,7 @@ clean-archive:
 	@echo "Clean $(APP) archive"
 	rm -rf $(FILE_ARCHIVE_APP_VERSION)
 
-
-build-dir:
-	if [ ! -d "$(BUILD_DIR)" ] ; then mkdir -p $(BUILD_DIR) ; fi
-
-build-dir-clean:
-	if [ -d "$(BUILD_DIR)" ] ; then rm -rf $(BUILD_DIR) ; fi
-
 clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image
-
-
-
-elasticsearch-clean-image:
-	@( ${DC} -f $(DC_ELASTICSEARCH) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
-           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
-           docker rmi $$image_name || true ; \
-        done
-
-elasticsearch-build: elasticsearch-build-image
-
-elasticsearch-build-image: elasticsearch-check-build
-	@echo building ${APP} elasticsearch
-	${DC} -f $(DC_ELASTICSEARCH) pull
-	${DC} -f $(DC_ELASTICSEARCH) build $(DC_BUILD_ARGS)
-
-elasticsearch-check-build:
-	${DC} -f $(DC_ELASTICSEARCH) config -q
-
-elasticsearch-save-image:
-	elasticsearch_image_name=$$(${DC} -f $(DC_ELASTICSEARCH) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.elasticsearch.image); \
-	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) $$elasticsearch_image_name ; \
-	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) $$elasticsearch_image_name
 
 publish: publish-$(APP_VERSION) publish-latest
 
