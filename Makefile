@@ -43,13 +43,15 @@ export DC := docker-compose
 export NPM_REGISTRY = $(shell echo $$NPM_REGISTRY )
 export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
 export dollar = $(shell echo \$$)
+export API_VERSION_V0=v0
+export API_VERSION_V1=v1
+export API_VERSION=${API_VERSION_V0}
 
 ##############################################
 #              reverse-proxy                 #
 ##############################################
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
-export NGINX_SERVER_TEMPLATE=nginx-run-v0.template
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
 export API_USER_SCOPE=http_x_forwarded_for
@@ -120,7 +122,6 @@ export openstack_timeout=10
 export openstack_url := $(shell echo $$openstack_url )
 export openstack_auth_id := $(shell echo $$openstack_auth_id )
 export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack_token | tr '\n' ' ')
-export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
 
 ##############################################
 #               backend confs                #
@@ -159,6 +160,12 @@ export PERF_REPORTS=${PERF}/reports/
 
 dummy               := $(shell touch artifacts)
 include ./artifacts
+
+# combined variables should not be overrided
+export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
+export NGINX_SERVER_TEMPLATE=nginx-run-${API_VERSION}.template
+export BACKEND_START=$(shell [ ${API_VERSION} = "v1" ] && echo backend-start)
+export BACKEND_STOP=$(shell [ ${API_VERSION} = "v1" ] && echo backend-stop)
 
 
 ##############################################
@@ -214,13 +221,17 @@ endif
 #                  RUN APP                   #
 ##############################################
 # run / stop all services in qualification (compiled) mode
-up: network elasticsearch backend-start frontend
+up: network elasticsearch ${BACKEND_START} frontend
 	@echo run all services in production mode
 
-down: frontend-stop elasticsearch-stop backend-stop network-stop
+down: frontend-stop elasticsearch-stop ${BACKEND_STOP} network-stop
+
+up-all: network-all elasticsearch frontend-nginx
+
+down-all: frontend-nginx-stop elasticsearch-stop network-stop
 
 # production mode with fake
-up-fake: up utac-fake smtp-fake-start
+up-fake: utac-fake smtp-fake up
 	@echo run fake services for smtp and utac
 
 down-fake: smtp-fake-stop utac-fake-stop down
@@ -245,7 +256,9 @@ dev-log:
 
 # network operations
 network: install-prerequisites
-	@docker network create ${APP} 2> /dev/null; true
+	@docker network create --opt com.docker.network.driver.mtu=1450 ${APP} 2> /dev/null; true
+
+network-all: network
 
 network-stop:
 	@echo cleaning ${APP} docker network
@@ -259,26 +272,32 @@ endif
 update:
 	git pull origin dev
 
+build-dir:
+	if [ ! -d "$(BUILD_DIR)" ] ; then mkdir -p $(BUILD_DIR) ; fi
+
+build-dir-clean:
+	if [ -d "$(BUILD_DIR)" ] ; then rm -rf $(BUILD_DIR) ; fi
+
 ##############################################
 #               reverse-proxy                #
 #                    and                     #
 #                 frontend                   #
 ##############################################
 # production mode
-frontend-nginx:
-	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
+frontend-nginx: frontend
 
-frontend-nginx-stop:
-	@${DC} -f $(DC_RUN_NGINX_FRONTEND) down
+frontend-nginx-stop: frontend-stop
 
 # qualification (compiled) mode
 
-frontend: network tor frontend-nginx
+frontend: network tor
+	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
 
-frontend-stop: frontend-nginx-stop
+frontend-stop:
+	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) down
 
 # build for qualification and production
-frontend-build: frontend-build-all
+frontend-build: build-dir frontend-build-all nginx-build
 
 frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 
@@ -299,11 +318,10 @@ frontend-check-build:
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) config -q
 
 frontend-build-dist: frontend-prepare-build frontend-check-build
-	@echo building ${APP} frontend in ${FRONTEND}
+	@echo building ${APP} frontend in ${FRONTEND} using $NGINX_SERVER_TEMPLATE
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) build $(DC_BUILD_ARGS)
 
 frontend-build-dist-archive:
-	mkdir -p $(BUILD_DIR)
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) run -T --rm frontend-build tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_FRONTEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) ; fi

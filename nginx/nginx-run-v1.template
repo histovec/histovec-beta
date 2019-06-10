@@ -102,7 +102,7 @@ server {
     limit_req_status 429;
 
     rewrite "^/.*/(feedback)/$" /$1/_doc break;
-    proxy_pass http://<ES_HOST>:9200;
+    proxy_pass http://elasticsearch;
     proxy_redirect off;
     proxy_hide_header Content-Type;
     proxy_set_header content-type "application/json";
