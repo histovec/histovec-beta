@@ -207,6 +207,7 @@ ifeq ("$(wildcard /usr/bin/gawk /usr/local/bin/gawk)","")
 	@echo installing gawk with ${INSTALL}, as needed for data injection
 	@${INSTALL} gawk
 endif
+
 ifeq ("$(wildcard /usr/bin/jq /usr/local/bin/jq)","")
 	@echo installing jq with ${INSTALL}, as needed for data injection
 	@${INSTALL} jq
@@ -231,7 +232,7 @@ up-all: network-all elasticsearch frontend-nginx
 down-all: frontend-nginx-stop elasticsearch-stop network-stop
 
 # production mode with fake
-up-fake: utac-fake smtp-fake up
+up-fake: utac-fake-start smtp-fake up
 	@echo run fake services for smtp and utac
 
 down-fake: smtp-fake-stop utac-fake-stop down
