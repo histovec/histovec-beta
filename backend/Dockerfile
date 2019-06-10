@@ -37,19 +37,23 @@ RUN if [ ! -z "$http_proxy" ] ; then \
    [ -z "$npm_registry" ] || npm config set registry=$npm_registry
 RUN npm i npm@latest -g
 
+COPY package.json ./
+
 ################################
 # Step 2: "development" target #
 ################################
 FROM base as development
+
+# Install app dependencies
+RUN npm --no-git-tag-version version ${APP_VERSION}
+RUN npm install
+RUN npm audit fix
+
+COPY babel.config.js boot-dev.js ./
+
 ARG app_ver
 ENV APP_VERSION ${app_ver}
 ENV NPM_CONFIG_LOGLEVEL debug
-
-COPY babel.config.js boot-dev.js package.json ./
-# Install app dependencies
-RUN npm --no-git-tag-version version ${APP_VERSION}
-RUN npm install --verbose
-RUN npm audit fix
 
 CMD ["npm","run",  "dev"]
 
@@ -58,22 +62,41 @@ CMD ["npm","run",  "dev"]
 ##########################
 FROM development as build
 ENV NPM_CONFIG_LOGLEVEL warn
+ARG app_name
+ARG app_ver
 
-COPY src src/
+COPY ${app_name}-${app_ver}-backend.tar.gz .
 
-# Transpile the code with babel
+RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-backend.tar.gz  && \
+     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
+     rm -rf ${app_name}-${app_ver}-backend.tar.gz
+
 CMD ["npm","run",  "build"]
 
 ###############################
 # Step 4: "production" target #
 ###############################
-FROM development as production
-
+FROM base as production
+ARG http_proxy
+ARG https_proxy
+ARG no_proxy
+ARG npm_registry
+ARG MIRROR_DEBIAN
+ARG app_path
+ARG app_name
+ARG app_ver
+ARG port
 ARG NPM_AUDIT_DRY_RUN
 ENV NODE_ENV=production
-ARG APP_VERSION
+ENV APP_VERSION=${app_ver}
 # Copy the transpiled code to use in production (in /app)
-COPY dist dist/
+
+COPY ${app_name}-${app_ver}-backend-dist.tar.gz .
+
+RUN  [ -f "${app_name}-${app_ver}-backend-dist.tar.gz" ] && \
+     tar -zxvf ${app_name}-${app_ver}-backend-dist.tar.gz  && \
+     rm -rf ${app_name}-${app_ver}-backend-dist.tar.gz
+
 COPY package.json ./
 
 # Install production dependencies and clean cache
@@ -82,6 +105,7 @@ RUN npm --no-git-tag-version version ${APP_VERSION} && \
     npm config set audit-level moderate && \
     npm audit --json --registry=https://registry.npmjs.org || ${NPM_AUDIT_DRY_RUN:-false} && \
     npm cache clean --force
+
 # Install pm2
 RUN npm install pm2 -g
 # Copy the pm2 config

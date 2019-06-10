@@ -46,6 +46,13 @@ export dollar = $(shell echo \$$)
 export API_VERSION_V0=v0
 export API_VERSION_V1=v1
 export API_VERSION=${API_VERSION_V0}
+# packaging
+export FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
+export FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
+# publish
+export PUBLISH_URL_BASE           = histovec-docker-images
+export PUBLISH_URL_APP_VERSION    = $(PUBLISH_URL_BASE)/$(APP_VERSION)
+export PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
 
 ##############################################
 #              reverse-proxy                 #
@@ -60,16 +67,9 @@ export API_GLOBAL_BURST=20 nodelay
 export API_WRITE_LIMIT_RATE=10r/m
 export API_WRITE_BURST=20 nodelay
 # packaging
-FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
-FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
-DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
-FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
-FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
-# publish
-PUBLISH_URL_BASE           = histovec-docker-images
-PUBLISH_URL_APP_VERSION    = $(PUBLISH_URL_BASE)/$(APP_VERSION)
-PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
-
+export FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
+export FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
+export DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
 
 ##############################################
 #                 frontend                   #
@@ -78,10 +78,10 @@ export FRONTEND=${APP_PATH}/frontend
 export FRONTEND_DEV_HOST=frontend-dev
 export FRONTEND_DEV_PORT=8080
 # packaging html/js/css & docker targets
+export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
 export FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
 export FILE_FRONTEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-frontend-dist.tar.gz
 export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
-export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
 
 
 ##############################################
@@ -159,6 +159,16 @@ export UTAC_PORT=9000
 export UTAC_API=utac
 export UTAC_LATENCY=300
 export UTAC_TIMEOUT=5000
+# packaging
+export DC_BUILD_BACKEND = ${DC_PREFIX}-backend.yml
+export DC_RUN_BACKEND = ${DC_PREFIX}-backend.yml
+export FILE_BACKEND_APP_VERSION = $(APP)-$(APP_VERSION)-backend.tar.gz
+export FILE_BACKEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-backend-dist.tar.gz
+export FILE_BACKEND_DIST_LATEST_VERSION = $(APP)-latest-backend-dist.tar.gz
+export FILE_IMAGE_BACKEND_APP_VERSION = $(APP)-backend-$(APP_VERSION)-image.tar
+export FILE_IMAGE_BACKEND_LATEST_VERSION = $(APP)-backend-latest-image.tar
+export FILE_IMAGE_REDIS_APP_VERSION = $(APP)-redis-$(APP_VERSION)-image.tar
+export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 
 ##############################################
 #                 test confs                 #
@@ -177,6 +187,7 @@ export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_dela
 export NGINX_SERVER_TEMPLATE=nginx-run-${API_VERSION}.template
 export BACKEND_START=$(shell [ ${API_VERSION} = "v1" ] && echo backend-start)
 export BACKEND_STOP=$(shell [ ${API_VERSION} = "v1" ] && echo backend-stop)
+export BACKEND_BUILD=$(shell [ ${API_VERSION} = "v1" ] && echo backend-build)
 
 
 ##############################################
@@ -233,18 +244,17 @@ endif
 #                  RUN APP                   #
 ##############################################
 # run / stop all services in qualification (compiled) mode
-up: network elasticsearch ${BACKEND_START} frontend
+up: network wait-elasticsearch ${BACKEND_START} frontend
 	@echo run all services in production mode
 
 down: frontend-stop elasticsearch-stop ${BACKEND_STOP} network-stop
 
-up-all: network-all elasticsearch frontend-nginx
+up-all: network-all wait-elasticsearch frontend-nginx
 
 down-all: frontend-nginx-stop elasticsearch-stop network-stop
 
 # production mode with fake
-up-fake: utac-fake-start smtp-fake up
-	@echo run fake services for smtp and utac
+up-fake: network utac-fake-start smtp-fake up
 
 down-fake: smtp-fake-stop utac-fake-stop down
 
@@ -627,9 +637,56 @@ backend-start:
 backend-stop:
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
 
-# build for production
-backend-build:
-	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-backend.yml up --build --force-recreate backend 2>&1 | grep -v orphan
+# packagin for production
+backend-build: build-dir backend-build-all
+
+backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
+
+backend-prepare-build:
+	if [ -f "${BACKEND}/$(FILE_BACKEND_APP_VERSION)" ] ; then rm -rf ${BACKEND}/$(FILE_BACKEND_APP_VERSION) ; fi
+	( cd ${BACKEND} && tar -zcvf $(FILE_BACKEND_APP_VERSION) --exclude ${APP}.tar.gz \
+         babel.config.js \
+         boot-dev.js \
+         src \
+         ecosystem.config.js )
+
+backend-check-build:
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) config -q
+
+backend-build-dist: backend-prepare-build backend-check-build
+	@echo building ${APP} backend in ${BACKEND}
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) build $(DC_BUILD_ARGS) backend
+
+backend-build-dist-archive:
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) run -T --rm backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
+	  cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION)
+	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ; fi
+	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ; fi
+
+backend-clean-dist:
+	@rm -rf $(FILE_BACKEND_APP_VERSION)
+
+backend-clean-dist-archive:
+	@rm -rf $(FILE_BACKEND_DIST_APP_VERSION)
+
+backend-build-image: $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) backend-check-build
+	@echo building ${APP} backend image
+	cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ${BACKEND}/
+	export EXEC_ENV=production; ${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) backend
+
+backend-save-image:
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+        backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker tag $$backend_image_name $$backend_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) $$backend_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_LATEST_VERSION) $$backend_image_name
+
+backend-clean-image:
+	@( ${DC} -f $(DC_BUILD_BACKEND) config | \
+           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
+           docker rmi $$image_name || true ; \
+        done
 
 # development mode
 backend-dev:
@@ -639,7 +696,23 @@ backend-dev:
 backend-dev-stop:
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
 
-# fake services for dev and test modes
+redis-build: redis-build-image
+
+redis-build-image: redis-check-build
+	@echo building ${APP} redis
+	${DC} -f $(DC_RUN_BACKEND) pull redis
+	${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) redis
+
+redis-check-build: backend-check-build
+
+redis-saveimage: backend-check-build
+	redis_image_name=$$(${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.redis.image); \
+	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) $$redis_image_name ; \
+	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_LATEST_VERSION) $$redis_image_name
+
+##############################################
+#              fake services                 #
+##############################################
 utac-fake-start:
 	@echo docker-compose up utac simulator for dev ${VERSION}
 	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
