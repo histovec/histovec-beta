@@ -245,9 +245,10 @@ endif
 ##############################################
 # run / stop all services in qualification (compiled) mode
 up: network wait-elasticsearch ${BACKEND_START} frontend
-	@echo run all services in production mode
+	@echo all services are up in production mode
 
 down: frontend-stop elasticsearch-stop ${BACKEND_STOP} network-stop
+	@echo all services stopped
 
 up-all: network-all wait-elasticsearch frontend-nginx
 
