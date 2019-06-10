@@ -272,13 +272,13 @@ frontend-nginx-stop:
 
 # qualification (compiled) mode
 
-frontend: network tor
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-run-frontend.yml up -d 2>&1 | grep -v orphan
+frontend: network tor frontend-nginx
 
-frontend-stop:
-	@${DC} -f ${DC_PREFIX}-run-frontend.yml down
+frontend-stop: frontend-nginx-stop
 
 # build for qualification and production
+frontend-build: frontend-build-all
+
 frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 
 frontend-prepare-build:
@@ -320,13 +320,6 @@ frontend-clean-image:
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
-
-frontend-build: network
-	@echo building ${APP} frontend in ${FRONTEND}
-	@sudo mkdir -p ${FRONTEND}/dist-build && sudo chmod 777 ${FRONTEND}/dist-build/.
-	@export EXEC_ENV=build; ${DC} -f ${DC_PREFIX}-build-frontend.yml up --build 2>&1 | grep -v orphan
-	@mkdir -p ${FRONTEND}/dist/
-	@sudo rsync -avz --delete ${FRONTEND}/dist-build/. ${FRONTEND}/dist/.
 
 nginx-build: nginx-build-image
 
