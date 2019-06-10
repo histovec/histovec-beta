@@ -262,9 +262,9 @@ down-fake: smtp-fake-stop utac-fake-stop down
 # build for production mode
 build: frontend-build backend-build
 
-build-all: build-dir build-archive build-all-images save-images
+build-all: build save-images
 
-save-images: elasticsearch-save-image nginx-save-image
+save-images: elasticsearch-save-image nginx-save-image backend-save-image redis-save-image
 
 build-all-images: build-dir frontend-build-all nginx-build elasticsearch-build
 
@@ -289,6 +289,8 @@ publish-$(APP_VERSION):
                 $(FILE_FRONTEND_DIST_APP_VERSION) \
                 $(FILE_IMAGE_NGINX_APP_VERSION) \
                 $(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) \
+                $(FILE_IMAGE_BACKEND_APP_VERSION) \
+                $(FILE_IMAGE_REDIS_APP_VERSION) \
            ; do \
             curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_APP_VERSION)/$$file ; \
            done ; \
@@ -305,6 +307,8 @@ publish-latest:
                 $(FILE_FRONTEND_DIST_LATEST_VERSION) \
                 $(FILE_IMAGE_NGINX_LATEST_VERSION) \
                 $(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) \
+                $(FILE_IMAGE_BACKEND_LATEST_VERSION) \
+                $(FILE_IMAGE_REDIS_LATEST_VERSION) \
            ; do \
             curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/$$file ; \
            done ; \
@@ -706,7 +710,7 @@ redis-build-image: redis-check-build
 
 redis-check-build: backend-check-build
 
-redis-saveimage: backend-check-build
+redis-save-image: backend-check-build
 	redis_image_name=$$(${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.redis.image); \
 	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) $$redis_image_name ; \
 	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_LATEST_VERSION) $$redis_image_name
