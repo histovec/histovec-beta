@@ -28,7 +28,6 @@ services:
       - API_WRITE_LIMIT_RATE
       - API_WRITE_BURST
     volumes:
-      - ${APP_PATH}/nginx/tor-ip.conf:/etc/nginx/tor-ip.conf
       - ${LOGS}/nginx:/var/log/nginx/
     ports:
       - ${PORT}:80
