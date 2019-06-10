@@ -659,7 +659,7 @@ backend-build-dist: backend-prepare-build backend-check-build
 	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) build $(DC_BUILD_ARGS) backend
 
 backend-build-dist-archive:
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) run -T --rm backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) run -T --no-deps --rm backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ; fi
