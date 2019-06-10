@@ -63,6 +63,13 @@ export API_WRITE_BURST=20 nodelay
 FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
 FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
 DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
+FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
+FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
+# publish
+PUBLISH_URL_BASE           = histovec-docker-images
+PUBLISH_URL_APP_VERSION    = $(PUBLISH_URL_BASE)/$(APP_VERSION)
+PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
+
 
 ##############################################
 #                 frontend                   #
@@ -244,11 +251,66 @@ down-fake: smtp-fake-stop utac-fake-stop down
 # build for production mode
 build: frontend-build backend-build
 
+build-all: build-dir build-archive build-all-images save-images
+
+save-images: elasticsearch-save-image nginx-save-image
+
+build-all-images: build-dir frontend-build-all nginx-build elasticsearch-build
+
+build-archive: clean-archive build-dir
+	@echo "Build $(APP) $(APP)-$(APP_VERSION) archive"
+	echo "$(APP_VERSION)" > VERSION ; cp VERSION $(BUILD_DIR)/$(APP)-VERSION
+	tar -zcvf $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) --exclude $$(basename $(BUILD_DIR)) --exclude nginx/*.tar.gz --exclude frontend/*.tar.gz *
+	@echo "Build $(APP) $(APP)-latest archive"
+	cp $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_LATEST_VERSION)
+
+# publish packagin
+publish: publish-$(APP_VERSION) publish-latest
+
+publish-$(APP_VERSION):
+	@echo "Publish $(APP) $(APP_VERSION) artifacts"
+	if [ -z "$(openstack_url)" -o -z "$(openstack_auth_id)" -o -z "$(openstack_token)" ] ; then exit 1 ; fi
+	( cd $(BUILD_DIR) ;\
+	  ls -alrt ;\
+	    for file in \
+                $(APP)-VERSION \
+                $(FILE_ARCHIVE_APP_VERSION) \
+                $(FILE_FRONTEND_DIST_APP_VERSION) \
+                $(FILE_IMAGE_NGINX_APP_VERSION) \
+                $(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) \
+           ; do \
+            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_APP_VERSION)/$$file ; \
+           done ; \
+	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=${APP_VERSION}/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
+	)
+
+publish-latest:
+	@echo "Publish $(APP) latest artifacts"
+	if [ -z "$(openstack_url)" -o -z "$(openstack_auth_id)" -o -z "$(openstack_token)" ] ; then exit 1 ; fi
+	( cd $(BUILD_DIR) ;\
+	    for file in \
+                $(APP)-VERSION \
+                $(FILE_ARCHIVE_LATEST_VERSION) \
+                $(FILE_FRONTEND_DIST_LATEST_VERSION) \
+                $(FILE_IMAGE_NGINX_LATEST_VERSION) \
+                $(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) \
+           ; do \
+            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/$$file ; \
+           done ; \
+	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=latest/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
+	)
+
 # clean for fresh start
 clean: index-purge docker-clean frontend-clean
 
 docker-clean: stop
 	docker container rm ${APP}-build-front ${APP}-nginx
+
+clean-archive:
+	@echo "Clean $(APP) archive"
+	rm -rf $(FILE_ARCHIVE_APP_VERSION)
+
+clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image
 
 # development mode
 dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev
@@ -595,10 +657,23 @@ smtp-fake-stop:
 ##############################################
 #                   tests                    #
 ##############################################
+# test production mode
+test-up: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-$(APP)
+	echo "${APP} ${APP_VERSION} up and running"
+test-up-$(APP):
+	time bash tests/test-up-$(APP).sh
+test-up-nginx:
+	time bash tests/test-up-nginx.sh
+test-up-elasticsearch: wait-elasticsearch
+	time bash tests/test-up-elasticsearch.sh
+
+
+# not working anymore: test requests in elasticsearch
 index-test: wait-elasticsearch
 	@echo index test
 	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 
+# performance test
 index-stress: wait-elasticsearch
 	@echo stress test
 	@export PERF_IDS_NB=`wc -l ${PERF_IDS} | awk '{print $1}'` && shuf ${PERF_IDS} | head -$(( ( RANDOM % ( ( ${PERF_IDS_NB} * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
