@@ -49,6 +49,7 @@ export dollar = $(shell echo \$$)
 ##############################################
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
+export NGINX_SERVER_TEMPLATE=nginx-run-v0.template
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
 export API_USER_SCOPE=http_x_forwarded_for
