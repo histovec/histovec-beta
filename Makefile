@@ -59,6 +59,8 @@ export PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
 ##############################################
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
+export NGINX_SERVER_TEMPLATE_V0=nginx-run-v0.template
+export NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
 export API_USER_SCOPE=http_x_forwarded_for
@@ -184,11 +186,6 @@ include ./artifacts
 
 # combined variables should not be overrided
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
-export NGINX_SERVER_TEMPLATE=nginx-run-${API_VERSION}.template
-export BACKEND_START=$(shell [ ${API_VERSION} = "v1" ] && echo backend-start)
-export BACKEND_STOP=$(shell [ ${API_VERSION} = "v1" ] && echo backend-stop)
-export BACKEND_BUILD=$(shell [ ${API_VERSION} = "v1" ] && echo backend-build)
-
 
 ##############################################
 ##############################################
@@ -244,10 +241,20 @@ endif
 #                  RUN APP                   #
 ##############################################
 # run / stop all services in qualification (compiled) mode
-up: network wait-elasticsearch ${BACKEND_START} frontend
+up: up-${API_VERSION}
+
+up-v0: network wait-elasticsearch backend-start frontend
 	@echo all services are up in production mode
 
-down: frontend-stop elasticsearch-stop ${BACKEND_STOP} network-stop
+up-v1: network wait-elasticsearch backend-start frontend
+	@echo all services are up in production mode
+
+down: down-${API_VERSION}
+
+down-v0: frontend-stop elasticsearch-stop network-stop
+	@echo all services stopped
+
+down-v1: frontend-stop elasticsearch-stop backend-stop network-stop
 	@echo all services stopped
 
 up-all: up
@@ -400,7 +407,7 @@ frontend-check-build:
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) config -q
 
 frontend-build-dist: frontend-prepare-build frontend-check-build
-	@echo building ${APP} frontend in ${FRONTEND} using $NGINX_SERVER_TEMPLATE
+	@echo building ${APP} frontend in ${FRONTEND}
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) build $(DC_BUILD_ARGS)
 
 frontend-build-dist-archive:
@@ -424,10 +431,21 @@ frontend-clean-image:
 
 nginx-build: nginx-build-image
 
-nginx-build-image: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
+nginx-build-image: nginx-build-image-${API_VERSION}
+
+nginx-build-image-v0: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
 	@echo building ${APP} nginx
 	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
-	export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
+	export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0}; \
+		export EXEC_ENV=production; \
+		${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
+
+nginx-build-image-v1: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
+	@echo building ${APP} nginx
+	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
+	export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V1}; \
+		export EXEC_ENV=production; \
+		${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
 
 nginx-check-build:
 	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_FRONTEND) config -q
