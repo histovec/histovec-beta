@@ -250,9 +250,9 @@ up: network wait-elasticsearch ${BACKEND_START} frontend
 down: frontend-stop elasticsearch-stop ${BACKEND_STOP} network-stop
 	@echo all services stopped
 
-up-all: network-all wait-elasticsearch frontend-nginx
+up-all: up
 
-down-all: frontend-nginx-stop elasticsearch-stop network-stop
+down-all: down
 
 # production mode with fake
 up-fake: network utac-fake-start smtp-fake up
