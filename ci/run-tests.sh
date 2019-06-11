@@ -4,10 +4,10 @@ ret=1
 echo "# build all/run/test all"
 time make -f Makefile.deploy build-all-images || exit $?
 time make -f Makefile.deploy up-all || exit $?
-time make -f Makefile.deploy down-all || exit $?
-echo "export API_VERSION=v1" >> artifacts
-time make -f Makefile.deploy nginx-build || exit $?
-time make -f Makefile.deploy up-all || exit $?
+# time make -f Makefile.deploy down-all || exit $?
+# echo "export API_VERSION=v1" >> artifacts
+# time make -f Makefile.deploy nginx-build || exit $?
+# time make -f Makefile.deploy up-all || exit $?
 # create test env
 time make -f Makefile.deploy wait-elasticsearch || exit $?
 time make -f Makefile.deploy data-encrypt || exit $?
