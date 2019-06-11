@@ -325,7 +325,7 @@ clean-archive:
 	@echo "Clean $(APP) archive"
 	rm -rf $(FILE_ARCHIVE_APP_VERSION)
 
-clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image
+clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image backend-clean-image
 
 # development mode
 dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev
@@ -416,7 +416,7 @@ frontend-clean-dist-archive:
 	@rm -rf $(FILE_FRONTEND_DIST_APP_VERSION)
 
 frontend-clean-image:
-	@( ${DC} -f $(DC_BUILD_FRONTEND) config | \
+	@( export EXEC_ENV=build-deploy && ${DC} -f $(DC_BUILD_FRONTEND) config | \
            python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
@@ -440,7 +440,7 @@ nginx-save-image:
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
 
 nginx-clean-image:
-	@( ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
+	@( export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
            python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
@@ -687,7 +687,7 @@ backend-save-image:
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_LATEST_VERSION) $$backend_image_name
 
 backend-clean-image:
-	@( ${DC} -f $(DC_BUILD_BACKEND) config | \
+	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_BACKEND) config | \
            python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
