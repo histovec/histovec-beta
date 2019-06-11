@@ -44,7 +44,7 @@ export default new Vuex.Store({
       pdf: true,
       updateDate: true,
       v1: false,
-      blocANTS: false
+      blocANTS: true
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
