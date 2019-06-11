@@ -266,7 +266,7 @@ build-all: build save-images
 
 save-images: elasticsearch-save-image nginx-save-image backend-save-image redis-save-image
 
-build-all-images: build-dir frontend-build-all nginx-build elasticsearch-build
+build-all-images: build-dir frontend-build backend-build elasticsearch-build redis-build
 
 build-archive: clean-archive build-dir
 	@echo "Build $(APP) $(APP)-$(APP_VERSION) archive"
