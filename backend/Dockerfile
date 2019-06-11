@@ -47,7 +47,7 @@ FROM base as development
 # Install app dependencies
 RUN npm --no-git-tag-version version ${APP_VERSION}
 RUN npm install
-RUN npm audit fix
+RUN npm audit fix --registry=https://registry.npmjs.org
 
 COPY babel.config.js boot-dev.js ./
 
