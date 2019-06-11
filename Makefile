@@ -637,7 +637,7 @@ index-direct-check: install-prerequisites-injection wait-elasticsearch
 # production mode
 backend-start:
 	@echo docker-compose up backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d 2>&1 | grep -v orphan
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
 
 backend-stop:
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
