@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   backend:
-    image: ${APP}-backend-${EXEC_ENV}
+    image: ${APP}-backend-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${BACKEND}
       target: ${EXEC_ENV}
@@ -49,7 +49,7 @@ services:
 
 
   redis:
-    image: redis
+    image: redis:5
     container_name: ${APP}-cache
 
 networks:

@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   nginx:
-    image: ${APP}-nginx-${EXEC_ENV}
+    image: ${APP}-nginx-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${NGINX}
       target: ${EXEC_ENV}
