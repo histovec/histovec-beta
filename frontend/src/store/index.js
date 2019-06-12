@@ -59,7 +59,6 @@ export default new Vuex.Store({
     },
     config: {
       beta: false,
-      fniMode: true,
       allTabs: false,
       id: {
         dateNaissance: false,
@@ -76,7 +75,6 @@ export default new Vuex.Store({
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       beta: ['ctrl', 'alt', 'b'],
-      fniMode: ['ctrl','alt','f'],
       'id.dateNaissance': ['ctrl', 'alt', 'd'],
       'id.code': ['ctrl', 'alt', 'c'],
       'id.strongCode': ['ctrl', 'alt', 'z'],

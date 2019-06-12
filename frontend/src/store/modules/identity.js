@@ -13,7 +13,6 @@ export default {
     plaque: '',
     siren: '',
     formule: '',
-    fniMode: true
   },
   mutations: {
     clearIdentity (state) {

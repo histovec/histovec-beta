@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div
-        v-if="typeImmatriculation === 'siv' || !fniMode"
+        v-if="typeImmatriculation === 'siv'"
         class="modal-wrapper"
       >
         <div class="modal-dialog">
@@ -106,7 +106,6 @@
 <script>
 export default {
   props: {
-    fniMode: Boolean,
     typeImmatriculation: {
       type: String,
       default: 'siv'
