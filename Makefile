@@ -243,10 +243,10 @@ endif
 # run / stop all services in qualification (compiled) mode
 up: up-${API_VERSION}
 
-up-v0: network wait-elasticsearch backend-start frontend
+up-v0: network wait-elasticsearch backend-start frontend-v0
 	@echo all services are up in production mode
 
-up-v1: network wait-elasticsearch backend-start frontend
+up-v1: network wait-elasticsearch backend-start frontend-v1
 	@echo all services are up in production mode
 
 down: down-${API_VERSION}
@@ -379,8 +379,17 @@ frontend-nginx-stop: frontend-stop
 
 # qualification (compiled) mode
 
-frontend: network tor
-	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
+frontend: frontend-${API_VERSION}
+
+frontend-v0: network tor
+	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0};\
+		export export EXEC_ENV=production; \
+		${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
+
+frontend-v1: network tor
+	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V1};\
+		export export EXEC_ENV=production; \
+		${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
 
 frontend-stop:
 	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) down
@@ -429,21 +438,19 @@ frontend-clean-image:
            docker rmi $$image_name || true ; \
         done
 
-nginx-build: nginx-build-image
-
-nginx-build-image: nginx-build-image-${API_VERSION}
+nginx-build: nginx-build-image-${API_VERSION}
 
 nginx-build-image-v0: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
 	@echo building ${APP} nginx
 	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
-	export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0}; \
+	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0};\
 		export EXEC_ENV=production; \
 		${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
 
 nginx-build-image-v1: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
 	@echo building ${APP} nginx
 	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
-	export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V1}; \
+	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V1};\
 		export EXEC_ENV=production; \
 		${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
 
@@ -658,6 +665,7 @@ backend-start:
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
 
 backend-stop:
+	@echo docker-compose down backend for production ${VERSION}
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 # packagin for production
@@ -754,7 +762,10 @@ smtp-fake-stop:
 #                   tests                    #
 ##############################################
 # test production mode
-test-up: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-$(APP)
+test-up: test-up-${API_VERSION}
+test-up-v0: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-$(APP)
+	echo "${APP} ${APP_VERSION} up and running"
+test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-backend test-up-$(APP)
 	echo "${APP} ${APP_VERSION} up and running"
 test-up-$(APP):
 	time bash tests/test-up-$(APP).sh
@@ -762,6 +773,8 @@ test-up-nginx:
 	time bash tests/test-up-nginx.sh
 test-up-elasticsearch: wait-elasticsearch
 	time bash tests/test-up-elasticsearch.sh
+test-up-backend:
+	time bash tests/test-up-backend.sh
 
 
 # not working anymore: test requests in elasticsearch
