@@ -243,11 +243,11 @@ endif
 # run / stop all services in qualification (compiled) mode
 up: up-${API_VERSION}
 
-up-v0: network wait-elasticsearch backend-start frontend-v0
-	@echo all services are up in production mode
+up-v0: network wait-elasticsearch frontend-v0
+	@echo all services are up in production mode, api v0
 
 up-v1: network wait-elasticsearch backend-start frontend-v1
-	@echo all services are up in production mode
+	@echo all services are up in production mode, api v1
 
 down: down-${API_VERSION}
 
