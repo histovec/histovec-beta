@@ -588,6 +588,7 @@ backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
 data-encrypt: network
 	@mkdir -p ${decrypted_datadir} ${datadir}
 	@${DC} -f ${DC_PREFIX}-dataprep.yml up --build
+	@${DC} -f ${DC_PREFIX}-dataprep.yml down
 
 # dataprep qualif mode - download data
 # before inserting it in elasticsearch
