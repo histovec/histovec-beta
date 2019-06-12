@@ -35,21 +35,6 @@
                 <!-- fin bandeau -->
               </div>
             </div>
-            <!-- debut beta -->
-            <div
-              v-if="$store.state.config['beta']"
-              id="no-boot"
-              class="col-xs-1"
-            >
-              <img
-                alt="version beta"
-                src="assets/images/beta.png"
-                class="img-responsive"
-                width="100"
-                height="100"
-              >
-            </div>
-            <!-- fin beta -->
           </div>
         </div>
       </header>
