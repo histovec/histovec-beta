@@ -14,9 +14,6 @@ ARG port
 # Base dir /app
 WORKDIR /$app_path
 
-VOLUME /${app_path}/src
-VOLUME /${app_path}/dist
-
 # Expose the listening port of your app
 EXPOSE ${port}
 
@@ -43,6 +40,13 @@ COPY package.json ./
 # Step 2: "development" target #
 ################################
 FROM base as development
+ARG app_ver
+ARG app_path
+ENV APP_VERSION ${app_ver}
+ENV NPM_CONFIG_LOGLEVEL debug
+
+VOLUME /${app_path}/src
+VOLUME /${app_path}/dist
 
 # Install app dependencies
 RUN npm --no-git-tag-version version ${APP_VERSION}
@@ -51,19 +55,21 @@ RUN npm audit fix --registry=https://registry.npmjs.org
 
 COPY babel.config.js boot-dev.js ./
 
-ARG app_ver
-ENV APP_VERSION ${app_ver}
-ENV NPM_CONFIG_LOGLEVEL debug
-
 CMD ["npm","run",  "dev"]
 
 ##########################
 # Step 3: "build" target #
 ##########################
-FROM development as build
+FROM base as build
 ENV NPM_CONFIG_LOGLEVEL warn
 ARG app_name
 ARG app_ver
+ENV APP_VERSION ${app_ver}
+
+# Install app dependencies
+RUN npm --no-git-tag-version version ${APP_VERSION}
+RUN npm install
+RUN npm audit fix --registry=https://registry.npmjs.org
 
 COPY ${app_name}-${app_ver}-backend.tar.gz .
 

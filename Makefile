@@ -162,6 +162,7 @@ export UTAC_API=utac
 export UTAC_LATENCY=300
 export UTAC_TIMEOUT=5000
 # packaging
+export DC_DEV_BACKEND = ${DC_PREFIX}-dev-backend.yml
 export DC_BUILD_BACKEND = ${DC_PREFIX}-backend.yml
 export DC_RUN_BACKEND = ${DC_PREFIX}-backend.yml
 export FILE_BACKEND_APP_VERSION = $(APP)-$(APP_VERSION)-backend.tar.gz
@@ -723,7 +724,8 @@ backend-clean-image:
 # development mode
 backend-dev:
 	@echo docker-compose up backend for dev ${VERSION}
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+	@export EXEC_ENV=development;\
+		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 backend-dev-stop:
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down

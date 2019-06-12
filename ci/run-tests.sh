@@ -15,5 +15,7 @@ time make -f Makefile.deploy test-up || exit $?
 time make -f Makefile.deploy down-all || exit $?
 time make -f Makefile.deploy nginx-build-image-v1 || exit $?
 time make -f Makefile.deploy up-v1 || exit $?
-time make -f Makefile.deploy test-up-v1 || exit $?
+docker logs histovec-nginx-production
+docker logs histovec-backend-production
+time make -f Makefile.deploy test-up-v1
 time make -f Makefile.deploy down-v1 || exit $?
