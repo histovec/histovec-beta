@@ -768,7 +768,7 @@ smtp-fake-stop:
 test-up: test-up-${API_VERSION}
 test-up-v0: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-$(APP)
 	echo "${APP} ${APP_VERSION} up and running"
-test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-backend test-up-$(APP)
+test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-backend test-up-nginx test-up-$(APP)
 	echo "${APP} ${APP_VERSION} up and running"
 test-up-$(APP):
 	time bash tests/test-up-$(APP).sh
