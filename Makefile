@@ -323,6 +323,43 @@ publish-latest:
 	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=latest/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
 	)
 
+# Download published images
+
+download-all-images: download-all-images-${API_VERSION}
+download-all-images-v0: build-dir nginx-download-image elasticsearch-download-image
+download-all-images-v1: build-dir nginx-download-image elasticsearch-download-image backend-download-image redis-download-image
+
+nginx-download-image: ## Download nginx image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_NGINX_APP_VERSION) \
+          $(curl_progress_bar)
+
+elasticsearch-download-image: ## Download elasticsearch image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) \
+          $(curl_progress_bar)
+
+backend-download-image: ## Download backend image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_BACKEND_APP_VERSION) \
+          $(curl_progress_bar)
+
+redis-download-image: ## Download redis image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_REDIS_APP_VERSION) \
+          $(curl_progress_bar)
+
+# Load published images
+load-all-images: load-all-images-${API_VERSION}
+load-all-images-v0: build-dir nginx-load-image elasticsearch-load-image
+load-all-images-v1: build-dir nginx-load-image elasticsearch-load-image backend-load-image redis-load-image
+
+nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
+elasticsearch-load-image: $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION)
+backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
+redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
+
+
 # clean for fresh start
 clean: index-purge docker-clean frontend-clean
 

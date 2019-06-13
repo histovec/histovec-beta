@@ -10,5 +10,6 @@ include Makefile
 export openstack_url = $(shell echo $$openstack_url )
 export openstack_auth_id = $(shell echo $$openstack_auth_id )
 export openstack_token = $(shell echo $$openstack_token )
+export curl_progress_bar=--progress-bar --write 'Downloaded %{url_effective} %{size_download} bytes in %{time_connect} seconds (%{speed_download} bytes/s)\n'
 
 
