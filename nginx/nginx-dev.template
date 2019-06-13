@@ -1,3 +1,15 @@
+upstream elasticsearch {
+  server <ES_HOST>:<ES_PORT>;
+}
+
+upstream backend {
+  server <BACKEND_HOST>:<BACKEND_PORT>;
+}
+
+upstream frontend-dev {
+  server <FRONTEND_DEV_HOST>:<FRONTEND_DEV_PORT>;
+}
+
 server {
   listen 80 default_server;
   include tor-ip.conf;
@@ -12,7 +24,7 @@ server {
   }
 
   location ~ (__webpack_hmr|app.js|^/static|.*hot-update.(js|json)) {
-  	proxy_pass http://frontend-dev:8080;
+  	proxy_pass http://frontend-dev;
       # Allow protocol upgrade to websocket
       proxy_http_version 1.1;
       proxy_next_upstream off;
@@ -23,7 +35,7 @@ server {
   }
 
   location /<APP> {
-        proxy_pass http://frontend-dev:8080;
+        proxy_pass http://frontend-dev;
   }
 
   location /<APP>/assets {
@@ -38,9 +50,9 @@ server {
     if ($request_method != GET) {
        return 405;
     }
-    rewrite "^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
-    # rewrite "^/.*/id/.*/([A-Za-z0-9_-]{43}=)$" /<dataset>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
-    proxy_pass http://<ES_HOST>:9200;
+    rewrite "^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" /<ES_INDEX>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
+    # rewrite "^/.*/id/.*/([A-Za-z0-9_-]{43}=)$" /<ES_INDEX>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
+    proxy_pass http://elasticsearch;
     proxy_redirect off;
     proxy_hide_header Content-Type;
     proxy_set_body '{"_source": "v"}';
@@ -77,7 +89,7 @@ server {
        return 405;
     }
     rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
-    proxy_pass http://<ES_HOST>:9200;
+    proxy_pass http://elasticsearch;
     proxy_redirect off;
     proxy_hide_header Content-Type;
     proxy_set_header content-type "application/json";
@@ -85,8 +97,11 @@ server {
     proxy_http_version 1.1;
   }
 
-  location ~ "^/<APP>/api/v1/" {
-    proxy_pass http://backend:8000;
+  location ~ "^/<APP>/api/v1/(siv|utac|contact|feedback)" {
+    if ($request_method != POST) {
+       return 405;
+    }
+    proxy_pass http://backend;
     proxy_http_version 1.1;
     proxy_next_upstream off;
     proxy_set_header Host $http_host;

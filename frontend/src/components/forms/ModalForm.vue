@@ -139,7 +139,7 @@
                     </p>
                   </div>
                   <div
-                    v-if="this.$store.state.histovec.id"
+                    v-if="this.$store.state.siv.id"
                   >
                     <label> Données transmises pour l'assistance </label>
                     <div class="row txt-small-11">
@@ -249,7 +249,7 @@ export default {
   },
   computed: {
     who () {
-      return this.$store.state.histovec.id ? (this.$store.state.histovec.code ? 'holder' : 'buyer') : undefined
+      return this.$store.state.siv.id ? (this.$store.state.siv.code ? 'holder' : 'buyer') : undefined
     },
     mode () {
       return this.$store.state.modalFormMode
