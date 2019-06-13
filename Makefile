@@ -24,6 +24,7 @@ else
 endif
 
 export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
+export curl_progress_bar=--progress-bar --write 'Downloaded %{url_effective} %{size_download} bytes in %{time_connect} seconds (%{speed_download} bytes/s)\n'
 
 ##############################################
 #         APP configuration section          #
@@ -267,7 +268,7 @@ up-fake: network utac-fake-start smtp-fake up
 
 down-fake: smtp-fake-stop utac-fake-stop down
 
-# build for production mode
+# package for production mode
 build: frontend-build backend-build
 
 build-all: build save-images
@@ -283,7 +284,7 @@ build-archive: clean-archive build-dir
 	@echo "Build $(APP) $(APP)-latest archive"
 	cp $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_LATEST_VERSION)
 
-# publish packagin
+# publish packages
 publish: publish-$(APP_VERSION) publish-latest
 
 publish-$(APP_VERSION):
@@ -329,36 +330,11 @@ download-all-images: download-all-images-${API_VERSION}
 download-all-images-v0: build-dir nginx-download-image elasticsearch-download-image
 download-all-images-v1: build-dir nginx-download-image elasticsearch-download-image backend-download-image redis-download-image
 
-nginx-download-image: ## Download nginx image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_NGINX_APP_VERSION) \
-          $(curl_progress_bar)
-
-elasticsearch-download-image: ## Download elasticsearch image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) \
-          $(curl_progress_bar)
-
-backend-download-image: ## Download backend image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_BACKEND_APP_VERSION) \
-          $(curl_progress_bar)
-
-redis-download-image: ## Download redis image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_REDIS_APP_VERSION) \
-          $(curl_progress_bar)
 
 # Load published images
 load-all-images: load-all-images-${API_VERSION}
 load-all-images-v0: build-dir nginx-load-image elasticsearch-load-image
 load-all-images-v1: build-dir nginx-load-image elasticsearch-load-image backend-load-image redis-load-image
-
-nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
-	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
-elasticsearch-load-image: $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION)
-	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION)
-backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
-	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
-redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
-	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
-
 
 # clean for fresh start
 clean: index-purge docker-clean frontend-clean
@@ -514,6 +490,15 @@ frontend-clean:
 	@echo cleaning ${APP} frontend npm dist
 	sudo rm -rf ${FRONTEND}/dist
 
+# download nginx and load it in docker
+nginx-download-image: ## Download nginx image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_NGINX_APP_VERSION) \
+          $(curl_progress_bar)
+
+nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
+
+
 # development mode
 frontend-dev: network tor
 	@echo docker-compose up frontend for dev ${VERSION}
@@ -559,6 +544,15 @@ elasticsearch-clean-image:
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
+
+# download image and load it to docker
+
+elasticsearch-download-image: ## Download elasticsearch image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) \
+          $(curl_progress_bar)
+
+elasticsearch-load-image: $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION)
 
 # mix elasticsearch procedures
 vm_max:
@@ -707,7 +701,7 @@ backend-stop:
 	@echo docker-compose down backend for production ${VERSION}
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
 
-# packagin for production
+# package for production
 backend-build: build-dir backend-build-all
 
 backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
@@ -757,6 +751,21 @@ backend-clean-image:
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
+
+# download image and load it in docker
+
+backend-download-image: ## Download backend image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_BACKEND_APP_VERSION) \
+          $(curl_progress_bar)
+backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
+
+redis-download-image: ## Download redis image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_REDIS_APP_VERSION) \
+          $(curl_progress_bar)
+redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
+
 
 # development mode
 backend-dev:
