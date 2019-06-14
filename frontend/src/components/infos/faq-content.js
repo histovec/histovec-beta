@@ -409,7 +409,7 @@ export default function (mailBody) {
       <br />Pensez à l'alternative de l'envoi par QR-Code si les mails n'ont pas permis d'aboutir.
       </p>
       <p class="indented">
-      2. Le rapport n'existe pas, ou n'est plus disponible pour des raison de sécurité - HistoVec vous signale alors une erreur:
+      2. Le rapport n'existe pas, ou n'est plus disponible pour des raisons de sécurité - HistoVec vous signale alors une erreur:
       </p>
       <ul class="indented">
           <li> Le rapport ne semble pas ou plus disponible </li>
@@ -417,7 +417,7 @@ export default function (mailBody) {
       </p>
       <p class="indented"> <b> Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur </b> </p>
       <p class="indented">
-      Si jamais le problème persite avec votre vendeur :
+      Si jamais le problème persiste avec votre vendeur :
         <a
           id="contact_hook_${id}"
           href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur%20de%20lien%20invalide"
