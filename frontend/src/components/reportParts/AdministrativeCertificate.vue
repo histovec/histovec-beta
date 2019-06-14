@@ -74,6 +74,9 @@ export default {
       }
     })
   },
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/csa`)
+  },
   methods: {
     pad (n, width, z) {
       z = z || '0'
@@ -81,6 +84,8 @@ export default {
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
     },
     generatePDF () {
+      this.$store.dispatch('log', `${this.$route.path}/csa/download`)
+
       var pdf = new JsPdf({compress: true})
       let self = this
       // globall params

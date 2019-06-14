@@ -108,6 +108,9 @@ export default {
       default: () => {}
     },
     holder: Boolean
+  },
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/administrative-status`)
   }
 }
 

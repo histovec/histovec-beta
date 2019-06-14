@@ -465,6 +465,9 @@ export default {
       type: Object,
       default: () => {}
     }
+  },
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/vehicle`)
   }
 }
 
