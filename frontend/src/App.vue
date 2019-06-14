@@ -87,7 +87,7 @@
                         </li>
                         <li>
                           <a
-                            :href="$store.state.config.v1 ? undefined : 'mailto:histovec@interieur.gouv.fr?subject=Contact%20Histovec'"
+                            :href="$store.state.config.v1 ? undefined : contactEmail"
                             title="Contact"
                             @click="toggleModalForm()"
                           >
@@ -96,7 +96,7 @@
                         </li>
                         <li>
                           <a
-                            :href="$store.state.config.v1 ? undefined : 'mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur'"
+                            :href="$store.state.config.v1 ? undefined : reportErrorEmail"
                             title="Signaler une erreur"
                             @click="toggleModalForm(contact.mode.contact, contact.subject.error)"
                           >
@@ -219,6 +219,9 @@ import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
 import ModalForm from './components/forms/ModalForm.vue'
 
+import { mailTo } from './utils/mail.js'
+import { CONTACT_MAIL, REPORT_ERROR_MAIL } from './constants/mail.js'
+
 Vue.use(VueTheMask)
 Vue.use(VueClipboard)
 
@@ -253,6 +256,9 @@ Vue.mixin({
     window.bus.$on('langChange', value => {
       this.lang = value
     })
+
+    this.contactEmail = mailTo(CONTACT_MAIL)
+    this.reportErrorEmail = mailTo(REPORT_ERROR_MAIL)
   },
   methods: {
     guid () {
