@@ -6,7 +6,7 @@
     <div class="row">
       <!-- debut alerte verte -->
       <div
-        v-if="notifSuccess"
+        v-show="notifSuccess"
         class="col-md-12"
       >
         <div
@@ -36,6 +36,7 @@
           <a
             :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody"
             class="btn radius-30 btn-default btn-animated btn"
+            @click="logReportMailDispatch"
           >
             Courriel
             <i class="fa fa-send"></i>
@@ -60,7 +61,7 @@
             level="L"
           >
           </qrcode-vue>
-        </div>
+        </div>http://localhost/histovec/report?id=Gb7fC6t-CVfcULEh5ZPuwKdEK9uwnQQiJ0MDu9v8EN8%3D&key=EyuHMhXIG5E1DxUSFdEleEvbhAwiUyzg7A4G8cdrAUs%3D
       </div>
     </div>
   </div>
@@ -105,8 +106,16 @@ export default {
       return text + this.url.replace('&', '%26')
     }
   },
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/share`)
+  },
   methods: {
+    logReportMailDispatch () {
+      this.$store.dispatch('log', `${this.$route.path}/share/mail`)
+    },
     showNotifSuccess () {
+      this.$store.dispatch('log', `${this.$route.path}/share/copy`)
+
       this.notifSuccess = true
       setTimeout(() => {
         this.notifSuccess = false

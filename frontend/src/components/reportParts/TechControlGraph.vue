@@ -59,13 +59,13 @@ export default {
             label: (tooltipItem) => {
               let text = ''
               text = this.nature[tooltipItem.index]
-              text += ': ' 
+              text += ': '
               text += this.resultat[tooltipItem.index]
               return text;
             }
           }
         }
-      }      
+      }
     },
     data () {
       return orderBy(this.ct.map((controle) => this.controlToPoint(controle)), ['x'], ['asc'])
@@ -101,6 +101,8 @@ export default {
     },
   },
   mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/kilometers`)
+
     this.renderChart(this.lineData, this.options)
   },
   methods: {

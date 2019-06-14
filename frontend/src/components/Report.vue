@@ -181,6 +181,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'abstract'}]"
               >
                 <abstract
+                  v-if="tab === 'abstract'"
                   :v="v"
                   :holder="holder"
                 >
@@ -191,14 +192,22 @@
                 class="tab-pane fade pr-20"
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'vehicle'}]"
               >
-                <tech-chars :v="v"></tech-chars>
+                <tech-chars
+                  v-if="tab === 'vehicle'"
+                  :v="v"
+                >
+                </tech-chars>
               </div>
               <!-- /* ----------------- titre ----------------- */ -->
               <div
                 class="tab-pane fade"
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'holder'}]"
               >
-                <license :v="v"></license>
+                <license
+                  v-if="tab === 'holder'"
+                  :v="v"
+                >
+                </license>
               </div>
               <!-- situation administrative -->
               <div
@@ -206,6 +215,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'situation'}]"
               >
                 <administrative
+                  v-if="tab === 'situation'"
                   :v="v"
                   :holder="holder"
                 >
@@ -216,14 +226,18 @@
                 class="tab-pane fade"
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'history'}]"
               >
-                <history :v="v"></history>
+                <history
+                  v-if="tab === 'history'"
+                  :v="v"
+                >
+                </history>
               </div>
               <div
                 class="tab-pane fade"
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
               >
                 <tech-control
-                  v-if="ct.length > 0"
+                  v-if="ct.length > 0 && tab === 'utac'"
                   :ct="ct"
                 >
                 </tech-control>
@@ -234,6 +248,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utacGraph'}]"
               >
                 <tech-control-graph
+                  v-if="tab === 'utacGraph'"
                   :ct="ct"
                 >
                 </tech-control-graph>
@@ -244,6 +259,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'send'}]"
               >
                 <share
+                  v-if="tab === 'send'"
                   :v="v"
                   :url="url"
                   :baseurl="baseurl"
@@ -257,6 +273,7 @@
                 :class="[{'in active' : tab === 'csa'}]"
               >
                 <administrative-certificate
+                  v-if="tab === 'csa'"
                   :v="v"
                   :url="url"
                   :baseurl="baseurl"
