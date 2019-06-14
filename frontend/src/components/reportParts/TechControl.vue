@@ -35,7 +35,7 @@
         </div>
         <div class="col-sm-2">
           <span class="info_red txt-small-12">{{ entry.km }}</span>
-        </div>        
+        </div>
       </div>
       <div class="separator pv-5"></div>
     </div>
@@ -64,6 +64,9 @@ export default {
         return []
       }
     },
+  },
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/technical-control`)
   },
   methods: {
     labelize (controle) {
