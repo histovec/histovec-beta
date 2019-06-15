@@ -49,8 +49,14 @@ services:
 
 
   redis:
-    image: redis:5
+    image: ${APP}-cache:${APP_VERSION}
+    build:
+      context: ${REDIS}
+      target: cache
+      dockerfile: Dockerfile
     container_name: ${APP}-cache
+    sysctls:
+      - net.core.somaxconn=65535
 
 networks:
   default:
