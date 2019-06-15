@@ -99,6 +99,9 @@ export ES_PORT=9200
 # or elasticsearch won't start
 export MAX_MAP_COUNT=262144
 export vm_max_count		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.max_map_count\s*=\s*262144 && echo true)
+# parameters recommanded to set on hot for redis (check vars)
+export transparent_hugepage		:= $(shell cat /sys/kernel/mm/transparent_hugepage/enabled 2>&1 | grep '\[never\]' && echo true)
+export vm_overcommit_memory		:= $(shell cat /etc/sysctl.conf 2>&1 | egrep vm.overcommit_memory\s*=\s*1 && echo true)
 # build
 export DC_ELASTICSEARCH      = ${DC_PREFIX}-elasticsearch.yml
 export FILE_IMAGE_ELASTICSEARCH_APP_VERSION = $(APP)-elasticsearch-$(APP_VERSION)-image.tar
@@ -153,6 +156,7 @@ export MAIL_TO=histovec@fake.mi
 export SMTP_SERVER=smtp
 export SMTP_PORT=25
 # redis confs for backend and cache of utac data
+export REDIS=${BACKEND}/redis
 export REDIS_PERSIST=86400
 export REDIS_URL=redis
 # utac confs for backend and fake api
@@ -693,13 +697,23 @@ index-direct-check: install-prerequisites-injection wait-elasticsearch
 #                  backend                   #
 ##############################################
 # production mode
-backend-start:
+backend-start: backend-host-config
 	@echo docker-compose up backend for production ${VERSION}
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
 
 backend-stop:
 	@echo docker-compose down backend for production ${VERSION}
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
+
+backend-host-config: redis-host-config
+
+redis-host-config:
+ifeq ("$(vm_overcommit_memory)", "")
+	sudo sysctl vm.overcommit_memory=1
+endif
+ifeq ("$(transparent_hugepage)", "")
+	echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+endif
 
 # package for production
 backend-build: build-dir backend-build-all
@@ -768,7 +782,7 @@ redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
 
 
 # development mode
-backend-dev:
+backend-dev: backend-host-config
 	@echo docker-compose up backend for dev ${VERSION}
 	@export EXEC_ENV=development;\
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
@@ -780,7 +794,6 @@ redis-build: redis-build-image
 
 redis-build-image: redis-check-build
 	@echo building ${APP} redis
-	${DC} -f $(DC_RUN_BACKEND) pull redis
 	${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) redis
 
 redis-check-build: backend-check-build
