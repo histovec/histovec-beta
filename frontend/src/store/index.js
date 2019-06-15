@@ -72,6 +72,8 @@ export default new Vuex.Store({
       let rootPath = key.replace(/((.*)\..*|.*)/, '$2')
       rootPath = rootPath === '' ? 'config' : `config.${rootPath}`
       let model = objectPath.get(state, rootPath)
+      /* eslint-disable-next-line no-console */
+      console.log('hidden-feature', key, !model[leafPath])
       Vue.set(model, leafPath, !model[leafPath])
     },
     toggleModalForm (state) {
