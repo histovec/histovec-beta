@@ -1,7 +1,29 @@
 config:
   environments:
-    development:
+    api-dev:
       target: "http://nginx-dev"
+      phases:
+        - duration: 5
+          arrivalRate: 2
+        - duration: 5
+          arrivalRate: 5
+      payload:
+        path: ids.csv
+        fields:
+          - idv
+    api:
+      target: "http://nginx"
+      phases:
+        - duration: 5
+          arrivalRate: 2
+        - duration: 5
+          arrivalRate: 5
+      payload:
+        path: ids.csv
+        fields:
+          - idv
+    api-perf:
+      target: "http://nginx"
       phases:
         - duration: 30
           arrivalRate: 2
@@ -32,7 +54,7 @@ scenarios:
   - name: histovec-v1
     flow:
     - post:
-        url: /histovec/api/v1/id
+        url: /histovec/api/v1/siv
         json:
           uuid: 8ebf2ad7-ec0f-f4d5-d974-995e07f199cf
           id: "{{ idv }}"
