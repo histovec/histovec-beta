@@ -863,13 +863,13 @@ test-perf: wait-elasticsearch build-api-injector
 	@echo perf test
 	@for test in v0 v1 utac; do\
 		make test-perf-$$test;\
-		doneaza
+		done
 	@make clean-random-ids
 
 test-api: wait-elasticsearch build-api-injector
 	@echo simple api test
 	@for test in v0 v1 utac; do\
-		do make test-api-$$test;\
+		make test-api-$$test;\
 		done
 	@make clean-random-ids
 
