@@ -184,7 +184,9 @@ export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 # performance test confs
 export PERF=${APP_PATH}/tests/performance
 export PERF_IDS=${PERF}/ids.csv
-export PERF_SCENARIOS:=$(shell ls ${PERF}/scenarios/*)
+export PERF_SCENARIO_V0=${PERF}/scenarios/test-histovec-v0.yml
+export PERF_SCENARIO_V1=${PERF}/scenarios/test-histovec-v1.yml
+export PERF_SCENARIO_UTAC=${PERF}/scenarios/test-histovec-v1-utac.yml
 export PERF_REPORTS=${PERF}/reports/
 
 dummy               := $(shell touch artifacts)
@@ -845,15 +847,86 @@ index-test: wait-elasticsearch
 	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 
 # performance test
-index-stress: wait-elasticsearch
-	@echo stress test
-	@export PERF_IDS_NB=`wc -l ${PERF_IDS} | awk '{print $1}'` && shuf ${PERF_IDS} | head -$(( ( RANDOM % ( ( ${PERF_IDS_NB} * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
-	@${DC} -f ${DC_PREFIX}-artillery.yml build
-	@for scenario in ${PERF_SCENARIOS};\
-		do export PERF_SCENARIO=$${scenario};\
-			report=reports/`basename $$scenario .yml`.json ;\
-			${DC} -f ${DC_PREFIX}-artillery.yml run artillery run -e development -o $${report} scenario.yml; \
-			${DC} -f ${DC_PREFIX}-artillery.yml run artillery report $${report}; \
-		done
+test-ids:
+	cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | awk -F ';' '{print $$1;print $$2;print $$3}' | sort -R > ${PERF_IDS}
+
+random-ids:
+	@shuf ${PERF_IDS} | head -$$(( ( RANDOM % ( ( $(shell wc -l ${PERF_IDS} | awk '{print $$1}') * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
+
+clean-random-ids:
 	@rm ${PERF_IDS}.random
+
+build-api-injector:
+	@${DC} -f ${DC_PREFIX}-artillery.yml build
+
+test-perf: wait-elasticsearch build-api-injector
+	@echo perf test
+	@for test in v0 v1 utac; do\
+		make test-perf-$$test;\
+		doneaza
+	@make clean-random-ids
+
+test-api: wait-elasticsearch build-api-injector
+	@echo simple api test
+	@for test in v0 v1 utac; do\
+		do make test-api-$$test;\
+		done
+	@make clean-random-ids
+
+test-api-dev: wait-elasticsearch build-api-injector
+	@echo api dev test
+	@for test in v0 v1 utac; do\
+		make test-api-dev-$$test;\
+		done
+	@make clean-random-ids
+
+test-perf-v0: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_V0};\
+		export PERF_TEST_ENV=api-perf;\
+		make test-api-generic
+
+test-perf-v1: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_V1};\
+		export PERF_TEST_ENV=api-perf;\
+		make test-api-generic
+
+test-perf-utac: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_UTAC};\
+		export PERF_TEST_ENV=api-perf;\
+		make test-api-generic
+
+test-api-v0: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_V0};\
+		export PERF_TEST_ENV=api;\
+		make test-api-generic
+
+test-api-v1: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_V1};\
+		export PERF_TEST_ENV=api;\
+		make test-api-generic
+
+test-api-utac: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_UTAC};\
+		export PERF_TEST_ENV=api;\
+		make test-api-generic
+
+test-api-dev-v0: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_V0};\
+		export PERF_TEST_ENV=api-dev;\
+		make test-api-generic
+
+test-api-dev-v1: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_V1};\
+		export PERF_TEST_ENV=api-dev;\
+		make test-api-generic
+
+test-api-dev-utac: random-ids
+	@export PERF_SCENARIO=${PERF_SCENARIO_UTAC};\
+		export PERF_TEST_ENV=api-dev;\
+		make test-api-generic
+
+test-api-generic:
+	export report=reports/`basename ${PERF_SCENARIO} .yml`-${PERF_TEST_ENV}.json ;\
+		${DC} -f ${DC_PREFIX}-artillery.yml run artillery run -e ${PERF_TEST_ENV} -o $${report} scenario.yml; \
+		${DC} -f ${DC_PREFIX}-artillery.yml run artillery report $${report}
 
