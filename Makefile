@@ -92,6 +92,8 @@ export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
 #          ES_MEM should be 4096m            #
 #            in production mode              #
 ##############################################
+export ES_DATA=${BACKEND}/esdata
+export ES_DATA_BACKUP=${BACKEND}/backup/
 export ES_MEM=512m
 export ES_HOST=elasticsearch
 export ES_PORT=9200
@@ -157,6 +159,7 @@ export SMTP_SERVER=smtp
 export SMTP_PORT=25
 # redis confs for backend and cache of utac data
 export REDIS=${BACKEND}/redis
+export REDIS_DATA=${BACKEND}/redis/data-dummy
 export REDIS_PERSIST=86400
 export REDIS_URL=redis
 # utac confs for backend and fake api
@@ -520,8 +523,8 @@ frontend-dev-stop:
 elasticsearch: vm_max network
 ifeq ("$(wildcard ${BACKEND}/esdata/)","")
 	@echo creating elasticsearch data directory
-	@mkdir -p ${BACKEND}/esdata
-	@chmod 777 ${BACKEND}/esdata/.
+	@mkdir -p ${ES_DATA}
+	@chmod 777 ${ES_DATA}/.
 endif
 	@${DC} -f ${DC_PREFIX}-elasticsearch.yml up -d 2>&1 | grep -v orphan
 
@@ -599,21 +602,21 @@ index-status: wait-elasticsearch
 
 # elasticsearch backup operations
 first-backup:
-	@mkdir -p ${BACKEND}/backup/esdata && \
+	@mkdir -p ${ES_DATA_BACKUP}/`basename ${ES_DATA}` && \
 		echo `date +'%Y%m%d_%H:%M'` first rsync && \
-		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
+		rsync -a ${ES_DATA}/. ${ES_DATA_BACKUP}/`basename ${ES_DATA}`/.
 
 last-backup:
-	@mkdir -p ${BACKEND}/backup/esdata && \
+	@mkdir -p ${ES_DATA_BACKUP} && \
 		echo `date +'%Y%m%d_%H:%M'` last rsync && \
-		rsync -a ${BACKEND}/esdata/. ${BACKEND}/backup/esdata/.
+		rsync -a ${ES_DATA}/. ${ES_DATA_BACKUP}/`basename ${ES_DATA}`/.
 
 post-backup:
 	@echo `date +'%Y%m%d_%H:%M'` taring && \
-		cd ${BACKEND}/backup/ && tar cf `date +%Y%m%d`_histovec.tar esdata/.
+		cd ${ES_DATA_BACKUP} && tar cf `date +%Y%m%d`_histovec.tar `basename ${ES_DATA}`/.
 		echo `date +'%Y%m%d_%H:%M'` cleaning tmp dir && \
-		rm -rf ${BACKEND}/backup/esdata && \
-		echo `date +'%Y%m%d_%H:%M'` backup done in ${BACKEND}/backup/`date +%Y%m%d`_histovec.tar
+		rm -rf ${ES_DATA_BACKUP} && \
+		echo `date +'%Y%m%d_%H:%M'` backup done in ${ES_DATA_BACKUP}/`date +%Y%m%d`_histovec.tar
 
 backup: first-backup elasticsearch-stop last-backup elasticsearch post-backup
 
@@ -710,6 +713,11 @@ backend-stop:
 backend-host-config: redis-host-config
 
 redis-host-config:
+ifeq ("$(wildcard ${REDIS_DATA})","")
+	@echo create dummy data directory for redis
+	@mkdir -p ${REDIS_DATA}
+	@sudo chown 100.100 ${REDIS_DATA}
+endif
 ifeq ("$(vm_overcommit_memory)", "")
 	sudo sysctl vm.overcommit_memory=1
 endif
