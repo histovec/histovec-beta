@@ -28,7 +28,7 @@
         <span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span>
         <br />
         <div v-if="v.ctec.puissance.cv">
-          <span class="txt-small-13">Puissance fiscale :</span>
+          <span class="txt-small-13">Puissance fiscale : </span>
           <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span>
         </div>
       </div>
@@ -128,7 +128,7 @@
           <span class="color-info_2 bold_4 txt-small-12">(immatriculation avant 2009)</span>
         </div> -->
         <div v-if="v.certificat.etranger">
-          <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
+          <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision </span>
           <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
         </div>
       </div>
@@ -144,7 +144,7 @@
         <i class="fa fa-calendar fa-2x pr-10"></i>
       </div>
       <div class="col-sm-6">
-        <span class="txt-small-13">Première immatriculation le</span>
+        <span class="txt-small-13">Première immatriculation le </span>
         <span class="info_red txt-small-13">{{ v.certificat.premier }}</span>
         <br />
         <br />
@@ -178,7 +178,7 @@
           <i class="fa fa fa-globe fa-2x pr-10"></i>
         </div>
         <div class="col-sm-6">
-          <span class="txt-small-13">Ce véhicule a été</span> <span class="info_red txt-small-13">importé</span>
+          <span class="txt-small-13">Ce véhicule a été </span> <span class="info_red txt-small-13">importé</span>
         </div>
         <div class="col-sm-5">
           <span
@@ -269,7 +269,7 @@
           <i class="fa fa-check info_green fa-2x"></i>
         </div>
         <div class="col-sm-6">
-          <span class="info_red txt-small-13">Rien à signaler</span>
+          <span class="info_red txt-small-13">Rien à signaler </span>
           <span class="txt-small-13">du point de vue administratif
             <br />
             (gages, opposition, vol,...)

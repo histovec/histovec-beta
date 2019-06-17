@@ -4,8 +4,8 @@ import CryptoJS from 'crypto-js'
 import store from '@/store'
 // import { EventSourcePolyfill } from 'event-source-polyfill';
 
-const apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '').replace(/\/$/, '')
-const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.APP).replace(/"/g, '').replace(/\/$/, '')
+const apiUrl = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
+const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
 
 
 const apiPaths = (apiName, future = false) => {

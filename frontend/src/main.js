@@ -12,7 +12,7 @@ import apiConf from './assets/json/backend.json'
 Vue.config.productionTip = false
 
 window.addEventListener('beforeunload', function () {
-  var apiUrl = apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, '')
+  var apiUrl = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '')
   navigator.sendBeacon(apiUrl + 'log/exit')
 }, false)
 

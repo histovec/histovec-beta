@@ -42,4 +42,6 @@ RUN  [ -f "${app_name}-${app_ver}-frontend-dist.tar.gz" ] && \
      tar -zxvf ${app_name}-${app_ver}-frontend-dist.tar.gz --strip=1 -C /usr/share/nginx/html  && \
      rm -rf ${app_name}-${app_ver}-frontend-dist.tar.gz
 
+
+
 CMD ["/home/nginx/run.sh"]

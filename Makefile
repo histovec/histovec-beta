@@ -427,15 +427,15 @@ frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 frontend-prepare-build:
 	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
 	( cd ${FRONTEND} && tar -zcvf $(FILE_FRONTEND_APP_VERSION) --exclude ${APP}.tar.gz \
-          index.html \
          .babelrc \
          .editorconfig \
          .eslintignore \
          .eslintrc.js \
+				 vue.config.js \
          config \
          src \
          build \
-         static )
+         public )
 
 frontend-check-build:
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) config -q

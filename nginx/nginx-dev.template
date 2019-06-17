@@ -23,7 +23,7 @@ server {
     return 302 $scheme://$http_host/<APP>/;
   }
 
-  location ~ (__webpack_hmr|app.js|^/static|.*hot-update.(js|json)) {
+  location ~ (__webpack_hmr|sockjs-node|app.js|^/static|.*hot-update.(js|json)) {
   	proxy_pass http://frontend-dev;
       # Allow protocol upgrade to websocket
       proxy_http_version 1.1;
@@ -38,8 +38,8 @@ server {
         proxy_pass http://frontend-dev;
   }
 
-  location /<APP>/assets {
-    alias /usr/share/nginx/html/assets;
+  location /<APP>/assets/images {
+    alias /usr/share/nginx/html/assets/images;
   }
 
   location ~ "^/<APP>/api/v0/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" {
