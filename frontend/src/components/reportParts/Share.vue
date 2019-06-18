@@ -61,7 +61,7 @@
             level="L"
           >
           </qrcode-vue>
-        </div>http://localhost/histovec/report?id=Gb7fC6t-CVfcULEh5ZPuwKdEK9uwnQQiJ0MDu9v8EN8%3D&key=EyuHMhXIG5E1DxUSFdEleEvbhAwiUyzg7A4G8cdrAUs%3D
+        </div>
       </div>
     </div>
   </div>

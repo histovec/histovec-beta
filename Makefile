@@ -197,6 +197,7 @@ include ./artifacts
 
 # combined variables should not be overrided
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
+export API_VERSION=${API_VERSION_V0}
 
 ##############################################
 ##############################################
