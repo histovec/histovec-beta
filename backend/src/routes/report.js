@@ -37,7 +37,10 @@ async function searchSIV(id, uuid) {
             v: hit
           }
         } else {
-          appLogger.warn(`Bad Content in elasticsearch response: ${JSON.stringify(response)}`)
+          appLogger.warn({
+            error: 'Bad Content in elasticsearch response',
+            response: response
+          })
           return {
             status: 500,
             source: 'siv',
@@ -45,7 +48,10 @@ async function searchSIV(id, uuid) {
           }
         }
       } else {
-        appLogger.debug(`No hit in elasticsearch: ${JSON.stringify(response)}`)
+        appLogger.debug({
+          error: 'No hit',
+          response: response
+        })
         return {
           status: 404,
           source: 'siv',
@@ -53,7 +59,11 @@ async function searchSIV(id, uuid) {
         }
       }
     } else {
-      appLogger.debug(`Bad request - invalid uuid or id: {'id': '${id}', 'uudi': '${uuid}}'`)
+      appLogger.debug({
+        error: 'Bad request - invalid uuid or id',
+        id: id,
+        uuid: uuid
+      })
       return {
         status: 400,
         source: 'siv',
@@ -61,11 +71,12 @@ async function searchSIV(id, uuid) {
       }
     }
   } catch (error) {
-    appLogger.warn(
-      `Couldn't process elasticsearch response :
-      {'id': '${id}', 'uuid': '${uuid}'}
-      ${error.message}`
-    )
+    appLogger.warn({
+      error: 'Couldn\'t process elasticsearch response',
+      id: id,
+      uuid: uuid,
+      message: error.message
+    })
     return {
       status: 500,
       source: 'histovec',
@@ -92,18 +103,21 @@ async function searchUTAC(plaque) {
         ct: response.data.ct
       }
     } else {
-      appLogger.warn(`Bad Content in UTAC response: ${JSON.stringify(response)}`)
+      appLogger.warn({
+        error: 'Bad Content in UTAC response',
+        response: response
+      })
       return {
         status: 500,
         message: 'Bad Content'
       }
     }
   } catch (error) {
-    appLogger.warn(
-      `Couldn't process UTAC response :
-      {'plaque': '${plaque}'}
-      ${error.message}`
-    )
+    appLogger.warn({
+      error: 'Couldn\'t process UTAC response',
+      plaque: plaque,
+      message: error.message
+    })
     return {
       status: 500,
       message: error.message
@@ -134,7 +148,11 @@ export async function getSIV (req, res) {
 
 export async function getUTAC (req, res) {
   if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
-    appLogger.debug(`Not authentified - mismatched id and token: {'id': '${req.body.id}', 'token': '${req.body.token}}'`)
+    appLogger.debug({
+      error: 'Not authentified - mismatched id and token',
+      id: req.body.id,
+      token: req.body.token
+    })
     res.status(401).json({
       success: false,
       message: 'Not authentified'
@@ -143,17 +161,20 @@ export async function getUTAC (req, res) {
     let ct = await redis.getAsync(hash(req.body.code || req.body.id))
     if (ct) {
       try {
-        appLogger.debug(`UTAC response cached - found following key in Redis: ${hash(req.body.code || req.body.id)}'`)
+        appLogger.debug({
+          message: 'UTAC response cached',
+          key: hash(req.body.code || req.body.id)
+        })
         ct = decrypt(ct, req.body.key)
         res.status(200).json({
           success: true,
           ct: ct
         })
       } catch (error) {
-        appLogger.warn(
-          `Couldn't decrypt cached UTAC response:
-          ${error.message}`
-        )
+        appLogger.warn( {
+          error: 'Couldn\'t decrypt cached UTAC response',
+          message: error.message
+        })
       }
     } else {
       let utacId = immatNorm(decryptXOR(req.body.utacId, config.utacIdKey))
@@ -169,9 +190,11 @@ export async function getUTAC (req, res) {
           ct: response.ct
         })
       } else {
-        appLogger.debug(
-          `UTAC response failed with status ${response.status}: ${response.message}`
-        )
+        appLogger.debug({
+          error: 'UTAC response failed with status',
+          status: response.status,
+          message: response.message
+        })
         res.status(response.status).json({
           success: false,
           message: response.message
