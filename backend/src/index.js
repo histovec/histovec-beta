@@ -10,8 +10,7 @@ import config from './config'
 const PORT = config.port || 8000
 
 techLogger.debug(
-  `config:
-  ${JSON.stringify(config)}/`
+  { config: config }
 )
 
 elasticsearch.Client.search({
