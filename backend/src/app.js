@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import { loggerStream } from './util/logger'
 import routes from './routes'
 import config from './config'
+import { decryptXOR } from './util/crypto'
 
 const app = express()
 

@@ -164,6 +164,7 @@ export REDIS_DATA=${BACKEND}/redis/data-dummy
 export REDIS_PERSIST=86400
 export REDIS_URL=redis
 # utac confs for backend and fake api
+export UTAC_ID_KEY=D2K8qvwHn36yBoENi5
 export UTAC_SCHEME=http
 export UTAC_HOST=utac
 export UTAC_PORT=9000

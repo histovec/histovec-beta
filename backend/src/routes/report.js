@@ -1,6 +1,6 @@
 import axios from 'axios'
 import elasticsearch from '../connectors/elasticsearch'
-import { sign, checkSigned, encrypt, decrypt, hash, checkId, checkUuid } from '../util/crypto'
+import { sign, checkSigned, encrypt, decrypt, decryptXOR, hash, checkId, checkUuid } from '../util/crypto'
 import config from '../config'
 import { appLogger } from '../util/logger'
 import redis from '../connectors/redis'
@@ -156,7 +156,12 @@ export async function getUTAC (req, res) {
         )
       }
     } else {
-      let response = await searchUTAC(req.body.utacId)
+      let utacId = immatNorm(decryptXOR(req.body.utacId, config.utacIdKey))
+      appLogger.debug({
+        message: "Request to UTAC api",
+        utacId: utacId
+      })
+      let response = await searchUTAC(utacId)
       if (response.status === 200) {
         await redis.setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
         res.status(200).json({
@@ -174,6 +179,16 @@ export async function getUTAC (req, res) {
       }
     }
   }
+}
+
+function immatNorm (plaque) {
+  if (!plaque || typeof plaque != 'string') {
+    return undefined
+  }
+  let p = plaque.toUpperCase()
+  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  return p
 }
 
 
