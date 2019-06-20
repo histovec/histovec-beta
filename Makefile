@@ -149,7 +149,8 @@ export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack
 export BACKEND=${APP_PATH}/backend
 export BACKEND_HOST=backend
 export BACKEND_PORT=8000
-export BACKEND_SECRET=%ch4NGM3!
+# one-shot secret = one shot redis crypted data
+export BACKEND_SECRET:=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export BACKEND_LOGS=${LOGS}/backend
 # mail confs for backend and fake smtp
 # must be overrided for production mode
@@ -795,6 +796,7 @@ redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
 # development mode
 backend-dev: backend-host-config
 	@echo docker-compose up backend for dev ${VERSION}
+	@echo secret ${BACKEND_SECRET}
 	@export EXEC_ENV=development;\
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
