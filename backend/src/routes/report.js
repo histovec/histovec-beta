@@ -5,16 +5,16 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import redis from '../connectors/redis'
 
-function addStreamEvent(res, id, status, json) {
-  res.write(`id: ${id}\n`)
-  res.write(`event: ${status}\n`)
-  res.write(`data: ${JSON.stringify(json)}\n\n`)
-}
+// function addStreamEvent(res, id, status, json) {
+//   res.write(`id: ${id}\n`)
+//   res.write(`event: ${status}\n`)
+//   res.write(`data: ${JSON.stringify(json)}\n\n`)
+// }
 
-function endStreamEvent(res, status, json) {
-  addStreamEvent(res, 'end-of-stream', status, json)
-  res.end()
-}
+// function endStreamEvent(res, status, json) {
+//   addStreamEvent(res, 'end-of-stream', status, json)
+//   res.end()
+// }
 
 async function searchSIV(id, uuid) {
   try {
