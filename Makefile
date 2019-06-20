@@ -169,7 +169,7 @@ export UTAC_SCHEME=http
 export UTAC_HOST=utac
 export UTAC_PORT=9000
 export UTAC_API=utac
-export UTAC_LATENCY=300
+export UTAC_LATENCY=500
 export UTAC_TIMEOUT=5000
 # packaging
 export DC_DEV_BACKEND = ${DC_PREFIX}-dev-backend.yml
