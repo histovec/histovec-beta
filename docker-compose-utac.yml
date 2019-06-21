@@ -16,6 +16,7 @@ services:
       - UTAC_PORT=${UTAC_PORT}
       - UTAC_API=${UTAC_API}
       - UTAC_TIMEOUT=${UTAC_TIMEOUT}
+      - UTAC_LATENCY=${UTAC_LATENCY}
     container_name: ${APP}-utac-fake
     restart: always
 
