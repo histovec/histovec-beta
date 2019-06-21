@@ -87,16 +87,30 @@ async function searchSIV(id, uuid) {
 
 async function searchUTAC(plaque) {
   try {
+    appLogger.debug({
+      debug: 'searchUTAC',
+      url: config.utacUrl,
+      plaque: plaque
+    })
     const response = await axios(
       {
         url: config.utacUrl,
         method: 'post',
-        timeout: config.utacTimeout
-      },
-      {
-        plaque: plaque
-      })
+        timeout: config.utacTimeout,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          plaque: plaque
+        }
+      }
+     )
     if (response.data && response.data.ct) {
+      appLogger.debug({
+        debug: 'UTAC result found',
+        plaque: plaque,
+        ct: response.data.ct
+      })
       return {
         status: response.status,
         source: 'utac',
