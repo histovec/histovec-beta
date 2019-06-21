@@ -25,7 +25,7 @@ RUN if [ ! -z "$http_proxy" ] ; then \
    [ -z "$npm_registry" ] || npm config set registry=$npm_registry
 RUN npm i npm@latest -g
 
-RUN npm i restana@2 turbo-http --save
+RUN npm i restana body-parser luxon --save
 
 COPY sample_data/utac_sample.json index.js ./
 
