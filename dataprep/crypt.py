@@ -22,9 +22,8 @@ CHUNK_SIZE = 20000         # size of each chunk
 MAX_INPUT_ROWS = None      # number of lines to process in the recipe, None if no limit
 #VERBOSECHUNKSIZE = 10000   # display log every VERBOSECHUNKSIZE line
 NUM_THREADS = 2            # number of parallel threads
-CRYPT_OPT_DATENAISSANCE=True
-CRYPT_OPT_STRONGCODE=False
-CRYPT_OPT_CODE=False
+CRYPT_OPT_DATENAISSANCE=False
+CRYPT_OPT_STRONGCODE=True
 
 COMMON_TRANSFER_SCHEMA = [
     {'name': 'ida1', 'type': 'string'},
@@ -111,10 +110,7 @@ def encrypt_df(df):
 
     df['key']=df['key'].apply(lambda x: base64.b64encode(x).decode('utf8'))
 
-    if CRYPT_OPT_CODE:
-        df = df[['ida1', 'ida2', 'v']]
-    else:
-        df = df[['idv', 'ida1', 'ida2', 'v']]
+    df = df[['idv', 'ida1', 'ida2', 'v']]
 
     return df
 
