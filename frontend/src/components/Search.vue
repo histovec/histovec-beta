@@ -681,7 +681,7 @@ export default {
     },
     pers_id () {
       if (this.typePersonne === 'particulier') {
-        return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '') + this.dateNaissance
+        return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '') + (this.$store.state.config.id.dateNaissance ? this.dateNaissance : '')
       } else {
         return this.raisonSociale + this.siren
       }
