@@ -22,9 +22,9 @@ CHUNK_SIZE = 20000         # size of each chunk
 MAX_INPUT_ROWS = None      # number of lines to process in the recipe, None if no limit
 #VERBOSECHUNKSIZE = 10000   # display log every VERBOSECHUNKSIZE line
 NUM_THREADS = 2            # number of parallel threads
-CRYPT_OPT_DATENAISSANCE=True
-CRYPT_OPT_STRONGCODE=False
-CRYPT_OPT_CODE=False
+CRYPT_OPT_DATENAISSANCE=False
+CRYPT_OPT_STRONGCODE=True
+CRYPT_OPT_CODE=True
 
 COMMON_TRANSFER_SCHEMA = [
     {'name': 'ida1', 'type': 'string'},

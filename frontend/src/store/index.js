@@ -35,9 +35,9 @@ export default new Vuex.Store({
       fniMode: true,
       allTabs: false,
       id: {
-        dateNaissance: true,
-        code: false,
-        strongCode: false
+        dateNaissance: false,
+        code: true,
+        strongCode: true
       },
       utac: false,
       utacGraph: false,
