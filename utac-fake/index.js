@@ -9,7 +9,21 @@ const config = {
   port: process.env.UTAC_PORT || 9000
 }
 
-const ct = require('./utac_sample.json')
+let ct = {}
+
+require('./utac_sample.json').map( item => ct[immatNorm(item['plaque'])]=item['ct'])
+
+console.log(ct)
+
+function immatNorm (plaque) {
+  if (!plaque || typeof plaque != 'string') {
+    return undefined
+  }
+  let p = plaque.toUpperCase()
+  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  return p
+}
 
 const nb = ct.length
 
@@ -31,7 +45,7 @@ async function latencyResSend(res, response, time) {
 
 service.post(`/${config.apiPath}`, async (req, res) => {
   res.setHeader("Content-Type", "application/json");
-  await latencyResSend(res, getCT());
+  await latencyResSend(res, getCT(req.plaque));
 })
 
 service.start(config.port)

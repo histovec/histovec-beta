@@ -75,7 +75,7 @@ async function searchSIV(id, uuid) {
       error: 'Couldn\'t process elasticsearch response',
       id: id,
       uuid: uuid,
-      message: error.message
+      remote_error: error.message
     })
     return {
       status: 500,
@@ -162,7 +162,7 @@ export async function getUTAC (req, res) {
     if (ct) {
       try {
         appLogger.debug({
-          message: 'UTAC response cached',
+          debug: 'UTAC response cached',
           key: hash(req.body.code || req.body.id)
         })
         ct = decrypt(ct, req.body.key)
@@ -173,7 +173,7 @@ export async function getUTAC (req, res) {
       } catch (error) {
         appLogger.warn( {
           error: 'Couldn\'t decrypt cached UTAC response',
-          message: error.message
+          remote_error: error.message
         })
       }
     } else {
@@ -191,9 +191,9 @@ export async function getUTAC (req, res) {
         })
       } else {
         appLogger.debug({
-          error: 'UTAC response failed with status',
+          error: 'UTAC response failed',
           status: response.status,
-          message: response.message
+          remote_error: response.message
         })
         res.status(response.status).json({
           success: false,
