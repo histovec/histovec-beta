@@ -203,12 +203,8 @@ export async function getUTAC (req, res) {
         })
       }
     } else {
-      let utacId = immatNorm(decryptXOR(req.body.utacId, config.utacIdKey))
-      appLogger.debug({
-        message: "Request to UTAC api",
-        utacId: utacId
-      })
-      let response = await searchUTAC(utacId)
+      let plaque = immatNorm(decryptXOR(req.body.utacId, config.utacIdKey))
+      let response = await searchUTAC(plaque)
       if (response.status === 200) {
         await redis.setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
         res.status(200).json({
