@@ -127,14 +127,26 @@ async function searchUTAC(plaque) {
       }
     }
   } catch (error) {
-    appLogger.warn({
-      error: 'Couldn\'t process UTAC response',
-      plaque: plaque,
-      message: error.message
-    })
-    return {
-      status: 500,
-      message: error.message
+    if (error.response && error.response.status === 404) {
+      appLogger.debug({
+        error: 'Not Found',
+        plaque: plaque,
+        remote_error: error.message,
+      })
+      return {
+        status: 404,
+        message: 'Not Found'
+      }
+    } else {
+      appLogger.warn({
+        error: 'Couldn\'t process UTAC response',
+        plaque: plaque,
+        remote_error: error.message
+      })
+      return {
+        status: 500,
+        message: error.message
+      }
     }
   }
 
