@@ -108,7 +108,7 @@ export default {
   methods: {
     controlToPoint (controle) {
       return {
-        x: moment(controle.ct_date, 'YYYY-MM-DD').toDate(),
+        x: moment(controle.ct_date, 'DD/MM/YYYY').toDate(),
         y: ((typeof controle.ct_km) === 'string') ? parseInt(controle.ct_km) : controle.ct_km,
       }
     }
