@@ -10,8 +10,7 @@ import config from './config'
 const PORT = config.port || 8000
 
 techLogger.debug(
-  `config:
-  ${JSON.stringify(config)}/`
+  { config: config }
 )
 
 elasticsearch.Client.search({
@@ -23,6 +22,8 @@ elasticsearch.Client.search({
     .then(() => {
       http.createServer(app).listen(PORT, '0.0.0.0')
       techLogger.info(`Server running at http://0.0.0.0:${PORT}/`)
+      techLogger.debug(`Server root secret: ${config.secret}`)
+      techLogger.debug(`Utac id key: ${config.utacIdKey}`)
     })
     .catch(error => {
       techLogger.error(`Server could not connect to redis, exiting`)

@@ -67,6 +67,21 @@ export function decrypt (encrypted, key) {
   }
 }
 
+
+const B64_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+export function decryptXOR (encrypted, key) {
+  // weak encryption (used for UtacId)
+  let WordArray = b64_decode(encrypted)
+  return WordArray.map((c, i) => {
+    return String.fromCharCode( c ^ keyCharAt(key, i) )
+  }).join("")
+}
+
+function keyCharAt(key, i) {
+  return key.charCodeAt(Math.floor(i % key.length))
+}
+
 export function hash (string) {
   return CryptoJS.SHA256(string).toString(CryptoJS.enc.Base64)
 }
@@ -79,3 +94,45 @@ export function checkId (id) {
   return id ? id.match(/[A-Za-z0-9_-]{43}=/) : false
 }
 
+export function str2hex (str) {
+  var res = ''
+  for (var i = 0; i < str.length; i++) {
+      res = res + ('k' + str.charCodeAt(i).toString(16))
+  }
+  return res;
+}
+
+export function hex2str (str) {
+  var strarr = str.split('k')
+  var res = ''
+  for (var i = 0; i < strarr.length; i++) {
+      if (strarr[i] && parseInt(strarr[i], 16)) {
+          res = res + (String.fromCharCode(parseInt(strarr[i], 16)))
+      }
+  }
+  return res
+}
+
+function b64_decode(data) {
+  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, result = []
+  if (!data) { return data }
+  data += ""
+  do {
+    h1 = B64_TABLE.indexOf(data.charAt(i++))
+    h2 = B64_TABLE.indexOf(data.charAt(i++))
+    h3 = B64_TABLE.indexOf(data.charAt(i++))
+    h4 = B64_TABLE.indexOf(data.charAt(i++))
+    bits = h1 << 18 | h2 << 12 | h3 << 6 | h4
+    o1 = bits >> 16 & 0xff
+    o2 = bits >> 8 & 0xff
+    o3 = bits & 0xff
+    result.push(o1)
+    if (h3 !== 64) {
+      result.push(o2)
+      if (h4 !== 64) {
+        result.push(o3)
+      }
+    }
+  } while (i < data.length)
+  return result
+}

@@ -47,7 +47,6 @@
 
 import labels from '@/assets/json/techControl.json'
 import orderBy from 'lodash.orderby'
-import moment from 'moment'
 
 export default {
   props: {
@@ -59,7 +58,7 @@ export default {
   computed: {
     controlesTechniques () {
       if (this.ct.length > 0) {
-        return orderBy(this.ct, ['ct_date'], ['desc']).map((controle) => this.labelize(controle))
+        return orderBy(this.ct, ['ct_id'], ['desc']).map((controle) => this.labelize(controle))
       } else {
         return []
       }
@@ -71,7 +70,7 @@ export default {
   methods: {
     labelize (controle) {
       return {
-        date: moment(controle.ct_date, 'YYYY-MM-DD').format('DD/MM/YYYY'),
+        date: controle.ct_date,
         nature: labels.nature[controle.ct_nature],
         resultat: labels.resultat[controle.ct_resultat],
         km: controle.ct_km

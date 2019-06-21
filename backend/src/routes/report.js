@@ -1,20 +1,20 @@
 import axios from 'axios'
 import elasticsearch from '../connectors/elasticsearch'
-import { sign, checkSigned, encrypt, decrypt, hash, checkId, checkUuid } from '../util/crypto'
+import { sign, checkSigned, encrypt, decrypt, decryptXOR, hash, checkId, checkUuid } from '../util/crypto'
 import config from '../config'
 import { appLogger } from '../util/logger'
 import redis from '../connectors/redis'
 
-function addStreamEvent(res, id, status, json) {
-  res.write(`id: ${id}\n`)
-  res.write(`event: ${status}\n`)
-  res.write(`data: ${JSON.stringify(json)}\n\n`)
-}
+// function addStreamEvent(res, id, status, json) {
+//   res.write(`id: ${id}\n`)
+//   res.write(`event: ${status}\n`)
+//   res.write(`data: ${JSON.stringify(json)}\n\n`)
+// }
 
-function endStreamEvent(res, status, json) {
-  addStreamEvent(res, 'end-of-stream', status, json)
-  res.end()
-}
+// function endStreamEvent(res, status, json) {
+//   addStreamEvent(res, 'end-of-stream', status, json)
+//   res.end()
+// }
 
 async function searchSIV(id, uuid) {
   try {
@@ -37,7 +37,10 @@ async function searchSIV(id, uuid) {
             v: hit
           }
         } else {
-          appLogger.warn(`Bad Content in elasticsearch response: ${JSON.stringify(response)}`)
+          appLogger.warn({
+            error: 'Bad Content in elasticsearch response',
+            response: response
+          })
           return {
             status: 500,
             source: 'siv',
@@ -45,7 +48,10 @@ async function searchSIV(id, uuid) {
           }
         }
       } else {
-        appLogger.debug(`No hit in elasticsearch: ${JSON.stringify(response)}`)
+        appLogger.debug({
+          error: 'No hit',
+          response: response
+        })
         return {
           status: 404,
           source: 'siv',
@@ -53,7 +59,11 @@ async function searchSIV(id, uuid) {
         }
       }
     } else {
-      appLogger.debug(`Bad request - invalid uuid or id: {'id': '${id}', 'uudi': '${uuid}}'`)
+      appLogger.debug({
+        error: 'Bad request - invalid uuid or id',
+        id: id,
+        uuid: uuid
+      })
       return {
         status: 400,
         source: 'siv',
@@ -61,11 +71,12 @@ async function searchSIV(id, uuid) {
       }
     }
   } catch (error) {
-    appLogger.warn(
-      `Couldn't process elasticsearch response :
-      {'id': '${id}', 'uuid': '${uuid}'}
-      ${error.message}`
-    )
+    appLogger.warn({
+      error: 'Couldn\'t process elasticsearch response',
+      id: id,
+      uuid: uuid,
+      remote_error: error.message
+    })
     return {
       status: 500,
       source: 'histovec',
@@ -76,37 +87,66 @@ async function searchSIV(id, uuid) {
 
 async function searchUTAC(plaque) {
   try {
+    appLogger.debug({
+      debug: 'searchUTAC',
+      url: config.utacUrl,
+      plaque: plaque
+    })
     const response = await axios(
       {
         url: config.utacUrl,
         method: 'post',
-        timeout: config.utacTimeout
-      },
-      {
-        plaque: plaque
-      })
+        timeout: config.utacTimeout,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          plaque: plaque
+        }
+      }
+     )
     if (response.data && response.data.ct) {
+      appLogger.debug({
+        debug: 'UTAC result found',
+        plaque: plaque,
+        ct: response.data.ct
+      })
       return {
         status: response.status,
         source: 'utac',
         ct: response.data.ct
       }
     } else {
-      appLogger.warn(`Bad Content in UTAC response: ${JSON.stringify(response)}`)
+      appLogger.warn({
+        error: 'Bad Content in UTAC response',
+        response: response
+      })
       return {
         status: 500,
         message: 'Bad Content'
       }
     }
   } catch (error) {
-    appLogger.warn(
-      `Couldn't process UTAC response :
-      {'plaque': '${plaque}'}
-      ${error.message}`
-    )
-    return {
-      status: 500,
-      message: error.message
+    if (error.response && error.response.status === 404) {
+      appLogger.debug({
+        error: 'Not Found',
+        plaque: plaque,
+        remote_error: error.message,
+      })
+      return {
+        status: 404,
+        message: 'Not Found'
+      }
+    } else {
+      appLogger.warn({
+        error: 'Couldn\'t process UTAC response',
+        plaque: plaque,
+        remote_error: error.message
+      })
+      return {
+        status: 500,
+        message: error.message
+      }
     }
   }
 
@@ -134,7 +174,11 @@ export async function getSIV (req, res) {
 
 export async function getUTAC (req, res) {
   if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
-    appLogger.debug(`Not authentified - mismatched id and token: {'id': '${req.body.id}', 'token': '${req.body.token}}'`)
+    appLogger.debug({
+      error: 'Not authentified - mismatched id and token',
+      id: req.body.id,
+      token: req.body.token
+    })
     res.status(401).json({
       success: false,
       message: 'Not authentified'
@@ -143,20 +187,24 @@ export async function getUTAC (req, res) {
     let ct = await redis.getAsync(hash(req.body.code || req.body.id))
     if (ct) {
       try {
-        appLogger.debug(`UTAC response cached - found following key in Redis: ${hash(req.body.code || req.body.id)}'`)
+        appLogger.debug({
+          debug: 'UTAC response cached',
+          key: hash(req.body.code || req.body.id)
+        })
         ct = decrypt(ct, req.body.key)
         res.status(200).json({
           success: true,
           ct: ct
         })
       } catch (error) {
-        appLogger.warn(
-          `Couldn't decrypt cached UTAC response:
-          ${error.message}`
-        )
+        appLogger.warn( {
+          error: 'Couldn\'t decrypt cached UTAC response',
+          remote_error: error.message
+        })
       }
     } else {
-      let response = await searchUTAC(req.body.utacId)
+      let plaque = immatNorm(decryptXOR(req.body.utacId, config.utacIdKey))
+      let response = await searchUTAC(plaque)
       if (response.status === 200) {
         await redis.setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
         res.status(200).json({
@@ -164,9 +212,11 @@ export async function getUTAC (req, res) {
           ct: response.ct
         })
       } else {
-        appLogger.debug(
-          `UTAC response failed with status ${response.status}: ${response.message}`
-        )
+        appLogger.debug({
+          error: 'UTAC response failed',
+          status: response.status,
+          remote_error: response.message
+        })
         res.status(response.status).json({
           success: false,
           message: response.message
@@ -174,6 +224,16 @@ export async function getUTAC (req, res) {
       }
     }
   }
+}
+
+function immatNorm (plaque) {
+  if (!plaque || typeof plaque != 'string') {
+    return undefined
+  }
+  let p = plaque.toUpperCase()
+  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  return p
 }
 
 
