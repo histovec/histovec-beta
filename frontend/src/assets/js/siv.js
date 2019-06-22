@@ -15,14 +15,7 @@ function pad (n, width, z) {
 }
 
 function formatDate (isoDate) {
-  let date = new Date(isoDate)
-  let mm = date.getMonth() + 1 // getMonth() is zero-based
-  let dd = date.getDate()
-
-  return [(dd > 9 ? '' : '0') + dd,
-    (mm > 9 ? '' : '0') + mm,
-    date.getFullYear()
-  ].join('/')
+  return moment(isoDate).utcOffset(120).format('DD/MM/YYYY')
 }
 
 function calcCertifDepuis (dateStr) {
