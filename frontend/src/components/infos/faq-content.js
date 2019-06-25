@@ -196,6 +196,7 @@ export default function (mailBody) {
       callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error),
       react: { object: store.state.config, key: 'v1'}
     },
+    // @todo: clean section about "date de naissance"
     {
       title: 'Je ne trouve pas mon véhicule ?',
       body: `

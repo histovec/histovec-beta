@@ -10,7 +10,6 @@ Afin de vous aider plus rapidement dans vos démarches, merci de nous communique
 
 Nom :
 Prénom(s) :
-Date de naissance :
 Plaque d'immatriculation :
 Numéro de formule (pour les plaques du type AA-123-AA) ou date du certificat (pour les plaques du type 123 ABC 45) :
 Description du problème :
