@@ -219,8 +219,8 @@ import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
 import ModalForm from './components/forms/ModalForm.vue'
 
-import { mailTo } from './utils/mail.js'
-import { CONTACT_MAIL, REPORT_ERROR_MAIL } from './constants/mail.js'
+import { mailTo } from './utils/email.js'
+import { CONTACT_EMAIL, REPORT_ERROR_EMAIL } from './constants/email.js'
 
 Vue.use(VueTheMask)
 Vue.use(VueClipboard)
@@ -257,8 +257,8 @@ Vue.mixin({
       this.lang = value
     })
 
-    this.contactEmail = mailTo(CONTACT_MAIL)
-    this.reportErrorEmail = mailTo(REPORT_ERROR_MAIL)
+    this.contactEmail = mailTo(CONTACT_EMAIL)
+    this.reportErrorEmail = mailTo(REPORT_ERROR_EMAIL)
   },
   methods: {
     guid () {
