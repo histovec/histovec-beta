@@ -105,7 +105,7 @@ make index-purge
 
 - rendez-vous sur : http://localhost
 - depuis la page d'accueil,  cliquez sur "vendeur" ou "professionnel"
-- sur la parge de recherche (mode "vendeur"), entrez les données de la personnes physique (nom, prénom, date de naissance) ou morale (raison sociale, n° SIREN) et les données identifiantes du véhicule (n° d'immatriculaion, n° de formule)
+- sur la parge de recherche (mode "vendeur"), entrez les données de la personnes physique (nom, prénom) ou morale (raison sociale, n° SIREN) et les données identifiantes du véhicule (n° d'immatriculaion, n° de formule)
 - vous obtenez le rapport. Cliquez sur "Transmettre le rapport" pour obtenir les liens à transmettre à l'acheteur. Celui-ci peut êre copié, envoyé par mail, sms ou QR-code.
 
 Ces opérations peuvent être accélérées en utilisant un copier coller avec les différentes données depuis un tableur.

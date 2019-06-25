@@ -125,7 +125,6 @@ export default {
           this.$store.state.identity.typeImmatriculation === 'fni' ?
             `\
             Nom (de naissance) et prénom(s): ${this.$store.state.identity.nom + this.$store.state.identity.prenom}\n\
-            Date de naissance (du titulaire): ${this.$store.state.identity.dateNaissance}\n\
             Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
             Date du certificat: ${this.$store.state.identity.dateCertificat}\n
             `
@@ -133,7 +132,6 @@ export default {
             `\
             Nom (de naissance): ${this.$store.state.identity.nom}\n\
             Prénom(s): ${this.$store.state.identity.prenom}\n\
-            Date de naissance (du titulaire): ${this.$store.state.identity.dateNaissance}\n\
             Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
             Numéro de formule: ${this.$store.state.identity.formule}\n\
             `

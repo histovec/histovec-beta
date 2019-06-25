@@ -131,7 +131,6 @@
                 <ul>
                   <li>nom (tel que figurant sur le certificat d’immatriculation)</li>
                   <li>prénom (idem)</li>
-                  <li>date de naissance (non présent sur le certificat d’immatriculation)</li>
                 </ul>
                 Pour un professionnel, les données d’identification sont :
                 <ul>
