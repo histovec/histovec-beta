@@ -34,7 +34,7 @@
             <i class="fa fa-copy"></i>
           </button>
           <a
-            :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody"
+            :href="shareReportEmail"
             class="btn radius-30 btn-default btn-animated btn"
             @click="logReportMailDispatch"
           >
@@ -71,6 +71,8 @@
 
 import QrcodeVue from 'qrcode.vue'
 import moment from 'moment'
+import { mailTo } from '../../utils/email'
+import { getShareReportEmail } from '../../utils/dynamicEmail'
 
 export default {
   components: {
@@ -100,11 +102,11 @@ export default {
   computed: {
     validityDate () {
       return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
-    },
-    mailBody () {
-      var text = encodeURI('Un titulaire de véhicule vous transmet un rapport HistoVec\n\nRendez-vous sur le lien suivant pour le consulter: \n')
-      return text + this.url.replace('&', '%26')
     }
+  },
+  created () {
+    const SHARE_REPORT_EMAIL = getShareReportEmail({reportUrl: this.url})
+    this.shareReportEmail = mailTo(SHARE_REPORT_EMAIL)
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/share`)

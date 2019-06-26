@@ -6,6 +6,9 @@ import aideFNI from '@/assets/img/aide_fni.jpg'
 import store from '@/store'
 import contact from '@/assets/json/contact.json'
 
+import { mailTo } from '../../utils/email'
+import { HISTOVEC_SUPPORT_EMAIL, REPORT_AN_ERROR_EMAIL, REPORT_INVALID_LINK_EMAIL } from '../../constants/email'
+
 
 const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.contact, mailBody = undefined) => {
   /* eslint-disable-next-line */
@@ -20,20 +23,22 @@ const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.
           await store.dispatch('toggleModalForm', { mode: mode, subject: subject })
         }
       } else {
-        if (mailBody) {
-          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(subject)}&body=${mailBody}`
-        } else {
-          e.href = `mailto:histovec@interieur.gouv.fr?subject=${encodeURIComponent(subject)}`
-        }
+        e.href = mailTo({ recipients: [HISTOVEC_SUPPORT_EMAIL], subject, body: mailBody })
         e.onclick = () => { return }
       }
     }
   }
 }
 
-export default function (mailBody) {
+export default function () {
   let id = 0
-  var faqContent = [
+  const vehicleNotFoundEmail = {
+    recipients: [HISTOVEC_SUPPORT_EMAIL],
+    subject: 'Je ne trouve pas mon véhicule',
+    body: this.userFooter
+  }
+
+  const faqContent = [
     {
       title: 'Comment utiliser HistoVec ?',
       body: `
@@ -83,7 +88,7 @@ export default function (mailBody) {
       title: 'A qui s’adresse HistoVec ?',
       body: `
         <dl>
-          <dt>Je vends mon véhicule d’occasion :</dt>
+          <dt>Je vends mon véhicule d’occasion :</dt>'
           <dd>
             <p class="indented">
               HistoVec vous permet de valoriser votre offre en
@@ -187,7 +192,7 @@ export default function (mailBody) {
         <p class="indented">
           <a
             id="contact_hook_${id}"
-            href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur"
+            href="${mailTo(REPORT_AN_ERROR_EMAIL)}"
           >
             contactez-nous
           </a>
@@ -247,11 +252,11 @@ export default function (mailBody) {
           véhicules (SIV) :
           <a
             id="contact_hook_${id}"
-            href="mailto:histovec@interieur.gouv.fr?subject=Je%20ne%20trouve%20pas%20mon%20vehicule&body=${mailBody}"
+            href="${mailTo(vehicleNotFoundEmail)}"
           >contactez-nous</a>.
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.holderNotFound, mailBody),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
       react: { object: store.state.config, key: 'v1'}
     },
     {
@@ -421,7 +426,7 @@ export default function (mailBody) {
       Si jamais le problème persiste avec votre vendeur :
         <a
           id="contact_hook_${id}"
-          href="mailto:histovec@interieur.gouv.fr?subject=Signaler%20une%20erreur%20de%20lien%20invalide"
+          href="${mailTo(REPORT_INVALID_LINK_EMAIL)}"
         >
           contactez-nous
         </a>

@@ -72,7 +72,7 @@
                   En application du code de la propriété intellectuelle, toute reproduction ou représentation
                   partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des
                   titulaires de droits. Pour toute demande de reproduction,
-                  <a :href="'mailto:histovec@interieur.gouv.fr?subject=Demande%20de%20reproduction'">contactez-nous</a>
+                  <a :href="reproductionRequestEmail">contactez-nous</a>
                 </p>
                 <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com">picjumbo.com</a> et libres de droits.</p>
                 <h5>Conception et réalisation</h5>
@@ -303,6 +303,10 @@
 </template>
 
 <script>
+
+import { mailTo } from '../../utils/email'
+import { REPRODUCTION_REQUEST_EMAIL } from '../../constants/email'
+
 export default {
   data () {
     return {
@@ -311,6 +315,7 @@ export default {
   },
   created () {
     this.$store.dispatch('log', this.$route.path)
+    this.reproductionRequestEmail = mailTo(REPRODUCTION_REQUEST_EMAIL)
   },
   methods: {
     choose (id) {

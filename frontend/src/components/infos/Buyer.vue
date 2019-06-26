@@ -78,10 +78,10 @@
         </p>
         <p class="text-center">
           <a
-            :href="'mailto:?subject=Rapport%20Histovec&body=' + mailBody"
+            :href="askReportEmail"
             class="btn radius-30 btn-default btn-animated btn"
           >
-            Demander le rapport histovec <i class="fa fa-send"></i>
+            Demander le rapport HistoVec <i class="fa fa-send"></i>
           </a>
         </p>
       </div>
@@ -91,18 +91,13 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      mailBody () {
-        var text = encodeURI('Bonjour,\n\nVous vendez un véhicule que je souhaiterais acquérir. Serait-il possible de me communiquer son historique. Vous pourrez obtenir cet historique en vous connectant sur le service histovec du Ministère de l\'Intérieur. Un lien vous sera alors fourni pour que vous puissiez prouver votre bonne foi auprès d\'acheteurs comme moi.\n\nCe service est disponible en cliquant sur le lien suivant : ')
-        return text + this.url.replace('&', '%26')
-      },
-      url () {
-        return window.location.protocol + '//' + window.location.host + '/histovec/'
-      }
-    },
-    created () {
-      this.$store.dispatch('log', this.$route.path)
-    }
+import { mailTo } from '../../utils/email'
+import { ASK_REPORT_EMAIL } from '../../constants/email'
+
+export default {
+  created () {
+    this.$store.dispatch('log', this.$route.path)
+    this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
   }
-  </script>
+}
+</script>
