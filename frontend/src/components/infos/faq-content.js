@@ -7,7 +7,7 @@ import store from '@/store'
 import contact from '@/assets/json/contact.json'
 
 import { mailTo } from '../../utils/email'
-import { HISTOVEC_SUPPORT_EMAIL, REPORT_AN_ERROR_EMAIL, REPORT_INVALID_LINK_EMAIL } from '../../constants/email'
+import { HISTOVEC_SUPPORT_EMAIL, REPORT_INVALID_LINK_EMAIL } from '../../constants/email'
 
 
 const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.contact, mailBody = undefined) => {
@@ -35,6 +35,12 @@ export default function () {
   const vehicleNotFoundEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
     subject: 'Je ne trouve pas mon véhicule',
+    body: this.userFooter
+  }
+
+  const reportAnErrorEmail = {
+    recipients: [HISTOVEC_SUPPORT_EMAIL],
+    subject: 'Signaler une erreur',
     body: this.userFooter
   }
 
@@ -193,13 +199,13 @@ export default function () {
         Pour ce faire,
           <a
             id="contact_hook_${id}"
-            href="${mailTo(REPORT_AN_ERROR_EMAIL)}"
+            href="${mailTo(reportAnErrorEmail)}"
           >
             contactez-nous
           </a>
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error, reportAnErrorEmail.body),
       react: { object: store.state.config, key: 'v1'}
     },
     {
