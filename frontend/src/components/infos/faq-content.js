@@ -201,7 +201,6 @@ export default function () {
       callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error),
       react: { object: store.state.config, key: 'v1'}
     },
-    // @todo: clean section about "date de naissance"
     {
       title: 'Je ne trouve pas mon véhicule ?',
       body: `
@@ -247,9 +246,7 @@ export default function () {
           correspondantes).
         </p>
         <p class="indented">
-          Il se peut aussi qu'il y ait une erreur sur la date de
-          naissance enregistrée dans le système d’immatriculation des
-          véhicules (SIV) :
+          Si votre véhicule est toujours introuvable,
           <a
             id="contact_hook_${id}"
             href="${mailTo(vehicleNotFoundEmail)}"
