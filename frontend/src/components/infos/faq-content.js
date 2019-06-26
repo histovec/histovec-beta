@@ -47,7 +47,7 @@ export default function () {
           <dd>
             <ol>
               <li>
-                sur la page vendeur, remplissez le formulaire pour vous
+                Sur la page vendeur, remplissez le formulaire pour vous
                 identifier avec les informations demandées, et validez.
                 <p class="indented">
                   Note : s’il s’agit d’un véhicule d’entreprise, cliquez
@@ -55,11 +55,11 @@ export default function () {
                 </p>
               </li>
               <li>
-                le rapport du véhicule est affiché. Vous pouvez consulter
+                Le rapport du véhicule est affiché. Vous pouvez consulter
                 les différentes sections sur le menu de gauche.
               </li>
               <li>
-                vous pouvez transmettre le lien vers le rapport à un tiers
+                Vous pouvez transmettre le lien vers le rapport à un tiers
                 en cliquant sur le menu “Transmettre le rapport”.
               </li>
             </ol>
@@ -128,7 +128,7 @@ export default function () {
         <p class="indented">
           Les informations du rapport sont issues du système
           d’immatriculation des véhicules (SIV) du ministère de
-          l’intérieur.
+          l’Intérieur.
         </p>
       `
     },
@@ -150,7 +150,7 @@ export default function () {
           <dd>
             <p class="indented">
               HistoVec est un site produit par le ministère de
-              l’intérieur et fournit les données du système
+              l’Intérieur et fournit les données du système
               d’immatriculation des véhicules (SIV).
             </p>
           </dd>
@@ -178,7 +178,7 @@ export default function () {
       title: 'Est-ce que les informations sont complètes ?',
       body: `
         <p class="indented">
-          Seules les informations connues du Ministère de l’Intérieur
+          Seules les informations connues du ministère de l’Intérieur
           sont fournies. Par exemple, ne sont enregistrés que les
           sinistres déclarés à l’assureur et pour lesquels un expert a
           enregistré une procédure VRC (Véhicule à Réparation
@@ -190,6 +190,7 @@ export default function () {
       title: 'Comment signaler une information manquante ou inexacte ?',
       body: `
         <p class="indented">
+        Pour ce faire,
           <a
             id="contact_hook_${id}"
             href="${mailTo(REPORT_AN_ERROR_EMAIL)}"
@@ -202,7 +203,7 @@ export default function () {
       react: { object: store.state.config, key: 'v1'}
     },
     {
-      title: 'Je ne trouve pas mon véhicule ?',
+      title: 'Pourquoi je ne trouve pas mon véhicule ?',
       body: `
         <p class="indented">
           Vérifiez que vous avez saisi très précisément dans les
@@ -396,7 +397,7 @@ export default function () {
       `
     },
     {
-      title: 'Acheteur: le lien fourni ne fonctionne pas',
+      title: 'Que faire si le lien du rapport HistoVec que l\'on m\'a envoyé ne fonctionne pas?',
       body: `
       <p class="indented">
       Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas. Les cas suivants peuvent être rencontrés :

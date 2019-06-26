@@ -6,8 +6,8 @@
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
-      "hash": "#je-ne-trouve-pas-mon-vehicule",
-      "icon": "fa fa-question-circle fa-lg"
+      "hash": "#pourquoi-je-ne-trouve-pas-mon-vehicule",
+      "icon": "fa fa-life-ring fa-lg"
     }
   },
   "wait": {
@@ -29,7 +29,7 @@
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
-      "hash": "#acheteur-le-lien-fourni-ne-fonctionne-pas",
+      "hash": "#que-faire-si-le-lien-du-rapport-histovec-que-l-on-m-a-envoye-ne-fonctionne-pas",
       "icon": "fa fa-question-circle fa-lg"
     }
   },
@@ -40,7 +40,7 @@
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
-      "hash": "#acheteur-le-lien-fourni-ne-fonctionne-pas",
+      "hash": "#que-faire-si-le-lien-du-rapport-histovec-que-l-on-m-a-envoye-ne-fonctionne-pas",
       "icon": "fa fa-question-circle fa-lg"
     }
   },
@@ -51,7 +51,7 @@
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
-      "hash": "#acheteur-le-lien-fourni-ne-fonctionne-pas",
+      "hash": "#que-faire-si-le-lien-du-rapport-histovec-que-l-on-m-a-envoye-ne-fonctionne-pas",
       "icon": "fa fa-question-circle fa-lg"
     }
   },
