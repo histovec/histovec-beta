@@ -205,6 +205,7 @@
 
 <script>
 import Vue from 'vue'
+import { detect } from 'detect-browser'
 
 import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
