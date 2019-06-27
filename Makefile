@@ -46,7 +46,7 @@ export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
 export dollar = $(shell echo \$$)
 export API_VERSION_V0=v0
 export API_VERSION_V1=v1
-export API_VERSION=${API_VERSION_V0}
+export API_VERSION=${API_VERSION_V1}
 # packaging
 export FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
 export FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
@@ -199,7 +199,6 @@ include ./artifacts
 
 # combined variables should not be overrided
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
-export API_VERSION=${API_VERSION_V0}
 
 ##############################################
 ##############################################
