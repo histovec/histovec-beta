@@ -53,7 +53,7 @@
           <div class="main col-md-12">
             <!-- page-title start -->
             <h3 class="title">
-              <span class="text-defaut">B</span>esoin d'aide
+              <span class="text-defaut">Besoin d'aide</span>
             </h3>
             <div class="separator-2"></div>
             <!-- page-title end -->
