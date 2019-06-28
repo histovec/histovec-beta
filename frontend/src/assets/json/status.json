@@ -4,7 +4,7 @@
     "class": "alert alert-icon alert-danger",
     "icon": "fa fa-warning",
     "ref": {
-      "msg": "Besoin d'aide",
+      "msg": "Tutoriel",
       "route": "faq",
       "hash": "#pourquoi-je-ne-trouve-pas-mon-vehicule",
       "icon": "fa fa-life-ring fa-lg"

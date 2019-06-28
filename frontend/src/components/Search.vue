@@ -422,8 +422,8 @@
                             class="btn btn-animated btn-default btn-sm btn-block"
                             :to="{ name: 'faq', hash:'#pourquoi-je-ne-trouve-pas-mon-vehicule' }"
                           >
-                            <i class="fa fa-question"></i>
-                            Besoin d'aide
+                            <i class="fa fa-life-ring"></i>
+                            Tutoriel
                           </router-link>
                         </div>
                       </div>
