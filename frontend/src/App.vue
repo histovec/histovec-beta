@@ -236,10 +236,10 @@ window.bus = new Vue()
 Vue.mixin({
   data () {
     return {
-      appName: process.env.APP,
+      appName: process.env.VUE_APP_TITLE,
       appVersion: npmConf.version,
-      apiUrl: apiConf.api.url.replace('<APP>', process.env.APP).replace(/"/g, ''),
-      apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.APP).replace(/"/g, ''),
+      apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
+      apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
       localization: localization,
       operations: operations,
       usages: usages,

@@ -80,6 +80,7 @@ export DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
 export FRONTEND=${APP_PATH}/frontend
 export FRONTEND_DEV_HOST=frontend-dev
 export FRONTEND_DEV_PORT=8080
+export FRONTEND_CONF_PORT=8000
 # packaging html/js/css & docker targets
 export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
 export FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
@@ -427,15 +428,14 @@ frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 frontend-prepare-build:
 	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
 	( cd ${FRONTEND} && tar -zcvf $(FILE_FRONTEND_APP_VERSION) --exclude ${APP}.tar.gz \
-          index.html \
          .babelrc \
          .editorconfig \
          .eslintignore \
          .eslintrc.js \
+				 vue.config.js \
          config \
          src \
-         build \
-         static )
+         public )
 
 frontend-check-build:
 	export EXEC_ENV=build-deploy; ${DC} -f $(DC_BUILD_FRONTEND) config -q

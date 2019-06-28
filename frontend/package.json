@@ -6,25 +6,37 @@
   "licence": "GPL",
   "private": false,
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src",
-    "format": "prettier-eslint --write 'src/**/*.js' 'src/**/*.vue'"
+    "dev-ui": "npm-run-all --parallel dev ui",
+    "dev": "vue-cli-service serve",
+    "inspect": "vue-cli-service inspect",
+    "ui": "vue ui --host 0.0.0.0",
+    "build": "vue-cli-service build",
+    "lint": "run-p lint:*",
+    "format": "run-s lint:js",
+    "lint:js": "vue-cli-service lint",
+    "lint:style": "vue-cli-service lint:style",
+    "start": "npm run serve",
+    "storybook:build": "vue-cli-service storybook:build -c .storybook",
+    "storybook:serve": "vue-cli-service storybook:serve -p 6007 -c .storybook",
+    "sb": "npm run storybook:serve",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "npm run -s test:unit -- --watch"
   },
   "dependencies": {
     "bootstrap": "3.4.1",
     "chart.js": "^2.8.0",
     "core-js": "^2.6.5",
     "crypto-js": "^3.1.9-1",
-    "detect-browser": "^4.5.0",
-    "es6-promise":"^4.2.6",
+    "detect-browser": "^4.5.1",
+    "es6-promise":"^4.2.8",
     "font-awesome": "^4.7.0",
     "jspdf": "1.4.1",
     "lodash.orderby": "^4.6.0",
     "moment": "^2.24.0",
     "object-path":"^0.11.4",
     "qr.js": "^0.0.0",
-    "qrcode.vue": "^1.6.1",
+    "qrcode.vue": "^1.6.2",
     "regenerator-runtime": "^0.13.2",
     "shake.js": "^1.2.2",
     "vue": "^2.6.10",
@@ -34,40 +46,25 @@
     "vue-shortkey": "^3.1.7",
     "vue-the-mask": "^0.11.1",
     "vuex": "^3.1.1",
-    "vuex-persist": "1.8.0",
+    "vuex-persist": "2.0.1",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "@babel/register": "^7.4.4",
-    "@vue/babel-preset-app": "^3.7.0",
-    "autoprefixer": "^9.5.1",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
+    "@ascendancyy/vue-cli-plugin-stylelint":"^1.1.2",
+    "@vue/cli":"^3.8.4",
+    "@vue/cli-plugin-babel":"^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-plugin-pwa": "^3.8.0",
+    "@vue/cli-service": "^3.8.4",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-dynamic-import-node": "^2.2.0",
-    "chalk": "^2.4.2",
-    "connect-history-api-fallback": "^1.6.0",
-    "copy-webpack-plugin": "^5.0.3",
-    "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-friendly-formatter": "^4.0.1",
-    "eslint-loader": "^2.1.2",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-node": "^9.0.1",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^5.2.2",
+    "eslint-plugin-vue": "^5.2.3",
     "eventsource-polyfill": "^0.9.6",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "file-loader": "^3.0.1",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "function-bind": "^1.1.1",
@@ -75,23 +72,75 @@
     "http-proxy-middleware": "^0.19.1",
     "js-beautify": "1.10.0",
     "node-sass": "^4.12.0",
-    "open": "^6.3.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "ora": "^3.4.0",
-    "rimraf": "^2.6.3",
+    "npm-run-all": "^4.1.5",
     "sass-loader": "^7.1.0",
-    "semver": "^6.0.0",
-    "style-loader": "^0.23.1",
-    "url-loader": "^1.1.2",
+    "semver": "^6.1.2",
+    "stylelint-config-standard": "^18.3.0",
     "vue-chartjs": "^3.4.2",
-    "vue-loader": "^15.7.0",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.31.0",
-    "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-dev-middleware": "^3.7.0",
-    "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^4.2.1"
+    "vue-template-compiler": "^2.6.10"
+  },
+  "engines": {
+    "node": ">= 11.14.0",
+    "npm": ">= 6.9.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {
+      "comma-dangle": [
+        2,
+        "always-multiline"
+      ]
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.vue$": "vue-jest",
+      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "snapshotSerializers": [
+      "jest-serializer-vue"
+    ],
+    "testMatch": [
+      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
+    ],
+    "testURL": "http://localhost/"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   },
   "engines": {
     "node": ">= 11.14.0",

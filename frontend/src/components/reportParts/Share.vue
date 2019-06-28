@@ -33,6 +33,7 @@
             Copier le lien
             <i class="fa fa-copy"></i>
           </button>
+          &nbsp;
           <a
             :href="shareReportEmail"
             class="btn radius-30 btn-default btn-animated btn"

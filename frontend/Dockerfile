@@ -8,6 +8,10 @@ ARG no_proxy
 ARG npm_registry
 ARG sass_registry
 ARG MIRROR_DEBIAN
+ARG NPM_GIT
+ARG NPM_FIX
+ARG NPM_LATEST
+ARG NPM_VERBOSE
 ARG app_path
 ARG app_name
 ARG app_ver
@@ -16,15 +20,15 @@ ENV APP_VERSION ${app_ver}
 
 WORKDIR /$app_path
 
-# update debian w/proxy & mirror
-RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
-   sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list
-RUN apt-get update
-
-# install git in case of github deps
-RUN buildDeps="git" ; \
-   apt-get install -qy --no-install-recommends $buildDeps ; \
-   git config --global url."https://".insteadOf git://
+# update debian w/proxy & mirror then installs git in case of git dependencies
+RUN if [ ! -z "${NPM_GIT}" ]; then \
+      echo "$http_proxy $no_proxy"; \
+      (set -x && [ -z "$MIRROR_DEBIAN" ] || sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list) ; \
+      apt-get update; \
+      buildDeps="git"; \
+      apt-get install -qy --no-install-recommends $buildDeps ; \
+      git config --global url."https://".insteadOf git:// ; \
+   fi
 
 # use proxy & private npm registry
 RUN if [ ! -z "$http_proxy" ] ; then \
@@ -33,15 +37,27 @@ RUN if [ ! -z "$http_proxy" ] ; then \
         npm config set https-proxy $https_proxy ; \
         npm config set no-proxy $no_proxy; \
    fi ; \
-   [ -z "$npm_registry" ] || npm config set registry=$npm_registry; \
-   [ -z "$sass_registry" ] || npm config set sass_binary_site=$sass_registry;
+   [ -z "${npm_registry}" ] || npm config set registry=$npm_registry; \
+   [ -z "${sass_registry}" ] || npm config set sass_binary_site=$sass_registry;
 
-RUN npm i npm@latest -g
+RUN [ -z "${NPM_LATEST}" ] || npm i npm@latest -g
 
 COPY package.json ./
 RUN npm --no-git-tag-version version ${APP_VERSION}
-RUN npm install
-RUN npm audit fix --registry=https://registry.npmjs.org
+RUN if [ -z "${NPM_VERBOSE}" ]; then\
+      npm install;  \
+    else \
+      npm install --verbose; \
+    fi
+
+RUN if [ -z "${NPM_FIX}" ]; then \
+      npm audit --registry=https://registry.npmjs.org; \
+    else \
+      npm audit fix --registry=https://registry.npmjs.org; \
+    fi
+
+COPY run.sh .
+RUN chmod +x run.sh
 
 ################################
 # Step 2: "development" target #
@@ -56,16 +72,18 @@ ARG MIRROR_DEBIAN
 ARG app_path
 ARG app_name
 ARG app_ver
-ENV APP ${APP}
-ENV APP_VERSION ${app_ver}
+ENV VUE_APP_PORT ${VUE_APP_PORT}
+ENV VUE_UI_PORT ${VUE_UI_PORT}
 
 VOLUME /$app_path/src
-VOLUME /$app_path/build
 VOLUME /$app_path/config
-VOLUME /$app_path/dist
+VOLUME /$app_path/public
 
-EXPOSE 8080
-CMD ["npm","run","dev"]
+EXPOSE ${VUE_APP_PORT}
+
+EXPOSE ${VUE_UI_PORT}
+
+CMD ["./run.sh", "dev-ui"]
 
 ################################
 # Step 3:   "build" target     #
@@ -85,14 +103,12 @@ ENV APP_VERSION ${app_ver}
 
 VOLUME /$app_path/dist
 
-COPY index.html ./
-COPY .babelrc .editorconfig .eslintignore .eslintrc.js ./
+COPY .babelrc .editorconfig .eslintignore .eslintrc.js vue.config.js ./
 COPY src src
 COPY config config
-COPY build build
-COPY static static
+COPY public public
 
-CMD ["npm","run","build"]
+CMD ["./run.sh", "build"]
 
 ################################
 # Step 4:"build-deploy" target #
@@ -107,13 +123,18 @@ ARG MIRROR_DEBIAN
 ARG app_path
 ARG app_name
 ARG app_ver
-ENV APP ${APP}
+ENV APP ${app_name}
 ENV APP_VERSION ${app_ver}
+ENV VUE_APP_TITLE ${app_name}
 
 COPY ${app_name}-${app_ver}-frontend.tar.gz .
 
+RUN env | grep VUE_APP_ > .env
+
+RUN cat .env
+
 RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-frontend.tar.gz  && \
      npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
-     rm -rf /${app_name}-${app_ver}-frontend.tar.gz
+     rm -rf ${app_name}-${app_ver}-frontend.tar.gz
 
-CMD ["npm","run","build"]
+CMD ["npm", "run", "build"]
