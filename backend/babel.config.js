@@ -1,8 +1,16 @@
 module.exports = {
-  presets: ['@vue/app'],
-  env: {
-    test: {
-      presets: [['@babel/env', { targets: { node: 'current' } }]],
-    },
-  },
+  presets: [
+    [
+      '@babel/env',
+      {
+        targets: {
+          node: process.versions.node,
+        },
+      },
+    ],
+  ],
+  plugins: [
+    'dynamic-import-node',
+    '@babel/plugin-syntax-dynamic-import',
+  ],
 }
