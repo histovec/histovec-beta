@@ -29,7 +29,7 @@ server {
   location /<APP> {
     limit_req zone=app burst=10 nodelay;
     limit_req_status 429;
-    alias /usr/share/nginx/html/<APP>;
+    alias /usr/share/nginx/html/;
     try_files $uri $uri/ @rewrites;
   }
 
@@ -37,16 +37,10 @@ server {
     rewrite ^(.+)$ /<APP>/index.html last;
   }
 
-  location /<APP>/static {
-    limit_req zone=app burst=10 nodelay;
-    limit_req_status 429;
-    alias /usr/share/nginx/html/static;
-  }
-
   location /<APP>/assets {
     limit_req zone=css burst=80 nodelay;
     limit_req_status 429;
-    alias /usr/share/nginx/html/static/assets;
+    alias /usr/share/nginx/html/assets;
   }
 
   location ~ "^/<APP>/api/v0/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" {
