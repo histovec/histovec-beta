@@ -7,7 +7,7 @@ import store from '@/store'
 import contact from '@/assets/json/contact.json'
 
 import { mailTo } from '../../utils/email'
-import { HISTOVEC_SUPPORT_EMAIL, REPORT_INVALID_LINK_EMAIL } from '../../constants/email'
+import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
 
 
 const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.contact, mailBody = undefined) => {
@@ -41,6 +41,12 @@ export default function () {
   const reportAnErrorEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
     subject: 'Signaler une erreur',
+    body: this.userFooter
+  }
+
+  const reportInvalidLinkEmail = {
+    recipients: [HISTOVEC_SUPPORT_EMAIL],
+    subject: 'Signaler une erreur de lien invalide',
     body: this.userFooter
   }
 
@@ -430,13 +436,13 @@ export default function () {
       Si jamais le problème persiste avec votre vendeur :
         <a
           id="contact_hook_${id}"
-          href="${mailTo(REPORT_INVALID_LINK_EMAIL)}"
+          href="${mailTo(reportInvalidLinkEmail)}"
         >
           contactez-nous
         </a>
       </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.buyerNotFound),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
       react: { object: store.state.config, key: 'v1'}
     }
   ]

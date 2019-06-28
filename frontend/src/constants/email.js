@@ -32,9 +32,3 @@ export const REPRODUCTION_REQUEST_EMAIL = {
   subject: 'Demande de reproduction',
   body: ''
 }
-
-export const REPORT_INVALID_LINK_EMAIL = {
-  recipients: [HISTOVEC_SUPPORT_EMAIL],
-  subject: 'Signaler une erreur de lien invalide',
-  body: ''
-}
