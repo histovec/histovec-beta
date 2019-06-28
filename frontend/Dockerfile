@@ -73,15 +73,17 @@ ARG app_path
 ARG app_name
 ARG app_ver
 ENV VUE_APP_PORT ${VUE_APP_PORT}
+ENV VUE_UI_PORT ${VUE_UI_PORT}
 
 VOLUME /$app_path/src
-VOLUME /$app_path/build
 VOLUME /$app_path/config
-VOLUME /$app_path/dist
+VOLUME /$app_path/public
 
 EXPOSE ${VUE_APP_PORT}
 
-CMD ["./run.sh", "dev"]
+EXPOSE ${VUE_UI_PORT}
+
+CMD ["./run.sh", "dev-ui"]
 
 ################################
 # Step 3:   "build" target     #

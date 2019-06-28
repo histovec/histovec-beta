@@ -6,7 +6,10 @@
   "licence": "GPL",
   "private": false,
   "scripts": {
+    "dev-ui": "npm-run-all --parallel dev ui",
     "dev": "vue-cli-service serve",
+    "inspect": "vue-cli-service inspect",
+    "ui": "vue ui --host 0.0.0.0",
     "build": "vue-cli-service build",
     "lint": "run-p lint:*",
     "format": "run-s lint:js",
@@ -48,10 +51,11 @@
   },
   "devDependencies": {
     "@ascendancyy/vue-cli-plugin-stylelint":"^1.1.2",
+    "@vue/cli":"^3.8.4",
     "@vue/cli-plugin-babel":"^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-plugin-pwa": "^3.8.0",
-    "@vue/cli-service": "^3.8.0",
+    "@vue/cli-service": "^3.8.4",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",

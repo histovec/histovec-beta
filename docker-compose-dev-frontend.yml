@@ -24,6 +24,7 @@ services:
       - BACKEND_PORT
       - FRONTEND_DEV_HOST
       - FRONTEND_DEV_PORT
+      - FRONTEND_CONF_PORT
       - API_GLOBAL_BURST
       - API_GLOBAL_LIMIT_RATE
       - API_USER_LIMIT_RATE
@@ -64,6 +65,7 @@ services:
     environment:
       - VUE_APP_TITLE=${APP}
       - VUE_APP_PORT=${FRONTEND_DEV_PORT}
+      - VUE_UI_PORT=${FRONTEND_CONF_PORT}
     volumes:
       - ${FRONTEND}/public:/${APP}/public
       - ${FRONTEND}/vue.config.js:/${APP}/vue.config.js
@@ -75,6 +77,8 @@ services:
       - ${FRONTEND}/src:/${APP}/src/
       - ${FRONTEND}/build:/${APP}/build/
       - /${APP}/node_modules
+    ports:
+      - "${FRONTEND_CONF_PORT}:${FRONTEND_CONF_PORT}"
 
 networks:
   default:
