@@ -205,6 +205,7 @@
 
 <script>
 import Vue from 'vue'
+import { detect } from 'detect-browser'
 
 import npmConf from '../package.json'
 import apiConf from './assets/json/backend.json'
@@ -219,8 +220,9 @@ import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
 import ModalForm from './components/forms/ModalForm.vue'
 
-import { mailTo } from './utils/mail.js'
-import { CONTACT_MAIL, REPORT_ERROR_MAIL } from './constants/mail.js'
+import { HISTOVEC_SUPPORT_EMAIL } from './constants/email'
+import { mailTo } from './utils/email'
+import { renderUserInfosBloc } from './utils/dynamicEmail'
 
 Vue.use(VueTheMask)
 Vue.use(VueClipboard)
@@ -249,6 +251,33 @@ Vue.mixin({
       show: false
     }
   },
+
+  computed: {
+    userFooter() {
+      const context = {
+        browser: detect(),
+        identity: this.$store.state.identity,
+        userId: localStorage.getItem('userId')
+      }
+
+      return renderUserInfosBloc(context)
+    },
+    contactEmail() {
+      return mailTo({
+        recipients: [HISTOVEC_SUPPORT_EMAIL],
+        subject: 'Contacter Histovec',
+        body: this.userFooter
+      })
+    },
+    reportErrorEmail() {
+      return mailTo({
+        recipients: [HISTOVEC_SUPPORT_EMAIL],
+        subject: 'Signaler une erreur',
+        body: this.userFooter
+      })
+    }
+  },
+
   created () {
     if (localStorage.getItem('userId') === null) {
       localStorage.setItem('userId', this.guid(), 1)
@@ -256,10 +285,8 @@ Vue.mixin({
     window.bus.$on('langChange', value => {
       this.lang = value
     })
-
-    this.contactEmail = mailTo(CONTACT_MAIL)
-    this.reportErrorEmail = mailTo(REPORT_ERROR_MAIL)
   },
+
   methods: {
     guid () {
       return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + this.s4() + this.s4()

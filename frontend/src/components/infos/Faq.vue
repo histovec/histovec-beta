@@ -53,7 +53,7 @@
           <div class="main col-md-12">
             <!-- page-title start -->
             <h3 class="title">
-              <span class="text-defaut">B</span>esoin d'aide
+              <span class="text-defaut">Besoin d'aide</span>
             </h3>
             <div class="separator-2"></div>
             <!-- page-title end -->
@@ -68,12 +68,12 @@
           <p>
             Voici les questions les plus fréquemment posées. Si vous ne trouvez
             pas dans cette liste la réponse à votre interrogation,
-            <a
-              :href="'mailto:histovec@interieur.gouv.fr?subject=Besoin%20d%20aide'"
-            >contactez-nous</a>
+            <a :href="needHelpEmail">
+              contactez-nous
+            </a>
           </p>
           <accordion
-            :content="faqContent(mailBody)"
+            :content="faqContent()"
             :initial-active="activeQuestion"
             @click="highlightQuestion"
           />
@@ -89,7 +89,9 @@
 import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
 // import delay from 'delay'
-import { detect } from 'detect-browser'
+
+import { mailTo } from '../../utils/email'
+import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
 
 export default {
   components: {
@@ -103,66 +105,8 @@ export default {
     }
   },
 
-  computed: {
-    mailBody() {
-      const browser = detect()
-      const header =
-        'Bonjour\n\
-        L’équipe HistoVec vous remercie d’avoir utilisé notre service.\n\
-        Votre recherche a été infructueuse, nous sommes désolés pour ce désagrément.\n\
-        Histovec n’est pas supporté par des navigateurs trop anciens, \n\
-        nous vous conseillons l’utilisation de versions récentes de Firefox ou chrome.\n\
-        \n\
-        Pour vous aider nous avons besoin des informations que vous avez utilisé\n\
-        pour consulter l’historique de votre véhicule.\n\
-        \n'
-      const typePersonne = this.$store.state.identity.typePersonne === 'pro' ?
-        'Catégorie du véhicule: professionnel\n' : 'Catégorie du véhicule: particulier\n'
-      const typeImmatriculation = this.$store.state.identity.typeImmatriculation === 'fni' ?
-        'Type d’immatriculation: avant 2009\n\n' : 'Type d’immatriculation: après 2009\n\n'
-      const identity =
-        (this.$store.state.identity.typePersonne === 'particulier') ? (
-          this.$store.state.identity.typeImmatriculation === 'fni' ?
-            `\
-            Nom (de naissance) et prénom(s): ${this.$store.state.identity.nom + this.$store.state.identity.prenom}\n\
-            Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
-            Date du certificat: ${this.$store.state.identity.dateCertificat}\n
-            `
-            :
-            `\
-            Nom (de naissance): ${this.$store.state.identity.nom}\n\
-            Prénom(s): ${this.$store.state.identity.prenom}\n\
-            Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
-            Numéro de formule: ${this.$store.state.identity.formule}\n\
-            `
-          ) : (
-            this.$store.state.identity.typeImmatriculation === 'fni' ?
-              `\
-              Raison sociale: ${this.$store.state.identity.raisonSociale}\n\
-              Numéro de siren: ${this.$store.state.identity.siren}\n\
-              Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
-              Date du certificat: ${this.$store.state.identity.dateCertificat}\n
-              `
-              :
-              `\
-              Raison sociale: ${this.$store.state.identity.raisonSociale}\n\
-              Numéro de siren: ${this.$store.state.identity.siren}\n\
-              Numéro d'immatriculation: ${this.$store.state.identity.plaque}\n\
-              Numéro de formule: ${this.$store.state.identity.formule}\n\
-              `
-          )
-      const tech =
-        `\n\
-        Numéro de session HistoVec: ${localStorage.getItem('userId')}\n\
-        Navigateur: ${browser.name} ${browser.version} ${browser.os}\n\
-        `
-      const footer =
-        '\n\
-        \n\
-        Nous pourrons ainsi vous répondre rapidement'
-      let mail = header + typePersonne + typeImmatriculation + identity + tech + footer
-      return encodeURIComponent(mail)
-    },
+  created () {
+    this.needHelpEmail = mailTo({ recipients: [HISTOVEC_SUPPORT_EMAIL], subject: 'Besoin d\'aide', body: this.userFooter })
   },
 
   mounted() {

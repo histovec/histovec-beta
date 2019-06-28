@@ -11,13 +11,24 @@
         >
           <i :class="icon"></i>
           {{ message }}
+        </div>
+
+        <div
+          v-if="refMessage && refIcon"
+          class="mb-20 text-center"
+        >
           <router-link
             v-if="refDisplay"
-            class="clickable alert-danger"
             :to="{ name: ref, hash: refHash }"
           >
-            <em>{{ refMessage }}</em>
-            <b :class="refIcon"></b>
+            <button
+              type="button"
+              class="btn btn-animated btn-default btn-m"
+              :title="refMessage"
+            >
+              {{ refMessage }}
+              <i :class="refIcon"></i>
+            </button>
           </router-link>
         </div>
       </div>
