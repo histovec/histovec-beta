@@ -434,7 +434,6 @@ frontend-prepare-build:
 				 vue.config.js \
          config \
          src \
-         build \
          public )
 
 frontend-check-build:

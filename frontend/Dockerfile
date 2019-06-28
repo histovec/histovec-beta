@@ -104,7 +104,6 @@ VOLUME /$app_path/dist
 COPY .babelrc .editorconfig .eslintignore .eslintrc.js vue.config.js ./
 COPY src src
 COPY config config
-COPY build build
 COPY public public
 
 CMD ["./run.sh", "build"]
