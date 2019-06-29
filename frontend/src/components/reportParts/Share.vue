@@ -71,7 +71,7 @@
 <script>
 
 import QrcodeVue from 'qrcode.vue'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { mailTo } from '../../utils/email'
 import { getShareReportEmail } from '../../utils/dynamicEmail'
 
@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     validityDate () {
-      return moment().add(-7, 'days').add(2, 'months').date(0).format('DD/MM/YYYY')
+      return dayjs().add(-7, 'day').add(2, 'month').set('date', 0).format('DD/MM/YYYY')
     }
   },
   created () {
