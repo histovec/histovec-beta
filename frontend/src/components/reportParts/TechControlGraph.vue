@@ -3,7 +3,7 @@
 import labels from '@/assets/json/techControl.json'
 import orderBy from 'lodash.orderby'
 import { Line } from 'vue-chartjs'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export default {
   extends: Line,
@@ -50,7 +50,7 @@ export default {
             title: (tooltipItem) => {
               let text = ''
               text += 'le '
-              text += moment(tooltipItem.xLabel).format('DD/MM/YYYY')
+              text += dayjs(tooltipItem.xLabel).format('DD/MM/YYYY')
               text += ': '
               text += Math.round(tooltipItem[0].yLabel * 100) / 100
               text += ' km'
@@ -108,7 +108,7 @@ export default {
   methods: {
     controlToPoint (controle) {
       return {
-        x: moment(controle.ct_date, 'DD/MM/YYYY').toDate(),
+        x: dayjs(controle.ct_date, 'DD/MM/YYYY').toDate(),
         y: ((typeof controle.ct_km) === 'string') ? parseInt(controle.ct_km) : controle.ct_km,
       }
     }

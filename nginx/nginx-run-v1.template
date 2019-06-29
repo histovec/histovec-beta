@@ -27,7 +27,7 @@ server {
   }
 
   location /<APP> {
-    limit_req zone=app burst=10 nodelay;
+    limit_req zone=app burst=30 nodelay;
     limit_req_status 429;
     alias /usr/share/nginx/html/;
     try_files $uri $uri/ @rewrites;

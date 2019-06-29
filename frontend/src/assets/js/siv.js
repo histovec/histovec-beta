@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
 import orderBy from 'lodash.orderby'
 import operations from '../json/operations.json'
 import suspensions from '../json/suspensions.json'
@@ -15,15 +15,16 @@ function pad (n, width, z) {
 }
 
 function formatDate (isoDate) {
-  return moment(isoDate).utcOffset(120).format('DD/MM/YYYY')
+  let d = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
+  return Intl.DateTimeFormat('fr-FR').format(d)
 }
 
 function calcCertifDepuis (dateStr) {
   // Si on détecte que la date est au format FR alors on l'a converti
-  if (moment(dateStr, 'DD/MM/YYYY', true).isValid()) {
-    dateStr = moment(dateStr, 'DD/MM/YYYY').format('YYYY-MM-DD')
+  if (dayjs(dateStr, 'DD/MM/YYYY').isValid()) {
+    dateStr = dayjs(dateStr, 'DD/MM/YYYY').format('YYYY-MM-DD')
   }
-  let nbMonth = Math.floor(moment(new Date()).diff(new Date(dateStr), 'months', true))
+  let nbMonth = Math.floor(dayjs().diff(new Date(dateStr), 'month'))
 
   if (nbMonth <= 18) {
     return nbMonth + ' mois'

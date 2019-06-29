@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+
+function loadView(view) {
+  return () => import(/* webpackChunkName: "component-[request]" */ `@/components/${view}.vue`)
+}
+
 import Home from '@/components/Home'
-import Search from '@/components/Search'
-import Report from '@/components/Report'
-import Faq from '@/components/infos/Faq'
-import Legal from '@/components/infos/Legal'
-import Buyer from '@/components/infos/Buyer'
+const Search = loadView('Search')
+const Report = loadView('Report')
+const Faq = loadView('Faq')
+const Legal = loadView('Legal')
+const Buyer = loadView('Buyer')
 import NotFound from '@/components/infos/NotFound'
 
 Vue.use(Router)

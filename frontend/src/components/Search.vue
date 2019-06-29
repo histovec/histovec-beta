@@ -457,7 +457,7 @@
 <script>
 import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
 
@@ -676,7 +676,7 @@ export default {
     },
     currentMonthNumber () {
       var date = new Date()
-      date = moment().add(-7, 'days').format('YYYYMM')
+      date = dayjs().add(-7, 'day').format('YYYYMM')
       return date
     },
     pers_id () {
