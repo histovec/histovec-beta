@@ -295,6 +295,9 @@
 </template>
 
 <script>
+function loadView(view) {
+  return () => import(/* webpackChunkName: "report-part-[request]" */ `@/components/reportParts/${view}.vue`)
+}
 
 import Abstract from './reportParts/Abstract.vue'
 import TechChars from './reportParts/TechChars.vue'
@@ -302,11 +305,14 @@ import License from './reportParts/License.vue'
 import Administrative from './reportParts/Administrative.vue'
 import History from './reportParts/History.vue'
 import TechControl from './reportParts/TechControl.vue'
-import TechControlGraph from './reportParts/TechControlGraph.vue'
-import AdministrativeCertificate from './reportParts/AdministrativeCertificate.vue'
-import Share from './reportParts/Share.vue'
+const TechControlGraph = loadView('TechControlGraph')
+const AdministrativeCertificate = loadView('AdministrativeCertificate')
+const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
+
+
+
 
 const statusFromCode = {
   'holder': {
