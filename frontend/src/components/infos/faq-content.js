@@ -215,7 +215,7 @@ export default function () {
       react: { object: store.state.config, key: 'v1'}
     },
     {
-      title: 'Pourquoi je ne trouve pas mon véhicule ?',
+      title: 'Comment retrouver mon véhicule ?',
       body: `
         <p class="indented">
           Vérifiez que vous avez saisi très précisément dans les
