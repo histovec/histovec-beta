@@ -4,10 +4,10 @@
     "class": "alert alert-icon alert-danger",
     "icon": "fa fa-warning",
     "ref": {
-      "msg": "Tutoriel",
+      "msg": "Besoin d'aide",
       "route": "faq",
-      "hash": "#pourquoi-je-ne-trouve-pas-mon-vehicule",
-      "icon": "fa fa-life-ring fa-lg"
+      "hash": "#",
+      "icon": "fa fa-question-circle fa-lg"
     }
   },
   "wait": {
@@ -16,8 +16,25 @@
     "icon": "fa fa-spinner fa-spin",
     "ref": false
   },
-  "notFound": "Désolé, nous n'avons pas trouvé de résultat pour cette recherche.",
-  "invalid": "Les données entrées sont invalides. Veuillez essayer à nouveau.",
+  "notFound": {
+    "msg": "Désolé, nous n'avons pas trouvé de résultat pour cette recherche.",
+    "ref": {
+      "msg": "Tutoriel",
+      "route": "faq",
+      "hash": "#comment-retrouver-mon-vehicule",
+      "icon": "fa fa-life-ring fa-lg"
+    }
+  },
+  "invalid": {
+    "msg": "Les données entrées sont invalides. Veuillez essayer à nouveau.",
+    "class": "alert alert-icon alert-danger",
+    "icon": "fa fa-warning",
+    "ref": {
+      "msg": "Retour",
+      "route": "search",
+      "icon": "fa fa-arrow-left"
+    }
+  },
   "cancelled": "Le certificat demandé a été annulé. Une procédure de destruction du véhicule est en cours.",
   "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
   "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
