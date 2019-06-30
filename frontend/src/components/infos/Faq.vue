@@ -68,7 +68,11 @@
           <p>
             Voici les questions les plus fréquemment posées. Si vous ne trouvez
             pas dans cette liste la réponse à votre interrogation,
-            <a :href="needHelpEmail">
+            <a
+              :href="$store.state.config.v1 ? undefined : contactEmail"
+              title="Contact"
+              @click="needHelp"
+            >
               contactez-nous
             </a>
           </p>
@@ -90,9 +94,6 @@ import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
 // import delay from 'delay'
 
-import { mailTo } from '../../utils/email'
-import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
-
 export default {
   components: {
     Accordion,
@@ -105,10 +106,6 @@ export default {
     }
   },
 
-  created () {
-    this.needHelpEmail = mailTo({ recipients: [HISTOVEC_SUPPORT_EMAIL], subject: 'Besoin d\'aide', body: this.userFooter })
-  },
-
   mounted() {
     if (this.activeQuestion) {
       this.highlightQuestion(this.activeQuestion)
@@ -117,6 +114,11 @@ export default {
   },
 
   methods: {
+    async needHelp () {
+      if (this.$store.state.config.v1) {
+        await this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.contact, subject: this.contact.subject.contact })
+      }
+    },
     async highlightQuestion(id) {
       const hash = `#${id}`
       this.activeQuestion = id
