@@ -28,16 +28,11 @@ module.exports = {
           path.join(__dirname, './src/**/*.vue'),
           path.join(__dirname, './src/**/*.js')
         ]),
-        extractors: [
-          {
-            extractor: class TailwindExtractor {
-              static extract(content) {
-                return content.match(/[A-z0-9-_:\/]+/g) || [];
-              }
-            },
-            extensions: ['html', 'vue', 'js'],
-          },
-        ],
+        whitelistPatterns: [
+          /fa\-(motorcycle|truck|car)/,
+          /fa\-(minus\-circle|warning|life\-ring|spinner|spin|question\-circle)/,
+          /alert\-(info|danger|warning|success)/
+        ]
       })
     ]
   },
