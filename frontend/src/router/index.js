@@ -9,9 +9,9 @@ function loadView(view) {
 import Home from '@/components/Home'
 const Search = loadView('Search')
 const Report = loadView('Report')
-const Faq = loadView('Faq')
-const Legal = loadView('Legal')
-const Buyer = loadView('Buyer')
+const Faq = loadView('infos/Faq')
+const Legal = loadView('infos/Legal')
+const Buyer = loadView('infos/Buyer')
 import NotFound from '@/components/infos/NotFound'
 
 Vue.use(Router)
