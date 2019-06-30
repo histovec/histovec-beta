@@ -29,7 +29,7 @@ module.exports = {
           path.join(__dirname, './src/**/*.js')
         ]),
         whitelistPatterns: [
-          /fa\-(motorcycle|truck|car)/,
+          /fa\-(motorcycle|truck|car|certificate|cog)/,
           /fa\-(minus\-circle|warning|life\-ring|spinner|spin|question\-circle)/,
           /alert\-(info|danger|warning|success)/
         ]
