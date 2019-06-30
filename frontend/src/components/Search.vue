@@ -420,7 +420,7 @@
                         <div class="col-sm-2">
                           <router-link
                             class="btn btn-animated btn-default btn-sm btn-block"
-                            :to="{ name: 'faq', hash:'#pourquoi-je-ne-trouve-pas-mon-vehicule' }"
+                            :to="{ name: 'faq', hash:'#comment-retrouver-mon-vehicule' }"
                           >
                             <i class="fa fa-life-ring"></i>
                             Tutoriel
