@@ -30,7 +30,7 @@ module.exports = {
         ]),
         whitelistPatterns: [
           /fa\-(motorcycle|truck|car|certificate|cog)/,
-          /fa\-(minus\-circle|warning|life\-ring|spinner|spin|question\-circle)/,
+          /fa\-(minus\-circle|warning|life\-ring|spinner|spin|question\-circle|arrow\-left)/,
           /alert\-(info|danger|warning|success)/
         ]
       })
