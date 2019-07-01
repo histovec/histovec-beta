@@ -29,6 +29,17 @@ if (localStorage.getItem('userId') === null) {
   localStorage.setItem('userId', uuid, 1)
 }
 
+// A / B testing util
+function isOptionActivated(uuid, pourcentage, base=16, precision=2) {
+  const subUuid = uuid.substring(0, precision)
+  const value = parseInt(subUuid, base)
+
+  return value < (pourcentage / 100) * (base ** precision)
+}
+
+// @todo: waiting modal and mail content verification (and contact email in devops)
+const isBetaTestUser = isOptionActivated(localStorage.getItem('userId'), 0)
+
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
@@ -56,7 +67,7 @@ export default new Vuex.Store({
       utacGraph: false,
       pdf: true,
       updateDate: true,
-      v1: false,
+      v1: isBetaTestUser,
       blocANTS: true
     },
     configEnabler: {
