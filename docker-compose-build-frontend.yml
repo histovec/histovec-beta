@@ -24,5 +24,6 @@ services:
         NPM_LATEST: ${NPM_LATEST}
         NPM_GIT: ${NPM_GIT}
         NPM_VERBOSE: ${NPM_VERBOSE}
+        VUE_APP_V1_PERCENTAGE: ${API_V1_PERCENTAGE}
     image: ${APP}-frontend-${EXEC_ENV}:${APP_VERSION}
     container_name: ${APP}-frontend-${EXEC_ENV}
