@@ -7,7 +7,7 @@ module.exports = {
   publicPath: `${process.env.VUE_APP_TITLE}`,
   outputDir: 'dist',
   runtimeCompiler: true,
-  productionSourceMap: false,
+  productionSourceMap: process.env.VUE_APP_SOURCE_MAP === 'true',
   devServer: {
     public: 'http://0.0.0.0/',
     overlay: true,
