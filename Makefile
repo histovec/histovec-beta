@@ -82,6 +82,7 @@ export FRONTEND=${APP_PATH}/frontend
 export FRONTEND_DEV_HOST=frontend-dev
 export FRONTEND_DEV_PORT=8080
 export FRONTEND_CONF_PORT=8000
+export FRONTEND_SOURCE_MAP=true
 # packaging html/js/css & docker targets
 export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
 export FILE_FRONTEND_APP_VERSION = $(APP)-$(APP_VERSION)-frontend.tar.gz
