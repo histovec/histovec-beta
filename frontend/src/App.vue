@@ -279,22 +279,10 @@ Vue.mixin({
   },
 
   created () {
-    if (localStorage.getItem('userId') === null) {
-      localStorage.setItem('userId', this.guid(), 1)
-    }
     window.bus.$on('langChange', value => {
       this.lang = value
     })
   },
-
-  methods: {
-    guid () {
-      return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4() + this.s4() + this.s4()
-    },
-    s4 () {
-      return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-    }
-  }
 })
 
 export default {
