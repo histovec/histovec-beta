@@ -157,8 +157,8 @@ export BACKEND_SECRET:=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:
 export BACKEND_LOGS=${LOGS}/backend
 # mail confs for backend and fake smtp
 # must be overrided for production mode
-export MAIL_FROM=histovec@fake.mi
-export MAIL_TO=histovec@fake.mi
+export MAIL_FROM=histovec@interieur.gouv.fr
+export MAIL_TO=histovec@interieur.gouv.fr
 export SMTP_SERVER=smtp
 export SMTP_PORT=25
 # redis confs for backend and cache of utac data
