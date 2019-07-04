@@ -14,19 +14,25 @@ server {
   }
 
   location /google6d56c7b24593249c.html {
+    expires 24h;
      return 200 "google-site-verification: google6d56c7b24593249c.html";
   }
 
   location /robots.txt {
+    expires 24h;
     return 200 "User-agent: *\nDisallow: /<APP>/api/\nAllow: /";
   }
 
-
   location @rew {
+    expires 24h;
+    if ($http_x_forwarded_proto) {
+      return 302 $http_x_forwarded_proto://$http_host/<APP>/;
+    }
     return 302 $scheme://$http_host/<APP>/;
   }
 
   location /<APP> {
+    expires 24h;
     limit_req zone=app burst=30 nodelay;
     limit_req_status 429;
     alias /usr/share/nginx/html/;
@@ -38,6 +44,7 @@ server {
   }
 
   location /<APP>/assets {
+    expires 24h;
     limit_req zone=css burst=80 nodelay;
     limit_req_status 429;
     alias /usr/share/nginx/html/assets;
