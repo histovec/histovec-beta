@@ -59,16 +59,12 @@ export default new Vuex.Store({
     },
     config: {
       allTabs: false,
-      id: {
-        strongCode: true
-      },
       utac: false,
       utacGraph: false,
       v1: isBetaTestUser,
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
-      'id.strongCode': ['ctrl', 'alt', 'z'],
       v1: ['ctrl','alt','v'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
