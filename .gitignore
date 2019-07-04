@@ -11,3 +11,4 @@ histovec-build
 *.tar.gz
 *.tar
 node_modules/
+data/encrypted

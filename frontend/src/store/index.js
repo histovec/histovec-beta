@@ -58,34 +58,16 @@ export default new Vuex.Store({
       error: {}
     },
     config: {
-      beta: false,
-      fniMode: true,
       allTabs: false,
-      id: {
-        dateNaissance: false,
-        code: true,
-        strongCode: true
-      },
       utac: false,
       utacGraph: false,
-      pdf: true,
-      updateDate: true,
       v1: isBetaTestUser,
-      blocANTS: true
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
-      beta: ['ctrl', 'alt', 'b'],
-      fniMode: ['ctrl','alt','f'],
-      'id.dateNaissance': ['ctrl', 'alt', 'd'],
-      'id.code': ['ctrl', 'alt', 'c'],
-      'id.strongCode': ['ctrl', 'alt', 'z'],
-      pdf: ['ctrl', 'alt', 'p'],
-      updateDate: ['ctrl', 'alt', 'u'],
       v1: ['ctrl','alt','v'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
-      blocANTS: ['ctrl', 'alt', 'r'],
     },
     modalForm: false,
     modalFormMode: contact.mode.contact,
