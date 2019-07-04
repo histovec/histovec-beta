@@ -21,8 +21,10 @@ server {
     return 200 "User-agent: *\nDisallow: /<APP>/api/\nAllow: /";
   }
 
-
   location @rew {
+    if ($http_x_forwarded_proto) {
+      return 302 $http_x_forwarded_proto://$http_host/<APP>/;
+    }
     return 302 $scheme://$http_host/<APP>/;
   }
 
