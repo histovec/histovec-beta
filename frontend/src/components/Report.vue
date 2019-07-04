@@ -149,7 +149,7 @@
                 </a>
               </li>
               <li
-                v-if="holder&&$store.state.config.pdf"
+                v-if="holder"
                 :class="[{'active' : tab === 'csa'}]"
               >
                 <a
@@ -268,7 +268,7 @@
                 </share>
               </div>
               <div
-                v-if="holder&&$store.state.config.pdf"
+                v-if="holder"
                 class="tab-pane fade"
                 :class="[{'in active' : tab === 'csa'}]"
               >
