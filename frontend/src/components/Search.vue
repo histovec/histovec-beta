@@ -690,7 +690,7 @@ export default {
       }
     },
     id () {
-      return this.$store.state.config.id.code ? this.code : this.hash(this.pers_id + this.veh_id)
+      return this.code
     },
     code () {
       return this.$store.state.config.id.strongCode ? this.hash(this.pers_id + this.veh_id + this.currentMonthNumber) : this.hash(this.veh_id + this.currentMonthNumber)

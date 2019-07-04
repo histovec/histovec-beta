@@ -61,7 +61,6 @@ export default new Vuex.Store({
       allTabs: false,
       id: {
         dateNaissance: false,
-        code: true,
         strongCode: true
       },
       utac: false,
@@ -71,7 +70,6 @@ export default new Vuex.Store({
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       'id.dateNaissance': ['ctrl', 'alt', 'd'],
-      'id.code': ['ctrl', 'alt', 'c'],
       'id.strongCode': ['ctrl', 'alt', 'z'],
       v1: ['ctrl','alt','v'],
       utac: ['ctrl', 'alt', 'o'],
