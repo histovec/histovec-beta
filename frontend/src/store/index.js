@@ -66,7 +66,6 @@ export default new Vuex.Store({
       },
       utac: false,
       utacGraph: false,
-      updateDate: true,
       v1: isBetaTestUser,
     },
     configEnabler: {
@@ -74,7 +73,6 @@ export default new Vuex.Store({
       'id.dateNaissance': ['ctrl', 'alt', 'd'],
       'id.code': ['ctrl', 'alt', 'c'],
       'id.strongCode': ['ctrl', 'alt', 'z'],
-      updateDate: ['ctrl', 'alt', 'u'],
       v1: ['ctrl','alt','v'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
