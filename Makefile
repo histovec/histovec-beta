@@ -236,6 +236,11 @@ ifeq ("$(wildcard /usr/local/bin/docker-compose)","")
 	@sudo curl -s -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 	@sudo chmod +x /usr/local/bin/docker-compose
 endif
+ifeq ("$(wildcard /usr/bin/sha1sum /usr/local/bin/sha1sum)","")
+	@echo installing sha1sum with ${INSTALL}, as needed for building targets
+	@${INSTALL} md5sha1sum
+endif
+
 
 install-prerequisites-injection:
 ifeq ("$(wildcard /usr/bin/gawk /usr/local/bin/gawk)","")
