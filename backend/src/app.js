@@ -20,12 +20,17 @@ morgan.token('utacId', function (req) {
   return req.body.utacId
 })
 
+morgan.token('fwd-addr', function (req) {
+  return req.headers['x-forwarded-for']
+})
+
 const formatAsNginx =
-  ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time :id'
+  ':remote-addr :fwd-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time :id'
 
 function formatAsJson(tokens, req, res) {
   return JSON.stringify({
     'remote-address': tokens['remote-addr'](req, res),
+    'forwarded-address': tokens['fwd-addr'](req, res),
     'remote-user': tokens['remote-user'](req, res),
     'time': tokens['date'](req, res, 'iso'),
     'response-time': tokens['response-time'](req, res, 'iso'),
