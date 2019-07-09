@@ -727,13 +727,13 @@ redis-host-config:
 ifeq ("$(wildcard ${REDIS_DATA})","")
 	@echo create dummy data directory for redis
 	@mkdir -p ${REDIS_DATA}
-	@sudo chown 100.100 ${REDIS_DATA}
+	@sudo chown 100.100 ${REDIS_DATA} || echo
 endif
 ifeq ("$(vm_overcommit_memory)", "")
-	sudo sysctl vm.overcommit_memory=1
+	sudo sysctl vm.overcommit_memory=1 || echo
 endif
 ifeq ("$(transparent_hugepage)", "")
-	echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+	echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled || echo
 endif
 
 # package for production
