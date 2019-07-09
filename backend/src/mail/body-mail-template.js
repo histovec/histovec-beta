@@ -15,8 +15,16 @@ export const json2html = (json) => {
     return JSON.stringify(json)
   }
 
-export const getHtmlBody = content =>
-  `<!DOCTYPE html>
+export const getHtmlBody = ({content, withImage}) => {
+    const imageBloc = withImage ? `
+    <tr>
+        <td>
+        <img width="548px" src="https://histovec.interieur.gouv.fr/histovec/assets/images/histovec-header-mobile.png" />
+        </td>
+    </tr>`
+    : ''
+
+return `<!DOCTYPE html>
 <html>
   <head>
   <title>Email HistoVec</title>
@@ -86,11 +94,7 @@ export const getHtmlBody = content =>
                                                       <!-- une zone de contenu -->
                                                       <table class="w580"  width="580" cellpadding="10" cellspacing="10" border="0">
                                                           <tbody>
-                                                              <tr>
-                                                                  <td>
-                                                                    <img width="548px" src="https://histovec.interieur.gouv.fr/histovec/assets/images/histovec-header-mobile.png" />
-                                                                  </td>
-                                                              </tr>
+                                                              ${imageBloc}
                                                               <tr>
                                                                   <td class="article-content" colspan="2">
                                                                       ${content}
@@ -149,3 +153,4 @@ export const getHtmlBody = content =>
       </table>
   </body>
 </html>`
+}

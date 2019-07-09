@@ -8,14 +8,17 @@ export const sendMailToSupport = async (from, subject, json) => {
     cc: from,
     to: config.mailTo,
     subject: subject,
-    content: getHtmlBody(`
-      <b> message </b>: <br />
-      <p>
-        ${(json.message && json.message.replace('\n','<br />')) || '' }
-      </p>
-      <br />
-      <b> donnée techniques </b>: <br />
-      ${json2html(json)}
-    `)
+    content: getHtmlBody({
+      content: `
+        <b> message </b>: <br />
+        <p>
+          ${(json.message && json.message.replace('\n','<br />')) || '' }
+        </p>
+        <br />
+        <b> donnée techniques </b>: <br />
+        ${json2html(json)}
+      `,
+      withImage: false
+    })
   })
 }
