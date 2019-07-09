@@ -6,7 +6,6 @@
           Résumé
         </h6>
         <p
-          v-if="$store.state.config.updateDate"
           class="small"
         >
           information du ministère de l'Intérieur au {{ v.date_update }}

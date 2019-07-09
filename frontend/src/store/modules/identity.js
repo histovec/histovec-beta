@@ -8,19 +8,16 @@ export default {
     nom: '',
     raisonSociale: '',
     prenom: '',
-    dateNaissance: '',
     dateCertificat: '',
     plaque: '',
     siren: '',
     formule: '',
-    fniMode: true
   },
   mutations: {
     clearIdentity (state) {
       state.nom = ''
       state.raisonSociale = ''
       state.prenom = ''
-      state.dateNaissance = ''
       state.dateCertificat = ''
       state.plaque = ''
       state.siren = ''
@@ -56,9 +53,6 @@ export default {
     },
     updateSiren (state, siren) {
       state.siren = siren
-    },
-    updateDateNaissance (state, dateNaissance) {
-      state.dateNaissance = dateNaissance
     },
     updateDateCertificat (state, dateCertificat) {
       state.dateCertificat = dateCertificat

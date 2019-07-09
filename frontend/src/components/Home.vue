@@ -32,10 +32,7 @@
               </router-link>
               <!-- fin bouton vendeur -->
               <div class="separator clearfix"></div>
-              <p v-if="!$store.state.config.blocANTS">
-                Rassurez vos acheteurs potentiels.
-              </p>
-              <p v-if="$store.state.config.blocANTS">
+              <p>
                 <span class="text-defaut text-defaut-i-g">Rassurez</span> vos acheteurs potentiels avec le <span class="text-defaut text-defaut-i-g">rapport</span>
                 <br />
                 et obtenez votre <span class="text-defaut text-defaut-i-g">certificat de non gage</span>.
@@ -54,10 +51,7 @@
               </router-link>
               <!-- fin bouton acheteur -->
               <div class="separator clearfix"></div>
-              <p v-if="!$store.state.config.blocANTS">
-                Achetez en confiance : demandez au vendeur le rapport.
-              </p>
-              <p v-if="$store.state.config.blocANTS">
+              <p>
                 Achetez en <span class="text-defaut text-defaut-i-g">confiance</span> :
                 <br />
                 demandez le <span class="text-defaut text-defaut-i-g">rapport</span> au vendeur.
@@ -273,51 +267,7 @@
     </section>
     <br />
     <section class="light-gray-bg pv-20 clearfix">
-      <div
-        v-if="!$store.state.config.blocANTS"
-        class="container"
-      >
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
-              <!-- debut bouton vendeur -->
-              <router-link
-                class="btn radius-30 btn-default btn-animated btn-lg"
-                :to="{ name: 'search', params: {t: 'particulier'}}"
-              >
-                Vendeur
-                <i class="fa fa-handshake-o"></i>
-              </router-link>
-              <!-- fin bouton vendeur -->
-              <div class="separator clearfix"></div>
-              <p>
-                Rassurez vos acheteurs potentiels.
-              </p>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="pv-20 ph-20 feature-box bordered_spec shadow_spec text-center ">
-              <!-- debut bouton acheteur -->
-              <router-link
-                class="btn radius-30 btn-warning btn-animated btn-lg"
-                :to="{ name: 'buyer' }"
-              >
-                Acheteur
-                <i class="fa fa-users"></i>
-              </router-link>
-              <!-- fin bouton acheteur -->
-              <div class="separator clearfix"></div>
-              <p>
-                Achetez en confiance : demandez au vendeur le rapport.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        v-if="$store.state.config.blocANTS"
-        class="container"
-      >
+      <div class="container">
         <div class="row justify-content-md-center">
           <div class="col-lg-12">
             <h2 class="text-center">

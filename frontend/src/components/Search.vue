@@ -66,7 +66,6 @@
             </div>
           </div>
           <div
-            v-if="$store.state.config.fniMode"
             class="col-md-12"
           >
             <div
@@ -79,7 +78,6 @@
             </div>
           </div>
           <div
-            v-if="$store.state.config.fniMode"
             class="col-xs-6 col-sm-6"
           >
             <a
@@ -97,7 +95,6 @@
             </a>
           </div>
           <div
-            v-if="$store.state.config.fniMode"
             class="col-xs-6 col-sm-6"
           >
             <a
@@ -115,7 +112,7 @@
             </a>
           </div>
           <div
-            v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni' || !$store.state.config.fniMode"
+            v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'"
             class="col-md-12 col-xs-12 p-h-25"
           >
             <!-- tabs start -->
@@ -169,10 +166,8 @@
                         >
                           <div
                             :class="{
-                              'col-md-4': ($store.state.config.id.dateNaissance) && (typeImmatriculation === 'siv' || !$store.state.config.fniMode),
-                              'col-md-6': (!$store.state.config.id.dateNaissance) && (typeImmatriculation === 'siv' || !$store.state.config.fniMode),
-                              'col-md-8' : ($store.state.config.id.dateNaissance) && (typeImmatriculation === 'fni'),
-                              'col-md-12' : (!$store.state.config.id.dateNaissance) && (typeImmatriculation === 'fni')
+                              'col-md-6': typeImmatriculation === 'siv',
+                              'col-md-12' : typeImmatriculation === 'fni'
                             }"
                           >
                             <div
@@ -180,7 +175,7 @@
                               :class="[{'has-error' : (nom === '' && status !== 'init')}]"
                             >
                               <label
-                                v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode"
+                                v-if="typeImmatriculation === 'siv'"
                                 class="control-label"
                               >
                                 Nom de naissance
@@ -220,8 +215,8 @@
                             </div>
                           </div>
                           <div
-                            v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode"
-                            :class="$store.state.config.id.dateNaissance ? 'col-md-4' : 'col-md-6'"
+                            v-if="typeImmatriculation === 'siv'"
+                            class="col-md-6"
                           >
                             <div
                               class="form-group has-feedback"
@@ -246,17 +241,6 @@
                               >
                               <i class="fa fa-user form-control-feedback"></i>
                             </div>
-                          </div>
-                          <div
-                            v-if="$store.state.config.id.dateNaissance"
-                            class="col-md-4"
-                          >
-                            <field
-                              form-id="dateNaissance"
-                              :option="typeImmatriculation"
-                              :active="status !== 'init'"
-                            >
-                            </field>
                           </div>
                         </div>
                         <div
@@ -319,7 +303,7 @@
                               class="form-group has-feedback plan position_left"
                               :class="[{'has-error' : ((!checkFormule && !checkDateCertificat) && status !== 'init')}]"
                             >
-                              <div v-if="typeImmatriculation === 'siv' || !$store.state.config.fniMode">
+                              <div v-if="typeImmatriculation === 'siv'">
                                 <label
                                   for="input"
                                   class="control-label"
@@ -351,7 +335,7 @@
                                 >
                                 <i class="fa fa-pencil-square-o form-control-feedback"></i>
                               </div>
-                              <div v-if="typeImmatriculation === 'fni' && $store.state.config.fniMode">
+                              <div v-if="typeImmatriculation === 'fni'">
                                 <label
                                   for="input"
                                   class="control-label"
@@ -445,7 +429,6 @@
     <!-- debut modal -->
     <modal-helper
       v-if="modal"
-      :fni-mode="$store.state.config.fniMode"
       :type-immatriculation="typeImmatriculation"
       @close="modal = false"
     >
@@ -516,32 +499,6 @@ const formInitialOptions = {
       icon: 'fa-drivers-license-o',
       tabindex: '4'
     }
-  },
-  dateNaissance: {
-    siv: {
-      label: 'Date de naissance',
-      model: 'dateNaissance',
-      masked: true,
-      mask: '##/##/####',
-      maskAlt: '####',
-      check: /^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/,
-      maskTitle: 'désactiver le contrôle si année de naissnce seule',
-      placeholder: 'xx/xx/xxxx',
-      placeholderAlt: '19xx',
-      tabindex: '3'
-    },
-    fni: {
-      label: 'Date de naissance',
-      model: 'dateNaissance',
-      masked: true,
-      mask: '##/##/####',
-      maskAlt: '####',
-      check: /^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/,
-      maskTitle: 'désactiver le contrôle si année de naissnce seule',
-      placeholder: 'xx/xx/xxxx',
-      placeholderAlt: '19xx',
-      tabindex: '2'
-    }
   }
 }
 
@@ -586,14 +543,6 @@ export default {
       },
       set (value) {
         this.$store.commit('updatePrenom', value)
-      }
-    },
-    dateNaissance: {
-      get () {
-        return this.$store.state.identity.dateNaissance
-      },
-      set (value) {
-        this.$store.commit('updateDateNaissance', value)
       }
     },
     raisonSociale: {
@@ -652,9 +601,6 @@ export default {
         this.$store.commit('updateDateCertificat', value)
       }
     },
-    checkDateNaissance () {
-      return (!this.$store.state.config.id.dateNaissance) || this.dateNaissance.match(/^([0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}|[1-2][0-9]{3})$/)
-    },
     checkDateCertificat () {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
     },
@@ -672,7 +618,7 @@ export default {
       return this.siren.match(/^\d{9}$/)
     },
     checkFields () {
-      return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni') && this.checkDateNaissance) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
+      return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni')) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
     },
     currentMonthNumber () {
       var date = new Date()
@@ -681,7 +627,7 @@ export default {
     },
     pers_id () {
       if (this.typePersonne === 'particulier') {
-        return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '') + (this.$store.state.config.id.dateNaissance ? this.dateNaissance : '')
+        return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '')
       } else {
         return this.raisonSociale + this.siren
       }
@@ -694,10 +640,10 @@ export default {
       }
     },
     id () {
-      return this.$store.state.config.id.code ? this.code : this.hash(this.pers_id + this.veh_id)
+      return this.code
     },
     code () {
-      return this.$store.state.config.id.strongCode ? this.hash(this.pers_id + this.veh_id + this.currentMonthNumber) : this.hash(this.veh_id + this.currentMonthNumber)
+      return this.hash(this.pers_id + this.veh_id + this.currentMonthNumber)
     },
     key () {
       return this.hash(this.veh_id)
@@ -728,16 +674,14 @@ export default {
       let data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
       if (data.length > 1) {
         if (evt.target.name === 'nom') {
-          if (this.typeImmatriculation === 'siv' || !this.$store.state.config.fniMode) {
+          if (this.typeImmatriculation === 'siv') {
             // this.nom = data[0]
             this.prenom = data[1]
-            this.dateNaissance = data[2]
             this.plaque = data[3]
             this.formule = data[4]
           }
           if (this.typeImmatriculation === 'fni') {
             // this.nom = data[0]
-            this.dateNaissance = data[1]
             this.plaque = data[2]
             this.dateCertificat = data[3]
           }
@@ -746,7 +690,7 @@ export default {
           // this.raisonSociale = data[0]
           this.siren = data[1]
           this.plaque = data[2]
-          if (this.typeImmatriculation === 'siv' || !this.$store.state.config.fniMode) {
+          if (this.typeImmatriculation === 'siv') {
             this.formule = data[3]
           }
           if (this.typeImmatriculation === 'fni') {

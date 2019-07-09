@@ -7,6 +7,9 @@ ARG https_proxy
 ARG no_proxy
 ARG npm_registry
 ARG MIRROR_DEBIAN
+ARG NPM_FIX
+ARG NPM_LATEST
+ARG NPM_VERBOSE
 ARG app_path
 ARG app_name
 ARG port
@@ -16,8 +19,6 @@ WORKDIR /$app_path
 
 # Expose the listening port of your app
 EXPOSE ${port}
-
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo "Europe/Paris" > /etc/timezone
 
 # update debian w/proxy & mirror
 RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
@@ -32,9 +33,22 @@ RUN if [ ! -z "$http_proxy" ] ; then \
         npm config set no-proxy $no_proxy; \
    fi ; \
    [ -z "$npm_registry" ] || npm config set registry=$npm_registry
-RUN npm i npm@latest -g
+
+RUN [ -z "${NPM_LATEST}" ] || npm i npm@latest -g
 
 COPY package.json ./
+RUN npm --no-git-tag-version version ${APP_VERSION}
+RUN if [ -z "${NPM_VERBOSE}" ]; then\
+      npm install;  \
+    else \
+      npm install --verbose; \
+    fi
+
+RUN if [ -z "${NPM_FIX}" ]; then \
+      npm audit --registry=https://registry.npmjs.org; \
+    else \
+      npm audit fix --registry=https://registry.npmjs.org; \
+    fi
 
 ################################
 # Step 2: "development" target #
@@ -48,14 +62,9 @@ ENV NPM_CONFIG_LOGLEVEL debug
 VOLUME /${app_path}/src
 VOLUME /${app_path}/dist
 
-# Install app dependencies
-RUN npm --no-git-tag-version version ${APP_VERSION}
-RUN npm install
-RUN npm audit fix --registry=https://registry.npmjs.org
-
 COPY babel.config.js boot-dev.js ./
 
-CMD ["npm","run",  "dev"]
+CMD ["npm","run", "dev"]
 
 ##########################
 # Step 3: "build" target #
@@ -65,11 +74,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 ARG app_name
 ARG app_ver
 ENV APP_VERSION ${app_ver}
-
-# Install app dependencies
-RUN npm --no-git-tag-version version ${APP_VERSION}
-RUN npm install
-RUN npm audit fix --registry=https://registry.npmjs.org
 
 COPY ${app_name}-${app_ver}-backend.tar.gz .
 

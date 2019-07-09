@@ -22,8 +22,6 @@ CHUNK_SIZE = 20000         # size of each chunk
 MAX_INPUT_ROWS = None      # number of lines to process in the recipe, None if no limit
 #VERBOSECHUNKSIZE = 10000   # display log every VERBOSECHUNKSIZE line
 NUM_THREADS = 2            # number of parallel threads
-CRYPT_OPT_DATENAISSANCE=False
-CRYPT_OPT_STRONGCODE=True
 
 COMMON_TRANSFER_SCHEMA = [
     {'name': 'ida1', 'type': 'string'},
@@ -75,8 +73,6 @@ def encrypt_df(df):
     df['id_personne'] = df['pers_raison_soc_tit'] + df['pers_siren_tit'] + df['pers_nom_naissance_tit']
     if ('pers_prenom_tit' in list(df)):
         df['id_personne'] = df['id_personne'] + (df['pers_prenom_tit']) #SIV
-    if (('pers_date_naissance_tit' in list(df)) and (CRYPT_OPT_DATENAISSANCE)):
-        df['id_personne'] = df['id_personne'] + (df['pers_date_naissance_tit'] )
     df['id_vehicle'] = df['plaq_immat']
     if ('numero_formule' in list(df)):
         df['id_vehicle'] = df['id_vehicle'] + df['numero_formule'] #SIV
@@ -84,7 +80,7 @@ def encrypt_df(df):
         df['id_vehicle'] = df['id_vehicle'] + df['date_emission_ci'] #FNI
 
     df['idv'] = df['id_personne'] + df['id_vehicle']
-    df['ida'] = df['idv'] if CRYPT_OPT_STRONGCODE else df['id_vehicle']
+    df['ida'] = df['idv']
     df['key'] = df['id_vehicle']
 
 

@@ -158,9 +158,6 @@
                           <li v-if="$store.state.identity.typeImmatriculation === 'fni'">
                             Nom de naissance et prénom(s): {{ $store.state.identity.nom }}
                           </li>
-                          <li v-if="$store.state.config.id.dateNaissance">
-                            Date de naissance : {{ $store.state.identity.dateNaissance }}
-                          </li>
                         </ul>
                       </div>
                       <div class="col-sm-6 col-xs-6">
@@ -346,7 +343,6 @@ export default {
               typePersonne: this.$store.state.identity.typePersonne,
               nom: this.$store.state.identity.nom,
               prenom: this.$store.state.identity.prenom,
-              dateNaissance: this.$store.state.identity.dateNaissance,
               plaque: this.$store.state.identity.plaque,
               formule: this.$store.state.identity.formule,
               dateCertificat: this.$store.state.identity.dateCertificat
