@@ -350,7 +350,8 @@ export default {
               plaque: this.$store.state.identity.plaque,
               formule: this.$store.state.identity.formule,
               dateCertificat: this.$store.state.identity.dateCertificat
-            }
+            },
+          'subject': this.subject
         }
         await this.$store.dispatch(this.dispatchName, data)
         if (this.$store.state.api.http[this.apiName] === 201) {
