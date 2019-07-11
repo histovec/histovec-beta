@@ -111,15 +111,15 @@
         <div v-if="(!v.certificat.etranger) && (v.fni !== 'ko')">
           <div v-if="holder">
             <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
-            <span class="info_red txt-small-13">{{ v.nb_tit }}</span><sup class="info_red txt-small">{{ (v.nb_tit === 1) ? 'er' : 'ème' }}</sup>
+            <span class="info_red txt-small-13">{{ v.nb_tit }}</span><sup class="info_red txt-small">{{ getExposant(v.nb_tit) }}</sup>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
           </div>
           <div v-if="!holder">
             <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
             <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
-            <span class="color-info_2 bold_4 txt-small-13">titulaire(s), en l'achetant vous serez le</span>
+            <span class="color-info_2 bold_4 txt-small-13"> titulaire(s), en l'achetant vous serez le </span>
             <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span>
-            <sup class="info_red txt-small">ème</sup>
+            <sup class="info_red txt-small">{{ getExposant(v.nb_tit + 1) }}</sup>
           </div>
         </div>
         <!-- <div v-if="(v.fni === 'ko')">
@@ -217,7 +217,7 @@
             <br />
             <span v-if="v.apte !== false">
               <span class="txt-small-13">et</span>
-              <span class="info_red txt-small-13">déclaré apte à circuler</span>
+              <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
                 v-if="v.apte !== true"
                 class="txt-small-13"
@@ -246,7 +246,9 @@
         </div>
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
-          <span class="color-info_2 bold_4 txt-small-13">{{ synthese[(v.apte ? 'fin_ove' : 'ove')].adv }}</span>
+          <span v-if="v.apte" class="color-info_2 bold_4 txt-small-13">{{ synthese[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}</span>
+          <span v-else class="color-info_2 bold_4 txt-small-13">{{ synthese['ove'].adv }}</span>
+
           <br />
           <span
             v-if="v.sinistres.length > 1"
@@ -383,6 +385,9 @@
 </template>
 
 <script>
+
+import { formatMixin } from '../../mixins/format.js'
+
 export default {
   props: {
     v: {
@@ -393,7 +398,8 @@ export default {
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/synthesis`)
-  }
+  },
+  mixins: [formatMixin]
 }
 
 </script>

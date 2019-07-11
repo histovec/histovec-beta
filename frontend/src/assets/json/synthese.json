@@ -4,10 +4,16 @@
     "adv": "Consultez le site des vignettes Crit'Air",
     "link": "https://www.certificat-air.gouv.fr"
   },
-  "fin_ove": {
+  "fin_ove_acheteur": {
     "icon": "fa-exclamation-triangle",
     "text": "Ce véhicule a eu un sinistre déclaré, et déclaré apte à circuler",
-    "adv": "Demandez le rapport d’expert et la(es) facture(s)",
+    "adv": "Pensez à demander les rapports d'expertise et les factures au vendeur",
+    "link": "https://www.service-public.fr/particuliers/vosdroits/F1473"
+  },
+  "fin_ove_vendeur": {
+    "icon": "fa-exclamation-triangle",
+    "text": "Ce véhicule a eu un sinistre déclaré, et déclaré apte à circuler",
+    "adv": "Pensez à transmettre une copie des rapports d'expertise à l'acquéreur",
     "link": "https://www.service-public.fr/particuliers/vosdroits/F1473"
   },
   "ove": {
