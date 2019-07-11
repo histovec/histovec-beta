@@ -246,7 +246,9 @@
         </div>
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
-          <span class="color-info_2 bold_4 txt-small-13">{{ synthese[(v.apte ? 'fin_ove' : 'ove')].adv }}</span>
+          <span v-if="v.apte" class="color-info_2 bold_4 txt-small-13">{{ synthese[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}</span>
+          <span v-else class="color-info_2 bold_4 txt-small-13">{{ synthese['ove'].adv }}</span>
+
           <br />
           <span
             v-if="v.sinistres.length > 1"
