@@ -76,6 +76,7 @@ export default function () {
               </li>
             </ol>
           </dd>
+          <br/>
           <dt>Vous êtes acheteur :</dt>
           <dd>
             <p class="indented">
@@ -97,15 +98,17 @@ export default function () {
       `,
     },
     {
-      title: 'A qui s’adresse HistoVec ?',
+      title: 'À qui s’adresse HistoVec ?',
       body: `
         <dl>
-          <dt>Je vends mon véhicule d’occasion :</dt>'
+          <dt>Je vends mon véhicule d’occasion :</dt>
           <dd>
             <p class="indented">
               HistoVec vous permet de valoriser votre offre en
               fournissant gratuitement un rapport d’historique
               officiel qui rassurera vos acheteurs potentiels.
+              Le certificat de situation administrative détaillée
+              y est également téléchargeable.
             </p>
           </dd>
           <dt>J’achète un véhicule d’occasion :</dt>
@@ -148,9 +151,13 @@ export default function () {
       title: 'Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?',
       body: `
         <p class="indented">
-          Seul le propriétaire du certificat d’immatriculation peut
-          générer le rapport HistoVec de son véhicule, qu’il choisit
-          de transmettre à des tiers.
+          Seul le titulaire du certificat d'immatriculation peut générer
+          le rapport HistoVec de son véhicule, qu'il choisit de transmettre
+          à des tiers.
+        </p>
+        <p class="indented">
+          Les locataires longue durée (LDD) doivent être mandatés par
+          le propriétaire du véhicule.
         </p>
       `
     },
@@ -169,9 +176,9 @@ export default function () {
           <dt>Confidentiel :</dt>
           <dd>
             <p class="indented">
-              Seul le propriétaire du certificat d’immatriculation
-              peut générer le rapport HistoVec de son véhicule, qu’il
-              choisit de transmettre à des tiers.
+              Seul le titulaire du certificat d'immatriculation
+              peut générer le rapport HistoVec de son véhicule,
+              qu'il choisit de transmettre à des tiers.
             </p>
           </dd>
           <dt>Gratuit :</dt>
@@ -252,11 +259,10 @@ export default function () {
         </p>
         <br />
         <p class="indented">
-          Si vous êtes locataire longue durée du véhicule, essayez
-          avec les informations du titulaire propriétaire (par exemple
-          pour une société de location, cliquez sur l'onglet
-          Entreprise du formulaire pour remplir les informations
-          correspondantes).
+          Pour les locataires longue durée (LDD), dûment mandatés par le
+          propriétaire du véhicule, il convient de renseigner les informations
+          du propriétaire. Par exemple, pour une société de location, cliquez
+          sur l'onglet Entreprise et remplissez le formulaire de recherche.
         </p>
         <p class="indented">
           Si votre véhicule est toujours introuvable,
@@ -385,7 +391,7 @@ export default function () {
       title: 'Quelle est la politique de protection des données personnelles ?',
       body: `
         <p class="indented">
-          Vous pouvez les consulter dans
+          Vous pouvez les consulter dans les
           <a href="legal">mentions légales.</a>
         </p>
       `
