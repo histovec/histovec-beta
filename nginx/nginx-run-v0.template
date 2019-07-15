@@ -1,5 +1,7 @@
 server {
   listen 80 default_server;
+  include tor-ip.conf;
+  include aws-ip.conf;
 
   location / {
     try_files $uri @rew;

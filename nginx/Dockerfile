@@ -34,6 +34,7 @@ ARG NGINX_SERVER_TEMPLATE
 VOLUME /var/log/nginx
 
 COPY tor-ip.conf /etc/nginx/
+COPY aws-ip.conf /etc/nginx/
 COPY ${NGINX_SERVER_TEMPLATE} /etc/nginx/conf.d/default.template
 COPY nginx.template /etc/nginx/nginx.template
 COPY ${app_name}-${app_ver}-frontend-dist.tar.gz .
