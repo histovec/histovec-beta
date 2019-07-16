@@ -389,11 +389,13 @@ network-stop:
 aws:
 ifeq ("$(wildcard nginx/aws-ip.conf)","")
 	wget -q https://ip-ranges.amazonaws.com/ip-ranges.json -O - | jq '.prefixes[].ip_prefix' | sed 's/"/deny /;s/"/;/' > nginx/aws-ip.conf
+	[ -s nginx/aws-ip.conf ] || exit 1
 endif
 
 tor:
 ifeq ("$(wildcard nginx/tor-ip.conf)","")
-	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
+	wget -q --no-check-certificate https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
+	[ -s nginx/tor-ip.conf ] || exit 1
 endif
 
 update:
