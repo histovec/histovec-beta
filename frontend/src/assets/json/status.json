@@ -18,7 +18,7 @@
   },
   "forbidden": {
     "msg": "Accès non autorisé.",
-    "class": "alert alert-info text-center",
+    "class": "alert alert-icon alert-danger",
     "icon": "fa fa-warning",
     "ref": false
   },
