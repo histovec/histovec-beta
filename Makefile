@@ -386,6 +386,11 @@ network-stop:
 	@echo cleaning ${APP} docker network
 	docker network rm ${APP}
 
+aws:
+ifeq ("$(wildcard nginx/aws-ip.conf)","")
+	wget -q https://ip-ranges.amazonaws.com/ip-ranges.json -O - | jq '.prefixes[].ip_prefix' | sed 's/"/deny /;s/"/;/' > nginx/aws-ip.conf
+endif
+
 tor:
 ifeq ("$(wildcard nginx/tor-ip.conf)","")
 	wget -q https://www.dan.me.uk/torlist/ -O - | sed 's/^/deny /g; s/$$/;/g' >  nginx/tor-ip.conf
@@ -414,12 +419,12 @@ frontend-nginx-stop: frontend-stop
 
 frontend: frontend-${API_VERSION}
 
-frontend-v0: network tor
+frontend-v0: network
 	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0};\
 		export export EXEC_ENV=production; \
 		${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
 
-frontend-v1: network tor
+frontend-v1: network
 	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V1};\
 		export export EXEC_ENV=production; \
 		${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
@@ -470,7 +475,7 @@ frontend-clean-image:
            docker rmi $$image_name || true ; \
         done
 
-nginx-build: nginx-build-image-${API_VERSION}
+nginx-build: tor aws nginx-build-image-${API_VERSION}
 
 nginx-build-image-v0: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
 	@echo building ${APP} nginx
