@@ -47,7 +47,6 @@ export dollar = $(shell echo \$$)
 export API_VERSION_V0=v0
 export API_VERSION_V1=v1
 export API_VERSION=${API_VERSION_V1}
-export API_V1_PERCENTAGE=50
 # packaging
 export FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
 export FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
