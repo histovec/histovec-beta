@@ -59,15 +59,17 @@ export default new Vuex.Store({
     },
     config: {
       allTabs: false,
-      utac: false,
-      utacGraph: false,
-      v1: isBetaTestUser,
+      utac: true,
+      utacGraph: true,
+      v1: true,
+      modalMail: true,
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
+      modalMail: ['ctrl', 'alt', 'b'],
       v1: ['ctrl','alt','v'],
       utac: ['ctrl', 'alt', 'o'],
-      utacGraph: ['ctrl', 'alt', 'g'],
+      utacGraph: ['ctrl', 'alt', 'g']
     },
     modalForm: false,
     modalFormMode: contact.mode.contact,
