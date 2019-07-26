@@ -15,7 +15,7 @@ const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.
   console.log(id, mode, subject)
   return {
     [id]: (e) => {
-      if (store.state.config.v1) {
+      if (store.state.config.modalMail) {
         e.removeAttribute('href')
         e.onclick = async () => {
           /* eslint-disable-next-line */
@@ -219,7 +219,7 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error, reportAnErrorEmail.body),
-      react: { object: store.state.config, key: 'v1'}
+      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Comment retrouver mon véhicule ?',
@@ -273,7 +273,7 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
-      react: { object: store.state.config, key: 'v1'}
+      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Où se trouve le numéro de formule ?',
@@ -449,7 +449,7 @@ export default function () {
       </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
-      react: { object: store.state.config, key: 'v1'}
+      react: { object: store.state.config, key: 'modalMail'}
     }
   ]
 
