@@ -67,7 +67,7 @@ services:
       - VUE_APP_TITLE=${APP}
       - VUE_APP_PORT=${FRONTEND_DEV_PORT}
       - VUE_UI_PORT=${FRONTEND_CONF_PORT}
-      - VUE_APP_V1_PERCENTAGE=${API_V1_PERCENTAGE}
+      - VUE_APP_AB_TESTING_PERCENTAGE=${AB_TESTING_PERCENTAGE}
     volumes:
       - ${FRONTEND}/public:/${APP}/public
       - ${FRONTEND}/vue.config.js:/${APP}/vue.config.js
