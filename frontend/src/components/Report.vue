@@ -125,7 +125,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.utac && (ct.length > 0)"
+                v-if="$store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -137,7 +137,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                v-if="$store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a

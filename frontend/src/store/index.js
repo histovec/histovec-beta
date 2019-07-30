@@ -45,8 +45,8 @@ export default new Vuex.Store({
     },
     config: {
       allTabs: false,
-      utac: true,
-      utacGraph: true,
+      utac: false,
+      utacGraph: false,
       v1: true,
       modalMail: true,
     },
