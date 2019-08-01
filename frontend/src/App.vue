@@ -72,7 +72,7 @@
                         </li>
                         <li>
                           <a
-                            :href="$store.state.config.modalMail ? undefined : contactEmail"
+                            :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : contactEmail"
                             title="Contact"
                             @click="toggleModalForm()"
                           >
@@ -81,7 +81,7 @@
                         </li>
                         <li>
                           <a
-                            :href="$store.state.config.modalMail ? undefined : reportErrorEmail"
+                            :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : reportErrorEmail"
                             title="Signaler une erreur"
                             @click="toggleModalForm(contact.mode.contact, contact.subject.error)"
                           >
@@ -282,7 +282,7 @@ export default {
   },
   methods: {
     toggleModalForm (mode = contact.mode.contact, subject = contact.subject.contact) {
-      if (this.$store.state.config.modalMail) {
+      if (this.$store.state.config.v1 && this.$store.state.config.modalMail) {
         this.$store.dispatch('toggleModalForm', { mode: mode, subject: subject })
       }
     }

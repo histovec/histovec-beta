@@ -69,7 +69,7 @@
             Voici les questions les plus fréquemment posées. Si vous ne trouvez
             pas dans cette liste la réponse à votre interrogation,
             <a
-              :href="$store.state.config.modalMail ? undefined : contactEmail"
+              :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : contactEmail"
               title="Contact"
               @click="needHelp"
             >
@@ -115,7 +115,7 @@ export default {
 
   methods: {
     async needHelp () {
-      if (this.$store.state.config.modalMail) {
+      if (this.$store.state.config.v1 && this.$store.state.config.modalMail) {
         await this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.contact, subject: this.contact.subject.contact })
       }
     },

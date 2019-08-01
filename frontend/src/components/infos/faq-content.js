@@ -15,7 +15,7 @@ const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.
   console.log(id, mode, subject)
   return {
     [id]: (e) => {
-      if (store.state.config.modalMail) {
+      if (store.state.config.v1 && store.state.config.modalMail) {
         e.removeAttribute('href')
         e.onclick = async () => {
           /* eslint-disable-next-line */
