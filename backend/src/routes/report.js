@@ -21,11 +21,19 @@ async function searchSIV(id, uuid) {
     if (checkUuid(uuid) && checkId(id)) {
       const response = await elasticsearch.Client.search({
         index: config.esSIVIndex,
-        q: id,
+        body: {
+          query: {
+            multi_match: {
+              query: id,
+              fields: ['ida1', 'ida2']
+            }
+          }
+        },
         size: 1,
         terminate_after: 1,
         filter_path: 'hits.hits._source.v'
       })
+
       let hits = response.hits && response.hits.hits
       if (hits && (hits.length > 0)) {
         let hit = hits[0]._source && hits[0]._source.v
