@@ -525,7 +525,7 @@ nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 
 
 # development mode
-frontend-dev: network tor
+frontend-dev: network tor aws
 	@echo docker-compose up frontend for dev ${VERSION}
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
 
