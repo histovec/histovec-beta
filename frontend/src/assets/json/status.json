@@ -1,6 +1,6 @@
 {
   "default": {
-    "msg": "Statut inconnu",
+    "msg": "Une erreur technique est survenue - sollicitez nous.",
     "class": "alert alert-icon alert-danger",
     "icon": "fa fa-warning",
     "ref": {
