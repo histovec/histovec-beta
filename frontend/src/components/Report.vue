@@ -431,7 +431,8 @@ export default {
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
       } else {
-        if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+        if ((!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) ||
+            (this.$route.params.id === undefined || this.$route.params.key === undefined)) {
           await this.$store.dispatch('log',
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
