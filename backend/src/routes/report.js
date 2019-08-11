@@ -79,16 +79,30 @@ async function searchSIV(id, uuid) {
       }
     }
   } catch (error) {
-    appLogger.warn({
-      error: 'Couldn\'t process elasticsearch response',
-      id: id,
-      uuid: uuid,
-      remote_error: error.message
-    })
-    return {
-      status: 500,
-      source: 'histovec',
-      message: error.message
+    if (error.message === 'No Living connections') {
+      appLogger.warn({
+        error: 'Elasticsearch service not available',
+        id: id,
+        uuid: uuid,
+        remote_error: error.message
+      })
+      return {
+        status: 502,
+        source: 'histovec',
+        message: error.message
+      }
+    } else {
+      appLogger.warn({
+        error: 'Couldn\'t process elasticsearch response',
+        id: id,
+        uuid: uuid,
+        remote_error: error.message
+      })
+      return {
+        status: 500,
+        source: 'histovec',
+        message: error.message
+      }
     }
   }
 }

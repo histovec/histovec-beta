@@ -61,7 +61,7 @@ export default {
       return this.statusMessages[this.status] ? ((this.statusMessages[this.status].ref !== undefined) ? this.statusMessages[this.status].ref.route : this.statusMessages.default.ref.route) : this.statusMessages.default.ref.route
     },
     refHash () {
-      return this.statusMessages[this.status] ? ((this.statusMessages[this.status].ref !== undefined) ? this.statusMessages[this.status].ref.hash : this.statusMessages.default.ref.hash) : this.statusMessages.default.ref.route
+      return this.statusMessages[this.status] ? ((this.statusMessages[this.status].ref !== undefined) ? this.statusMessages[this.status].ref.hash : this.statusMessages.default.ref.hash) : this.statusMessages.default.ref.hash
     },
     refMessage () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].ref ? this.statusMessages[this.status].ref.msg : this.statusMessages.default.ref.msg) : this.statusMessages.default.ref.msg
