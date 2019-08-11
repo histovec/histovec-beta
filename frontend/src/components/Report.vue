@@ -386,10 +386,10 @@ export default {
       } else if (this.$store.state.api.http.siv !== 200) {
         return this.holder ? statusFromCode.holder[this.$store.state.api.http.siv] :
                              statusFromCode.buyer[this.$store.state.api.http.siv]
-      } else if (!this.$store.state.api.hit.siv) {
-        return this.holder ? 'notFound' : 'notFoundBuyer'
       } else if (!this.$store.state.api.decrypted.siv) {
         return this.holder ? 'decryptError' : 'decryptErrorBuyer'
+      } else if (!this.$store.state.api.hit.siv) {
+        return this.holder ? 'notFound' : 'notFoundBuyer'
       }
       return 'error'
     },
