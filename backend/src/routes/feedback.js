@@ -42,7 +42,7 @@ export async function sendFeedback (req, res) {
     'holder': req.body.holder
   }
   try {
-    const response = await elasticsearch.Client.index({
+    await elasticsearch.Client.index({
       index: config.esFeedbackIndex,
       type: 'feedback',
       body: feedback
@@ -59,7 +59,19 @@ export async function sendFeedback (req, res) {
     })
   }
   try {
-    await sendMailToSupport(req.body.email, `[Feedback ${req.body.uuid.substring(0,6)} - ${req.body.note}/5]`, req.body)
+    // Don't send email if no textual feedback
+    if (feedback.message) {
+      await sendMailToSupport(req.body.email, `[Feedback ${req.body.uuid.substring(0,6)} - ${req.body.note}/5]`, req.body)
+      res.status(201).json({
+        success: true,
+        message: "feedback indexed and mail sent"
+      })
+    } else {
+      res.status(201).json({
+        success: false,
+        message: "feedback indexed but no mail sent"
+      })
+    }
   } catch (error) {
     appLogger.warn(
       `Couldn't create feedback in elasticsearch :
@@ -71,10 +83,6 @@ export async function sendFeedback (req, res) {
       message: "feedback indexed but couldn't send mail"
     })
   }
-  res.status(201).json({
-    success: true,
-    message: "feedback indexed and mail sent"
-  })
 }
 
 export async function sendContact (req, res) {
