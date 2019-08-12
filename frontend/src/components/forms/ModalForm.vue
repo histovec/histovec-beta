@@ -19,114 +19,42 @@
                 </h6>
               </div>
               <div class="modal-body">
-                <div v-if="mode === contact.mode.rating">
-                  <label>
-                    Comment évaluez-vous HistoVec :
-                    <span
-                      class="info_red"
-                      title="Ce champ est requis."
-                    >
-                      *
-                    </span>
-                  </label>
-                  <div class="rating position_left p-g-10">
-                    <span
-                      v-if="errors.includes(contact.error.note)"
-                      class="info_red txt-small-11"
-                    >
-                      {{ contact.error.note }}
-                      <br />
-                    </span>
-                    <span
-                      v-for="n in ratings"
-                      :key="n"
-                    >
-                      <a
-                        :class="{'is-selected': (note && (note >= (ratings.length+1)-n))}"
-                        title="Give star"
-                        @click="setNote((ratings.length+1)-n)"
-                        @mouseover="starOver((ratings.length+1)-n)"
-                        @mouseout="starOut"
-                      >
-                        ★
-                      </a>
-                    </span>
-                  </div>
-                  <p class="m-h-10">
-                    <label>Vos commentaires ou suggestions :</label>
-                    <textarea
-                      id="message"
-                      v-model="message"
-                      name="message"
-                      rows="2"
-                      class="form-control"
-                      maxlength="1000"
-                    >
-                    </textarea>
-                  </p>
-                  <br />
-                </div>
-                <div v-if="mode !== contact.mode.rating">
-                  <div
-                    class="form-group has-feedback"
-                    :class="[{'has-error' : (errors.includes(contact.error.subject))}]"
-                  >
+                <div class="content" v-if="!isMessageSent">
+                  <div v-if="mode === contact.mode.rating">
                     <label>
-                      Sujet
-                    </label>
-                    <span
-                      v-if="errors.includes(contact.error.subject)"
-                      class="info_red txt-small-11"
-                    >
-                      {{ contact.error.subject }}
-                    </span>
-                    <select
-                      v-model="subject"
-                      class="col-sm-12 col-xs-12"
-                    >
-                      <option
-                        v-for="(entry, index) in contact.subject"
-                        :key="index"
-                        :value="entry"
-                        :disabled="entry === contact.subject.default"
+                      Comment évaluez-vous HistoVec :
+                      <span
+                        class="info_red"
+                        title="Ce champ est requis."
                       >
-                        {{ entry }}
-                      </option>
-                    </select>
-                    <p><br /></p>
-                  </div>
-                </div>
-                <div
-                  class="form-group has-feedback"
-                  :class="[{'has-error' : (errors.includes(contact.error.email))}]"
-                >
-                  <p>
-                    <label v-if="mode === contact.mode.rating">
-                      Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
-                      <i>(L'adresse email ne servira que dans le cadre de l'amélioration du service)</i>
+                        *
+                      </span>
                     </label>
-                    <label v-else>
-                      Courriel
-                    </label>
-                    <span
-                      v-if="errors.includes(contact.error.mail)"
-                      class="info_red txt-small-11"
-                    >
-                      {{ contact.error.mail }}
-                    </span>
-                    <input
-                      id="email"
-                      v-model="email"
-                      name="email"
-                      class="form-control"
-                      placeholder="name@example.com"
-                    >
-                  </p>
-                </div>
-                <div v-if="mode !== contact.mode.rating">
-                  <div class="form-group">
+                    <div class="rating position_left p-g-10">
+                      <span
+                        v-if="errors.includes(contact.error.note)"
+                        class="info_red txt-small-11"
+                      >
+                        {{ contact.error.note }}
+                        <br />
+                      </span>
+                      <span
+                        v-for="n in ratings"
+                        :key="n"
+                      >
+                        <a
+                          :class="{'is-selected': (note && (note >= (ratings.length+1)-n))}"
+                          title="Give star"
+                          @click="setNote((ratings.length+1)-n)"
+                          @mouseover="starOver((ratings.length+1)-n)"
+                          @mouseout="starOut"
+                        >
+                          ★
+                        </a>
+                      </span>
+                    </div>
                     <p class="m-h-10">
-                      <label>Message (optionnel) :</label>
+                      <label>Vos commentaires ou suggestions :</label>
                       <textarea
                         id="message"
                         v-model="message"
@@ -137,48 +65,129 @@
                       >
                       </textarea>
                     </p>
+                    <br />
+                  </div>
+                  <div v-if="mode !== contact.mode.rating">
+                    <div
+                      class="form-group has-feedback"
+                      :class="[{'has-error' : (errors.includes(contact.error.subject))}]"
+                    >
+                      <label>
+                        Sujet
+                      </label>
+                      <span
+                        v-if="errors.includes(contact.error.subject)"
+                        class="info_red txt-small-11"
+                      >
+                        {{ contact.error.subject }}
+                      </span>
+                      <select
+                        v-model="subject"
+                        class="col-sm-12 col-xs-12"
+                      >
+                        <option
+                          v-for="(entry, index) in contact.subject"
+                          :key="index"
+                          :value="entry"
+                          :disabled="entry === contact.subject.default"
+                        >
+                          {{ entry }}
+                        </option>
+                      </select>
+                      <p><br /></p>
+                    </div>
                   </div>
                   <div
-                    v-if="this.$store.state.siv.id"
+                    class="form-group has-feedback"
+                    :class="[{'has-error' : (errors.includes(contact.error.email))}]"
                   >
-                    <label> Données transmises pour l'assistance </label>
-                    <div class="row txt-small-11">
-                      <div class="col-sm-6 col-xs-6">
-                        <ul v-if="$store.state.identity.typePersonne === 'pro'">
-                          <li> Raison sociale: {{ $store.state.identity.raisonSociale }} </li>
-                          <li> Numéro SIREN: {{ $store.state.identity.siren }} </li>
-                        </ul>
-                        <ul v-else>
-                          <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
-                            Nom de naissance: {{ $store.state.identity.nom }}
-                          </li>
-                          <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
-                            Prénom(s): {{ $store.state.identity.prenom }}
-                          </li>
-                          <li v-if="$store.state.identity.typeImmatriculation === 'fni'">
-                            Nom de naissance et prénom(s): {{ $store.state.identity.nom }}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="col-sm-6 col-xs-6">
-                        <ul>
-                          <li> Immatriculation: {{ $store.state.identity.plaque }} </li>
-                          <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
-                            Numéro de formule: {{ $store.state.identity.formule }}
-                          </li>
-                          <li v-else>
-                            Date du certificat : {{ $store.state.identity.dateCertificat }}
-                          </li>
-                        </ul>
+                    <p>
+                      <label v-if="mode === contact.mode.rating">
+                        Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
+                        <i>(L'adresse email ne servira que dans le cadre de l'amélioration du service)</i>
+                      </label>
+                      <label v-else>
+                        Courriel
+                      </label>
+                      <span
+                        v-if="errors.includes(contact.error.mail)"
+                        class="info_red txt-small-11"
+                      >
+                        {{ contact.error.mail }}
+                      </span>
+                      <input
+                        id="email"
+                        v-model="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="name@example.com"
+                      >
+                    </p>
+                  </div>
+                  <div v-if="mode !== contact.mode.rating">
+                    <div class="form-group">
+                      <p class="m-h-10">
+                        <label>Message (optionnel) :</label>
+                        <textarea
+                          id="message"
+                          v-model="message"
+                          name="message"
+                          rows="2"
+                          class="form-control"
+                          maxlength="1000"
+                        >
+                        </textarea>
+                      </p>
+                    </div>
+                    <div
+                      v-if="this.$store.state.siv.id"
+                    >
+                      <label> Données transmises pour l'assistance </label>
+                      <div class="row txt-small-11">
+                        <div class="col-sm-6 col-xs-6">
+                          <ul v-if="$store.state.identity.typePersonne === 'pro'">
+                            <li> Raison sociale: {{ $store.state.identity.raisonSociale }} </li>
+                            <li> Numéro SIREN: {{ $store.state.identity.siren }} </li>
+                          </ul>
+                          <ul v-else>
+                            <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                              Nom de naissance: {{ $store.state.identity.nom }}
+                            </li>
+                            <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                              Prénom(s): {{ $store.state.identity.prenom }}
+                            </li>
+                            <li v-if="$store.state.identity.typeImmatriculation === 'fni'">
+                              Nom de naissance et prénom(s): {{ $store.state.identity.nom }}
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="col-sm-6 col-xs-6">
+                          <ul>
+                            <li> Immatriculation: {{ $store.state.identity.plaque }} </li>
+                            <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                              Numéro de formule: {{ $store.state.identity.formule }}
+                            </li>
+                            <li v-else>
+                              Date du certificat : {{ $store.state.identity.dateCertificat }}
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </div>
+                <div v-if="isMessageSent">
+                  <p class="text-center">
+                    <label>
+                      <i class="fa fa-check info_green fa-2x"></i> Votre message a bien été envoyé.
+                    </label>
+                  </p>
                 </div>
               </div>
               <div class="modal-footer">
                 <div class="row">
                   <div class="col-md-6 m-h-15 position_left">
-                    <label v-if="mode === contact.mode.rating">
+                    <label v-if="!isMessageSent && mode === contact.mode.rating">
                       <input
                         id="showModal"
                         v-model="notShow"
@@ -190,13 +199,14 @@
                   </div>
                   <div class="col-md-6">
                     <span
-                      v-if="errors.includes(contact.error.api)"
+                      v-if="!isMessageSent && errors.includes(contact.error.api)"
                       class="info_red txt-small-11"
                     >
                       {{ contact.error.api }}
                       <br />
                     </span>
                     <button
+                    v-if="!isMessageSent"
                       class="btn btn-animated btn-default m-h-05"
                       @click="send"
                     >
@@ -242,6 +252,7 @@ export default {
       email: '',
       note: undefined,
       clicked: false,
+      isMessageSent: false
     }
   },
   computed: {
@@ -313,6 +324,7 @@ export default {
       if (this.notShow) {
           localStorage.setItem('evaluation', true, 1)
       }
+      this.isMessageSent = false
       this.$store.dispatch('toggleModalForm')
       return
     },
@@ -354,7 +366,7 @@ export default {
           if (this.mode === this.contact.mode.rating) {
             localStorage.setItem('evaluation', true, 1)
           }
-          this.$store.dispatch('toggleModalForm')
+          this.isMessageSent = true
         } else {
           this.clicked = true
         }
