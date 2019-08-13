@@ -177,11 +177,11 @@
                   </div>
                 </div>
                 <div v-if="isMessageSent">
-                  <p class="text-center">
+                  <div class="text-center">
                     <label>
                       <i class="fa fa-check info_green fa-2x"></i> Votre message a bien été envoyé.
                     </label>
-                  </p>
+                  </div>
                 </div>
               </div>
               <div class="modal-footer">
