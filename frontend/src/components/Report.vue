@@ -431,8 +431,12 @@ export default {
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
       } else {
-        if ((!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) ||
-            (this.$route.params.id === undefined || this.$route.params.key === undefined)) {
+        if (
+          // rapport vendeur via formulaire de recherche, avec un paramètre manquant
+          (this.holder && (!this.$route.params.key || !this.$route.params.id)) ||
+          // rapport acheteur avec un paramètre manquant
+          (!this.holder && (!this.$route.query.key || !this.$route.query.id))
+        ) {
           await this.$store.dispatch('log',
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
