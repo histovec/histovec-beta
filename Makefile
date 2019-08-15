@@ -292,8 +292,8 @@ down-fake: smtp-fake-stop utac-fake-stop down
 build: frontend-build backend-build
 
 build-if-necessary:
-	make backend-save-image || make backend-build
-	make nginx-save-image || make frontend-build
+	(make backend-check-image >/dev/null 2>&1) || make backend-build
+	(make nginx-check-image >/dev/null 2>&1) || make frontend-build
 
 build-all: build save-images
 
@@ -519,6 +519,11 @@ nginx-save-image:
         docker tag $$nginx_image_name $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
+
+nginx-check-image:
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker image inspect $$nginx_image_name_version 
 
 nginx-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
@@ -809,6 +814,12 @@ backend-save-image:
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_LATEST_VERSION) $$backend_image_name
+
+backend-check-image:
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+	docker image inspect $$backend_image_name_version
+
 
 backend-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_BACKEND) config | \
