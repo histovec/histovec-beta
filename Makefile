@@ -33,6 +33,7 @@ export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
+export APP_USER := $(shell whoami)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
 export LOGS=${APP_PATH}/log
 # build options
@@ -406,7 +407,10 @@ git-pull:
 	git pull origin dev
 
 update: git-pull build-if-necessary up
-	
+
+install-cron:
+	@echo installing cron in /etc/cron.d
+	@echo "* * * * * ${APP_USER} /usr/bin/make -C ${APP_PATH} update" | sudo tee /etc/cron.d/${APP}
 
 build-dir:
 	if [ ! -d "$(BUILD_DIR)" ] ; then mkdir -p $(BUILD_DIR) ; fi
