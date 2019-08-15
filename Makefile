@@ -290,6 +290,10 @@ down-fake: smtp-fake-stop utac-fake-stop down
 # package for production mode
 build: frontend-build backend-build
 
+build-if-necessary:
+	@if [ ! -f "${BACKEND}/$(FILE_BACKEND_APP_VERSION)" ]; then make frontend-build ; else echo "backend was already built"; fi
+	@if [ ! -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ]; then make backend-build ; else echo "frontend was already built"; fi
+
 build-all: build save-images
 
 save-images: elasticsearch-save-image nginx-save-image backend-save-image redis-save-image
