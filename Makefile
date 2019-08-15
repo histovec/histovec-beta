@@ -292,8 +292,8 @@ down-fake: smtp-fake-stop utac-fake-stop down
 build: frontend-build backend-build
 
 build-if-necessary:
-	@if [ ! -f "${BACKEND}/$(FILE_BACKEND_APP_VERSION)" ]; then make frontend-build ; else echo "backend was already built"; fi
-	@if [ ! -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ]; then make backend-build ; else echo "frontend was already built"; fi
+	make backend-save-image || make backend-build
+	make nginx-save-image || make frontend-build
 
 build-all: build save-images
 
@@ -446,7 +446,13 @@ frontend-stop:
 	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) down
 
 # build for qualification and production
-frontend-build: build-dir frontend-build-all nginx-build
+frontend-build: build-dir frontend-build-lock frontend-build-all nginx-build frontend-build-unlock
+
+frontend-build-lock:
+	@if [ -f "${FRONTEND}/.build-lock" ]; then exit 1; else touch "${FRONTEND}/.build-lock"; fi
+
+frontend-build-unlock:
+	@if [ -f "${FRONTEND}/.build-lock" ]; then rm "${FRONTEND}/.build-lock"; fi
 
 frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 
@@ -755,7 +761,13 @@ ifeq ("$(transparent_hugepage)", "")
 endif
 
 # package for production
-backend-build: build-dir backend-build-all
+backend-build: build-dir backend-build-lock backend-build-all backend-build-unlock
+
+backend-build-lock:
+	@if [ -f "${BACKEND}/.build-lock" ]; then exit 1; else touch "${BACKEND}/.build-lock"; fi
+
+backend-build-unlock:
+	@if [ -f "${BACKEND}/.build-lock" ]; then rm "${BACKEND}/.build-lock"; fi
 
 backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
 
