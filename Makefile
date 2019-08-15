@@ -402,8 +402,11 @@ ifeq ("$(wildcard nginx/tor-ip.conf)","")
 	[ -s nginx/tor-ip.conf ] || exit 1
 endif
 
-update:
+git-pull:
 	git pull origin dev
+
+update: git-pull build-if-necessary up
+	
 
 build-dir:
 	if [ ! -d "$(BUILD_DIR)" ] ; then mkdir -p $(BUILD_DIR) ; fi
@@ -880,6 +883,13 @@ index-test: wait-elasticsearch
 # performance test
 test-ids:
 	cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | awk -F ';' '{print $$1;print $$2;print $$3}' | sort -R > ${PERF_IDS}
+
+test-direct-ids:
+	# warning: below, $$2 and $$3 are ida1 and ida1 as $$1 is still idv which is not injected in elasticsearch
+	@curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ \
+		| egrep '${data_remote_files}.gz|${data_remote_files_inc}.gz' \
+		| parallel -j${ES_JOBS} '(>&2 echo {});curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o -' | gunzip \
+		| awk -F ';' '{print $$2;print $$3}' | sort -R > ${PERF_IDS}
 
 random-ids:
 	@shuf ${PERF_IDS} | head -$$(( ( RANDOM % ( ( $(shell wc -l ${PERF_IDS} | awk '{print $$1}') * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
