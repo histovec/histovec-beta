@@ -33,6 +33,7 @@ export PORT=80
 export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
+export APP_USER := $(shell whoami)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
 export LOGS=${APP_PATH}/log
 # build options
@@ -290,6 +291,10 @@ down-fake: smtp-fake-stop utac-fake-stop down
 # package for production mode
 build: frontend-build backend-build
 
+build-if-necessary:
+	(make backend-check-image >/dev/null 2>&1) || make backend-build
+	(make nginx-check-image >/dev/null 2>&1) || make frontend-build
+
 build-all: build save-images
 
 save-images: elasticsearch-save-image nginx-save-image backend-save-image redis-save-image
@@ -398,8 +403,14 @@ ifeq ("$(wildcard nginx/tor-ip.conf)","")
 	[ -s nginx/tor-ip.conf ] || exit 1
 endif
 
-update:
+git-pull:
 	git pull origin dev
+
+update: git-pull build-if-necessary up
+
+install-cron:
+	@echo installing cron in /etc/cron.d
+	@echo "* * * * * ${APP_USER} /usr/bin/make -C ${APP_PATH} update" | sudo tee /etc/cron.d/${APP}
 
 build-dir:
 	if [ ! -d "$(BUILD_DIR)" ] ; then mkdir -p $(BUILD_DIR) ; fi
@@ -435,7 +446,13 @@ frontend-stop:
 	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) down
 
 # build for qualification and production
-frontend-build: build-dir frontend-build-all nginx-build
+frontend-build: build-dir frontend-build-lock frontend-build-all nginx-build frontend-build-unlock
+
+frontend-build-lock:
+	@if [ -f "${FRONTEND}/.build-lock" ]; then exit 1; else touch "${FRONTEND}/.build-lock"; fi
+
+frontend-build-unlock:
+	@if [ -f "${FRONTEND}/.build-lock" ]; then rm "${FRONTEND}/.build-lock"; fi
 
 frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 
@@ -502,6 +519,11 @@ nginx-save-image:
         docker tag $$nginx_image_name $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
+
+nginx-check-image:
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker image inspect $$nginx_image_name_version 
 
 nginx-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
@@ -744,7 +766,13 @@ ifeq ("$(transparent_hugepage)", "")
 endif
 
 # package for production
-backend-build: build-dir backend-build-all
+backend-build: build-dir backend-build-lock backend-build-all backend-build-unlock
+
+backend-build-lock:
+	@if [ -f "${BACKEND}/.build-lock" ]; then exit 1; else touch "${BACKEND}/.build-lock"; fi
+
+backend-build-unlock:
+	@if [ -f "${BACKEND}/.build-lock" ]; then rm "${BACKEND}/.build-lock"; fi
 
 backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
 
@@ -786,6 +814,12 @@ backend-save-image:
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_LATEST_VERSION) $$backend_image_name
+
+backend-check-image:
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+	docker image inspect $$backend_image_name_version
+
 
 backend-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_BACKEND) config | \
@@ -876,6 +910,13 @@ index-test: wait-elasticsearch
 # performance test
 test-ids:
 	cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | awk -F ';' '{print $$1;print $$2;print $$3}' | sort -R > ${PERF_IDS}
+
+test-direct-ids:
+	# warning: below, $$2 and $$3 are ida1 and ida1 as $$1 is still idv which is not injected in elasticsearch
+	@curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ \
+		| egrep '${data_remote_files}.gz|${data_remote_files_inc}.gz' \
+		| parallel -j${ES_JOBS} '(>&2 echo {});curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o -' | gunzip \
+		| awk -F ';' '{print $$2;print $$3}' | sort -R > ${PERF_IDS}
 
 random-ids:
 	@shuf ${PERF_IDS} | head -$$(( ( RANDOM % ( ( $(shell wc -l ${PERF_IDS} | awk '{print $$1}') * 10) / 100 ) )  + 1 ))  > ${PERF_IDS}.random
