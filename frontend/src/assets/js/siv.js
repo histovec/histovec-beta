@@ -202,8 +202,6 @@ function calcNbTit (historique) {
 function siv (veh) {
   if (veh === undefined) {
     return false
-  } else if (veh.annulation_ci === 'OUI') {
-    return veh
   }
   /* eslint-disable-next-line no-console */
   console.log(veh)
@@ -223,6 +221,30 @@ function siv (veh) {
       titre: {}
     }
   }
+
+  if (veh.annulation_ci === 'OUI') {
+    v.plaque = veh.plaq_immat
+    v.date_update = veh.date_update || v.date_update
+
+    // Numéro d'immatriculation du véhicule : AA 451 LN
+    // Date de première immatriculation du véhicule : 14/06/2000
+    // Numéro VIN du véhicule (ou numéro de série) : WV2Z********54980
+    // Marque : VOLKSWAGEN
+
+    v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
+    v.administratif.dateAnnulation = veh.date_annulation_ci
+    // v.certificat.premier = veh.date_premiere_immat || missing
+    // v.ctec.vin = veh.vin
+    // v.ctec.marque = veh.marque
+    v.certificat.premier = missing
+    v.ctec.vin = missing
+    v.ctec.marque = missing
+
+    /* eslint-disable-next-line no-console */
+    console.log(v)
+    return v
+  }
+
   // filtre l'historique des opérations annulées
   let historique = veh.historique
   historique = (historique === undefined) ? [] : historique.filter(event => event.ope_date_annul === undefined)

@@ -79,7 +79,10 @@
               class="nav nav-tabs"
               role="tablist"
             >
-              <li :class="[{'active' : tab === 'abstract'}]">
+              <li
+                v-if="v.administratif.annulation !== 'Oui'"
+                :class="[{'active' : tab === 'abstract'}]"
+              >
                 <a
                   class="clickable"
                   @click="tab = 'abstract'"
@@ -88,7 +91,10 @@
                   Synthèse
                 </a>
               </li>
-              <li :class="[{'active' : tab === 'vehicle'}]">
+              <li
+                v-if="v.administratif.annulation !== 'Oui'"
+                :class="[{'active' : tab === 'vehicle'}]"
+              >
                 <a
                   class="clickable"
                   @click="tab = 'vehicle'"
@@ -97,7 +103,10 @@
                   Véhicule
                 </a>
               </li>
-              <li :class="[{'active' : tab === 'holder'}]">
+              <li
+                v-if="v.administratif.annulation !== 'Oui'"
+                :class="[{'active' : tab === 'holder'}]"
+              >
                 <a
                   class="clickable"
                   @click="tab = 'holder'"
@@ -106,7 +115,10 @@
                   Titulaire &amp; Titre
                 </a>
               </li>
-              <li :class="[{'active' : tab === 'situation'}]">
+              <li
+                v-if="v.administratif.annulation !== 'Oui'"
+                :class="[{'active' : tab === 'situation'}]"
+              >
                 <a
                   class="clickable"
                   @click="tab = 'situation'"
@@ -115,7 +127,10 @@
                   Situation administrative
                 </a>
               </li>
-              <li :class="[{'active' : tab === 'history'}]">
+              <li
+                v-if="v.administratif.annulation !== 'Oui'"
+                :class="[{'active' : tab === 'history'}]"
+              >
                 <a
                   class="clickable"
                   @click="tab = 'history'"
@@ -125,7 +140,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
+                v-if="v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -137,7 +152,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                v-if="v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -161,7 +176,7 @@
                 </a>
               </li>
               <li
-                v-if="holder"
+                v-if="v.administratif.annulation !== 'Oui' && holder"
                 :class="[{'active' : tab === 'send'}]"
               >
                 <a
@@ -312,8 +327,6 @@ import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
 
 
-
-
 const statusFromCode = {
   'holder': {
     400: 'invalid',
@@ -369,9 +382,6 @@ export default {
     },
     status () {
       if (this.$store.state.siv.v) {
-        if (this.$store.state.siv.v.annulation_ci === 'OUI') {
-          return 'cancelled'
-        }
         this.showModalForm()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
@@ -421,7 +431,11 @@ export default {
     if (this.$route.params.code !== undefined) {
       this.$store.commit('updateCode', this.$route.params.code)
     }
-    this.getSIV()
+    this.getSIV().then( () => {
+      if (this.$store.state.siv.v.annulation_ci === 'OUI') {
+        this.tab = 'csa'
+      }
+    })
   },
   methods: {
     async getSIV () {
