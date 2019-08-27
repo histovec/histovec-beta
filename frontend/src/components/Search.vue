@@ -65,6 +65,7 @@
               </div>
             </div>
           </div>
+
           <div
             class="col-md-12"
           >
@@ -110,6 +111,26 @@
                 height="44"
               >
             </a>
+          </div>
+          <div v-if="$store.state.config.searchFormHelp"
+            class="col-md-12"
+          >
+            <div
+              class="container-fluid"
+            >
+              <img v-if="typePersonne === 'particulier' && typeImmatriculation === 'siv'"
+                class="img-responsive center-block p-h-25"
+                height="250"
+                width="450"
+                :src="imageAideSIV"
+              />
+              <img v-if="typePersonne === 'particulier' && typeImmatriculation === 'fni'"
+                class="img-responsive center-block p-h-25"
+                height="250"
+                width="450"
+                :src="imageAideFNI"
+              />
+            </div>
           </div>
           <div
             v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'"
@@ -178,7 +199,7 @@
                                 v-if="typeImmatriculation === 'siv'"
                                 class="control-label"
                               >
-                                Nom de naissance
+                                1 - Nom de naissance
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -190,7 +211,7 @@
                                 v-if="typeImmatriculation === 'fni'"
                                 class="control-label"
                               >
-                                Nom(s) et Prénom(s)
+                                1 - Nom(s) et Prénom(s)
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -211,7 +232,11 @@
                                 @input="nom = $event.target.value.replace(/\t.*/,'')"
                                 @paste="onPaste"
                               >
-                              <i class="fa fa-user form-control-feedback"></i>
+                              <i
+                                class="fa fa-user form-control-feedback"
+                                :class="{'nom-prenoms': $store.state.config.searchFormHelp && typeImmatriculation === 'fni', 'nom': $store.state.config.searchFormHelp && typeImmatriculation === 'siv'}"
+                              >
+                              </i>
                             </div>
                           </div>
                           <div
@@ -223,7 +248,7 @@
                               :class="[{'has-error' : (prenom === '' && status !== 'init')}]"
                             >
                               <label class="control-label">
-                                Prénom(s)
+                                2 - Prénom(s)
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -239,7 +264,10 @@
                                 class="form-control"
                                 tabindex="2"
                               >
-                              <i class="fa fa-user form-control-feedback"></i>
+                              <i class="fa fa-user form-control-feedback"
+                                :class="{'prenoms': $store.state.config.searchFormHelp}"
+                              >
+                              </i>
                             </div>
                           </div>
                         </div>
@@ -253,7 +281,7 @@
                               :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]"
                             >
                               <label class="control-label">
-                                Raison sociale
+                                1 - Raison sociale
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -272,14 +300,19 @@
                                 @input="raisonSociale = $event.target.value.replace(/\t.*/,'')"
                                 @paste="onPaste"
                               >
-                              <i class="fa fa-user form-control-feedback"></i>
+                              <i class="fa fa-user form-control-feedback"
+                                :class="{'raison-sociale': $store.state.config.searchFormHelp}"
+                              >
+                              </i>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <field
-                              form-id="siren"
-                              :option="typeImmatriculation"
                               :active="status !== 'init'"
+                              form-id="siren"
+                              :icon="$store.state.config.searchFormHelp ? 'fa-hashtag siren' : 'fa-hashtag'"
+                              :option="typeImmatriculation"
+                              :typePersonne="typePersonne"
                             >
                             </field>
                           </div>
@@ -292,9 +325,11 @@
                         <div class="row">
                           <div class="col-md-6">
                             <field
-                              form-id="plaque"
-                              :option="typeImmatriculation"
                               :active="status !== 'init'"
+                              form-id="plaque"
+                              :icon="$store.state.config.searchFormHelp ? 'fa-drivers-license-o plaque-immatriculation' : 'fa-drivers-license-o'"
+                              :option="typeImmatriculation"
+                              :typePersonne="typePersonne"
                             >
                             </field>
                           </div>
@@ -308,7 +343,7 @@
                                   for="input"
                                   class="control-label"
                                 >
-                                  N° de formule
+                                  4 - N° de formule
                                   <span
                                     class="info_red"
                                     title="Ce champ est requis."
@@ -333,14 +368,19 @@
                                   placeholder="2013BZ80335"
                                   tabindex="5"
                                 >
-                                <i class="fa fa-pencil-square-o form-control-feedback"></i>
+                                <i class="fa fa-pencil-square-o form-control-feedback"
+                                  :class="{'numero-formule': $store.state.config.searchFormHelp}"
+                                >
+                                </i>
                               </div>
                               <div v-if="typeImmatriculation === 'fni'">
                                 <label
                                   for="input"
                                   class="control-label"
                                 >
-                                  Date du certificat d'immatriculation
+                                  <span v-if="typePersonne === 'particulier'">3</span>
+                                  <span v-if="typePersonne === 'pro'">4</span>
+                                  - Date du certificat d'immatriculation
                                   <span
                                     class="info_red"
                                     title="Ce champ est requis."
@@ -365,7 +405,10 @@
                                   placeholder="xx/xx/xxxx"
                                   tabindex="5"
                                 >
-                                <i class="fa fa-calendar form-control-feedback"></i>
+                                <i class="fa fa-calendar form-control-feedback"
+                                  :class="{'date-certificat-immatriculation': $store.state.config.searchFormHelp}"
+                                >
+                                </i>
                               </div>
                             </div>
                           </div>
@@ -443,6 +486,9 @@ import Shake from 'shake.js'
 import dayjs from 'dayjs'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
+import imageAideFNI from '@/assets/img/aide_fni_form.svg'
+import imageAideSIV from '@/assets/img/aide_siv_form.svg'
+
 
 const formInitialOptions = {
   default: {
@@ -454,6 +500,8 @@ const formInitialOptions = {
   },
   siren: {
     siv: {
+      fieldNumberPro: 2,
+      fieldNumberParticulier: 2,
       label: 'N° SIREN (9 caractères)',
       model: 'siren',
       masked: true,
@@ -463,6 +511,8 @@ const formInitialOptions = {
       tabindex: '2'
     },
     fni: {
+      fieldNumberPro: 2,
+      fieldNumberParticulier: 2,
       label: 'N° SIREN (9 caractères)',
       model: 'siren',
       masked: true,
@@ -474,6 +524,8 @@ const formInitialOptions = {
   },
   plaque: {
     siv: {
+      fieldNumberPro: 3,
+      fieldNumberParticulier: 3,
       label: 'Plaque d\'immatriculation',
       model: 'plaque',
       masked: true,
@@ -483,10 +535,11 @@ const formInitialOptions = {
       check: /^[a-zA-Z]{1,2}(-|\s+)?[0-9]{2,3}(-|\s+)?[a-zA-Z]{1,2}$/,
       placeholder: 'AA-123-AA',
       placeholderAlt: 'AA123AA ou A123A ou AA123A',
-      icon: 'fa-drivers-license-o',
       tabindex: '4'
     },
     fni: {
+      fieldNumberPro: 3,
+      fieldNumberParticulier: 2,
       label: 'Plaque d\'immatriculation',
       model: 'plaque',
       masked: true,
@@ -496,7 +549,6 @@ const formInitialOptions = {
       check: /^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/,
       placeholder: '123 ABC 45',
       placeholderAlt: '1234ABC45 ou 123ABC45 ou 12ABC45 ou 12AB45',
-      icon: 'fa-drivers-license-o',
       tabindex: '4'
     }
   }
@@ -516,8 +568,10 @@ export default {
   },
   data () {
     return {
+      imageAideFNI,
+      imageAideSIV,
       modal: false,
-      status: 'init'
+      status: 'init',
     }
   },
   computed: {

@@ -7,8 +7,8 @@
       for="input"
       class="control-label"
     >
-      {{ options['label'] }}
-      <span 
+      {{ label }}
+      <span
         v-if="required"
         class="info_red"
         :title="requiredTitle"
@@ -19,7 +19,7 @@
     <i
       v-if="false"
       class="pull-right m-l-15 fa"
-      :class="{ 
+      :class="{
         'fa-lock': masked,
         'fa-unlock-alt': !masked
       }"
@@ -73,6 +73,11 @@ import masks from  '@/assets/js/masks'
 
 export default {
   props: {
+    active: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
     formId: {
       type: String,
       default: 'default',
@@ -83,11 +88,16 @@ export default {
       default: undefined,
       required: false,
     },
-    active: {
-      type: Boolean,
-      default: false,
+    typePersonne: {
+      type: String,
+      default: undefined,
       required: false,
-    }
+    },
+    icon: {
+      type: String,
+      default: undefined,
+      required: false,
+    },
   },
   computed: {
     defaultOptions () {
@@ -110,14 +120,30 @@ export default {
         this.$store.commit(`update${m}`, value)
       }
     },
-    label () { return this.options.label || this.defaultOptions.label },
+    fieldNumber () {
+      if (this.typePersonne === 'pro') {
+        return this.options.fieldNumberPro
+      }
+
+      if (this.typePersonne === 'particulier') {
+        return this.options.fieldNumberParticulier
+      }
+
+      return ''
+    },
+    label () {
+      const label = this.options.label || this.defaultOptions.label
+      if (this.fieldNumber !== undefined) {
+        return `${this.fieldNumber} - ${label}`
+      }
+      return label
+    },
     required () { return ('required' in this.options) ? this.options.required : this.defaultOptions.required },
     requiredTitle () { return this.options.requiredTitle || this.defaultOptions.requiredTitle },
     type () { return this.options.type || this.defaultOptions.type },
     masked () { return this.options.masked },
     maskTitle () { return this.masked ? (this.options.maskTitle || this.defaultOptions.maskTitle) : (this.options.maskTitleAlt || this.defaultOptions.maskTitleAlt) },
     tabindex () { return this.options.tabindex },
-    icon () { return this.options.icon },
     placeholder () { return this.masked ? this.options.placeholder : this.options.placeholderAlt },
     mask () {
       if (this.options.mask in masks) {
