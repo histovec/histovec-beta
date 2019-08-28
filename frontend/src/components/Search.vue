@@ -486,8 +486,8 @@ import Shake from 'shake.js'
 import dayjs from 'dayjs'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
-import imageAideFNI from '@/assets/img/aide_fni_form.svg'
-import imageAideSIV from '@/assets/img/aide_siv_form.svg'
+import imageAideFNI from '@/assets/img/aide_fni_form.png'
+import imageAideSIV from '@/assets/img/aide_siv_form.png'
 
 
 const formInitialOptions = {
