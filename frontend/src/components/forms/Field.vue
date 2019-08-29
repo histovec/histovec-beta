@@ -16,6 +16,7 @@
         *
       </span>
     </label>
+    <slot name="link"></slot>
     <i
       v-if="false"
       class="pull-right m-l-15 fa"
@@ -61,7 +62,7 @@
     >
     <i
       v-if="icon"
-      class="fa form-control-feedback"
+      class="form-control-feedback"
       :class="icon"
     >
     </i>
@@ -88,16 +89,6 @@ export default {
       default: undefined,
       required: false,
     },
-    typePersonne: {
-      type: String,
-      default: undefined,
-      required: false,
-    },
-    icon: {
-      type: String,
-      default: undefined,
-      required: false,
-    },
   },
   computed: {
     defaultOptions () {
@@ -120,23 +111,8 @@ export default {
         this.$store.commit(`update${m}`, value)
       }
     },
-    fieldNumber () {
-      if (this.typePersonne === 'pro') {
-        return this.options.fieldNumberPro
-      }
-
-      if (this.typePersonne === 'particulier') {
-        return this.options.fieldNumberParticulier
-      }
-
-      return ''
-    },
     label () {
-      const label = this.options.label || this.defaultOptions.label
-      if (this.fieldNumber !== undefined) {
-        return `${this.fieldNumber} - ${label}`
-      }
-      return label
+      return this.options.label || this.defaultOptions.label
     },
     required () { return ('required' in this.options) ? this.options.required : this.defaultOptions.required },
     requiredTitle () { return this.options.requiredTitle || this.defaultOptions.requiredTitle },
@@ -144,6 +120,7 @@ export default {
     masked () { return this.options.masked },
     maskTitle () { return this.masked ? (this.options.maskTitle || this.defaultOptions.maskTitle) : (this.options.maskTitleAlt || this.defaultOptions.maskTitleAlt) },
     tabindex () { return this.options.tabindex },
+    icon () { return this.options.icon },
     placeholder () { return this.masked ? this.options.placeholder : this.options.placeholderAlt },
     mask () {
       if (this.options.mask in masks) {
