@@ -112,26 +112,6 @@
               >
             </a>
           </div>
-          <div v-if="$store.state.config.searchFormHelp"
-            class="col-md-12"
-          >
-            <div
-              class="container-fluid"
-            >
-              <img v-if="typePersonne === 'particulier' && typeImmatriculation === 'siv'"
-                class="img-responsive center-block p-h-25"
-                height="250"
-                width="450"
-                :src="imageAideSIV"
-              />
-              <img v-if="typePersonne === 'particulier' && typeImmatriculation === 'fni'"
-                class="img-responsive center-block p-h-25"
-                height="250"
-                width="450"
-                :src="imageAideFNI"
-              />
-            </div>
-          </div>
           <div
             v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'"
             class="col-md-12 col-xs-12 p-h-25"
@@ -199,7 +179,7 @@
                                 v-if="typeImmatriculation === 'siv'"
                                 class="control-label"
                               >
-                                1 - Nom de naissance
+                                Nom de naissance
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -207,11 +187,19 @@
                                   *
                                 </span>
                               </label>
+                              <a
+                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'siv'"
+                                class="clickable text-info btn-sm-link"
+                                @click="nomsModal = true"
+                              >
+                                Où le trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
                               <label
                                 v-if="typeImmatriculation === 'fni'"
                                 class="control-label"
                               >
-                                1 - Nom(s) et Prénom(s)
+                                Nom(s) et Prénom(s)
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -219,6 +207,14 @@
                                   *
                                 </span>
                               </label>
+                              <a
+                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'fni'"
+                                class="clickable text-info btn-sm-link"
+                                @click="nomsPrenomsModal = true"
+                              >
+                                Où les trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
                               <input
                                 id="lastname"
                                 ref="nom"
@@ -232,10 +228,7 @@
                                 @input="nom = $event.target.value.replace(/\t.*/,'')"
                                 @paste="onPaste"
                               >
-                              <i
-                                class="fa fa-user form-control-feedback"
-                                :class="{'nom-prenoms': $store.state.config.searchFormHelp && typeImmatriculation === 'fni', 'nom': $store.state.config.searchFormHelp && typeImmatriculation === 'siv'}"
-                              >
+                              <i class="fa fa-user form-control-feedback">
                               </i>
                             </div>
                           </div>
@@ -248,7 +241,7 @@
                               :class="[{'has-error' : (prenom === '' && status !== 'init')}]"
                             >
                               <label class="control-label">
-                                2 - Prénom(s)
+                                Prénom(s)
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -256,6 +249,14 @@
                                   *
                                 </span>
                               </label>
+                              <a
+                                v-if="$store.state.config.searchFormHelp"
+                                class="clickable text-info btn-sm-link"
+                                @click="prenomsModal = true"
+                              >
+                                Où le trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
                               <input
                                 id="firstname"
                                 v-model="prenom"
@@ -264,10 +265,7 @@
                                 class="form-control"
                                 tabindex="2"
                               >
-                              <i class="fa fa-user form-control-feedback"
-                                :class="{'prenoms': $store.state.config.searchFormHelp}"
-                              >
-                              </i>
+                              <i class="fa fa-user form-control-feedback"></i>
                             </div>
                           </div>
                         </div>
@@ -281,7 +279,7 @@
                               :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]"
                             >
                               <label class="control-label">
-                                1 - Raison sociale
+                                Raison sociale
                                 <span
                                   class="info_red"
                                   title="Ce champ est requis."
@@ -300,7 +298,8 @@
                                 @input="raisonSociale = $event.target.value.replace(/\t.*/,'')"
                                 @paste="onPaste"
                               >
-                              <i class="fa fa-user form-control-feedback"
+                              <i
+                                class="fa fa-user form-control-feedback"
                                 :class="{'raison-sociale': $store.state.config.searchFormHelp}"
                               >
                               </i>
@@ -310,9 +309,7 @@
                             <field
                               :active="status !== 'init'"
                               form-id="siren"
-                              :icon="$store.state.config.searchFormHelp ? 'fa-hashtag siren' : 'fa-hashtag'"
                               :option="typeImmatriculation"
-                              :typePersonne="typePersonne"
                             >
                             </field>
                           </div>
@@ -327,10 +324,26 @@
                             <field
                               :active="status !== 'init'"
                               form-id="plaque"
-                              :icon="$store.state.config.searchFormHelp ? 'fa-drivers-license-o plaque-immatriculation' : 'fa-drivers-license-o'"
                               :option="typeImmatriculation"
-                              :typePersonne="typePersonne"
                             >
+                              <a
+                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'siv'"
+                                slot="link"
+                                class="clickable text-info btn-sm-link"
+                                @click="plaqueImmatriculationSIVModal = true"
+                              >
+                                Où la trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
+                              <a
+                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'fni'"
+                                slot="link"
+                                class="clickable text-info btn-sm-link"
+                                @click="plaqueImmatriculationFNIModal = true"
+                              >
+                                Où la trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
                             </field>
                           </div>
                           <div class="col-md-6">
@@ -343,7 +356,7 @@
                                   for="input"
                                   class="control-label"
                                 >
-                                  4 - N° de formule
+                                  N° de formule
                                   <span
                                     class="info_red"
                                     title="Ce champ est requis."
@@ -353,7 +366,7 @@
                                 </label>
                                 <a
                                   class="clickable text-info btn-sm-link"
-                                  @click="modal = true"
+                                  @click="numeroFormuleModal = true"
                                 >
                                   Où le trouver
                                   <i class="fa fa-info-circle fa-lg"></i>
@@ -368,7 +381,8 @@
                                   placeholder="2013BZ80335"
                                   tabindex="5"
                                 >
-                                <i class="fa fa-pencil-square-o form-control-feedback"
+                                <i
+                                  class="fa fa-pencil-square-o form-control-feedback"
                                   :class="{'numero-formule': $store.state.config.searchFormHelp}"
                                 >
                                 </i>
@@ -378,9 +392,7 @@
                                   for="input"
                                   class="control-label"
                                 >
-                                  <span v-if="typePersonne === 'particulier'">3</span>
-                                  <span v-if="typePersonne === 'pro'">4</span>
-                                  - Date du certificat d'immatriculation
+                                  Date du certificat d'immatriculation
                                   <span
                                     class="info_red"
                                     title="Ce champ est requis."
@@ -390,7 +402,7 @@
                                 </label>
                                 <a
                                   class="clickable text-info btn-sm-link"
-                                  @click="modal = true"
+                                  @click="dateImmatriculationModal = true"
                                 >
                                   Où la trouver
                                   <i class="fa fa-info-circle fa-lg"></i>
@@ -405,10 +417,7 @@
                                   placeholder="xx/xx/xxxx"
                                   tabindex="5"
                                 >
-                                <i class="fa fa-calendar form-control-feedback"
-                                  :class="{'date-certificat-immatriculation': $store.state.config.searchFormHelp}"
-                                >
-                                </i>
+                                <i class="fa fa-calendar form-control-feedback"></i>
                               </div>
                             </div>
                           </div>
@@ -469,14 +478,113 @@
       <div class="row">
       </div>
     </div>
-    <!-- debut modal -->
+    <!-- debut modals -->
     <modal-helper
-      v-if="modal"
-      :type-immatriculation="typeImmatriculation"
-      @close="modal = false"
+      v-if="nomsPrenomsModal"
+      @close="nomsPrenomsModal = false"
     >
+      <span slot="title">Information nom(s) et prénom(s)</span>
+      <img
+        slot="body"
+        alt="Indication localisation nom(s) et prénom(s) : sous le numéro d'immatriculation"
+        :src="imageNomsPrenomsFNI"
+        class="img-responsive"
+        style="margin: 0 auto;"
+        width="290px"
+      >
     </modal-helper>
-    <!-- fin modal -->
+
+    <modal-helper
+      v-if="plaqueImmatriculationFNIModal"
+      @close="plaqueImmatriculationFNIModal = false"
+    >
+      <span slot="title">Information plaque d'immatriculation</span>
+      <img
+        slot="body"
+        alt="Indication localisation plaque d'immatriculation : au dessus du nom et prénom"
+        :src="imagePlaqueImmatriculationFNI"
+        class="img-responsive"
+        style="margin: 0 auto;"
+        width="290px"
+      >
+    </modal-helper>
+
+    <modal-helper
+      v-if="dateImmatriculationModal"
+      @close="dateImmatriculationModal = false"
+    >
+      <span slot="title">
+        Information date du certificat d'immatriculation
+      </span>
+      <img
+        slot="body"
+        alt="Indication localisation date du certificat d'immatriculation : à droite du numéro d'immatriculation"
+        :src="imageDateImmatriculationFNI"
+        class="img-responsive"
+        style="margin: 0 auto;"
+        width="290px"
+      >
+    </modal-helper>
+
+    <modal-helper
+      v-if="nomsModal"
+      @close="nomsModal = false"
+    >
+      <span slot="title">Information nom(s)</span>
+      <img
+        slot="body"
+        alt="Indication localisation nom(s) : au dessus du prénom"
+        :src="imageNomsSIV"
+        class="img-responsive"
+        style="margin: 0 auto;"
+        width="350px"
+      >
+    </modal-helper>
+
+    <modal-helper
+      v-if="prenomsModal"
+      @close="prenomsModal = false"
+    >
+      <span slot="title">Information prenom(s)</span>
+      <img
+        slot="body"
+        alt="Indication localisation prenom(s) : en dessous du nom"
+        :src="imagePrenomsSIV"
+        class="img-responsive"
+        style="margin: 0 auto;"
+        width="350px"
+      >
+    </modal-helper>
+
+    <modal-helper
+      v-if="plaqueImmatriculationSIVModal"
+      @close="plaqueImmatriculationSIVModal = false"
+    >
+      <span slot="title">Information plaque d'immatriculation</span>
+      <img
+        slot="body"
+        alt="Indication localisation plaque d'immatriculation : au dessus du numéro de formule"
+        :src="imagePlaqueImmatriculationSIV"
+        class="img-responsive"
+        style="margin: 0 auto;"
+        width="350px"
+      >
+    </modal-helper>
+
+    <modal-helper
+      v-if="numeroFormuleModal"
+      @close="numeroFormuleModal = false"
+    >
+      <span slot="title">Information n° de formule</span>
+      <img
+        slot="body"
+        alt="Indication localisation numéro de formule : sous la plaque d'immatriculation ou dans la bande MRZ ou sur la première page de la carte grise"
+        :src="imageNumeroFormuleSIV"
+        class="img-responsive"
+        style="margin: 0 auto;"
+      >
+    </modal-helper>
+    <!-- fin modals -->
   </div>
 </template>
 
@@ -486,8 +594,13 @@ import Shake from 'shake.js'
 import dayjs from 'dayjs'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
-import imageAideFNI from '@/assets/img/aide_fni_form.png'
-import imageAideSIV from '@/assets/img/aide_siv_form.png'
+import imageDateImmatriculationFNI from '@/assets/img/aide_fni_date_immatriculation.png'
+import imageNomsPrenomsFNI from '@/assets/img/aide_fni_noms_prenoms.png'
+import imagePlaqueImmatriculationFNI from '@/assets/img/aide_fni_plaque_immatriculation.png'
+import imageNomsSIV from '@/assets/img/aide_siv_noms.png'
+import imageNumeroFormuleSIV from '@/assets/img/aide_siv_numero_formule.png'
+import imagePlaqueImmatriculationSIV from '@/assets/img/aide_siv_plaque_immatriculation.png'
+import imagePrenomsSIV from '@/assets/img/aide_siv_prenoms.png'
 
 
 const formInitialOptions = {
@@ -508,6 +621,7 @@ const formInitialOptions = {
       mask: '#########',
       check: /^(\d{9})$/,
       placeholder: '123456789',
+      icon: 'fa fa-hashtag',
       tabindex: '2'
     },
     fni: {
@@ -519,6 +633,7 @@ const formInitialOptions = {
       mask: '#########',
       check: /^[0-9]{9}$/,
       placeholder: '123456789',
+      icon: 'fa fa-hashtag',
       tabindex: '2'
     }
   },
@@ -535,6 +650,7 @@ const formInitialOptions = {
       check: /^[a-zA-Z]{1,2}(-|\s+)?[0-9]{2,3}(-|\s+)?[a-zA-Z]{1,2}$/,
       placeholder: 'AA-123-AA',
       placeholderAlt: 'AA123AA ou A123A ou AA123A',
+      icon: 'fa fa-drivers-license-o',
       tabindex: '4'
     },
     fni: {
@@ -549,6 +665,7 @@ const formInitialOptions = {
       check: /^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/,
       placeholder: '123 ABC 45',
       placeholderAlt: '1234ABC45 ou 123ABC45 ou 12ABC45 ou 12AB45',
+      icon: 'fa fa-drivers-license-o',
       tabindex: '4'
     }
   }
@@ -568,9 +685,26 @@ export default {
   },
   data () {
     return {
-      imageAideFNI,
-      imageAideSIV,
-      modal: false,
+      // modals FNI
+      nomsPrenomsModal: false,
+      plaqueImmatriculationFNIModal: false,
+      dateImmatriculationModal: false,
+
+      // modals SIV
+      nomsModal: false,
+      prenomsModal: false,
+      plaqueImmatriculationSIVModal: false,
+      numeroFormuleModal: false,
+
+      // images
+      imageNomsPrenomsFNI,
+      imagePlaqueImmatriculationFNI,
+      imageDateImmatriculationFNI,
+      imageNomsSIV,
+      imagePrenomsSIV,
+      imagePlaqueImmatriculationSIV,
+      imageNumeroFormuleSIV,
+
       status: 'init',
     }
   },

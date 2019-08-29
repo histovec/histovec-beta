@@ -246,8 +246,18 @@
         </div>
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
-          <span v-if="v.apte" class="color-info_2 bold_4 txt-small-13">{{ synthese[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}</span>
-          <span v-else class="color-info_2 bold_4 txt-small-13">{{ synthese['ove'].adv }}</span>
+          <span
+            v-if="v.apte"
+            class="color-info_2 bold_4 txt-small-13"
+          >
+            {{ synthese[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
+          </span>
+          <span
+            v-else
+            class="color-info_2 bold_4 txt-small-13"
+          >
+            {{ synthese['ove'].adv }}
+          </span>
 
           <br />
           <span
@@ -389,6 +399,7 @@
 import { formatMixin } from '../../mixins/format.js'
 
 export default {
+  mixins: [formatMixin],
   props: {
     v: {
       type: Object,
@@ -399,7 +410,6 @@ export default {
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/synthesis`)
   },
-  mixins: [formatMixin]
 }
 
 </script>

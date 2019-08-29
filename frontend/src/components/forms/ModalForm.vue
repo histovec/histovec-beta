@@ -19,7 +19,10 @@
                 </h6>
               </div>
               <div class="modal-body">
-                <div class="content" v-if="!isMessageSent">
+                <div
+                  v-if="!isMessageSent"
+                  class="content"
+                >
                   <div v-if="mode === contact.mode.rating">
                     <label>
                       Comment évaluez-vous HistoVec :
@@ -206,7 +209,7 @@
                       <br />
                     </span>
                     <button
-                    v-if="!isMessageSent"
+                      v-if="!isMessageSent"
                       class="btn btn-animated btn-default m-h-05"
                       @click="send"
                     >
