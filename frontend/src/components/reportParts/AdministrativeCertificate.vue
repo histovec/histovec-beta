@@ -85,6 +85,7 @@ export default {
     },
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
+      const missing = 'non disponible'
 
       var pdf = new JsPdf({compress: true})
       let self = this
@@ -136,6 +137,12 @@ export default {
             type: 'normal',
             size: 10
           }
+        },
+        annulation: {
+          pos: [15, 107],
+          size: 12,
+          type: 'bold',
+          htab: [0, 5],
         },
         situation1: {
           render: true,
@@ -254,6 +261,7 @@ export default {
         pdf.setFontSize(10)
         pdf.text(p.title.pos[0], p.title.pos[1] + p.title.inter, '(Articles L.322-2 et R.322-4 du code de la route)', null, null, p.title.align)
       } // end of title
+
       if (p.id.render) { // identification du véhicule
         // title
         pdf.setFontType(p.id.title.type)
@@ -264,126 +272,135 @@ export default {
         pdf.setFontSize(p.id.content.size)
         let i = 1
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro d\'immatriculation du véhicule :')
-        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.identity.plaque.toUpperCase())
+        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.$store.state.identity.plaque.toUpperCase() || missing)
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Date de première immatriculation du véhicule :')
-        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.certificat.premier)
+        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.certificat.premier || missing)
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Numéro VIN du véhicule (ou numéro de série) :')
-        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.vin)
+        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.vin || missing)
         pdf.text(p.id.pos[0] + p.id.htab[0], p.id.pos[1] + p.id.inter * (i), 'Marque :')
-        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.marque)
+        pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.marque || missing)
       } // identification du véhicule
-      if (p.situation1.render) { // situation administrative
-        let histoLength = self.v.historique.length
-        if (self.v.historique.length > p.historique.limit) {
-          histoLength = (self.v.historique.length + 5) / 2
-        }
-        p.situation1.pos[1] = p.situation1.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
-        pdf.setFontType(p.situation1.title.type)
-        pdf.setFontSize(p.situation1.title.size)
-        pdf.text(p.situation1.pos[0], p.situation1.pos[1], 'Situation administrative du véhicule')
-        let data = [
-            {
-              key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
-              value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : (self.v.administratif.pv ? 'PV en attente' : 'Oui')
-            },
-            {
-              key: '- Procédure de réparation contrôlée',
-              value: ((self.v.administratif.ove !== 'Aucune') || (this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE')) ? 'Oui' : 'Aucune')
-            },
-            {
-              key: '- Déclaration valant saisie',
-              value: self.v.administratif.saisie
-            },
-            {
-              key: '- Gage',
-              value: self.v.administratif.gage
-            }
-        ]
-        let offset = p.situation1.inter
-        data.forEach(d => {
-          pdf.setFontType(p.situation1.key.type)
-          pdf.setFontSize(p.situation1.key.size)
-          pdf.text(p.situation1.pos[0] + p.situation1.htab[0], p.situation1.pos[1] + offset, d.key)
-          offset = offset + p.situation1.key.intra * (d.key.split('\n').length - 1) + p.situation1.key.inter
-          pdf.setFontType(p.situation1.value.type)
-          pdf.setFontSize(p.situation1.value.size)
-          pdf.text(p.situation1.pos[0] + p.situation1.htab[1], p.situation1.pos[1] + offset, d.value)
-          offset = offset + p.situation1.value.intra * (d.value.split('\n').length - 1) + p.situation1.value.inter
-        })
-      } // situation administrative
-      if (p.situation2.render) { // situation administrative 2ème section
-        let histoLength = self.v.historique.length
-        if (self.v.historique.length > p.historique.limit) {
-          histoLength = (self.v.historique.length + 5) / 2
-        }
-        p.situation2.pos[1] = p.situation2.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
-        let data = [
-            {
-              key: '- Immatriculation suspendue',
-              value: (self.v.administratif.suspension !== 'Non') ? self.v.administratif.suspensions.join(', ') : 'Non'
-            },
-            {
-              key: '- Immatriculation annulée',
-              value: self.v.administratif.annulation
-            },
-            {
-              key: '- Véhicule volé',
-              value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui'
-            },
-            {
-              key: '- Certificat d\'immatriculation volé',
-              value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui'
-            },
-            {
-              key: '- Certificat d\'immatriculation perdu',
-              value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'
-            },
-            {
-              key: '- Certificat d\'immatriculation duplicata',
-              value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui'
-            }
-        ]
-        let offset = p.situation2.inter
-        data.forEach(d => {
-          pdf.setFontType(p.situation2.key.type)
-          pdf.setFontSize(p.situation2.key.size)
-          pdf.text(p.situation2.pos[0] + p.situation2.htab[0], p.situation2.pos[1] + offset, d.key)
-          offset = offset + p.situation1.key.intra * (d.key.split('\n').length - 1) + p.situation1.key.inter
-          pdf.setFontType(p.situation2.value.type)
-          pdf.setFontSize(p.situation2.value.size)
-          pdf.text(p.situation2.pos[0] + p.situation2.htab[1], p.situation2.pos[1] + offset, d.value)
-          offset = offset + p.situation2.value.intra * (d.value.split('\n').length - 1) + p.situation2.value.inter
-        })
-      } // situation administrative 2ème section
-      if (p.historique.render) { // historique
-        pdf.setFontType(p.historique.title.type)
-        pdf.setFontSize(p.historique.title.size)
-        pdf.text(p.historique.pos[0], p.historique.pos[1], 'Historique du véhicule')
-        pdf.setFontType(p.historique.content.type)
-        pdf.setFontSize(p.historique.content.size)
-        let i = 0
-        let countHisto = 0
-        let column = 0
-        self.v.historique.forEach(function (o) {
-          if (self.v.historique.length > p.historique.limit && countHisto === Math.round((self.v.historique.length / 2))) {
-            // si la limite est atteinte on passe sur 2 colonnes
-            column = p.historique.pos[2] // On passe sur la deuxième colonne
-            i = 0 // on repart du haut du tableau
+
+      if (self.v.administratif.annulation === 'Oui') {
+        pdf.setFontType(p.annulation.type)
+        pdf.setFontSize(p.annulation.size)
+        pdf.text(p.annulation.pos[0], p.annulation.pos[1], `Immatriculation annulée le : ${self.v.administratif.dateAnnulation}.`)
+        pdf.text(p.annulation.pos[0] + p.annulation.htab[0], p.annulation.pos[1] + p.annulation.htab[1], 'Le certificat demandé a été annulé. Une procédure de destruction du véhicule est en cours.')
+      } else {
+        if (p.situation1.render) { // situation administrative
+          let histoLength = self.v.historique.length
+          if (self.v.historique.length > p.historique.limit) {
+            histoLength = (self.v.historique.length + 5) / 2
           }
-          let splitText = pdf.getTextDimensions(o.nature)
-          pdf.text(p.historique.pos[0] + p.historique.htab[0] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i), o.date)
-          if (splitText.w >= p.historique.maxLengthText && self.v.historique.length > p.historique.limit) {
-            // Si on est dans le cas de double colonne on passe en multiligne
-            let split = pdf.splitTextToSize(o.nature, p.historique.splitText)
-            split.forEach(s => {
-              pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), s)
-            })
-          } else {
-            pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), o.nature)
+          p.situation1.pos[1] = p.situation1.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
+          pdf.setFontType(p.situation1.title.type)
+          pdf.setFontSize(p.situation1.title.size)
+          pdf.text(p.situation1.pos[0], p.situation1.pos[1], 'Situation administrative du véhicule')
+          let data = [
+              {
+                key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
+                value: self.v.administratif.otci === 'Aucune' ? 'Aucune' : (self.v.administratif.pv ? 'PV en attente' : 'Oui')
+              },
+              {
+                key: '- Procédure de réparation contrôlée',
+                value: ((self.v.administratif.ove !== 'Aucune') || (this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE')) ? 'Oui' : 'Aucune')
+              },
+              {
+                key: '- Déclaration valant saisie',
+                value: self.v.administratif.saisie
+              },
+              {
+                key: '- Gage',
+                value: self.v.administratif.gage
+              }
+          ]
+          let offset = p.situation1.inter
+          data.forEach(d => {
+            pdf.setFontType(p.situation1.key.type)
+            pdf.setFontSize(p.situation1.key.size)
+            pdf.text(p.situation1.pos[0] + p.situation1.htab[0], p.situation1.pos[1] + offset, d.key)
+            offset = offset + p.situation1.key.intra * (d.key.split('\n').length - 1) + p.situation1.key.inter
+            pdf.setFontType(p.situation1.value.type)
+            pdf.setFontSize(p.situation1.value.size)
+            pdf.text(p.situation1.pos[0] + p.situation1.htab[1], p.situation1.pos[1] + offset, d.value)
+            offset = offset + p.situation1.value.intra * (d.value.split('\n').length - 1) + p.situation1.value.inter
+          })
+        } // situation administrative
+        if (p.situation2.render) { // situation administrative 2ème section
+          let histoLength = self.v.historique.length
+          if (self.v.historique.length > p.historique.limit) {
+            histoLength = (self.v.historique.length + 5) / 2
           }
-          countHisto++
-        })
-      } // historique
+          p.situation2.pos[1] = p.situation2.pos[1] + p.historique.pos[1] + p.historique.inter + histoLength * p.historique.content.inter
+          let data = [
+              {
+                key: '- Immatriculation suspendue',
+                value: (self.v.administratif.suspension !== 'Non') ? self.v.administratif.suspensions.join(', ') : 'Non'
+              },
+              {
+                key: '- Immatriculation annulée',
+                value: self.v.administratif.annulation
+              },
+              {
+                key: '- Véhicule volé',
+                value: self.v.administratif.vol === 'NON' ? 'Non' : 'Oui'
+              },
+              {
+                key: '- Certificat d\'immatriculation volé',
+                value: self.v.administratif.titre.vol === 'NON' ? 'Non' : 'Oui'
+              },
+              {
+                key: '- Certificat d\'immatriculation perdu',
+                value: self.v.administratif.titre.perte === 'NON' ? 'Non' : 'Oui'
+              },
+              {
+                key: '- Certificat d\'immatriculation duplicata',
+                value: self.v.administratif.titre.duplicata === 'NON' ? 'Non' : 'Oui'
+              }
+          ]
+          let offset = p.situation2.inter
+          data.forEach(d => {
+            pdf.setFontType(p.situation2.key.type)
+            pdf.setFontSize(p.situation2.key.size)
+            pdf.text(p.situation2.pos[0] + p.situation2.htab[0], p.situation2.pos[1] + offset, d.key)
+            offset = offset + p.situation1.key.intra * (d.key.split('\n').length - 1) + p.situation1.key.inter
+            pdf.setFontType(p.situation2.value.type)
+            pdf.setFontSize(p.situation2.value.size)
+            pdf.text(p.situation2.pos[0] + p.situation2.htab[1], p.situation2.pos[1] + offset, d.value)
+            offset = offset + p.situation2.value.intra * (d.value.split('\n').length - 1) + p.situation2.value.inter
+          })
+        } // situation administrative 2ème section
+        if (p.historique.render) { // historique
+          pdf.setFontType(p.historique.title.type)
+          pdf.setFontSize(p.historique.title.size)
+          pdf.text(p.historique.pos[0], p.historique.pos[1], 'Historique du véhicule')
+          pdf.setFontType(p.historique.content.type)
+          pdf.setFontSize(p.historique.content.size)
+          let i = 0
+          let countHisto = 0
+          let column = 0
+          self.v.historique.forEach(function (o) {
+            if (self.v.historique.length > p.historique.limit && countHisto === Math.round((self.v.historique.length / 2))) {
+              // si la limite est atteinte on passe sur 2 colonnes
+              column = p.historique.pos[2] // On passe sur la deuxième colonne
+              i = 0 // on repart du haut du tableau
+            }
+            let splitText = pdf.getTextDimensions(o.nature)
+            pdf.text(p.historique.pos[0] + p.historique.htab[0] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i), o.date)
+            if (splitText.w >= p.historique.maxLengthText && self.v.historique.length > p.historique.limit) {
+              // Si on est dans le cas de double colonne on passe en multiligne
+              let split = pdf.splitTextToSize(o.nature, p.historique.splitText)
+              split.forEach(s => {
+                pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), s)
+              })
+            } else {
+              pdf.text(p.historique.pos[0] + p.historique.htab[1] + column, p.historique.pos[1] + p.historique.inter + p.historique.content.inter * (i++), o.nature)
+            }
+            countHisto++
+          })
+        } // historique
+      }
+
       if (p.date.render) { // date certificat
         pdf.setFontType(p.date.title.type)
         pdf.setFontSize(p.date.title.size)
