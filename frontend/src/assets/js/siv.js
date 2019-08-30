@@ -199,9 +199,11 @@ function calcNbTit (historique) {
   return nbTit.length
 }
 
-function siv (veh) {
+function siv (veh, csaAnnulationCiConfig) {
   if (veh === undefined) {
     return false
+  } else if (!csaAnnulationCiConfig && veh.annulation_ci === 'OUI') {
+    return veh
   }
   /* eslint-disable-next-line no-console */
   console.log(veh)
@@ -222,7 +224,7 @@ function siv (veh) {
     }
   }
 
-  if (veh.annulation_ci === 'OUI') {
+  if (csaAnnulationCiConfig && veh.annulation_ci === 'OUI') {
     v.plaque = veh.plaq_immat
     v.date_update = veh.date_update || v.date_update
 
