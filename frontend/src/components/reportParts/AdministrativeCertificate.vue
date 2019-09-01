@@ -142,7 +142,7 @@ export default {
           pos: [15, 107],
           size: 12,
           type: 'bold',
-          htab: [0, 5],
+          htab: [0, 7],
         },
         situation1: {
           render: true,
@@ -281,7 +281,7 @@ export default {
         pdf.text(p.id.pos[0] + p.id.htab[1], p.id.pos[1] + p.id.inter * (i++), self.v.ctec.marque || missing)
       } // identification du véhicule
 
-      if (self.v.administratif.annulation === 'Oui') {
+      if (this.$store.state.config.csaAnnulationCi && self.v.administratif.annulation === 'Oui') {
         pdf.setFontType(p.annulation.type)
         pdf.setFontSize(p.annulation.size)
         pdf.text(p.annulation.pos[0], p.annulation.pos[1], `Immatriculation annulée le : ${self.v.administratif.dateAnnulation}.`)

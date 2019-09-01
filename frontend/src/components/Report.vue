@@ -66,6 +66,16 @@
                 Numéro - Plaque d'immatriculation : {{ v.plaque }}
               </div>
             </div>
+            <div class="col-sm-4">
+              <div
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation === 'Oui'"
+                class="alert alert-icon alert-danger"
+                role="alert"
+              >
+                <i class="fa fa-warning"></i>
+                Le certificat demandé a été annulé
+              </div>
+            </div>
           </div>
           <!-- fin vignette -->
           <!-- debut trait séparation -->
@@ -80,7 +90,7 @@
               role="tablist"
             >
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'abstract'}]"
               >
                 <a
@@ -92,7 +102,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'vehicle'}]"
               >
                 <a
@@ -104,7 +114,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'holder'}]"
               >
                 <a
@@ -116,7 +126,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'situation'}]"
               >
                 <a
@@ -128,7 +138,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'history'}]"
               >
                 <a
@@ -140,7 +150,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -152,7 +162,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -176,7 +186,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui' && holder"
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui' && holder"
                 :class="[{'active' : tab === 'send'}]"
               >
                 <a
@@ -382,6 +392,9 @@ export default {
     },
     status () {
       if (this.$store.state.siv.v) {
+        if (!this.$store.state.config.csaAnnulationCi && this.$store.state.siv.v.annulation_ci === 'OUI') {
+          return 'cancelled'
+        }
         this.showModalForm()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
@@ -404,7 +417,7 @@ export default {
       return 'error'
     },
     v () {
-      return siv.siv(this.$store.state.siv.v)
+      return siv.siv(this.$store.state.siv.v, this.$store.state.config.csaAnnulationCi)
     },
     holder () {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
@@ -432,7 +445,7 @@ export default {
       this.$store.commit('updateCode', this.$route.params.code)
     }
     this.getSIV().then( () => {
-      if (this.$store.state.siv.v.annulation_ci === 'OUI') {
+      if (this.$store.state.config.csaAnnulationCi && this.$store.state.siv.v.annulation_ci === 'OUI') {
         this.tab = 'csa'
       }
     })

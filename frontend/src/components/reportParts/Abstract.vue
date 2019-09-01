@@ -193,7 +193,7 @@
       <div class="separator-2"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="(v.sinistres.length > 0) || ($store.state.siv.v.suspensions && $store.state.siv.v.suspensions.includes('PVE'))">
+    <div v-if="(v.sinistres && v.sinistres.length > 0) || ($store.state.siv.v.suspensions && $store.state.siv.v.suspensions.includes('PVE'))">
       <div class="row">
         <!-- debut sinistre  -->
         <div class="col-sm-1">
@@ -261,7 +261,7 @@
 
           <br />
           <span
-            v-if="v.sinistres.length > 1"
+            v-if="v.sinistres && v.sinistres.length > 1"
             class="color-info_2 bold_4 txt-small-13"
           >
             {{ synthese.multi_ove.adv }}
@@ -273,7 +273,7 @@
       <div class="separator-2"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="(v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
+    <div v-if="(v.administratif.synthese && v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
       <div class="row">
         <!-- debut ras  -->
         <div class="col-sm-1">
@@ -333,7 +333,7 @@
     </div>
     <div>
       <div
-        v-if="v.vignette_numero !== ''"
+        v-if="v.vignette_numero !== '' && v.vignette_numero !== undefined"
         class="row"
       >
         <!-- debut ras  -->
