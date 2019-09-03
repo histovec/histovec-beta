@@ -188,7 +188,7 @@
                                 </span>
                               </label>
                               <a
-                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'siv'"
+                                v-if="typeImmatriculation === 'siv'"
                                 class="clickable text-info btn-sm-link"
                                 @click="nomsModal = true"
                               >
@@ -208,7 +208,7 @@
                                 </span>
                               </label>
                               <a
-                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'fni'"
+                                v-if="typeImmatriculation === 'fni'"
                                 class="clickable text-info btn-sm-link"
                                 @click="nomsPrenomsModal = true"
                               >
@@ -250,7 +250,6 @@
                                 </span>
                               </label>
                               <a
-                                v-if="$store.state.config.searchFormHelp"
                                 class="clickable text-info btn-sm-link"
                                 @click="prenomsModal = true"
                               >
@@ -298,11 +297,7 @@
                                 @input="raisonSociale = $event.target.value.replace(/\t.*/,'')"
                                 @paste="onPaste"
                               >
-                              <i
-                                class="fa fa-user form-control-feedback"
-                                :class="{'raison-sociale': $store.state.config.searchFormHelp}"
-                              >
-                              </i>
+                              <i class="fa fa-user form-control-feedback raison-sociale"></i>
                             </div>
                           </div>
                           <div class="col-md-4">
@@ -327,7 +322,7 @@
                               :option="typeImmatriculation"
                             >
                               <a
-                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'siv'"
+                                v-if="typeImmatriculation === 'siv'"
                                 slot="link"
                                 class="clickable text-info btn-sm-link"
                                 @click="plaqueImmatriculationSIVModal = true"
@@ -336,7 +331,7 @@
                                 <i class="fa fa-info-circle fa-lg"></i>
                               </a>
                               <a
-                                v-if="$store.state.config.searchFormHelp && typeImmatriculation === 'fni'"
+                                v-if="typeImmatriculation === 'fni'"
                                 slot="link"
                                 class="clickable text-info btn-sm-link"
                                 @click="plaqueImmatriculationFNIModal = true"
@@ -382,10 +377,7 @@
                                   tabindex="5"
                                 >
                                 <i
-                                  class="fa fa-pencil-square-o form-control-feedback"
-                                  :class="{'numero-formule': $store.state.config.searchFormHelp}"
-                                >
-                                </i>
+                                  class="fa fa-pencil-square-o form-control-feedback numero-formule"></i>
                               </div>
                               <div v-if="typeImmatriculation === 'fni'">
                                 <label
@@ -458,8 +450,8 @@
                             class="btn btn-animated btn-default btn-sm btn-block"
                             :to="{ name: 'faq', hash:'#comment-retrouver-mon-vehicule' }"
                           >
-                            <i class="fa fa-life-ring"></i>
-                            Tutoriel
+                            <i class="fa fa-question"></i>
+                            Besoin d'aide
                           </router-link>
                         </div>
                       </div>
