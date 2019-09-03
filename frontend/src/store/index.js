@@ -46,7 +46,6 @@ export default new Vuex.Store({
     config: {
       allTabs: false,
       modalMail: true,
-      searchFormHelp: false,
       csaAnnulationCi: false,
       utac: false,
       utacGraph: false,
@@ -55,7 +54,6 @@ export default new Vuex.Store({
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       modalMail: ['ctrl', 'alt', 'b'],
-      searchFormHelp: ['ctrl', 'alt', 'k'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
