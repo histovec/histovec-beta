@@ -450,8 +450,8 @@
                             class="btn btn-animated btn-default btn-sm btn-block"
                             :to="{ name: 'faq', hash:'#comment-retrouver-mon-vehicule' }"
                           >
-                            <i class="fa fa-life-ring"></i>
-                            Tutoriel
+                            <i class="fa fa-question"></i>
+                            Besoin d'aide
                           </router-link>
                         </div>
                       </div>
