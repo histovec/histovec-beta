@@ -90,7 +90,7 @@
               role="tablist"
             >
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
+                v-if="(v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'abstract'}]"
               >
                 <a
@@ -102,7 +102,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
+                v-if="(v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'vehicle'}]"
               >
                 <a
@@ -114,7 +114,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
+                v-if="(v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'holder'}]"
               >
                 <a
@@ -126,7 +126,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
+                v-if="(v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'situation'}]"
               >
                 <a
@@ -138,7 +138,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui'"
+                v-if="(v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui'"
                 :class="[{'active' : tab === 'history'}]"
               >
                 <a
@@ -150,7 +150,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
+                v-if="((v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui') && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -162,7 +162,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                v-if="((v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui') && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -186,7 +186,7 @@
                 </a>
               </li>
               <li
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation !== 'Oui' && holder"
+                v-if="((v.administratif.annulation === 'Oui' && !$store.state.config.csaAnnulationCi) || v.administratif.annulation !== 'Oui') && holder"
                 :class="[{'active' : tab === 'send'}]"
               >
                 <a
