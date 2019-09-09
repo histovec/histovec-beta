@@ -225,11 +225,19 @@ export default function () {
       title: 'Comment retrouver mon véhicule ?',
       body: `
         <p class="indented">
-          Vérifiez que vous avez saisi très précisément dans les
-          champs du formulaire les informations telles qu'elles
-          figurent sur la carte grise (nom et prénom(s),
-          immatriculation, numéro de formule ou date du certificat
-          d'immatriculation).
+          Vérifiez que <strong> vous avez saisi très précisément
+          dans les champs du formulaire</strong>, les <strong>
+          informations telles qu'elles figurent sur la carte grise
+          </strong> (nom et prénom(s), immatriculation, numéro de
+          formule ou date du certificat d'immatriculation). </strong>
+        </p>
+        <p class="indented">
+          <strong>
+            <i class="fa fa-warning color-danger"></i>
+            Vos données sont susceptibles d'avoir fait l'objet
+            d'erreurs lors de la saisie de votre dossier
+            <i class="fa fa-warning color-danger"></i>
+          </strong>
         </p>
         <p class="indented">
           Pour les anciens numéros d'immatriculation, veillez à bien

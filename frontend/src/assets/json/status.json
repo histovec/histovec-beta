@@ -23,9 +23,9 @@
     "ref": false
   },
   "notFound": {
-    "msg": "Désolé, nous n'avons pas trouvé de résultat pour cette recherche.",
+    "msg": "Ce véhicule est inconnu d'HistoVec. Pensez à vérifier les données inscrites sur votre carte grise.",
     "ref": {
-      "msg": "Tutoriel",
+      "msg": "Besoin d'aide",
       "route": "faq",
       "hash": "#comment-retrouver-mon-vehicule",
       "icon": "fa fa-life-ring fa-lg"
@@ -41,7 +41,7 @@
       "icon": "fa fa-arrow-left"
     }
   },
-  "cancelled": "Le certificat demandé a été annulé. Une procédure de destruction du véhicule est en cours.",
+  "cancelled": "Le certificat demandé a été annulé.",
   "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
   "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
   "decryptError": "Problème dans l'ouverture du rapport sécurisé - sollicitez nous.",
