@@ -41,7 +41,7 @@
       "icon": "fa fa-arrow-left"
     }
   },
-  "cancelled": "Le certificat demandé a été annulé. Une procédure de destruction du véhicule est en cours.",
+  "cancelled": "Le certificat demandé a été annulé.",
   "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
   "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
   "decryptError": "Problème dans l'ouverture du rapport sécurisé - sollicitez nous.",

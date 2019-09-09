@@ -284,8 +284,8 @@ export default {
       if (this.$store.state.config.csaAnnulationCi && self.v.administratif.annulation === 'Oui') {
         pdf.setFontType(p.annulation.type)
         pdf.setFontSize(p.annulation.size)
-        pdf.text(p.annulation.pos[0], p.annulation.pos[1], `Immatriculation annulée le : ${self.v.administratif.dateAnnulation}.`)
-        pdf.text(p.annulation.pos[0] + p.annulation.htab[0], p.annulation.pos[1] + p.annulation.htab[1], 'Le certificat demandé a été annulé. Une procédure de destruction du véhicule est en cours.')
+        pdf.text(p.annulation.pos[0], p.annulation.pos[1], 'Le certificat demandé a été annulé.')
+        pdf.text(p.annulation.pos[0] + p.annulation.htab[0], p.annulation.pos[1] + p.annulation.htab[1], `Immatriculation annulée le : ${self.v.administratif.dateAnnulation}.`)
       } else {
         if (p.situation1.render) { // situation administrative
           let histoLength = self.v.historique.length
