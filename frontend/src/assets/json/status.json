@@ -23,7 +23,7 @@
     "ref": false
   },
   "notFound": {
-    "msg": "Désolé, nous n'avons pas trouvé de résultat pour cette recherche.",
+    "msg": "Ce véhicule est inconnu d'HistoVec. Pensez à vérifier les données inscrites sur votre carte grise.",
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
