@@ -25,7 +25,7 @@
   "notFound": {
     "msg": "Désolé, nous n'avons pas trouvé de résultat pour cette recherche.",
     "ref": {
-      "msg": "Tutoriel",
+      "msg": "Besoin d'aide",
       "route": "faq",
       "hash": "#comment-retrouver-mon-vehicule",
       "icon": "fa fa-life-ring fa-lg"
