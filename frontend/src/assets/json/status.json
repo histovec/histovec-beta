@@ -2,6 +2,8 @@
   "default": {
     "msg": "Une erreur technique est survenue - sollicitez nous.",
     "class": "alert alert-icon alert-danger",
+    "subMsg": "",
+    "subClass": "alert alert-icon alert-warning",
     "icon": "fa fa-warning",
     "ref": {
       "msg": "Besoin d'aide",
@@ -23,7 +25,17 @@
     "ref": false
   },
   "notFound": {
-    "msg": "Ce véhicule est inconnu d'HistoVec. Pensez à vérifier les données inscrites sur votre carte grise.",
+    "msg": "Ce véhicule est inconnu d'HistoVec.",
+    "subMsg": "Vos noms et prénoms sont susceptibles d'avoir fait l'objet d'erreurs lors de la saisie de votre dossier. Recopiez exactement les données de votre carte grise.",
+    "ref": {
+      "msg": "Besoin d'aide",
+      "route": "faq",
+      "hash": "#comment-retrouver-mon-vehicule",
+      "icon": "fa fa-life-ring fa-lg"
+    }
+  },
+  "notFoundWarning": {
+    "msg": "Vos noms et prénoms sont susceptibles d'avoir fait l'objet d'erreurs lors de la saisie de votre dossier. Recopiez exactement les données de votre carte grise).",
     "ref": {
       "msg": "Besoin d'aide",
       "route": "faq",
@@ -41,10 +53,18 @@
       "icon": "fa fa-arrow-left"
     }
   },
-  "cancelled": "Le certificat demandé a été annulé.",
-  "unavailable": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement.",
-  "tooManyRequests": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez.",
-  "decryptError": "Problème dans l'ouverture du rapport sécurisé - sollicitez nous.",
+  "cancelled": {
+    "msg": "Le certificat demandé a été annulé."
+  },
+  "unavailable": {
+    "msg": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement."
+  },
+  "tooManyRequests": {
+    "msg": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez."
+  },
+  "decryptError": {
+    "msg": "Problème dans l'ouverture du rapport sécurisé - sollicitez nous."
+  },
   "decryptErrorBuyer": {
     "msg": "Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide : veuillez redemander le lien ou le QR-code à votre vendeur.",
     "class": "alert alert-icon alert-danger",
@@ -78,5 +98,7 @@
       "icon": "fa fa-question-circle fa-lg"
     }
   },
-  "error": "Erreur inconnue - sollicitez nous."
+  "error": {
+    "msg": "Erreur inconnue - sollicitez nous."
+  }
 }

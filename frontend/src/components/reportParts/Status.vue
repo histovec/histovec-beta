@@ -12,7 +12,14 @@
           <i :class="icon"></i>
           {{ message }}
         </div>
-
+        <div
+          v-if="subMessage"
+          :class="subAlertClass"
+          role="alert"
+        >
+          <i :class="icon"></i>
+          {{ subMessage }}
+        </div>
         <div
           v-if="refMessage && refIcon"
           class="mb-20 text-center"
@@ -46,10 +53,16 @@ export default {
   },
   computed: {
     message () {
-      return this.statusMessages[this.status] ? (this.statusMessages[this.status].msg ? this.statusMessages[this.status].msg : this.statusMessages[this.status]) : this.statusMessages.default.msg
+      return this.statusMessages[this.status] ? (this.statusMessages[this.status].msg ? this.statusMessages[this.status].msg : '') : this.statusMessages.default.msg
     },
     alertClass () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].class ? this.statusMessages[this.status].class : this.statusMessages.default.class) : this.statusMessages.default.class
+    },
+    subMessage () {
+      return this.statusMessages[this.status] ? (this.statusMessages[this.status].subMsg ? this.statusMessages[this.status].subMsg : '') : this.statusMessages.default.subMsg
+    },
+    subAlertClass () {
+      return this.statusMessages[this.status] ? (this.statusMessages[this.status].subClass ? this.statusMessages[this.status].subClass : this.statusMessages.default.subClass) : this.statusMessages.default.subClass
     },
     icon () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].icon ? this.statusMessages[this.status].icon : this.statusMessages.default.icon) : this.statusMessages.default.icon
