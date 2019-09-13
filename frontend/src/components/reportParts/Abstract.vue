@@ -5,11 +5,6 @@
         <h6 class="title p-h-35">
           Résumé
         </h6>
-        <p
-          class="small"
-        >
-          information du ministère de l'Intérieur au {{ v.date_update }}
-        </p>
       </div>
       <div
         class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs"
