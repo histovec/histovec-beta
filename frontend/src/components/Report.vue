@@ -59,11 +59,20 @@
           <div class="row">
             <div class="col-sm-6">
               <div
+                v-if="v.administratif.annulation !== 'Oui'"
                 class="alert alert-icon alert-info"
                 role="alert"
               >
                 <i :class="'fa fa-' + v.logo_vehicule"></i>
                 Numéro - Plaque d'immatriculation : {{ v.plaque }}
+              </div>
+              <div
+                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation === 'Oui'"
+                class="alert alert-icon alert-danger"
+                role="alert"
+              >
+                <i class="fa fa-warning"></i>
+                Le certificat demandé a été annulé : {{ v.plaque }}
               </div>
             </div>
             <div class="col-sm-6">
@@ -74,16 +83,6 @@
                 <i class="fa fa-calendar-check-o"></i>
                 Informations du ministère de l'Intérieur datant du
                 <strong>{{ v.date_update }}</strong>
-              </div>
-            </div>
-            <div class="col-sm-4 col-sm-offset-4">
-              <div
-                v-if="$store.state.config.csaAnnulationCi && v.administratif.annulation === 'Oui'"
-                class="alert alert-icon alert-danger"
-                role="alert"
-              >
-                <i class="fa fa-warning"></i>
-                Le certificat demandé a été annulé
               </div>
             </div>
           </div>
