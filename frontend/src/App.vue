@@ -53,7 +53,7 @@
         <div class="container">
           <div class="footer-inner">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="footer-content">
                   <h4 class="title">
                     Liens utiles
@@ -134,7 +134,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="footer-content">
                   <h4 class="title">
                     Réseaux sociaux
@@ -162,6 +162,29 @@
                   </ul>
                 </div>
               </div>
+
+              <div class="col-md-2">
+                <div class="footer-content">
+                  <h4 class="title">
+                    Service Public
+                  </h4>
+                  <div class="separator-2"></div>
+                  <div class="float-left">
+                  <a
+                    href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
+                    target="_blank"
+                  >
+                    <img
+                      class="center-block"
+                      src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
+                      alt="Je donne mon avis"
+                      title="Je donne mon avis sur cette démarche"
+                    />
+                  </a>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
