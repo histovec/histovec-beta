@@ -404,7 +404,9 @@ export default {
         if (!this.$store.state.config.csaAnnulationCi && this.$store.state.siv.v.annulation_ci === 'OUI') {
           return 'cancelled'
         }
-        this.showModalForm()
+        // Deactivate this modal for the moment
+        // @todo: remove it or not later
+        // this.showModalForm()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
         return 'invalidBuyer'
