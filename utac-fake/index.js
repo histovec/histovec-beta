@@ -11,9 +11,9 @@ const config = {
 }
 
 console.log(JSON.stringify({ start_date: DateTime.local(), config: config }))
-let ct = {}
+let allCt = {}
 
-require('./utac_sample.json').map( item => ct[immatNorm(item['plaque'])]=item['ct'])
+require('./utac_sample.json').map( item => allCt[immatNorm(item['plaque'])]=item['ct'])
 
 function immatNorm (plaque) {
   if (!plaque || typeof plaque != 'string') {
@@ -25,10 +25,8 @@ function immatNorm (plaque) {
   return p
 }
 
-const nb = ct.length
-
 function getCT(plaque) {
-  let myCt = ct[plaque]
+  let myCt = allCt[plaque]
   console.log({
     plaque: plaque,
     ct: myCt ? `Found ${myCt.length} tech controls` : 'Not Found'

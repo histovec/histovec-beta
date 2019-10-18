@@ -346,6 +346,7 @@ const AdministrativeCertificate = loadView('AdministrativeCertificate')
 const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
+import { isSubjectToTechnicalControl } from '../utils/vehicle/technicalControl.js'
 
 
 const statusFromCode = {
@@ -461,7 +462,6 @@ export default {
   methods: {
     async getSIV () {
       if (this.$store.state.siv.v) {
-        // déjà en cache
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
@@ -476,9 +476,28 @@ export default {
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
+
         await this.$store.dispatch('getSIV', this.$store.state.config.v1)
-        if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.utac) {
-          await this.$store.dispatch('getUTAC')
+        if (
+          this.status === 'ok' &&
+          this.v.administratif.annulation !== 'Oui' &&
+          this.$store.state.config.v1 &&
+          this.$store.state.config.utac
+          ) {
+
+          const {
+            ctec: {
+              genre,
+              carrosserie: { national: carrosserieNat },
+              PT: { AC: ptac }
+            },
+            certificat: { premier: dateMiseEnService },
+            usage: usages = []
+          } = this.v
+
+          if (isSubjectToTechnicalControl({ genre, carrosserieNat, ptac, dateMiseEnService, usages})) {
+            await this.$store.dispatch('getUTAC')
+          }
         }
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))

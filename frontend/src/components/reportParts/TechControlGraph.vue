@@ -107,10 +107,12 @@ export default {
   },
   methods: {
     controlToPoint (controle) {
-      return {
+      const point = {
         x: dayjs(controle.ct_date, 'DD/MM/YYYY').toDate(),
         y: ((typeof controle.ct_km) === 'string') ? parseInt(controle.ct_km) : controle.ct_km,
       }
+
+      return point
     }
   }
 }

@@ -23,7 +23,14 @@ export default {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.utac) {
         return
       }
-      const response = await api.getUTAC(rootState.siv.id, rootState.siv.code, state.token, CryptoJS.SHA256(rootState.siv.key).toString(CryptoJS.enc.Base64), rootState.siv.v.utac_id, localStorage.getItem('userId'))
+      const response = await api.getUTAC(
+        rootState.siv.id,
+        rootState.siv.code,
+        state.token,
+        CryptoJS.SHA256(rootState.siv.key).toString(CryptoJS.enc.Base64),
+        rootState.siv.v.utac_id,
+        localStorage.getItem('userId')
+      )
       if (response.success) {
         commit('updateCT', response.ct)
       }

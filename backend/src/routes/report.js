@@ -212,17 +212,19 @@ export async function getUTAC (req, res) {
       message: 'Not authentified',
     })
   } else {
-    let ct = await getAsync(hash(req.body.code || req.body.id))
-    if (ct) {
+    const cachedCtKey = hash(req.body.code || req.body.id)
+    const cachedCt = await getAsync(cachedCtKey)
+    if (cachedCt) {
       try {
         appLogger.debug({
-          debug: 'UTAC response cached',
-          key: hash(req.body.code || req.body.id),
+          debug: 'getting cached UTAC response',
+          key: cachedCtKey
         })
-        ct = decrypt(ct, req.body.key)
+        const ct = decrypt(cachedCt, req.body.key)
+
         res.status(200).json({
           success: true,
-          ct: ct,
+          ct
         })
       } catch (error) {
         appLogger.warn({
@@ -231,29 +233,41 @@ export async function getUTAC (req, res) {
         })
       }
     } else {
-      let plaque = immatNorm(decryptXOR(req.body.utacId, config.utacIdKey))
-      let response = await searchUTAC(plaque)
-      if (response.status === 200) {
-        await setAsync(
-          hash(req.body.code || req.body.id),
-          encrypt(response.ct, req.body.key),
-          'EX',
-          config.redisPersit
-        )
-        res.status(200).json({
-          success: true,
-          ct: response.ct,
+
+      try {
+        const decrypted = decryptXOR(req.body.utacId, config.utacIdKey)
+        appLogger.debug({ decrypted })
+
+        const plaque = immatNorm(decrypted)
+        appLogger.debug({ plaque })
+
+        const response = await searchUTAC(plaque)
+        if (response.status === 200) {
+          await setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
+          res.status(200).json({
+            success: true,
+            ct: response.ct
+          })
+        } else {
+          appLogger.debug({
+            error: 'UTAC response failed',
+            status: response.status,
+            remote_error: response.message
+          })
+          res.status(response.status).json({
+            success: false,
+            message: response.message
+          })
+        }
+      } catch(error) {
+        appLogger.warn({
+          error: 'UTAC error',
+          remote_error: error.message
         })
-      } else {
-        appLogger.debug({
-          error: 'UTAC response failed',
-          status: response.status,
-          remote_error: response.message,
-        })
-        res.status(response.status).json({
-          success: false,
-          message: response.message,
-        })
+        return {
+          status: 500,
+          message: error.message
+        }
       }
     }
   }
