@@ -81,3 +81,26 @@
 @media only screen and (max-width: 767px) {
 .pvm0 { margin-top: -50px; }
 }
+
+.btn-mon-avis {
+  color: #2C3079;
+  font-size: 18px;
+  background-color: white;
+  border-radius: 20px;
+  font-weight: bold;
+  margin-top: 0;
+}
+
+.btn-mon-avis > a {
+  color: #2C3079;
+  text-decoration: none;
+}
+
+.btn-mon-avis > a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+#mon-avis {
+  margin-left: 2.7rem;
+}

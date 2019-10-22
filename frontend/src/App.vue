@@ -59,42 +59,32 @@
                     Liens utiles
                   </h4>
                   <div class="separator-2"></div>
-                  <!-- debut -->
-                  <div class="media margin-clear">
-                    <nav>
-                      <ul class="nav nav-pills nav-stacked">
-                        <li>
-                          <router-link
-                            :to="{ name: 'faq' }"
-                          >
-                            Besoin d'aide
-                          </router-link>
-                        </li>
-                        <li>
-                          <a
-                            :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : contactEmail"
-                            title="Contact"
-                            @click="toggleModalForm()"
-                          >
-                            Contact
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : reportErrorEmail"
-                            title="Signaler une erreur"
-                            @click="toggleModalForm(contact.mode.contact, contact.subject.error)"
-                          >
-                            Signaler une erreur
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                  <!-- fin -->
+                  <button class="btn btn-mon-avis">
+                    <a
+                      :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : contactEmail"
+                      title="Contactez-nous"
+                      @click="toggleModalForm()"
+                    >
+                      Contactez-nous
+                      <i class="fa fa-comments"></i>
+                    </a>
+                  </button>
+                  <a
+                    href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
+                    target="_blank"
+                  >
+                    <img
+                    id="mon-avis"
+                      width="140"
+                      src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
+                      alt="Je donne mon avis"
+                      title="Je donne mon avis sur cette démarche"
+                    />
+                  </a>
                 </div>
               </div>
-              <div class="col-md-4">
+
+              <div class="col-md-3">
                 <div class="footer-content">
                   <h4 class="title">
                     Un service proposé par
@@ -105,6 +95,7 @@
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
+                          width="55px"
                           src="assets/images/logos_metiers/logo_mi.png"
                           alt="Ministère de l'Intérieur"
                         >
@@ -116,10 +107,11 @@
                         </a>
                       </div>
                     </div>
-                    <div class="col-md-6 p-b-10 m-h-17">
+                    <div class="col-md-6 p-b-12 m-h-14">
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
+                          width="110px"
                           src="assets/images/logos_metiers/securite_routiere_120.png"
                           alt="sécurité routière, tous responsables"
                         >
@@ -134,6 +126,24 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-md-3">
+                <div class="footer-content">
+                  <h4 class="title">
+                    Comment ça marche ?
+                  </h4>
+                  <div class="separator-2"></div>
+                  <router-link
+                    tag="button"
+                    class="btn btn-mon-avis"
+                    :to="{ name: 'faq' }"
+                  >
+                    Besoin d'aide
+                    <i class="fa fa-life-ring"></i>
+                  </router-link>
+                </div>
+              </div>
+
               <div class="col-md-3">
                 <div class="footer-content">
                   <h4 class="title">
@@ -160,28 +170,6 @@
                       </a>
                     </li>
                   </ul>
-                </div>
-              </div>
-
-              <div class="col-md-2">
-                <div class="footer-content">
-                  <h4 class="title">
-                    Service Public
-                  </h4>
-                  <div class="separator-2"></div>
-                  <div class="float-left">
-                  <a
-                    href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
-                    target="_blank"
-                  >
-                    <img
-                      class="center-block"
-                      src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-                      alt="Je donne mon avis"
-                      title="Je donne mon avis sur cette démarche"
-                    />
-                  </a>
-                  </div>
                 </div>
               </div>
 
