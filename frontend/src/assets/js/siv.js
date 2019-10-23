@@ -189,7 +189,11 @@ function histoFilter (historique) {
   let h = historique.filter(event => operations[event.opa_type] !== undefined)
   h = orderBy(h, ['opa_date'], ['desc'])
   return h.map(event => {
-    return {'date': formatDate(event.opa_date), 'nature': operations[event.opa_type]}
+    return {
+      'date': formatDate(event.opa_date),
+      'nature': operations[event.opa_type],
+      ...(event.numAgree ? { 'numAgree': event.numAgree } : undefined)
+    }
   })
 }
 
@@ -197,6 +201,49 @@ function calcNbTit (historique) {
   let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_LOC', 'CHANG_LOC_CVN', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
   let nbTit = historique.filter(event => opTit.includes(event.opa_type))
   return nbTit.length
+}
+
+function addPVEInfos(historique, pves) {
+  const infosByPve = pves.reduce((infosByPveAccu, pve) => {
+    return {
+      ...infosByPveAccu,
+      [pve.id]: pve
+    }
+  }, {})
+
+  const updatedHistorique = historique.map((element) => {
+    if (!element.id_pve) {
+      return element
+    }
+
+    const pveInfos = infosByPve[element.id_pve]
+    let numAgree
+
+    switch (element.opa_type) {
+      case 'DEC_VE':
+        numAgree = pveInfos.decl ? pveInfos.decl.num_agree : undefined
+        break
+
+      case 'PREM_RAP_VE':
+        numAgree = pveInfos.decl ? pveInfos.prem.num_agree : undefined
+        break
+
+      case 'SEC_RAP_VE':
+        numAgree = pveInfos.deux ? pveInfos.prem.num_agree : undefined
+        break
+    }
+
+    if (numAgree) {
+      return {
+        ...element,
+        numAgree
+      }
+    }
+
+    return element
+  })
+
+  return updatedHistorique
 }
 
 function siv (veh) {
@@ -284,13 +331,19 @@ function siv (veh) {
   v.certificat.courant = veh.date_emission_CI || missing
   v.certificat.depuis = calcCertifDepuis((orderBy(historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
 
+  historique = addPVEInfos(historique, veh.pve)
+
+  let filteredHistorique
   if ((v.fni !== true) && (v.certificat.fr !== v.certificat.siv) && ((historique === undefined) || (!historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
     let tmp = historique
     tmp.push({opa_date: v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
-    v.historique = (historique !== undefined) ? histoFilter(tmp) : []
+    filteredHistorique = (historique !== undefined) ? histoFilter(tmp) : []
   } else {
-    v.historique = (historique !== undefined) ? histoFilter(historique) : []
+    filteredHistorique = (historique !== undefined) ? histoFilter(historique) : []
   }
+
+  v.historique = filteredHistorique
+
   v.nb_proprietaires = veh.nb_proprietaire
   v.nb_tit = (historique !== undefined) ? (calcNbTit(historique) + (v.certificat.incertain ? 1 : 0)) : undefined
   v.age_veh = veh.age_annee
