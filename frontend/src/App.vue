@@ -211,7 +211,6 @@ import usages from './assets/json/usages.json'
 import synthese from './assets/json/synthese.json'
 import statusMessages from './assets/json/status.json'
 import contact from './assets/json/contact.json'
-import verbatims from './assets/json/verbatims.json'
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
 import ModalForm from './components/forms/ModalForm.vue'
@@ -242,7 +241,6 @@ Vue.mixin({
       synthese: synthese,
       statusMessages: statusMessages,
       contact: contact,
-      verbatims: verbatims,
       lang: localization.default,
       show: false
     }

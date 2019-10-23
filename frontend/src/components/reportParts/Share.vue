@@ -24,13 +24,14 @@
           Ce rapport sera accessible jusqu'au {{ validityDate }}
           <br />
         </p>
+
         <p class="text-center">
           <button
             v-clipboard:copy="url"
             class="btn radius-30 btn-dark btn-animated btn"
             @click="showNotifSuccess"
           >
-            Copier le lien
+            Copier le lien du rapport
             <i class="fa fa-copy"></i>
           </button>
           &nbsp;
@@ -39,14 +40,14 @@
             class="btn radius-30 btn-default btn-animated btn"
             @click="logReportMailDispatch"
           >
-            Courriel
+            Envoyer le rapport à un acheteur
             <i class="fa fa-send"></i>
           </a>
         </p>
       </div>
       <div class="row">
         <div class="col-md-12">
-          Ou par QR code
+          Ou partager le rapport par QR code :
           <p></p>
         </div>
       </div>
@@ -97,12 +98,17 @@ export default {
   data () {
     return {
       notifSuccess: false,
-      timerNotifSuccess: 2000
+      timerNotifSuccess: 10000
     }
   },
   computed: {
     validityDate () {
-      return dayjs().add(-7, 'day').add(2, 'month').set('date', 0).format('DD/MM/YYYY')
+      const today = dayjs()
+      if (today.date() > 8) {
+        return today.add(1, 'month').date(8).format('DD/MM/YYYY')
+      } else {
+        return today.date(8).format('DD/MM/YYYY')
+      }
     }
   },
   created () {
