@@ -97,7 +97,7 @@ export default {
   data () {
     return {
       notifSuccess: false,
-      timerNotifSuccess: 2000
+      timerNotifSuccess: 10000
     }
   },
   computed: {
