@@ -81,7 +81,7 @@
             :href="askReportEmail"
             class="btn radius-30 btn-default btn-animated btn"
           >
-            Demander le rapport HistoVec <i class="fa fa-send"></i>
+            Je demande le rapport au vendeur <i class="fa fa-send"></i>
           </a>
         </p>
       </div>
