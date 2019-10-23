@@ -203,7 +203,7 @@ function calcNbTit (historique) {
   return nbTit.length
 }
 
-function addPVEInfos(historique, pves) {
+function addPVEInfos(historique, pves=[]) {
   const infosByPve = pves.reduce((infosByPveAccu, pve) => {
     return {
       ...infosByPveAccu,
