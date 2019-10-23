@@ -24,13 +24,14 @@
           Ce rapport sera accessible jusqu'au {{ validityDate }}
           <br />
         </p>
+
         <p class="text-center">
           <button
             v-clipboard:copy="url"
             class="btn radius-30 btn-dark btn-animated btn"
             @click="showNotifSuccess"
           >
-            Copier le lien
+            Copier le lien du rapport
             <i class="fa fa-copy"></i>
           </button>
           &nbsp;
@@ -39,14 +40,14 @@
             class="btn radius-30 btn-default btn-animated btn"
             @click="logReportMailDispatch"
           >
-            Courriel
+            Envoyer le rapport à un acheteur
             <i class="fa fa-send"></i>
           </a>
         </p>
       </div>
       <div class="row">
         <div class="col-md-12">
-          Ou par QR code
+          Ou partager le rapport par QR code :
           <p></p>
         </div>
       </div>
