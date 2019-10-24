@@ -29,11 +29,11 @@
             >
               n° d'agrément <b>{{ entry.numAgree }}</b> -
               <a
-                  class="clickable text-info"
-                  @click="numAgreeModal = true"
-                >
-                  En savoir plus
-                  <i class="fa fa-info-circle fa-lg"></i>
+                class="clickable text-info"
+                @click="numAgreeModal = true"
+              >
+                En savoir plus
+                <i class="fa fa-info-circle fa-lg"></i>
               </a>
             </span>
           </span>
