@@ -207,7 +207,7 @@ function addPVEInfos(historique, pves=[]) {
   const infosByPve = pves.reduce((infosByPveAccu, pve) => {
     return {
       ...infosByPveAccu,
-      [pve.id]: pve
+      [pve.id_pve]: pve
     }
   }, {})
 

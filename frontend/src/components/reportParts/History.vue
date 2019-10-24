@@ -43,10 +43,10 @@
     </div>
     <div v-if="v.certificat.incertain">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
           <span class="txt-small-12">{{ v.certificat.fr }}</span>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-10">
           <span class="info_red txt-small-12"> Première immatriculation (source incertaine)</span>
         </div>
       </div>
@@ -70,10 +70,10 @@
       <div class="separator"></div>
       <div>
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-2">
             <span class="txt-small-12">{{ v.certificat.premier }}</span>
           </div>
-          <div class="col-sm-8">
+          <div class="col-sm-10">
             <span class="info_red txt-small-12">Première immatriculation à l'étranger</span>
           </div>
         </div>
