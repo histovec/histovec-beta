@@ -376,8 +376,7 @@
                                   placeholder="2013BZ80335"
                                   tabindex="5"
                                 >
-                                <i
-                                  class="fa fa-pencil-square-o form-control-feedback numero-formule"></i>
+                                <i class="fa fa-pencil-square-o form-control-feedback numero-formule"></i>
                               </div>
                               <div v-if="typeImmatriculation === 'fni'">
                                 <label

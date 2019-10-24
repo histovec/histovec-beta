@@ -74,7 +74,7 @@
                     target="_blank"
                   >
                     <img
-                    id="mon-avis"
+                      id="mon-avis"
                       width="140"
                       src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
                       alt="Je donne mon avis"
@@ -172,7 +172,6 @@
                   </ul>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
