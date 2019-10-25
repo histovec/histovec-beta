@@ -88,28 +88,19 @@
       <span slot="title">Plus d'infos à propos du numéro d'expert agréé</span>
       <div slot="body">
         <p>
-          HistoVec n'a pas accès au rapport lié à un sinistre.
-          <br>
-          Pour obtenir plus de précisions, recherchez les coordonnées de l'expert en automobile via son <b>numéro d'agrément (ex: 012345-VE)</b> sur
+          Histovec ne délivre pas les détails des rapports d’experts en automobile.
+        </p>
+        <p>
+          Pour davantage de précisions sur un rapport, vous pouvez rechercher les coordonnées d’un expert en automobile sur la
           <a
-            href="https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/en-voiture/experts-automobiles/carte-des-experts"
+            href="https://www.securite-routiere.gouv.fr/sites/default/files/2019-10/liste_nationale_des_experts_en_automobile.pdf"
             target="_blank"
           >
-            le site de la Sécurité Routière
-          </a>,
-          <br>
-          en cliquant sur le lien <b>« Liste des experts »</b> (Cf image ci-dessous).
+            liste nationale
+            <b><i class="fa fa-file-pdf-o"></i></b>
+          </a>
+          mise à jour par le ministère chargé des transports.
         </p>
-        <img
-          slot="body"
-          alt="Indication localisation nom(s) et prénom(s) : sous le numéro d'immatriculation"
-          :src="imageListeDesExperts"
-          class="img-responsive"
-          style="margin: 0 auto;"
-          width="390px"
-        >
-        <!-- <span>Il est possible que votre n'expert ne soit pas dans la liste. Cela signifie alors qu'il n'exerce plus.
-        Dans ce cas, ...</span> -->
       </div>
     </modal-helper>
   </div>
@@ -118,7 +109,6 @@
 <script>
 
 import ModalHelper from '../infos/ModalHelper'
-import imageListeDesExperts from '@/assets/img/liste_des_experts.png'
 
 export default {
   components: {
@@ -133,7 +123,6 @@ export default {
   data () {
     return {
       numAgreeModal: false,
-      imageListeDesExperts,
     }
   },
   mounted () {
