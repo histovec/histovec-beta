@@ -19,9 +19,10 @@
       <!-- fin alerte verte -->
       <div class="col-md-12 p-h-10">
         <p>
-          Vous pouvez transmettre à votre acheteur potentiel, le rapport que vous venez de consulter par mail.
+          Vous pouvez transmettre le lien du rapport à votre acheteur potentiel.
+          Un lien transmis durant le mois courant sera accessible jusqu'au 8 du mois suivant.
           <br />
-          Ce rapport sera accessible jusqu'au {{ validityDate }}
+          (<b>Ex:</b> un lien transmis le <b>18/01/2019</b> sera accessible jusqu'au <b>08/02/2019</b>)
           <br />
         </p>
 
@@ -72,7 +73,6 @@
 <script>
 
 import QrcodeVue from 'qrcode.vue'
-import dayjs from 'dayjs'
 import { mailTo } from '../../utils/email'
 import { getShareReportEmail } from '../../utils/dynamicEmail'
 
@@ -99,16 +99,6 @@ export default {
     return {
       notifSuccess: false,
       timerNotifSuccess: 10000
-    }
-  },
-  computed: {
-    validityDate () {
-      const today = dayjs()
-      if (today.date() > 8) {
-        return today.add(1, 'month').date(8).format('DD/MM/YYYY')
-      } else {
-        return today.date(8).format('DD/MM/YYYY')
-      }
     }
   },
   created () {
