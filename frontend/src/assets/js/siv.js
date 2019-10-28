@@ -225,11 +225,11 @@ function addPVEInfos(historique, pves=[]) {
         break
 
       case 'PREM_RAP_VE':
-        numAgree = pveInfos.decl ? pveInfos.prem.num_agree : undefined
+        numAgree = pveInfos.prem ? pveInfos.prem.num_agree : undefined
         break
 
       case 'SEC_RAP_VE':
-        numAgree = pveInfos.deux ? pveInfos.prem.num_agree : undefined
+        numAgree = pveInfos.deux ? pveInfos.deux.num_agree : undefined
         break
     }
 
