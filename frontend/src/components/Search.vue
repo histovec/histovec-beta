@@ -61,7 +61,7 @@
                 role="alert"
               >
                 <i class="fa fa-exclamation-triangle"></i>
-                Histovec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV).
+                HistoVec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV).
               </div>
             </div>
           </div>
@@ -79,24 +79,24 @@
             </div>
           </div>
           <div
-            class="col-xs-6 col-sm-6"
+            class="col-xs-4 col-sm-4"
           >
             <a
               class="clickable"
-              title="Immatriculation après 2009"
+              title="Immatriculation depuis 2009"
               @click="typeImmatriculation = 'siv'"
             >
               <img
                 class="img-responsive pull-right"
-                :class="{'opacity-plaque': typeImmatriculation === 'fni' }"
-                src="assets/images/nouvelle_plaque_immatriculation_fd_transp_txt.png"
+                :class="{ 'opacity-plaque': typeImmatriculation !== 'siv' }"
+                src="assets/images/plaque_immatriculation_depuis_2009.png"
                 width="200"
                 height="44"
               >
             </a>
           </div>
           <div
-            class="col-xs-6 col-sm-6"
+            class="col-xs-4 col-sm-4"
           >
             <a
               class="clickable"
@@ -104,355 +104,400 @@
               @click="typeImmatriculation = 'fni'"
             >
               <img
-                class="img-responsive pull-left"
-                :class="{'opacity-plaque': typeImmatriculation === 'siv' }"
-                src="assets/images/ancienne_plaque_immatriculation_fd_transp_txt.png"
+                class="img-responsive center-block"
+                :class="{ 'opacity-plaque': typeImmatriculation !== 'fni' }"
+                src="assets/images/plaque_immatriculation_avant_2009.png"
                 width="200"
                 height="44"
               >
             </a>
           </div>
           <div
-            v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'"
-            class="col-md-12 col-xs-12 p-h-25"
+            class="col-xs-4 col-sm-4"
           >
-            <!-- tabs start -->
-            <!-- ================ -->
-            <!-- Nav tabs -->
-            <ul
-              class="nav nav-tabs style-2"
-              role="tablist"
+            <a
+              class="clickable"
+              title="Immatriculation avant 1995"
+              @click="typeImmatriculation = 'old'"
             >
-              <li :class="[{'in active' : typePersonne === 'particulier'}]">
-                <a
-                  class="clickable"
-                  @click="typePersonne = 'particulier'"
-                >
-                  <i class="fa fa-user pr-10"></i>
-                  Particulier
-                </a>
-              </li>
-              <li :class="[{'in active' : typePersonne === 'pro'}]">
-                <a
-                  class="clickable"
-                  @click="typePersonne = 'pro'"
-                >
-                  <i class="fa fa-building-o pr-10"></i>
-                  Entreprise
-                </a>
-              </li>
-            </ul>
-            <!-- Tab panes -->
-            <div class="tab-content">
-              <div
-                id="h2tab1"
-                class="tab-pane in active"
+              <img
+                class="img-responsive pull-left"
+                :class="{ 'opacity-plaque': typeImmatriculation !== 'old' }"
+                src="assets/images/plaque_immatriculation_avant_1995.png"
+                width="200"
+                height="44"
               >
-                <div class="row">
-                  <div class="col-md-12">
-                    <span
-                      v-if="(status == 'failed') && (!checkFields)"
-                      class="info_red txt-small-11"
-                    >
-                      * Veuillez renseignez les champs obligatoires
-                    </span>
-                    <fieldset>
-                      <legend>
-                        <span class="color-default">Titulaire</span>
-                      </legend>
-                      <form role="form">
+            </a>
+          </div>
+        </div>
+        <div
+          v-if="typeImmatriculation === 'old'"
+          class="row"
+        >
+          <div class="col-md-10 col-md-offset-1">
+            <div
+              class="alert alert-info text-center"
+              role="alert"
+            >
+              <p>
+                L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
+              </p>
+              <p>
+                Nous vous invitons à télécharger le certificat de situation administrative détaillé (CSA) sur le site de l'ANTS.
+              </p>
+            </div>
+            <div class="col-xs-6 col-sm-4 col-xs-offset-3 col-sm-offset-4">
+              <a
+                class="btn btn-default btn-m center-block m-h-05"
+                href="https://siv.interieur.gouv.fr/map-usg-ui/do/csa_retour_dem_certificat"
+              >
+                Obtenir le CSA via l'ANTS
+              </a>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'"
+          class="col-md-12 col-xs-12 p-h-25"
+        >
+          <!-- tabs start -->
+          <!-- ================ -->
+          <!-- Nav tabs -->
+          <ul
+            class="nav nav-tabs style-2"
+            role="tablist"
+          >
+            <li :class="[{'in active' : typePersonne === 'particulier'}]">
+              <a
+                class="clickable"
+                @click="typePersonne = 'particulier'"
+              >
+                <i class="fa fa-user pr-10"></i>
+                Particulier
+              </a>
+            </li>
+            <li :class="[{'in active' : typePersonne === 'pro'}]">
+              <a
+                class="clickable"
+                @click="typePersonne = 'pro'"
+              >
+                <i class="fa fa-building-o pr-10"></i>
+                Entreprise
+              </a>
+            </li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div
+              id="h2tab1"
+              class="tab-pane in active"
+            >
+              <div class="row">
+                <div class="col-md-12">
+                  <span
+                    v-if="(status == 'failed') && (!checkFields)"
+                    class="info_red txt-small-11"
+                  >
+                    * Veuillez renseignez les champs obligatoires
+                  </span>
+                  <fieldset>
+                    <legend>
+                      <span class="color-default">Titulaire</span>
+                    </legend>
+                    <form role="form">
+                      <div
+                        v-if="typePersonne === 'particulier'"
+                        class="row"
+                      >
                         <div
-                          v-if="typePersonne === 'particulier'"
-                          class="row"
+                          :class="{
+                            'col-md-6': typeImmatriculation === 'siv',
+                            'col-md-12' : typeImmatriculation === 'fni'
+                          }"
                         >
                           <div
-                            :class="{
-                              'col-md-6': typeImmatriculation === 'siv',
-                              'col-md-12' : typeImmatriculation === 'fni'
-                            }"
+                            class="form-group has-feedback"
+                            :class="[{'has-error' : (nom === '' && status !== 'init')}]"
                           >
-                            <div
-                              class="form-group has-feedback"
-                              :class="[{'has-error' : (nom === '' && status !== 'init')}]"
+                            <label
+                              v-if="typeImmatriculation === 'siv'"
+                              class="control-label"
                             >
-                              <label
-                                v-if="typeImmatriculation === 'siv'"
-                                class="control-label"
+                              Nom de naissance
+                              <span
+                                class="info_red"
+                                title="Ce champ est requis."
                               >
-                                Nom de naissance
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <a
-                                v-if="typeImmatriculation === 'siv'"
-                                class="clickable text-info btn-sm-link"
-                                @click="nomsModal = true"
-                              >
-                                Où le trouver
-                                <i class="fa fa-info-circle fa-lg"></i>
-                              </a>
-                              <label
-                                v-if="typeImmatriculation === 'fni'"
-                                class="control-label"
-                              >
-                                Nom(s) et Prénom(s)
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <a
-                                v-if="typeImmatriculation === 'fni'"
-                                class="clickable text-info btn-sm-link"
-                                @click="nomsPrenomsModal = true"
-                              >
-                                Où les trouver
-                                <i class="fa fa-info-circle fa-lg"></i>
-                              </a>
-                              <input
-                                id="lastname"
-                                ref="nom"
-                                v-model="nom"
-                                v-focus
-                                name="nom"
-                                required="required"
-                                type="text"
-                                class="form-control"
-                                tabindex="1"
-                                @input="nom = $event.target.value.replace(/\t.*/,'')"
-                                @paste="onPaste"
-                              >
-                              <i class="fa fa-user form-control-feedback">
-                              </i>
-                            </div>
-                          </div>
-                          <div
-                            v-if="typeImmatriculation === 'siv'"
-                            class="col-md-6"
-                          >
-                            <div
-                              class="form-group has-feedback"
-                              :class="[{'has-error' : (prenom === '' && status !== 'init')}]"
+                                *
+                              </span>
+                            </label>
+                            <a
+                              v-if="typeImmatriculation === 'siv'"
+                              class="clickable text-info btn-sm-link"
+                              @click="nomsModal = true"
                             >
-                              <label class="control-label">
-                                Prénom(s)
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <a
-                                class="clickable text-info btn-sm-link"
-                                @click="prenomsModal = true"
-                              >
-                                Où le trouver
-                                <i class="fa fa-info-circle fa-lg"></i>
-                              </a>
-                              <input
-                                id="firstname"
-                                v-model="prenom"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                tabindex="2"
-                              >
-                              <i class="fa fa-user form-control-feedback"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          v-if="typePersonne === 'pro'"
-                          class="row"
-                        >
-                          <div class="col-md-8">
-                            <div
-                              class="form-group has-feedback"
-                              :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]"
+                              Où le trouver
+                              <i class="fa fa-info-circle fa-lg"></i>
+                            </a>
+                            <label
+                              v-if="typeImmatriculation === 'fni'"
+                              class="control-label"
                             >
-                              <label class="control-label">
-                                Raison sociale
-                                <span
-                                  class="info_red"
-                                  title="Ce champ est requis."
-                                >
-                                  *
-                                </span>
-                              </label>
-                              <input
-                                id="organization"
-                                v-model="raisonSociale"
-                                name="raisonSociale"
-                                type="text"
-                                required="required"
-                                class="form-control"
-                                tabindex="1"
-                                @input="raisonSociale = $event.target.value.replace(/\t.*/,'')"
-                                @paste="onPaste"
+                              Nom(s) et Prénom(s)
+                              <span
+                                class="info_red"
+                                title="Ce champ est requis."
                               >
-                              <i class="fa fa-user form-control-feedback raison-sociale"></i>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <field
-                              :active="status !== 'init'"
-                              form-id="siren"
-                              :option="typeImmatriculation"
+                                *
+                              </span>
+                            </label>
+                            <a
+                              v-if="typeImmatriculation === 'fni'"
+                              class="clickable text-info btn-sm-link"
+                              @click="nomsPrenomsModal = true"
                             >
-                            </field>
-                          </div>
-                        </div>
-                      </form>
-                    </fieldset>
-                    <fieldset>
-                      <legend><span class="color-default">Carte grise</span></legend>
-                      <form role="form">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <field
-                              :active="status !== 'init'"
-                              form-id="plaque"
-                              :option="typeImmatriculation"
+                              Où les trouver
+                              <i class="fa fa-info-circle fa-lg"></i>
+                            </a>
+                            <input
+                              id="lastname"
+                              ref="nom"
+                              v-model="nom"
+                              v-focus
+                              name="nom"
+                              required="required"
+                              type="text"
+                              class="form-control"
+                              tabindex="1"
+                              @input="nom = $event.target.value.replace(/\t.*/,'')"
+                              @paste="onPaste"
                             >
-                              <a
-                                v-if="typeImmatriculation === 'siv'"
-                                slot="link"
-                                class="clickable text-info btn-sm-link"
-                                @click="plaqueImmatriculationSIVModal = true"
-                              >
-                                Où la trouver
-                                <i class="fa fa-info-circle fa-lg"></i>
-                              </a>
-                              <a
-                                v-if="typeImmatriculation === 'fni'"
-                                slot="link"
-                                class="clickable text-info btn-sm-link"
-                                @click="plaqueImmatriculationFNIModal = true"
-                              >
-                                Où la trouver
-                                <i class="fa fa-info-circle fa-lg"></i>
-                              </a>
-                            </field>
-                          </div>
-                          <div class="col-md-6">
-                            <div
-                              class="form-group has-feedback plan position_left"
-                              :class="[{'has-error' : ((!checkFormule && !checkDateCertificat) && status !== 'init')}]"
-                            >
-                              <div v-if="typeImmatriculation === 'siv'">
-                                <label
-                                  for="input"
-                                  class="control-label"
-                                >
-                                  N° de formule
-                                  <span
-                                    class="info_red"
-                                    title="Ce champ est requis."
-                                  >
-                                    *
-                                  </span>
-                                </label>
-                                <a
-                                  class="clickable text-info btn-sm-link"
-                                  @click="numeroFormuleModal = true"
-                                >
-                                  Où le trouver
-                                  <i class="fa fa-info-circle fa-lg"></i>
-                                </a>
-                                <input
-                                  id="formule"
-                                  v-model="formule"
-                                  v-mask="'####AA#####'"
-                                  type="text"
-                                  required="required"
-                                  class="form-control"
-                                  placeholder="2013BZ80335"
-                                  tabindex="5"
-                                >
-                                <i class="fa fa-pencil-square-o form-control-feedback numero-formule"></i>
-                              </div>
-                              <div v-if="typeImmatriculation === 'fni'">
-                                <label
-                                  for="input"
-                                  class="control-label"
-                                >
-                                  Date du certificat d'immatriculation
-                                  <span
-                                    class="info_red"
-                                    title="Ce champ est requis."
-                                  >
-                                    *
-                                  </span>
-                                </label>
-                                <a
-                                  class="clickable text-info btn-sm-link"
-                                  @click="dateImmatriculationModal = true"
-                                >
-                                  Où la trouver
-                                  <i class="fa fa-info-circle fa-lg"></i>
-                                </a>
-                                <input
-                                  id="dateCertificat"
-                                  v-model="dateCertificat"
-                                  v-mask="'##/##/####'"
-                                  type="text"
-                                  required="required"
-                                  class="form-control"
-                                  placeholder="xx/xx/xxxx"
-                                  tabindex="5"
-                                >
-                                <i class="fa fa-calendar form-control-feedback"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </fieldset>
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="col-sm-3">
-                        </div>
-                        <div class="col-sm-2">
-                          <button
-                            class="btn btn-animated btn-default btn-sm btn-block"
-                            tabindex="6"
-                            @click="onSubmit"
-                          >
-                            <i
-                              class="fa"
-                              :class="[{'fa-search' : (status === 'init')},
-                                       {'fa-spin fa-spinner' : (status === 'posting')},
-                                       {'fa-exclamation-triangle' : (status === 'failed')}]"
-                            >
+                            <i class="fa fa-user form-control-feedback">
                             </i>
-                            Rechercher
-                          </button>
+                          </div>
                         </div>
-                        <div class="col-sm-2">
-                          <button
-                            class="btn btn-animated btn-default btn-sm btn-block"
-                            @click="clearAll()"
+                        <div
+                          v-if="typeImmatriculation === 'siv'"
+                          class="col-md-6"
+                        >
+                          <div
+                            class="form-group has-feedback"
+                            :class="[{'has-error' : (prenom === '' && status !== 'init')}]"
                           >
-                            Effacer
-                            <i class="fa fa-close"></i>
-                          </button>
+                            <label class="control-label">
+                              Prénom(s)
+                              <span
+                                class="info_red"
+                                title="Ce champ est requis."
+                              >
+                                *
+                              </span>
+                            </label>
+                            <a
+                              class="clickable text-info btn-sm-link"
+                              @click="prenomsModal = true"
+                            >
+                              Où le trouver
+                              <i class="fa fa-info-circle fa-lg"></i>
+                            </a>
+                            <input
+                              id="firstname"
+                              v-model="prenom"
+                              type="text"
+                              required="required"
+                              class="form-control"
+                              tabindex="2"
+                            >
+                            <i class="fa fa-user form-control-feedback"></i>
+                          </div>
                         </div>
-                        <div class="col-sm-2">
-                          <router-link
-                            class="btn btn-animated btn-default btn-sm btn-block"
-                            :to="{ name: 'faq', hash:'#comment-retrouver-mon-vehicule' }"
+                      </div>
+                      <div
+                        v-if="typePersonne === 'pro'"
+                        class="row"
+                      >
+                        <div class="col-md-8">
+                          <div
+                            class="form-group has-feedback"
+                            :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]"
                           >
-                            <i class="fa fa-life-ring"></i>
-                            Besoin d'aide
-                          </router-link>
+                            <label class="control-label">
+                              Raison sociale
+                              <span
+                                class="info_red"
+                                title="Ce champ est requis."
+                              >
+                                *
+                              </span>
+                            </label>
+                            <input
+                              id="organization"
+                              v-model="raisonSociale"
+                              name="raisonSociale"
+                              type="text"
+                              required="required"
+                              class="form-control"
+                              tabindex="1"
+                              @input="raisonSociale = $event.target.value.replace(/\t.*/,'')"
+                              @paste="onPaste"
+                            >
+                            <i class="fa fa-user form-control-feedback raison-sociale"></i>
+                          </div>
                         </div>
+                        <div class="col-md-4">
+                          <field
+                            :active="status !== 'init'"
+                            form-id="siren"
+                            :option="typeImmatriculation"
+                          >
+                          </field>
+                        </div>
+                      </div>
+                    </form>
+                  </fieldset>
+                  <fieldset>
+                    <legend><span class="color-default">Carte grise</span></legend>
+                    <form role="form">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <field
+                            :active="status !== 'init'"
+                            form-id="plaque"
+                            :option="typeImmatriculation"
+                          >
+                            <a
+                              v-if="typeImmatriculation === 'siv'"
+                              slot="link"
+                              class="clickable text-info btn-sm-link"
+                              @click="plaqueImmatriculationSIVModal = true"
+                            >
+                              Où la trouver
+                              <i class="fa fa-info-circle fa-lg"></i>
+                            </a>
+                            <a
+                              v-if="typeImmatriculation === 'fni'"
+                              slot="link"
+                              class="clickable text-info btn-sm-link"
+                              @click="plaqueImmatriculationFNIModal = true"
+                            >
+                              Où la trouver
+                              <i class="fa fa-info-circle fa-lg"></i>
+                            </a>
+                          </field>
+                        </div>
+                        <div class="col-md-6">
+                          <div
+                            class="form-group has-feedback plan position_left"
+                            :class="[{'has-error' : ((!checkFormule && !checkDateCertificat) && status !== 'init')}]"
+                          >
+                            <div v-if="typeImmatriculation === 'siv'">
+                              <label
+                                for="input"
+                                class="control-label"
+                              >
+                                N° de formule
+                                <span
+                                  class="info_red"
+                                  title="Ce champ est requis."
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <a
+                                class="clickable text-info btn-sm-link"
+                                @click="numeroFormuleModal = true"
+                              >
+                                Où le trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
+                              <input
+                                id="formule"
+                                v-model="formule"
+                                v-mask="'####AA#####'"
+                                type="text"
+                                required="required"
+                                class="form-control"
+                                placeholder="2013BZ80335"
+                                tabindex="5"
+                              >
+                              <i class="fa fa-pencil-square-o form-control-feedback numero-formule"></i>
+                            </div>
+                            <div v-if="typeImmatriculation === 'fni'">
+                              <label
+                                for="input"
+                                class="control-label"
+                              >
+                                Date du certificat d'immatriculation
+                                <span
+                                  class="info_red"
+                                  title="Ce champ est requis."
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <a
+                                class="clickable text-info btn-sm-link"
+                                @click="dateImmatriculationModal = true"
+                              >
+                                Où la trouver
+                                <i class="fa fa-info-circle fa-lg"></i>
+                              </a>
+                              <input
+                                id="dateCertificat"
+                                v-model="dateCertificat"
+                                v-mask="'##/##/####'"
+                                type="text"
+                                required="required"
+                                class="form-control"
+                                placeholder="xx/xx/xxxx"
+                                tabindex="5"
+                              >
+                              <i class="fa fa-calendar form-control-feedback"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </fieldset>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-3">
+                      </div>
+                      <div class="col-sm-2">
+                        <button
+                          class="btn btn-animated btn-default btn-sm btn-block"
+                          tabindex="6"
+                          @click="onSubmit"
+                        >
+                          <i
+                            class="fa"
+                            :class="[
+                              {'fa-search' : (status === 'init')},
+                              {'fa-spin fa-spinner' : (status === 'posting')},
+                              {'fa-exclamation-triangle' : (status === 'failed')}
+                            ]"
+                          >
+                          </i>
+                          Rechercher
+                        </button>
+                      </div>
+                      <div class="col-sm-2">
+                        <button
+                          class="btn btn-animated btn-default btn-sm btn-block"
+                          @click="clearAll()"
+                        >
+                          Effacer
+                          <i class="fa fa-close"></i>
+                        </button>
+                      </div>
+                      <div class="col-sm-2">
+                        <router-link
+                          class="btn btn-animated btn-default btn-sm btn-block"
+                          :to="{ name: 'faq', hash:'#comment-retrouver-mon-vehicule' }"
+                        >
+                          <i class="fa fa-life-ring"></i>
+                          Besoin d'aide
+                        </router-link>
                       </div>
                     </div>
                   </div>
@@ -460,8 +505,8 @@
               </div>
             </div>
           </div>
-          <!-- tabs end -->
         </div>
+        <!-- tabs end -->
       </div>
     </section>
     <!-- section end -->
