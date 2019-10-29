@@ -88,7 +88,7 @@
             >
               <img
                 class="img-responsive pull-right"
-                :class="{ 'opacity-plaque': typeImmatriculation !== 'siv' }"
+                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'siv' }"
                 src="assets/images/plaque_immatriculation_depuis_2009.png"
                 width="200"
                 height="44"
@@ -105,7 +105,7 @@
             >
               <img
                 class="img-responsive center-block"
-                :class="{ 'opacity-plaque': typeImmatriculation !== 'fni' }"
+                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'fni' }"
                 src="assets/images/plaque_immatriculation_avant_2009.png"
                 width="200"
                 height="44"
@@ -122,7 +122,7 @@
             >
               <img
                 class="img-responsive pull-left"
-                :class="{ 'opacity-plaque': typeImmatriculation !== 'old' }"
+                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'old' }"
                 src="assets/images/plaque_immatriculation_avant_1995.png"
                 width="200"
                 height="44"
