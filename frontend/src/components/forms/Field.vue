@@ -129,7 +129,9 @@ export default {
         return this.options.mask
       }
     },
-    checkForm () { return this.model.match(this.options.check) }
+    checkForm () {
+      return this.model.match(this.options.check)
+    }
   },
   methods: {
     toggleMask () {
