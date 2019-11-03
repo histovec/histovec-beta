@@ -658,7 +658,9 @@ const formInitialOptions = {
       check: /^(\d{9})$/,
       placeholder: '123456789',
       icon: 'fa fa-hashtag',
-      tabindex: '2'
+      tabindex: '2',
+      required: false,
+      defaultValue: '000000000'
     },
     fni: {
       fieldNumberPro: 2,
@@ -670,7 +672,9 @@ const formInitialOptions = {
       check: /^[0-9]{9}$/,
       placeholder: '123456789',
       icon: 'fa fa-hashtag',
-      tabindex: '2'
+      tabindex: '2',
+      required: false,
+      defaultValue: '000000000'
     }
   },
   plaque: {
@@ -839,7 +843,7 @@ export default {
       return this.formule.match(/^(\d{2,4}[a-zA-Z]{2}\d{5})$/)
     },
     checkSiren () {
-      return this.siren.match(/^\d{9}$/)
+      return !this.siren || this.siren.match(/^\d{9}$/)
     },
     checkFields () {
       return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni')) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
@@ -893,7 +897,42 @@ export default {
     }
     this.typePersonne = this.$store.state.identity.typePersonne || this.$route.params.t || 'particulier'
   },
+  mounted() {
+    this.cleanDefaultFields()
+  },
+  updated () {
+    this.cleanDefaultFields()
+  },
   methods: {
+    defaultEmtpyFields () {
+      for (let [field, options] of Object.entries(this.formOptions)) {
+        ['siv', 'fni'].forEach((typeImmat) => {
+          if (field !== 'default' && this.typeImmatriculation === typeImmat) {
+            const specificOptions = options[typeImmat]
+            if (specificOptions.required === false || (specificOptions.required === undefined && this.formOptions.default === false)) {
+              this[field] = specificOptions.defaultValue
+            }
+          }
+        })
+      }
+    },
+    cleanDefaultFields () {
+      for (let [field, options] of Object.entries(this.formOptions)) {
+        ['siv', 'fni'].forEach((typeImmat) => {
+          if (field !== 'default' && this.typeImmatriculation === typeImmat) {
+            const specificOptions = options[typeImmat]
+            if (specificOptions.required === false || (specificOptions.required === undefined && this.formOptions.default === false)) {
+              if (this[field] === specificOptions.defaultValue) {
+                // @note: <Field> is to complexe and should be rewrited
+                // All fields are text field, so we use empty string as clean value
+                // instead of adding complexity to <Field>
+                this[field] = ''
+              }
+            }
+          }
+        })
+      }
+    },
     onPaste (evt) {
       let data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
       if (data.length > 1) {
@@ -947,6 +986,8 @@ export default {
     },
     async onSubmit () {
       this.status = 'posting'
+      this.defaultEmtpyFields()
+
       if (this.checkFields) {
         if (this.id !== this.$store.state.siv.id) {
           this.clearReports()
