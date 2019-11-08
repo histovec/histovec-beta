@@ -57,7 +57,7 @@
     "msg": "Le certificat demandé a été annulé."
   },
   "unavailable": {
-    "msg": "Le service Histovec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement."
+    "msg": "Le service HistoVec n'est pas disponible pour le moment. Veuillez réessayer ultérieurement."
   },
   "tooManyRequests": {
     "msg": "Trop de requêtes pour le moment. Veuillez attendre quelques instants puis réessayez."

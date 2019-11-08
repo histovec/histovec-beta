@@ -19,7 +19,7 @@ La version en ligne v0 a été homologuée par le ministère de l'Intérieur et 
 Le code source du présent site comporte l'ensemble des éléments fonctionnels (frontend), et bien sûr ne comporte pas les données, ni les configurations de déploiement.
 
 ## données personnelles
-Les données en base d'Histovec sont intégralement chiffrées en AES256, et les données personnelles hashées (SHA256).
+Les données en base d'HistoVec sont intégralement chiffrées en AES256, et les données personnelles hashées (SHA256).
 
 ## composants
 La version disponible sur le site fonctionne sur la base des composants suivants :
