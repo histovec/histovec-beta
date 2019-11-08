@@ -61,89 +61,79 @@
         </div>
       </div>
     </section>
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <h1 class="title large">
-          Comment ça <span class="text-defaut">marche</span>
-        </h1>
-        <div class="separator"></div>
-      </div>
-      <div class="col-md-4 ">
-        <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible">
-          <span class="icon without-bg"><i class="fa fa-drivers-license-o"></i></span>
-          <div class="body">
-            <h4 class="title m-g-10">
-              <span class="text-defaut-g">1</span> - Identifiez-vous
-            </h4>
-            <p class="m-g-10">
-              Le vendeur renseigne son identité et les informations d’identification du véhicule.
-            </p>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h1 class="title large">
+            Comment ça <span class="text-defaut">marche</span>
+          </h1>
+          <div class="separator"></div>
+        </div>
+        <div class="col-md-4 ">
+          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible">
+            <span class="icon without-bg"><i class="fa fa-drivers-license-o"></i></span>
+            <div class="body">
+              <h4 class="title m-g-10">
+                <span class="text-defaut-g">1</span> - Identifiez-vous
+              </h4>
+              <p class="m-g-10">
+                Le vendeur renseigne son identité et les informations d’identification du véhicule.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-4 ">
-        <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible">
-          <span class="icon without-bg"><i class="fa fa-search"></i></span>
-          <div class="body">
-            <h4 class="title m-g-10">
-              <span class="text-defaut-g">2</span> - Générez le rapport...
-            </h4>
-            <p class="m-g-10">
-              Le vendeur consulte son rapport HistoVec et partage le lien à l'acheteur.
-            </p>
+        <div class="col-md-4 ">
+          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible">
+            <span class="icon without-bg"><i class="fa fa-search"></i></span>
+            <div class="body">
+              <h4 class="title m-g-10">
+                <span class="text-defaut-g">2</span> - Générez le rapport...
+              </h4>
+              <p class="m-g-10">
+                Le vendeur consulte son rapport HistoVec et partage le lien à l'acheteur.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-4 ">
-        <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible">
-          <span class="icon without-bg"><i class="fa fa-share"></i></span>
-          <div class="body">
-            <h4 class="title m-g-10">
-              <span class="text-defaut-g">3</span> - Partagez-le !
-            </h4>
-            <p class="m-g-10">
-              L’acheteur consulte le rapport HistoVec sur le site officiel de l’administration.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="dark-bg default-hovered footer-top animated-text">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="call-to-action text-center">
-              <div class="row">
-                <div class="col-sm-8">
-                  <h2>
-                    Consulter un exemple de rapport...
-                  </h2>
-                  <h6>
-                    <img
-                      src="assets/images/exemple_rapport.png"
-                      width="1044"
-                      height="113"
-                      alt="type véhicule, puissance fiscale, propriétaire actuel, depuis quelle année, nombre de propriétaires"
-                    >
-                  </h6>
-                </div>
-                <div class="col-sm-4">
-                  <p class="mt-10">
-                    <button
-                      class="btn btn-animated btn-lg btn-gray"
-                      @click="modal = true"
-                    >
-                      Voir un exemple
-                      <i class="fa fa-file-text-o pl-20"></i>
-                    </button>
-                  </p>
-                </div>
-              </div>
+        <div class="col-md-4 ">
+          <div class="pv-20 ph-20 feature-box-2 light-gray-bg boxed shadow object-non-visible animated object-visible">
+            <span class="icon without-bg"><i class="fa fa-share"></i></span>
+            <div class="body">
+              <h4 class="title m-g-10">
+                <span class="text-defaut-g">3</span> - Partagez-le !
+              </h4>
+              <p class="m-g-10">
+                L’acheteur consulte le rapport HistoVec sur le site officiel de l’administration.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="dark-bg">
+      <div class="container">
+        <div class="row justify-content-lg-center">
+          <div class="col-lg-12">
+            <h2 class="text-center mt-4">
+              L’administration agit pour la sécurité routière
+            </h2>
+            <p class="large text-center">
+              HistoVec permet au titulaire du certificat d’immatriculation de consulter l’historique de son véhicule.
+              <br>
+              <b>Toute demande de renseignement ou de correction de votre dossier doit être adressées à Agence Nationale des titres Sécurisés</b>
+              <a
+                href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande/"
+                target="_blank"
+              >
+                ANTS
+              </a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <section class="light-gray-bg pv-30 clearfix">
       <div class="container">
         <div class="row justify-content-md-center">
@@ -214,24 +204,38 @@
       </div>
     </section>
 
-    <div class="dark-bg">
+    <div class="dark-bg default-hovered footer-top animated-text">
       <div class="container">
-        <div class="row justify-content-lg-center">
-          <div class="col-lg-12">
-            <h2 class="text-center mt-4">
-              L’administration agit pour la sécurité routière
-            </h2>
-            <p class="large text-center">
-              Ce site est mis en oeuvre par le ministère de l’intérieur dans le cadre de la mesure 16 décidée par le Gouvernement en janvier 2018 afin de mieux protéger les acheteurs de véhicules d’occasion
-              (cf.
-              <a
-                href="https://www.gouvernement.fr/sites/default/files/document/document/2018/01/dossier_de_presse_-_comite_interministeriel_de_la_securite_routiere_-_mardi_9_janvier_2018.pdf"
-                target="_blank"
-              >
-                dossier de presse
-              </a>
-              )
-            </p>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="call-to-action text-center">
+              <div class="row">
+                <div class="col-sm-8">
+                  <h2>
+                    Consulter un exemple de rapport...
+                  </h2>
+                  <h6>
+                    <img
+                      src="assets/images/exemple_rapport.png"
+                      width="1044"
+                      height="113"
+                      alt="type véhicule, puissance fiscale, propriétaire actuel, depuis quelle année, nombre de propriétaires"
+                    >
+                  </h6>
+                </div>
+                <div class="col-sm-4">
+                  <p class="mt-10">
+                    <button
+                      class="btn btn-animated btn-lg btn-gray"
+                      @click="modal = true"
+                    >
+                      Voir un exemple
+                      <i class="fa fa-file-text-o pl-20"></i>
+                    </button>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
