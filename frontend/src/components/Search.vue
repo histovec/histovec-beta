@@ -316,7 +316,7 @@
                         v-if="typePersonne === 'pro'"
                         class="row"
                       >
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                           <div
                             class="form-group has-feedback"
                             :class="[{'has-error' : (raisonSociale === '' && status !== 'init')}]"
@@ -344,12 +344,20 @@
                             <i class="fa fa-user form-control-feedback raison-sociale"></i>
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                           <field
                             :active="status !== 'init'"
                             form-id="siren"
                             :option="typeImmatriculation"
                           >
+                            <a
+                              slot="link"
+                              class="clickable text-info btn-sm-link"
+                              @click="sirenModal = true"
+                            >
+                              Je n'ai pas de SIREN
+                              <i class="fa fa-info-circle fa-lg"></i>
+                            </a>
                           </field>
                         </div>
                       </div>
@@ -620,6 +628,17 @@
         style="margin: 0 auto;"
       >
     </modal-helper>
+
+    <modal-helper
+      v-if="sirenModal"
+      @close="sirenModal = false"
+    >
+      <span slot="title">Je n'ai pas de SIREN</span>
+      <p slot="body" class="text-center">
+        Dans le cas où vous <b>n'avez pas de numéro SIREN</b>, laissez ce <b>champs vide</b>.
+      </p>
+    </modal-helper>
+
     <!-- fin modals -->
   </div>
 </template>
@@ -735,6 +754,9 @@ export default {
       prenomsModal: false,
       plaqueImmatriculationSIVModal: false,
       numeroFormuleModal: false,
+
+      // modals entreprises
+      sirenModal: false,
 
       // images
       imageNomsPrenomsFNI,
