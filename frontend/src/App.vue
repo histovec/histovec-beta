@@ -258,7 +258,7 @@ Vue.mixin({
     contactEmail() {
       return mailTo({
         recipients: [HISTOVEC_SUPPORT_EMAIL],
-        subject: 'Contacter Histovec',
+        subject: 'Contacter HistoVec',
         body: this.userFooter
       })
     },

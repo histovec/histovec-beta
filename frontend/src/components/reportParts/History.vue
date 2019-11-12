@@ -88,7 +88,7 @@
       <span slot="title">Plus d'infos à propos du numéro d'expert agréé</span>
       <div slot="body">
         <p>
-          Histovec ne délivre pas les détails des rapports d’experts en automobile.
+          HistoVec ne délivre pas les détails des rapports d’experts en automobile.
         </p>
         <p>
           Pour davantage de précisions sur un rapport, vous pouvez rechercher les coordonnées d’un expert en automobile sur la

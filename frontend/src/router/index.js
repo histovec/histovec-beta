@@ -19,13 +19,13 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
-    {name: 'root', path: '/histovec/', redirect: { name: 'home' }, meta: { title: 'Histovec - Accueil' }},
-    {name: 'home', path: '/histovec/home', component: Home, meta: { title: 'Histovec - Accueil' }},
-    {name: 'search', path: '/histovec/search', component: Search, meta: { title: 'Histovec - Recherche' }},
-    {name: 'report', path: '/histovec/report', component: Report, meta: { title: 'Histovec - Rapport' }},
-    {name: 'faq', path: '/histovec/faq', component: Faq, meta: { title: 'Histovec - FAQ' }},
-    {name: 'legal', path: '/histovec/legal', component: Legal, meta: { title: 'Histovec - Mentions Légales' }},
-    {name: 'buyer', path: '/histovec/buyer', component: Buyer, meta: { title: 'Histovec - Acheteur' }},
-    {name: 'notfound', path: '/histovec/*', component: NotFound, meta: { title: 'Histovec - Page non trouvée' }}
+    {name: 'root', path: '/histovec/', redirect: { name: 'home' }, meta: { title: 'HistoVec - Accueil' }},
+    {name: 'home', path: '/histovec/home', component: Home, meta: { title: 'HistoVec - Accueil' }},
+    {name: 'search', path: '/histovec/search', component: Search, meta: { title: 'HistoVec - Recherche' }},
+    {name: 'report', path: '/histovec/report', component: Report, meta: { title: 'HistoVec - Rapport' }},
+    {name: 'faq', path: '/histovec/faq', component: Faq, meta: { title: 'HistoVec - FAQ' }},
+    {name: 'legal', path: '/histovec/legal', component: Legal, meta: { title: 'HistoVec - Mentions Légales' }},
+    {name: 'buyer', path: '/histovec/buyer', component: Buyer, meta: { title: 'HistoVec - Acheteur' }},
+    {name: 'notfound', path: '/histovec/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
   ]
 })

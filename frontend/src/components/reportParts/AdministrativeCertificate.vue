@@ -60,12 +60,7 @@ export default {
   },
   computed: {
     validityDate () {
-      const today = dayjs()
-      if (today.date() > 8) {
-        return today.add(1, 'month').date(8).format('DD/MM/YYYY')
-      } else {
-        return today.date(8).format('DD/MM/YYYY')
-      }
+      return dayjs().add(1, 'month').date(8).format('DD/MM/YYYY')
     }
   },
   created () {

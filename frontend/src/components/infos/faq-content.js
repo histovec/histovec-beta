@@ -81,7 +81,7 @@ export default function () {
           <dd>
             <p class="indented">
               Demandez au vendeur de vous transmettre le lien vers le
-              rapport en le générant sur le site Histovec.
+              rapport en le générant sur le site HistoVec.
             </p>
           </dd>
         </dl>
@@ -387,7 +387,7 @@ export default function () {
         <p class="indented">
           Le propriétaire du véhicule et titulaire du certificat
           d'immatriculation sont le plus souvent la même personne,
-          mais peuvent être différents. C'est pourquoi, Histovec
+          mais peuvent être différents. C'est pourquoi, HistoVec
           distingue les opérations qui correspondent à la vente du
           véhicule ("cession/vente par un particulier" et
           "achat/reprise par un professionnel ") du changement de
@@ -458,7 +458,25 @@ export default function () {
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
       react: { object: store.state.config, key: 'modalMail'}
-    }
+    },
+    {
+      title: 'Comment puis-je récupérer le rapport d\'un expert en automobile ?',
+      body: `
+      <p class="indented">
+      Lorsqu'un véhicule a fait l'objet d'une procédure à réparations contrôlées,
+      HistoVec affiche le numéro d'agrément de l'expert en automobile ayant enclenché la procédure
+      et rédigé un premier ou un second rapport d'expertise.
+      </p>
+      <p class="indented">
+      En revanche, HistoVec ne peut afficher les détails des rapports (p. ex. éléments à réparer),
+      car ceux-ci ne sont pas transmis en tant que tels dans le système d'immatriculation des véhicules (SIV).
+      Dès lors, si vous achetez le véhicule, n'hésitez pas à demander au vendeur s'il est en possession du rapport d'expertise.
+      Autrement, vous pouvez consulter les coordonnées de l'expert concerné sur la liste nationale mise à jour par le ministère chargé des transports.
+      Cette liste étant régulièrement mise à jour, il est toutefois possible que vous ne trouviez plus l'expert qui a rédigé le rapport,
+      notamment si celui-ci a été radié (sanction, cessation d'activité, retraite, etc.).
+      </p>
+      `
+    },
   ]
 
   return faqContent.map(content => ({
