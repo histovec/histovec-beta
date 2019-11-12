@@ -197,6 +197,16 @@ a:focus {
   text-decoration: underline !important;
 }
 
+.link-default {
+  color: #2aa4a5 !important;
+  text-decoration: none !important;
+}
+
+.link-default:hover {
+  color: #2aa4a5 !important;
+  text-decoration: underline !important;
+}
+
 .dark .footer .link-dark {
   color: #777777;
   text-decoration: none !important;

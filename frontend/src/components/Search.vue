@@ -355,7 +355,7 @@
                               class="clickable text-info btn-sm-link"
                               @click="sirenModal = true"
                             >
-                              Je n'ai pas de SIREN
+                              Où le trouver?
                               <i class="fa fa-info-circle fa-lg"></i>
                             </a>
                           </field>
@@ -633,10 +633,29 @@
       v-if="sirenModal"
       @close="sirenModal = false"
     >
-      <span slot="title">Je n'ai pas de SIREN</span>
-      <p slot="body" class="text-center">
-        Dans le cas où vous <b>n'avez pas de numéro SIREN</b>, laissez ce <b>champs vide</b>.
-      </p>
+      <span slot="title">Où trouver le numéro SIREN</span>
+      <div slot="body">
+        <p>
+          Le numéro SIREN correspond au 9 premiers caractères du numéro SIRET de votre société.
+        </p>
+        <p>
+          Il figure sur le <b>KBIS</b> de votre société.
+          Vous pouvez aussi l'obtenir sur ce
+          <a
+            href="https://www.societe.com/"
+            target="_blank"
+          >
+            site
+            <i class="fa fa-external-link"></i>
+          </a>
+          en effectuant une <b>recherche avec le nom de votre société</b>.
+        </p>
+        <p>
+          En tant qu'association, il se peut que vous n'ayez <b>pas de numéro de SIREN</b>.
+          <br>
+          Dans ce cas, <b>laissez le champs SIREN vide</b>.
+        </p>
+      </div>
     </modal-helper>
 
     <!-- fin modals -->

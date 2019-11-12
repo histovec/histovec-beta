@@ -77,6 +77,7 @@
             </div>
             <div class="col-sm-6">
               <div
+                v-if="v.date_update && v.date_update != '01/01/1900'"
                 class="alert alert-icon alert-warning"
                 role="alert"
               >

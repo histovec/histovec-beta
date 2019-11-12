@@ -61,6 +61,7 @@
         </div>
       </div>
     </section>
+
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
@@ -118,17 +119,18 @@
             <h2 class="text-center mt-4">
               L’administration agit pour la sécurité routière
             </h2>
-            <p class="large text-center">
-              HistoVec permet au titulaire du certificat d’immatriculation de consulter l’historique de son véhicule.
-              <br>
-              <b>Toute demande de renseignement ou de correction de votre dossier doit être adressées à Agence Nationale des titres Sécurisés</b>
+            <h3 class="large text-center p-b-10">
+              Toute demande de renseignement ou de correction de votre dossier
+              doit être adressée à l'Agence Nationale des titres Sécurisés
               <a
                 href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande/"
                 target="_blank"
+                class="link-default"
               >
                 ANTS
-              </a>.
-            </p>
+                <i class="fa fa-external-link"></i>
+              </a>
+              </h3>
           </div>
         </div>
       </div>
