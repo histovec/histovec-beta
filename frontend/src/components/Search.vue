@@ -950,7 +950,11 @@ export default {
         ['siv', 'fni'].forEach((typeImmat) => {
           if (field !== 'default' && this.typeImmatriculation === typeImmat) {
             const specificOptions = options[typeImmat]
-            if (specificOptions.required === false || (specificOptions.required === undefined && this.formOptions.default === false)) {
+            if (
+              (specificOptions.required === false ||
+                (specificOptions.required === undefined && this.formOptions.default === false)
+              ) && this[field] === ''
+            ) {
               this[field] = specificOptions.defaultValue
             }
           }
