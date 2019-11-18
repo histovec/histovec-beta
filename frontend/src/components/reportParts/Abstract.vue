@@ -45,7 +45,7 @@
       <!-- fin voiture  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2">
+    <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
     <!-- debut trait separation  -->
@@ -88,7 +88,7 @@
         </div>
         <div
           v-if="usages[entry]"
-          class="separator-2"
+          class="separator-2 separator-lg"
         >
         </div>
       </div>
@@ -129,7 +129,7 @@
       <!-- fin proprietaire  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2">
+    <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
     <div class="row">
@@ -147,7 +147,7 @@
       <!-- fin immatriculation  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2">
+    <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
     <div v-if="false">
@@ -185,7 +185,7 @@
         <!-- fin immatriculer  -->
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div v-if="(v.sinistres && v.sinistres.length > 0) || ($store.state.siv.v.suspensions && $store.state.siv.v.suspensions.includes('PVE'))">
@@ -272,7 +272,7 @@
         <!-- fin sinistre  -->
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div v-if="(v.administratif.synthese && v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
@@ -297,7 +297,7 @@
         <!-- fin ras  -->
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div
@@ -338,7 +338,7 @@
         </div>
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div>
