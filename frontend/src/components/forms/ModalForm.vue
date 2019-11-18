@@ -356,6 +356,8 @@ export default {
             {
               typeImmatriculation: this.$store.state.identity.typeImmatriculation,
               typePersonne: this.$store.state.identity.typePersonne,
+              raisonSociale: this.$store.state.identity.raisonSociale,
+              siren: this.$store.state.identity.siren,
               nom: this.$store.state.identity.nom,
               prenom: this.$store.state.identity.prenom,
               plaque: this.$store.state.identity.plaque,
