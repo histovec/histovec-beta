@@ -219,6 +219,7 @@
                   v-if="tab === 'abstract'"
                   :v="v"
                   :holder="holder"
+                  :changeTab="changeTab"
                 >
                 </abstract>
               </div>
@@ -493,6 +494,11 @@ export default {
             this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.rating } )
           }
         }, this.modalFormTimer)
+      }
+    },
+    changeTab (tab) {
+      if (['abstract', 'vehicle', 'holder', 'situation', 'history', 'utac', 'utacGraph', 'send', 'csa'].includes(tab)) {
+        this.tab = tab
       }
     }
   }

@@ -238,6 +238,13 @@
               </span>
             </span>
           </span>
+          <a
+            @click="changeTab('history')"
+            class="clickable btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+          >
+            En savoir plus
+            <i class="fa fa-external-link pl-5"></i>
+          </a>
         </div>
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
@@ -307,6 +314,14 @@
         </div>
         <div class="col-sm-6 txt-small-13">
           {{ synthese[entry].text }}
+          <br />
+          <a
+            @click="changeTab('situation')"
+            class="clickable btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+          >
+            En savoir plus
+            <i class="fa fa-external-link pl-5"></i>
+          </a>
         </div>
         <div class="col-sm-5 color-info_2 bold_4 txt-small-13">
           {{ synthese[entry].adv }}
@@ -400,7 +415,8 @@ export default {
       type: Object,
       default: () => {}
     },
-    holder: Boolean
+    holder: Boolean,
+    changeTab: Function
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/synthesis`)
