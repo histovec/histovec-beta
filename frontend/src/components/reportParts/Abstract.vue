@@ -314,7 +314,7 @@
           <a
             v-if="synthese[entry].link !== undefined"
             :href="synthese[entry].link"
-            target="_blanck"
+            target="_blank"
             class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
           >
             En savoir plus
@@ -347,7 +347,7 @@
           <a
             v-if="synthese['critair'].link !== undefined"
             :href="synthese['critair'].link"
-            target="_blanck"
+            target="_blank"
             class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
           >
             En savoir plus
@@ -373,7 +373,7 @@
           <a
             v-if="synthese['critair'].link !== undefined"
             :href="synthese['critair'].link"
-            target="_blanck"
+            target="_blank"
             class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
           >
             En savoir plus
