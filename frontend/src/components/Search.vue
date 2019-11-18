@@ -651,7 +651,7 @@
           en effectuant une <b>recherche avec le nom de votre société</b>.
         </p>
         <p>
-          En tant qu'association, il se peut que vous n'ayez <b>pas de numéro de SIREN</b>.
+          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <b>pas de numéro de SIREN</b>.
           <br>
           Dans ce cas, <b>laissez le champs SIREN vide</b>.
         </p>
