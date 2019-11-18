@@ -14,3 +14,7 @@ node_modules/
 data/encrypted
 backend/.build-lock
 frontend/.build-lock
+artifacts_dev
+artifacts_prod
+artifacts_qualif
+swift_get_token.sh
