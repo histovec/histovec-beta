@@ -34,7 +34,7 @@
         <br />
         <a
           href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
-          class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+          class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           title="Simulateur"
           target="_blank"
         >
@@ -45,7 +45,7 @@
       <!-- fin voiture  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2">
+    <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
     <!-- debut trait separation  -->
@@ -76,7 +76,7 @@
             <a
               v-if="usages[entry].adv"
               :href="usages[entry].link"
-              class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+              class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
               :title="usages[entry].adv"
               target="_blank"
             >
@@ -88,7 +88,7 @@
         </div>
         <div
           v-if="usages[entry]"
-          class="separator-2"
+          class="separator-2 separator-lg"
         >
         </div>
       </div>
@@ -129,7 +129,7 @@
       <!-- fin proprietaire  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2">
+    <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
     <div class="row">
@@ -147,7 +147,7 @@
       <!-- fin immatriculation  -->
     </div>
     <!-- debut trait separation  -->
-    <div class="separator-2">
+    <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
     <div v-if="false">
@@ -185,7 +185,7 @@
         <!-- fin immatriculer  -->
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div v-if="(v.sinistres && v.sinistres.length > 0) || ($store.state.siv.v.suspensions && $store.state.siv.v.suspensions.includes('PVE'))">
@@ -240,9 +240,9 @@
           </span>
           <a
             @click="changeTab('history')"
-            class="clickable btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+            class="clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
-            En savoir plus
+            Détails
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </div>
@@ -272,7 +272,7 @@
         <!-- fin sinistre  -->
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div v-if="(v.administratif.synthese && v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
@@ -297,7 +297,7 @@
         <!-- fin ras  -->
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div
@@ -317,9 +317,9 @@
           <br />
           <a
             @click="changeTab('situation')"
-            class="clickable btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+            class="clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
-            En savoir plus
+            Détails
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </div>
@@ -330,7 +330,7 @@
             v-if="synthese[entry].link !== undefined"
             :href="synthese[entry].link"
             target="_blank"
-            class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+            class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
             En savoir plus
             <i class="fa fa-external-link pl-5"></i>
@@ -338,7 +338,7 @@
         </div>
       </div>
       <!-- debut trait separation  -->
-      <div class="separator-2"></div>
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div>
@@ -363,7 +363,7 @@
             v-if="synthese['critair'].link !== undefined"
             :href="synthese['critair'].link"
             target="_blank"
-            class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+            class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
             En savoir plus
             <i class="fa fa-external-link pl-5"></i>
@@ -389,7 +389,7 @@
             v-if="synthese['critair'].link !== undefined"
             :href="synthese['critair'].link"
             target="_blank"
-            class="btn-sm-link pop color-info_2 bold_4 txt-small-12 no-padding"
+            class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
             En savoir plus
             <i class="fa fa-external-link pl-5"></i>

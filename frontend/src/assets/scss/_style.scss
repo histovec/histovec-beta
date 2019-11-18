@@ -51,6 +51,10 @@ h6 a {
   color: #333333;
 }
 
+a.lowercase {
+  text-transform: lowercase;
+}
+
 .dark h1,
 .dark h2,
 .dark h3,
@@ -9192,6 +9196,10 @@ h6.media-heading {
   height: 1px;
 }
 
+.separator-2.separator-lg {
+  width: 100%;
+}
+
 .full_screen {
   /* background:url(../../assets/images/tableau_de_bord/full_screen_1.jpg) no-repeat center center fixed; */
   -webkit-background-size: cover;
@@ -9335,6 +9343,10 @@ hr.style1 {
 
 .color-info_2 {
   color: #1a4e68;
+}
+
+.color-info_3 {
+  color: #337ab7;
 }
 
 .color-warning {

@@ -446,7 +446,7 @@ frontend-stop:
 	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_FRONTEND) down
 
 # build for qualification and production
-frontend-build: build-dir frontend-build-lock frontend-build-all nginx-build frontend-build-unlock
+frontend-build: frontend-build-unlock build-dir frontend-build-lock frontend-build-all nginx-build frontend-build-unlock
 
 frontend-build-lock:
 	@if [ -f "${FRONTEND}/.build-lock" ]; then exit 1; else touch "${FRONTEND}/.build-lock"; fi
@@ -523,7 +523,7 @@ nginx-save-image:
 nginx-check-image:
 	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
 	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
-        docker image inspect $$nginx_image_name_version 
+        docker image inspect $$nginx_image_name_version
 
 nginx-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
@@ -766,7 +766,7 @@ ifeq ("$(transparent_hugepage)", "")
 endif
 
 # package for production
-backend-build: build-dir backend-build-lock backend-build-all backend-build-unlock
+backend-build: backend-build-unlock build-dir backend-build-lock backend-build-all backend-build-unlock
 
 backend-build-lock:
 	@if [ -f "${BACKEND}/.build-lock" ]; then exit 1; else touch "${BACKEND}/.build-lock"; fi

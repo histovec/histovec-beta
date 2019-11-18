@@ -12,3 +12,5 @@ histovec-build
 *.tar
 node_modules/
 data/encrypted
+backend/.build-lock
+frontend/.build-lock

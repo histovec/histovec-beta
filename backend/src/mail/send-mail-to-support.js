@@ -3,12 +3,14 @@ import config from '../config'
 import { sendMail } from '../connectors/send-mail'
 import { appLogger } from '../util'
 
+
 // @todo: We need to insert a fake dateNaissance waiting to clean it in code and CSV data files.
-const formDataShortcut = (identity, separator='&#9;', fakeDateNaissance='01/01/1500') => {
+const formDataShortcut = (identity, fakeDateNaissance='0') => {
   const { typeImmatriculation, typePersonne, raisonSociale, siren, nom, prenom, plaque, formule, dateCertificat } = identity
   let elements
   const emptyNom = ' '
   const emptyPrenom = ' '
+  let table = '<table><tr>'
 
   switch (typeImmatriculation) {
     case 'siv': {
@@ -30,7 +32,12 @@ const formDataShortcut = (identity, separator='&#9;', fakeDateNaissance='01/01/1
     }
   }
 
-  return elements.join(separator)
+  for(const element of elements) {
+    table += `<td>${element}</td>`
+  }
+  table += '</tr></table>'
+
+  return table
 }
 
 export const sendMailToSupport = async (from, subject, json) => {
@@ -50,7 +57,8 @@ export const sendMailToSupport = async (from, subject, json) => {
         <br />
         <b> donnée techniques </b>: <br />
         ${json2html(json)}
-        <b> raccourci </b>: ${shortcut}
+        <b> raccourci </b>: <br />
+        ${shortcut}
       `,
       withImage: false
     })
