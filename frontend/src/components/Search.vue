@@ -689,7 +689,7 @@ const formInitialOptions = {
     siv: {
       fieldNumberPro: 2,
       fieldNumberParticulier: 2,
-      label: 'N° SIREN (9 caractères)',
+      label: 'N° SIREN (optionnel)',
       model: 'siren',
       masked: true,
       mask: '#########',
