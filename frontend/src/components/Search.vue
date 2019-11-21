@@ -689,12 +689,12 @@ const formInitialOptions = {
     siv: {
       fieldNumberPro: 2,
       fieldNumberParticulier: 2,
-      label: 'N° SIREN (optionnel)',
+      label: 'N° SIREN',
       model: 'siren',
       masked: true,
       mask: '#########',
       check: /^(\d{9})$/,
-      placeholder: '123456789',
+      placeholder: '123456789 ou vide si vous n\'en avez pas',
       icon: 'fa fa-hashtag',
       tabindex: '2',
       required: false,
@@ -703,7 +703,7 @@ const formInitialOptions = {
     fni: {
       fieldNumberPro: 2,
       fieldNumberParticulier: 2,
-      label: 'N° SIREN (9 caractères)',
+      label: 'N° SIREN (Optionnel)',
       model: 'siren',
       masked: true,
       mask: '#########',
