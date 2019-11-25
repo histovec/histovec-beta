@@ -130,7 +130,7 @@
                 ANTS
                 <i class="fa fa-external-link"></i>
               </a>
-              </h3>
+            </h3>
           </div>
         </div>
       </div>

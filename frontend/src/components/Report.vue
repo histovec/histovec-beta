@@ -219,7 +219,7 @@
                   v-if="tab === 'abstract'"
                   :v="v"
                   :holder="holder"
-                  :changeTab="changeTab"
+                  :change-tab="changeTab"
                 >
                 </abstract>
               </div>
