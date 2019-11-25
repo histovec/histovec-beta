@@ -3,19 +3,20 @@ import { appLogger } from '../util/logger'
 
 const nonce = randomString(10)
 
-const salt = CryptoJS.lib.WordArray.random(128/8)
+const salt = CryptoJS.lib.WordArray.random(128 / 8)
 
 export function generateKey (secret) {
-  return CryptoJS.PBKDF2(secret, salt, { keySize: 512/32, iterations: 1000 })
+  return CryptoJS.PBKDF2(secret, salt, { keySize: 512 / 32, iterations: 1000 })
 }
 
 export function randomString (length) {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for(var i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  var text = ''
+  var possible =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
   }
-  return text;
+  return text
 }
 
 export function sign (message, key) {
@@ -24,7 +25,7 @@ export function sign (message, key) {
 }
 
 export function checkSigned (message, key, signature) {
-  return (signature === sign(message, key))
+  return signature === sign(message, key)
 }
 
 export function encrypt (json, key) {
@@ -35,14 +36,6 @@ export function encrypt (json, key) {
     appLogger.debug(`encrypt_error: ${e.message}`)
     throw new Error(`encrypt_error: ${e}`)
   }
-}
-
-function atob (str) {
-  return Buffer.from(str, 'base64').toString('binary');
-}
-
-function btoa (str) {
-  return Buffer.from(str.toString(), 'binary').toString('base64')
 }
 
 export function decrypt (encrypted, key) {
@@ -67,18 +60,18 @@ export function decrypt (encrypted, key) {
   }
 }
 
-
-const B64_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+const B64_TABLE =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
 
 export function decryptXOR (encrypted, key) {
   // weak encryption (used for UtacId)
-  let WordArray = b64_decode(encrypted)
+  let WordArray = b64Decode(encrypted)
   return WordArray.map((c, i) => {
-    return String.fromCharCode( c ^ keyCharAt(key, i) )
-  }).join("")
+    return String.fromCharCode(c ^ keyCharAt(key, i))
+  }).join('')
 }
 
-function keyCharAt(key, i) {
+function keyCharAt (key, i) {
   return key.charCodeAt(Math.floor(i % key.length))
 }
 
@@ -87,7 +80,9 @@ export function hash (string) {
 }
 
 export function checkUuid (uuid) {
-  return (uuid && typeof uuid === 'string') ? uuid.match(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/) : false
+  return uuid && typeof uuid === 'string'
+    ? uuid.match(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/)
+    : false
 }
 
 export function checkId (id) {
@@ -97,34 +92,45 @@ export function checkId (id) {
 export function str2hex (str) {
   var res = ''
   for (var i = 0; i < str.length; i++) {
-      res = res + ('k' + str.charCodeAt(i).toString(16))
+    res = res + ('k' + str.charCodeAt(i).toString(16))
   }
-  return res;
+  return res
 }
 
 export function hex2str (str) {
   var strarr = str.split('k')
   var res = ''
   for (var i = 0; i < strarr.length; i++) {
-      if (strarr[i] && parseInt(strarr[i], 16)) {
-          res = res + (String.fromCharCode(parseInt(strarr[i], 16)))
-      }
+    if (strarr[i] && parseInt(strarr[i], 16)) {
+      res = res + String.fromCharCode(parseInt(strarr[i], 16))
+    }
   }
   return res
 }
 
-function b64_decode(data) {
-  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, result = []
-  if (!data) { return data }
-  data += ""
+function b64Decode (data) {
+  var o1
+  var o2
+  var o3
+  var h1
+  var h2
+  var h3
+  var h4
+  var bits
+  var i = 0
+  var result = []
+  if (!data) {
+    return data
+  }
+  data += ''
   do {
     h1 = B64_TABLE.indexOf(data.charAt(i++))
     h2 = B64_TABLE.indexOf(data.charAt(i++))
     h3 = B64_TABLE.indexOf(data.charAt(i++))
     h4 = B64_TABLE.indexOf(data.charAt(i++))
-    bits = h1 << 18 | h2 << 12 | h3 << 6 | h4
-    o1 = bits >> 16 & 0xff
-    o2 = bits >> 8 & 0xff
+    bits = (h1 << 18) | (h2 << 12) | (h3 << 6) | h4
+    o1 = (bits >> 16) & 0xff
+    o2 = (bits >> 8) & 0xff
     o3 = bits & 0xff
     result.push(o1)
     if (h3 !== 64) {

@@ -9,7 +9,7 @@
     "dev": "nodemon --inspect --watch src boot-dev.js",
     "format": "prettier-eslint --write 'src/**/*.js'",
     "lint:all": "run-p lint:client lint --",
-    "lint:client": "cd .. ; cd client ; npm run lint",
+    "lint:client": "cd .. ; cd frontend ; npm run lint",
     "lint:only": "eslint src",
     "prelint": "npm run format",
     "lint": "eslint src",
@@ -20,8 +20,8 @@
     "test:only": "cross-env NODE_ENV=test jest",
     "pretest": "npm run lint",
     "test:all": "run-s test test:client",
-    "test:client": "cd .. ; cd client ; npm test",
-    "test": "cross-env NODE_ENV=test jest --detectOpenHandles --forceExit"
+    "test:client": "cd .. ; cd frontend ; npm test",
+    "test": "cross-env NODE_ENV=test jest --passWithNoTests --detectOpenHandles --forceExit"
   },
   "keywords": [
     "vehicule",
@@ -45,7 +45,7 @@
     "nodemailer-html-to-text": "^3.0.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "redis": "^2.8.0",
-    "util":"^0.12.0",
+    "util": "^0.12.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
   },
@@ -72,7 +72,7 @@
     "lint-staged": "^8.1.5",
     "nodemon": "^1.18.11",
     "npm-run-all": "^4.1.5",
-    "prettier-eslint-cli": "^4.7.1",
+    "prettier-eslint-cli": "^5.0.0",
     "regenerator-runtime": "^0.13.2",
     "supertest": "^4.0.2"
   },

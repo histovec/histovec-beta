@@ -22,7 +22,7 @@ const config = {
   smtpPort: process.env.SMTP_PORT,
   mailFrom: process.env.MAIL_FROM,
   mailTo: process.env.MAIL_TO,
-  apiPrefix: `/${process.env.APP}/api/v1`
+  apiPrefix: `/${process.env.APP}/api/v1`,
 }
 
 export const smtpOptions = {

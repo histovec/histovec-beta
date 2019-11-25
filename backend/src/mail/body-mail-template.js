@@ -1,22 +1,23 @@
-export const json2html = (json) => {
-    if (typeof json === 'string' || typeof json === 'number') {
-      return `${json}`
-    }
-    if (Array.isArray(json)) {
-      return `<ul>${json.map((v) => '<li>' + json2html(v) + '</li>')}</ul>`
-    }
-    if (typeof json === 'object') {
-      let res = '<ul>'
-      Object.keys(json).forEach((key) => {
-        res = res + `<li>${key} : ${json2html(json[key])}</li>`
-      })
-      return res + '</ul>'
-    }
-    return JSON.stringify(json)
+export const json2html = json => {
+  if (typeof json === 'string' || typeof json === 'number') {
+    return `${json}`
   }
+  if (Array.isArray(json)) {
+    return `<ul>${json.map(v => '<li>' + json2html(v) + '</li>')}</ul>`
+  }
+  if (typeof json === 'object') {
+    let res = '<ul>'
+    Object.keys(json).forEach(key => {
+      res = res + `<li>${key} : ${json2html(json[key])}</li>`
+    })
+    return res + '</ul>'
+  }
+  return JSON.stringify(json)
+}
 
-export const getHtmlBody = ({content, withImage}) => {
-    const imageBloc = withImage ? `
+export const getHtmlBody = ({ content, withImage }) => {
+  const imageBloc = withImage
+    ? `
     <tr>
         <td>
         <img width="548px" src="https://histovec.interieur.gouv.fr/histovec/assets/images/histovec-header-mobile.png" />
@@ -24,7 +25,7 @@ export const getHtmlBody = ({content, withImage}) => {
     </tr>`
     : ''
 
-return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html>
   <head>
   <title>Email HistoVec</title>

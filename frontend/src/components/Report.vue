@@ -219,7 +219,7 @@
                   v-if="tab === 'abstract'"
                   :v="v"
                   :holder="holder"
-                  :changeTab="changeTab"
+                  :change-tab="changeTab"
                 >
                 </abstract>
               </div>
@@ -403,9 +403,7 @@ export default {
     },
     status () {
       if (this.$store.state.siv.v) {
-        // Deactivate this modal for the moment
-        // @todo: remove it or not later
-        // this.showModalForm()
+        this.showModalForm()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
         return 'invalidBuyer'
@@ -488,7 +486,10 @@ export default {
       }
     },
     showModalForm () {
-      if (localStorage.getItem('evaluation') === 'false' || localStorage.getItem('evaluation') === null) {
+      const notShow = localStorage.getItem('notShow') === 'true'
+      const evaluation = localStorage.getItem('evaluation') === 'true'
+
+      if (!notShow && !evaluation) {
         setTimeout(() => {
           if (!this.$store.state.modalForm && this.$route.path.match(/report/)) {
             this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.rating } )

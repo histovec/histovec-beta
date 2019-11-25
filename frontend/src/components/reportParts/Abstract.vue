@@ -239,8 +239,8 @@
             </span>
           </span>
           <a
-            @click="changeTab('history')"
             class="clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            @click="changeTab('history')"
           >
             Détails
             <i class="fa fa-external-link pl-5"></i>
@@ -316,8 +316,8 @@
           {{ synthese[entry].text }}
           <br />
           <a
-            @click="changeTab('situation')"
             class="clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            @click="changeTab('situation')"
           >
             Détails
             <i class="fa fa-external-link pl-5"></i>
@@ -416,7 +416,10 @@ export default {
       default: () => {}
     },
     holder: Boolean,
-    changeTab: Function
+    changeTab: {
+      type: Function,
+      default: () => {}
+    },
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/synthesis`)
