@@ -27,6 +27,3 @@ export const sendMail = async ({ from, to, cc, subject, content: html }) => {
     transporter.close()
   }
 }
-
-
-

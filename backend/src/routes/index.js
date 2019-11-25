@@ -1,7 +1,7 @@
 import express from 'express'
 import config from '../config'
 import { getSIV, getUTAC } from './report'
-import { sendFeedback, sendContact } from './feedback'
+import { sendFeedback, sendContact } from './feedback'
 // import { streamedReport } from './report'
 
 const router = express.Router()
