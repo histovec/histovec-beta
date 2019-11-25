@@ -69,18 +69,6 @@
                       <i class="fa fa-comments"></i>
                     </a>
                   </button>
-                  <a
-                    href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
-                    target="_blank"
-                  >
-                    <img
-                      id="mon-avis"
-                      width="140"
-                      src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-                      alt="Je donne mon avis"
-                      title="Je donne mon avis sur cette démarche"
-                    />
-                  </a>
                 </div>
               </div>
 
@@ -282,11 +270,6 @@ export default {
   name: 'App',
   components: {
     ModalForm
-  },
-  data () {
-    return {
-      modalFormShow: false
-    }
   },
   methods: {
     toggleModalForm (mode = contact.mode.contact, subject = contact.subject.contact) {

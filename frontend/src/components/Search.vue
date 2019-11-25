@@ -939,6 +939,8 @@ export default {
     this.typePersonne = this.$store.state.identity.typePersonne || this.$route.params.t || 'particulier'
   },
   mounted() {
+    // reset 'MonAvis' evaluation for each new search (notShow option will override it)
+    localStorage.setItem('evaluation', false)
     this.cleanDefaultFields()
   },
   updated () {

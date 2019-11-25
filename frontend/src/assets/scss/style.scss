@@ -3,6 +3,15 @@
 @import './_style.scss';
 @import './bleu_vert.scss';
 
+.img-inline {
+  display: inline;
+  margin-right: 10px;
+}
+
+.img-responsive.img-center {
+  margin: 0 auto;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -84,7 +93,7 @@
 
 .btn-mon-avis {
   color: #2C3079;
-  font-size: 18px;
+  font-size: 15px;
   background-color: white;
   border-radius: 20px;
   font-weight: bold;
@@ -99,8 +108,4 @@
 .btn-mon-avis > a:hover {
   color: #333;
   text-decoration: none;
-}
-
-#mon-avis {
-  margin-left: 2.7rem;
 }

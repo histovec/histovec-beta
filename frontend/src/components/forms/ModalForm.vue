@@ -24,53 +24,37 @@
                   class="content"
                 >
                   <div v-if="mode === contact.mode.rating">
-                    <label>
-                      Comment évaluez-vous HistoVec :
-                      <span
-                        class="info_red"
-                        title="Ce champ est requis."
-                      >
-                        *
-                      </span>
-                    </label>
-                    <div class="rating position_left p-g-10">
-                      <span
-                        v-if="errors.includes(contact.error.note)"
-                        class="info_red txt-small-11"
-                      >
-                        {{ contact.error.note }}
-                        <br />
-                      </span>
-                      <span
-                        v-for="n in ratings"
-                        :key="n"
-                      >
-                        <a
-                          :class="{'is-selected': (note && (note >= (ratings.length+1)-n))}"
-                          title="Give star"
-                          @click="setNote((ratings.length+1)-n)"
-                          @mouseover="starOver((ratings.length+1)-n)"
-                          @mouseout="starOut"
+                    <div class="row">
+                      <div class="col-sm-6 p-g-17">
+                        <img
+                          :src="imageLogoRepubliqueFrancaisePng"
+                          class="img-responsive img-inline"
+                          width="60px"
+                          alt="Logo voxusagers.numerique.gouv.fr"
                         >
-                          ★
-                        </a>
-                      </span>
+                        <span>
+                          <b>voxusagers.</b><i>numerique.gouv.fr</i>
+                        </span>
+                      </div>
                     </div>
-                    <p class="m-h-10">
-                      <label>Vos commentaires ou suggestions :</label>
-                      <textarea
-                        id="message"
-                        v-model="message"
-                        name="message"
-                        rows="2"
-                        class="form-control"
-                        maxlength="1000"
-                      >
-                      </textarea>
-                    </p>
                     <br />
+                    <div class="row">
+                      <a
+                        href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
+                        target="_blank"
+                        @click="setEvaluation"
+                      >
+                        <img
+                          width="140px"
+                          src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
+                          alt="Je donne mon avis"
+                          title="Je donne mon avis sur cette démarche"
+                          class="img-responsive img-center"
+                        />
+                      </a>
+                    </div>
                   </div>
-                  <div v-if="mode !== contact.mode.rating">
+                  <div v-if="mode === contact.mode.contact">
                     <div
                       class="form-group has-feedback"
                       :class="[{'has-error' : (errors.includes(contact.error.subject))}]"
@@ -101,15 +85,12 @@
                     </div>
                   </div>
                   <div
+                    v-if="mode === contact.mode.contact"
                     class="form-group has-feedback"
                     :class="[{'has-error' : (errors.includes(contact.error.email))}]"
                   >
                     <p>
-                      <label v-if="mode === contact.mode.rating">
-                        Acceptez-vous d'être recontacté pour nous donner votre retour d'expérience ?
-                        <i>(L'adresse email ne servira que dans le cadre de l'amélioration du service)</i>
-                      </label>
-                      <label v-else>
+                      <label>
                         Courriel
                       </label>
                       <span
@@ -127,7 +108,7 @@
                       >
                     </p>
                   </div>
-                  <div v-if="mode !== contact.mode.rating">
+                  <div v-if="mode === contact.mode.contact">
                     <div class="form-group">
                       <p class="m-h-10">
                         <label>Message (optionnel) :</label>
@@ -196,6 +177,7 @@
                         v-model="notShow"
                         name="showModal"
                         type="checkbox"
+                        @change="persistNotShow"
                       >
                       Ne plus afficher
                     </label>
@@ -209,7 +191,7 @@
                       <br />
                     </span>
                     <button
-                      v-if="!isMessageSent"
+                      v-if="!isMessageSent && mode === contact.mode.contact"
                       class="btn btn-animated btn-default m-h-05"
                       @click="send"
                     >
@@ -243,19 +225,22 @@
 
 <script>
 import { detect } from 'detect-browser'
+import imageLogoRepubliqueFrancaisePng from '@/assets/img/logo_de_la_Republique_francaise.png'
 
 export default {
   data () {
     return {
-      notShow: false,
-      ratings: [1, 2, 3, 4, 5],
+      notShow: localStorage.getItem('notShow') === 'true',
       tempValue: undefined,
       disabled: false,
       message: '',
       email: '',
       note: undefined,
       clicked: false,
-      isMessageSent: false
+      isMessageSent: false,
+
+      // images
+      imageLogoRepubliqueFrancaisePng,
     }
   },
   computed: {
@@ -274,10 +259,10 @@ export default {
       }
     },
     apiName () {
-      return this.mode === this.contact.mode.rating ? 'feedback' : 'contact'
+      return this.mode === this.contact.mode.contact ? 'contact' : ''
     },
     dispatchName () {
-      return this.mode === this.contact.mode.rating ? 'sendFeedback' : 'sendContact'
+      return this.mode === this.contact.mode.contact ? 'sendContact' : ''
     },
     title () {
       return this.contact.title[this.mode]
@@ -287,13 +272,10 @@ export default {
     },
     errors () {
       let errorList = []
-      if (this.clicked && (this.mode !== this.contact.mode.rating) && (this.subject === this.contact.subject.default)) {
+      if (this.clicked && (this.mode === this.contact.mode.contact) && (this.subject === this.contact.subject.default)) {
         errorList.push(this.contact.error.subject)
       }
-      if (this.clicked && ((this.mode === this.contact.mode.rating) && !this.note)) {
-        errorList.push(this.contact.error.note)
-      }
-      if (this.clicked && (this.email || this.mode !== this.contact.mode.rating) && !this.isEmailValid()) {
+      if (this.clicked && (this.email || this.mode === this.contact.mode.contact) && !this.isEmailValid()) {
         errorList.push(this.contact.error.mail)
       }
       if (this.clicked && this.$store.state.api && this.$store.state.api.http[this.apiName] && (this.$store.state.api.http[this.apiName] !== 201)) {
@@ -305,7 +287,7 @@ export default {
       if (this.clicked) {
         if (this.errors.length > 0) {
           return 'failed'
-        } else if (this.$store.state.api && this.$store.state.api.fetching.feedback) {
+        } else if (this.$store.state.api && (this.$store.state.api.fetching.feedback || this.$store.state.api.fetching.contact)) {
           return 'posting'
         } else {
           return 'posted'
@@ -324,22 +306,16 @@ export default {
       }
     },
     close () {
-      if (this.notShow) {
-          localStorage.setItem('evaluation', true, 1)
-      }
       this.isMessageSent = false
       this.$store.dispatch('toggleModalForm')
       return
     },
     async send (e) {
       e.preventDefault()
-      this.$store.dispatch('initApiStatus', this.apiName)
-      this.clicked = true
-      if (this.notShow) {
-        localStorage.setItem('evaluation', true, 1)
-        this.$store.dispatch('toggleModalForm')
-        return
+      if (this.apiName) {
+        this.$store.dispatch('initApiStatus', this.apiName)
       }
+      this.clicked = true
       if (this.errors.length > 0) {
           setTimeout(() => this.clicked = false, 3000)
           return
@@ -366,14 +342,16 @@ export default {
             },
           'subject': this.subject
         }
-        await this.$store.dispatch(this.dispatchName, data)
-        if (this.$store.state.api.http[this.apiName] === 201) {
-          if (this.mode === this.contact.mode.rating) {
-            localStorage.setItem('evaluation', true, 1)
-          }
-          this.isMessageSent = true
-        } else {
+
+        if (this.mode === this.contact.mode.rating) {
           this.clicked = true
+        } else if (this.mode === this.contact.mode.contact) {
+          await this.$store.dispatch(this.dispatchName, data)
+          if (this.$store.state.api.http[this.apiName] === 201) {
+            this.isMessageSent = true
+          } else {
+            this.clicked = true
+          }
         }
       }
     },
@@ -381,22 +359,11 @@ export default {
       let reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return reg.test(this.email)
     },
-    setNote (value) {
-      if (!this.disabled) {
-        this.tempValue = value
-        this.note = value
-      }
+    persistNotShow ({ target: { checked } }) {
+      localStorage.setItem('notShow', checked)
     },
-    starOver (value) {
-      if (!this.disabled) {
-        this.tempValue = this.note
-        this.note = value
-      }
-    },
-    starOut () {
-      if (!this.disabled) {
-        this.note = this.tempValue
-      }
+    setEvaluation () {
+      localStorage.setItem('evaluation', true)
     }
   }
 }
