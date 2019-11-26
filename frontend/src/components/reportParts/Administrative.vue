@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-sm-6">
         <h6 class="title">
+          Gages
           <a
             :href="synthese['otci'].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
-            Gages
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </h6>
@@ -20,12 +20,12 @@
       </div>
       <div class="col-sm-6">
         <h6 class="title">
+          Oppositions
           <a
             :href="synthese['otci'].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
-            Oppositions
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </h6>
