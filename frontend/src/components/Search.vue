@@ -703,7 +703,7 @@ const formInitialOptions = {
     fni: {
       fieldNumberPro: 2,
       fieldNumberParticulier: 2,
-      label: 'N° SIREN (Optionnel)',
+      label: 'N° SIREN',
       model: 'siren',
       masked: true,
       mask: '#########',
