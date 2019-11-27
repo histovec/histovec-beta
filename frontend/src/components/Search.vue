@@ -708,7 +708,7 @@ const formInitialOptions = {
       masked: true,
       mask: '#########',
       check: /^[0-9]{9}$/,
-      placeholder: '123456789',
+      placeholder: '123456789 ou vide si vous n\'en avez pas',
       icon: 'fa fa-hashtag',
       tabindex: '2',
       required: false,
