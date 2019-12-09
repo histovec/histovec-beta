@@ -191,7 +191,7 @@
                   class="clickable"
                   @click="tab = 'csa'"
                 >
-                  <i class="fa fa-print pr-10"></i>
+                  <i class="fa fa-file-pdf-o pr-10"></i>
                   Certificat de situation administrative
                 </a>
               </li>
