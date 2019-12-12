@@ -12,17 +12,20 @@ const config = {
   env: process.env.NODE_ENV,
   app: process.env.APP,
   redisUrl: `redis://${process.env.REDIS_URL}`,
-  redisPersit: process.env.REDIS_PERSIST || 86400,
+  redisPersit: process.env.REDIS_PERSIST || 86400, // 24h
   esUrl: process.env.ES_URL,
   esSIVIndex: process.env.ES_INDEX,
   esFeedbackIndex: 'feedback',
-  utacUrl: process.env.UTAC_URL,
-  utacTimeout: process.env.UTAC_TIMEOUT,
   smtpServer: process.env.SMTP_SERVER,
   smtpPort: process.env.SMTP_PORT,
   mailFrom: process.env.MAIL_FROM,
   mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`,
+
+  // UTAC api
+  utacThroughInesUrl: process.env.UTAC_THROUGH_INES_URL,
+  utacTimeout: process.env.UTAC_TIMEOUT,
+  utacHealthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 120
 }
 
 export const smtpOptions = {

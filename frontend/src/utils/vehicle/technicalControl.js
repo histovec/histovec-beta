@@ -7,7 +7,7 @@ import { USAGE } from '../../constants/vehicle/usage'
 
 
 const extractYear = (dateString, defaultYear) => {
-	const [day, month, year] = dateString.split('/')
+	const [, , year] = dateString.split('/')
 	return year ? year : defaultYear
 }
 

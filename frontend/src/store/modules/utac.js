@@ -3,18 +3,18 @@ import CryptoJS from 'crypto-js'
 
 export default {
   state: {
-    ct: undefined,
+    ctData: {},
     token: undefined
   },
   mutations: {
-    updateCT (state, ct) {
-      state.ct = ct
+    updateCT (state, ctData) {
+      state.ctData = ctData
     },
     updateToken (state, token) {
       state.token = token
     },
     clearUTAC (state) {
-      state.ct = undefined
+      state.ctData = {}
       state.token = undefined
     }
   },
@@ -32,7 +32,7 @@ export default {
         localStorage.getItem('userId')
       )
       if (response.success) {
-        commit('updateCT', response.ct)
+        commit('updateCT', response.ctData)
       }
       return
     }
