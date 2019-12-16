@@ -346,6 +346,7 @@ const AdministrativeCertificate = loadView('AdministrativeCertificate')
 const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
+import { isSubjectToTechnicalControl } from '../utils/vehicle/technicalControl.js'
 
 
 const statusFromCode = {
@@ -431,7 +432,10 @@ export default {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
     },
     ct () {
-      return this.$store.state.utac.ct || []
+      return this.$store.state.utac.ctData.ct || []
+    },
+    ctUpdateDate () {
+      return this.$store.state.utac.ctData.updateDate
     },
     baseurl () {
       // return 'https://histovec.interieur.gouv.fr'
@@ -442,7 +446,7 @@ export default {
       return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },
-  created () {
+  async created () {
     if (this.id !== undefined) {
       this.$store.commit('updateId', this.id)
     }
@@ -452,16 +456,35 @@ export default {
     if (this.$route.params.code !== undefined) {
       this.$store.commit('updateCode', this.$route.params.code)
     }
-    this.getSIV().then( () => {
-      if (this.$store.state.siv.v.annulation_ci === 'OUI') {
-        this.tab = 'csa'
+
+    await this.getSIV()
+
+    if (this.$store.state.siv.v.annulation_ci === 'OUI') {
+      this.tab = 'csa'
+    }
+
+    const isUtacActivated = this.$store.state.config.v1 && this.$store.state.config.utac
+    const isGetSIVSucceeded = this.status === 'ok' && this.v
+    if (isUtacActivated && isGetSIVSucceeded && this.v.administratif.annulation !== 'Oui') {
+      const {
+        ctec: {
+          genre,
+          carrosserie: { national: carrosserieNat },
+          PT: { AC: ptac }
+        },
+        certificat: { premier: dateMiseEnService },
+        usage: usages = []
+      } = this.v
+
+      const isGetUTACCached = this.ctData
+      if (!isGetUTACCached && isSubjectToTechnicalControl({ genre, carrosserieNat, ptac, dateMiseEnService, usages})) {
+        await this.$store.dispatch('getUTAC')
       }
-    })
+    }
   },
   methods: {
     async getSIV () {
       if (this.$store.state.siv.v) {
-        // déjà en cache
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
@@ -476,10 +499,8 @@ export default {
             this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
           return
         }
+
         await this.$store.dispatch('getSIV', this.$store.state.config.v1)
-        if (this.status === 'ok' && this.$store.state.config.v1 && this.$store.state.config.utac) {
-          await this.$store.dispatch('getUTAC')
-        }
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
         return

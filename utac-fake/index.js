@@ -11,9 +11,9 @@ const config = {
 }
 
 console.log(JSON.stringify({ start_date: DateTime.local(), config: config }))
-let ct = {}
+let allCt = {}
 
-require('./utac_sample.json').map( item => ct[immatNorm(item['plaque'])]=item['ct'])
+require('./utac_sample.json').map( item => allCt[immatNorm(item['plaque'])]=item['ct'])
 
 function immatNorm (plaque) {
   if (!plaque || typeof plaque != 'string') {
@@ -25,19 +25,19 @@ function immatNorm (plaque) {
   return p
 }
 
-const nb = ct.length
-
 function getCT(plaque) {
-  let myCt = ct[plaque]
+  let myCt = allCt[plaque]
   console.log({
     plaque: plaque,
-    ct: myCt ? `Found ${myCt.length} tech controls` : 'Not Found'
+    ct: myCt ? `Found ${myCt.length} tech controls` : 'Not Found',
   })
-  return {
+  const res = {
     status: myCt ? 200 : 404,
     update_date: DateTime.local(),
     ct: myCt
   }
+  console.log(res)
+  return res
 }
 
 function erlangWait() {
@@ -48,12 +48,30 @@ function erlangWait() {
 async function latencyResSend(req, res, response, time) {
   return await setTimeout(function(){
     res.send(response, response.status)
-  }, erlangWait() );
+  }, erlangWait() )
 }
 
-service.post(`/${config.apiPath}`, async (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  await latencyResSend(req, res, getCT(req.body.plaque));
+service.get(`/${config.apiPath}/auth`, async (req, res) => {
+  res.setHeader("Content-Type", "application/json")
+  await latencyResSend(req, res, {
+    status: 200,
+    token: 'yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw'
+  })
+})
+
+console.log(`-- /${config.apiPath}/healthcheck`)
+
+service.get(`/${config.apiPath}/healthcheck`, async (req, res) => {
+  res.setHeader("Content-Type", "application/json")
+  await latencyResSend(req, res, {
+    status: 200,
+  })
+})
+
+service.post(`/${config.apiPath}/immat/search`, async (req, res) => {
+  res.setHeader("Content-Type", "application/json")
+  const { immat } = req.body.data
+  await latencyResSend(req, res, getCT(immat))
 })
 
 service.start(config.port)

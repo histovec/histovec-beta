@@ -1,8 +1,9 @@
 import http from 'http'
 
-import app from './app'
+import createApp from './app'
 import { getAsync } from './connectors/redis'
 import elasticsearch from './connectors/elasticsearch'
+import { UTACClient } from './services/utac'
 import { techLogger } from './util'
 
 import config from './config'
@@ -14,20 +15,24 @@ techLogger.debug({ config: config })
 elasticsearch.Client.search({
   index: config.esIndex,
   q: 'version',
-  size: '1',
-})
-  .then(() => {
-    getAsync('')
-      .then(() => {
-        http.createServer(app).listen(PORT, '0.0.0.0')
-        techLogger.info(`Server running at http://0.0.0.0:${PORT}/`)
-        techLogger.debug(`Server root secret: ${config.secret}`)
-        techLogger.debug(`Utac id key: ${config.utacIdKey}`)
-      })
-      .catch(error => {
-        techLogger.error(`Server could not connect to redis, exiting`)
-        techLogger.error(error)
-      })
+  size: '1'
+}).then(() => {
+  getAsync('')
+    .then(async () => {
+      const utacClient = new UTACClient()
+      await utacClient.initialize()
+
+      const app = createApp(utacClient)
+
+      http.createServer(app).listen(PORT, '0.0.0.0')
+      techLogger.info(`Server running at http://0.0.0.0:${PORT}/`)
+      techLogger.debug(`Server root secret: ${config.secret}`)
+      techLogger.debug(`Utac id key: ${config.utacIdKey}`)
+    })
+    .catch(error => {
+      techLogger.error(`Server could not connect to redis, exiting`)
+      techLogger.error(error)
+    })
   })
   .catch(error => {
     techLogger.error(`Server could not connect to elasticsearch, exiting`)

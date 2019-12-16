@@ -307,10 +307,17 @@ export default {
     const options = {
       body: JSON.stringify({id: id, code: code, token: token, key: key, utacId: utacId, uuid: uuid})
     }
+    /* eslint-disable-next-line no-console */
+    console.log('getUTAC before request')
     let response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
+    /* eslint-disable-next-line no-console */
+    console.log('getUTAC after request')
     return {
       success: response.success,
-      ct: (response.json.ct || {})
+      ctData: {
+        ct: response.json.ct,
+        updateDate: response.json.updateDate
+      }
     }
   },
   // async getHistoVecAndUtac(id, key, plaque, uuid, callbacks) {
