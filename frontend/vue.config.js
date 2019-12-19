@@ -4,7 +4,7 @@ const glob = require('glob-all')
 const path = require('path')
 
 module.exports = {
-  publicPath: `${process.env.VUE_APP_TITLE}`,
+  publicPath: `/${process.env.VUE_APP_TITLE}`,
   outputDir: 'dist',
   runtimeCompiler: true,
   productionSourceMap: false, //process.env.VUE_APP_SOURCE_MAP === 'true',
