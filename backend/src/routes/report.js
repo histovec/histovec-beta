@@ -183,6 +183,15 @@ export function generateGetUTAC(utacClient) {
         appLogger.debug({ plaque })
 
         try {
+          if (!utacClient) {
+            res.status(503).json({
+              success: false,
+              status: res.status,
+              source: 'utac',
+              message: 'No UTAC api found'
+            })
+          }
+
           let response = await utacClient.readControlesTechniques(plaque)
 
           if (response.status === 200) {

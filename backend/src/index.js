@@ -19,8 +19,12 @@ elasticsearch.Client.search({
 }).then(() => {
   getAsync('')
     .then(async () => {
-      const utacClient = new UTACClient()
-      await utacClient.initialize()
+      let utacClient
+
+      if (config.isUtacApiActivated) {
+        utacClient = new UTACClient()
+        await utacClient.initialize()
+      }
 
       const app = createApp(utacClient)
 
