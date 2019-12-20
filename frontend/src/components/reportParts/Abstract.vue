@@ -2,17 +2,43 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-7">
+        <h6 class="title p-h-15">
+          Impression CSA
+        </h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-1">
+        <i class="fa fa-print fa-3x"></i>
+      </div>
+      <div class="col-md-10">
+        <div class="txt-small-13">
+          Pour imprimer le <span class="info_red">Certificat de Situation Administrative</span>
+          (<b>certificat de non gage</b>),
+          <br>
+          <a
+            class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            @click="changeTab('csa')"
+          >
+            rendez-vous ici<i class="fa fa-external-link pl-5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7">
         <h6 class="title p-h-35">
           Résumé
         </h6>
       </div>
-      <div
-        class="col-md-4 alert alert-icon alert-info hidden-sm hidden-xs"
-        role="alert"
-      >
-        <i class="fa fa-info-circle blink_me"></i>Informations utiles
+      <div class="col-md-4">
+        <h6 class="title p-h-35">
+          Informations utiles
+        </h6>
       </div>
     </div>
+    <div class="separator-2 separator-lg"></div>
     <div class="row">
       <!-- debut voiture  -->
       <div class="col-sm-1">
