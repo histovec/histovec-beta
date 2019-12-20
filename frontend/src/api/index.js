@@ -2,7 +2,6 @@ import 'whatwg-fetch'
 import apiConf from '@/assets/json/backend.json'
 import CryptoJS from 'crypto-js'
 import store from '@/store'
-// import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const apiUrl = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
 const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
@@ -23,7 +22,6 @@ const apiPaths = (apiName, future = false) => {
       contact: 'contact',
       utac: 'utac'
     }
-    // stream: 'stream'
   }
   return future ? `${apiFutureUrl}/${apiRoute.future[apiName]}` : `${apiUrl}/${apiRoute.current[apiName]}`
 }
@@ -189,71 +187,11 @@ export const fetchInit = (apiName, url, options) => {
   return fetch(url, options)
 }
 
-// export const eventClient = async (e, callbacks) => {
-//   try {
-//     if (!e.data) { throw new Error('stream_error_missing_data') }
-//     if (!e.id) { throw new Error('stream_error_missing_id') }
-//     if (!e.event) { throw new Error('stream_error_missing_event') }
-
-//     let apiName = e.id
-//     if (!(apiName in callbacks)) { throw new Error('stream_error_message_id_without_callback') }
-
-//     let response = {
-//       success: (e.event === 200),
-//       status: e.event,
-//       body: e.data,
-//       json: (() => JSON.parse(e.data))
-//     }
-
-//     response = await checkStatus(apiName, response)
-//     if (callbacks[apiName].json || callbacks[apiName].search || callbacks[apiName].decrypt) {
-//       response = await checkValidJson(apiName, response)
-//     }
-
-//     if (callbacks[apiName].json || callbacks[apiName].search || callbacks[apiName].decrypt) {
-//       // artificial fake elasticsearch response for StreamEvent and direct Elasticsearch Api compatibility
-//       response = await checkValidSearch(apiName, {
-//         status: response.status,
-//         success: response.success,
-//         hits: { hits: [{ _source: response.json }]}
-//       })
-//     }
-
-//     if (callbacks[apiName].decrypt) {
-//       response = await decryptHit(apiName, response, 'v', callbacks[apiName].key)
-//     }
-
-//     if (callbacks[apiName].callback) {
-//       callbacks[apiName].callback(response)
-//     }
-//   } catch (error) {
-//       /* eslint-disable-next-line no-console */
-//       console.log(error)
-//       throw new Error('stream_unhandled_exception')
-//   }
-// }
-
 export const fetchClient = (apiName, url, options) => fetchInit(apiName, url, options).then(resp => checkStatus(apiName, resp))
 export const jsonClient = (apiName, url, options) => fetchClient(apiName, url, options).then(resp => checkValidJson(apiName, resp))
 export const searchClient = (apiName, url, options) => jsonClient(apiName, url, options).then(resp => checkValidSearch(apiName, resp))
 export const decryptSearchClient = (apiName, url, objectPath, key, options) => searchClient(apiName,url, options).then(resp => decryptHit(apiName, resp, objectPath, key))
 export const decryptClient = (apiName, url, objectPath, key, options) => jsonClient(apiName,url, options).then(resp => decryptHit(apiName, resp, objectPath, key))
-
-// export const streamClient = async (url, callbacks, options) => {
-//   let es = new EventSourcePolyfill(url, options)
-//   Object.keys(callbacks).forEach((apiName) => store.commit('initApiStatus', apiName))
-//   /* eslint-disable-next-line no-console */
-//   console.log('streamClient', url, callbacks, options)
-//   es.onmessage = (e) => {
-//     /* eslint-disable-next-line no-console */
-//     console.log('message', e)
-//     if (e.id === 'end-of-stream') {
-//       es.close()
-//     } else {
-//       eventClient(e, callbacks)
-//     }
-//   }
-// }
 
 const jsonHeader = {
   'Content-Type': 'application/json',
@@ -275,9 +213,6 @@ const apiClient = {
   decrypt: (apiName, url, objectPath, key, options) => (
     decryptClient(apiName, url, objectPath, key, { ...options, headers: jsonHeader})
   ),
-  // stream: (url, callbacks, options) => (
-  //   streamClient(url, callbacks, options)
-  // )
 }
 
 export default {
@@ -307,11 +242,7 @@ export default {
     const options = {
       body: JSON.stringify({id: id, code: code, token: token, key: key, utacId: utacId, uuid: uuid})
     }
-    /* eslint-disable-next-line no-console */
-    console.log('getUTAC before request')
     let response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
-    /* eslint-disable-next-line no-console */
-    console.log('getUTAC after request')
     return {
       success: response.success,
       ctData: {
@@ -320,27 +251,6 @@ export default {
       }
     }
   },
-  // async getHistoVecAndUtac(id, key, plaque, uuid, callbacks) {
-  //   const apiName = 'stream'
-  //   const options = {
-  //     headers: {
-  //       'Histovec-Id': id,
-  //       'Histovec-Uuid': uuid,
-  //       'Histovec-Plaque': plaque
-  //     }
-  //   }
-  //   const streamCallbacks = {
-  //     histovec: {
-  //       decrypt: key,
-  //       callback: callbacks.histovec
-  //     },
-  //     utac: {
-  //       json: true,
-  //       callback: callbacks.utac
-  //     }
-  //   }
-  //   await apiClient.stream(`${apiPaths[apiName]}`, streamCallbacks, options)
-  // },
   async log (path, uid) {
     const apiName = 'log'
     let p = path.replace(/^\/\w+\//, '')
