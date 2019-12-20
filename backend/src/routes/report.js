@@ -13,17 +13,6 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-// function addStreamEvent(res, id, status, json) {
-//   res.write(`id: ${id}\n`)
-//   res.write(`event: ${status}\n`)
-//   res.write(`data: ${JSON.stringify(json)}\n\n`)
-// }
-
-// function endStreamEvent(res, status, json) {
-//   addStreamEvent(res, 'end-of-stream', status, json)
-//   res.end()
-// }
-
 function immatNorm (plaque) {
 	if (!plaque || typeof plaque != 'string') {
 		return undefined
@@ -232,31 +221,3 @@ export function generateGetUTAC(utacClient) {
     }
   }
 }
-
-// export async function streamedReport (req, res) {
-//   res.set({
-//     "Content-Type": "text/event-stream",
-//     "Cache-Control": "no-cache",
-//     "Connection": "keep-alive",
-//   })
-//   let status = 500
-//   let success = false
-//   try {
-//     let response = await searchSIV(req.header('Histovec-Id'), req.header('Histovec-Uuid'))
-//     addStreamEvent(res, 'histovec', response.status, response)
-
-//     if (response.status === 200) {
-//       response = await searchUTAC(req.header('Histovec-Plaque'))
-//       addStreamEvent(res, 'utac', response.status, response)
-//       success = (response.status === 200)
-//       status = success ? 200 : 206
-//     } else {
-//       addStreamEvent(res, 'histovec', response.status, response)
-//       status = response.status
-//       success = false
-//     }
-//     endStreamEvent(res, status, { status: status, success: success })
-//   } catch (error) {
-//     endStreamEvent(res, status, { status: status, success: success, error: error.message })
-//   }
-// }

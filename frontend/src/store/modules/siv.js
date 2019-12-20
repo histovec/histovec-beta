@@ -35,8 +35,6 @@ export default {
   },
   actions: {
     async getSIV ({ commit, state, rootState }, future) {
-      /* eslint-disable-next-line no-console */
-      console.log('getSIV')
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.siv) {
         return
       }
@@ -55,20 +53,7 @@ export default {
           commit('updateUtacId', response.utac_id)
         }
       }
-      /* eslint-disable-next-line no-console */
-      console.log('END')
       return
     },
-    // async getSIVAndUtac ({ commit, state, rootState}) {
-    //   if (rootState.api && rootState.api.fetching && ( rootState.api.fetching.histovec || rootState.api.fetching.utac )) {
-    //     return
-    //   }
-    //   await api.getSIVAndUtac(state.id, state.key, rootState.identity.plaque, localStorage.getItem('userId'),
-    //     {
-    //       histovec: ((response) => { if (response.success) { commit('uptateV', response.v) } }),
-    //       utac: ((response) => { if (response.success) { commit('uptateCT', response.ctData) } })
-    //     }
-    //   )
-    // }
   }
 }
