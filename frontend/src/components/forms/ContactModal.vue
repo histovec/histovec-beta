@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.state.modalForm">
+  <div v-if="$store.state.isContactModalVisible">
     <transition name="modal">
       <div class="modal-mask">
         <div class="modal-wrapper">
@@ -15,7 +15,7 @@
                   <span class="sr-only">Fermer</span>
                 </button>
                 <h6 class="modal-title">
-                  {{ title }}
+                  Contact
                 </h6>
               </div>
               <div class="modal-body">
@@ -23,69 +23,85 @@
                   v-if="!isMessageSent"
                   class="content"
                 >
-                  <div v-if="mode === contact.mode.rating">
-                    <div class="row">
-                      <div class="col-sm-6 p-g-17">
-                        <img
-                          :src="imageLogoRepubliqueFrancaisePng"
-                          class="img-responsive img-inline"
-                          width="60px"
-                          alt="Logo voxusagers.numerique.gouv.fr"
-                        >
-                        <span>
-                          <b>voxusagers.</b><i>numerique.gouv.fr</i>
-                        </span>
-                      </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                      <a
-                        href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
-                        target="_blank"
-                        @click="setEvaluation"
-                      >
-                        <img
-                          width="140px"
-                          src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-                          alt="Je donne mon avis"
-                          title="Je donne mon avis sur cette démarche"
-                          class="img-responsive img-center"
-                        />
-                      </a>
-                    </div>
-                  </div>
-                  <div v-if="mode === contact.mode.contact">
-                    <div
-                      class="form-group has-feedback"
-                      :class="[{'has-error' : (errors.includes(contact.error.subject))}]"
-                    >
-                      <label>
-                        Sujet
-                      </label>
-                      <span
-                        v-if="errors.includes(contact.error.subject)"
-                        class="info_red txt-small-11"
-                      >
-                        {{ contact.error.subject }}
-                      </span>
-                      <select
-                        v-model="subject"
-                        class="col-sm-12 col-xs-12"
-                      >
-                        <option
-                          v-for="(entry, index) in contact.subject"
-                          :key="index"
-                          :value="entry"
-                          :disabled="entry === contact.subject.default"
-                        >
-                          {{ entry }}
-                        </option>
-                      </select>
-                      <p><br /></p>
-                    </div>
-                  </div>
                   <div
-                    v-if="mode === contact.mode.contact"
+                    class="form-group has-feedback"
+                    :class="[{'has-error' : (errors.includes(contact.error.subject))}]"
+                  >
+                    <label>
+                      Sujet
+                    </label>
+                    <span
+                      v-if="errors.includes(contact.error.subject)"
+                      class="info_red txt-small-11"
+                    >
+                      {{ contact.error.subject }}
+                    </span>
+                    <select
+                      v-model="subject"
+                      class="col-sm-12 col-xs-12"
+                    >
+                      <option
+                        v-for="(entry, index) in contact.subject"
+                        :key="index"
+                        :value="entry"
+                        :disabled="entry === contact.subject.default"
+                      >
+                        {{ entry }}
+                      </option>
+                    </select>
+                    <p><br /></p>
+                  </div>
+
+                  <div
+                    v-if="isReadOnlySubject && !isDefaultSubject"
+                    class="form-group has-feedback"
+                  >
+                    <p>
+                      <label>
+                        Marche à suivre
+                      </label>
+                      <br>
+                      <span v-if="subject === contact.subject.transfer">
+                        Il convient d'effectuer les
+                        <a
+                          href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
+                          target="_blank"
+                        >
+                          démarches de déclaration de cession du véhicule
+                          <i class="fa fa-external-link"></i>
+                        </a>
+                        auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+                      </span>
+                      <span v-if="subject === contact.subject.registrationCardChange">
+                        Il convient d'effectuer les
+                        <a
+                          href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
+                          target="_blank"
+                        >
+                          démarches de changement de titulaire du certificat d'immatriculation
+                          <i class="fa fa-external-link"></i>
+                        </a>
+                        auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+                      </span>
+                      <span v-if="subject === contact.subject.registrationCardLoss">
+                        Il convient d'effectuer les
+                        <a
+                          href="https://immatriculation.ants.gouv.fr/Vos-demarches/Obtenir-un-duplicata-en-cas-de-perte-vol-deterioration"
+                          target="_blank"
+                        >
+                          démarches de déclaration de perte ou de vol du certificat d'immatriculation
+                          <i class="fa fa-external-link"></i>
+                        </a>
+                        auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+                      </span>
+                      <span v-if="subject === contact.subject.resolvePV">
+                        Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé).
+                      </span>
+                    </p>
+                  </div>
+
+                  <div
+                    v-if="!isReadOnlySubject && !isDefaultSubject"
                     class="form-group has-feedback"
                     :class="[{'has-error' : (errors.includes(contact.error.email))}]"
                   >
@@ -108,7 +124,8 @@
                       >
                     </p>
                   </div>
-                  <div v-if="mode === contact.mode.contact">
+
+                  <div v-if="!isReadOnlySubject && !isDefaultSubject">
                     <div class="form-group">
                       <p class="m-h-10">
                         <label>Message (optionnel) :</label>
@@ -124,7 +141,7 @@
                       </p>
                     </div>
                     <div
-                      v-if="this.$store.state.siv.id"
+                      v-if="$store.state.siv.id"
                     >
                       <label> Données transmises pour l'assistance </label>
                       <div class="row txt-small-11">
@@ -171,27 +188,17 @@
               <div class="modal-footer">
                 <div class="row">
                   <div class="col-md-6 m-h-15 position_left">
-                    <label v-if="!isMessageSent && mode === contact.mode.rating">
-                      <input
-                        id="showModal"
-                        v-model="notShow"
-                        name="showModal"
-                        type="checkbox"
-                        @change="persistNotShow"
-                      >
-                      Ne plus afficher
-                    </label>
                   </div>
                   <div class="col-md-6">
                     <span
-                      v-if="!isMessageSent && errors.includes(contact.error.api)"
+                      v-if="!isReadOnlySubject && !isMessageSent && errors.includes(contact.error.api)"
                       class="info_red txt-small-11"
                     >
                       {{ contact.error.api }}
                       <br />
                     </span>
                     <button
-                      v-if="!isMessageSent && mode === contact.mode.contact"
+                      v-if="!isReadOnlySubject && !isMessageSent"
                       class="btn btn-animated btn-default m-h-05"
                       @click="send"
                     >
@@ -225,6 +232,7 @@
 
 <script>
 import { detect } from 'detect-browser'
+import contact from '@/assets/json/contact.json'
 import imageLogoRepubliqueFrancaisePng from '@/assets/img/logo_de_la_Republique_francaise.png'
 
 export default {
@@ -238,6 +246,13 @@ export default {
       note: undefined,
       clicked: false,
       isMessageSent: false,
+      readOnlySubjects: [
+        contact.subject.transfer,
+        contact.subject.registrationCardChange,
+        contact.subject.registrationCardLoss,
+        contact.subject.resolvePV
+      ],
+      contact,
 
       // images
       imageLogoRepubliqueFrancaisePng,
@@ -247,39 +262,33 @@ export default {
     who () {
       return this.$store.state.siv.id ? (this.$store.state.siv.code ? 'holder' : 'buyer') : undefined
     },
-    mode () {
-      return this.$store.state.modalFormMode
-    },
     subject: {
       get () {
-        return this.$store.state.modalFormSubject
+        return this.$store.state.contactModalSubject
       },
       set (value) {
-        this.$store.commit('updateModalFormSubject', value)
+        this.$store.commit('updateContactModalSubject', value)
       }
     },
     apiName () {
-      return this.mode === this.contact.mode.contact ? 'contact' : ''
+      return 'contact'
     },
     dispatchName () {
-      return this.mode === this.contact.mode.contact ? 'sendContact' : ''
-    },
-    title () {
-      return this.contact.title[this.mode]
+      return 'sendContact'
     },
     filteredMessage () {
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
     },
     errors () {
       let errorList = []
-      if (this.clicked && (this.mode === this.contact.mode.contact) && (this.subject === this.contact.subject.default)) {
-        errorList.push(this.contact.error.subject)
+      if (this.clicked && (this.subject === contact.subject.default)) {
+        errorList.push(contact.error.subject)
       }
-      if (this.clicked && (this.email || this.mode === this.contact.mode.contact) && !this.isEmailValid()) {
-        errorList.push(this.contact.error.mail)
+      if (this.clicked && this.email && !this.isEmailValid()) {
+        errorList.push(contact.error.mail)
       }
       if (this.clicked && this.$store.state.api && this.$store.state.api.http[this.apiName] && (this.$store.state.api.http[this.apiName] !== 201)) {
-        errorList.push(this.contact.error.api)
+        errorList.push(contact.error.api)
       }
       return errorList
     },
@@ -287,7 +296,7 @@ export default {
       if (this.clicked) {
         if (this.errors.length > 0) {
           return 'failed'
-        } else if (this.$store.state.api && (this.$store.state.api.fetching.feedback || this.$store.state.api.fetching.contact)) {
+        } else if (this.$store.state.api && this.$store.state.api.fetching.contact) {
           return 'posting'
         } else {
           return 'posted'
@@ -295,6 +304,12 @@ export default {
       } else {
         return 'init'
       }
+    },
+    isReadOnlySubject () {
+      return this.readOnlySubjects.includes(this.subject)
+    },
+    isDefaultSubject () {
+      return this.subject === contact.subject.default
     }
   },
   methods: {
@@ -307,7 +322,7 @@ export default {
     },
     close () {
       this.isMessageSent = false
-      this.$store.dispatch('toggleModalForm')
+      this.$store.dispatch('toggleContactModal')
       return
     },
     async send (e) {
@@ -328,30 +343,25 @@ export default {
           'date': new Date().toUTCString(),
           'holder': (this.who === 'holder'),
           'browser': detect(),
-          'identity': (this.mode === this.contact.mode.rating) ? undefined :
-            {
-              typeImmatriculation: this.$store.state.identity.typeImmatriculation,
-              typePersonne: this.$store.state.identity.typePersonne,
-              raisonSociale: this.$store.state.identity.raisonSociale,
-              siren: this.$store.state.identity.siren,
-              nom: this.$store.state.identity.nom,
-              prenom: this.$store.state.identity.prenom,
-              plaque: this.$store.state.identity.plaque,
-              formule: this.$store.state.identity.formule,
-              dateCertificat: this.$store.state.identity.dateCertificat
-            },
+          'identity':{
+            typeImmatriculation: this.$store.state.identity.typeImmatriculation,
+            typePersonne: this.$store.state.identity.typePersonne,
+            raisonSociale: this.$store.state.identity.raisonSociale,
+            siren: this.$store.state.identity.siren,
+            nom: this.$store.state.identity.nom,
+            prenom: this.$store.state.identity.prenom,
+            plaque: this.$store.state.identity.plaque,
+            formule: this.$store.state.identity.formule,
+            dateCertificat: this.$store.state.identity.dateCertificat
+          },
           'subject': this.subject
         }
 
-        if (this.mode === this.contact.mode.rating) {
+        await this.$store.dispatch(this.dispatchName, data)
+        if (this.$store.state.api.http[this.apiName] === 201) {
+          this.isMessageSent = true
+        } else {
           this.clicked = true
-        } else if (this.mode === this.contact.mode.contact) {
-          await this.$store.dispatch(this.dispatchName, data)
-          if (this.$store.state.api.http[this.apiName] === 201) {
-            this.isMessageSent = true
-          } else {
-            this.clicked = true
-          }
         }
       }
     },

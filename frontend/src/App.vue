@@ -39,8 +39,8 @@
         </div>
       </header>
     </div>
-    <modal-form>
-    </modal-form>
+    <contact-modal></contact-modal>
+    <rating-modal></rating-modal>
     <!-- fin entete -->
     <router-view></router-view>
     <!-- footer start -->
@@ -63,7 +63,7 @@
                     <a
                       :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : contactEmail"
                       title="Contactez-nous"
-                      @click="toggleModalForm()"
+                      @click="toggleContactModal()"
                     >
                       Contactez-nous
                       <i class="fa fa-comments"></i>
@@ -191,16 +191,17 @@ import Vue from 'vue'
 import { detect } from 'detect-browser'
 
 import npmConf from '../package.json'
-import apiConf from './assets/json/backend.json'
-import localization from './assets/json/lang.json'
-import operations from './assets/json/operations.json'
-import usages from './assets/json/usages.json'
-import synthese from './assets/json/synthese.json'
-import statusMessages from './assets/json/status.json'
-import contact from './assets/json/contact.json'
+import apiConf from '@/assets/json/backend.json'
+import localization from '@/assets/json/lang.json'
+import operations from '@/assets/json/operations.json'
+import usages from '@/assets/json/usages.json'
+import synthese from '@/assets/json/synthese.json'
+import statusMessages from '@/assets/json/status.json'
+import contact from '@/assets/json/contact.json'
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
-import ModalForm from './components/forms/ModalForm.vue'
+import ContactModal from './components/forms/ContactModal.vue'
+import RatingModal from './components/forms/RatingModal.vue'
 
 import { HISTOVEC_SUPPORT_EMAIL } from './constants/email'
 import { mailTo } from './utils/email'
@@ -227,7 +228,6 @@ Vue.mixin({
       usages: usages,
       synthese: synthese,
       statusMessages: statusMessages,
-      contact: contact,
       lang: localization.default,
       show: false
     }
@@ -269,12 +269,13 @@ Vue.mixin({
 export default {
   name: 'App',
   components: {
-    ModalForm
+    ContactModal,
+    RatingModal,
   },
   methods: {
-    toggleModalForm (mode = contact.mode.contact, subject = contact.subject.contact) {
+    toggleContactModal (subject = contact.subject.default) {
       if (this.$store.state.config.v1 && this.$store.state.config.modalMail) {
-        this.$store.dispatch('toggleModalForm', { mode: mode, subject: subject })
+        this.$store.dispatch('toggleContactModal', { subject })
       }
     }
   }

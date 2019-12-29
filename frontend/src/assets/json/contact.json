@@ -1,24 +1,15 @@
 {
-  "mode": {
-    "rating": "rating",
-    "contact": "contact"
-  },
-  "title": {
-    "rating": "Votre évaluation",
-    "contact": "Contact"
-  },
-  "route": {
-    "rating": "feedback",
-    "contact": "contact"
-  },
   "subject": {
     "default": "Choisissez",
-    "error": "Signaler une erreur",
+    "transfer": "Déclarer la cession de mon véhicule",
+    "registrationCardChange": "Effectuer un changement de titulaire de la carte grise",
+    "registrationCardLoss": "Déclarer la perte ou le vol de ma carte grise",
+    "resolvePV": "Lever une opposition pour PV en attente",
     "content": "Signaler un problème avec les données de mon véhicule",
     "holderNotFound": "Je ne trouve pas mon véhicule",
+    "error": "Signaler une erreur",
     "buyerNotFound": "Signaler une erreur de lien invalide",
-    "other": "Autre problème",
-    "contact": "Contact"
+    "contact": "Autre problème"
   },
   "error": {
     "subject": "Veuillez choisir un objet",

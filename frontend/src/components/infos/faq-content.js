@@ -10,17 +10,13 @@ import { mailTo } from '../../utils/email'
 import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
 
 
-const contactHook = (id, mode = contact.mode.contact, subject = contact.subject.contact, mailBody = undefined) => {
-  /* eslint-disable-next-line */
-  console.log(id, mode, subject)
+const contactHook = (id, subject = contact.subject.default, mailBody = undefined) => {
   return {
     [id]: (e) => {
       if (store.state.config.v1 && store.state.config.modalMail) {
         e.removeAttribute('href')
         e.onclick = async () => {
-          /* eslint-disable-next-line */
-          console.log(mode, subject)
-          await store.dispatch('toggleModalForm', { mode: mode, subject: subject })
+          await store.dispatch('toggleContactModal', { subject })
         }
       } else {
         e.href = mailTo({ recipients: [HISTOVEC_SUPPORT_EMAIL], subject, body: mailBody })
@@ -218,7 +214,7 @@ export default function () {
           </a>
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.error, reportAnErrorEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.error, reportAnErrorEmail.body),
       react: { object: store.state.config, key: 'modalMail'}
     },
     {
@@ -280,7 +276,7 @@ export default function () {
           >contactez-nous</a>.
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
       react: { object: store.state.config, key: 'modalMail'}
     },
     {
@@ -456,7 +452,7 @@ export default function () {
         </a>
       </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.mode.contact, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
       react: { object: store.state.config, key: 'modalMail'}
     },
     {
