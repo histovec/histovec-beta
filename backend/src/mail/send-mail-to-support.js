@@ -20,6 +20,9 @@ const formDataShortcut = (identity, fakeDateNaissance = '0') => {
   const emptyPrenom = ' '
   let table = '<table><tr>'
 
+  // No data shortcut available if user didn't complete any report form
+  if (!typeImmatriculation) return
+
   switch (typeImmatriculation) {
     case 'siv': {
       if (typePersonne === 'particulier') {
