@@ -21,6 +21,14 @@
               <div class="modal-body">
                 <div class="content">
                   <div class="row">
+                    <div class="p-g-17 text-center">
+                      <h7>
+                        <b>Vous pouvez donner votre avis sur le service HistoVec :</b>
+                      </h7>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row">
                     <div class="col-sm-6 p-g-17">
                       <img
                         :src="imageLogoRepubliqueFrancaisePng"
