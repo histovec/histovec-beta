@@ -8,10 +8,10 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-1">
+      <div class="col-md-1 col-sm-2">
         <i class="fa fa-print fa-3x"></i>
       </div>
-      <div class="col-md-10">
+      <div class="col-md-10 col-sm-10">
         <div class="txt-small-13">
           Pour imprimer le <span class="info_red">Certificat de Situation Administrative</span>
           (<b>certificat de non gage</b>),
@@ -362,9 +362,7 @@
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </div>
-      </div>
-      <!-- debut trait separation  -->
-      <div class="separator-2 separator-lg"></div>
+      </div>col-sm-8
       <!-- fin trait separation  -->
     </div>
     <div>
