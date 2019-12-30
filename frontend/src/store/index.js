@@ -59,9 +59,8 @@ export default new Vuex.Store({
       utacGraph: ['ctrl', 'alt', 'g'],
       v1: ['ctrl','alt','v'],
     },
-    modalForm: false,
-    modalFormMode: contact.mode.contact,
-    modalFormSubject: '',
+    isContactModalVisible: false,
+    contactModalSubject: '',
     feedback: {},
     contact: {}
   },
@@ -75,14 +74,14 @@ export default new Vuex.Store({
       console.log('hidden-feature', key, !model[leafPath])
       Vue.set(model, leafPath, !model[leafPath])
     },
-    toggleModalForm (state) {
-      state.modalForm = !state.modalForm
+    toggleContactModal (state) {
+      state.isContactModalVisible = !state.isContactModalVisible
     },
-    updateModalFormMode (state, mode) {
-      state.modalFormMode = mode
+    toggleRatingModal (state) {
+      state.isRatingModalVisible = !state.isRatingModalVisible
     },
-    updateModalFormSubject (state, subject) {
-      state.modalFormSubject = subject
+    updateContactModalSubject (state, subject) {
+      state.contactModalSubject = subject
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
@@ -109,14 +108,18 @@ export default new Vuex.Store({
       await api.log(path, localStorage.getItem('userId'))
       commit('updateLogCounter')
     },
-    async toggleModalForm ({ state, commit, dispatch }, message ) {
-      let mode = ( message && message.mode ) || contact.mode.contact
-      let subject = ( message && message.subject ) || contact.mode.subject
-      await commit('toggleModalForm')
-      await commit('updateModalFormMode', mode)
-      await commit('updateModalFormSubject', subject)
-      if (state.modalForm && mode) {
-        await dispatch('log', contact.route[mode])
+    async toggleContactModal ({ state, commit, dispatch }, message ) {
+      let subject = ( message && message.subject ) || contact.subject.default
+      await commit('toggleContactModal')
+      await commit('updateContactModalSubject', subject)
+      if (state.isContactModalVisible) {
+        await dispatch('log', 'contact')
+      }
+    },
+    async toggleRatingModal ({ state, commit, dispatch }) {
+      await commit('toggleRatingModal')
+      if (state.isRatingModalVisible) {
+        await dispatch('log', 'feedback')
       }
     },
     async sendFeedback ({ state, commit }, feedback) {

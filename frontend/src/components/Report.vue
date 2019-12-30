@@ -391,7 +391,7 @@ export default {
       vin: '',
       conf: [],
       timeout: 10000,
-      modalFormTimer: 120000
+      ratingModalTimer: 120000
     }
   },
   computed: {
@@ -404,7 +404,7 @@ export default {
     },
     status () {
       if (this.$store.state.siv.v) {
-        this.showModalForm()
+        this.showRatingModal()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
         return 'invalidBuyer'
@@ -506,16 +506,16 @@ export default {
         return
       }
     },
-    showModalForm () {
+    showRatingModal () {
       const notShow = localStorage.getItem('notShow') === 'true'
       const evaluation = localStorage.getItem('evaluation') === 'true'
 
       if (!notShow && !evaluation) {
         setTimeout(() => {
-          if (!this.$store.state.modalForm && this.$route.path.match(/report/)) {
-            this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.rating } )
+          if (!this.$store.state.isRatingModalVisible && this.$route.path.match(/report/)) {
+            this.$store.dispatch('toggleRatingModal')
           }
-        }, this.modalFormTimer)
+        }, this.ratingModalTimer)
       }
     },
     changeTab (tab) {

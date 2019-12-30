@@ -116,7 +116,7 @@ export default {
   methods: {
     async needHelp () {
       if (this.$store.state.config.v1 && this.$store.state.config.modalMail) {
-        await this.$store.dispatch('toggleModalForm', { mode: this.contact.mode.contact, subject: this.contact.subject.contact })
+        await this.$store.dispatch('toggleContactModal', { subject: this.contact.subject.default })
       }
     },
     async highlightQuestion(id) {
