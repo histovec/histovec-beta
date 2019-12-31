@@ -1,15 +1,15 @@
 {
   "subject": {
     "default": "Choisissez",
-    "transfer": "Déclarer la cession de mon véhicule",
-    "registrationCardChange": "Effectuer un changement de titulaire de la carte grise",
-    "registrationCardLoss": "Déclarer la perte ou le vol de ma carte grise",
-    "resolvePV": "Lever une opposition pour PV en attente",
-    "content": "Signaler un problème avec les données de mon véhicule",
+    "transfer": "Je ne parviens pas à faire la déclaration de cession de mon véhicule",
+    "registrationCardChange": "Je souhaite effectuer un changement de titulaire de la carte grise",
+    "registrationCardLoss": "Je ne dispose plus de la carte grise de mon véhicule",
+    "resolvePV": "Je souhaite faire lever une opposition pour PV en attente",
+    "content": "J'ai constaté un problème avec les données de mon véhicule ",
     "holderNotFound": "Je ne trouve pas mon véhicule",
-    "error": "Signaler une erreur",
-    "buyerNotFound": "Signaler une erreur de lien invalide",
-    "contact": "Autre problème"
+    "error": "Je signale une erreur",
+    "buyerNotFound": "Je signale une erreur de lien invalide",
+    "contact": "Je signale un autre problème"
   },
   "error": {
     "subject": "Veuillez choisir un objet",

@@ -95,7 +95,13 @@
                         auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
                       </span>
                       <span v-if="subject === contact.subject.resolvePV">
-                        Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé).
+                        Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou
+                        <a
+                          href="https://www.antai.gouv.fr"
+                          target="_blank"
+                        >
+                          l'Agence nationale de traitement automatisé des infractions (ANTAI)
+                        </a>.
                       </span>
                     </p>
                   </div>
