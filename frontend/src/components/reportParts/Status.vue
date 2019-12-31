@@ -13,7 +13,8 @@
           {{ message }}
         </div>
         <div
-          v-if="subMessage"
+          v-for="(subMessage, index) in subMessages"
+          :key="index"
           :class="subAlertClass"
           role="alert"
         >
@@ -58,8 +59,8 @@ export default {
     alertClass () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].class ? this.statusMessages[this.status].class : this.statusMessages.default.class) : this.statusMessages.default.class
     },
-    subMessage () {
-      return this.statusMessages[this.status] ? (this.statusMessages[this.status].subMsg ? this.statusMessages[this.status].subMsg : '') : this.statusMessages.default.subMsg
+    subMessages () {
+      return this.statusMessages[this.status] ? (this.statusMessages[this.status].subMessages ? this.statusMessages[this.status].subMessages : []) : this.statusMessages.default.subMessages
     },
     subAlertClass () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].subClass ? this.statusMessages[this.status].subClass : this.statusMessages.default.subClass) : this.statusMessages.default.subClass

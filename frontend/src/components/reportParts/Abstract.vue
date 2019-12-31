@@ -362,7 +362,7 @@
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </div>
-      </div>col-sm-8
+      </div>
       <!-- fin trait separation  -->
     </div>
     <div>
