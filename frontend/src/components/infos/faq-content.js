@@ -13,7 +13,7 @@ import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
 const contactHook = (id, subject = contact.subject.default, mailBody = undefined) => {
   return {
     [id]: (e) => {
-      if (store.state.config.v1 && store.state.config.modalMail) {
+      if (store.state.config.v1) {
         e.removeAttribute('href')
         e.onclick = async () => {
           await store.dispatch('toggleContactModal', { subject })
@@ -30,19 +30,25 @@ export default function () {
   let id = 0
   const vehicleNotFoundEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: 'Je ne trouve pas mon véhicule',
+    subject: contact.subject.holderNotFound,
     body: this.userFooter
   }
 
-  const reportAnErrorEmail = {
+  const reportPersonnalDataEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: 'Signaler une erreur',
+    subject: contact.subject.personalData,
+    body: this.userFooter
+  }
+
+  const reportVehicleDataEmail = {
+    recipients: [HISTOVEC_SUPPORT_EMAIL],
+    subject: contact.subject.vehicleData,
     body: this.userFooter
   }
 
   const reportInvalidLinkEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: 'Signaler une erreur de lien invalide',
+    subject: contact.subject.buyerNotFound,
     body: this.userFooter
   }
 
@@ -202,20 +208,34 @@ export default function () {
       `
     },
     {
-      title: 'Comment signaler une information manquante ou inexacte ?',
+      title: 'Comment corriger une information manquante ou inexacte sur mes données personnelles?',
       body: `
         <p class="indented">
         Pour ce faire,
           <a
             id="contact_hook_${id}"
-            href="${mailTo(reportAnErrorEmail)}"
+            href="${mailTo(reportPersonnalDataEmail)}"
           >
             contactez-nous
           </a>
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.error, reportAnErrorEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.personalData, reportPersonnalDataEmail.body),
+    },
+    {
+      title: 'Comment corriger une information manquante ou inexacte sur les données de mon véhicule?',
+      body: `
+        <p class="indented">
+        Pour ce faire,
+          <a
+            id="contact_hook_${id}"
+            href="${mailTo(reportVehicleDataEmail)}"
+          >
+            contactez-nous
+          </a>
+        </p>
+      `,
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.vehicleData, reportVehicleDataEmail.body),
     },
     {
       title: 'Comment retrouver mon véhicule ?',
@@ -277,7 +297,6 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Où se trouve le numéro de formule ?',
@@ -392,7 +411,7 @@ export default function () {
       `
     },
     {
-      title: 'Quelle est la politique de protection des données personnelles ?',
+      title: 'Quelle est notre politique de protection des données personnelles ?',
       body: `
         <p class="indented">
           Vous pouvez les consulter dans les
@@ -453,7 +472,6 @@ export default function () {
       </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Comment puis-je récupérer le rapport d\'un expert en automobile ?',

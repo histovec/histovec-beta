@@ -5,9 +5,9 @@
     "registrationCardChange": "Je souhaite effectuer un changement de titulaire de la carte grise",
     "registrationCardLoss": "Je ne dispose plus de la carte grise de mon véhicule",
     "resolvePV": "Je souhaite faire lever une opposition pour PV en attente",
-    "content": "J'ai constaté un problème avec les données de mon véhicule ",
+    "personalData": "Je constate un problème avec mes données personnelles",
+    "vehicleData": "Je constate un problème avec les données de mon véhicule",
     "holderNotFound": "Je ne trouve pas mon véhicule",
-    "error": "Je signale une erreur",
     "buyerNotFound": "Je signale une erreur de lien invalide",
     "contact": "Je signale un autre problème"
   },

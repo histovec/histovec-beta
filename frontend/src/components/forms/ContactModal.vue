@@ -103,6 +103,20 @@
                           l'Agence nationale de traitement automatisé des infractions (ANTAI)
                         </a>.
                       </span>
+                      <span v-if="subject === contact.subject.personalData || subject === contact.subject.vehicleData">
+                        HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d'Immatriculation des Véhicules).
+                        <br>
+                        <br>
+                        Pour toute modification de vos données, rendez-vous sur
+                        <a
+                          href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande"
+                          target="_blank"
+                        >
+                          les démarches
+                          <i class="fa fa-external-link"></i>
+                        </a>
+                        proposées par l'ANTS (Agence Nationale des Titres Sécurisés)
+                      </span>
                     </p>
                   </div>
 
@@ -256,7 +270,9 @@ export default {
         contact.subject.transfer,
         contact.subject.registrationCardChange,
         contact.subject.registrationCardLoss,
-        contact.subject.resolvePV
+        contact.subject.resolvePV,
+        contact.subject.personalData,
+        contact.subject.vehicleData
       ],
       contact,
 
