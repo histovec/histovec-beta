@@ -13,7 +13,7 @@ import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
 const contactHook = (id, subject = contact.subject.default, mailBody = undefined) => {
   return {
     [id]: (e) => {
-      if (store.state.config.v1 && store.state.config.modalMail) {
+      if (store.state.config.v1) {
         e.removeAttribute('href')
         e.onclick = async () => {
           await store.dispatch('toggleContactModal', { subject })
@@ -221,7 +221,6 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.personalData, reportPersonnalDataEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Comment corriger une information manquante ou inexacte sur les données de mon véhicule?',
@@ -237,7 +236,6 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.vehicleData, reportVehicleDataEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Comment retrouver mon véhicule ?',
@@ -299,7 +297,6 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Où se trouve le numéro de formule ?',
@@ -475,7 +472,6 @@ export default function () {
       </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Comment puis-je récupérer le rapport d\'un expert en automobile ?',

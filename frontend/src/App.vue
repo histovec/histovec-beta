@@ -61,7 +61,7 @@
                   <div class="separator-2"></div>
                   <button class="btn btn-mon-avis">
                     <a
-                      :href="$store.state.config.v1 && $store.state.config.modalMail ? undefined : contactEmail"
+                      :href="$store.state.config.v1 ? undefined : contactEmail"
                       title="Contactez-nous"
                       @click="toggleContactModal()"
                     >
@@ -274,7 +274,7 @@ export default {
   },
   methods: {
     toggleContactModal (subject = contact.subject.default) {
-      if (this.$store.state.config.v1 && this.$store.state.config.modalMail) {
+      if (this.$store.state.config.v1) {
         this.$store.dispatch('toggleContactModal', { subject })
       }
     }
