@@ -30,7 +30,7 @@ export default function () {
   let id = 0
   const vehicleNotFoundEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: 'Je ne trouve pas mon véhicule',
+    subject: contact.subject.holderNotFound,
     body: this.userFooter
   }
 
@@ -40,9 +40,21 @@ export default function () {
     body: this.userFooter
   }
 
+  const reportPersonnalDataEmail = {
+    recipients: [HISTOVEC_SUPPORT_EMAIL],
+    subject: contact.subject.personalData,
+    body: this.userFooter
+  }
+
+  const reportVehicleDataEmail = {
+    recipients: [HISTOVEC_SUPPORT_EMAIL],
+    subject: contact.subject.vehicleData,
+    body: this.userFooter
+  }
+
   const reportInvalidLinkEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: 'Signaler une erreur de lien invalide',
+    subject: contact.subject.buyerNotFound,
     body: this.userFooter
   }
 
@@ -215,6 +227,38 @@ export default function () {
         </p>
       `,
       callbacks: contactHook(`contact_hook_${id++}`, contact.subject.error, reportAnErrorEmail.body),
+      react: { object: store.state.config, key: 'modalMail'}
+    },
+    {
+      title: 'Comment corriger une information manquante ou inexacte sur mes données personnelles?',
+      body: `
+        <p class="indented">
+        Pour ce faire,
+          <a
+            id="contact_hook_${id}"
+            href="${mailTo(reportPersonnalDataEmail)}"
+          >
+            contactez-nous
+          </a>
+        </p>
+      `,
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.personalData, reportPersonnalDataEmail.body),
+      react: { object: store.state.config, key: 'modalMail'}
+    },
+    {
+      title: 'Comment corriger une information manquante ou inexacte sur les données de mon véhicule?',
+      body: `
+        <p class="indented">
+        Pour ce faire,
+          <a
+            id="contact_hook_${id}"
+            href="${mailTo(reportVehicleDataEmail)}"
+          >
+            contactez-nous
+          </a>
+        </p>
+      `,
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.vehicleData, reportVehicleDataEmail.body),
       react: { object: store.state.config, key: 'modalMail'}
     },
     {
@@ -392,7 +436,7 @@ export default function () {
       `
     },
     {
-      title: 'Quelle est la politique de protection des données personnelles ?',
+      title: 'Quelle est la politique de protection des données personnelles ?',
       body: `
         <p class="indented">
           Vous pouvez les consulter dans les
