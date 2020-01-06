@@ -414,7 +414,7 @@ export default function () {
       `
     },
     {
-      title: 'Quelle est la politique de protection des données personnelles ?',
+      title: 'Quelle est notre politique de protection des données personnelles ?',
       body: `
         <p class="indented">
           Vous pouvez les consulter dans les
