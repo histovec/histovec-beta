@@ -34,12 +34,6 @@ export default function () {
     body: this.userFooter
   }
 
-  const reportAnErrorEmail = {
-    recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: 'Signaler une erreur',
-    body: this.userFooter
-  }
-
   const reportPersonnalDataEmail = {
     recipients: [HISTOVEC_SUPPORT_EMAIL],
     subject: contact.subject.personalData,
@@ -212,22 +206,6 @@ export default function () {
           Contrôlée).
         </p>
       `
-    },
-    {
-      title: 'Comment signaler une information manquante ou inexacte ?',
-      body: `
-        <p class="indented">
-        Pour ce faire,
-          <a
-            id="contact_hook_${id}"
-            href="${mailTo(reportAnErrorEmail)}"
-          >
-            contactez-nous
-          </a>
-        </p>
-      `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.error, reportAnErrorEmail.body),
-      react: { object: store.state.config, key: 'modalMail'}
     },
     {
       title: 'Comment corriger une information manquante ou inexacte sur mes données personnelles?',
