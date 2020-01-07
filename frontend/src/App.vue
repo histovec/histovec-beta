@@ -59,7 +59,7 @@
                     Liens utiles
                   </h4>
                   <div class="separator-2"></div>
-                  <button class="btn btn-mon-avis">
+                  <div class="btn btn-mon-avis">
                     <a
                       :href="$store.state.config.v1 ? undefined : contactEmail"
                       title="Contactez-nous"
@@ -68,7 +68,7 @@
                       Contactez-nous
                       <i class="fa fa-comments"></i>
                     </a>
-                  </button>
+                  </div>
                 </div>
               </div>
 
