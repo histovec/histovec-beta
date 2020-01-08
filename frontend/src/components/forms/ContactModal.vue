@@ -258,12 +258,8 @@ import imageLogoRepubliqueFrancaisePng from '@/assets/img/logo_de_la_Republique_
 export default {
   data () {
     return {
-      notShow: localStorage.getItem('notShow') === 'true',
-      tempValue: undefined,
-      disabled: false,
       message: '',
       email: '',
-      note: undefined,
       clicked: false,
       isMessageSent: false,
       readOnlySubjects: [
@@ -361,7 +357,6 @@ export default {
           'message': this.filteredMessage,
           'email': (this.email === '') ? undefined : this.email,
           'uuid': localStorage.getItem('userId'),
-          'note': this.note,
           'date': new Date().toUTCString(),
           'holder': (this.who === 'holder'),
           'browser': detect(),
@@ -390,12 +385,6 @@ export default {
     isEmailValid () {
       let reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return reg.test(this.email)
-    },
-    persistNotShow ({ target: { checked } }) {
-      localStorage.setItem('notShow', checked)
-    },
-    setEvaluation () {
-      localStorage.setItem('evaluation', true)
     }
   }
 }
