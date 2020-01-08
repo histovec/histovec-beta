@@ -58,6 +58,7 @@ export default new Vuex.Store({
       v1: ['ctrl','alt','v'],
     },
     isContactModalVisible: false,
+    isRatingModalVisible: false,
     contactModalSubject: '',
     feedback: {},
     contact: {}
