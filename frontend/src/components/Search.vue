@@ -1036,7 +1036,7 @@ export default {
         if (this.id !== this.$store.state.siv.id) {
           this.clearReports()
         }
-        this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code}})
+        this.$router.push({name: 'report', params: {id: this.id, key: this.key, code: this.code, typeImmatriculation: this.typeImmatriculation}})
       } else {
         this.status = 'failed'
       }
