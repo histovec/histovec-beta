@@ -99,32 +99,15 @@ export default {
   data () {
     return {
       notShow: localStorage.getItem('notShow') === 'true',
-      tempValue: undefined,
-      disabled: false,
-      message: '',
-      email: '',
-      note: undefined,
-      clicked: false,
 
       // images
       imageLogoRepubliqueFrancaisePng,
     }
   },
   methods: {
-    normalize (string) {
-      try {
-        return string.normalize('NFD')
-      } catch (e) {
-        return string.replace(/[\u0300-\u036f]*/g, '')
-      }
-    },
     close () {
       this.$store.dispatch('toggleRatingModal')
       return
-    },
-    isEmailValid () {
-      let reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return reg.test(this.email)
     },
     persistNotShow ({ target: { checked } }) {
       localStorage.setItem('notShow', checked)

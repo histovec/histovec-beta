@@ -1,7 +1,7 @@
 ############################
 # Artillery.io load tester #
 ############################
-FROM python:3-slim
+FROM python:3.7-slim
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy

@@ -985,19 +985,16 @@ export default {
       if (data.length > 1) {
         if (evt.target.name === 'nom') {
           if (this.typeImmatriculation === 'siv') {
-            // this.nom = data[0]
             this.prenom = data[1]
             this.plaque = data[3]
             this.formule = data[4]
           }
           if (this.typeImmatriculation === 'fni') {
-            // this.nom = data[0]
             this.plaque = data[2]
             this.dateCertificat = data[3]
           }
         }
         if (evt.target.name === 'raisonSociale') {
-          // this.raisonSociale = data[0]
           this.siren = data[1]
           this.plaque = data[2]
           if (this.typeImmatriculation === 'siv') {
