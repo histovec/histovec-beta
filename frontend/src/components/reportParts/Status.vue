@@ -21,6 +21,17 @@
           <i :class="icon"></i>
           {{ subMessage }}
         </div>
+        <div v-if="typeImmatriculation === 'fni'">
+          <div
+            v-for="(fniSubMessage, index) in fniSubMessages"
+            :key="index"
+            :class="subAlertClass"
+            role="alert"
+          >
+            <i :class="icon"></i>
+            {{ fniSubMessage }}
+          </div>
+        </div>
         <div
           v-if="refMessage && refIcon"
           class="mb-20 text-center"
@@ -50,6 +61,10 @@ export default {
     status: {
       type: String,
       default: 'unknown'
+    },
+    typeImmatriculation: {
+      type: String,
+      default: undefined
     }
   },
   computed: {
@@ -61,6 +76,9 @@ export default {
     },
     subMessages () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].subMessages ? this.statusMessages[this.status].subMessages : []) : this.statusMessages.default.subMessages
+    },
+    fniSubMessages () {
+      return this.statusMessages[this.status] ? (this.statusMessages[this.status].fniSubMessages ? this.statusMessages[this.status].fniSubMessages : []) : this.statusMessages.default.fniSubMessages
     },
     subAlertClass () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].subClass ? this.statusMessages[this.status].subClass : this.statusMessages.default.subClass) : this.statusMessages.default.subClass

@@ -326,7 +326,10 @@
       </div>
       <!-- row -->
     </div>
-    <status :status="status"></status>
+    <status
+      :status="status"
+      :type-immatriculation="typeImmatriculation"
+    ></status>
   </section>
 </template>
 
@@ -424,6 +427,9 @@ export default {
         return this.holder ? 'notFound' : 'notFoundBuyer'
       }
       return 'error'
+    },
+    typeImmatriculation () {
+      return this.$route.params.typeImmatriculation
     },
     v () {
       return siv.siv(this.$store.state.siv.v)
