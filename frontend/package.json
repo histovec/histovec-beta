@@ -31,7 +31,7 @@
     "detect-browser": "^4.5.1",
     "es6-promise": "^4.2.8",
     "font-awesome": "^4.7.0",
-    "jspdf": "1.4.1",
+    "jspdf": "1.5.2",
     "lodash.orderby": "^4.6.0",
     "object-path": "^0.11.4",
     "qr.js": "^0.0.0",
