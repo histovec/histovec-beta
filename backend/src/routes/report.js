@@ -14,16 +14,16 @@ import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
 function immatNorm (plaque) {
-	if (!plaque || typeof plaque != 'string') {
-		return undefined
-	}
-	let p = plaque.toUpperCase()
-	p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
-	p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
-	return p
+  if (!plaque || typeof plaque !== 'string') {
+    return undefined
+  }
+  let p = plaque.toUpperCase()
+  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  return p
 }
 
-async function searchSIV(id, uuid) {
+async function searchSIV (id, uuid) {
   try {
     if (checkUuid(uuid) && checkId(id)) {
       const response = await elasticsearch.Client.search({
@@ -134,22 +134,22 @@ export async function getSIV (req, res) {
   }
 }
 
-export function generateGetUTAC(utacClient) {
+export function generateGetUTAC (utacClient) {
   return async function getUTAC (req, res) {
     if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
       appLogger.debug({
         error: 'Not authentified - mismatched id and token',
         id: req.body.id,
-        token: req.body.token
+        token: req.body.token,
       })
       res.status(401).json({
         success: false,
         status: res.status,
         source: 'utac',
-        message: 'Not authentified'
+        message: 'Not authentified',
       })
     } else {
-      const cachedCtKey = hash(req.body.code || req.body.id)
+      const cachedCtKey = hash(req.body.code || req.body.id)
       const cachedCt = await getAsync(cachedCtKey)
       if (cachedCt) {
         try {
@@ -159,7 +159,7 @@ export function generateGetUTAC(utacClient) {
             cachedCt,
             bodyKey: req.body.key,
             bodyCode: req.body.code,
-            bodyId: req.body.id
+            bodyId: req.body.id,
           })
           const ct = decrypt(cachedCt, req.body.key)
 
@@ -167,12 +167,12 @@ export function generateGetUTAC(utacClient) {
             success: true,
             status: res.status,
             source: 'utac',
-            ct
+            ct,
           })
         } catch (error) {
-          appLogger.warn( {
-            error: 'Couldn\'t decrypt cached UTAC response',
-            remote_error: error.message
+          appLogger.warn({
+            error: "Couldn't decrypt cached UTAC response",
+            remote_error: error.message,
           })
         }
       } else {
@@ -188,42 +188,47 @@ export function generateGetUTAC(utacClient) {
               success: false,
               status: res.status,
               source: 'utac',
-              message: 'No UTAC api found'
+              message: 'No UTAC api found',
             })
           }
 
           let response = await utacClient.readControlesTechniques(plaque)
 
           if (response.status === 200) {
-            await setAsync(hash(req.body.code || req.body.id), encrypt(response.ct, req.body.key), 'EX', config.redisPersit)
+            await setAsync(
+              hash(req.body.code || req.body.id),
+              encrypt(response.ct, req.body.key),
+              'EX',
+              config.redisPersit
+            )
             res.status(200).json({
               success: true,
               status: response.status,
               source: 'utac',
               ct: response.ct,
-              updateDate: response.updateDate
+              updateDate: response.updateDate,
             })
           } else {
             appLogger.debug({
               error: 'UTAC response failed',
               status: response.status,
-              remote_error: response.message
+              remote_error: response.message,
             })
             res.status(response.status).json({
               success: false,
               status: response.status,
               source: 'utac',
-              message: response.message
+              message: response.message,
             })
           }
-        } catch(error) {
+        } catch (error) {
           appLogger.warn({
             error: 'UTAC error',
-            remote_error: error.message
+            remote_error: error.message,
           })
           return {
             status: 500,
-            message: error.message
+            message: error.message,
           }
         }
       }
