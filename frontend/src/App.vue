@@ -100,7 +100,7 @@
                         <img
                           class="img-responsive"
                           width="110px"
-                          src="assets/images/logos_metiers/securite_routiere_120.png"
+                          src="assets/images/logos_metiers/securite_routiere.png"
                           alt="sécurité routière, tous responsables"
                         >
                         <a
