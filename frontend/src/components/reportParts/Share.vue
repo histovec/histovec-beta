@@ -89,7 +89,7 @@ export default {
       type: String,
       default: ''
     },
-    baseurl: {
+    baseUrl: {
       type: String,
       default: ''
     },
