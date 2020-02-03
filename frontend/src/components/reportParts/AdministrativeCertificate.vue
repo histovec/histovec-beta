@@ -40,7 +40,7 @@ export default {
       type: String,
       default: ''
     },
-    baseurl: {
+    baseUrl: {
       type: String,
       default: ''
     }
@@ -247,7 +247,7 @@ export default {
           })
         })
         pdf.setFontSize(p.qr.text.size)
-        pdf.text(p.qr.text.pos[0], p.qr.text.pos[1], self.baseurl, null, p.qr.text.rot)
+        pdf.text(p.qr.text.pos[0], p.qr.text.pos[1], self.baseUrl, null, p.qr.text.rot)
         pdf.addImage(this.images['histovec'].img, 'PNG', p.qr.logo.pos[0], p.qr.logo.pos[1], p.qr.logo.pos[2], p.qr.logo.pos[3])
       } // end of QR Code
       if (p.marianne.render) { // logo Marianne
@@ -416,7 +416,7 @@ export default {
         pdf.setFontSize(p.mentions.content.size)
         let i = 0
         pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours, les données étant susceptibles')
-        pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'd\'évoluer. Le QR code ci-contre renvoie au site ' + self.baseurl + ' - il permet de vous assurer de la')
+        pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'd\'évoluer. Le QR code ci-contre renvoie au site ' + self.baseUrl + ' - il permet de vous assurer de la')
         pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'conformité des informations retranscrites et de leurs mises à jour. Ce code sera disponible jusqu\'au changement de')
         pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'titulaire et au plus tard jusqu\'au ' + self.validityDate + '. Au-delà, un nouveau rapport devra être généré.')
       } // mentions légales
