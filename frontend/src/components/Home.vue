@@ -27,7 +27,7 @@
                 class="btn radius-30 btn-default btn-animated btn-lg"
                 :to="{ name: 'search', params: {t: 'particulier'}}"
               >
-                Vendeur
+                Propriétaire
                 <i class="fa fa-handshake-o"></i>
               </router-link>
               <!-- fin bouton vendeur -->
@@ -46,7 +46,7 @@
                 class="btn radius-30 btn-warning btn-animated btn-lg"
                 :to="{ name: 'buyer' }"
               >
-                Acheteur
+                Acquéreur
                 <i class="fa fa-users"></i>
               </router-link>
               <!-- fin bouton acheteur -->
