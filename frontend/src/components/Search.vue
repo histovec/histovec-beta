@@ -55,13 +55,20 @@
             class="col-md-12"
           >
             <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-12">
+              <div
+                class="alert alert-info alert-icon text-center"
+                role="alert"
+              >
+                <i class="fa fa-info-circle"></i>
+                HistoVec permet de consulter l'historique de votre véhicule établi à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV).
+              </div>
               <div
                 class="alert alert-warning alert-icon text-center"
                 role="alert"
               >
                 <i class="fa fa-exclamation-triangle"></i>
-                HistoVec établit l'historique des véhicules à partir des données enregistrées dans le système d'immatriculation des véhicules (SIV).
+                Toute demande de renseignements sur votre dossier ou de correction des informations doit être adressée à l'Agence nationale des titres sécurisés (ANTS).
               </div>
             </div>
           </div>
@@ -164,7 +171,7 @@
           <!-- ================ -->
           <!-- Nav tabs -->
           <ul
-            class="nav nav-tabs style-2"
+            class="nav nav-tabs style-2 nav-justified"
             role="tablist"
           >
             <li :class="[{'in active' : typePersonne === 'particulier'}]">
@@ -182,7 +189,7 @@
                 @click="typePersonne = 'pro'"
               >
                 <i class="fa fa-building-o pr-10"></i>
-                Entreprise
+                Personne morale
               </a>
             </li>
           </ul>
