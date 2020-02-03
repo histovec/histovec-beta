@@ -298,7 +298,7 @@
                   v-if="tab === 'send'"
                   :v="v"
                   :url="url"
-                  :baseurl="baseurl"
+                  :base-url="baseUrl"
                   :holder="holder"
                 >
                 </share>
@@ -312,7 +312,7 @@
                   v-if="tab === 'csa'"
                   :v="v"
                   :url="url"
-                  :baseurl="baseurl"
+                  :base-url="baseUrl"
                 >
                 </administrative-certificate>
               </div>
@@ -443,13 +443,13 @@ export default {
     ctUpdateDate () {
       return this.$store.state.utac.ctData.updateDate
     },
-    baseurl () {
+    baseUrl () {
       // return 'https://histovec.interieur.gouv.fr'
       return window.location.protocol + '//' + window.location.host
     },
     url () {
       let urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
-      return this.baseurl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
+      return this.baseUrl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },
   async created () {

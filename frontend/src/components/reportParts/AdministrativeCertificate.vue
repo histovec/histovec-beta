@@ -29,6 +29,7 @@
 import dayjs from 'dayjs'
 import JsPdf from 'jspdf'
 import Qr from 'qr.js'
+import { generateCsa } from '../../utils/csaAsPdf'
 
 export default {
   props: {
@@ -40,7 +41,7 @@ export default {
       type: String,
       default: ''
     },
-    baseurl: {
+    baseUrl: {
       type: String,
       default: ''
     }
@@ -85,6 +86,41 @@ export default {
     },
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
+
+      if (this.$store.state.config.pdfMultiPages) {
+        console.log('pdf multipages pending...')  // eslint-disable-line no-console
+        generateCsa({
+          annulation: this.v.administratif.annulation,
+          dateAnnulation: this.v.administratif.dateAnnulation,
+          duplicataTitre: this.v.administratif.titre.duplicata,
+          gage: this.v.administratif.gage,
+          hasPVE: this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE'),
+          historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
+          histoVecLogo: this.images['histovec'].img,
+          marianneImage: this.images['marianne'].img,
+          marque: this.v.ctec.marque,
+          ove: this.v.administratif.ove,
+          otci: this.v.administratif.otci,
+          perteTitre: this.v.administratif.titre.perte,
+          plaque: this.$store.state.identity.plaque,
+          premierCertificat: this.v.certificat.premier,
+          pv: this.v.administratif.pv,
+          qrCodeUrl: this.url,
+          saisie: this.v.administratif.saisie,
+          suspension: this.v.administratif.suspension,
+          suspensions: this.v.administratif.suspensions,
+          validityDate: this.validityDate,
+          vin: this.v.ctec.vin,
+          volTitre: this.v.administratif.titre.vol,
+          volVehicule: this.v.administratif.vol,
+          webSiteUrl: this.baseUrl
+        })
+        console.log('pdf multipages done!')  // eslint-disable-line no-console
+        return
+      }
+
+      console.log('old pdf pending...')  // eslint-disable-line no-console
+
       const missing = 'non disponible'
 
       var pdf = new JsPdf({compress: true})
@@ -247,7 +283,7 @@ export default {
           })
         })
         pdf.setFontSize(p.qr.text.size)
-        pdf.text(p.qr.text.pos[0], p.qr.text.pos[1], self.baseurl, null, p.qr.text.rot)
+        pdf.text(p.qr.text.pos[0], p.qr.text.pos[1], self.baseUrl, null, p.qr.text.rot)
         pdf.addImage(this.images['histovec'].img, 'PNG', p.qr.logo.pos[0], p.qr.logo.pos[1], p.qr.logo.pos[2], p.qr.logo.pos[3])
       } // end of QR Code
       if (p.marianne.render) { // logo Marianne
@@ -416,12 +452,13 @@ export default {
         pdf.setFontSize(p.mentions.content.size)
         let i = 0
         pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours, les données étant susceptibles')
-        pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'd\'évoluer. Le QR code ci-contre renvoie au site ' + self.baseurl + ' - il permet de vous assurer de la')
+        pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'd\'évoluer. Le QR code ci-contre renvoie au site ' + self.baseUrl + ' - il permet de vous assurer de la')
         pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'conformité des informations retranscrites et de leurs mises à jour. Ce code sera disponible jusqu\'au changement de')
         pdf.text(p.mentions.pos[0], p.mentions.pos[1] + p.mentions.inter * (i++), 'titulaire et au plus tard jusqu\'au ' + self.validityDate + '. Au-delà, un nouveau rapport devra être généré.')
       } // mentions légales
 
       pdf.save('rapport.pdf')
+      console.log('old pdf done!')  // eslint-disable-line no-console
     }
   }
 }

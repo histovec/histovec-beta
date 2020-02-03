@@ -27,7 +27,8 @@ const config = {
   utacThroughInesUrl: process.env.UTAC_THROUGH_INES_URL,
   utacTimeout: process.env.UTAC_TIMEOUT || 30,
   utacHealthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 30,
-  utacAuthenticateRetrySeconds: process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30
+  utacAuthenticateRetrySeconds:
+    process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30,
 }
 
 export const smtpOptions = {
