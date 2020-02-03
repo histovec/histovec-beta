@@ -29,6 +29,7 @@
 import dayjs from 'dayjs'
 import JsPdf from 'jspdf'
 import Qr from 'qr.js'
+import { generateCsa } from '../../utils/csaAsPdf'
 
 export default {
   props: {
@@ -85,6 +86,41 @@ export default {
     },
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
+
+      if (this.$store.state.config.pdfMultiPages) {
+        console.log('pdf multipages pending...')  // eslint-disable-line no-console
+        generateCsa({
+          annulation: this.v.administratif.annulation,
+          dateAnnulation: this.v.administratif.dateAnnulation,
+          duplicataTitre: this.v.administratif.titre.duplicata,
+          gage: this.v.administratif.gage,
+          hasPVE: this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE'),
+          historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
+          histoVecLogo: this.images['histovec'].img,
+          marianneImage: this.images['marianne'].img,
+          marque: this.v.ctec.marque,
+          ove: this.v.administratif.ove,
+          otci: this.v.administratif.otci,
+          perteTitre: this.v.administratif.titre.perte,
+          plaque: this.$store.state.identity.plaque,
+          premierCertificat: this.v.certificat.premier,
+          pv: this.v.administratif.pv,
+          qrCodeUrl: this.url,
+          saisie: this.v.administratif.saisie,
+          suspension: this.v.administratif.suspension,
+          suspensions: this.v.administratif.suspensions,
+          validityDate: this.validityDate,
+          vin: this.v.ctec.vin,
+          volTitre: this.v.administratif.titre.vol,
+          volVehicule: this.v.administratif.vol,
+          webSiteUrl: this.baseUrl
+        })
+        console.log('pdf multipages done!')  // eslint-disable-line no-console
+        return
+      }
+
+      console.log('old pdf pending...')  // eslint-disable-line no-console
+
       const missing = 'non disponible'
 
       var pdf = new JsPdf({compress: true})
@@ -422,6 +458,7 @@ export default {
       } // mentions légales
 
       pdf.save('rapport.pdf')
+      console.log('old pdf done!')  // eslint-disable-line no-console
     }
   }
 }
