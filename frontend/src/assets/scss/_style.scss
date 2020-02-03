@@ -578,7 +578,8 @@ tbody {
 .header-left {
   padding:3px
   /* 12px*/
-  0 0 0;
+  0 10px 0;
+  // margin-bottom: 10px;
 }
 
 .header-right {
@@ -9166,6 +9167,10 @@ h6.media-heading {
 .text-defaut-g {
   color: #2aa4a5;
   font-weight: 600;
+}
+
+.img-marianne {
+  width: 18%;
 }
 
 .logo {
