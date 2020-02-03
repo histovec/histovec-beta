@@ -171,7 +171,7 @@
           <!-- ================ -->
           <!-- Nav tabs -->
           <ul
-            class="nav nav-tabs style-2"
+            class="nav nav-tabs style-2 nav-justified"
             role="tablist"
           >
             <li :class="[{'in active' : typePersonne === 'particulier'}]">
@@ -189,7 +189,7 @@
                 @click="typePersonne = 'pro'"
               >
                 <i class="fa fa-building-o pr-10"></i>
-                Entreprise
+                Personne morale
               </a>
             </li>
           </ul>
