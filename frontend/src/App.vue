@@ -15,7 +15,7 @@
       <header class="header">
         <div class="container">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
               <div class="header-left clearfix">
                 <!-- debut bandeau -->
                 <div class="logo">
@@ -24,10 +24,24 @@
                   >
                     <img
                       alt="accueil"
-                      src="assets/images/histovec-header-mobile.png"
-                      class="img-responsive"
-                      width="548"
-                      height="98"
+                      src="assets/images/logo_mi_fond_bleu.svg"
+                      class="img-responsive col-md-2 img-marianne"
+                      width="85"
+                      height="100"
+                      @click="show = !show"
+                    >
+                  </router-link>
+                </div>
+                <div class="logo">
+                  <router-link
+                    :to="{ name: 'home' }"
+                  >
+                    <img
+                      alt="accueil"
+                      src="assets/images/histovec-header-mobile-sans-marianne.svg"
+                      class="img-responsive col-md-8"
+                      width="460"
+                      height="100"
                       @click="show = !show"
                     >
                   </router-link>

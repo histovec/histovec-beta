@@ -247,7 +247,6 @@ const writeFirstSituationColumn = (pdf, previousY, { otci, pv, ove, hasPVE, sais
 			key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
 			values: [
 				otci === 'Aucune' ? 'Aucune' : (pv ? 'PV en attente' : 'Oui'),
-				'Date: 01/12/2020'
 			]
 		},
 		{

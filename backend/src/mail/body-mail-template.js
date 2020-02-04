@@ -20,7 +20,8 @@ export const getHtmlBody = ({ content, withImage }) => {
     ? `
     <tr>
         <td>
-        <img width="548px" src="https://histovec.interieur.gouv.fr/histovec/assets/images/histovec-header-mobile.png" />
+            <img width="100px" height="129px" style="display: inline-block; margin-right: 30px;" src="https://histovec.interieur.gouv.fr/histovec/assets/images/logo_mi_fond_bleu.png" />
+            <img width="405px" height="76px" style="display: inline-block" src="https://histovec.interieur.gouv.fr/histovec/assets/images/histovec-header-mobile-sans-marianne.png" />
         </td>
     </tr>`
     : ''
