@@ -54,7 +54,7 @@ export default {
           url: 'assets/images/logo_mi_header.png'
         },
         histovec: {
-          url: 'assets/images/histovec-logo-droite-name.png'
+          url: 'assets/images/histovec_logo_droite_name.png'
         }
       }
     }
