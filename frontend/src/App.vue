@@ -24,7 +24,7 @@
                   >
                     <img
                       alt="accueil"
-                      src="assets/images/logo_mi_fond_bleu.svg"
+                      src="assets/images/logo_mi_fond_bleu.png"
                       class="img-responsive col-md-2 img-marianne"
                       width="85"
                       height="100"
@@ -38,7 +38,7 @@
                   >
                     <img
                       alt="accueil"
-                      src="assets/images/histovec-header-mobile-sans-marianne.svg"
+                      src="assets/images/histovec_header_mobile_sans_marianne.png"
                       class="img-responsive col-md-8"
                       width="460"
                       height="100"
