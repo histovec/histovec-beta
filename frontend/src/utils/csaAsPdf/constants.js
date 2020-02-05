@@ -1,19 +1,20 @@
 export const MISSING_VALUE = 'non disponible'
 
+export const TOP_PAGE_Y = 10
+export const FIRST_COLUMN_X = 15
+export const SECOND_COLUMN_X = 105
+
+export const COLUMN_WIDTH = 110
+export const TABBED_COLUMN_WIDTH = 90
+export const LARGE_COLUMN_WIDTH = 230
+export const LARGE_TABBED_COLUMN_WIDTH = 190
+export const TAB_PREFIX = '                   '
+
+export const FONT = 'helvetica'
+
 export const ALIGN = {
 	CENTER: 'center'
 }
-
-export const TOP_PAGE_Y = 10
-
-export const FIRST_COLUMN_X = 15
-export const SECOND_COLUMN_X = 105
-export const COLUMN_WIDTH = 100
-export const TABBED_COLUMN_WIDTH = 80
-export const TAB_PREFIX = '                   '
-
-
-export const FONT = 'helvetica'
 
 export const FONT_SIZES = {
 	XS: 5,

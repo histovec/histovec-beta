@@ -1,7 +1,25 @@
-import { ALIGN, FONT, FONT_SIZES, FONT_STYLES } from './constants'
+import {
+	ALIGN,
+	COLUMN_WIDTH,
+	FONT,
+	FONT_SIZES,
+	FONT_STYLES,
+	LARGE_COLUMN_WIDTH,
+	LARGE_TABBED_COLUMN_WIDTH,
+	TABBED_COLUMN_WIDTH,
+	TAB_PREFIX
+} from './constants'
 
 
-export const getTextLinesWithSplit = (pdf, textLines, textLimit, tabbedTextLimit, tabPrefix) => {
+export const getTextLinesWithSplit = (pdf, textLines, { onlyOneColumn }={
+	onlyOneColumn: false
+},
+{ tabPrefix }={
+	tabPrefix: TAB_PREFIX
+}) => {
+	const textLimit = onlyOneColumn ? LARGE_COLUMN_WIDTH : COLUMN_WIDTH
+	const tabbedTextLimit = onlyOneColumn ? LARGE_TABBED_COLUMN_WIDTH : TABBED_COLUMN_WIDTH
+
 	return textLines.map((textLine) => {
 		const splittedContent = pdf.splitTextToSize(textLine, textLimit)
 		const contentToTab = splittedContent.slice(1)
@@ -29,7 +47,7 @@ export const padString = (n, width, padChar='0') => {
 }
 
 export const writeMainTitle = (pdf, x, y, title) => {
-	writeText(pdf, x, y, title, {
+	return writeText(pdf, x, y, title, {
 		align: ALIGN.CENTER,
 		size: FONT_SIZES.XL,
 		style: FONT_STYLES.BOLD
@@ -40,7 +58,7 @@ export const writePageNumber = (pdf, pageNumber, totalPageNumber, { x, y }={
 	x: 170,
 	y: 288
 }) => {
-	writeText(pdf, x, y, `Page ${pageNumber} / ${totalPageNumber}`)
+	return writeText(pdf, x, y, `Page ${pageNumber} / ${totalPageNumber}`)
 }
 
 export const writeText = (pdf, x, y, content, {
@@ -57,15 +75,17 @@ export const writeText = (pdf, x, y, content, {
 	pdf.setFont(FONT, style)
 	pdf.setFontSize(size)
 	pdf.text(x, y, content, null, rotation, align)
+
+	return y
 }
 
 export const writeTitle = (pdf, x, y, title, { align, style }={
 	align: null,
 	style: FONT_STYLES.BOLD
 }) => {
-	writeText(pdf, x, y, title, {
+	return writeText(pdf, x, y, title, {
 		align,
-		size:FONT_SIZES.L,
+		size: FONT_SIZES.L,
 		style
 	})
 }

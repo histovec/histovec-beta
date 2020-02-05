@@ -126,5 +126,6 @@ export const writeFooter = (pdf, { histoVecLogo, qrCodeUrl, validityDate, webSit
 	const { topY: validityDateTopY } = writeValidityDate(pdf)
 	const { topY: legalNoticeTopY } = writeLegalNotice(pdf, validityDate, webSiteUrl)
 	const { topY: qrCodeTopY } = writeCSAQrCode(pdf, histoVecLogo, qrCodeUrl, webSiteUrl)
+
 	return { topY: Math.min(validityDateTopY, legalNoticeTopY, qrCodeTopY) }
 }

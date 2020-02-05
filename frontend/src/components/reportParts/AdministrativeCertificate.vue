@@ -89,32 +89,52 @@ export default {
 
       if (this.$store.state.config.pdfMultiPages) {
         console.log('pdf multipages pending...')  // eslint-disable-line no-console
-        generateCsa({
-          annulation: this.v.administratif.annulation,
-          dateAnnulation: this.v.administratif.dateAnnulation,
-          duplicataTitre: this.v.administratif.titre.duplicata,
-          gage: this.v.administratif.gage,
-          hasPVE: this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE'),
-          historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
-          histoVecLogo: this.images['histovec'].img,
-          marianneImage: this.images['marianne'].img,
-          marque: this.v.ctec.marque,
-          ove: this.v.administratif.ove,
-          otci: this.v.administratif.otci,
-          perteTitre: this.v.administratif.titre.perte,
-          plaque: this.$store.state.identity.plaque,
-          premierCertificat: this.v.certificat.premier,
-          pv: this.v.administratif.pv,
-          qrCodeUrl: this.url,
-          saisie: this.v.administratif.saisie,
-          suspension: this.v.administratif.suspension,
-          suspensions: this.v.administratif.suspensions,
-          validityDate: this.validityDate,
-          vin: this.v.ctec.vin,
-          volTitre: this.v.administratif.titre.vol,
-          volVehicule: this.v.administratif.vol,
-          webSiteUrl: this.baseUrl
-        })
+
+        if (this.v.administratif.annulation === 'Oui') {
+          generateCsa({
+            annulation: this.v.administratif.annulation,
+            dateAnnulation: this.v.administratif.dateAnnulation,
+            histoVecLogo: this.images['histovec'].img,
+            marianneImage: this.images['marianne'].img,
+            marque: this.v.ctec.marque,
+            plaque: this.$store.state.identity.plaque,
+            premierCertificat: this.v.certificat.premier,
+            qrCodeUrl: this.url,
+            validityDate: this.validityDate,
+            vin: this.v.ctec.vin,
+            webSiteUrl: this.baseUrl
+          })
+        } else {
+          generateCsa({
+            annulation: this.v.administratif.annulation,
+            dateAnnulation: this.v.administratif.dateAnnulation,
+            histoVecLogo: this.images['histovec'].img,
+            marianneImage: this.images['marianne'].img,
+            marque: this.v.ctec.marque,
+            plaque: this.$store.state.identity.plaque,
+            premierCertificat: this.v.certificat.premier,
+            qrCodeUrl: this.url,
+            validityDate: this.validityDate,
+            vin: this.v.ctec.vin,
+            webSiteUrl: this.baseUrl
+          },
+          {
+            duplicataTitre: this.v.administratif.titre.duplicata,
+            gage: this.v.administratif.gage,
+            hasPVE: this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE'),
+            historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
+            ove: this.v.administratif.ove,
+            otci: this.v.administratif.otci,
+            perteTitre: this.v.administratif.titre.perte,
+            pv: this.v.administratif.pv,
+            saisie: this.v.administratif.saisie,
+            suspension: this.v.administratif.suspension,
+            suspensions: this.v.administratif.suspensions,
+            volTitre: this.v.administratif.titre.vol,
+            volVehicule: this.v.administratif.vol
+          })
+        }
+
         console.log('pdf multipages done!')  // eslint-disable-line no-console
         return
       }
