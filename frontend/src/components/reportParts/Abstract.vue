@@ -1,13 +1,21 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
+  <div
+    class="container-fluid"
+  >
+    <div
+      v-if="holder"
+      class="row"
+    >
       <div class="col-md-7">
         <h6 class="title p-h-15">
           Impression CSA
         </h6>
       </div>
     </div>
-    <div class="row">
+    <div
+      v-if="holder"
+      class="row"
+    >
       <div class="col-md-1 col-sm-2">
         <i class="fa fa-print fa-3x"></i>
       </div>
