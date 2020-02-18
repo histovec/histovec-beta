@@ -82,8 +82,13 @@
                 role="alert"
               >
                 <i class="fa fa-calendar-check-o"></i>
-                Informations du ministère de l'Intérieur datant du
-                <strong>{{ v.date_update }}</strong>
+                <span v-if="$store.state.config.dataDate">
+                  Informations du ministère de l'Intérieur datant du
+                  <strong>{{ v.date_update }}</strong>
+                </span>
+                <span v-else>
+                  Informations connues d'HistoVec à ce jour
+                </span>
               </div>
             </div>
           </div>
