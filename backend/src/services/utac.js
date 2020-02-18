@@ -1,20 +1,30 @@
 import axios from 'axios'
+import { readFileSync } from 'fs'
 import config from '../config'
+import { Agent as HttpsAgent } from 'https'
+
 import { appLogger } from '../util/logger'
-import { getAsync, setAsync } from '../connectors/redis'
 import { techLogger } from '../util'
 
 module.exports.UTACClient = class UTACClient {
   constructor () {
-    this.axios = axios.create({
-      baseURL: config.utacThroughInesUrl,
-      timeout: config.utacTimeout,
+    const ca = config.isProd ? readFileSync(config.utac.inesPem) : readFileSync(config.utac.utacPem)
+    const options = {
+      httpsAgent: new HttpsAgent({
+        keepAlive: true,
+        ca,
+        pfx: readFileSync(config.utac.histovecPfx),
+        passphrase: config.utac.histovecPfxPassphrase,
+      }),
+      baseURL: config.utac.apiUrl,
+      timeout: config.utac.timeout,
       headers: {
         Accepts: 'application/json',
         'Content-Type': 'application/json',
       },
-    })
+    }
 
+    this.axios = axios.create(options)
     this.isApiAvailable = true
     this.isAuthenticated = false
 
@@ -39,24 +49,35 @@ module.exports.UTACClient = class UTACClient {
         return response
       },
       error => {
-        if (error.response.status === 429 || error.response.status === 503) {
+        techLogger.info(`-- response interceptor -- ${error}`)
+
+        if (error.response && (error.response.status === 429 || error.response.status === 503)) {
           this.isApiAvailable = false
           setTimeout(async () => {
+            techLogger.info('-- healthcheck --')
             const response = await this.healthCheck()
             this.isApiAvailable = response.status === 200
-          }, config.utacHealthCheckRetrySeconds)
+          }, config.utac.healthCheckRetrySeconds)
         }
-        if (error.response.status === 401) {
+        if (error.response && error.response.status === 401) {
           this.isApiAvailable = false
           setTimeout(async () => {
+            techLogger.info('-- RE auth --')
             const response = await this._authenticate()
+
             this.isAuthenticated = response.status === 200
-          }, config.utacAuthenticateRetrySeconds)
+          }, config.utac.authenticateRetrySeconds)
         } else {
+          techLogger.info('-- response REJECT --')
+
           return Promise.reject(error)
         }
       }
     )
+  }
+
+  async ensureTokenValidity () {
+
   }
 
   async healthCheck () {
@@ -125,25 +146,14 @@ module.exports.UTACClient = class UTACClient {
       }
     }
 
-    const UTAC_AUTH_TOKEN = await this._getAuthenticationCache()
-    if (UTAC_AUTH_TOKEN) {
-      this.axios.defaults.headers.common['Authorization'] = UTAC_AUTH_TOKEN
-      appLogger.debug({
-        debug: 'UTAC authentication already done',
-        token: UTAC_AUTH_TOKEN,
-      })
-      return
-    }
-
     try {
       const response = await this.axios.get('/auth', {
         auth: {
-          username: config.utacUsername,
-          password: config.utacPassword,
+          username: config.utac.username,
+          password: config.utac.password,
         },
       })
 
-      techLogger.info(`-- AUTH response token -- ${response.data.token}`)
       const token = response.data && response.data.token
       if (token) {
         appLogger.debug({
@@ -151,8 +161,7 @@ module.exports.UTACClient = class UTACClient {
           token: token,
         })
 
-        await this._setAuthenticationCache(token)
-        this.axios.defaults.headers.common['Authorization'] = UTAC_AUTH_TOKEN
+        this.axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
         return {
           status: 200,
@@ -170,6 +179,8 @@ module.exports.UTACClient = class UTACClient {
         }
       }
     } catch (error) {
+      techLogger.info(`--! ERROR !-- ${error}`)
+
       if (error.response && error.response.status === 401) {
         appLogger.debug({
           error: 'Invalid login / password',
@@ -198,19 +209,10 @@ module.exports.UTACClient = class UTACClient {
       debug: 'reset UTAC authentication',
     })
 
-    await setAsync('UTAC_AUTH_TOKEN', '')
     this.axios.defaults.headers.common['Authorization'] = null
     this.isAuthenticated = false
 
     return this._authenticate()
-  }
-
-  async _getAuthenticationCache () {
-    return getAsync('UTAC_AUTH_TOKEN')
-  }
-
-  async _setAuthenticationCache (authToken) {
-    await setAsync('UTAC_AUTH_TOKEN', authToken)
   }
 
   // /!\ This method must be called to configure UTACClient before using it /!\
@@ -273,7 +275,7 @@ module.exports.UTACClient = class UTACClient {
 
     try {
       const response = await this.axios.post('/immat/search', {
-        data: { immat: plaque },
+        immat: plaque,
       })
 
       if (response.data && response.data.ct && response.data.update_date) {

@@ -22,7 +22,7 @@ elasticsearch.Client.search({
       .then(async () => {
         let utacClient
 
-        if (config.isUtacApiActivated) {
+        if (config.utac.isApiActivated) {
           utacClient = new UTACClient()
           await utacClient.initialize()
         }
