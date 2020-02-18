@@ -46,6 +46,7 @@ export default new Vuex.Store({
     config: {
       allTabs: false,
       csaAnnulationCi: false,
+      dataDate: false,
       pdfMultiPages: false,
       utac: false,
       utacGraph: false,
@@ -54,10 +55,11 @@ export default new Vuex.Store({
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
+      dataDate: ['ctrl', 'alt', 'd'],
       pdfMultiPages: ['ctrl', 'alt', 'n'],
       utac: ['ctrl', 'alt', 'o'],
       utacGraph: ['ctrl', 'alt', 'g'],
-      v1: ['ctrl','alt','v'],
+      v1: ['ctrl', 'alt', 'v'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,
