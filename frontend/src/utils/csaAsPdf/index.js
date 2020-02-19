@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf'
 
 import { writeContent } from './content'
-import { FONT } from './constants'
+import { FONT, RAPPORT_FILENAME } from './constants'
 
 export const generateCsa = (
 	// Complete CSA and annulation
@@ -33,7 +33,8 @@ export const generateCsa = (
 		suspensions,
 		volTitre,
 		volVehicule,
-	}={}) => {
+	}={}
+) => {
 	const pdf = new jsPDF({
 		orientation: 'portrait',
 		unit: 'mm',
@@ -94,5 +95,5 @@ export const generateCsa = (
 		)
 	}
 
-	pdf.save('rapport.pdf')
+	pdf.save(`${RAPPORT_FILENAME}.pdf`)
 }

@@ -11,12 +11,11 @@ import {
 } from './constants'
 
 
-export const getTextLinesWithSplit = (pdf, textLines, { onlyOneColumn }={
-	onlyOneColumn: false
-},
-{ tabPrefix }={
-	tabPrefix: TAB_PREFIX
-}) => {
+export const getTextLinesWithSplit = (
+	pdf, textLines,
+	{ onlyOneColumn }={ onlyOneColumn: false },
+  { tabPrefix }={ tabPrefix: TAB_PREFIX }
+) => {
 	const textLimit = onlyOneColumn ? LARGE_COLUMN_WIDTH : COLUMN_WIDTH
 	const tabbedTextLimit = onlyOneColumn ? LARGE_TABBED_COLUMN_WIDTH : TABBED_COLUMN_WIDTH
 
@@ -54,24 +53,22 @@ export const writeMainTitle = (pdf, x, y, title) => {
 	})
 }
 
-export const writePageNumber = (pdf, pageNumber, totalPageNumber, { x, y }={
-	x: 170,
-	y: 288
-}) => {
+export const writePageNumber = (
+	pdf, pageNumber, totalPageNumber,
+	{ x, y }={ x: 170, y: 288 }
+) => {
 	return writeText(pdf, x, y, `Page ${pageNumber} / ${totalPageNumber}`)
 }
 
-export const writeText = (pdf, x, y, content, {
-	align,
-	rotation,
-	size,
-	style
-}={
-	align: null,
-	rotation: null,
-	size: FONT_SIZES.M,
-	style: FONT_STYLES.NORMAL
-}) => {
+export const writeText = (
+	pdf, x, y, content,
+	{ align, rotation, size, style }={
+		align: null,
+		rotation: null,
+		size: FONT_SIZES.M,
+		style: FONT_STYLES.NORMAL
+	}
+) => {
 	pdf.setFont(FONT, style)
 	pdf.setFontSize(size)
 	pdf.text(x, y, content, null, rotation, align)
@@ -79,10 +76,13 @@ export const writeText = (pdf, x, y, content, {
 	return y
 }
 
-export const writeTitle = (pdf, x, y, title, { align, style }={
-	align: null,
-	style: FONT_STYLES.BOLD
-}) => {
+export const writeTitle = (
+	pdf, x, y, title,
+	{ align, style }={
+		align: null,
+		style: FONT_STYLES.BOLD
+	}
+) => {
 	return writeText(pdf, x, y, title, {
 		align,
 		size: FONT_SIZES.L,
@@ -90,24 +90,28 @@ export const writeTitle = (pdf, x, y, title, { align, style }={
 	})
 }
 
-export const writeWithSpacing = (pdf, x, y, spacing, textLines, {
-	size,
-	style,
-}={
-	size: FONT_SIZES.M,
-	style: FONT_STYLES.NORMAL
-}) => {
+export const writeWithSpacing = (
+	pdf, x, y, spacing, textLines,
+	{ dryRun }={ dryRun: false },
+	{ size, style }={
+		size: FONT_SIZES.M,
+		style: FONT_STYLES.NORMAL
+	}
+) => {
 	if (!textLines.length) {
 		return
 	}
 
-	pdf.setFont(FONT, style)
-	pdf.setFontSize(size)
-
+	if (!dryRun) {
+		pdf.setFont(FONT, style)
+		pdf.setFontSize(size)
+	}
 	let nextY = y
 	textLines.forEach((textLine, i) => {
 		nextY = y + spacing * i
-		pdf.text(x, nextY, textLine)
+		if (!dryRun) {
+			pdf.text(x, nextY, textLine)
+		}
 	})
 
 	return nextY

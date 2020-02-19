@@ -23,17 +23,15 @@ import {
 } from './utils'
 
 
-const writeHeaderLogo = (pdf, image, {
-	imageFormat,
-	width,
-	height,
-	x,
-}={
-	imageFormat: IMAGE_FORMAT.PNG,
-	width: 46,
-	height: 24,
-	x: 82,
-}) => {
+const writeHeaderLogo = (
+	pdf, image,
+	{ imageFormat, width, height,	x}={
+		imageFormat: IMAGE_FORMAT.PNG,
+		width: 46,
+		height: 24,
+		x: 82,
+	}
+) => {
 	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height)
 	return TOP_PAGE_Y + height + FONT_SPACING.L
 }
@@ -48,9 +46,10 @@ const writeCSAMainTitle = (pdf, y) => {
 	return titleY + FONT_SPACING.L * 2
 }
 
-const writeVehicleIdentification = (pdf, plaque, premierCertificat, vin, marque, { y }={
-	y: 67
-}) => {
+const writeVehicleIdentification = (
+	pdf, plaque, premierCertificat, vin, marque,
+	{ y }={ y: 67 }
+) => {
 	writeTitle(pdf, FIRST_COLUMN_X, y, 'Identification du véhicule')
 
 	const nextY = y + FONT_SPACING.L
@@ -71,7 +70,7 @@ const writeVehicleIdentification = (pdf, plaque, premierCertificat, vin, marque,
 	]
 	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.L, values)
 
-	return lastY
+	return lastY + FONT_SPACING.L
 }
 
 /* **********************  writeHistory  ********************** */
@@ -92,9 +91,10 @@ const getCutIndex = (itemsWithSplit, maxNbLinesToCut) => {
 	return result.cutIndex
 }
 
-const getBalancedTextLinesForPage = (topY, remainingHeight, maxColumnLinesForPage, itemsWithSplit, { onlyOneColumn }={
-	onlyOneColumn: false
-}) => {
+const getBalancedTextLinesForPage = (
+	topY, remainingHeight, maxColumnLinesForPage, itemsWithSplit,
+	{ onlyOneColumn }={ onlyOneColumn: false }
+) => {
 	if (remainingHeight < 0) {
 		throw new Error('Bad use for getBalancedTextLinesForPage...')
 	}
@@ -109,11 +109,6 @@ const getBalancedTextLinesForPage = (topY, remainingHeight, maxColumnLinesForPag
 				x: FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS,
 				y: topY,
 				items: itemsWithSplit
-			},
-			secondColumn: {
-				x: -1,
-				y: -1,
-				items: []
 			},
 			remainingItems: []
 		}
@@ -158,20 +153,23 @@ const getBalancedTextLinesForPage = (topY, remainingHeight, maxColumnLinesForPag
 	}
 }
 
-const getHistoryItemsByPage = (pdf, firsPageTopY, bottomY, bottomHistoryTitleForNextPage, historyItemSize, historyItems) => {
-	let remainingHeight = bottomY - firsPageTopY
+const getHistoryItemsByPage = (
+	pdf, firstPageTopY, bottomY, bottomHistoryTitleForNextPage, historyItemSize, historyItems,
+	{ forceTwoColumns } = { forceTwoColumns: false }
+) => {
+	let remainingHeight = bottomY - firstPageTopY
 	let maxColumnLinesForPage = Math.floor(remainingHeight / historyItemSize)
 
 	let historyItemsWithSplit, firstColumn, secondColumn, remainingItems
 
 	// All lines fit in first page and one column
-	if (historyItems.length <= maxColumnLinesForPage) {
+	if (historyItems.length <= maxColumnLinesForPage && !forceTwoColumns ) {
 		historyItemsWithSplit = getTextLinesWithSplit(pdf, historyItems, { onlyOneColumn: true });
 		({
 			firstColumn,
 			secondColumn,
 			remainingItems
-		} = getBalancedTextLinesForPage(firsPageTopY, remainingHeight, maxColumnLinesForPage, historyItemsWithSplit, { onlyOneColumn: true })
+		} = getBalancedTextLinesForPage(firstPageTopY, remainingHeight, maxColumnLinesForPage, historyItemsWithSplit, { onlyOneColumn: true })
 		)
 
 	} else {  // First page with many columns
@@ -180,7 +178,7 @@ const getHistoryItemsByPage = (pdf, firsPageTopY, bottomY, bottomHistoryTitleFor
 			firstColumn,
 			secondColumn,
 			remainingItems
-		} = getBalancedTextLinesForPage(firsPageTopY, remainingHeight, maxColumnLinesForPage, historyItemsWithSplit)
+		} = getBalancedTextLinesForPage(firstPageTopY, remainingHeight, maxColumnLinesForPage, historyItemsWithSplit)
 		)
 	}
 
@@ -213,35 +211,55 @@ const getHistoryItemsByPage = (pdf, firsPageTopY, bottomY, bottomHistoryTitleFor
 	return historyItemsByPage
 }
 
-const writeHistory = (pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, writeFooterCallback, writeHeaderCallback) => {
-	writeTitle(pdf, FIRST_COLUMN_X, y, 'Historique du véhicule')
 
+const addPage = (pdf, writeHeaderCallback, writeFooterCallback, title) => {
+	pdf.addPage()
+	const nextY = writeHeaderCallback(pdf)
+	if (title) {
+		writeTitle(pdf, FIRST_COLUMN_X, nextY, title)
+	}
+	writeFooterCallback(pdf)
+}
+
+const writeHistory = (
+	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, writeFooterCallback, writeHeaderCallback,
+	{ dryRun, forceTwoColumns }={ dryRun: false, forceTwoColumns: false },
+	{ totalPageCount }={ totalPageCount: null }
+) => {
+	if (!dryRun) {
+		writeTitle(pdf, FIRST_COLUMN_X, y, 'Historique du véhicule')
+	}
 	const topY = y + FONT_SPACING.L
 	const historyItemSize = FONT_SPACING.S
-	const bottomY = topFooterY - FONT_SPACING.S
-	const historyItemsByPage = getHistoryItemsByPage(pdf, topY, bottomY, bottomHistoryTitleForNextPage, historyItemSize, historyItems)
+	const historyItemsByPage = getHistoryItemsByPage(
+		pdf, topY, topFooterY, bottomHistoryTitleForNextPage, historyItemSize, historyItems,
+		{ forceTwoColumns }
+	)
 	const totalPageNumber = Object.keys(historyItemsByPage).length
 
-	for (let [pageNumber, historyItemsForPage] of Object.entries(historyItemsByPage)) {
-		if (pageNumber > 1) {
-			pdf.addPage()
-			const nextY = writeHeaderCallback(pdf)
-			writeTitle(pdf, FIRST_COLUMN_X, nextY, 'Historique du véhicule (suite)')
-			writeFooterCallback(pdf)
+	let firstColumnLastY = y
+	let secondColumnLastY = y
+	let firstPageColumnsCount = 0
+
+	for (let [pageNumberStr, historyItemsForPage] of Object.entries(historyItemsByPage)) {
+		const pageNumber = parseInt(pageNumberStr)
+		if (!dryRun) {
+			if (pageNumber > 1) {
+				addPage(pdf, writeHeaderCallback, writeFooterCallback, 'Historique du véhicule (suite)')
+			}
+			writePageNumber(pdf, pageNumber, totalPageCount ? totalPageCount : totalPageNumber)
 		}
-
-		writePageNumber(pdf, pageNumber, totalPageNumber)
-
 		const firstColumnSplittedLines = historyItemsForPage.firstColumn.items.map(
 			(item) => item.splittedContent
 		).flat()
 
-		writeWithSpacing(
+		firstColumnLastY = writeWithSpacing(
 			pdf,
 			historyItemsForPage.firstColumn.x,
 			historyItemsForPage.firstColumn.y,
 			historyItemSize,
-			firstColumnSplittedLines
+			firstColumnSplittedLines,
+			{ dryRun }
 		)
 
 		if (historyItemsForPage.secondColumn) {
@@ -249,38 +267,63 @@ const writeHistory = (pdf, y, topFooterY, bottomHistoryTitleForNextPage, history
 				(item) => item.splittedContent
 			).flat()
 
-			writeWithSpacing(
+			secondColumnLastY = writeWithSpacing(
 				pdf,
 				historyItemsForPage.secondColumn.x,
 				historyItemsForPage.secondColumn.y,
 				historyItemSize,
-				secondColumnSplittedLines
+				secondColumnSplittedLines,
+				{ dryRun }
 			)
 		}
+
+		if (pageNumber === 1) {
+			if (historyItemsForPage.firstColumn) {
+				firstPageColumnsCount = firstPageColumnsCount + 1
+			}
+
+			if (historyItemsForPage.secondColumn) {
+				firstPageColumnsCount = firstPageColumnsCount + 1
+			}
+		}
+	}
+
+	return {
+		y: Math.max(firstColumnLastY, secondColumnLastY) + FONT_SPACING.L,
+		currentPageNumber: totalPageNumber,
+		firstPageColumnsCount
 	}
 }
 /* ************************************************************ */
 
 /* ********************** writeSituation *********************** */
 
-const writeSituationColumn = (pdf, previousY, situationItems, { x, y }) => {
+const writeSituationColumn = (
+	pdf, previousY, situationItems,
+	{ x, y },
+	{ dryRun }={ dryRun: false }
+) => {
 	const newY = previousY + y
 
-	let offset = FONT_SPACING.L
+	let offset = 0
 	situationItems.forEach(item => {
 		const titleX = x + HORIZONTAL_TABULATION.XS
 		const titleY = newY + offset
-		writeText(pdf, titleX, titleY, item.key, {
-			size: FONT_SIZES.M,
-			style: FONT_STYLES.BOLD
-		})
+		if (!dryRun) {
+			writeText(pdf, titleX, titleY, item.key, {
+				size: FONT_SIZES.M,
+				style: FONT_STYLES.BOLD
+			})
+		}
 		offset = offset + FONT_SPACING.XS * (item.key.split('\n').length - 1) + FONT_SPACING.XS
 
 		item.values.forEach((value, i) => {
 			const valueX = x + HORIZONTAL_TABULATION.S
 			const valueY = newY + offset
 
-			writeText(pdf, valueX, valueY, value)
+			if (!dryRun) {
+				writeText(pdf, valueX, valueY, value)
+			}
 			const spacing = (i === item.values.length-1) ? FONT_SPACING.M : FONT_SPACING.XS
 			offset = offset + FONT_SPACING.XS * (value.split('\n').length - 1) + spacing
 		})
@@ -290,7 +333,10 @@ const writeSituationColumn = (pdf, previousY, situationItems, { x, y }) => {
 	return lastY
 }
 
-const writeFirstSituationColumn = (pdf, previousY, { otci, pv, ove, hasPVE, saisie, gage, x, y }
+const writeFirstSituationColumn = (
+	pdf, previousY,
+	{ otci, pv, ove, hasPVE, saisie, gage, x, y },
+	{ dryRun }={ dryRun: false }
 ) => {
 	const situationItems = [
 		{
@@ -319,10 +365,14 @@ const writeFirstSituationColumn = (pdf, previousY, { otci, pv, ove, hasPVE, sais
 		}
 	]
 
-	return writeSituationColumn(pdf, previousY, situationItems, { x, y })
+	return writeSituationColumn(pdf, previousY, situationItems, { x, y }, { dryRun })
 }
 
-const writeSecondSituationColumn = (pdf, previousY, { annulation, volVehicule, volTitre, perteTitre, duplicataTitre, suspension, suspensions, x, y }) => {
+const writeSecondSituationColumn = (
+	pdf, previousY,
+	{ annulation, volVehicule, volTitre, perteTitre, duplicataTitre, suspension, suspensions, x, y },
+	{ dryRun }={ dryRun: false }
+) => {
 	const situationItems = [
 		{
 			key: '- Immatriculation suspendue',
@@ -362,31 +412,44 @@ const writeSecondSituationColumn = (pdf, previousY, { annulation, volVehicule, v
 		}
 	]
 
-	return writeSituationColumn(pdf, previousY, situationItems, { x, y })
+	return writeSituationColumn(pdf, previousY, situationItems, { x, y }, { dryRun })
 }
 
-const writeSituation = (pdf, previousY, {
-	annulation,
-	duplicataTitre,
-	gage,
-	hasPVE,
-	otci,
-	ove,
-	perteTitre,
-	pv,
-	saisie,
-	suspension,
-	suspensions,
-	volTitre,
-	volVehicule},
-	{ y }={
-		y: 7
-	}) => {
-	const newY = previousY + y
+const writeSituation = (
+	pdf, y,
+	{
+		annulation,
+		duplicataTitre,
+		gage,
+		hasPVE,
+		otci,
+		ove,
+		perteTitre,
+		pv,
+		saisie,
+		suspension,
+		suspensions,
+		volTitre,
+		volVehicule
+	},
+	{ dryRun }={ dryRun: false }
+) => {
+	const spacing = FONT_SPACING.L
 
-	writeTitle(pdf, FIRST_COLUMN_X, newY, 'Situation administrative du véhicule')
-	const lastFirstY = writeFirstSituationColumn(pdf, previousY, { gage, hasPVE, otci, ove, pv, saisie, x: FIRST_COLUMN_X, y })
-	const lastSecondY = writeSecondSituationColumn(pdf, previousY, { annulation, duplicataTitre, perteTitre, suspension, suspensions, volTitre, volVehicule, x: SECOND_COLUMN_X, y })
+	if (!dryRun) {
+		writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
+	}
+
+	const lastFirstY = writeFirstSituationColumn(
+		pdf, y,
+		{ gage, hasPVE, otci, ove, pv, saisie, x: FIRST_COLUMN_X, y: spacing },
+		{ dryRun }
+	)
+	const lastSecondY = writeSecondSituationColumn(
+		pdf, y,
+		{ annulation, duplicataTitre, perteTitre, suspension, suspensions, volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing },
+		{ dryRun }
+	)
 
 	return Math.max(lastFirstY, lastSecondY)
 }
@@ -405,7 +468,8 @@ const writeAnnulation = (pdf, y, dateAnnulation) => {
 /* ************************************************************ */
 
 /* ********************** CONTENT ********************** */
-export const writeContent = (pdf,
+export const writeContent = (
+	pdf,
 	// Complete CSA and annulation
 	{
 		annulation,
@@ -442,12 +506,14 @@ export const writeContent = (pdf,
 		return writeCSAMainTitle(pdf, headerY + FONT_SPACING.L)
 	}
 
-	const writeFooterCallback = (pdf) => {
-		return writeFooter(pdf, { histoVecLogo, qrCodeUrl, validityDate, webSiteUrl })
+	const writeFooterCallback = (
+		pdf,
+		{ dryRun }={ dryRun: false }
+	) => {
+		return writeFooter(pdf, { histoVecLogo, qrCodeUrl, validityDate, webSiteUrl }, { dryRun })
 	}
 
 	const bottomHeaderY = writeHeaderCallback(pdf)
-	console.log('bottomHeaderY = ', bottomHeaderY)  // eslint-disable-line no-console
 	if (annulation === 'Oui') {
 		const vehicleIdentificationAnnulationY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
 		const annulationY = vehicleIdentificationAnnulationY + FONT_SPACING.XL * 2
@@ -458,8 +524,17 @@ export const writeContent = (pdf,
 		return
 	}
 	const vehicleIdentificationY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
+	const historyTopY = vehicleIdentificationY + FONT_SPACING.S
 
-	const situationY = writeSituation(pdf, vehicleIdentificationY + FONT_SPACING.XS, {
+	const { topY: footerTopY } = writeFooterCallback(pdf)
+	const footerWithMarginTopY = footerTopY - FONT_SPACING.S
+
+	const nextPageTopY = bottomHeaderY
+	const historyNextPageTopY = nextPageTopY + FONT_SIZES.S  // Adding history title dynamically for each new page
+
+	// Simulate writeSituation call (using dryRun option) to :
+	// 1 - get bottom situation Y position : to know if history Y size will fit into one page document
+	const simulatedSituationBottomY = writeSituation(pdf, historyTopY, {
 		annulation,
 		duplicataTitre,
 		gage,
@@ -473,10 +548,91 @@ export const writeContent = (pdf,
 		suspensions,
 		volTitre,
 		volVehicule
-	})
+	}, { dryRun: true })
 
-	const { topY: topFooterY } = writeFooterCallback(pdf)
-	const nextPageTopY = bottomHeaderY + FONT_SIZES.S  // Adding history title
+	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
+	// 1 - know if document would fit into one page, in order to force 2 columns history or not
+	const {
+		firstPageColumnsCount
+	} = writeHistory(
+		pdf, simulatedSituationBottomY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		{ dryRun: true }
+	)
 
-	writeHistory(pdf, situationY + FONT_SPACING.XS, topFooterY, nextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback)
+	const forceTwoColumns = firstPageColumnsCount == 2
+
+	// Simulate writeHistory call (using dryRun option) to :
+	// 1 - get bottom history Y position : to know from where we begin to write Situation section (and to compute point 2)
+	// 2 - get history page count : to calculate Situation section position (does it fit in current page or do we write it on the next page?)
+	const {
+		y: simulatedHistoryY,
+		currentPageNumber: simulatedCurrentPageNumber
+	} = writeHistory(
+		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		{ dryRun: true, forceTwoColumns },
+	)
+
+	const simulatedHistoryWithMarginY = simulatedHistoryY + FONT_SPACING.M
+
+
+	// Simulate writeSituation call (using dryRun option) to :
+	// 1 - get bottom situation Y position : to know if we can write Situation section on the current page or the next page
+	// 2 - get the total page count of the report.pdf : use this count to write page count on every page
+	// (all History section pages and the eventual Situation section page)
+	const anotherSimulatedSituationBottomY = writeSituation(pdf, simulatedHistoryWithMarginY, {
+		annulation,
+		duplicataTitre,
+		gage,
+		hasPVE,
+		otci,
+		ove,
+		perteTitre,
+		pv,
+		saisie,
+		suspension,
+		suspensions,
+		volTitre,
+		volVehicule
+	}, { dryRun: true })
+
+	const isSituationSectionOnNewPage = anotherSimulatedSituationBottomY > footerWithMarginTopY
+	const lastPageNumber = isSituationSectionOnNewPage ? simulatedCurrentPageNumber + 1 : simulatedCurrentPageNumber
+
+	// Since we have all needed informations, let's write the pdf file for real!
+	const {
+		y: historyY,
+		currentPageNumber
+	} = writeHistory(
+		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		{ dryRun: false, forceTwoColumns },
+		{ totalPageCount: lastPageNumber }
+	)
+
+	const historyWithMarginY = historyY + FONT_SPACING.M
+
+	if (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) {
+		addPage(pdf, writeHeaderCallback, writeFooterCallback)
+		writePageNumber(pdf, lastPageNumber, lastPageNumber)
+	}
+
+	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyWithMarginY
+
+	writeSituation(
+		pdf, situationTopY,
+		{
+			annulation,
+			duplicataTitre,
+			gage,
+			hasPVE,
+			otci,
+			ove,
+			perteTitre,
+			pv,
+			saisie,
+			suspension,
+			suspensions,
+			volTitre,
+			volVehicule
+		}
+	)
 }

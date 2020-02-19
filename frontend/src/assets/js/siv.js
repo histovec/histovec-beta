@@ -343,7 +343,6 @@ function siv (veh) {
   }
 
   v.historique = filteredHistorique
-
   v.nb_proprietaires = veh.nb_proprietaire
   v.nb_tit = (historique !== undefined) ? (calcNbTit(historique) + (v.certificat.incertain ? 1 : 0)) : undefined
   v.age_veh = veh.age_annee
