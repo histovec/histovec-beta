@@ -86,7 +86,7 @@
             </div>
           </div>
           <div
-            class="col-xs-4 col-sm-4"
+            class="col-xs-12 col-xs-offset-0 col-sm-3 col-sm-offset-1"
           >
             <a
               class="clickable"
@@ -94,7 +94,7 @@
               @click="typeImmatriculation = 'siv'"
             >
               <img
-                class="img-responsive pull-right"
+                class="img-responsive center-block"
                 :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'siv' }"
                 src="assets/images/plaque_immatriculation_depuis_2009.png"
                 width="200"
@@ -103,7 +103,7 @@
             </a>
           </div>
           <div
-            class="col-xs-4 col-sm-4"
+            class="col-xs-12 col-xs-offset-0 col-sm-3"
           >
             <a
               class="clickable"
@@ -120,7 +120,7 @@
             </a>
           </div>
           <div
-            class="col-xs-4 col-sm-4"
+            class="col-xs-12 col-xs-offset-0 col-sm-3 col-sm-offset-1"
           >
             <a
               class="clickable"
@@ -128,7 +128,7 @@
               @click="typeImmatriculation = 'old'"
             >
               <img
-                class="img-responsive pull-left"
+                class="img-responsive center-block"
                 :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'old' }"
                 src="assets/images/plaque_immatriculation_avant_1995.png"
                 width="200"
@@ -153,7 +153,7 @@
                 Nous vous invitons à télécharger le certificat de situation administrative détaillé (CSA) sur le site de l'ANTS.
               </p>
             </div>
-            <div class="col-xs-6 col-sm-4 col-xs-offset-3 col-sm-offset-4">
+            <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4">
               <a
                 class="btn btn-default btn-m center-block m-h-05"
                 href="https://siv.interieur.gouv.fr/map-usg-ui/do/csa_retour_dem_certificat"
