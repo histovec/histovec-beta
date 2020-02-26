@@ -47,7 +47,7 @@ export default new Vuex.Store({
       allTabs: false,
       csaAnnulationCi: false,
       dataDate: false,
-      pdfMultiPages: false,
+      pdfMultiPages: true,
       utac: false,
       utacGraph: false,
       v1: true,
