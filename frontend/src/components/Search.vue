@@ -103,7 +103,7 @@
             </a>
           </div>
           <div
-            class="col-xs-12 col-xs-offset-0 col-sm-3"
+            class="col-xs-12 col-xs-offset-0 col-sm-4"
           >
             <a
               class="clickable"
@@ -120,7 +120,7 @@
             </a>
           </div>
           <div
-            class="col-xs-12 col-xs-offset-0 col-sm-3 col-sm-offset-1"
+            class="col-xs-12 col-xs-offset-0 col-sm-3"
           >
             <a
               class="clickable"
