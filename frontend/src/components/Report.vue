@@ -90,6 +90,16 @@
                   Informations connues d'HistoVec à ce jour
                 </span>
               </div>
+              <div
+                v-if="!$store.state.config.dataDate && v.date_update && v.date_update === '01/01/1900'"
+                class="alert alert-icon alert-warning"
+                role="alert"
+              >
+                <i class="fa fa-calendar-check-o"></i>
+                <span v-if="!$store.state.config.dataDate">
+                  Informations connues d'HistoVec à ce jour
+                </span>
+              </div>
             </div>
           </div>
           <!-- fin vignette -->
