@@ -28,5 +28,9 @@ export default new Router({
     {name: 'legal', path: '/legal', component: Legal, meta: { title: 'HistoVec - Mentions Légales' }},
     {name: 'buyer', path: '/buyer', component: Buyer, meta: { title: 'HistoVec - Acheteur' }},
     {name: 'notfound', path: '/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
-  ]
+  ],
+  // Scroll top for every route navigation
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })
