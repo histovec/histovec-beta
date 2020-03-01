@@ -992,16 +992,23 @@ export default {
       if (data.length > 1) {
         if (evt.target.name === 'nom') {
           if (this.typeImmatriculation === 'siv') {
+            // 1st element has already been pasted on current target name : 'nom'
+            // It is equivalent to :
+            // this.nom = data[0]
             this.prenom = data[1]
-            this.plaque = data[3]
-            this.formule = data[4]
+            this.plaque = data[2]
+            this.formule = data[3]
           }
           if (this.typeImmatriculation === 'fni') {
-            this.plaque = data[2]
-            this.dateCertificat = data[3]
+            this.nom = data[0]
+            this.plaque = data[1]
+            this.dateCertificat = data[2]
           }
         }
         if (evt.target.name === 'raisonSociale') {
+          // 1st element has already been pasted on current target name : 'raisonSociale'
+          // It is equivalent to :
+          // this.raisonSociale = data[0]
           this.siren = data[1]
           this.plaque = data[2]
           if (this.typeImmatriculation === 'siv') {

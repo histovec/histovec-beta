@@ -2,8 +2,7 @@ import { json2html, getHtmlBody } from './body-mail-template'
 import config from '../config'
 import { sendMail } from '../connectors/send-mail'
 
-// @todo: We need to insert a fake dateNaissance waiting to clean it in code and CSV data files.
-const formDataShortcut = (identity, fakeDateNaissance = '0') => {
+const formDataShortcut = (identity) => {
   const {
     typeImmatriculation,
     typePersonne,
@@ -26,7 +25,7 @@ const formDataShortcut = (identity, fakeDateNaissance = '0') => {
   switch (typeImmatriculation) {
     case 'siv': {
       if (typePersonne === 'particulier') {
-        elements = [nom, prenom, fakeDateNaissance, plaque, formule]
+        elements = [nom, prenom, plaque, formule]
       } else if (typePersonne === 'pro') {
         elements = [
           raisonSociale,
@@ -42,7 +41,7 @@ const formDataShortcut = (identity, fakeDateNaissance = '0') => {
 
     case 'fni': {
       if (typePersonne === 'particulier') {
-        elements = [nom, fakeDateNaissance, plaque, dateCertificat]
+        elements = [nom, plaque, dateCertificat]
       } else if (typePersonne === 'pro') {
         elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat]
       }
