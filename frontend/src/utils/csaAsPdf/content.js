@@ -7,6 +7,7 @@ import {
 	FONT_STYLES,
 	FIRST_COLUMN_X,
 	SECOND_COLUMN_X,
+	NEXT_PAGE_SYMBOL_X,
 	HORIZONTAL_TABULATION,
 	IMAGE_FORMAT,
 	MISSING_VALUE,
@@ -223,7 +224,7 @@ const addPage = (pdf, writeHeaderCallback, writeFooterCallback, title) => {
 
 const writeHistory = (
 	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, writeFooterCallback, writeHeaderCallback,
-	{ dryRun, forceTwoColumns }={ dryRun: false, forceTwoColumns: false },
+	{ dryRun, forceTwoColumns, nextPageSymbol }={ dryRun: false, forceTwoColumns: false, nextPageSymbol: false },
 	{ totalPageCount }={ totalPageCount: null }
 ) => {
 	if (!dryRun) {
@@ -288,8 +289,20 @@ const writeHistory = (
 		}
 	}
 
+	const lastY = Math.max(firstColumnLastY, secondColumnLastY)
+
+	if (!dryRun) {
+		if (nextPageSymbol) {
+			writeText(pdf, NEXT_PAGE_SYMBOL_X, lastY + FONT_SPACING.S, '... / ...',
+			{
+				size: FONT_SIZES.M,
+				style: FONT_STYLES.BOLD
+			})
+		}
+	}
+
 	return {
-		y: Math.max(firstColumnLastY, secondColumnLastY) + FONT_SPACING.L,
+		y: lastY + FONT_SPACING.L,
 		currentPageNumber: totalPageNumber,
 		firstPageColumnsCount
 	}
@@ -559,7 +572,21 @@ export const writeContent = (
 		{ dryRun: true }
 	)
 
-	const forceTwoColumns = firstPageColumnsCount == 2
+	let forceTwoColumns = firstPageColumnsCount == 2
+
+	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
+	// 1 - know if document would fit into one page, in order to force 2 columns history or not
+	let firstPageColumnsCountSecond
+	if (!forceTwoColumns) {
+		({
+			firstPageColumnsCount: firstPageColumnsCountSecond
+		} = firstPageColumnsCountSecond = writeHistory(
+			pdf, simulatedSituationBottomY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+			{ dryRun: true, forceTwoColumns: true }
+		))
+
+		forceTwoColumns = firstPageColumnsCountSecond == 2
+	}
 
 	// Simulate writeHistory call (using dryRun option) to :
 	// 1 - get bottom history Y position : to know from where we begin to write Situation section (and to compute point 2)
@@ -604,7 +631,7 @@ export const writeContent = (
 		currentPageNumber
 	} = writeHistory(
 		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
-		{ dryRun: false, forceTwoColumns },
+		{ dryRun: false, forceTwoColumns, nextPageSymbol: true },
 		{ totalPageCount: lastPageNumber }
 	)
 
