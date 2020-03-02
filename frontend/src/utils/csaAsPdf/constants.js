@@ -4,6 +4,7 @@ export const RAPPORT_FILENAME = 'rapport'
 export const TOP_PAGE_Y = 10
 export const FIRST_COLUMN_X = 15
 export const SECOND_COLUMN_X = 105
+export const NEXT_PAGE_SYMBOL_X = 180
 
 export const COLUMN_WIDTH = 110
 export const TABBED_COLUMN_WIDTH = 90
