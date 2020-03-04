@@ -1,5 +1,6 @@
 export const MISSING_VALUE = 'non disponible'
 export const RAPPORT_FILENAME = 'rapport'
+export const TO_BE_CONTINUED_SYMBOL = '... / ...'
 
 export const TOP_PAGE_Y = 10
 export const FIRST_COLUMN_X = 15

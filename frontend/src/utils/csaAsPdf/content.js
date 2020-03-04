@@ -11,6 +11,7 @@ import {
 	HORIZONTAL_TABULATION,
 	IMAGE_FORMAT,
 	MISSING_VALUE,
+	TO_BE_CONTINUED_SYMBOL,
 	TOP_PAGE_Y
 } from './constants'
 
@@ -23,6 +24,14 @@ import {
 	writeWithSpacing
 } from './utils'
 
+
+const writeNextPageSymbol = (pdf, y) => {
+	writeText(pdf, NEXT_PAGE_SYMBOL_X, y, TO_BE_CONTINUED_SYMBOL,
+		{
+			size: FONT_SIZES.M,
+			style: FONT_STYLES.BOLD
+		})
+}
 
 const writeHeaderLogo = (
 	pdf, image,
@@ -71,7 +80,7 @@ const writeVehicleIdentification = (
 	]
 	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.L, values)
 
-	return lastY + FONT_SPACING.L
+	return lastY + FONT_SPACING.M
 }
 
 /* **********************  writeHistory  ********************** */
@@ -236,19 +245,22 @@ const writeHistory = (
 		pdf, topY, topFooterY, bottomHistoryTitleForNextPage, historyItemSize, historyItems,
 		{ forceTwoColumns }
 	)
-	const totalPageNumber = Object.keys(historyItemsByPage).length
+	const totalPageNumber =  totalPageCount ? totalPageCount : Object.keys(historyItemsByPage).length
 
 	let firstColumnLastY = y
 	let secondColumnLastY = y
 	let firstPageColumnsCount = 0
+	let lastY = y
+	let pageNumber
+	let hasSymbol = false
 
 	for (let [pageNumberStr, historyItemsForPage] of Object.entries(historyItemsByPage)) {
-		const pageNumber = parseInt(pageNumberStr)
+		pageNumber = parseInt(pageNumberStr)
 		if (!dryRun) {
 			if (pageNumber > 1) {
 				addPage(pdf, writeHeaderCallback, writeFooterCallback, 'Historique du véhicule (suite)')
 			}
-			writePageNumber(pdf, pageNumber, totalPageCount ? totalPageCount : totalPageNumber)
+			writePageNumber(pdf, pageNumber, totalPageNumber)
 		}
 		const firstColumnSplittedLines = historyItemsForPage.firstColumn.items.map(
 			(item) => item.splittedContent
@@ -287,24 +299,24 @@ const writeHistory = (
 				firstPageColumnsCount = firstPageColumnsCount + 1
 			}
 		}
-	}
 
-	const lastY = Math.max(firstColumnLastY, secondColumnLastY)
+		lastY = Math.max(firstColumnLastY, secondColumnLastY)
 
-	if (!dryRun) {
-		if (nextPageSymbol) {
-			writeText(pdf, NEXT_PAGE_SYMBOL_X, lastY + FONT_SPACING.S, '... / ...',
-			{
-				size: FONT_SIZES.M,
-				style: FONT_STYLES.BOLD
-			})
+		if (pageNumber < totalPageNumber && totalPageNumber > 1) {
+			if (!dryRun) {
+				if (nextPageSymbol) {
+					writeNextPageSymbol(pdf, lastY + FONT_SPACING.S)
+					hasSymbol = true
+				}
+			}
 		}
 	}
 
 	return {
 		y: lastY + FONT_SPACING.L,
-		currentPageNumber: totalPageNumber,
-		firstPageColumnsCount
+		currentPageNumber: pageNumber,
+		firstPageColumnsCount,
+		hasSymbol,
 	}
 }
 /* ************************************************************ */
@@ -545,8 +557,18 @@ export const writeContent = (
 	const nextPageTopY = bottomHeaderY
 	const historyNextPageTopY = nextPageTopY + FONT_SIZES.S  // Adding history title dynamically for each new page
 
-	// Simulate writeSituation call (using dryRun option) to :
-	// 1 - get bottom situation Y position : to know if history Y size will fit into one page document
+	/***** REVERSE simulation (1-SITUATION ADMINISTRATIVE, 2-HISTORY) *****/
+	/*
+		1- Simulate writeSituation call to :
+			a - get bottom situation Y position
+
+		2 - Simulate writeHistory :
+			a - to know if history Y size will fit into one page document
+				(and force one column or two columns option)
+
+		=> we know if we need to force two columns write for history
+	*/
+
 	const simulatedSituationBottomY = writeSituation(pdf, historyTopY, {
 		annulation,
 		duplicataTitre,
@@ -566,83 +588,40 @@ export const writeContent = (
 	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
 	// 1 - know if document would fit into one page, in order to force 2 columns history or not
 	const {
-		firstPageColumnsCount
+		firstPageColumnsCount,
+		currentPageNumber: lastPageNumber,
+		y: simulatedHistoryWithMarginY,
 	} = writeHistory(
 		pdf, simulatedSituationBottomY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: true }
 	)
 
-	let forceTwoColumns = firstPageColumnsCount == 2
-
-	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
-	// 1 - know if document would fit into one page, in order to force 2 columns history or not
-	let firstPageColumnsCountSecond
-	if (!forceTwoColumns) {
-		({
-			firstPageColumnsCount: firstPageColumnsCountSecond
-		} = firstPageColumnsCountSecond = writeHistory(
-			pdf, simulatedSituationBottomY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
-			{ dryRun: true, forceTwoColumns: true }
-		))
-
-		forceTwoColumns = firstPageColumnsCountSecond == 2
-	}
-
-	// Simulate writeHistory call (using dryRun option) to :
-	// 1 - get bottom history Y position : to know from where we begin to write Situation section (and to compute point 2)
-	// 2 - get history page count : to calculate Situation section position (does it fit in current page or do we write it on the next page?)
-	const {
-		y: simulatedHistoryY,
-		currentPageNumber: simulatedCurrentPageNumber
-	} = writeHistory(
-		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
-		{ dryRun: true, forceTwoColumns },
-	)
-
-	const simulatedHistoryWithMarginY = simulatedHistoryY + FONT_SPACING.M
-
-
-	// Simulate writeSituation call (using dryRun option) to :
-	// 1 - get bottom situation Y position : to know if we can write Situation section on the current page or the next page
-	// 2 - get the total page count of the report.pdf : use this count to write page count on every page
-	// (all History section pages and the eventual Situation section page)
-	const anotherSimulatedSituationBottomY = writeSituation(pdf, simulatedHistoryWithMarginY, {
-		annulation,
-		duplicataTitre,
-		gage,
-		hasPVE,
-		otci,
-		ove,
-		perteTitre,
-		pv,
-		saisie,
-		suspension,
-		suspensions,
-		volTitre,
-		volVehicule
-	}, { dryRun: true })
-
-	const isSituationSectionOnNewPage = anotherSimulatedSituationBottomY > footerWithMarginTopY
-	const lastPageNumber = isSituationSectionOnNewPage ? simulatedCurrentPageNumber + 1 : simulatedCurrentPageNumber
+	const forceTwoColumns = firstPageColumnsCount == 2
+	const isSituationSectionOnNewPage = simulatedHistoryWithMarginY > footerWithMarginTopY || lastPageNumber > 1
+	/**********************************************************************/
 
 	// Since we have all needed informations, let's write the pdf file for real!
 	const {
-		y: historyY,
-		currentPageNumber
+		y: historyBottomY,
+		currentPageNumber,
+		hasSymbol,
 	} = writeHistory(
 		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
-		{ dryRun: false, forceTwoColumns, nextPageSymbol: true },
+		{ dryRun: false, forceTwoColumns, nextPageSymbol: isSituationSectionOnNewPage },
 		{ totalPageCount: lastPageNumber }
 	)
 
-	const historyWithMarginY = historyY + FONT_SPACING.M
+	const historyBottomWithMarginY = historyBottomY + FONT_SPACING.M
 
 	if (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) {
+		if (!hasSymbol) {
+			writeNextPageSymbol(pdf, historyBottomWithMarginY - FONT_SPACING.S)
+		}
 		addPage(pdf, writeHeaderCallback, writeFooterCallback)
 		writePageNumber(pdf, lastPageNumber, lastPageNumber)
 	}
 
-	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyWithMarginY
+	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyBottomWithMarginY
 
 	writeSituation(
 		pdf, situationTopY,
