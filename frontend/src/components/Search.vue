@@ -898,7 +898,8 @@ export default {
     },
     currentMonthNumber () {
       var date = new Date()
-      date = dayjs().add(-7, 'day').format('YYYYMM')
+      date = dayjs().add(-7, 'day').subtract(1, 'month').format('YYYYMM')
+      console.log(`Patched currentMonthNumber = ${date}`)  // eslint-disable-line no-console
       return date
     },
     pers_id () {
