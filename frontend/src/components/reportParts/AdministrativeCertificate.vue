@@ -27,8 +27,6 @@
 <script>
 
 import dayjs from 'dayjs'
-import JsPdf from 'jspdf'
-import Qr from 'qr.js'
 import { generateCsa } from '../../utils/csaAsPdf'
 
 export default {
@@ -79,59 +77,43 @@ export default {
     this.$store.dispatch('log', `${this.$route.path}/csa`)
   },
   methods: {
-    pad (n, width, z) {
-      z = z || '0'
-      n = n + ''
-      return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
-    },
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
       console.log('pdf multipages pending...')  // eslint-disable-line no-console
 
-      if (this.v.administratif.annulation === 'Oui') {
-        generateCsa({
-          annulation: this.v.administratif.annulation,
-          dateAnnulation: this.v.administratif.dateAnnulation,
-          histoVecLogo: this.images['histovec'].img,
-          marianneImage: this.images['marianne'].img,
-          marque: this.v.ctec.marque,
-          plaque: this.$store.state.identity.plaque,
-          premierCertificat: this.v.certificat.premier,
-          qrCodeUrl: this.url,
-          validityDate: this.validityDate,
-          vin: this.v.ctec.vin,
-          webSiteUrl: this.baseUrl
-        })
-      } else {
-        generateCsa({
-          annulation: this.v.administratif.annulation,
-          dateAnnulation: this.v.administratif.dateAnnulation,
-          histoVecLogo: this.images['histovec'].img,
-          marianneImage: this.images['marianne'].img,
-          marque: this.v.ctec.marque,
-          plaque: this.$store.state.identity.plaque,
-          premierCertificat: this.v.certificat.premier,
-          qrCodeUrl: this.url,
-          validityDate: this.validityDate,
-          vin: this.v.ctec.vin,
-          webSiteUrl: this.baseUrl
-        },
-        {
-          duplicataTitre: this.v.administratif.titre.duplicata,
-          gage: this.v.administratif.gage,
-          hasPVE: this.$store.state.siv.v.suspensions && this.$store.state.siv.v.suspensions.includes('PVE'),
+      const isAnnulationCI = this.v.administratif.isAnnulationCI
+      const csaLabels = this.v.administratif.csaLabels
+
+      generateCsa({
+        isAnnulationCI,
+        annulationCurrentStatus: csaLabels.annulationCurrentStatus,
+        dateAnnulation: this.v.administratif.dateAnnulation,
+        histoVecLogo: this.images.histovec.img,
+        marianneImage: this.images.marianne.img,
+        marque: this.v.ctec.marque,
+        plaque: this.$store.state.identity.plaque,
+        premierCertificat: this.v.certificat.premier,
+        qrCodeUrl: this.url,
+        validityDate: this.validityDate,
+        vin: this.v.ctec.vin,
+        webSiteUrl: this.baseUrl
+      },
+      (
+        !isAnnulationCI ? {
+          duplicataTitre: csaLabels.titre.duplicata,
+          dvsCurrentStatus: csaLabels.dvsCurrentStatus,
+          gagesCurrentStatus: csaLabels.gagesCurrentStatus,
           historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
-          ove: this.v.administratif.ove,
-          otci: this.v.administratif.otci,
-          perteTitre: this.v.administratif.titre.perte,
-          pv: this.v.administratif.pv,
-          saisie: this.v.administratif.saisie,
-          suspension: this.v.administratif.suspension,
-          suspensions: this.v.administratif.suspensions,
-          volTitre: this.v.administratif.titre.vol,
-          volVehicule: this.v.administratif.vol
-        })
-      }
+          otcisCurrentStatus: csaLabels.otcisCurrentStatus,
+          otcisPvCurrentStatus: csaLabels.otcisPvCurrentStatus,
+          ovesCurrentStatus: csaLabels.ovesCurrentStatus,
+          perteTitre: csaLabels.titre.perte,
+          pveCurrentStatus: csaLabels.pveCurrentStatus,
+          suspensionsMotifsCurrentStatus: csaLabels.suspensionsMotifsCurrentStatus,
+          volTitre: csaLabels.titre.vol,
+          volVehicule: csaLabels.vol
+        } : {}
+      ))
 
       console.log('pdf multipages done!')  // eslint-disable-line no-console
     }

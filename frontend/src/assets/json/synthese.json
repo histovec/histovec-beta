@@ -22,6 +22,12 @@
     "adv": "Une procédure de réparation contrôlée est en cours",
     "link": "https://www.service-public.fr/particuliers/vosdroits/F1473"
   },
+  "ovei": {
+    "icon": "fa-exclamation-triangle",
+    "text": "Ce véhicule est économiquement irréparable",
+    "adv": "Il ne peut être vendu qu'à un professionnel",
+    "link": "https://www.service-public.fr/particuliers/vosdroits/F1473"
+  },
   "multi_ove": {
     "icon": "fa-exclamation-triangle",
     "text": "Ce véhicule a eu plusieurs sinistres déclarés",
@@ -34,7 +40,31 @@
     "adv": "Ce véhicule pourra être vendu après levée de l'opposition",
     "link": "https://www.service-public.fr/particuliers/vosdroits/F34107"
   },
+  "otcipv": {
+    "icon": "fa-exclamation-triangle",
+    "text": "Le certificat fait l'objet d'une opposition temporaire (non liée à un sinistre)",
+    "adv": "Ce véhicule pourra être vendu après levée de l'opposition (liée à un PV)",
+    "link": "https://www.service-public.fr/particuliers/vosdroits/F34107"
+  },
   "otci_ove": {
+    "icon": "fa-exclamation-triangle",
+    "text": "Le certificat fait l'objet d'une opposition temporaire",
+    "adv": "Ce véhicule pourra être vendu après levée de l'opposition",
+    "link": "https://www.service-public.fr/particuliers/vosdroits/F34107"
+  },
+  "otci_ovei": {
+    "icon": "fa-exclamation-triangle",
+    "text": "Le certificat fait l'objet d'une opposition temporaire",
+    "adv": "Ce véhicule pourra être vendu après levée de l'opposition",
+    "link": "https://www.service-public.fr/particuliers/vosdroits/F34107"
+  },
+  "otcipv_ove": {
+    "icon": "fa-exclamation-triangle",
+    "text": "Le certificat fait l'objet d'une opposition temporaire",
+    "adv": "Ce véhicule pourra être vendu après levée de l'opposition",
+    "link": "https://www.service-public.fr/particuliers/vosdroits/F34107"
+  },
+  "otcipv_ovei": {
     "icon": "fa-exclamation-triangle",
     "text": "Le certificat fait l'objet d'une opposition temporaire",
     "adv": "Ce véhicule pourra être vendu après levée de l'opposition",

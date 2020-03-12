@@ -4,13 +4,13 @@
       Titulaire
     </h6>
     <!-- debut titulaire et co-titulaire -->
-    <div v-if="v.titulaire.nature !== undefined">
+    <div v-if="titulaire.nature">
       <div class="row">
         <div class="col-sm-5">
           <span class="txt-small-12">Nature</span>
         </div>
         <div class="col-sm-7">
-          <span class="txt-small-12">{{ v.titulaire.nature }}</span>
+          <span class="txt-small-12">{{ titulaire.nature }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -21,7 +21,7 @@
         <span class="txt-small-12">Identité</span>
       </div>
       <div class="col-sm-7">
-        <span class="info_red txt-small-12">{{ v.titulaire.identite }}</span>
+        <span class="info_red txt-small-12">{{ titulaire.identite }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -31,7 +31,7 @@
         <span class="txt-small-12">Code Postal</span>
       </div>
       <div class="col-sm-7">
-        <span class="info_red txt-small-12">{{ v.titulaire.adresse }}</span>
+        <span class="info_red txt-small-12">{{ titulaire.adresse }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -44,24 +44,24 @@
       <div class="col-sm-5">
         <span class="txt-small-12">Date de première immatriculation</span>
         <span
-          v-if="v.certificat.etranger"
+          v-if="certificat.etranger"
           class="txt-small-12"
         >
           à l'étranger
         </span>
       </div>
       <div class="col-sm-7">
-        <span class="info_red txt-small-12">{{ v.certificat.premier }}</span>
+        <span class="info_red txt-small-12">{{ certificat.premier }}</span>
       </div>
     </div>
     <div class="separator"></div>
-    <div v-if="v.certificat.etranger">
+    <div v-if="certificat.etranger">
       <div class="row">
         <div class="col-sm-5">
           <span class="txt-small-12">Date de première immatriculation en France</span>
         </div>
         <div class="col-sm-7">
-          <span class="info_red txt-small-12">{{ v.certificat.fr }}</span>
+          <span class="info_red txt-small-12">{{ certificat.fr }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -71,7 +71,7 @@
         <span class="txt-small-12">Date de la carte grise actuelle</span>
       </div>
       <div class="col-sm-7">
-        <span class="info_red txt-small-12">{{ v.certificat.courant }}</span>
+        <span class="info_red txt-small-12">{{ certificat.courant }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -82,7 +82,11 @@
 
 export default {
   props: {
-    v: {
+    certificat: {
+      type: Object,
+      default: () => {}
+    },
+    titulaire: {
       type: Object,
       default: () => {}
     }

@@ -35,16 +35,6 @@ export const getTextLinesWithSplit = (
 	})
 }
 
-export const padString = (n, width, padChar='0') => {
-	const stringifiedN = String(n)
-	if (stringifiedN.length >= width) {
-		return stringifiedN
-	}
-
-	const padding = new Array(width - stringifiedN.length + 1).join(padChar)
-	return  `${padding}${stringifiedN}`
-}
-
 export const writeMainTitle = (pdf, x, y, title) => {
 	return writeText(pdf, x, y, title, {
 		align: ALIGN.CENTER,

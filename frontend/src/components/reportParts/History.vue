@@ -41,7 +41,7 @@
       </div>
       <div class="separator pv-5"></div>
     </div>
-    <div v-if="v.certificat.incertain">
+    <div v-if="v.certificat.isIncertain">
       <div class="row">
         <div class="col-sm-2">
           <span class="txt-small-12">{{ v.certificat.fr }}</span>

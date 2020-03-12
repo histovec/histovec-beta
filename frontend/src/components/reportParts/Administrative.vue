@@ -5,7 +5,7 @@
         <h6 class="title">
           Gages
           <a
-            :href="synthese['otci'].link"
+            :href="syntheseMapping['otci'].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
@@ -14,7 +14,7 @@
         </h6>
         <!-- debut tableau gages -->
         <div class="col-sm-12">
-          <span class="info_red txt-small-12">{{ v.administratif.gages }}</span>
+          <span class="info_red txt-small-12">{{ reportLabels.gagesCurrentStatus }}</span>
           <div class="separator-2"></div>
         </div>
       </div>
@@ -22,7 +22,7 @@
         <h6 class="title">
           Oppositions
           <a
-            :href="synthese['otci'].link"
+            :href="syntheseMapping['otci'].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
@@ -31,9 +31,9 @@
         </h6>
         <!-- debut tableau oppositions -->
         <div class="col-sm-12">
-          <span class="info_red txt-small-12">{{ v.administratif.oppositions }} </span>
+          <span class="info_red txt-small-12">{{ reportLabels.oppositionsCurrentStatus }} </span>
           <span
-            v-if="v.administratif.pv && holder"
+            v-if="opposition.hasOtciPv && holder"
             class="txt-small-12"
           >
             <br />
@@ -49,11 +49,8 @@
         </h6>
         <!-- debut tableau suspensions -->
         <div class="col-sm-12">
-          <div
-            v-for="(suspension, index) in v.administratif.suspensions"
-            :key="index"
-          >
-            <span class="info_red txt-small-12">{{ suspension }}</span>
+          <div>
+            <span class="info_red txt-small-12">{{ reportLabels.suspensionsMotifsCurrentStatus }}</span>
           </div>
           <div class="separator-2"></div>
         </div>
@@ -65,7 +62,7 @@
         </h6>
         <!-- debut tableau procédures -->
         <div class="col-sm-12">
-          <span class="info_red txt-small-12">{{ v.administratif.procedures }}</span>
+          <span class="info_red txt-small-12">{{ reportLabels.procedures }}</span>
           <div class="separator-2"></div>
         </div>
         <!-- fin tableau procédures -->
@@ -81,7 +78,7 @@
           <span class="txt-small-12">Etat de vol</span>
         </div>
         <div class="col-sm-3">
-          <span class="info_red txt-small-12">{{ v.administratif.vol }}</span>
+          <span class="info_red txt-small-12">{{ reportLabels.vol }}</span>
         </div>
         <!-- fin tableau véhicule -->
       </div>
@@ -94,19 +91,19 @@
           <span class="txt-small-12">Etat de vol</span>
         </div>
         <div class="col-sm-5">
-          <span class="info_red txt-small-12">{{ v.administratif.titre.vol }}</span>
+          <span class="info_red txt-small-12">{{ reportLabels.titre.vol }}</span>
         </div>
         <div class="col-sm-5">
           <span class="txt-small-12">Etat de perte</span>
         </div>
         <div class="col-sm-5">
-          <span class="info_red txt-small-12">{{ v.administratif.titre.perte }}</span>
+          <span class="info_red txt-small-12">{{ reportLabels.titre.perte }}</span>
         </div>
         <div class="col-sm-5">
           <span class="txt-small-12">Duplicata</span>
         </div>
         <div class="col-sm-5">
-          <span class="info_red txt-small-12">{{ v.administratif.titre.duplicata }}</span>
+          <span class="info_red txt-small-12">{{ reportLabels.titre.duplicata }}</span>
         </div>
       </div>
     </div>
@@ -117,11 +114,15 @@
 
 export default {
   props: {
-    v: {
+    holder: Boolean,
+    opposition: {
       type: Object,
       default: () => {}
     },
-    holder: Boolean
+    reportLabels: {
+      type: Object,
+      default: () => {}
+    },
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/administrative-status`)

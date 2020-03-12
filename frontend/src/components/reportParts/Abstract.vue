@@ -50,7 +50,7 @@
     <div class="row">
       <!-- debut voiture  -->
       <div class="col-sm-1">
-        <i :class="'fa fa-' + v.logo_vehicule + ' fa-2x'"></i>
+        <i :class="'fa fa-' + v.logoVehicule + ' fa-2x'"></i>
       </div>
       <div class="col-sm-6">
         <span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span>
@@ -83,35 +83,35 @@
     </div>
     <!-- fin trait separation  -->
     <!-- debut trait separation  -->
-    <div v-if="v.usage">
+    <div v-if="v.usages.length">
       <div
-        v-for="(entry, index) in v.usage"
+        v-for="(usage, index) in v.usages"
         :key="index"
       >
         <div
-          v-if="usages[entry]"
+          v-if="usagesMapping[usage]"
           class="row"
         >
           <!-- debut voiture  -->
           <div class="col-sm-1">
-            <i :class="'fa ' + usages[entry].icon + ' fa-2x'"></i>
+            <i :class="'fa ' + usagesMapping[usage].icon + ' fa-2x'"></i>
           </div>
           <div class="col-sm-6">
             <span class="txt-small-13">Usage:</span>
-            <span class="info_red txt-small-13"> {{ usages[entry].text }} </span>
+            <span class="info_red txt-small-13"> {{ usagesMapping[usage].text }} </span>
             <br />
           </div>
           <div
-            v-if="usages[entry].adv"
+            v-if="usagesMapping[usage].adv"
             class="col-sm-5"
           >
-            <span class="color-info_2 bold_4 txt-small-13">{{ usages[entry].adv }}</span>
+            <span class="color-info_2 bold_4 txt-small-13">{{ usagesMapping[usage].adv }}</span>
             <br />
             <a
-              v-if="usages[entry].adv"
-              :href="usages[entry].link"
+              v-if="usagesMapping[usage].adv"
+              :href="usagesMapping[usage].link"
               class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
-              :title="usages[entry].adv"
+              :title="usagesMapping[usage].adv"
               target="_blank"
             >
               En savoir plus
@@ -121,7 +121,7 @@
           <!-- fin voiture  -->
         </div>
         <div
-          v-if="usages[entry]"
+          v-if="usagesMapping[usage]"
           class="separator-2 separator-lg"
         >
         </div>
@@ -137,24 +137,20 @@
         <span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span>
       </div>
       <div class="col-sm-5">
-        <div v-if="(!v.certificat.etranger) && (v.fni !== 'ko')">
+        <div v-if="!v.certificat.etranger">
           <div v-if="holder">
             <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
-            <span class="info_red txt-small-13">{{ v.nb_tit }}</span><sup class="info_red txt-small">{{ getExposant(v.nb_tit) }}</sup>
+            <span class="info_red txt-small-13">{{ v.titulairesCount }}</span><sup class="info_red txt-small">{{ getExposant(v.titulairesCount) }}</sup>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
           </div>
           <div v-if="!holder">
             <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
-            <span class="info_red txt-small-13">{{ v.nb_tit }}</span>
+            <span class="info_red txt-small-13">{{ v.titulairesCount }}</span>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire(s), en l'achetant vous serez le </span>
-            <span class="info_red txt-small-13">{{ v.nb_tit + 1 }}</span>
-            <sup class="info_red txt-small">{{ getExposant(v.nb_tit + 1) }}</sup>
+            <span class="info_red txt-small-13">{{ v.titulairesCount + 1 }}</span>
+            <sup class="info_red txt-small">{{ getExposant(v.titulairesCount + 1) }}</sup>
           </div>
         </div>
-        <!-- <div v-if="(v.fni === 'ko')">
-          <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision</span>
-          <span class="color-info_2 bold_4 txt-small-12">(immatriculation avant 2009)</span>
-        </div> -->
         <div v-if="v.certificat.etranger">
           <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision </span>
           <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
@@ -184,22 +180,8 @@
     <div class="separator-2 separator-lg">
     </div>
     <!-- fin trait separation  -->
-    <div v-if="false">
-      <div class="row">
-        <!-- debut releve  -->
-        <div class="col-sm-1">
-          <i class="fa fa-arrows-h fa-2x pr-10"></i>
-        </div>
-        <div class="col-sm-6">
-          <span class="info_red txt-small-13">48.210 km</span> <span class="txt-small-13">Relevé au dernier contrôle technique du</span> <span class="info_red txt-small-13">21/04/2016</span>
-        </div>
-        <div class="col-sm-5">
-          <span class="color-info_2 bold_4 txt-small-13">Un contrôle technique de moins de 6 mois doit être fourni</span>
-        </div>
-        <!-- fin releve  -->
-      </div>
-    </div>
-    <div v-if="v.etranger !== 'NON'">
+
+    <div v-if="v.etranger.hasBeenImported">
       <div class="row">
         <!-- debut immatriculer  -->
         <div class="col-sm-1">
@@ -222,53 +204,55 @@
       <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="(v.sinistres && v.sinistres.length > 0) || ($store.state.siv.v.suspensions && $store.state.siv.v.suspensions.includes('PVE'))">
+
+
+    <div v-if="v.hasSinistre || v.administratif.hasPve">
       <div class="row">
         <!-- debut sinistre  -->
         <div class="col-sm-1">
           <i
-            :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.apte !== false},
-                     {'fa fa-exclamation-triangle info_red fa-2x pr-10' : v.apte === false}]"
+            :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.isApte},
+                     {'fa fa-exclamation-triangle info_red fa-2x pr-10' : !v.isApte}]"
           >
           </i>
         </div>
         <div class="col-sm-6">
           <!-- état - un seul sinistre !-->
-          <span v-if="v.sinistres_nb === 1 || ((v.sinistres_nb === 0) && $store.state.siv.v.suspensions && $store.state.siv.v.suspensions.includes('PVE'))">
+          <span v-if="v.sinistresCount === 1 || (v.sinistresCount === 0 && v.administratif.hasPve)">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">un sinistre déclaré</span>
             <span
-              v-if="v.sinistres_nb === 1"
+              v-if="v.sinistresCount === 1"
               class="txt-small-13"
             >
-              en {{ v.sinistre }}
+              en {{ v.lastSinistreYear }}
             </span>
             <br />
-            <span v-if="v.apte !== false">
+            <span v-if="v.isApte">
               <span class="txt-small-13">et</span>
               <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
-                v-if="v.apte !== true"
+                v-if="!v.isApte"
                 class="txt-small-13"
               >
-                en {{ v.apte }}
+                en {{ v.lastResolutionYear }}
               </span>
             </span>
           </span>
           <!-- état - plusieurs sinistres !-->
-          <span v-if="v.sinistres_nb > 1">
+          <span v-if="v.sinistresCount > 1">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">plusieurs sinistres, </span>
-            <span class="txt-small-13">dont le dernier déclaré en {{ v.sinistre }}</span>
+            <span class="txt-small-13">dont le dernier déclaré en {{ v.lastSinistreYear }}</span>
             <br />
-            <span v-if="v.apte !== false">
+            <span v-if="v.isApte">
               <span class="txt-small-13">Le véhicule a été</span>
-              <span class="info_red txt-small-13">déclaré apte à circuler</span>
+              <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
-                v-if="v.apte !== true"
+                v-if="!v.isApte"
                 class="txt-small-13"
               >
-                en {{ v.apte }}
+                en {{ v.lastResolutionYear }}
               </span>
             </span>
           </span>
@@ -280,27 +264,28 @@
             <i class="fa fa-external-link pl-5"></i>
           </a>
         </div>
+
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
           <span
-            v-if="v.apte"
+            v-if="v.isApte"
             class="color-info_2 bold_4 txt-small-13"
           >
-            {{ synthese[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
+            {{ syntheseMapping[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
           </span>
           <span
             v-else
             class="color-info_2 bold_4 txt-small-13"
           >
-            {{ synthese['ove'].adv }}
+            {{ syntheseMapping['ove'].adv }}
           </span>
 
           <br />
           <span
-            v-if="v.sinistres && v.sinistres.length > 1"
+            v-if="v.hasSinistre && v.sinistres.length > 1"
             class="color-info_2 bold_4 txt-small-13"
           >
-            {{ synthese.multi_ove.adv }}
+            {{ syntheseMapping['multi_ove'].adv }}
           </span>
         </div>
         <!-- fin sinistre  -->
@@ -309,7 +294,7 @@
       <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="(v.administratif.synthese && v.administratif.synthese.length === 0) && (v.sinistre === undefined)">
+    <div v-if="synthese.length === 0 && !v.lastSinistreYear">
       <div class="row">
         <!-- debut ras  -->
         <div class="col-sm-1">
@@ -335,19 +320,19 @@
       <!-- fin trait separation  -->
     </div>
     <div
-      v-for="(entry, index) in v.administratif.synthese"
+      v-for="(entry, index) in synthese"
       :key="index"
     >
       <div class="row info_red">
         <div class="col-sm-1">
           <i
             class="fa fa-2x pr-10"
-            :class="synthese[entry].icon"
+            :class="syntheseMapping[entry].icon"
           >
           </i>
         </div>
         <div class="col-sm-6 txt-small-13">
-          {{ synthese[entry].text }}
+          {{ syntheseMapping[entry].text }}
           <br />
           <a
             class="clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
@@ -358,11 +343,11 @@
           </a>
         </div>
         <div class="col-sm-5 color-info_2 bold_4 txt-small-13">
-          {{ synthese[entry].adv }}
+          {{ syntheseMapping[entry].adv }}
           <br />
           <a
-            v-if="synthese[entry].link !== undefined"
-            :href="synthese[entry].link"
+            v-if="syntheseMapping[entry].link"
+            :href="syntheseMapping[entry].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
@@ -371,29 +356,31 @@
           </a>
         </div>
       </div>
+      <!-- debut trait separation  -->
+      <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
     <div>
       <div
-        v-if="v.vignette_numero !== '' && v.vignette_numero !== undefined"
+        v-if="v.vignetteNumero"
         class="row"
       >
         <!-- debut ras  -->
         <div class="col-sm-1">
           <img
             class="img-responsive"
-            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignette_numero + '.png'"
+            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignetteNumero + '.png'"
           >
         </div>
         <div class="col-sm-6">
-          <span class="txt-small-13"> {{ synthese['critair'].text }} {{ v.vignette_numero }}</span>
+          <span class="txt-small-13"> {{ syntheseMapping['critair'].text }} {{ v.vignetteNumero }}</span>
         </div>
         <div class="col-sm-5 color-info_2 bold_4 txt-small-13">
-          {{ synthese['critair'].adv }}
+          {{ syntheseMapping['critair'].adv }}
           <br />
           <a
-            v-if="synthese['critair'].link !== undefined"
-            :href="synthese['critair'].link"
+            v-if="syntheseMapping['critair'].link"
+            :href="syntheseMapping['critair'].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
@@ -404,7 +391,7 @@
         <!-- fin ras  -->
       </div>
       <div
-        v-if="(v.vignette_numero === '') && !(v.usage && v.usage.includes('COL'))"
+        v-if="!v.vignetteNumero && !v.usages.includes('COL')"
         class="row"
       >
         <!-- debut pas de critair  -->
@@ -415,11 +402,11 @@
           <span class="txt-small-13">Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les informations dont nous disposons sont insuffisantes</span>
         </div>
         <div class="col-sm-5 color-info_2 bold_4 txt-small-13">
-          {{ synthese['critair'].adv }}
+          {{ syntheseMapping['critair'].adv }}
           <br />
           <a
-            v-if="synthese['critair'].link !== undefined"
-            :href="synthese['critair'].link"
+            v-if="syntheseMapping['critair'].link"
+            :href="syntheseMapping['critair'].link"
             target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
           >
@@ -453,9 +440,19 @@ export default {
       default: () => {}
     },
   },
+  computed: {
+    synthese () {
+      return this.v.administratif.reportLabels.synthese
+    }
+  },
+
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/synthesis`)
   },
 }
 
 </script>
+
+
+logoVehicule
+ctec

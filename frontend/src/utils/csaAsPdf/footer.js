@@ -9,8 +9,8 @@ import {
 	IMAGE_FORMAT,
 	QR_CODE_PIXEL_SIZE
 } from './constants'
-import { padString, writeText, writeTitle, writeWithSpacing } from './utils'
-
+import { writeText, writeTitle, writeWithSpacing } from './utils'
+import { padString } from '../../assets/js/format'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = (

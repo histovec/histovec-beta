@@ -1,97 +1,106 @@
 import dayjs from 'dayjs'
 import orderBy from 'lodash.orderby'
-import operations from '../json/operations.json'
-import suspensions from '../json/suspensions.json'
+
+import { booleanLabel, camelize, entitiesLabel, formatDate, padString } from '../js/format'
+import { getTypeCarburant } from '../../utils/vehicle/energie'
+
+import { NUMERO_EURO } from '../../constants/vehicle/numeroEuro'
+import { VIGNETTE } from '../../constants/vehicle/vignette'
+import { TYPE_CARBURANT } from '../../constants/vehicle/typeCarburant'
+
+import operationsMapping from '../json/operations.json'
+import suspensionsMapping from '../json/suspensions.json'
+import { FNI_STATE, TITULAIRE_CHANGE_OPERATIONS } from './constants'
 
 
-export default { siv }
+const MISSING_VALUE = 'non disponible'
 
-const missing = 'non disponible'
+// Important dates about vignette rules (instancied only once)
+const DATE_1997_01_01 = new Date('1997-01-01')
+const DATE_2000_06_01 = new Date('2000-06-01')
+const DATE_2000_12_31 = new Date('2000-12-31')
+const DATE_2001_01_01 = new Date('2001-01-01')
+const DATE_2001_10_01 = new Date('2001-10-01')
+const DATE_2004_06_30 = new Date('2004-06-30')
+const DATE_2004_07_01 = new Date('2004-07-01')
+const DATE_2005_12_31 = new Date('2005-12-31')
+const DATE_2006_01_01 = new Date('2006-01-01')
+const DATE_2006_09_30 = new Date('2006-09-30')
+const DATE_2006_10_01 = new Date('2006-10-01')
+const DATE_2006_12_31 = new Date('2006-12-31')
+const DATE_2007_01_01 = new Date('2007-01-01')
+const DATE_2009_09_30 = new Date('2009-09-30')
+const DATE_2009_01_01 = new Date('2009-10-01')
+const DATE_2010_12_31 = new Date('2010-12-31')
+const DATE_2011_01_01 = new Date('2011-01-01')
+const DATE_2013_12_31 = new Date('2013-12-31')
+const DATE_2014_01_01 = new Date('2014-01-01')
+const DATE_2016_12_31 = new Date('2016-12-31')
+const DATE_2017_01_01 = new Date('2017-01-01')
+const DATE_2017_12_31 = new Date('2017-12-31')
+const DATE_2018_01_01 = new Date('2018-01-01')
 
-function pad (n, width, z) {
-  z = z || '0'
-  n = n + ''
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
-}
 
-function formatDate (isoDate) {
-  let d = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
-  return Intl.DateTimeFormat('fr-FR').format(d)
-}
+const computeCertifDepuis = (dateString) => {
+  // Si on détecte que la date est au format FR alors on la convertie
+  const convertedDateString = (
+    dayjs(dateString, 'DD/MM/YYYY').isValid() ?
+      dayjs(dateString, 'DD/MM/YYYY').format('YYYY-MM-DD') :
+      dateString
+  )
 
-function calcCertifDepuis (dateStr) {
-  // Si on détecte que la date est au format FR alors on l'a converti
-  if (dayjs(dateStr, 'DD/MM/YYYY').isValid()) {
-    dateStr = dayjs(dateStr, 'DD/MM/YYYY').format('YYYY-MM-DD')
-  }
-  let nbMonth = Math.floor(dayjs().diff(new Date(dateStr), 'month'))
+  const nbMonth = Math.floor(dayjs().diff(new Date(convertedDateString), 'month'))
 
   if (nbMonth <= 18) {
-    return nbMonth + ' mois'
+    return `${nbMonth} mois`
   } else {
-    let year = Math.floor(nbMonth / 12)
+    const year = Math.floor(nbMonth / 12)
+    const yearLabel = year > 1 ? `${year} ans` : `${year} an`
     let month = nbMonth - 12 * year
     if ((month > 0) && (year < 10)) {
-      return (year > 1) ? year + ' ans et ' + month + ' mois' : year + ' an et ' + month + ' mois'
+      return `${yearLabel} et ${month} mois`
     } else {
-      return (year > 1) ? year + ' ans' : year + ' an'
+      return yearLabel
     }
   }
 }
 
-function getVehiculeTypeCarburant (carburant) {
-  // Mapping Carburant
-  let essence = ['ES', 'EH', 'ET', 'FE', 'FH']
-  let diesel = ['GO', 'GA', 'GE', 'GF', 'GG', 'GH', 'PL', 'GQ']
-  let electHydro = ['AC', 'EL', 'H2', 'HE', 'HH']
-  let gaz = ['EG', 'EN', 'EP', 'EQ', 'FG', 'FN', 'G2', 'GN', 'GP', 'GZ', 'NH', 'PH']
-  let hybrideRech = ['EE', 'EM', 'ER', 'FL', 'GL', 'GM', 'NE', 'PE']
-  let typeCarburant = ''
-  if (essence.includes(carburant)) {
-    typeCarburant = 'essence'
-  } else if (diesel.includes(carburant)) {
-    typeCarburant = 'diesel'
-  } else if (electHydro.includes(carburant)) {
-    typeCarburant = 'electrique'
-  } else if (gaz.includes(carburant)) {
-    typeCarburant = 'gaz'
-  } else if (hybrideRech.includes(carburant)) {
-    typeCarburant = 'hybride'
-  }
-  return typeCarburant
-}
+// @todo: use utils/vehicle
+const getVehiculeLogo = (genre) => {
+  const moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
+  const truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
 
-function getVehiculeLogo (genre) {
-  let moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
-  let truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
-  let type = 'car'
   if (moto.includes(genre)) {
-    type = 'motorcycle'
+    return 'motorcycle'
   } else if (truck.includes(genre)) {
-    type = 'truck'
+    return 'truck'
+  } else {
+    return 'car'
   }
-  return type
 }
 
-function getVignetteNumero (genre, categorie, typeCarburant, pollution, datePremImmat) {
-  let splitDate = datePremImmat.split('/')
-  let dateImmatEn = new Date(splitDate[2] + '-' + splitDate[1] + '-' + splitDate[0])
-  let vignette = ''
+// @todo: use constants/vehicle/categorie ENUM
+const getVignetteNumero = (genre, categorie, typeCarburant, pollution, datePremImmat) => {
+  const datePremImmatChunks = datePremImmat.split('/')
+  const normalizedDateImmat = new Date(`${datePremImmatChunks[2]}-${datePremImmatChunks[1]}-${datePremImmatChunks[0]}`)
+
   // Mapping Norme Euro
-  let normeEuro = (pollution) ? pollution.split('EURO') : ''
-  let numeroEuro = (normeEuro !== '' && normeEuro[1] !== undefined) ? normeEuro[1] : ''
+  const normeEuro = pollution ? pollution.split('EURO') : ''
+  const numeroEuro = normeEuro[1] || ''
+
   let voitureParticuliere = []
   let vehiculeUtilitaireLegers = []
   let motocycle = []
   let cyclomoteur = []
   let poidsLourdsAutobusAutocar = []
-  if (typeCarburant === 'gaz' || typeCarburant === 'hybride') {
-    vignette = 1
-  } else if (typeCarburant === 'electrique') {
-    vignette = 'electrique'
+
+  if ([TYPE_CARBURANT.GAZ, TYPE_CARBURANT.HYBRID].includes(typeCarburant)) {
+    return VIGNETTE.UN
+  } else if (typeCarburant === TYPE_CARBURANT.ELECTRIQUE) {
+    return VIGNETTE.ELECTRIQUE
   } else {
     // Mapping Categorie
-    if ((categorie !== '' && categorie !== undefined)) {
+    if (categorie) {
       let categ = categorie.split('-')
       categorie = categ[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
       voitureParticuliere = ['M1']
@@ -107,103 +116,174 @@ function getVignetteNumero (genre, categorie, typeCarburant, pollution, datePrem
       cyclomoteur = ['CYCL', 'CL']
       poidsLourdsAutobusAutocar = ['CAM', 'TCP']
     } else {
-      return vignette
+      return
     }
 
     if (motocycle.includes(categorie) || cyclomoteur.includes(categorie)) {
-      if (numeroEuro === '4' || (numeroEuro === '' && motocycle.includes(categorie) && dateImmatEn >= new Date('2017-01-01')) || (numeroEuro === '' && cyclomoteur.includes(categorie) && dateImmatEn >= new Date('2018-01-01'))) {
-        vignette = 1
-      } else if (numeroEuro === '3' || (numeroEuro === '' && motocycle.includes(categorie) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2016-12-31'))) || (numeroEuro === '' && cyclomoteur.includes(categorie) && (dateImmatEn >= new Date('2007-01-01') && dateImmatEn <= new Date('2017-12-31')))) {
-        vignette = 2
-      } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('2004-07-01') && dateImmatEn <= new Date('2006-12-31'))) {
-        vignette = 3
-      } else if (dateImmatEn >= new Date('2000-06-01') && dateImmatEn <= new Date('2004-06-30')) {
-        vignette = 4
+      if (
+        numeroEuro === NUMERO_EURO.QUATRE ||
+        (!numeroEuro && motocycle.includes(categorie) && normalizedDateImmat >= DATE_2017_01_01) ||
+        (!numeroEuro && cyclomoteur.includes(categorie) && normalizedDateImmat >= DATE_2018_01_01)
+      ) {
+        return VIGNETTE.UN
+      } else if (
+        numeroEuro === NUMERO_EURO.TROIS ||
+        (!numeroEuro && motocycle.includes(categorie) && (normalizedDateImmat >= DATE_2007_01_01 && normalizedDateImmat <= new DATE_2016_12_31)) ||
+        (!numeroEuro && cyclomoteur.includes(categorie) && (normalizedDateImmat >= DATE_2007_01_01 && normalizedDateImmat <= DATE_2017_12_31))
+      ) {
+        return VIGNETTE.DEUX
+      } else if (
+        numeroEuro === NUMERO_EURO.DEUX ||
+        (!numeroEuro && normalizedDateImmat >= DATE_2004_07_01 && normalizedDateImmat <= DATE_2006_12_31)
+      ) {
+        return VIGNETTE.TROIS
+      } else if (normalizedDateImmat >= DATE_2000_06_01 && normalizedDateImmat <= DATE_2004_06_30) {
+        return VIGNETTE.QUATRE
       }
     } else if (voitureParticuliere.includes(categorie)) {
-      if (typeCarburant === 'essence') {
-        if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
-          vignette = 1
-        } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
-          vignette = 2
-        } else if (numeroEuro === '2' || numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
-          vignette = 3
+      if (typeCarburant === TYPE_CARBURANT.ESSENCE) {
+        if (
+          numeroEuro === NUMERO_EURO.CINQ ||
+          numeroEuro === NUMERO_EURO.SIX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2011_01_01)
+        ) {
+          return VIGNETTE.UN
+        } else if (
+          numeroEuro === NUMERO_EURO.QUATRE ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2006_01_01 && normalizedDateImmat <= DATE_2010_12_31)
+        ) {
+          return VIGNETTE.DEUX
+        } else if (
+          numeroEuro === NUMERO_EURO.DEUX ||
+          numeroEuro === NUMERO_EURO.TROIS ||
+          (!numeroEuro && normalizedDateImmat >= DATE_1997_01_01 && normalizedDateImmat <= DATE_2005_12_31)
+        ) {
+          return VIGNETTE.TROIS
         }
-      } else if (typeCarburant === 'diesel') {
-        if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
-          vignette = 2
-        } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
-          vignette = 3
-        } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
-          vignette = 4
-        } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2000-12-31'))) {
-          vignette = 5
+      } else if (typeCarburant === TYPE_CARBURANT.DIESEL) {
+        if (
+          numeroEuro === NUMERO_EURO.CINQ ||
+          numeroEuro === NUMERO_EURO.SIX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2011_01_01)
+        ) {
+          return VIGNETTE.DEUX
+        } else if (
+          numeroEuro === NUMERO_EURO.QUATRE ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2006_01_01 && normalizedDateImmat <= DATE_2010_12_31)
+        ) {
+          return VIGNETTE.TROIS
+        } else if (
+          numeroEuro === NUMERO_EURO.TROIS ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2001_01_01 && normalizedDateImmat <= DATE_2005_12_31)
+        ) {
+          return VIGNETTE.QUATRE
+        } else if (
+          numeroEuro === NUMERO_EURO.DEUX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_1997_01_01 && normalizedDateImmat <= DATE_2000_12_31)
+        ) {
+          return VIGNETTE.CINQ
         }
       }
     } else if (vehiculeUtilitaireLegers.includes(categorie)) {
-      if (typeCarburant === 'essence') {
-        if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
-          vignette = 1
-        } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
-          vignette = 2
-        } else if (numeroEuro === '2' || numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
-          vignette = 3
+      if (typeCarburant === TYPE_CARBURANT.ESSENCE) {
+        if (
+          numeroEuro === NUMERO_EURO.CINQ ||
+          numeroEuro === NUMERO_EURO.SIX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2011_01_01)
+        ) {
+          return VIGNETTE.UN
+        } else if (
+          numeroEuro === NUMERO_EURO.QUATRE ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2006_01_01 && normalizedDateImmat <= DATE_2010_12_31)
+        ) {
+          return VIGNETTE.DEUX
+        } else if (
+          numeroEuro === NUMERO_EURO.DEUX ||
+          numeroEuro === NUMERO_EURO.TROIS ||
+          (!numeroEuro && normalizedDateImmat >= DATE_1997_01_01 && normalizedDateImmat <= DATE_2005_12_31)
+        ) {
+          return VIGNETTE.TROIS
         }
-      } else if (typeCarburant === 'diesel') {
-        if (numeroEuro === '5' || numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2011-01-01'))) {
-          vignette = 2
-        } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-01-01') && dateImmatEn <= new Date('2010-12-31'))) {
-          vignette = 3
-        } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-01-01') && dateImmatEn <= new Date('2005-12-31'))) {
-          vignette = 4
-        } else if (numeroEuro === '2' || (numeroEuro === '' && dateImmatEn >= new Date('1997-01-01') && dateImmatEn <= new Date('2000-12-31'))) {
-          vignette = 5
+      } else if (typeCarburant === TYPE_CARBURANT.DIESEL) {
+        if (
+          numeroEuro === NUMERO_EURO.CINQ ||
+          numeroEuro === NUMERO_EURO.SIX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2011_01_01)
+        ) {
+          return VIGNETTE.DEUX
+        } else if (
+          numeroEuro === NUMERO_EURO.QUATRE ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2006_01_01 && normalizedDateImmat <= DATE_2010_12_31)
+        ) {
+          return VIGNETTE.TROIS
+        } else if (
+          numeroEuro === NUMERO_EURO.TROIS ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2001_01_01 && normalizedDateImmat <= DATE_2005_12_31)
+        ) {
+          return VIGNETTE.QUATRE
+        } else if (
+          numeroEuro === NUMERO_EURO.DEUX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_1997_01_01 && normalizedDateImmat <= DATE_2000_12_31)
+        ) {
+          return VIGNETTE.CINQ
         }
       }
     } else if (poidsLourdsAutobusAutocar.includes(categorie)) {
-      if (typeCarburant === 'essence') {
-        if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
-          vignette = 1
-        } else if (numeroEuro === '5' || (numeroEuro === '' && dateImmatEn >= new Date('2009-10-01') && dateImmatEn <= new Date('2013-12-31'))) {
-          vignette = 2
-        } else if (numeroEuro === '3' || numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2001-10-01') && dateImmatEn <= new Date('2009-09-30'))) {
-          vignette = 3
+      if (typeCarburant === TYPE_CARBURANT.ESSENCE) {
+        if (
+          numeroEuro === NUMERO_EURO.SIX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2014_01_01)
+        ) {
+          return VIGNETTE.UN
+        } else if (
+          numeroEuro === NUMERO_EURO.CINQ ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2009_01_01 && normalizedDateImmat <= DATE_2013_12_31)
+        ) {
+          return VIGNETTE.DEUX
+        } else if (
+          numeroEuro === NUMERO_EURO.TROIS ||
+          numeroEuro === NUMERO_EURO.QUATRE ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2001_10_01 && normalizedDateImmat <= DATE_2009_09_30)
+        ) {
+          return VIGNETTE.TROIS
         }
-      } else if (typeCarburant === 'diesel') {
-        if (numeroEuro === '6' || (numeroEuro === '' && dateImmatEn >= new Date('2014-01-01'))) {
-          vignette = 2
-        } else if (numeroEuro === '5' || (numeroEuro === '' && dateImmatEn >= new Date('2009-10-01') && dateImmatEn <= new Date('2013-12-31'))) {
-          vignette = 3
-        } else if (numeroEuro === '4' || (numeroEuro === '' && dateImmatEn >= new Date('2006-10-01') && dateImmatEn <= new Date('2009-09-30'))) {
-          vignette = 4
-        } else if (numeroEuro === '3' || (numeroEuro === '' && dateImmatEn >= new Date('2001-10-01') && dateImmatEn <= new Date('2006-09-30'))) {
-          vignette = 5
+      } else if (typeCarburant === TYPE_CARBURANT.DIESEL) {
+        if (
+          numeroEuro === NUMERO_EURO.SIX ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2014_01_01)
+        ) {
+          return VIGNETTE.DEUX
+        } else if (
+          numeroEuro === NUMERO_EURO.CINQ ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2009_01_01 && normalizedDateImmat <= DATE_2013_12_31)
+        ) {
+          return VIGNETTE.TROIS
+        } else if (
+          numeroEuro === NUMERO_EURO.QUATRE ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2006_10_01 && normalizedDateImmat <= DATE_2009_09_30)
+        ) {
+          return VIGNETTE.QUATRE
+        } else if (
+          numeroEuro === NUMERO_EURO.TROIS ||
+          (!numeroEuro && normalizedDateImmat >= DATE_2001_10_01 && normalizedDateImmat <= DATE_2006_09_30)
+        ) {
+          return VIGNETTE.CINQ
         }
       }
     }
   }
-  return vignette
 }
 
-function histoFilter (historique) {
-  let h = historique.filter(event => operations[event.opa_type] !== undefined)
-  h = orderBy(h, ['opa_date'], ['desc'])
-  return h.map(event => {
-    return {
-      'date': formatDate(event.opa_date),
-      'nature': operations[event.opa_type],
-      ...(event.numAgree ? { 'numAgree': event.numAgree } : undefined)
-    }
-  })
+const computeTitulaireCount = (historique=[], isIncertain) => {
+  const titulaireChangeOperations = historique.filter(event => TITULAIRE_CHANGE_OPERATIONS.includes(event.opa_type))
+  return titulaireChangeOperations.length + (isIncertain ? 1 : 0)
 }
 
-function calcNbTit (historique) {
-  let opTit = ['IMMAT_NORMALE', 'IMMAT_NORMALE_PREM_VO', 'CHANG_LOC', 'CHANG_LOC_CVN', 'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN']
-  let nbTit = historique.filter(event => opTit.includes(event.opa_type))
-  return nbTit.length
-}
+const addPVEInfos = (historique=[], pves=[]) => {
+  if (historique.length === 0) {
+    return historique
+  }
 
-function addPVEInfos(historique, pves=[]) {
   const infosByPve = pves.reduce((infosByPveAccu, pve) => {
     return {
       ...infosByPveAccu,
@@ -246,147 +326,564 @@ function addPVEInfos(historique, pves=[]) {
   return updatedHistorique
 }
 
-function siv (veh) {
+const ctecVehiculeMapping = ({
+  couleur,
+  cveh_num_reception,
+  marque,
+  nom_commercial,
+  num_cnit,
+  ptac_f2,
+  ptav_g1,
+  ptra_f3,
+  pt_tech_adm_f1,
+  pt_service_g,
+  tvv,
+  type_reception,
+  vin,
+  CTEC_CO2,
+  CTEC_CYLINDREE,
+  CTEC_NIVEAU_SONORE,
+  CTEC_PLACES_ASSISES,
+  CTEC_PLACES_DEBOUT,
+  CTEC_PUISS_CV,
+  CTEC_PUISS_NETTE,
+  CTEC_RAPPORT_PUIS_MASSE,
+  CTEC_RLIB_CARROSSERIE_CE,
+  CTEC_RLIB_CARROSSERIE_NAT,
+  CTEC_RLIB_CATEGORIE,
+  CTEC_RLIB_ENERGIE,
+  CTEC_RLIB_GENRE,
+  CTEC_RLIB_POLLUTION,
+  CTEC_VITESSE_MOTEUR,
+}, isAnnulationCI) => {
+  if (isAnnulationCI) {
+    return {
+      marque,
+      vin,
+    }
+  }
+
+  return {
+    categorie: CTEC_RLIB_CATEGORIE,
+    carrosserie: {
+      ce: CTEC_RLIB_CARROSSERIE_CE,
+      national: CTEC_RLIB_CARROSSERIE_NAT,
+    },
+    cnit: num_cnit,
+    couleur: couleur || MISSING_VALUE,
+    co2: CTEC_CO2,
+    db: CTEC_NIVEAU_SONORE,
+    energie: CTEC_RLIB_ENERGIE,
+    environnement: CTEC_RLIB_POLLUTION,
+    genre: CTEC_RLIB_GENRE,
+    marque: marque,
+    modele: nom_commercial,
+    moteur: CTEC_VITESSE_MOTEUR,
+    places: {
+      assis: CTEC_PLACES_ASSISES,
+      debout: CTEC_PLACES_DEBOUT,
+    },
+    puissance: {
+      cv: CTEC_PUISS_CV,
+      cylindres: CTEC_CYLINDREE,
+      nette: CTEC_PUISS_NETTE,
+      norm: CTEC_RAPPORT_PUIS_MASSE,
+    },
+    reception: {
+      numero: cveh_num_reception,
+      type: type_reception,
+    },
+    tvv,
+    vin,
+    PT: {
+      admissible: pt_tech_adm_f1,
+      service: pt_service_g,
+      AC: ptac_f2,
+      AV: ptav_g1,
+      RA: ptra_f3,
+    },
+  }
+}
+
+const certificatVehiculeMapping = ({
+  date_emission_CI,
+  date_premiere_immat,
+  date_premiere_immat_siv,
+  import: isImportedVehicule,
+}, historique, isAnnulationCI) => {
+  const premier = date_premiere_immat || MISSING_VALUE
+
+  if (isAnnulationCI) {
+    return {
+      premier
+    }
+  }
+
+  const isImported = isImportedVehicule === 'OUI'
+  const franceImportDate = isImported && (historique.length > 0) ? formatDate(historique[0].opa_date) : premier
+  const sivImportDate = date_premiere_immat_siv || MISSING_VALUE
+
+  const immatriculationHistoriqueItems = historique.filter(e => (
+    e.opa_type === 'IMMAT_NORMALE' ||
+    e.opa_type === 'IMMAT_NORMALE_PREM_VO' ||
+    e.opa_type === 'CHANG_TIT_NORMAL' ||
+    e.opa_type === 'CHANG_TIT_NORMAL_CVN'
+  ))
+
+  const olderImmatriculationHistoriqueItem = orderBy(
+    immatriculationHistoriqueItems,
+    ['opa_date'],
+    ['desc']
+  )[0] ||
+  {'opa_date': date_premiere_immat}
+
+  return {
+    courant: date_emission_CI || MISSING_VALUE,
+    depuis: computeCertifDepuis(olderImmatriculationHistoriqueItem.opa_date),
+    etranger: isImported,  // véhicule importé: changement de règle de gestion #406
+    fr: franceImportDate,
+    isIncertain: (
+      !isImported && (sivImportDate !== franceImportDate) &&
+      ((historique.length === 0) || (historique[0].opa_type !== 'IMMAT_NORMALE'))
+    ),
+    premier,
+    siv: sivImportDate,
+  }
+}
+
+const titulaireVehiculeMapping = ({
+  pers_raison_soc_tit,
+  pers_siren_tit,
+  pers_nom_naissance_tit,
+  pers_prenom_tit,
+  adr_code_postal_tit,
+  isAnnulationCI,
+}) => {
+  if (isAnnulationCI) {
+    return {}
+  }
+
+  return {
+    identite: [pers_raison_soc_tit, pers_siren_tit, pers_nom_naissance_tit, pers_prenom_tit].join(' '),
+    adresse: adr_code_postal_tit ? padString(adr_code_postal_tit, 5) : MISSING_VALUE,
+  }
+}
+
+const syntheseVehiculeMapping = ({
+  ci_vole,
+  duplicata,
+  perte_ci,
+  vehicule_vole,
+}, {
+  isAnnulationCI,
+  hasDvs,
+  hasGage,
+  hasOtci,
+  hasOtciPv,
+  hasOve,
+  hasOvei,
+  hasSuspension,
+}) => {
+  const anomalies = ['annulation_ci', 'ci_vole', 'duplicata', 'gage', 'perte_ci', 'saisie', 'suspension', 'vehicule_vole']
+  const anomaliesMapping = {
+    annulation_ci: booleanLabel(isAnnulationCI),
+    ci_vole,
+    duplicata,
+    gage: booleanLabel(hasGage),
+    perte_ci,
+    saisie: booleanLabel(hasDvs),
+    suspension: booleanLabel(hasSuspension),
+    vehicule_vole,
+  }
+
+  const filteredAnomalies = anomalies.filter(e => {
+    if (e !== 'duplicata') {
+      return anomaliesMapping[e] === 'OUI'
+    } else {
+      if ((perte_ci === 'OUI') || (ci_vole === 'OUI')) {
+        return false
+      } else {
+        return anomaliesMapping[e] === 'OUI'
+      }
+    }
+  })
+
+  const otciAnomaly = hasOtci ? 'otci' : (hasOtciPv ? 'otcipv' : '')
+  const oveAnomaly = hasOve ? 'ove' : (hasOvei ? 'ovei' : '')
+
+  let oppositionTemporaireAnomaly
+  if(otciAnomaly && oveAnomaly) {
+    oppositionTemporaireAnomaly = `${otciAnomaly}_${oveAnomaly}`
+  } else if(otciAnomaly) {
+    oppositionTemporaireAnomaly = otciAnomaly
+  } else if(oveAnomaly) {
+    oppositionTemporaireAnomaly = oveAnomaly
+  }
+
+  if (oppositionTemporaireAnomaly) {
+    return [
+      ...filteredAnomalies,
+      oppositionTemporaireAnomaly
+    ]
+  } else {
+    return filteredAnomalies
+  }
+}
+
+const administratifVehiculeMapping = ({
+  ci_vole,
+  date_annulation_ci,
+  duplicata,
+  perte_ci,
+  sit_adm: {
+    dvs,
+    gages,
+    opposition: {
+      otcis,
+      otcis_pv: otcisPv,
+      oves,
+      oveis,
+    },
+    suspensions,
+  },
+  vehicule_vole,
+}, isAnnulationCI) => {
+  const annulationCurrentStatus = booleanLabel(isAnnulationCI, { upperCase: false })
+
+  if (isAnnulationCI) {
+    return {
+      annulationCurrentStatus,
+      dateAnnulation: date_annulation_ci,
+      isAnnulationCI,
+    }
+  }
+
+  // Helpers
+  const hasDvs = Boolean(dvs.length)  // DVS = Déclaration valant saisie
+  const hasGage = Boolean(gages.length)
+  const hasOtci = Boolean(otcis.length)
+  const hasOtciPv = Boolean(otcisPv.length)
+  const hasOve = Boolean(oves.length)
+  const hasOvei = Boolean(oveis.length)
+  const hasSuspension = Boolean(suspensions.length)
+
+  const otcisPvCurrentStatus = hasOtciPv ? 'PV en attente' : 'Aucune'
+
+  let oppositionTemporaireCurrentStatus
+  if (hasOtciPv) {
+    oppositionTemporaireCurrentStatus = 'Opposition temporaire (PV en attente)'
+  } else if (hasOtci) {
+    oppositionTemporaireCurrentStatus = 'Opposition temporaire'
+  } else {
+    oppositionTemporaireCurrentStatus = 'Aucune'
+  }
+
+  let oppositionsCurrentStatus
+  if (hasOve || hasOvei) {
+    oppositionsCurrentStatus = (hasOtci || hasOtciPv) ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
+  } else if (hasOtci || hasOtciPv) {
+    oppositionsCurrentStatus = hasOtciPv ? 'Opposition temporaire (PV en attente)' : 'Opposition temporaire'
+  } else {
+    oppositionsCurrentStatus = 'NON'
+  }
+
+  // let oveCurrentStatus
+  // if (hasOve) {
+  //   oveCurrentStatus =
+  //   oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
+  //   // oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
+  // }
+
+  // let oveiCurrentStatus
+  // if (hasOvei) {
+  //   oveiCurrentStatus =
+  //   oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
+  //   // oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
+  // }
+
+  // let otciCurrentStatus
+  // if (hasOtci) {
+  //   otciCurrentStatus = 'Opposition temporaire'
+  // } else if (hasOtciPv) {
+  //   otciCurrentStatus = 'Opposition temporaire (PV en attente)'
+  // }
+
+  // @todo: 'mapping à valider' -> est-ce validé ?
+  let procedures
+  if (hasDvs) {
+    procedures = hasGage ? 'véhicule gagé et saisi' : 'véhicule saisi'
+  } else {
+    procedures = hasGage ? 'véhicule gagé' : 'NON'
+  }
+
+  const suspensionsMotifs = suspensions.map(suspension => suspension.motif)
+  const suspensionMotifsLabels = suspensionsMotifs.map(suspensionMotif => suspensionsMapping[suspensionMotif])
+  const hasPve = Boolean(hasSuspension && suspensionsMotifs.includes('PVE'))
+
+  const synthese = syntheseVehiculeMapping({
+    ci_vole,
+    duplicata,
+    perte_ci,
+    vehicule_vole,
+  }, {
+    isAnnulationCI,
+    hasDvs,
+    hasGage,
+    hasOtci,
+    hasOtciPv,
+    hasOve,
+    hasOvei,
+    hasSuspension,
+  })
+
+  return {
+    isAnnulationCI,
+
+    opposition: {
+      hasOtci,
+      otcis,
+
+      hasOtciPv,
+      otcisPv,
+
+      hasOve,
+      oves,
+
+      hasOvei,
+      oveis,
+    },
+
+    hasDvs,
+    dvs,
+
+    hasGage,
+    gages,
+
+    hasPve,
+
+    hasSuspension,
+    suspensions,
+    suspensionsMotifs,
+
+    csaLabels: {
+      annulationCurrentStatus,
+      dvsCurrentStatus: entitiesLabel(dvs, { isMale: false }),
+      gagesCurrentStatus: entitiesLabel(gages),
+      otcisCurrentStatus: entitiesLabel(otcis, { isMale: false }),
+      otcisPvCurrentStatus,
+
+      // @todo: oves || ovei => procédure de réparation contrôlée
+      // Ne souhaite-t-on pas afficher une section à part pour les OVEI ? (CSA et/ou rapport)
+      ovesCurrentStatus: entitiesLabel(oves, { isMale: false }),
+      pveCurrentStatus: hasPve ? 'Oui' : 'Aucun',
+      suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'Non',
+      titre: {
+        vol: ci_vole ? camelize(ci_vole) : MISSING_VALUE,
+        perte: perte_ci ? camelize(perte_ci) : MISSING_VALUE,
+        duplicata: camelize(perte_ci === 'OUI' ? perte_ci : (duplicata || MISSING_VALUE)),
+      },
+      // vol : les informations viennent-elles de foves ?
+      vol: vehicule_vole ? camelize(vehicule_vole) : MISSING_VALUE,
+    },
+
+    reportLabels: {
+      // dvsCurrentStatus: entitiesLabel(dvs, { isMale: false }),
+      gagesCurrentStatus: hasGage ? 'OUI' : 'NON',
+      oppositionsCurrentStatus,
+      oppositionTemporaireCurrentStatus,  // @todo: where to use it ?
+      // otcisCurrentStatus: entitiesLabel(otcis, { isMale: false }),
+      // otcisPvCurrentStatus,
+    // oveisCurrentStatus: entitiesLabel(oveis, { isMale: false }),
+      // ovesCurrentStatus: entitiesLabel(oves, { isMale: false }),
+      procedures,  // Resume about both gages and dvs
+      suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'NON',
+      synthese,
+
+      titre: {
+        vol: ci_vole || MISSING_VALUE,
+        perte: perte_ci || MISSING_VALUE,
+        duplicata: perte_ci === 'OUI' ? perte_ci : (duplicata || MISSING_VALUE),
+      },
+
+      // vol : les informations viennent-elles de foves ?
+      vol: vehicule_vole || MISSING_VALUE,
+    },
+  }
+}
+
+const computeDescendingHistoriqueForReport = (
+  historique,
+  {
+    fr: frImmatDate,
+    siv: sivImmatDate
+  },
+  fniState,
+) => {
+  const isFniConverted = (
+    (fniState !== FNI_STATE.OUI) && (frImmatDate !== sivImmatDate) && !historique.length ||
+    (!historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))
+  )
+
+  const historiqueWithFNIConversion = [
+    ...historique,
+    (
+      isFniConverted ?
+      {
+        opa_date: sivImmatDate.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'),
+        opa_type: 'CONVERSION_DOSSIER_FNI'
+      } :
+      {}
+    ),
+  ]
+
+  const descendingHistoriqueWithFNIConversion = orderBy(
+    historiqueWithFNIConversion.filter(item => operationsMapping[item.opa_type]),
+    ['opa_date'],
+    ['desc']
+  )
+
+  // Only keep useful elements to compute HistoVec report and CSA
+  return descendingHistoriqueWithFNIConversion.map(({numAgree, opa_date, opa_type}) => {
+    return {
+      date: formatDate(opa_date),
+      nature: operationsMapping[opa_type],
+      ...(numAgree ? { 'numAgree': numAgree } : undefined),
+      opa_type,
+    }
+  })
+}
+
+
+const computeAscendingValidHistorique = ({ historique=[], pve=[] }) => {
+  if (historique.length === 0) {
+    return historique
+  }
+
+  // Filtre les opérations annulées et réordonne les opérations par ordre chronologique
+  const validHistorique = historique.filter(item => !item.ope_date_annul)
+  const ascendingValidHistorique = orderBy(
+    validHistorique,
+    ['opa_date']
+  )
+
+  return addPVEInfos(ascendingValidHistorique, pve)
+}
+
+const processRawData = (veh) => {
   if (veh === undefined) {
     return false
   }
 
   /* eslint-disable-next-line no-console */
   console.log(veh)
-  let v = {
-    date_update: '25/11/2018',
-    ctec: {
-      reception: {},
-      puissance: {},
-      places: {},
-      carrosserie: {},
-      PT: {}
-    },
-    titulaire: {},
-    certificat: {},
-    administratif: {
-      synthese: [],
-      titre: {}
-    }
+
+  const isAnnulationCi = veh.annulation_ci === 'OUI'
+
+  const ascendingValidHistorique = computeAscendingValidHistorique(veh)
+
+  let fniState
+  if (veh.dos_date_conversion_siv !== undefined && ascendingValidHistorique.length > 0) {
+    fniState = ascendingValidHistorique[0].opa_type === 'IMMAT_NORMALE' ? FNI_STATE.CONVERTI : FNI_STATE.CONVERTI_INCERTAIN
+  } else {
+    fniState = veh.date_premiere_immat_siv === undefined ? FNI_STATE.OUI : FNI_STATE.NON
   }
 
-  if (veh.annulation_ci === 'OUI') {
-    v.plaque = veh.plaq_immat
-    v.date_update = veh.date_update || v.date_update
-    v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
-    v.administratif.dateAnnulation = veh.date_annulation_ci
-    v.certificat.premier = veh.date_premiere_immat || missing
-    v.ctec.vin = veh.vin
-    v.ctec.marque = veh.marque
+  const certificat = certificatVehiculeMapping(veh, ascendingValidHistorique, isAnnulationCi)
+  const descendingHistoriqueForReport = isAnnulationCi ? [] : computeDescendingHistoriqueForReport(ascendingValidHistorique, certificat, fniState)
 
+  const administratif = administratifVehiculeMapping(veh, isAnnulationCi)
+  const ctec = ctecVehiculeMapping(veh, isAnnulationCi)
+  const titulaire = titulaireVehiculeMapping(veh, isAnnulationCi)
+
+  let v = {
+    administratif,
+    certificat,
+    ctec,
+    dateUpdate: veh.date_update || '25/11/2018',  // @todo: why do we use this default date?
+    plaque: veh.plaq_immat,
+    titulaire,
+  }
+
+  if (isAnnulationCi) {
     /* eslint-disable-next-line no-console */
     console.log(v)
     return v
   }
 
-  // filtre l'historique des opérations annulées
-  let historique = veh.historique
-  historique = (historique === undefined) ? [] : historique.filter(event => event.ope_date_annul === undefined)
-  // réordonne l'historique des opérations
-  historique = orderBy(historique, ['opa_date'])
-  v.date_update = veh.date_update || v.date_update
-  v.ctec.vin = veh.vin
-  v.plaque = veh.plaq_immat
-  v.ctec.couleur = veh.couleur || missing
-  v.ctec.cnit = veh.num_cnit
-  v.ctec.tvv = veh.tvv
-  v.ctec.reception.type = veh.type_reception
-  v.ctec.reception.numero = veh.cveh_num_reception
-  v.ctec.puissance.cylindres = veh.CTEC_CYLINDREE
-  v.ctec.puissance.nette = veh.CTEC_PUISS_NETTE
-  v.ctec.puissance.cv = veh.CTEC_PUISS_CV
-  v.ctec.puissance.norm = veh.CTEC_RAPPORT_PUIS_MASSE
-  v.ctec.places.assis = veh.CTEC_PLACES_ASSISES
-  v.ctec.places.debout = veh.CTEC_PLACES_DEBOUT
-  v.ctec.db = veh.CTEC_NIVEAU_SONORE
-  v.ctec.co2 = veh.CTEC_CO2
-  v.ctec.moteur = veh.CTEC_VITESSE_MOTEUR
-  v.ctec.marque = veh.marque
-  v.ctec.modele = veh.nom_commercial
-  v.ctec.genre = veh.CTEC_RLIB_GENRE
-  v.ctec.categorie = veh.CTEC_RLIB_CATEGORIE
-  v.ctec.carrosserie.national = veh.CTEC_RLIB_CARROSSERIE_NAT
-  v.ctec.carrosserie.ce = veh.CTEC_RLIB_CARROSSERIE_CE
-  v.ctec.environnement = veh.CTEC_RLIB_POLLUTION
-  v.ctec.energie = veh.CTEC_RLIB_ENERGIE
-  v.ctec.PT.admissible = veh.pt_tech_adm_f1
-  v.ctec.PT.AC = veh.ptac_f2
-  v.ctec.PT.RA = veh.ptra_f3
-  v.ctec.PT.service = veh.pt_service_g
-  v.ctec.PT.AV = veh.ptav_g1
-  v.titulaire.identite = [veh.pers_raison_soc_tit, veh.pers_siren_tit, veh.pers_nom_naissance_tit, veh.pers_prenom_tit].join(' ')
-  v.titulaire.adresse = (veh.adr_code_postal_tit !== undefined) ? pad(veh.adr_code_postal_tit, 5) : missing
-  v.certificat.premier = veh.date_premiere_immat || missing
-  // véhicule importé: changement de règle de gestion #406
-  v.certificat.etranger = (veh.import === 'OUI')
-  v.certificat.siv = veh.date_premiere_immat_siv || missing
-  v.certificat.fr = (v.certificat.etranger && (historique.length > 0)) ? formatDate(historique[0].opa_date) : v.certificat.premier
-  v.fni = ((veh.dos_date_conversion_siv !== undefined) && (historique.length > 0)) ? ((historique[0].opa_type === 'IMMAT_NORMALE') ? 'converti' : 'converti_incertain') : (veh.date_premiere_immat_siv === undefined)
-  v.certificat.incertain = !v.certificat.etranger && (v.certificat.siv !== v.certificat.fr) && ((historique.length === 0) || (historique[0].opa_type !== 'IMMAT_NORMALE'))
-  v.certificat.courant = veh.date_emission_CI || missing
-  v.certificat.depuis = calcCertifDepuis((orderBy(historique.filter(e => (e.opa_type === 'IMMAT_NORMALE' || e.opa_type === 'IMMAT_NORMALE_PREM_VO' || e.opa_type === 'CHANG_TIT_NORMAL' || e.opa_type === 'CHANG_TIT_NORMAL_CVN')), ['opa_date'], ['desc'])[0] || {'opa_date': veh.date_premiere_immat}).opa_date)
+  const sinistres = descendingHistoriqueForReport.filter((sinistre) =>
+    (sinistre.opa_type === 'INSCRIRE_OVE') || (sinistre.opa_type === 'DEC_VE')
+  )
+  const sinistresYears = sinistres.map((sinistre) => {
+    return sinistre.date.split('/')[2]
+  })
+  const hasSinistre = Boolean(sinistres.length)
+  const lastSinistreYear = hasSinistre ? sinistresYears[0] : undefined
 
-  historique = addPVEInfos(historique, veh.pve)
+  let sinistresCount = sinistres.map((sinistre) =>
+    (sinistre.opa_type === 'INSCRIRE_OVE') ? 10 : 0
+  )
+  .reduce((count, itemValue) => count + itemValue, 0)
+  sinistresCount = Math.max(sinistresCount % 10, ((sinistresCount - (sinistresCount % 10)) / 10))  // @todo: Understand and simplify this logic ?
 
-  let filteredHistorique
-  if ((v.fni !== true) && (v.certificat.fr !== v.certificat.siv) && ((historique === undefined) || (!historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))) {
-    let tmp = historique
-    tmp.push({opa_date: v.certificat.siv.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'), opa_type: 'CONVERSION_DOSSIER_FNI'})
-    filteredHistorique = (historique !== undefined) ? histoFilter(tmp) : []
-  } else {
-    filteredHistorique = (historique !== undefined) ? histoFilter(historique) : []
+
+  const resolutions = descendingHistoriqueForReport.filter((item) =>
+    (item.opa_type === 'LEVER_OVE') || (item.opa_type === 'SEC_RAP_VE')
+  )
+  const resolutionsYears = resolutions.map((resolution) => {
+    return resolution.date.split('/')[2]
+  })
+  const hasResolution = Boolean(resolutions.length)
+  const lastResolutionYear = hasResolution ? resolutionsYears[0] : undefined
+
+  const isApte = (
+    lastResolutionYear > lastSinistreYear ||
+    (!administratif.hasSuspension && !administratif.opposition.hasOve && !administratif.opposition.hasOvei)
+  )
+
+
+
+  v = {
+    ...v,
+    ageVeh: veh.age_annee,
+
+    // véhicule importé : changement de règle de gestion #406
+    // @todo: souhaite-t-on afficher le pays d'import et son ancienne immatriculation ?
+    etranger: (
+      (veh.import === 'NON') ?
+        { hasBeenImported: false } :
+        { hasBeenImported: true, immat: veh.imp_imp_immat, pays: veh.pays_import}
+    ),
+
+    fniState,
+    historique: descendingHistoriqueForReport,
+    isApte,
+    logoVehicule: getVehiculeLogo(veh.CTEC_RLIB_GENRE),
+
+    proprietairesCount: veh.nb_proprietaire,
+    titulairesCount: computeTitulaireCount(descendingHistoriqueForReport, certificat.isIncertain),
+
+    hasSinistre,
+    lastSinistreYear,
+    sinistres,
+    sinistresCount,
+
+    hasResolution,
+    lastResolutionYear,
+    resolutions,
+
+    usages: veh.usage || [],
+    vignetteNumero: getVignetteNumero(
+      veh.CTEC_RLIB_GENRE,
+      veh.CTEC_RLIB_CATEGORIE,
+      getTypeCarburant(veh.CTEC_RLIB_ENERGIE),
+      veh.CTEC_RLIB_POLLUTION,
+      veh.date_premiere_immat,
+    ),
   }
 
-  v.historique = filteredHistorique
-  v.nb_proprietaires = veh.nb_proprietaire
-  v.nb_tit = (historique !== undefined) ? (calcNbTit(historique) + (v.certificat.incertain ? 1 : 0)) : undefined
-  v.age_veh = veh.age_annee
-  v.logo_vehicule = getVehiculeLogo(veh.CTEC_RLIB_GENRE)
-  v.vignette_numero = getVignetteNumero(veh.CTEC_RLIB_GENRE, veh.CTEC_RLIB_CATEGORIE, getVehiculeTypeCarburant(veh.CTEC_RLIB_ENERGIE), veh.CTEC_RLIB_POLLUTION, veh.date_premiere_immat)
-
-  v.administratif.gages = veh.gage || missing
-  v.administratif.suspension = (veh.suspension === 'NON') ? 'Non' : 'Oui'
-  v.administratif.annulation = (veh.annulation_ci === 'NON') ? 'Non' : 'Oui'
-  v.administratif.suspensions = (veh.suspension === 'NON') ? ['NON'] : ((veh.suspensions === undefined) ? ['certificat annulé'] : veh.suspensions.map(s => suspensions[s]))
-  // v.administratif.suspensions = (veh.suspension === 'NON') ? ((veh.suspension === 'NON') ? 'NON' : 'certificat annulé') : ((veh.annulation_ci === 'NON') ? 'certificat suspendu' : 'certificat suspendu et annulé') // mapping à valider
-  // opposition et procédure à valider
-  v.administratif.otci = (veh.otci === 'NON') ? 'Aucune' : ((veh.otci_pv === 'OUI') ? 'opposition temporaire (PV en attente)' : 'opposition temporaire')
-  v.administratif.ove = (veh.ove === 'NON') ? 'Aucune' : 'Oui'
-  v.administratif.oppositions = (veh.ove === 'NON') ? ((veh.otci === 'NON') ? 'NON' : (veh.otci_pv === 'OUI') ? 'Opposition temporaire (PV en attente)' : 'opposition temporaire') : ((veh.otci === 'NON') ? 'Procédure de réparation contrôlée' : 'opposition temporaire, véhicule endommagé') // mapping à valider
-  v.administratif.pv = (veh.otci_pv === 'OUI')
-  // pour l'instant aucun véhicule saisi dans les échantillons
-  v.administratif.saisie = (veh.saisie === 'NON') ? 'Aucune' : 'Oui'
-  v.administratif.gage = (veh.gage === 'NON') ? 'Aucun' : 'Oui'
-  v.administratif.procedures = (veh.saisie === 'NON') ? ((veh.gage === 'NON') ? 'NON' : 'véhicule gagé') : ((veh.annulation_ci === 'NON') ? 'véhicule saisi' : 'véhicule gagé et saisi') // mapping à valider
-  v.administratif.vol = veh.vehicule_vole || missing
-
-  // vol : les informations viennent-elles de foves ?
-  v.administratif.titre.vol = veh.ci_vole || missing
-  v.administratif.titre.perte = veh.perte_ci || missing
-  v.administratif.titre.duplicata = (veh.perte_ci === 'OUI') ? 'OUI' : veh.duplicata
-
-  v.administratif.synthese = [ 'saisie', 'vehicule_vole', 'gage', 'suspension', 'perte_ci', 'ci_vole', 'annulation_ci', 'duplicata' ].filter(e => (e !== 'duplicata') ? veh[e] === 'OUI' : ((veh['perte_ci'] === 'OUI') || (veh['ci_vole'] === 'OUI') ? false : veh[e] === 'OUI'))
-  if (veh['otci'] === 'OUI') {
-    v.administratif.synthese.push(veh['ove'] === 'OUI' ? 'otci_ove' : 'otci')
-  }
-  // véhicule importé : changement de règle de gestion #406
-  v.etranger = (veh.import === 'NON') ? 'NON' : [veh.import, veh.imp_imp_immat, veh.pays_import]
-  // ci-dessous : interprétation à confirmer
-  v.sinistres = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-  v.sinistres_nb = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'INSCRIRE_OVE') || (e.opa_type === 'DEC_VE')), ['opa_date'], ['desc']).map(e => ((e.opa_type === 'INSCRIRE_OVE') ? 10 : 1))) : []
-  v.sinistres_nb = v.sinistres_nb.length === 0 ? 0 : v.sinistres_nb.reduce((a, b) => a + b)
-  v.sinistres_nb = Math.max(v.sinistres_nb % 10, ((v.sinistres_nb - (v.sinistres_nb % 10)) / 10))
-  // console.log(v.sinistres_nb)
-  v.sinistre = v.sinistres[0]
-  v.aptes = (historique !== undefined) ? (orderBy(historique.filter(e => (e.opa_type === 'LEVER_OVE') || (e.opa_type === 'SEC_RAP_VE')), ['opa_date'], ['desc']).map(e => e.opa_date.replace(/-.*/, ''))) : []
-  v.apte = (historique !== undefined) ? ((v.aptes[0] > v.sinistres[0]) || ((veh.suspension === 'NON') && (veh.ove === 'NON'))) : undefined
-  v.usage = veh.usage
   /* eslint-disable-next-line no-console */
   console.log(v)
   return v
 }
+
+export default { processRawData }

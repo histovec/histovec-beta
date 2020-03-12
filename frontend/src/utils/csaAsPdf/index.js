@@ -6,7 +6,8 @@ import { FONT, RAPPORT_FILENAME } from './constants'
 export const generateCsa = (
 	// Complete CSA and annulation
 	{
-		annulation,
+		isAnnulationCI,
+		annulationCurrentStatus,
 		dateAnnulation,
 		histoVecLogo,
 		marianneImage,
@@ -21,16 +22,15 @@ export const generateCsa = (
 	// Only complete CSA
 	{
 		duplicataTitre,
-		gage,
-		hasPVE,
+		dvsCurrentStatus,
+		gagesCurrentStatus,
 		historyItems,
-		ove,
-		otci,
+		otcisCurrentStatus,
+		otcisPvCurrentStatus,
+		ovesCurrentStatus,
 		perteTitre,
-		pv,
-		saisie,
-		suspension,
-		suspensions,
+		pveCurrentStatus,
+		suspensionsMotifsCurrentStatus,
 		volTitre,
 		volVehicule,
 	}={}
@@ -44,56 +44,38 @@ export const generateCsa = (
 
 	pdf.setFont(FONT)
 
-
-	if (annulation === 'Oui') {
-		writeContent(pdf,
-			{
-				annulation,
-				dateAnnulation,
-				histoVecLogo,
-				marianneImage,
-				marque,
-				plaque,
-				premierCertificat,
-				qrCodeUrl,
-				validityDate,
-				vin,
-				webSiteUrl
-			}
-		)
-	} else {
-		writeContent(pdf,
-			{
-				annulation,
-				dateAnnulation,
-				histoVecLogo,
-				marianneImage,
-				marque,
-				plaque,
-				premierCertificat,
-				qrCodeUrl,
-				validityDate,
-				vin,
-				webSiteUrl
-			},
-			// Only complete CSA
-			{
+	writeContent(pdf,
+		{
+			isAnnulationCI,
+			annulationCurrentStatus,
+			dateAnnulation,
+			histoVecLogo,
+			marianneImage,
+			marque,
+			plaque,
+			premierCertificat,
+			qrCodeUrl,
+			validityDate,
+			vin,
+			webSiteUrl
+		},
+		(
+			!isAnnulationCI ? {
 				duplicataTitre,
-				gage,
-				hasPVE,
+				dvsCurrentStatus,
+				gagesCurrentStatus,
 				historyItems,
-				ove,
-				otci,
+				otcisCurrentStatus,
+				otcisPvCurrentStatus,
+				ovesCurrentStatus,
 				perteTitre,
-				pv,
-				saisie,
-				suspension,
-				suspensions,
+				pveCurrentStatus,
+				suspensionsMotifsCurrentStatus,
 				volTitre,
 				volVehicule,
-			}
+			} : {}
 		)
-	}
+	)
 
 	pdf.save(`${RAPPORT_FILENAME}.pdf`)
 }
