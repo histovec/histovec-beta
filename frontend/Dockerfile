@@ -50,7 +50,7 @@ RUN if [ -z "${NPM_VERBOSE}" ]; then\
       npm install --verbose; \
     fi
 
-RUN npm config set audit-level moderate
+RUN npm config set audit-level high
 RUN if [ -z "${NPM_FIX}" ]; then \
       npm audit --registry=https://registry.npmjs.org; \
     else \
