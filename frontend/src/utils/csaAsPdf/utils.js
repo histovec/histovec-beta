@@ -88,20 +88,22 @@ export const writeWithSpacing = (
 		style: FONT_STYLES.NORMAL
 	}
 ) => {
+	let nextY = y
+
 	if (!textLines.length) {
-		return
+		return nextY
 	}
 
 	if (!dryRun) {
 		pdf.setFont(FONT, style)
 		pdf.setFontSize(size)
 	}
-	let nextY = y
+
 	textLines.forEach((textLine, i) => {
-		nextY = y + spacing * i
 		if (!dryRun) {
 			pdf.text(x, nextY, textLine)
 		}
+		nextY = y + spacing * (i+1)
 	})
 
 	return nextY

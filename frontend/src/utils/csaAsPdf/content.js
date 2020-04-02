@@ -70,7 +70,7 @@ const writeVehicleIdentification = (
 		'Numéro VIN du véhicule (ou numéro de série) :',
 		'Marque :'
 	]
-	writeWithSpacing(pdf, FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.L, labels)
+	writeWithSpacing(pdf, FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.S, labels)
 
 	const values = [
 		plaque.toUpperCase() || MISSING_VALUE,
@@ -78,7 +78,7 @@ const writeVehicleIdentification = (
 		vin || MISSING_VALUE,
 		marque || MISSING_VALUE
 	]
-	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.L, values)
+	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.S, values)
 
 	return lastY + FONT_SPACING.M
 }
@@ -238,6 +238,10 @@ const writeHistory = (
 ) => {
 	if (!dryRun) {
 		writeTitle(pdf, FIRST_COLUMN_X, y, 'Historique du véhicule')
+	} else {
+		// force a fake write to configure the method pdf.splitTextToSize while using dryRun
+		// (this method need some text on pdf to know font size and correctly split text)
+		writeTitle(pdf, FIRST_COLUMN_X, -10, 'Fake')
 	}
 	const topY = y + FONT_SPACING.L
 	const historyItemSize = FONT_SPACING.S
@@ -313,7 +317,7 @@ const writeHistory = (
 	}
 
 	return {
-		y: lastY + FONT_SPACING.L,
+		y: lastY + FONT_SPACING.M,
 		currentPageNumber: pageNumber,
 		firstPageColumnsCount,
 		hasSymbol,
@@ -340,7 +344,7 @@ const writeSituationColumn = (
 				style: FONT_STYLES.BOLD
 			})
 		}
-		offset = offset + FONT_SPACING.XS * (item.key.split('\n').length - 1) + FONT_SPACING.XS
+		offset = offset + FONT_SPACING.XS * (item.key.split('\n').length - 1) + FONT_SPACING.S
 
 		item.values.forEach((value, i) => {
 			const valueX = x + HORIZONTAL_TABULATION.S
@@ -349,7 +353,7 @@ const writeSituationColumn = (
 			if (!dryRun) {
 				writeText(pdf, valueX, valueY, value)
 			}
-			const spacing = (i === item.values.length-1) ? FONT_SPACING.M : FONT_SPACING.XS
+			const spacing = (i === item.values.length-1) ? FONT_SPACING.M : FONT_SPACING.S
 			offset = offset + FONT_SPACING.XS * (value.split('\n').length - 1) + spacing
 		})
 	})
@@ -566,11 +570,9 @@ export const writeContent = (
 
 		return
 	}
-	const vehicleIdentificationY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
-	const historyTopY = vehicleIdentificationY + FONT_SPACING.S
+	const vehicleIdentificationBottomY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
 
 	const { topY: footerTopY } = writeFooterCallback(pdf)
-	const footerWithMarginTopY = footerTopY - FONT_SPACING.S
 
 	const nextPageTopY = bottomHeaderY
 	const historyNextPageTopY = nextPageTopY + FONT_SIZES.S  // Adding history title dynamically for each new page
@@ -587,58 +589,64 @@ export const writeContent = (
 		=> we know if we need to force two columns write for history
 	*/
 
-	const simulatedSituationBottomY = writeSituation(pdf, historyTopY, {
-		annulationCurrentStatus,
-		duplicataTitre,
-		dvsCurrentStatusLines,
-		gagesCurrentStatusLines,
-		otcisCurrentStatusLines,
-		otcisPvCurrentStatusLines,
-		oveisCurrentStatusLines,
-		perteTitre,
-		procedureReparationControleeStatus,
-		suspensionCurrentStatusLines,
-		volTitre,
-		volVehicule
-	}, { dryRun: true })
+
+	const simulatedSituationBottomY = writeSituation(
+		pdf, vehicleIdentificationBottomY,
+		{
+			annulationCurrentStatus,
+			duplicataTitre,
+			dvsCurrentStatusLines,
+			gagesCurrentStatusLines,
+			otcisCurrentStatusLines,
+			otcisPvCurrentStatusLines,
+			oveisCurrentStatusLines,
+			perteTitre,
+			procedureReparationControleeStatus,
+			suspensionCurrentStatusLines,
+			volTitre,
+			volVehicule
+		},
+		{ dryRun: true }
+	)
 
 	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
 	// 1 - know if document would fit into one page, in order to force 2 columns history or not
 	const {
 		firstPageColumnsCount,
-		currentPageNumber: lastPageNumber,
-		y: simulatedHistoryWithMarginY,
+		currentPageNumber: simulatedCurrentPageNumber,
+		y: simulatedHistoryWithMarginBottomY,
 	} = writeHistory(
-		pdf, simulatedSituationBottomY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		pdf, simulatedSituationBottomY, footerTopY, historyNextPageTopY,
+		historyItems, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: true }
 	)
 
 	const forceTwoColumns = firstPageColumnsCount == 2
-	const isSituationSectionOnNewPage = simulatedHistoryWithMarginY > footerWithMarginTopY || lastPageNumber > 1
+	const lastPageNumber = simulatedHistoryWithMarginBottomY > footerTopY ? simulatedCurrentPageNumber + 1 : simulatedCurrentPageNumber
+	const isSituationSectionOnNewPage = simulatedHistoryWithMarginBottomY > footerTopY || lastPageNumber > 1
 	/**********************************************************************/
 
 	// Since we have all needed informations, let's write the pdf file for real!
 	const {
-		y: historyBottomY,
+		y: historyWithMarginBottomY,
 		currentPageNumber,
 		hasSymbol,
 	} = writeHistory(
-		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		pdf, vehicleIdentificationBottomY, footerTopY, historyNextPageTopY,
+		historyItems, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: false, forceTwoColumns, nextPageSymbol: isSituationSectionOnNewPage },
 		{ totalPageCount: lastPageNumber }
 	)
 
-	const historyBottomWithMarginY = historyBottomY + FONT_SPACING.M
-
 	if (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) {
 		if (!hasSymbol) {
-			writeNextPageSymbol(pdf, historyBottomWithMarginY - FONT_SPACING.S)
+			writeNextPageSymbol(pdf, historyWithMarginBottomY - FONT_SPACING.S)
 		}
 		addPage(pdf, writeHeaderCallback, writeFooterCallback)
 		writePageNumber(pdf, lastPageNumber, lastPageNumber)
 	}
 
-	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyBottomWithMarginY
+	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyWithMarginBottomY
 
 	writeSituation(
 		pdf, situationTopY,
