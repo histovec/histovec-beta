@@ -3,14 +3,6 @@ export const booleanLabel = (test, { upperCase }={ upperCase: true }) => {
 	return upperCase ? label.toUpperCase() : label
 }
 
-export const entitiesLabel = (entities, { isMale }={ isMale: true }) => {
-	if (entities.length > 0) {
-		return 'Oui'
-	} else {
-		return isMale ? 'Aucun' : 'Aucune'
-	}
-}
-
 export const formatDate = (isoDate) => {
   let d = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
   return Intl.DateTimeFormat('fr-FR').format(d)

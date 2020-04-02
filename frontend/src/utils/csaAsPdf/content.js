@@ -360,33 +360,44 @@ const writeSituationColumn = (
 
 const writeFirstSituationColumn = (
 	pdf, previousY,
-	{ dvsCurrentStatus, gagesCurrentStatus, otcisCurrentStatus, otcisPvCurrentStatus, ovesCurrentStatus, pveCurrentStatus, x, y },
+	{
+		dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines, otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines, procedureReparationControleeStatus,
+		x, y
+	},
 	{ dryRun }={ dryRun: false }
 ) => {
-	const situationItems = [
+
+	const otci = otcisPvCurrentStatusLines[0] === 'Aucune' ?
 		{
 			key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
-			values: [
-				otcisPvCurrentStatus === 'Aucune' ? otcisCurrentStatus: otcisPvCurrentStatus,
-			]
+			values:	otcisCurrentStatusLines,
+		} :
+		{
+			key: '- Opposition au transfert du certificat\n  d\'immatriculation due à un PV (OTCI PV)',
+			values:	otcisPvCurrentStatusLines,
+		}
+
+	const situationItems = [
+		otci,
+		{
+			key: '- Opposition véhicule économiquement irréparable',
+			values: oveisCurrentStatusLines
 		},
 		{
 			key: '- Procédure de réparation contrôlée',
 			values: [
-				ovesCurrentStatus === 'Aucune' ? pveCurrentStatus : ovesCurrentStatus,
+				procedureReparationControleeStatus,
 			]
 		},
 		{
 			key: '- Déclaration valant saisie',
-			values: [
-				dvsCurrentStatus,
-			]
+			values: dvsCurrentStatusLines,
 		},
 		{
 			key: '- Gage',
-			values: [
-				gagesCurrentStatus,
-			]
+			values:	gagesCurrentStatusLines
+
 		}
 	]
 
@@ -395,15 +406,16 @@ const writeFirstSituationColumn = (
 
 const writeSecondSituationColumn = (
 	pdf, previousY,
-	{ annulationCurrentStatus, volVehicule, volTitre, perteTitre, duplicataTitre, suspensionsMotifsCurrentStatus, x, y },
+	{
+		annulationCurrentStatus, volVehicule, volTitre, perteTitre, duplicataTitre,
+		suspensionCurrentStatusLines, x, y
+	},
 	{ dryRun }={ dryRun: false }
 ) => {
 	const situationItems = [
 		{
 			key: '- Immatriculation suspendue',
-			values: [
-				suspensionsMotifsCurrentStatus,
-			]
+			values: suspensionCurrentStatusLines
 		},
 		{
 			key: '- Immatriculation annulée',
@@ -445,20 +457,20 @@ const writeSituation = (
 	{
 		annulationCurrentStatus,
 		duplicataTitre,
-		dvsCurrentStatus,
-		gagesCurrentStatus,
-		otcisCurrentStatus,
-		otcisPvCurrentStatus,
-		ovesCurrentStatus,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
 		perteTitre,
-		pveCurrentStatus,
-		suspensionsMotifsCurrentStatus,
+		procedureReparationControleeStatus,
+		suspensionCurrentStatusLines,
 		volTitre,
 		volVehicule
 	},
 	{ dryRun }={ dryRun: false }
 ) => {
-	const spacing = FONT_SPACING.L
+	const spacing = FONT_SPACING.M
 
 	if (!dryRun) {
 		writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
@@ -466,12 +478,19 @@ const writeSituation = (
 
 	const lastFirstY = writeFirstSituationColumn(
 		pdf, y,
-		{ dvsCurrentStatus, gagesCurrentStatus, otcisCurrentStatus, otcisPvCurrentStatus, ovesCurrentStatus, pveCurrentStatus, x: FIRST_COLUMN_X, y: spacing },
+		{
+			dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines,
+			otcisPvCurrentStatusLines, oveisCurrentStatusLines, procedureReparationControleeStatus,
+			x: FIRST_COLUMN_X, y: spacing
+		},
 		{ dryRun }
 	)
 	const lastSecondY = writeSecondSituationColumn(
 		pdf, y,
-		{ annulationCurrentStatus, duplicataTitre, perteTitre, suspensionsMotifsCurrentStatus, volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing },
+		{
+			annulationCurrentStatus, duplicataTitre, perteTitre, suspensionCurrentStatusLines,
+			volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing
+		},
 		{ dryRun }
 	)
 
@@ -512,15 +531,15 @@ export const writeContent = (
 	// Only complete CSA
 	{
 		duplicataTitre,
-		dvsCurrentStatus,
-		gagesCurrentStatus,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
 		historyItems,
-		otcisCurrentStatus,
-		otcisPvCurrentStatus,
-		ovesCurrentStatus,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
 		perteTitre,
-		pveCurrentStatus,
-		suspensionsMotifsCurrentStatus,
+		procedureReparationControleeStatus,
+		suspensionCurrentStatusLines,
 		volTitre,
 		volVehicule,
 	}={}
@@ -571,14 +590,14 @@ export const writeContent = (
 	const simulatedSituationBottomY = writeSituation(pdf, historyTopY, {
 		annulationCurrentStatus,
 		duplicataTitre,
-		dvsCurrentStatus,
-		gagesCurrentStatus,
-		otcisCurrentStatus,
-		otcisPvCurrentStatus,
-		ovesCurrentStatus,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
 		perteTitre,
-		pveCurrentStatus,
-		suspensionsMotifsCurrentStatus,
+		procedureReparationControleeStatus,
+		suspensionCurrentStatusLines,
 		volTitre,
 		volVehicule
 	}, { dryRun: true })
@@ -626,14 +645,14 @@ export const writeContent = (
 		{
 			annulationCurrentStatus,
 			duplicataTitre,
-			dvsCurrentStatus,
-			gagesCurrentStatus,
-			otcisCurrentStatus,
-			otcisPvCurrentStatus,
-			ovesCurrentStatus,
+			dvsCurrentStatusLines,
+			gagesCurrentStatusLines,
+			otcisCurrentStatusLines,
+			otcisPvCurrentStatusLines,
+			oveisCurrentStatusLines,
 			perteTitre,
-			pveCurrentStatus,
-			suspensionsMotifsCurrentStatus,
+			procedureReparationControleeStatus,
+			suspensionCurrentStatusLines,
 			volTitre,
 			volVehicule
 		}

@@ -101,15 +101,15 @@ export default {
       (
         !isAnnulationCI ? {
           duplicataTitre: csaLabels.titre.duplicata,
-          dvsCurrentStatus: csaLabels.dvsCurrentStatus,
-          gagesCurrentStatus: csaLabels.gagesCurrentStatus,
+          dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
+          gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
           historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
-          otcisCurrentStatus: csaLabels.otcisCurrentStatus,
-          otcisPvCurrentStatus: csaLabels.otcisPvCurrentStatus,
-          ovesCurrentStatus: csaLabels.ovesCurrentStatus,
+          otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
+          otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
+          oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
           perteTitre: csaLabels.titre.perte,
-          pveCurrentStatus: csaLabels.pveCurrentStatus,
-          suspensionsMotifsCurrentStatus: csaLabels.suspensionsMotifsCurrentStatus,
+          procedureReparationControleeStatus: csaLabels.procedureReparationControleeStatus,
+          suspensionCurrentStatusLines: csaLabels.suspensionCurrentStatusLines,
           volTitre: csaLabels.titre.vol,
           volVehicule: csaLabels.vol
         } : {}

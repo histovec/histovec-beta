@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import orderBy from 'lodash.orderby'
 
-import { booleanLabel, camelize, entitiesLabel, formatDate, padString } from '../js/format'
+import { booleanLabel, camelize, formatDate, padString } from '../js/format'
 import { getTypeCarburant } from '../../utils/vehicle/energie'
 
 import { NUMERO_EURO } from '../../constants/vehicle/numeroEuro'
@@ -531,32 +531,38 @@ const syntheseVehiculeMapping = ({
 }
 
 const administratifVehiculeMapping = ({
-  ci_vole,
   date_annulation_ci,
-  duplicata,
-  perte_ci,
-  sit_adm: {
-    dvs,
-    gages,
-    opposition: {
-      otcis,
-      otcis_pv: otcisPv,
-      oves,
-      oveis,
-    },
-    suspensions,
-  },
-  vehicule_vole,
+  ...veh
 }, isAnnulationCI) => {
   const annulationCurrentStatus = booleanLabel(isAnnulationCI, { upperCase: false })
 
   if (isAnnulationCI) {
     return {
-      annulationCurrentStatus,
       dateAnnulation: date_annulation_ci,
       isAnnulationCI,
+      csaLabels: {
+        annulationCurrentStatus,
+      }
     }
   }
+
+  const {
+    ci_vole,
+    duplicata,
+    perte_ci,
+    sit_adm: {
+      dvs,
+      gages,
+      opposition: {
+        otcis,
+        otcis_pv: otcisPv,
+        oves,
+        oveis,
+      },
+      suspensions,
+    },
+    vehicule_vole
+  } = veh
 
   // Helpers
   const hasDvs = Boolean(dvs.length)  // DVS = Déclaration valant saisie
@@ -567,7 +573,6 @@ const administratifVehiculeMapping = ({
   const hasOvei = Boolean(oveis.length)
   const hasSuspension = Boolean(suspensions.length)
 
-  const otcisPvCurrentStatus = hasOtciPv ? 'PV en attente' : 'Aucune'
 
   let oppositionTemporaireCurrentStatus
   if (hasOtciPv) {
@@ -587,26 +592,64 @@ const administratifVehiculeMapping = ({
     oppositionsCurrentStatus = 'NON'
   }
 
-  // let oveCurrentStatus
-  // if (hasOve) {
-  //   oveCurrentStatus =
-  //   oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
-  //   // oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
-  // }
+  const hasProcedureReparationControlee = hasOve || hasOvei || hasPve
 
-  // let oveiCurrentStatus
-  // if (hasOvei) {
-  //   oveiCurrentStatus =
-  //   oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
-  //   // oveCurrentStatus = hasOtci ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
-  // }
+  let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV en attente'] : ['Aucune']
+  const pvDates = otcisPv.map((otciPv) => {
+    return [
+      `Date du PV :  ${formatDate(otciPv.date)}`
+    ]
+  }).flat()
+  otcisPvCurrentStatusLines = [
+    ...otcisPvCurrentStatusLines,
+    ...pvDates
+  ]
 
-  // let otciCurrentStatus
-  // if (hasOtci) {
-  //   otciCurrentStatus = 'Opposition temporaire'
-  // } else if (hasOtciPv) {
-  //   otciCurrentStatus = 'Opposition temporaire (PV en attente)'
-  // }
+  const otcisCurrentStatusLines = otcis.map((otci) => {
+    return [
+      `Date de l'opposition :  ${formatDate(otci.date)}`
+    ]
+  }).flat()
+
+
+  // @todo CSA 1 : how to use this ?
+  // const ovesCurrentStatusLines = oves.map((ove) => {
+  //   return [
+  //     `Date :     ${formatDate(ove.date)}`
+  //   ]
+  // })
+
+  const oveisCurrentStatusLines = oveis.map((ovei) => {
+    return [
+      `Date de l'opposition :  ${formatDate(ovei.date)}`
+    ]
+  }).flat()
+
+  const suspensionCurrentStatusLines = suspensions.map((suspension) => {
+    return [
+      `Motif :  ${suspensionsMapping[suspension.motif]}`,
+      `Date de la suspension :  ${formatDate(suspension.date)}`
+      // @todo: missing functional rules from SIV/DSR to build these data on JSON :
+      // - remise titre
+      // - retrait titre
+    ]
+  }).flat()
+
+  const gagesCurrentStatusLines = gages.map((gage) => {
+    return [
+      `Nom du créancier :  ${gage.nom_creancier}`,
+      `Date du gage :  ${formatDate(gage.date)}`
+    ]
+  }).flat()
+
+  // @todo: rename nomAutorite to nom_autorite (when data will be ready)
+  const dvsCurrentStatusLines = dvs.map((_dvs) => {
+    return [
+      'Nom de l\'autorité à l\'origine de l\'inscription :',
+      `    ${_dvs.nomAutorite}`,
+      `Date de la déclaration valant saisie :  ${formatDate(_dvs.date)}`
+    ]
+  }).flat()
 
   // @todo: 'mapping à valider' -> est-ce validé ?
   let procedures
@@ -617,8 +660,10 @@ const administratifVehiculeMapping = ({
   }
 
   const suspensionsMotifs = suspensions.map(suspension => suspension.motif)
-  const suspensionMotifsLabels = suspensionsMotifs.map(suspensionMotif => suspensionsMapping[suspensionMotif])
   const hasPve = Boolean(hasSuspension && suspensionsMotifs.includes('PVE'))
+
+  const suspensionMotifsLabels = suspensionsMotifs.map(suspensionMotif => suspensionsMapping[suspensionMotif])
+
 
   const synthese = syntheseVehiculeMapping({
     ci_vole,
@@ -667,16 +712,15 @@ const administratifVehiculeMapping = ({
 
     csaLabels: {
       annulationCurrentStatus,
-      dvsCurrentStatus: entitiesLabel(dvs, { isMale: false }),
-      gagesCurrentStatus: entitiesLabel(gages),
-      otcisCurrentStatus: entitiesLabel(otcis, { isMale: false }),
-      otcisPvCurrentStatus,
-
-      // @todo: oves || ovei => procédure de réparation contrôlée
-      // Ne souhaite-t-on pas afficher une section à part pour les OVEI ? (CSA et/ou rapport)
-      ovesCurrentStatus: entitiesLabel(oves, { isMale: false }),
-      pveCurrentStatus: hasPve ? 'Oui' : 'Aucun',
-      suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'Non',
+      dvsCurrentStatusLines: hasDvs ? dvsCurrentStatusLines : ['Aucune'],
+      gagesCurrentStatusLines: hasGage ? gagesCurrentStatusLines : ['Aucun'],
+      otcisCurrentStatusLines: hasOtci ? otcisCurrentStatusLines : ['Aucune'],
+      otcisPvCurrentStatusLines: otcisPvCurrentStatusLines,
+      // ovesCurrentStatusLines: hasOve ? ovesCurrentStatusLines : ['Aucune'],
+      oveisCurrentStatusLines: hasOvei ? oveisCurrentStatusLines : ['Aucune'],
+      procedureReparationControleeStatus: booleanLabel(hasProcedureReparationControlee, { upperCase: false }),
+      suspensionCurrentStatusLines: hasSuspension ? suspensionCurrentStatusLines : ['Aucune'],
+      // suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'Non',
       titre: {
         vol: ci_vole ? camelize(ci_vole) : MISSING_VALUE,
         perte: perte_ci ? camelize(perte_ci) : MISSING_VALUE,
@@ -687,14 +731,9 @@ const administratifVehiculeMapping = ({
     },
 
     reportLabels: {
-      // dvsCurrentStatus: entitiesLabel(dvs, { isMale: false }),
       gagesCurrentStatus: hasGage ? 'OUI' : 'NON',
       oppositionsCurrentStatus,
       oppositionTemporaireCurrentStatus,  // @todo: where to use it ?
-      // otcisCurrentStatus: entitiesLabel(otcis, { isMale: false }),
-      // otcisPvCurrentStatus,
-    // oveisCurrentStatus: entitiesLabel(oveis, { isMale: false }),
-      // ovesCurrentStatus: entitiesLabel(oves, { isMale: false }),
       procedures,  // Resume about both gages and dvs
       suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'NON',
       synthese,
