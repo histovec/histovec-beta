@@ -573,26 +573,15 @@ const administratifVehiculeMapping = ({
   const hasOvei = Boolean(oveis.length)
   const hasSuspension = Boolean(suspensions.length)
 
-
-  let oppositionTemporaireCurrentStatus
-  if (hasOtciPv) {
-    oppositionTemporaireCurrentStatus = 'Opposition temporaire (PV en attente)'
-  } else if (hasOtci) {
-    oppositionTemporaireCurrentStatus = 'Opposition temporaire'
-  } else {
-    oppositionTemporaireCurrentStatus = 'Aucune'
-  }
-
-  let oppositionsCurrentStatus
-  if (hasOve || hasOvei) {
-    oppositionsCurrentStatus = (hasOtci || hasOtciPv) ? 'Opposition temporaire, véhicule endommagé' : 'Procédure de réparation contrôlée'
-  } else if (hasOtci || hasOtciPv) {
-    oppositionsCurrentStatus = hasOtciPv ? 'Opposition temporaire (PV en attente)' : 'Opposition temporaire'
-  } else {
-    oppositionsCurrentStatus = 'NON'
-  }
-
+  const suspensionsMotifs = suspensions.map(suspension => suspension.motif)
+  const hasPve = Boolean(veh.pve.length > 0 || hasSuspension && suspensionsMotifs.includes('PVE'))
   const hasProcedureReparationControlee = hasOve || hasOvei || hasPve
+
+  const oppositions = [
+    ...(hasProcedureReparationControlee ? ['Procédure de réparation contrôlée'] : []),
+    ...(hasOtci ? ['Opposition temporaire'] : []),
+    ...(hasOtciPv ? ['Opposition temporaire (PV en attente)'] : [])
+  ]
 
   let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV en attente'] : ['Aucune']
   const pvDates = otcisPv.map((otciPv) => {
@@ -658,9 +647,6 @@ const administratifVehiculeMapping = ({
   } else {
     procedures = hasGage ? 'véhicule gagé' : 'NON'
   }
-
-  const suspensionsMotifs = suspensions.map(suspension => suspension.motif)
-  const hasPve = Boolean(hasSuspension && suspensionsMotifs.includes('PVE'))
 
   const suspensionMotifsLabels = suspensionsMotifs.map(suspensionMotif => suspensionsMapping[suspensionMotif])
 
@@ -732,8 +718,7 @@ const administratifVehiculeMapping = ({
 
     reportLabels: {
       gagesCurrentStatus: hasGage ? 'OUI' : 'NON',
-      oppositionsCurrentStatus,
-      oppositionTemporaireCurrentStatus,  // @todo: where to use it ?
+      oppositionsCurrentStatus: (oppositions.length > 0) ? oppositions : 'NON',
       procedures,  // Resume about both gages and dvs
       suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'NON',
       synthese,

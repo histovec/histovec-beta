@@ -31,14 +31,19 @@
         </h6>
         <!-- debut tableau oppositions -->
         <div class="col-sm-12">
-          <span class="info_red txt-small-12">{{ reportLabels.oppositionsCurrentStatus }} </span>
-          <span
+          <div
+            v-for="(oppositionStatus, index) in reportLabels.oppositionsCurrentStatus"
+            :key="index"
+            class="info_red txt-small-12"
+          >
+            {{ oppositionStatus }}
+          </div>
+          <!-- <span
             v-if="opposition.hasOtciPv && holder"
             class="txt-small-12"
           >
-            <br />
             Appelez le 08 21 08 00 31
-          </span>
+          </span> -->
           <div class="separator-2"></div>
         </div>
         <!-- fin tableau oppositions -->
