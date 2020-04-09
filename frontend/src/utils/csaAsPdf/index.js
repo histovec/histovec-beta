@@ -29,8 +29,8 @@ export const generateCsa = (
 		otcisPvCurrentStatusLines,
 		oveisCurrentStatusLines,
 		perteTitre,
-		procedureReparationControleeStatus,
-		suspensionCurrentStatusLines,
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
 	}={}
@@ -69,8 +69,8 @@ export const generateCsa = (
 				otcisPvCurrentStatusLines,
 				oveisCurrentStatusLines,
 				perteTitre,
-				procedureReparationControleeStatus,
-				suspensionCurrentStatusLines,
+				proceduresReparationControleeStatus,
+				suspensionsCurrentStatusLines,
 				volTitre,
 				volVehicule,
 			} : {}

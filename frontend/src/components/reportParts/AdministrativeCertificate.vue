@@ -108,8 +108,8 @@ export default {
           otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
           perteTitre: csaLabels.titre.perte,
-          procedureReparationControleeStatus: csaLabels.procedureReparationControleeStatus,
-          suspensionCurrentStatusLines: csaLabels.suspensionCurrentStatusLines,
+          proceduresReparationControleeStatus: csaLabels.proceduresReparationControleeStatus,
+          suspensionsCurrentStatusLines: csaLabels.suspensionsCurrentStatusLines,
           volTitre: csaLabels.titre.vol,
           volVehicule: csaLabels.vol
         } : {}

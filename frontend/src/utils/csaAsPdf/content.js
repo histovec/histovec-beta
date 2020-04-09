@@ -366,7 +366,7 @@ const writeFirstSituationColumn = (
 	pdf, previousY,
 	{
 		dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines, otcisPvCurrentStatusLines,
-		oveisCurrentStatusLines, procedureReparationControleeStatus,
+		oveisCurrentStatusLines, proceduresReparationControleeStatus,
 		x, y
 	},
 	{ dryRun }={ dryRun: false }
@@ -391,7 +391,7 @@ const writeFirstSituationColumn = (
 		{
 			key: '- Procédure de réparation contrôlée',
 			values: [
-				procedureReparationControleeStatus,
+				proceduresReparationControleeStatus,
 			]
 		},
 		{
@@ -412,14 +412,14 @@ const writeSecondSituationColumn = (
 	pdf, previousY,
 	{
 		annulationCurrentStatus, volVehicule, volTitre, perteTitre, duplicataTitre,
-		suspensionCurrentStatusLines, x, y
+		suspensionsCurrentStatusLines, x, y
 	},
 	{ dryRun }={ dryRun: false }
 ) => {
 	const situationItems = [
 		{
 			key: '- Immatriculation suspendue',
-			values: suspensionCurrentStatusLines
+			values: suspensionsCurrentStatusLines
 		},
 		{
 			key: '- Immatriculation annulée',
@@ -467,8 +467,8 @@ const writeSituation = (
 		otcisPvCurrentStatusLines,
 		oveisCurrentStatusLines,
 		perteTitre,
-		procedureReparationControleeStatus,
-		suspensionCurrentStatusLines,
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule
 	},
@@ -484,7 +484,7 @@ const writeSituation = (
 		pdf, y,
 		{
 			dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines,
-			otcisPvCurrentStatusLines, oveisCurrentStatusLines, procedureReparationControleeStatus,
+			otcisPvCurrentStatusLines, oveisCurrentStatusLines, proceduresReparationControleeStatus,
 			x: FIRST_COLUMN_X, y: spacing
 		},
 		{ dryRun }
@@ -492,7 +492,7 @@ const writeSituation = (
 	const lastSecondY = writeSecondSituationColumn(
 		pdf, y,
 		{
-			annulationCurrentStatus, duplicataTitre, perteTitre, suspensionCurrentStatusLines,
+			annulationCurrentStatus, duplicataTitre, perteTitre, suspensionsCurrentStatusLines,
 			volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing
 		},
 		{ dryRun }
@@ -542,8 +542,8 @@ export const writeContent = (
 		otcisPvCurrentStatusLines,
 		oveisCurrentStatusLines,
 		perteTitre,
-		procedureReparationControleeStatus,
-		suspensionCurrentStatusLines,
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
 	}={}
@@ -601,8 +601,8 @@ export const writeContent = (
 			otcisPvCurrentStatusLines,
 			oveisCurrentStatusLines,
 			perteTitre,
-			procedureReparationControleeStatus,
-			suspensionCurrentStatusLines,
+			proceduresReparationControleeStatus,
+			suspensionsCurrentStatusLines,
 			volTitre,
 			volVehicule
 		},
@@ -659,8 +659,8 @@ export const writeContent = (
 			otcisPvCurrentStatusLines,
 			oveisCurrentStatusLines,
 			perteTitre,
-			procedureReparationControleeStatus,
-			suspensionCurrentStatusLines,
+			proceduresReparationControleeStatus,
+			suspensionsCurrentStatusLines,
 			volTitre,
 			volVehicule
 		}
