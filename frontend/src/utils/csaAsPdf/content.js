@@ -232,7 +232,7 @@ const addPage = (pdf, writeHeaderCallback, writeFooterCallback, title) => {
 }
 
 const writeHistory = (
-	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, writeFooterCallback, writeHeaderCallback,
+	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, plaque, writeFooterCallback, writeHeaderCallback,
 	{ dryRun, forceTwoColumns, nextPageSymbol }={ dryRun: false, forceTwoColumns: false, nextPageSymbol: false },
 	{ totalPageCount }={ totalPageCount: null }
 ) => {
@@ -262,7 +262,7 @@ const writeHistory = (
 		pageNumber = parseInt(pageNumberStr)
 		if (!dryRun) {
 			if (pageNumber > 1) {
-				addPage(pdf, writeHeaderCallback, writeFooterCallback, 'Historique du véhicule (suite)')
+				addPage(pdf, writeHeaderCallback, writeFooterCallback, `Suite historique du véhicule - ${plaque}`)
 			}
 			writePageNumber(pdf, pageNumber, totalPageNumber)
 		}
@@ -366,34 +366,39 @@ const writeFirstSituationColumn = (
 	pdf, previousY,
 	{
 		dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines, otcisPvCurrentStatusLines,
-		oveisCurrentStatusLines, proceduresReparationControleeStatus,
+		oveisCurrentStatusLines, ovesCurrentStatusLines, proceduresReparationControleeStatus,
 		x, y
 	},
 	{ dryRun }={ dryRun: false }
 ) => {
-
-	const otci = otcisPvCurrentStatusLines[0] === 'Aucune' ?
-		{
-			key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
-			values:	otcisCurrentStatusLines,
-		} :
-		{
-			key: '- Opposition au transfert du certificat\n  d\'immatriculation due à un PV (OTCI PV)',
-			values:	otcisPvCurrentStatusLines,
-		}
-
-	const situationItems = [
-		otci,
-		{
-			key: '- Opposition véhicule économiquement irréparable',
-			values: oveisCurrentStatusLines
-		},
-		{
+	const	proceduresReparationControlee = proceduresReparationControleeStatus ?
+		[{
 			key: '- Procédure de réparation contrôlée',
 			values: [
 				proceduresReparationControleeStatus,
 			]
+		}] : []
+
+	const	oveisCurrentStatus = oveisCurrentStatusLines ?
+		[{
+			key: '- Opposition véhicule économiquement irréparable',
+			values: oveisCurrentStatusLines
+		}] : []
+
+	const	ovesCurrentStatus = (ovesCurrentStatusLines || !oveisCurrentStatusLines) ?
+		[{
+			key: '- Opposition véhicule endommagé',
+			values: ovesCurrentStatusLines || ['Aucun']
+		}] : []
+
+	const situationItems = [
+		{
+			key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
+			values:	otcisPvCurrentStatusLines[0] === 'Aucune' ? otcisCurrentStatusLines : otcisPvCurrentStatusLines,
 		},
+		...oveisCurrentStatus,
+		...ovesCurrentStatus,
+		...proceduresReparationControlee,
 		{
 			key: '- Déclaration valant saisie',
 			values: dvsCurrentStatusLines,
@@ -401,7 +406,6 @@ const writeFirstSituationColumn = (
 		{
 			key: '- Gage',
 			values:	gagesCurrentStatusLines
-
 		}
 	]
 
@@ -466,7 +470,9 @@ const writeSituation = (
 		otcisCurrentStatusLines,
 		otcisPvCurrentStatusLines,
 		oveisCurrentStatusLines,
+		ovesCurrentStatusLines,
 		perteTitre,
+		plaque,
 		proceduresReparationControleeStatus,
 		suspensionsCurrentStatusLines,
 		volTitre,
@@ -477,15 +483,19 @@ const writeSituation = (
 	const spacing = FONT_SPACING.M
 
 	if (!dryRun) {
-		writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
+		if (plaque) {
+			writeTitle(pdf, FIRST_COLUMN_X, y, `Situation administrative du véhicule - ${plaque}`)
+		} else {
+			writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
+		}
 	}
 
 	const lastFirstY = writeFirstSituationColumn(
 		pdf, y,
 		{
 			dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines,
-			otcisPvCurrentStatusLines, oveisCurrentStatusLines, proceduresReparationControleeStatus,
-			x: FIRST_COLUMN_X, y: spacing
+			otcisPvCurrentStatusLines, oveisCurrentStatusLines, ovesCurrentStatusLines,
+			proceduresReparationControleeStatus, x: FIRST_COLUMN_X, y: spacing
 		},
 		{ dryRun }
 	)
@@ -541,6 +551,7 @@ export const writeContent = (
 		otcisCurrentStatusLines,
 		otcisPvCurrentStatusLines,
 		oveisCurrentStatusLines,
+		ovesCurrentStatusLines,
 		perteTitre,
 		proceduresReparationControleeStatus,
 		suspensionsCurrentStatusLines,
@@ -600,7 +611,9 @@ export const writeContent = (
 			otcisCurrentStatusLines,
 			otcisPvCurrentStatusLines,
 			oveisCurrentStatusLines,
+			ovesCurrentStatusLines,
 			perteTitre,
+			plaque,
 			proceduresReparationControleeStatus,
 			suspensionsCurrentStatusLines,
 			volTitre,
@@ -617,7 +630,7 @@ export const writeContent = (
 		y: simulatedHistoryWithMarginBottomY,
 	} = writeHistory(
 		pdf, simulatedSituationBottomY, footerTopY, historyNextPageTopY,
-		historyItems, writeFooterCallback, writeHeaderCallback,
+		historyItems, plaque, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: true }
 	)
 
@@ -633,7 +646,7 @@ export const writeContent = (
 		hasSymbol,
 	} = writeHistory(
 		pdf, vehicleIdentificationBottomY, footerTopY, historyNextPageTopY,
-		historyItems, writeFooterCallback, writeHeaderCallback,
+		historyItems, plaque, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: false, forceTwoColumns, nextPageSymbol: isSituationSectionOnNewPage },
 		{ totalPageCount: lastPageNumber }
 	)
@@ -658,7 +671,9 @@ export const writeContent = (
 			otcisCurrentStatusLines,
 			otcisPvCurrentStatusLines,
 			oveisCurrentStatusLines,
+			ovesCurrentStatusLines,
 			perteTitre,
+			plaque: isSituationSectionOnNewPage ? plaque : '',
 			proceduresReparationControleeStatus,
 			suspensionsCurrentStatusLines,
 			volTitre,

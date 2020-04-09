@@ -269,7 +269,7 @@
                 <administrative
                   v-if="tab === 'situation'"
                   :holder="holder"
-                  :opposition="v.administratif.opposition"
+                  :opposition-section="v.administratif.opposition"
                   :report-labels="v.administratif.reportLabels"
                 >
                 </administrative>

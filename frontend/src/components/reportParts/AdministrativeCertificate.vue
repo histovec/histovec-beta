@@ -107,6 +107,7 @@ export default {
           otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
           otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
+          ovesCurrentStatusLines: csaLabels.ovesCurrentStatusLines,
           perteTitre: csaLabels.titre.perte,
           proceduresReparationControleeStatus: csaLabels.proceduresReparationControleeStatus,
           suspensionsCurrentStatusLines: csaLabels.suspensionsCurrentStatusLines,

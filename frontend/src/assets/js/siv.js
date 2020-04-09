@@ -546,10 +546,11 @@ const administratifVehiculeMapping = ({
     }
   }
 
-  const {
+  let {
     ci_vole,
     duplicata,
     perte_ci,
+    pve=[],
     sit_adm: {
       dvs,
       gages,
@@ -572,21 +573,29 @@ const administratifVehiculeMapping = ({
   const hasOve = Boolean(oves.length)
   const hasOvei = Boolean(oveis.length)
   const hasSuspension = Boolean(suspensions.length)
-
   const suspensionsMotifs = suspensions.map(suspension => suspension.motif)
-  const hasPve = Boolean(veh.pve.length > 0 || hasSuspension && suspensionsMotifs.includes('PVE'))
-  const hasProcedureReparationControlee = hasOve || hasOvei || hasPve
+  const hasPve = Boolean(pve.length > 0 || hasSuspension && suspensionsMotifs.includes('PVE'))
+  const hasProcedureReparationControlee = hasOve || hasOvei
 
-  const oppositions = [
-    ...(hasProcedureReparationControlee ? ['Procédure de réparation contrôlée'] : []),
-    ...(hasOtci ? ['Opposition temporaire'] : []),
-    ...(hasOtciPv ? ['Opposition temporaire (PV en attente)'] : [])
-  ]
+  const oppositionsInfos = orderBy(
+    [
+      ...(hasOvei ? [{ date: formatDate(oveis[0].date), label: 'Véhicule économiquement irréparable' }] : []),
+      // Pour les OVEs, le CSA afficher "Véhicule endommagé".
+      // Il a été convenu par la DSR qu'on préfère afficher "Procédure de réparation contrôlée" dans le cas du rapport HistoVec,
+      // même si cela crée une incohérence entre le rapport HistoVec et le CSA.
+      ...(hasOve ? [{ date: formatDate(oves[0].date), label: 'Procédure de réparation contrôlée' }] : []),
+      // On pourrait identifier les différents motifs d'OTCI (trésor, véhicule bloqué, etc.) mais il a été décidé de laisser "Opposition temporaire" pour le moment
+      ...(hasOtci ? [{ date: formatDate(otcis[0].date), label: 'Opposition temporaire'}] : []),
+      ...(hasOtciPv ? [{ date: formatDate(otcisPv[0].date), label: 'PV en attente' }] : [])
+    ],
+    ['date'],
+    ['desc']
+  )
 
-  let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV en attente'] : ['Aucune']
+  let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV(s) en attente'] : ['Aucune']
   const pvDates = otcisPv.map((otciPv) => {
     return [
-      `Date du PV :  ${formatDate(otciPv.date)}`
+      `- Date du PV :  ${formatDate(otciPv.date)}`
     ]
   }).flat()
   otcisPvCurrentStatusLines = [
@@ -596,60 +605,72 @@ const administratifVehiculeMapping = ({
 
   const otcisCurrentStatusLines = otcis.map((otci) => {
     return [
-      `Date de l'opposition :  ${formatDate(otci.date)}`
+      `- Date de l'opposition :  ${formatDate(otci.date)}`
     ]
   }).flat()
 
 
-  // @todo CSA 1 : how to use this ?
-  // const ovesCurrentStatusLines = oves.map((ove) => {
-  //   return [
-  //     `Date :     ${formatDate(ove.date)}`
-  //   ]
-  // })
+  const ovesCurrentStatusLines = oves.map((ove) => {
+    return [
+      `- Date de l'opposition :  ${formatDate(ove.date)}`
+    ]
+  }).flat()
 
   const oveisCurrentStatusLines = oveis.map((ovei) => {
     return [
-      `Date de l'opposition :  ${formatDate(ovei.date)}`
+      `- Date de l'opposition :  ${formatDate(ovei.date)}`
     ]
   }).flat()
 
-  const suspensionCurrentStatusLines = suspensions.map((suspension) => {
+  const suspensionsCurrentStatusLines = suspensions.map((suspension) => {
     return [
-      `Motif :  ${suspensionsMapping[suspension.motif]}`,
-      `Date de la suspension :  ${formatDate(suspension.date)}`
+      `- Motif :  ${suspensionsMapping[suspension.motif]}`,
+      `  Date de la suspension :  ${formatDate(suspension.date)}`
       // @todo: missing functional rules from SIV/DSR to build these data on JSON :
-      // - remise titre
-      // - retrait titre
+      // `  Remise titre :  ${suspension.remise_titre}`,
+      // `  Retrait titre :  ${suspension.retrait_titre}`
     ]
   }).flat()
+
+  const suspensionsInfos = orderBy(
+    suspensions.map((suspension) => {
+      return { date: formatDate(suspension.date), label: suspensionsMapping[suspension.motif] }
+    }),
+    ['date'],
+    ['desc']
+  )
+
 
   const gagesCurrentStatusLines = gages.map((gage) => {
     return [
-      `Nom du créancier :  ${gage.nom_creancier}`,
-      `Date du gage :  ${formatDate(gage.date)}`
+      `- Nom du créancier :  ${gage.nom_creancier}`,
+      `  Date du gage :  ${formatDate(gage.date)}`
     ]
   }).flat()
 
-  // @todo: rename nomAutorite to nom_autorite (when data will be ready)
+  const gagesInfos = orderBy(
+    gages.map((gage) => {
+      return { date: formatDate(gage.date), label: gage.nom_creancier }
+    }),
+    ['date'],
+    ['desc']
+  )
+
   const dvsCurrentStatusLines = dvs.map((_dvs) => {
     return [
-      'Nom de l\'autorité à l\'origine de l\'inscription :',
-      `    ${_dvs.nomAutorite}`,
-      `Date de la déclaration valant saisie :  ${formatDate(_dvs.date)}`
+      '- Nom de l\'autorité à l\'origine de l\'inscription :',
+      `    ${_dvs.dvs_autorite}`,
+      `  Date de la déclaration valant saisie :  ${formatDate(_dvs.date)}`
     ]
   }).flat()
 
-  // @todo: 'mapping à valider' -> est-ce validé ?
-  let procedures
-  if (hasDvs) {
-    procedures = hasGage ? 'véhicule gagé et saisi' : 'véhicule saisi'
-  } else {
-    procedures = hasGage ? 'véhicule gagé' : 'NON'
-  }
-
-  const suspensionMotifsLabels = suspensionsMotifs.map(suspensionMotif => suspensionsMapping[suspensionMotif])
-
+  const dvsInfos = orderBy(
+    dvs.map((_dvs) => {
+      return { date: formatDate(_dvs.date), label: _dvs.dvs_autorite }
+    }),
+    ['date'],
+    ['desc']
+  )
 
   const synthese = syntheseVehiculeMapping({
     ci_vole,
@@ -702,11 +723,10 @@ const administratifVehiculeMapping = ({
       gagesCurrentStatusLines: hasGage ? gagesCurrentStatusLines : ['Aucun'],
       otcisCurrentStatusLines: hasOtci ? otcisCurrentStatusLines : ['Aucune'],
       otcisPvCurrentStatusLines: otcisPvCurrentStatusLines,
-      // ovesCurrentStatusLines: hasOve ? ovesCurrentStatusLines : ['Aucune'],
-      oveisCurrentStatusLines: hasOvei ? oveisCurrentStatusLines : ['Aucune'],
-      procedureReparationControleeStatus: booleanLabel(hasProcedureReparationControlee, { upperCase: false }),
-      suspensionCurrentStatusLines: hasSuspension ? suspensionCurrentStatusLines : ['Aucune'],
-      // suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'Non',
+      oveisCurrentStatusLines: hasOvei ? oveisCurrentStatusLines : '',
+      ovesCurrentStatusLines: hasOve ? ovesCurrentStatusLines : '',
+      proceduresReparationControleeStatus: booleanLabel(hasProcedureReparationControlee, { upperCase: false }),
+      suspensionsCurrentStatusLines: hasSuspension ? suspensionsCurrentStatusLines : ['Non'],
       titre: {
         vol: ci_vole ? camelize(ci_vole) : MISSING_VALUE,
         perte: perte_ci ? camelize(perte_ci) : MISSING_VALUE,
@@ -717,10 +737,10 @@ const administratifVehiculeMapping = ({
     },
 
     reportLabels: {
-      gagesCurrentStatus: hasGage ? 'OUI' : 'NON',
-      oppositionsCurrentStatus: (oppositions.length > 0) ? oppositions : 'NON',
-      procedures,  // Resume about both gages and dvs
-      suspensionsMotifsCurrentStatus: (suspensionMotifsLabels.length > 0) ? suspensionMotifsLabels.join(', ') : 'NON',
+      dvsInfos: (dvsInfos.length > 0) ? dvsInfos : [{ label: 'NON' }],
+      gagesInfos: (gagesInfos.length > 0) ? gagesInfos : [{ label: 'NON' }],
+      oppositionsInfos: (oppositionsInfos.length > 0) ? oppositionsInfos : [{ label: 'NON' }],
+      suspensionsInfos: (suspensionsInfos.length > 0) ? suspensionsInfos : [{ label: 'NON' }],
       synthese,
 
       titre: {
@@ -744,19 +764,20 @@ const computeDescendingHistoriqueForReport = (
   fniState,
 ) => {
   const isFniConverted = (
-    (fniState !== FNI_STATE.OUI) && (frImmatDate !== sivImmatDate) && !historique.length ||
-    (!historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/)))
+    (fniState !== FNI_STATE.OUI) &&
+    (frImmatDate !== sivImmatDate) &&
+    (!historique.length || (!historique.some(e => e.opa_type.match(/(CONVERSION_DOSSIER_FNI|.*_CVN)/))))
   )
 
   const historiqueWithFNIConversion = [
     ...historique,
-    (
+    ...(
       isFniConverted ?
-      {
+      [{
         opa_date: sivImmatDate.replace(/^(..)\/(..)\/(....)$/, '$3-$2-$1'),
         opa_type: 'CONVERSION_DOSSIER_FNI'
-      } :
-      {}
+      }] :
+      []
     ),
   ]
 
@@ -864,14 +885,11 @@ const processRawData = (veh) => {
     (!administratif.hasSuspension && !administratif.opposition.hasOve && !administratif.opposition.hasOvei)
   )
 
-
-
   v = {
     ...v,
     ageVeh: veh.age_annee,
 
     // véhicule importé : changement de règle de gestion #406
-    // @todo: souhaite-t-on afficher le pays d'import et son ancienne immatriculation ?
     etranger: (
       (veh.import === 'NON') ?
         { hasBeenImported: false } :

@@ -25,7 +25,7 @@
   "ovei": {
     "icon": "fa-exclamation-triangle",
     "text": "Ce véhicule est économiquement irréparable",
-    "adv": "Il ne peut être vendu qu'à un professionnel",
+    "adv": "En l'état actuel, il ne peut être vendu qu'à un professionnel",
     "link": "https://www.service-public.fr/particuliers/vosdroits/F1473"
   },
   "multi_ove": {
@@ -94,7 +94,7 @@
   "ci_vole": {
     "icon": "fa-exclamation-triangle",
     "text": "La carte grise a fait l'objet d'une déclaration de vol",
-    "adv": "Demandez la déclaration de vol. La carte grise fournie doit porter la mention \"Duplicata\" et la date"
+    "adv": "Demandez la déclaration de vol"
   },
   "saisie": {
     "icon": "fa-minus-circle",
