@@ -1,7 +1,7 @@
 <template>
   <div
     class="pv-30 ph-20 feature-box bordered_spec text-center"
-    style="background: white"
+    style="background: white;"
   >
     <div class="row">
       <!-- debut alerte verte -->
@@ -56,7 +56,7 @@
       <div class="row">
         <div
           class="col-md-12"
-          style="fload: none; margin: 0 auto"
+          style="fload: none; margin: 0 auto;"
         >
           <qrcode-vue
             :value="url"
