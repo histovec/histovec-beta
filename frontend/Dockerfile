@@ -38,6 +38,7 @@ RUN if [ ! -z "$http_proxy" ] ; then \
         npm config set no-proxy $no_proxy; \
    fi ; \
    [ -z "${npm_registry}" ] || npm config set registry=$npm_registry; \
+   [ -z "$npm_registry" ] || npm config set strict-ssl false ; \
    [ -z "${sass_registry}" ] || npm config set sass_binary_site=$sass_registry;
 
 RUN [ -z "${NPM_LATEST}" ] || npm i npm@latest -g
