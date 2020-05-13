@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import orderBy from 'lodash.orderby'
 
-import { booleanLabel, camelize, formatDate, padString } from '../js/format'
+import { booleanLabel, camelize, formatDate, formatDateOrDefault, padString } from '../js/format'
 import { getTypeCarburant } from '../../utils/vehicle/energie'
 
 import { NUMERO_EURO } from '../../constants/vehicle/numeroEuro'
@@ -10,10 +10,8 @@ import { TYPE_CARBURANT } from '../../constants/vehicle/typeCarburant'
 
 import operationsMapping from '../json/operations.json'
 import suspensionsMapping from '../json/suspensions.json'
-import { FNI_STATE, TITULAIRE_CHANGE_OPERATIONS } from './constants'
+import { FNI_STATE, TITULAIRE_CHANGE_OPERATIONS, MISSING_VALUE } from './constants'
 
-
-const MISSING_VALUE = 'non disponible'
 
 // Important dates about vignette rules (instancied only once)
 const DATE_1997_01_01 = new Date('1997-01-01')
@@ -595,7 +593,7 @@ const administratifVehiculeMapping = ({
   let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV(s) en attente'] : ['Aucune']
   const pvDates = otcisPv.map((otciPv) => {
     return [
-      `- Date du PV :  ${formatDate(otciPv.date)}`
+      `- Date du PV :  ${formatDateOrDefault(otciPv.date)}`
     ]
   }).flat()
   otcisPvCurrentStatusLines = [
@@ -605,27 +603,27 @@ const administratifVehiculeMapping = ({
 
   const otcisCurrentStatusLines = otcis.map((otci) => {
     return [
-      `- Date de l'opposition :  ${formatDate(otci.date)}`
+      `- Date de l'opposition :  ${formatDateOrDefault(otci.date)}`
     ]
   }).flat()
 
 
   const ovesCurrentStatusLines = oves.map((ove) => {
     return [
-      `- Date de l'opposition :  ${formatDate(ove.date)}`
+      `- Date de l'opposition :  ${formatDateOrDefault(ove.date)}`
     ]
   }).flat()
 
   const oveisCurrentStatusLines = oveis.map((ovei) => {
     return [
-      `- Date de l'opposition :  ${formatDate(ovei.date)}`
+      `- Date de l'opposition :  ${formatDateOrDefault(ovei.date)}`
     ]
   }).flat()
 
   const suspensionsCurrentStatusLines = suspensions.map((suspension) => {
     return [
       `- Motif :  ${suspensionsMapping[suspension.motif]}`,
-      `  Date de la suspension :  ${formatDate(suspension.date)}`
+      `  Date de la suspension :  ${formatDateOrDefault(suspension.date)}`
       // @todo: missing functional rules from SIV/DSR to build these data on JSON :
       // `  Remise titre :  ${suspension.remise_titre}`,
       // `  Retrait titre :  ${suspension.retrait_titre}`
@@ -644,7 +642,7 @@ const administratifVehiculeMapping = ({
   const gagesCurrentStatusLines = gages.map((gage) => {
     return [
       `- Nom du créancier :  ${gage.nom_creancier}`,
-      `  Date du gage :  ${formatDate(gage.date)}`
+      `  Date du gage :  ${formatDateOrDefault(gage.date)}`
     ]
   }).flat()
 
@@ -660,7 +658,7 @@ const administratifVehiculeMapping = ({
     return [
       '- Nom de l\'autorité à l\'origine de l\'inscription :',
       `    ${_dvs.dvs_autorite}`,
-      `  Date de la déclaration valant saisie :  ${formatDate(_dvs.date)}`
+      `  Date de la déclaration valant saisie :  ${formatDateOrDefault(_dvs.date)}`
     ]
   }).flat()
 
@@ -790,7 +788,7 @@ const computeDescendingHistoriqueForReport = (
   // Only keep useful elements to compute HistoVec report and CSA
   return descendingHistoriqueWithFNIConversion.map(({numAgree, opa_date, opa_type}) => {
     return {
-      date: formatDate(opa_date),
+      date: formatDateOrDefault(opa_date),
       nature: operationsMapping[opa_type],
       ...(numAgree ? { 'numAgree': numAgree } : undefined),
       opa_type,

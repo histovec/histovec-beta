@@ -1,11 +1,21 @@
+import { MISSING_VALUE } from './constants'
+
 export const booleanLabel = (test, { upperCase }={ upperCase: true }) => {
 	const label = test ? 'Oui' : 'Non'
 	return upperCase ? label.toUpperCase() : label
 }
 
 export const formatDate = (isoDate) => {
-  let d = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
-  return Intl.DateTimeFormat('fr-FR').format(d)
+	if(!isoDate){
+		return ''
+	}
+
+	let d = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
+	return Intl.DateTimeFormat('fr-FR').format(d)
+}
+
+export const formatDateOrDefault = (isoDate, defaultValue=MISSING_VALUE) => {
+	return isoDate ? formatDate(isoDate) : defaultValue
 }
 
 export const padString = (n, width, padChar='0') => {

@@ -10,3 +10,5 @@ export const TITULAIRE_CHANGE_OPERATIONS = [
   'CHANG_LOC', 'CHANG_LOC_CVN',
   'CHANG_TIT_NORMAL', 'CHANG_TIT_NORMAL_CVN'
 ]
+
+export const MISSING_VALUE = 'non disponible'
