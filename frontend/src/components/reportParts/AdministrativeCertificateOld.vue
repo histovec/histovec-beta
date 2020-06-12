@@ -11,10 +11,11 @@
     </p>
     <p class="text-center">
       <button
+        v-if="imagesLoading === 0"
         type="button"
         class="btn btn-animated btn-default btn-sm"
         title="certificat de situation administrative"
-        @click="generatePdf"
+        @click="generatePDF"
       >
         Imprimer le CSA
         <i class="fa fa-print"></i>
@@ -26,26 +27,7 @@
 <script>
 
 import dayjs from 'dayjs'
-import { generateCsa } from '../../utils/csaAsPdfRewrite'
-import { RAPPORT_FILENAME } from '../../utils/csaAsPdfRewrite/constants'
-
-import histoVecLogo from '@/assets/img/histovec_logo_droite_name.png'
-import marianneImage from '@/assets/img/logo_mi_header.png'
-
-
-const downloadBlob = (blob, filename) => {
-  const blobUrl = URL.createObjectURL(blob)
-
-  const a = document.createElement('a')
-  a.href = blobUrl
-  a.download = filename || 'download'
-
-  // Make the download to happen automatically without attaching the anchor element to the DOM
-  a.click()
-
-  // Usefull to release blobUrl when finished
-  return blobUrl
-}
+import { generateCsa } from '../../utils/csaAsPdf'
 
 export default {
   props: {
@@ -62,40 +44,52 @@ export default {
       default: ''
     }
   },
+  data () {
+    return {
+      imagesLoading: -1,
+      images: {
+        marianne: {
+          url: 'assets/images/logo_mi_header_old.png'
+        },
+        histovec: {
+          url: 'assets/images/histovec_logo_droite_name_old.png'
+        }
+      }
+    }
+  },
   computed: {
     validityDate () {
       return dayjs().add(1, 'month').date(8).format('DD/MM/YYYY')
     }
   },
-  async mounted () {
-    this.$store.dispatch('log', `${this.$route.path}/csa`)
-
-    if (!this.histoVecLogoBytes) {
-      this.histoVecLogoBytes = await fetch(histoVecLogo).then((res) => res.arrayBuffer())
-    }
-
-    if (!this.marianneImageBytes) {
-      this.marianneImageBytes = await fetch(marianneImage).then((res) => res.arrayBuffer())
-    }
+  created () {
+    this.imagesLoading = Object.keys(this.images).length
+    Object.keys(this.images).forEach((key) => {
+      this.images[key].status = false
+      this.images[key].img = new Image()
+      this.images[key].img.src = this.images[key].url
+      this.images[key].img.onload = () => {
+        this.imagesLoading = this.imagesLoading - 1
+      }
+    })
   },
-  beforeDestroy () {
-    console.log('before free CSA object URL')  // eslint-disable-line no-console
-    URL.revokeObjectURL(this.csaObjectURL)
-    console.log('after free CSA object URL')  // eslint-disable-line no-console
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/csa`)
   },
   methods: {
-    async generatePdf () {
+    generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
+      console.log('pdf multipages pending...')  // eslint-disable-line no-console
 
       const isAnnulationCI = this.v.administratif.isAnnulationCI
       const csaLabels = this.v.administratif.csaLabels
 
-      const csaPdfBytes = await generateCsa({
+      generateCsa({
         isAnnulationCI,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
         dateAnnulation: this.v.administratif.dateAnnulation,
-        histoVecLogoBytes: this.histoVecLogoBytes,
-        marianneImageBytes: this.marianneImageBytes,
+        histoVecLogo: this.images.histovec.img,
+        marianneImage: this.images.marianne.img,
         marque: this.v.ctec.marque,
         plaque: this.$store.state.identity.plaque,
         premierCertificat: this.v.certificat.premier,
@@ -122,17 +116,7 @@ export default {
         } : {}
       ))
 
-      console.log('before csa Object URL')  // eslint-disable-line no-console
-      this.csaObjectURL = downloadBlob(
-        new Blob([csaPdfBytes], { type: 'application/pdf' }),
-        `${RAPPORT_FILENAME}.pdf`
-      )
-      // this.csaObjectURL = URL.createObjectURL(
-      //   new Blob([csaPdfBytes], { type: 'application/pdf' }),
-      // )
-
-      console.log('after download CSA')  // eslint-disable-line no-console
-      // window.open(this.csaObjectURL, '_blank')
+      console.log('pdf multipages done!')  // eslint-disable-line no-console
     }
   }
 }

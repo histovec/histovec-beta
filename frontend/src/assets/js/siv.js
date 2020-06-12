@@ -12,6 +12,8 @@ import operationsMapping from '../json/operations.json'
 import suspensionsMapping from '../json/suspensions.json'
 import { FNI_STATE, TITULAIRE_CHANGE_OPERATIONS, MISSING_VALUE } from './constants'
 
+// @TODO: use BULLET_POINT_CHAR = '\u2022' instead of '- ' for CSA listing
+// when pdf-lib will be approved for frontend
 
 // Important dates about vignette rules (instancied only once)
 const DATE_1997_01_01 = new Date('1997-01-01')
@@ -715,6 +717,8 @@ const administratifVehiculeMapping = ({
     suspensions,
     suspensionsMotifs,
 
+    // @TODO: mutualize this part with backend to generate CSA
+    // @TODO: mutualize needed images too
     csaLabels: {
       annulationCurrentStatus,
       dvsCurrentStatusLines: hasDvs ? dvsCurrentStatusLines : ['Aucune'],

@@ -2,6 +2,7 @@ import express from 'express'
 import config from '../config'
 import { getSIV, generateGetUTAC } from './report'
 import { sendFeedback, sendContact } from './feedback'
+import { getCSA } from './csa'
 
 export default function getRouter (utacClient) {
   const router = express.Router()
@@ -13,6 +14,7 @@ export default function getRouter (utacClient) {
   router.post('/utac', getUTAC)
   router.post('/feedback', sendFeedback)
   router.post('/contact', sendContact)
+  router.post('/csa', getCSA)
 
   return router
 }

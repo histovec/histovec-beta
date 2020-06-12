@@ -45,6 +45,7 @@ export default new Vuex.Store({
     },
     config: {
       allTabs: false,
+      newPdfLib: true,
       csaAnnulationCi: false,
       dataDate: false,
       utac: false,
@@ -53,6 +54,7 @@ export default new Vuex.Store({
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
+      newPdfLib: ['ctrl', 'alt', 'b'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
       utac: ['ctrl', 'alt', 'o'],

@@ -452,7 +452,3 @@ export default {
 }
 
 </script>
-
-
-logoVehicule
-ctec
