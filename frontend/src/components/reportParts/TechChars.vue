@@ -15,7 +15,7 @@
         <span class="bold txt-small-12">D.1</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ v.ctec.marque }}</span>
+        <span class="info_red txt-small-12">{{ ctec.marque }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -27,7 +27,7 @@
         <span class="bold txt-small-12">D.2</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ v.ctec.tvv }}</span>
+        <span class="info_red txt-small-12">{{ ctec.tvv }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -39,7 +39,7 @@
         <span class="bold txt-small-12">D.3</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ v.ctec.modele }}</span>
+        <span class="info_red txt-small-12">{{ ctec.modele }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -51,7 +51,7 @@
         <span class="bold txt-small-12">D.2.1</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ v.ctec.cnit }}</span>
+        <span class="info_red txt-small-12">{{ ctec.cnit }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -63,7 +63,7 @@
         <span class="bold txt-small-12">&nbsp;</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ v.ctec.couleur }}</span>
+        <span class="info_red txt-small-12">{{ ctec.couleur }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -96,7 +96,7 @@
         <span class="bold txt-small-12">E</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ v.ctec.vin }}</span>
+        <span class="info_red txt-small-12">{{ ctec.vin }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -106,7 +106,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="v.ctec.PT.admissible">
+    <div v-if="ctec.PT.admissible">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PT technique admissible (kg)</span>
@@ -115,12 +115,12 @@
           <span class="bold txt-small-12">F.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.PT.admissible }}</span>
+          <span class="info_red txt-small-12">{{ ctec.PT.admissible }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.PT.AC">
+    <div v-if="ctec.PT.AC">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PTAC (kg)</span>
@@ -129,12 +129,12 @@
           <span class="bold txt-small-12">F.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.PT.AC }}</span>
+          <span class="info_red txt-small-12">{{ ctec.PT.AC }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.PT.RA">
+    <div v-if="ctec.PT.RA">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PTRA (kg)</span>
@@ -143,12 +143,12 @@
           <span class="bold txt-small-12">F.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.PT.RA }}</span>
+          <span class="info_red txt-small-12">{{ ctec.PT.RA }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.PT.admissible || v.ctec.PT.admissible || v.ctec.PT.AC || v.ctec.PT.RA">
+    <div v-if="ctec.PT.admissible || ctec.PT.admissible || ctec.PT.AC || ctec.PT.RA">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -156,7 +156,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.PT.service">
+    <div v-if="ctec.PT.service">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PT en service (kg)</span>
@@ -165,12 +165,12 @@
           <span class="bold txt-small-12">G</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.PT.service }}</span>
+          <span class="info_red txt-small-12">{{ ctec.PT.service }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.PT.AV">
+    <div v-if="ctec.PT.AV">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PTAV (kg)</span>
@@ -179,12 +179,12 @@
           <span class="bold txt-small-12">G.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.PT.AV }}</span>
+          <span class="info_red txt-small-12">{{ ctec.PT.AV }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.PT.service || v.ctec.PT.AV">
+    <div v-if="ctec.PT.service || ctec.PT.AV">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -192,7 +192,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.categorie">
+    <div v-if="ctec.categorie">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Catégorie (Ce)</span>
@@ -201,12 +201,12 @@
           <span class="bold txt-small-12">J</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.categorie }}</span>
+          <span class="info_red txt-small-12">{{ ctec.categorie }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.genre">
+    <div v-if="ctec.genre">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Genre (National)</span>
@@ -215,12 +215,12 @@
           <span class="bold txt-small-12">J.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.genre }}</span>
+          <span class="info_red txt-small-12">{{ ctec.genre }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.carrosserie.ce">
+    <div v-if="ctec.carrosserie.ce">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Carrosserie (Ce)</span>
@@ -229,12 +229,12 @@
           <span class="bold txt-small-12">J.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.carrosserie.ce }}</span>
+          <span class="info_red txt-small-12">{{ ctec.carrosserie.ce }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.carrosserie.national">
+    <div v-if="ctec.carrosserie.national">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Carrosserie (National)</span>
@@ -243,7 +243,7 @@
           <span class="bold txt-small-12">J.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.carrosserie.national }}</span>
+          <span class="info_red txt-small-12">{{ ctec.carrosserie.national }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -254,7 +254,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="v.ctec.reception.numero">
+    <div v-if="ctec.reception.numero">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Numéro de réception</span>
@@ -263,7 +263,7 @@
           <span class="bold txt-small-12">K</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.reception.numero }}</span>
+          <span class="info_red txt-small-12">{{ ctec.reception.numero }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -274,7 +274,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.puissance.cylindres">
+    <div v-if="ctec.puissance.cylindres">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Cylindrée (cm3)</span>
@@ -283,12 +283,12 @@
           <span class="bold txt-small-12">P.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.puissance.cylindres }}</span>
+          <span class="info_red txt-small-12">{{ ctec.puissance.cylindres }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.puissance.nette">
+    <div v-if="ctec.puissance.nette">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Puissance nette max (kW)</span>
@@ -297,12 +297,12 @@
           <span class="bold txt-small-12">P.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.puissance.nette }}</span>
+          <span class="info_red txt-small-12">{{ ctec.puissance.nette }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.energie">
+    <div v-if="ctec.energie">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Energie</span>
@@ -311,12 +311,12 @@
           <span class="bold txt-small-12">P.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.energie }}</span>
+          <span class="info_red txt-small-12">{{ ctec.energie }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.puissance.cv">
+    <div v-if="ctec.puissance.cv">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Puissance CV</span>
@@ -325,7 +325,7 @@
           <span class="bold txt-small-12">P.6</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.puissance.cv }}</span>
+          <span class="info_red txt-small-12">{{ ctec.puissance.cv }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -336,7 +336,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="v.ctec.puissance.norm">
+    <div v-if="ctec.puissance.norm">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Puissance / masse (kW/kg)</span>
@@ -345,7 +345,7 @@
           <span class="bold txt-small-12">Q</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.puissance.norm }}</span>
+          <span class="info_red txt-small-12">{{ ctec.puissance.norm }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -356,7 +356,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.places.assis">
+    <div v-if="ctec.places.assis">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Places assises</span>
@@ -365,12 +365,12 @@
           <span class="bold txt-small-12">S.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.places.assis }}</span>
+          <span class="info_red txt-small-12">{{ ctec.places.assis }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.places.debout">
+    <div v-if="ctec.places.debout">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Places debout</span>
@@ -379,7 +379,7 @@
           <span class="bold txt-small-12">S.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.places.debout }}</span>
+          <span class="info_red txt-small-12">{{ ctec.places.debout }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -390,7 +390,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="v.ctec.db">
+    <div v-if="ctec.db">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Niveau sonore (db(A))</span>
@@ -399,12 +399,12 @@
           <span class="bold txt-small-12">U.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.db }}</span>
+          <span class="info_red txt-small-12">{{ ctec.db }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.moteur">
+    <div v-if="ctec.moteur">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Vitesse moteur (min-1)</span>
@@ -413,12 +413,12 @@
           <span class="bold txt-small-12">U.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.moteur }}</span>
+          <span class="info_red txt-small-12">{{ ctec.moteur }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.db || v.ctec.moteur">
+    <div v-if="ctec.db || ctec.moteur">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -426,7 +426,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.co2">
+    <div v-if="ctec.co2">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">CO2 (g/km)</span>
@@ -435,12 +435,12 @@
           <span class="bold txt-small-12">V.7</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.co2 }}</span>
+          <span class="info_red txt-small-12">{{ ctec.co2 }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="v.ctec.environnement">
+    <div v-if="ctec.environnement">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Classe environnement (CE)</span>
@@ -449,7 +449,7 @@
           <span class="bold txt-small-12">V.9</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ v.ctec.environnement }}</span>
+          <span class="info_red txt-small-12">{{ ctec.environnement }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -461,7 +461,7 @@
 
 export default {
   props: {
-    v: {
+    ctec: {
       type: Object,
       default: () => {}
     }

@@ -19,9 +19,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .modal-wrapper {
@@ -32,12 +32,12 @@
 
 .modal-container {
   width: 300px;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -76,23 +76,26 @@
 }
 
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
+
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
-.slide-fade-enter, .slide-fade-leave-to
+
+.slide-fade-enter,
+ .slide-fade-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateX(100px);
   opacity: 0;
 }
 
 @media only screen and (max-width: 767px) {
-.pvm0 { margin-top: -50px; }
+  .pvm0 { margin-top: -50px; }
 }
 
 .btn-mon-avis {
-  color: #2C3079;
+  color: #2c3079;
   font-size: 15px;
   background-color: white;
   border-radius: 20px;
@@ -101,7 +104,7 @@
 }
 
 .btn-mon-avis > a {
-  color: #2C3079;
+  color: #2c3079;
   text-decoration: none;
 }
 

@@ -73,7 +73,6 @@
   "CORRECTION_VEHICULE": "Correction des informations du véhicule",
   "CORRECTION_TITRE": "Correction de l'état de remise du titre",
   "CORRECTION_AUTORISATION": "Correction des informations sur l'autorisation",
-  "ANNULATION_OPERATION": "Annulation d'une opération",
   "PROD_DOC": "Production de document",
   "INSCRIRE_OVE": "Opposition dans le cadre de la procédure de réparation contrôlée",
   "LEVER_OVE": "Levée d'une opposition véhicule endommagé",
@@ -129,6 +128,5 @@
   "OUTREPASSER_REFCNIT_RUBVARIABLES": "Outrepasser : Saisie de rubriques variables du CNIT hors limites",
   "OUTREPASSER_REFCNIT_MENTIONVARIABLE": "Outrepasser : Mentions variables du CNIT absentes ou hors limites",
   "BATCH_VEHICULES_IMPORTES": "Fournir des fichiers de véhicules étrangers immatriculés en France",
-  "EDIT_ETAT_REGIE": "Edition d'un état de régie",
-  "REMISE_TITRE_PREF": "Remise du titre en préfecture"
+  "EDIT_ETAT_REGIE": "Edition d'un état de régie"
 }

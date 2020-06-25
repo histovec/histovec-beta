@@ -24,7 +24,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%"
+            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -59,15 +59,15 @@
           <div class="row">
             <div class="col-sm-6">
               <div
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="!v.administratif.isAnnulationCI"
                 class="alert alert-icon alert-info"
                 role="alert"
               >
-                <i :class="'fa fa-' + v.logo_vehicule"></i>
+                <i :class="'fa fa-' + v.logoVehicule"></i>
                 Numéro - Plaque d'immatriculation : {{ v.plaque }}
               </div>
               <div
-                v-if="v.administratif.annulation === 'Oui'"
+                v-if="v.administratif.isAnnulationCI"
                 class="alert alert-icon alert-danger"
                 role="alert"
               >
@@ -77,21 +77,21 @@
             </div>
             <div class="col-sm-6">
               <div
-                v-if="v.date_update && v.date_update != '01/01/1900'"
+                v-if="v.dateUpdate && v.dateUpdate != DEFAULT_DATE_UPDATE"
                 class="alert alert-icon alert-warning"
                 role="alert"
               >
                 <i class="fa fa-calendar-check-o"></i>
                 <span v-if="$store.state.config.dataDate">
                   Informations du ministère de l'Intérieur datant du
-                  <strong>{{ v.date_update }}</strong>
+                  <strong>{{ v.dateUpdate }}</strong>
                 </span>
                 <span v-else>
                   Informations connues d'HistoVec à ce jour
                 </span>
               </div>
               <div
-                v-if="!$store.state.config.dataDate && v.date_update && v.date_update === '01/01/1900'"
+                v-if="!$store.state.config.dataDate && v.dateUpdate && v.dateUpdate === DEFAULT_DATE_UPDATE"
                 class="alert alert-icon alert-warning"
                 role="alert"
               >
@@ -115,7 +115,7 @@
               role="tablist"
             >
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="!v.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'abstract'}]"
               >
                 <a
@@ -127,19 +127,19 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="!v.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'vehicle'}]"
               >
                 <a
                   class="clickable"
                   @click="tab = 'vehicle'"
                 >
-                  <i :class="'fa fa-' + v.logo_vehicule + ' pr-10'"></i>
+                  <i :class="'fa fa-' + v.logoVehicule + ' pr-10'"></i>
                   Véhicule
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="!v.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'holder'}]"
               >
                 <a
@@ -151,7 +151,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="!v.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'situation'}]"
               >
                 <a
@@ -163,7 +163,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui'"
+                v-if="!v.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'history'}]"
               >
                 <a
@@ -175,7 +175,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
+                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui' && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -211,7 +211,7 @@
                 </a>
               </li>
               <li
-                v-if="v.administratif.annulation !== 'Oui' && holder"
+                v-if="!v.administratif.isAnnulationCI && holder"
                 :class="[{'active' : tab === 'send'}]"
               >
                 <a
@@ -245,7 +245,7 @@
               >
                 <tech-chars
                   v-if="tab === 'vehicle'"
-                  :v="v"
+                  :ctec="v.ctec"
                 >
                 </tech-chars>
               </div>
@@ -256,7 +256,8 @@
               >
                 <license
                   v-if="tab === 'holder'"
-                  :v="v"
+                  :certificat="v.certificat"
+                  :titulaire="v.titulaire"
                 >
                 </license>
               </div>
@@ -267,8 +268,9 @@
               >
                 <administrative
                   v-if="tab === 'situation'"
-                  :v="v"
                   :holder="holder"
+                  :opposition-section="v.administratif.opposition"
+                  :report-labels="v.administratif.reportLabels"
                 >
                 </administrative>
               </div>
@@ -364,6 +366,7 @@ const AdministrativeCertificate = loadView('AdministrativeCertificate')
 const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
+import { DEFAULT_DATE_UPDATE } from '../constants/v'
 import { isSubjectToTechnicalControl } from '../utils/vehicle/technicalControl.js'
 
 
@@ -409,7 +412,9 @@ export default {
       vin: '',
       conf: [],
       timeout: 10000,
-      ratingModalTimer: 120000
+      ratingModalTimer: 120000,
+
+      DEFAULT_DATE_UPDATE,
     }
   },
   computed: {
@@ -447,7 +452,7 @@ export default {
       return this.$route.params.typeImmatriculation
     },
     v () {
-      return siv.siv(this.$store.state.siv.v)
+      return siv.processRawData(this.$store.state.siv.v)
     },
     holder () {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
@@ -480,13 +485,13 @@ export default {
 
     await this.getSIV()
 
-    if (this.$store.state.siv.v.annulation_ci === 'OUI') {
+    if (this.v.administratif.isAnnulationCI) {
       this.tab = 'csa'
     }
 
     const isUtacActivated = this.$store.state.config.v1 && this.$store.state.config.utac
     const isGetSIVSucceeded = this.status === 'ok' && this.v
-    if (isUtacActivated && isGetSIVSucceeded && this.v.administratif.annulation !== 'Oui') {
+    if (isUtacActivated && isGetSIVSucceeded && !this.v.administratif.isAnnulationCI) {
       const {
         ctec: {
           genre,

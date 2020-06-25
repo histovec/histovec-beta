@@ -207,10 +207,10 @@ import { detect } from 'detect-browser'
 import npmConf from '../package.json'
 import apiConf from '@/assets/json/backend.json'
 import localization from '@/assets/json/lang.json'
-import operations from '@/assets/json/operations.json'
-import usages from '@/assets/json/usages.json'
-import synthese from '@/assets/json/synthese.json'
+import syntheseMapping from '@/assets/json/synthese.json'
 import statusMessages from '@/assets/json/status.json'
+import usagesMapping from '@/assets/json/usages.json'
+
 import contact from '@/assets/json/contact.json'
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
@@ -237,11 +237,10 @@ Vue.mixin({
       appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
       apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
-      localization: localization,
-      operations: operations,
-      usages: usages,
-      synthese: synthese,
-      statusMessages: statusMessages,
+      localization,
+      syntheseMapping,
+      statusMessages,
+      usagesMapping,
       lang: localization.default,
       show: false
     }

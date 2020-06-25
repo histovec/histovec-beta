@@ -70,7 +70,7 @@ const writeVehicleIdentification = (
 		'Numéro VIN du véhicule (ou numéro de série) :',
 		'Marque :'
 	]
-	writeWithSpacing(pdf, FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.L, labels)
+	writeWithSpacing(pdf, FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.S, labels)
 
 	const values = [
 		plaque.toUpperCase() || MISSING_VALUE,
@@ -78,7 +78,7 @@ const writeVehicleIdentification = (
 		vin || MISSING_VALUE,
 		marque || MISSING_VALUE
 	]
-	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.L, values)
+	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.S, values)
 
 	return lastY + FONT_SPACING.M
 }
@@ -232,12 +232,16 @@ const addPage = (pdf, writeHeaderCallback, writeFooterCallback, title) => {
 }
 
 const writeHistory = (
-	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, writeFooterCallback, writeHeaderCallback,
+	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, plaque, writeFooterCallback, writeHeaderCallback,
 	{ dryRun, forceTwoColumns, nextPageSymbol }={ dryRun: false, forceTwoColumns: false, nextPageSymbol: false },
 	{ totalPageCount }={ totalPageCount: null }
 ) => {
 	if (!dryRun) {
 		writeTitle(pdf, FIRST_COLUMN_X, y, 'Historique du véhicule')
+	} else {
+		// force a fake write to configure the method pdf.splitTextToSize while using dryRun
+		// (this method need some text on pdf to know font size and correctly split text)
+		writeTitle(pdf, FIRST_COLUMN_X, -10, 'Fake')
 	}
 	const topY = y + FONT_SPACING.L
 	const historyItemSize = FONT_SPACING.S
@@ -258,7 +262,7 @@ const writeHistory = (
 		pageNumber = parseInt(pageNumberStr)
 		if (!dryRun) {
 			if (pageNumber > 1) {
-				addPage(pdf, writeHeaderCallback, writeFooterCallback, 'Historique du véhicule (suite)')
+				addPage(pdf, writeHeaderCallback, writeFooterCallback, `Suite historique du véhicule - ${plaque}`)
 			}
 			writePageNumber(pdf, pageNumber, totalPageNumber)
 		}
@@ -313,7 +317,7 @@ const writeHistory = (
 	}
 
 	return {
-		y: lastY + FONT_SPACING.L,
+		y: lastY + FONT_SPACING.M,
 		currentPageNumber: pageNumber,
 		firstPageColumnsCount,
 		hasSymbol,
@@ -340,7 +344,7 @@ const writeSituationColumn = (
 				style: FONT_STYLES.BOLD
 			})
 		}
-		offset = offset + FONT_SPACING.XS * (item.key.split('\n').length - 1) + FONT_SPACING.XS
+		offset = offset + FONT_SPACING.XS * (item.key.split('\n').length - 1) + FONT_SPACING.S
 
 		item.values.forEach((value, i) => {
 			const valueX = x + HORIZONTAL_TABULATION.S
@@ -349,7 +353,7 @@ const writeSituationColumn = (
 			if (!dryRun) {
 				writeText(pdf, valueX, valueY, value)
 			}
-			const spacing = (i === item.values.length-1) ? FONT_SPACING.M : FONT_SPACING.XS
+			const spacing = (i === item.values.length-1) ? FONT_SPACING.M : FONT_SPACING.S
 			offset = offset + FONT_SPACING.XS * (value.split('\n').length - 1) + spacing
 		})
 	})
@@ -360,33 +364,48 @@ const writeSituationColumn = (
 
 const writeFirstSituationColumn = (
 	pdf, previousY,
-	{ otci, pv, ove, hasPVE, saisie, gage, x, y },
+	{
+		dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines, otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines, ovesCurrentStatusLines, proceduresReparationControleeStatus,
+		x, y
+	},
 	{ dryRun }={ dryRun: false }
 ) => {
+	const	proceduresReparationControlee = proceduresReparationControleeStatus ?
+		[{
+			key: '- Procédure de réparation contrôlée',
+			values: [
+				proceduresReparationControleeStatus,
+			]
+		}] : []
+
+	const	oveisCurrentStatus = oveisCurrentStatusLines ?
+		[{
+			key: '- Opposition véhicule économiquement irréparable',
+			values: oveisCurrentStatusLines
+		}] : []
+
+	const	ovesCurrentStatus = (ovesCurrentStatusLines || !oveisCurrentStatusLines) ?
+		[{
+			key: '- Opposition véhicule endommagé',
+			values: ovesCurrentStatusLines || ['Aucun']
+		}] : []
+
 	const situationItems = [
 		{
 			key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
-			values: [
-				otci === 'Aucune' ? 'Aucune' : (pv ? 'PV en attente' : 'Oui'),
-			]
+			values:	otcisPvCurrentStatusLines[0] === 'Aucune' ? otcisCurrentStatusLines : otcisPvCurrentStatusLines,
 		},
-		{
-			key: '- Procédure de réparation contrôlée',
-			values: [
-				ove !== 'Aucune' ? 'Oui' : (hasPVE ? 'Oui' : 'Aucune')
-			]
-		},
+		...oveisCurrentStatus,
+		...ovesCurrentStatus,
+		...proceduresReparationControlee,
 		{
 			key: '- Déclaration valant saisie',
-			values: [
-				saisie
-			]
+			values: dvsCurrentStatusLines,
 		},
 		{
 			key: '- Gage',
-			values: [
-				gage
-			]
+			values:	gagesCurrentStatusLines
 		}
 	]
 
@@ -395,44 +414,45 @@ const writeFirstSituationColumn = (
 
 const writeSecondSituationColumn = (
 	pdf, previousY,
-	{ annulation, volVehicule, volTitre, perteTitre, duplicataTitre, suspension, suspensions, x, y },
+	{
+		annulationCurrentStatus, volVehicule, volTitre, perteTitre, duplicataTitre,
+		suspensionsCurrentStatusLines, x, y
+	},
 	{ dryRun }={ dryRun: false }
 ) => {
 	const situationItems = [
 		{
 			key: '- Immatriculation suspendue',
-			values: [
-				(suspension !== 'Non') ? suspensions.join(', ') : 'Non'
-			]
+			values: suspensionsCurrentStatusLines
 		},
 		{
 			key: '- Immatriculation annulée',
 			values: [
-				annulation
+				annulationCurrentStatus,
 			]
 		},
 		{
 			key: '- Véhicule volé',
 			values: [
-				volVehicule === 'NON' ? 'Non' : 'Oui'
+				volVehicule === 'NON' ? 'Non' : 'Oui',
 			]
 		},
 		{
 			key: '- Certificat d\'immatriculation volé',
 			values: [
-				volTitre === 'NON' ? 'Non' : 'Oui'
+				volTitre === 'NON' ? 'Non' : 'Oui',
 			]
 		},
 		{
 			key: '- Certificat d\'immatriculation perdu',
 			values: [
-				perteTitre === 'NON' ? 'Non' : 'Oui'
+				perteTitre === 'NON' ? 'Non' : 'Oui',
 			]
 		},
 		{
 			key: '- Certificat d\'immatriculation duplicata',
 			values: [
-				duplicataTitre === 'NON' ? 'Non' : 'Oui'
+				duplicataTitre === 'NON' ? 'Non' : 'Oui',
 			]
 		}
 	]
@@ -443,36 +463,48 @@ const writeSecondSituationColumn = (
 const writeSituation = (
 	pdf, y,
 	{
-		annulation,
+		annulationCurrentStatus,
 		duplicataTitre,
-		gage,
-		hasPVE,
-		otci,
-		ove,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
+		ovesCurrentStatusLines,
 		perteTitre,
-		pv,
-		saisie,
-		suspension,
-		suspensions,
+		plaque,
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule
 	},
 	{ dryRun }={ dryRun: false }
 ) => {
-	const spacing = FONT_SPACING.L
+	const spacing = FONT_SPACING.M
 
 	if (!dryRun) {
-		writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
+		if (plaque) {
+			writeTitle(pdf, FIRST_COLUMN_X, y, `Situation administrative du véhicule - ${plaque}`)
+		} else {
+			writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
+		}
 	}
 
 	const lastFirstY = writeFirstSituationColumn(
 		pdf, y,
-		{ gage, hasPVE, otci, ove, pv, saisie, x: FIRST_COLUMN_X, y: spacing },
+		{
+			dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines,
+			otcisPvCurrentStatusLines, oveisCurrentStatusLines, ovesCurrentStatusLines,
+			proceduresReparationControleeStatus, x: FIRST_COLUMN_X, y: spacing
+		},
 		{ dryRun }
 	)
 	const lastSecondY = writeSecondSituationColumn(
 		pdf, y,
-		{ annulation, duplicataTitre, perteTitre, suspension, suspensions, volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing },
+		{
+			annulationCurrentStatus, duplicataTitre, perteTitre, suspensionsCurrentStatusLines,
+			volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing
+		},
 		{ dryRun }
 	)
 
@@ -497,7 +529,8 @@ export const writeContent = (
 	pdf,
 	// Complete CSA and annulation
 	{
-		annulation,
+		isAnnulationCI,
+		annulationCurrentStatus,
 		dateAnnulation,
 		histoVecLogo,
 		marianneImage,
@@ -512,16 +545,16 @@ export const writeContent = (
 	// Only complete CSA
 	{
 		duplicataTitre,
-		gage,
-		hasPVE,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
 		historyItems,
-		ove,
-		otci,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
+		ovesCurrentStatusLines,
 		perteTitre,
-		pv,
-		saisie,
-		suspension,
-		suspensions,
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
 	}={}
@@ -539,7 +572,7 @@ export const writeContent = (
 	}
 
 	const bottomHeaderY = writeHeaderCallback(pdf)
-	if (annulation === 'Oui') {
+	if (isAnnulationCI) {
 		const vehicleIdentificationAnnulationY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
 		const annulationY = vehicleIdentificationAnnulationY + FONT_SPACING.XL * 2
 		writeAnnulation(pdf, annulationY, dateAnnulation)
@@ -548,11 +581,9 @@ export const writeContent = (
 
 		return
 	}
-	const vehicleIdentificationY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
-	const historyTopY = vehicleIdentificationY + FONT_SPACING.S
+	const vehicleIdentificationBottomY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
 
 	const { topY: footerTopY } = writeFooterCallback(pdf)
-	const footerWithMarginTopY = footerTopY - FONT_SPACING.S
 
 	const nextPageTopY = bottomHeaderY
 	const historyNextPageTopY = nextPageTopY + FONT_SIZES.S  // Adding history title dynamically for each new page
@@ -569,74 +600,82 @@ export const writeContent = (
 		=> we know if we need to force two columns write for history
 	*/
 
-	const simulatedSituationBottomY = writeSituation(pdf, historyTopY, {
-		annulation,
-		duplicataTitre,
-		gage,
-		hasPVE,
-		otci,
-		ove,
-		perteTitre,
-		pv,
-		saisie,
-		suspension,
-		suspensions,
-		volTitre,
-		volVehicule
-	}, { dryRun: true })
+
+	const simulatedSituationBottomY = writeSituation(
+		pdf, vehicleIdentificationBottomY,
+		{
+			annulationCurrentStatus,
+			duplicataTitre,
+			dvsCurrentStatusLines,
+			gagesCurrentStatusLines,
+			otcisCurrentStatusLines,
+			otcisPvCurrentStatusLines,
+			oveisCurrentStatusLines,
+			ovesCurrentStatusLines,
+			perteTitre,
+			plaque,
+			proceduresReparationControleeStatus,
+			suspensionsCurrentStatusLines,
+			volTitre,
+			volVehicule
+		},
+		{ dryRun: true }
+	)
 
 	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
 	// 1 - know if document would fit into one page, in order to force 2 columns history or not
 	const {
 		firstPageColumnsCount,
-		currentPageNumber: lastPageNumber,
-		y: simulatedHistoryWithMarginY,
+		currentPageNumber: simulatedCurrentPageNumber,
+		y: simulatedHistoryWithMarginBottomY,
 	} = writeHistory(
-		pdf, simulatedSituationBottomY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		pdf, simulatedSituationBottomY, footerTopY, historyNextPageTopY,
+		historyItems, plaque, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: true }
 	)
 
 	const forceTwoColumns = firstPageColumnsCount == 2
-	const isSituationSectionOnNewPage = simulatedHistoryWithMarginY > footerWithMarginTopY || lastPageNumber > 1
+	const lastPageNumber = simulatedHistoryWithMarginBottomY > footerTopY ? simulatedCurrentPageNumber + 1 : simulatedCurrentPageNumber
+	const isSituationSectionOnNewPage = simulatedHistoryWithMarginBottomY > footerTopY || lastPageNumber > 1
 	/**********************************************************************/
 
 	// Since we have all needed informations, let's write the pdf file for real!
 	const {
-		y: historyBottomY,
+		y: historyWithMarginBottomY,
 		currentPageNumber,
 		hasSymbol,
 	} = writeHistory(
-		pdf, historyTopY, footerWithMarginTopY, historyNextPageTopY, historyItems, writeFooterCallback, writeHeaderCallback,
+		pdf, vehicleIdentificationBottomY, footerTopY, historyNextPageTopY,
+		historyItems, plaque, writeFooterCallback, writeHeaderCallback,
 		{ dryRun: false, forceTwoColumns, nextPageSymbol: isSituationSectionOnNewPage },
 		{ totalPageCount: lastPageNumber }
 	)
 
-	const historyBottomWithMarginY = historyBottomY + FONT_SPACING.M
-
 	if (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) {
 		if (!hasSymbol) {
-			writeNextPageSymbol(pdf, historyBottomWithMarginY - FONT_SPACING.S)
+			writeNextPageSymbol(pdf, historyWithMarginBottomY - FONT_SPACING.S)
 		}
 		addPage(pdf, writeHeaderCallback, writeFooterCallback)
 		writePageNumber(pdf, lastPageNumber, lastPageNumber)
 	}
 
-	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyBottomWithMarginY
+	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyWithMarginBottomY
 
 	writeSituation(
 		pdf, situationTopY,
 		{
-			annulation,
+			annulationCurrentStatus,
 			duplicataTitre,
-			gage,
-			hasPVE,
-			otci,
-			ove,
+			dvsCurrentStatusLines,
+			gagesCurrentStatusLines,
+			otcisCurrentStatusLines,
+			otcisPvCurrentStatusLines,
+			oveisCurrentStatusLines,
+			ovesCurrentStatusLines,
 			perteTitre,
-			pv,
-			saisie,
-			suspension,
-			suspensions,
+			plaque: isSituationSectionOnNewPage ? plaque : '',
+			proceduresReparationControleeStatus,
+			suspensionsCurrentStatusLines,
 			volTitre,
 			volVehicule
 		}
