@@ -45,6 +45,7 @@ RUN if [ -z "${NPM_VERBOSE}" ]; then\
       npm install --verbose; \
     fi
 
+RUN npm config set audit-level moderate
 RUN if [ -z "${NPM_FIX}" ]; then \
       npm audit --registry=https://registry.npmjs.org; \
     else \
@@ -113,7 +114,7 @@ COPY package.json ./
 # Install production dependencies and clean cache
 RUN npm --no-git-tag-version version ${APP_VERSION} && \
     npm install --production && \
-    npm config set audit-level high && \
+    npm config set audit-level moderate && \
     npm audit --json --registry=https://registry.npmjs.org || ${NPM_AUDIT_DRY_RUN:-false} && \
     npm cache clean --force
 
