@@ -9,7 +9,6 @@ ARG npm_registry
 ARG sass_registry
 ARG MIRROR_DEBIAN
 ARG NPM_GIT
-ARG NPM_FIX
 ARG NPM_LATEST
 ARG NPM_VERBOSE
 ARG app_path
@@ -52,11 +51,8 @@ RUN if [ -z "${NPM_VERBOSE}" ]; then\
     fi
 
 RUN npm config set audit-level moderate
-RUN if [ -z "${NPM_FIX}" ]; then \
-      npm audit --registry=https://registry.npmjs.org; \
-    else \
-      npm audit fix --registry=https://registry.npmjs.org; \
-    fi
+RUN npm audit --registry=https://registry.npmjs.org;
+
 
 COPY run.sh .
 RUN chmod +x run.sh

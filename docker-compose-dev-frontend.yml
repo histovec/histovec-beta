@@ -57,7 +57,6 @@ services:
         app_path: /${APP}
         app_name: ${APP}
         app_ver: ${APP_VERSION}
-        NPM_FIX: ${NPM_FIX}
         NPM_LATEST: ${NPM_LATEST}
         NPM_GIT: ${NPM_GIT}
         NPM_VERBOSE: ${NPM_VERBOSE}
