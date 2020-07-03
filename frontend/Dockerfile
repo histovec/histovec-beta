@@ -52,11 +52,11 @@ RUN if [ -z "${NPM_VERBOSE}" ]; then\
     fi
 
 RUN npm config set audit-level moderate
-RUN if [ -z "${NPM_FIX}" ]; then \
-      npm audit --registry=https://registry.npmjs.org; \
-    else \
-      npm audit fix --registry=https://registry.npmjs.org; \
-    fi
+# RUN if [ -z "${NPM_FIX}" ]; then \
+RUN npm audit --registry=https://registry.npmjs.org;
+    # else \
+    #   npm audit fix --registry=https://registry.npmjs.org; \
+    # fi
 
 COPY run.sh .
 RUN chmod +x run.sh
