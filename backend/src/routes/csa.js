@@ -1,3 +1,5 @@
+import { searchSIV } from './report'
+
 export async function getCSA (req, res) {
   let response = await searchSIV(req.body.id, req.body.uuid)
   if (response.status === 200) {

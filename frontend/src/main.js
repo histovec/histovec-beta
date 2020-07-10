@@ -7,6 +7,9 @@ import router from './router'
 import store from './store'
 import './plugins'
 
+import { generateCsa } from '@sebastien.nicolas/csa-as-pdf'
+generateCsa()
+
 import apiConf from './assets/json/backend.json'
 
 Vue.config.productionTip = false

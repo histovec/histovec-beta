@@ -23,7 +23,7 @@ function immatNorm (plaque) {
   return p
 }
 
-async function searchSIV (id, uuid) {
+export async function searchSIV (id, uuid) {
   try {
     if (checkUuid(uuid) && checkId(id)) {
       const response = await elasticsearch.Client.search({
