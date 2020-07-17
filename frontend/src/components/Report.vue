@@ -325,13 +325,25 @@
                 class="tab-pane fade"
                 :class="[{'in active' : tab === 'csa'}]"
               >
-                <administrative-certificate
-                  v-if="tab === 'csa'"
-                  :v="v"
-                  :url="url"
-                  :base-url="baseUrl"
-                >
-                </administrative-certificate>
+                <div v-if="!$store.state.config.newPdfLib">
+                  <administrative-certificate-old
+                    v-if="tab === 'csa'"
+                    :v="v"
+                    :url="url"
+                    :base-url="baseUrl"
+                  >
+                  </administrative-certificate-old>
+                </div>
+
+                <div v-if="$store.state.config.newPdfLib">
+                  <administrative-certificate
+                    v-if="tab === 'csa'"
+                    :v="v"
+                    :url="url"
+                    :base-url="baseUrl"
+                  >
+                  </administrative-certificate>
+                </div>
               </div>
             </div>
           </div>
@@ -363,6 +375,8 @@ import History from './reportParts/History.vue'
 import TechControl from './reportParts/TechControl.vue'
 const TechControlGraph = loadView('TechControlGraph')
 const AdministrativeCertificate = loadView('AdministrativeCertificate')
+const AdministrativeCertificateOld = loadView('AdministrativeCertificateOld')
+
 const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
@@ -401,6 +415,7 @@ export default {
     TechControl,
     TechControlGraph,
     AdministrativeCertificate,
+    AdministrativeCertificateOld,
     Share,
     Status
   },
