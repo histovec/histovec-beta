@@ -59,7 +59,6 @@ service.get(`/${config.apiPath}/auth`, async (req, res) => {
   })
 })
 
-console.log(`-- /${config.apiPath}/healthcheck`)
 
 service.get(`/${config.apiPath}/healthcheck`, async (req, res) => {
   res.setHeader("Content-Type", "application/json")
@@ -70,7 +69,7 @@ service.get(`/${config.apiPath}/healthcheck`, async (req, res) => {
 
 service.post(`/${config.apiPath}/immat/search`, async (req, res) => {
   res.setHeader("Content-Type", "application/json")
-  const { immat } = req.body.data
+  const { immat } = req.body
   await latencyResSend(req, res, getCT(immat))
 })
 

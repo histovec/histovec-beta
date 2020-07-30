@@ -1,6 +1,8 @@
 import api from '@/api'
 import CryptoJS from 'crypto-js'
 
+import { labelizeTechnicalControls }  from '../../utils/vehicle/technicalControlFormat'
+
 export default {
   state: {
     ctData: {},
@@ -8,7 +10,10 @@ export default {
   },
   mutations: {
     updateCT (state, ctData) {
-      state.ctData = ctData
+      state.ctData = {
+        ...ctData,
+        ct: labelizeTechnicalControls(ctData.ct),
+      }
     },
     updateToken (state, token) {
       state.token = token

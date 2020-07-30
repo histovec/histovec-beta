@@ -8,15 +8,23 @@ import { techLogger } from '../util'
 
 module.exports.UTACClient = class UTACClient {
   constructor () {
-    const ca = config.isProd ? readFileSync(config.utac.inesPem) : readFileSync(config.utac.utacPem)
+    // /!\ boolean setting is passed as string /!\
+    // @todo: we should use typed yaml to load settings
+    const isFakedUtacApi = config.utac.isFakedApi === true || config.utac.isFakedApi === 'true'
+    const baseURL = isFakedUtacApi ? config.utac.fakeApiUrl : config.utac.apiUrl
+
     const options = {
-      httpsAgent: new HttpsAgent({
-        keepAlive: true,
-        ca,
-        pfx: readFileSync(config.utac.histovecPfx),
-        passphrase: config.utac.histovecPfxPassphrase,
-      }),
-      baseURL: config.utac.apiUrl,
+      ...(
+        isFakedUtacApi
+          ? {}
+          : { httpsAgent: new HttpsAgent({
+            keepAlive: true,
+            ca: config.isProd ? readFileSync(config.utac.inesPem) : readFileSync(config.utac.utacPem),
+            pfx: readFileSync(config.utac.histovecPfx),
+            passphrase: config.utac.histovecPfxPassphrase,
+          }) }
+      ),
+      baseURL,
       timeout: config.utac.timeout,
       headers: {
         Accepts: 'application/json',

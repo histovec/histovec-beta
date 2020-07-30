@@ -26,7 +26,9 @@ const config = {
   // UTAC api
   utac: {
     isApiActivated: process.env.IS_UTAC_API_ACTIVATED || true, // /!\ value is passed as String
+    isFakedApi: process.env.IS_FAKED_UTAC_API || true, // /!\ value is passed as String
     apiUrl: 'https://histovectest.utac-otc.com/histovec/api/v1.0',
+    fakeApiUrl: process.env.UTAC_URL,
     timeout: process.env.UTAC_TIMEOUT || 30,
     healthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 30,
     authenticateRetrySeconds:

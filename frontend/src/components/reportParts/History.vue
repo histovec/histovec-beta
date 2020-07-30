@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div>
-      Historique des opérations en France
-    </div>
     <div class="row">
       <div class="col-sm-4">
         <span class="txt-small-12"><h6>Date</h6></span>

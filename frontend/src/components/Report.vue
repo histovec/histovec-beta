@@ -195,7 +195,7 @@
                   @click="tab = 'utacGraph'"
                 >
                   <i class="fa fa-line-chart pr-10"></i>
-                  Kilomètres
+                  Kilométrage
                 </a>
               </li>
               <li
@@ -381,7 +381,7 @@ const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
 import { DEFAULT_DATE_UPDATE } from '../constants/v'
-import { isSubjectToTechnicalControl } from '../utils/vehicle/technicalControl.js'
+import { isSubjectToTechnicalControl } from '../utils/vehicle/technicalControlEligibility.js'
 
 
 const statusFromCode = {

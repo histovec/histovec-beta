@@ -1,6 +1,5 @@
 <script>
 
-import labels from '@/assets/json/techControl.json'
 import orderBy from 'lodash.orderby'
 import { Line } from 'vue-chartjs'
 import dayjs from 'dayjs'
@@ -48,20 +47,17 @@ export default {
         tooltips: {
           callbacks: {
             title: (tooltipItem) => {
-              let text = ''
-              text += 'le '
-              text += dayjs(tooltipItem.xLabel).format('DD/MM/YYYY')
-              text += ': '
-              text += Math.round(tooltipItem[0].yLabel * 100) / 100
-              text += ' km'
-              return text
+              const day = dayjs(tooltipItem[0].xLabel).format('DD/MM/YYYY')
+              const km = Math.round(tooltipItem[0].yLabel * 100) / 100
+              const formattedKm = new Intl.NumberFormat().format(km)
+
+              return `Le ${day}: ${formattedKm} km`
             },
             label: (tooltipItem) => {
-              let text = ''
-              text = this.nature[tooltipItem.index]
-              text += ': '
-              text += this.resultat[tooltipItem.index]
-              return text;
+              const nature = this.nature[tooltipItem.index]
+              const resultat = this.resultat[tooltipItem.index]
+
+              return `${nature}: ${resultat}`
             }
           }
         }
@@ -71,13 +67,13 @@ export default {
       return orderBy(this.ct.map((controle) => this.controlToPoint(controle)), ['x'], ['asc'])
     },
     pointColors () {
-      return orderBy(this.ct.map((controle) => this.colors[controle.ct_resultat]), ['x'], ['asc'])
+      return orderBy(this.ct.map((controle) => this.colors[controle.resultat]), ['x'], ['asc'])
     },
     nature () {
-      return orderBy(this.ct.map((controle) => labels.nature[controle.ct_nature]), ['x'], ['asc'])
+      return orderBy(this.ct.map((controle) => controle.natureLabel), ['x'], ['asc'])
     },
     resultat () {
-      return orderBy(this.ct.map((controle) => labels.resultat[controle.ct_resultat]), ['x'], ['asc'])
+      return orderBy(this.ct.map((controle) => controle.resultatLabel), ['x'], ['asc'])
     },
     lineData () {
       if (this.ct.length > 0) {
@@ -108,8 +104,8 @@ export default {
   methods: {
     controlToPoint (controle) {
       const point = {
-        x: dayjs(controle.ct_date, 'DD/MM/YYYY').toDate(),
-        y: ((typeof controle.ct_km) === 'string') ? parseInt(controle.ct_km) : controle.ct_km,
+        x: controle.isoFormatDate,
+        y: controle.km,
       }
 
       return point
