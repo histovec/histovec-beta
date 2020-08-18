@@ -715,6 +715,8 @@ const administratifVehiculeMapping = ({
     suspensions,
     suspensionsMotifs,
 
+    // @TODO: mutualize this part with backend to generate CSA
+    // @TODO: mutualize needed images too
     csaLabels: {
       annulationCurrentStatus,
       dvsCurrentStatusLines: hasDvs ? dvsCurrentStatusLines : ['Aucune'],
