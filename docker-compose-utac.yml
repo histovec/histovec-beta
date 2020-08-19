@@ -13,10 +13,10 @@ services:
         npm_registry: ${NPM_REGISTRY}
         MIRROR_DEBIAN: ${MIRROR_DEBIAN}
     environment:
-      - UTAC_PORT=${UTAC_PORT}
-      - UTAC_API=${UTAC_API}
-      - UTAC_TIMEOUT=${UTAC_TIMEOUT}
-      - UTAC_LATENCY=${UTAC_LATENCY}
+      - FAKE_UTAC_PORT=${FALE_UTAC_PORT}
+      - FAKE_UTAC_API=${FAKE_UTAC_API}
+      - FAKE_UTAC_TIMEOUT=${FAKE_UTAC_TIMEOUT}
+      - FAKE_UTAC_LATENCY=${FAKE_UTAC_LATENCY}
     container_name: ${APP}-utac-fake
     restart: always
 

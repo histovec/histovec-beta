@@ -29,6 +29,7 @@ module.exports.UTACClient = class UTACClient {
       headers: {
         Accepts: 'application/json',
         'Content-Type': 'application/json',
+        ...((config.isProd && !isFakedUtacApi) ? { Token: config.utac.inesToken } : {}),
       },
     }
 

@@ -168,13 +168,28 @@ export REDIS_DATA=${BACKEND}/redis/data-dummy
 export REDIS_PERSIST=86400
 export REDIS_URL=redis
 # utac confs for backend and fake api
-export UTAC_ID_KEY=D2K8qvwHn36yBoENi5
-export UTAC_SCHEME=http
-export UTAC_HOST=utac
-export UTAC_PORT=9000
-export UTAC_API=utac
-export UTAC_LATENCY=500
-export UTAC_TIMEOUT=5000
+export FAKE_UTAC_SCHEME=http
+export FAKE_UTAC_HOST=utac
+export FAKE_UTAC_PORT=9000
+export FAKE_UTAC_API=utac
+export FAKE_UTAC_TIMEOUT=5000
+export FAKE_UTAC_LATENCY=500
+
+# Default values for dev environement
+export IS_UTAC_API_ACTIVATED?=false
+export UTAC_URL?='https://histovectest.utac-otc.com/histovec/api/v1.0'
+export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
+export UTAC_TIMEOUT?=5000
+export UTAC_HEALTHCHECK_RETRY_SECONDS?=30
+export UTAC_AUTHENTICATE_RETRY_SECONDS?=30
+export UTAC_USERNAME?=Ch@ng€-m€
+export UTAC_PASSWORD?=Ch@ng€-m€-t0o
+export HISTOVEC_PFX?=src/utac/histovec.pfx
+export HISTOVEC_PFX_PASSPHRASE?=Ch@ng€-m€-pl€@se
+export INES_PEM?=src/utac/ines.pem
+export INES_TOKEN?=yOu-t0k€n-t0-m€?
+export UTAC_PEM?=src/utac/utac.pem
+
 # packaging
 export DC_DEV_BACKEND = ${DC_PREFIX}-dev-backend.yml
 export DC_BUILD_BACKEND = ${DC_PREFIX}-backend.yml
@@ -203,6 +218,7 @@ include ./artifacts
 
 # combined variables should not be overrided
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
+
 
 ##############################################
 ##############################################
