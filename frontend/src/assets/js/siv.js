@@ -126,7 +126,7 @@ const getVignetteNumero = (genre, categorie, typeCarburant, pollution, datePremI
         return VIGNETTE.UN
       } else if (
         numeroEuro === NUMERO_EURO.TROIS ||
-        (!numeroEuro && motocycle.includes(categorie) && (normalizedDateImmat >= DATE_2007_01_01 && normalizedDateImmat <= new DATE_2016_12_31)) ||
+        (!numeroEuro && motocycle.includes(categorie) && (normalizedDateImmat >= DATE_2007_01_01 && normalizedDateImmat <= DATE_2016_12_31)) ||
         (!numeroEuro && cyclomoteur.includes(categorie) && (normalizedDateImmat >= DATE_2007_01_01 && normalizedDateImmat <= DATE_2017_12_31))
       ) {
         return VIGNETTE.DEUX
