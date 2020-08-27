@@ -22,7 +22,10 @@ elasticsearch.Client.search({
       .then(async () => {
         let utacClient
 
-        if (config.isUtacApiActivated) {
+        // /!\ boolean setting is passed as string /!\
+        // @todo: we should use typed yaml to load settings
+        const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
+        if (isApiActivated) {
           utacClient = new UTACClient()
           await utacClient.initialize()
         }

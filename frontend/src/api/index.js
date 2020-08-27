@@ -247,7 +247,7 @@ export default {
       success: response.success,
       ctData: {
         ct: response.json.ct,
-        updateDate: response.json.updateDate
+        updateDate: response.json.update_date
       }
     }
   },

@@ -5,9 +5,9 @@ const service = require('restana')()
 service.use(bodyParser.json())
 
 const config = {
-  apiPath: process.env.UTAC_API,
-  latency: process.env.UTAC_LATENCY || 300,
-  port: process.env.UTAC_PORT || 9000
+  apiPath: process.env.FAKE_UTAC_API,
+  latency: process.env.FAKE_UTAC_LATENCY || 300,
+  port: process.env.FAKE_UTAC_PORT || 9000
 }
 
 console.log(JSON.stringify({ start_date: DateTime.local(), config: config }))
@@ -59,7 +59,6 @@ service.get(`/${config.apiPath}/auth`, async (req, res) => {
   })
 })
 
-console.log(`-- /${config.apiPath}/healthcheck`)
 
 service.get(`/${config.apiPath}/healthcheck`, async (req, res) => {
   res.setHeader("Content-Type", "application/json")
@@ -70,7 +69,7 @@ service.get(`/${config.apiPath}/healthcheck`, async (req, res) => {
 
 service.post(`/${config.apiPath}/immat/search`, async (req, res) => {
   res.setHeader("Content-Type", "application/json")
-  const { immat } = req.body.data
+  const { immat } = req.body
   await latencyResSend(req, res, getCT(immat))
 })
 

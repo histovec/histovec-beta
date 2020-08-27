@@ -13,15 +13,15 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-function immatNorm (plaque) {
-  if (!plaque || typeof plaque !== 'string') {
-    return undefined
-  }
-  let p = plaque.toUpperCase()
-  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
-  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
-  return p
-}
+// function immatNorm (plaque) {
+//   if (!plaque || typeof plaque !== 'string') {
+//     return undefined
+//   }
+//   let p = plaque.toUpperCase()
+//   p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+//   p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+//   return p
+// }
 
 async function searchSIV (id, uuid) {
   try {
@@ -179,7 +179,7 @@ export function generateGetUTAC (utacClient) {
         const decrypted = decryptXOR(req.body.utacId, config.utacIdKey)
         appLogger.debug({ decrypted })
 
-        const plaque = immatNorm(decrypted)
+        const plaque = 'AA-612-LQ' // immatNorm(decrypted)
         appLogger.debug({ plaque })
 
         try {

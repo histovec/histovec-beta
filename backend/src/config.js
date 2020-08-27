@@ -9,6 +9,7 @@ const config = {
   utacIdKey: process.env.UTAC_ID_KEY || '%Ch4NGm3+',
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
+  isDevelopment: process.env.NODE_ENV === 'development',
   env: process.env.NODE_ENV,
   app: process.env.APP,
   redisUrl: `redis://${process.env.REDIS_URL}`,
@@ -23,12 +24,23 @@ const config = {
   apiPrefix: `/${process.env.APP}/api/v1`,
 
   // UTAC api
-  isUtacApiActivated: process.env.IS_UTAC_API_ACTIVATED || false, // /!\ value is passed as String
-  utacThroughInesUrl: process.env.UTAC_THROUGH_INES_URL,
-  utacTimeout: process.env.UTAC_TIMEOUT || 30,
-  utacHealthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 30,
-  utacAuthenticateRetrySeconds:
-    process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30,
+  utac: {
+    isApiActivated: process.env.IS_UTAC_API_ACTIVATED || true, // /!\ value is passed as String
+    isFakedApi: false, // /!\ value is passed as String
+    apiUrl: process.env.UTAC_URL,
+    fakeApiUrl: process.env.FAKE_UTAC_URL,
+    timeout: process.env.UTAC_TIMEOUT || 30,
+    healthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 30,
+    authenticateRetrySeconds:
+      process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30,
+    username: process.env.UTAC_USERNAME,
+    password: process.env.UTAC_PASSWORD,
+    histovecPfx: process.env.HISTOVEC_PFX || 'src/utac/histovec.pfx',
+    histovecPfxPassphrase: process.env.HISTOVEC_PFX_PASSPHRASE,
+    inesPem: process.env.INES_PEM,
+    inesToken: process.env.INES_TOKEN,
+    utacPem: process.env.UTAC_PEM || 'src/utac/utac.pem',
+  },
 }
 
 export const smtpOptions = {

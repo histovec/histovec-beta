@@ -195,7 +195,7 @@
                   @click="tab = 'utacGraph'"
                 >
                   <i class="fa fa-line-chart pr-10"></i>
-                  Kilomètres
+                  Kilométrage
                 </a>
               </li>
               <li
@@ -381,7 +381,6 @@ const Share = loadView('Share')
 import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
 import { DEFAULT_DATE_UPDATE } from '../constants/v'
-import { isSubjectToTechnicalControl } from '../utils/vehicle/technicalControl.js'
 
 
 const statusFromCode = {
@@ -507,18 +506,9 @@ export default {
     const isUtacActivated = this.$store.state.config.v1 && this.$store.state.config.utac
     const isGetSIVSucceeded = this.status === 'ok' && this.v
     if (isUtacActivated && isGetSIVSucceeded && !this.v.administratif.isAnnulationCI) {
-      const {
-        ctec: {
-          genre,
-          carrosserie: { national: carrosserieNat },
-          PT: { AC: ptac }
-        },
-        certificat: { premier: dateMiseEnService },
-        usage: usages = []
-      } = this.v
-
       const isGetUTACCached = this.ctData
-      if (!isGetUTACCached && isSubjectToTechnicalControl({ genre, carrosserieNat, ptac, dateMiseEnService, usages})) {
+
+      if (!isGetUTACCached) {
         await this.$store.dispatch('getUTAC')
       }
     }
