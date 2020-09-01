@@ -13,7 +13,7 @@ services:
         npm_registry: ${NPM_REGISTRY}
         MIRROR_DEBIAN: ${MIRROR_DEBIAN}
     environment:
-      - FAKE_UTAC_PORT=${FALE_UTAC_PORT}
+      - FAKE_UTAC_PORT=${FAKE_UTAC_PORT}
       - FAKE_UTAC_API=${FAKE_UTAC_API}
       - FAKE_UTAC_TIMEOUT=${FAKE_UTAC_TIMEOUT}
       - FAKE_UTAC_LATENCY=${FAKE_UTAC_LATENCY}
