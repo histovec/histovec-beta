@@ -7,10 +7,12 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.7.0
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.9.0
     container_name: ${APP}-elasticsearch
     environment:
+      - node.name=${APP}-elasticsearch
       - cluster.name=${APP}
+      - cluster.initial_master_nodes=${APP}-elasticsearch
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM}"
     ulimits:

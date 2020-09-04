@@ -27,8 +27,8 @@ function immatNorm (plaque) {
 async function searchSIV (id, uuid) {
   try {
     if (checkUuid(uuid) && checkId(id)) {
-      const response = await elasticsearch.Client.search({
-        index: config.esSIVIndex,
+      const { body: { hits: { hits = [] } } } = await elasticsearch.Client.search({
+        index: config.elasticSearch.SIVIndex,
         body: {
           query: {
             multi_match: {
@@ -42,8 +42,7 @@ async function searchSIV (id, uuid) {
         filter_path: 'hits.hits._source.v',
       })
 
-      const hits = response.hits && response.hits.hits
-      if (hits && hits.length > 0) {
+      if (hits.length > 0) {
         const vehicleData = hits[0]._source && hits[0]._source.v
         if (vehicleData) {
           return {
@@ -55,7 +54,7 @@ async function searchSIV (id, uuid) {
         } else {
           appLogger.error({
             error: 'Bad Content in elasticsearch response',
-            response: response,
+            response: hits,
           })
           return {
             status: 500,
@@ -66,7 +65,7 @@ async function searchSIV (id, uuid) {
       } else {
         appLogger.warn({
           error: 'No hit',
-          response: response,
+          response: hits,
         })
         return {
           status: 404,
