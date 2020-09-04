@@ -5,23 +5,27 @@ import { sendMailToSupport } from '../mail'
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export async function sendContact (req, res) {
+  const errorMessages = {
+    email: 'Bad request: "email" field mandatory and must be valid',
+    uuid: 'Bad request: "uuid" field mandatory and must be RFC 4122 compliant',
+  }
+
   if (!(req.body.email && emailRegex.test(req.body.email))) {
-    const errMessage = 'Bad request: "email" field mandatory and must be valid'
-    appLogger.error(errMessage)
+    appLogger.debug(errorMessages.email)
     res.status(400).json({
       success: false,
-      message: errMessage,
+      message: errorMessages.email,
     })
   }
+
   if (!(req.body.uuid && checkUuid(req.body.uuid))) {
-    const errMessage =
-      'Bad request: "uuid" field mandatory and must be RFC 4122 compliant'
-    appLogger.error(errMessage)
+    appLogger.error(errorMessages.uuid)
     res.status(400).json({
       success: false,
-      message: errMessage,
+      message: errorMessages.uuid,
     })
   }
+
   try {
     res.status(201).json({
       success: true,
