@@ -1,7 +1,7 @@
 #####################################################
 #                   Redis target                    #
 #####################################################
-FROM redis:5-alpine as cache
+FROM redis:6-alpine as cache
 
 COPY redis.conf /usr/local/etc/redis/redis.conf
 
