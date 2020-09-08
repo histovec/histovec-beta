@@ -37,7 +37,6 @@ const config = {
     password: process.env.UTAC_PASSWORD,
     histovecPfx: process.env.HISTOVEC_PFX || 'src/utac/histovec.pfx',
     histovecPfxPassphrase: process.env.HISTOVEC_PFX_PASSPHRASE,
-    inesPem: process.env.INES_PEM,
     inesToken: process.env.INES_TOKEN,
     utacPem: process.env.UTAC_PEM || 'src/utac/utac.pem',
   },
