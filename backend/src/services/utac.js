@@ -15,11 +15,13 @@ module.exports.UTACClient = class UTACClient {
 
     const options = {
       ...(
-        isFakedUtacApi
+        // No https needed for local faked api
+        // For production, https certificate is managed by the PIO
+        isFakedUtacApi || config.isProd
           ? {}
           : { httpsAgent: new HttpsAgent({
             keepAlive: true,
-            ca: config.isProd ? readFileSync(config.utac.inesPem) : readFileSync(config.utac.utacPem),
+            ca: readFileSync(config.utac.utacPem),
             pfx: readFileSync(config.utac.histovecPfx),
             passphrase: config.utac.histovecPfxPassphrase,
           }) }
