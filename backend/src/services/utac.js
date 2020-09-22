@@ -150,10 +150,17 @@ module.exports.UTACClient = class UTACClient {
       debug: 'UTACClient - authenticate',
     })
 
+    const errorMessages = {
+      401: 'Authentication to UTAC api failed',
+      500: 'Missing information in UTAC response',
+      503: 'Unavailable UTAC api',
+      default: 'Unexpected error from UTAC api',
+    }
+
     if (!this.isApiAvailable) {
       return {
         status: 503,
-        message: 'Unavailable UTAC api',
+        message: errorMessages[503],
       }
     }
 
@@ -178,38 +185,34 @@ module.exports.UTACClient = class UTACClient {
           status: 200,
         }
       } else {
-        const errorMessage = 'Token not found while authenticating to UTAC api'
         appLogger.warn({
-          error: errorMessage,
+          error: 'Token not found while authenticating to UTAC api',
           response,
         })
 
         return {
           status: 500,
-          message: errorMessage,
+          message: errorMessages[500],
         }
       }
     } catch (error) {
-      techLogger.info(`--! ERROR !-- ${error}`)
-
       if (error.response && error.response.status === 401) {
         appLogger.debug({
-          error: 'Invalid login / password',
+          error: errorMessages[401],
           remote_error: error.message,
         })
         return {
           status: 401,
-          message: 'Not Found',
+          message: errorMessages[401],
         }
       } else {
-        techLogger.info(`-- ERROR -- ${error.message}`)
         appLogger.warn({
-          error: 'Unexpected error from UTAC api server',
+          error: errorMessages['default'],
           remote_error: error.message,
         })
         return {
           status: 500,
-          message: error.message,
+          message: errorMessages['default'],
         }
       }
     }
@@ -257,11 +260,22 @@ module.exports.UTACClient = class UTACClient {
       plaque,
     })
 
+    const errorMessages = {
+      401: 'Authentication to UTAC api failed',
+      403: 'Forbidden',
+      404: 'Unknown immatriculation',
+      406: 'Invalid request',
+      429: 'Too many request',
+      500: 'Missing information in UTAC response',
+      503: 'Unavailable UTAC api',
+      default: 'Unexpected error from UTAC api',
+    }
+
     this.checkInitialization()
     if (!this.isApiAvailable) {
       return {
         status: 503,
-        message: 'Unavailable UTAC api',
+        message: errorMessages[503],
       }
     }
 
@@ -272,7 +286,7 @@ module.exports.UTACClient = class UTACClient {
       } catch (error) {
         return {
           status: 403,
-          message: 'Failed to authenticate UTAC api',
+          message: errorMessages[403],
         }
       }
     }
@@ -280,7 +294,7 @@ module.exports.UTACClient = class UTACClient {
     if (!this.isAuthenticated) {
       return {
         status: 403,
-        message: 'Failed to authenticate UTAC api',
+        message: errorMessages[403],
       }
     }
 
@@ -304,14 +318,13 @@ module.exports.UTACClient = class UTACClient {
           updateDate: response.data.update_date,
         }
       } else {
-        const errorMessage = 'Missing information in UTAC response'
         appLogger.warn({
-          error: errorMessage,
+          error: errorMessages[500],
           response: response,
         })
         return {
           status: 500,
-          message: errorMessage,
+          message: errorMessages[500],
         }
       }
     } catch (error) {
@@ -324,96 +337,85 @@ module.exports.UTACClient = class UTACClient {
           )
         }
 
-        const errorMessage = 'Authentication to UTAC api failed'
-
         // The second one is real a login / password error
         appLogger.debug({
-          error: errorMessage,
+          error: errorMessages[401],
           plaque,
           remote_error: error.message,
         })
 
         return {
           status: 401,
-          message: errorMessage,
+          message: errorMessages[401],
         }
       } else if (error.response && error.response.status === 403) {
-        const errorMessage = 'Forbidden'
-
         appLogger.debug({
-          error: errorMessage,
+          error: errorMessages[403],
           plaque,
           remote_error: error.message,
         })
 
         return {
           status: 403,
-          message: errorMessage,
+          message: errorMessages[403],
         }
       } else if (error.response && error.response.status === 404) {
         appLogger.debug({
-          error: 'Unknown immatriculation',
+          error: errorMessages[404],
           plaque,
           remote_error: error.message,
         })
 
         return {
-          status: 200,
-          source: 'utac',
-          ct: [],
-          updateDate: null,
+          status: 404,
+          // source: 'utac',
+          // ct: [],
+          // updateDate: null,
+          message: errorMessages[404],
         }
       } else if (error.response && error.response.status === 406) {
-        const errorMessage = 'Invalid request'
-
         appLogger.debug({
-          error: errorMessage,
+          error: errorMessages[406],
           plaque,
           remote_error: error.message,
         })
 
         return {
           status: 406,
-          message: errorMessage,
+          message: errorMessages[406],
         }
       } else if (error.response && error.response.status === 429) {
-        const errorMessage = 'Too many request'
-
         appLogger.debug({
-          error: errorMessage,
+          error: errorMessages[429],
           plaque,
           remote_error: error.message,
         })
 
         return {
           status: 429,
-          message: errorMessage,
+          message: errorMessages[429],
         }
       } else if (error.response && error.response.status === 503) {
-        const errorMessage = 'Unavailable UTAC api'
-
         appLogger.debug({
-          error: errorMessage,
+          error: errorMessages[503],
           plaque,
           remote_error: error.message,
         })
 
         return {
           status: 503,
-          message: errorMessage,
+          message: errorMessages[503],
         }
       } else {
-        const errorMessage = 'Unexpected error from UTAC api'
-
         appLogger.warn({
-          error: errorMessage,
+          error: errorMessages['default'],
           plaque,
           remote_error: error.message,
         })
 
         return {
           status: error.response.status,
-          message: errorMessage,
+          message: errorMessages['default'],
         }
       }
     }
