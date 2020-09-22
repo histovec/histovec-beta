@@ -988,7 +988,8 @@ export default {
       }
     },
     onPaste (evt) {
-      let data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
+      const data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
+
       if (data.length > 1) {
         if (evt.target.name === 'nom') {
           if (this.typeImmatriculation === 'siv') {
@@ -1000,7 +1001,9 @@ export default {
             this.formule = data[3]
           }
           if (this.typeImmatriculation === 'fni') {
-            this.nom = data[0]
+            // 1st element has already been pasted on current target name : 'nom'
+            // It is equivalent to :
+            // this.nom = data[0]
             this.plaque = data[1]
             this.dateCertificat = data[2]
           }
