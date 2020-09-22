@@ -368,9 +368,6 @@ module.exports.UTACClient = class UTACClient {
 
         return {
           status: 404,
-          // source: 'utac',
-          // ct: [],
-          // updateDate: null,
           message: errorMessages[404],
         }
       } else if (error.response && error.response.status === 406) {
