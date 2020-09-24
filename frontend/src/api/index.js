@@ -77,7 +77,7 @@ const checkValidJson = async (apiName, response) => {
     await store.commit('updateApiStatus', { json: { [apiName]: true } })
     json = await response.json()
     return {
-      success: true,
+      success: json.success,
       status: response.status,
       json: json
     }
@@ -157,6 +157,7 @@ const decryptHit = async (apiName, response, objectPath, key) => {
       })
       return {
         success: true,
+        status: response.status,
         decrypted: decrypted
       }
     } else {
@@ -245,6 +246,7 @@ export default {
     let response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
     return {
       success: response.success,
+      status: response.status,
       ctData: {
         ct: response.json.ct,
         updateDate: response.json.update_date

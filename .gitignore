@@ -19,3 +19,5 @@ artifacts_dev
 artifacts_prod
 artifacts_qualif
 swift_get_token.sh
+data/decrypted/.~lock*
+data/decrypted/old/.~lock*

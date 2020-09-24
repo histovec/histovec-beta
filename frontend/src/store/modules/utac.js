@@ -28,6 +28,9 @@ export default {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.utac) {
         return
       }
+
+      commit('clearUTAC')
+
       const response = await api.getUTAC(
         rootState.siv.id,
         rootState.siv.code,
@@ -36,10 +39,15 @@ export default {
         rootState.siv.v.utac_id,
         localStorage.getItem('userId')
       )
+
       if (response.success) {
         commit('updateCT', response.ctData)
       }
-      return
+      if (!response.success && response.status !== 404 && response.status !== 406) {
+        commit('updateCT', {
+          error: 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
+        })
+      }
     }
   }
 }

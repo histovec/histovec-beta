@@ -13,15 +13,15 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-// function immatNorm (plaque) {
-//   if (!plaque || typeof plaque !== 'string') {
-//     return undefined
-//   }
-//   let p = plaque.toUpperCase()
-//   p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
-//   p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
-//   return p
-// }
+function immatNorm (plaque) {
+  if (!plaque || typeof plaque !== 'string') {
+    return undefined
+  }
+  let p = plaque.toUpperCase()
+  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  return p
+}
 
 async function searchSIV (id, uuid) {
   try {
@@ -148,88 +148,89 @@ export function generateGetUTAC (utacClient) {
         source: 'utac',
         message: 'Not authentified',
       })
-    } else {
-      const cachedCtKey = hash(req.body.code || req.body.id)
-      const cachedCt = await getAsync(cachedCtKey)
-      if (cachedCt) {
-        try {
-          appLogger.debug({
-            debug: 'getting cached UTAC response',
-            cachedCtKey,
-            cachedCt,
-            bodyKey: req.body.key,
-            bodyCode: req.body.code,
-            bodyId: req.body.id,
-          })
-          const ct = decrypt(cachedCt, req.body.key)
+      return
+    }
 
-          res.status(200).json({
-            success: true,
+    const cachedCtKey = hash(req.body.code || req.body.id)
+    const cachedCt = await getAsync(cachedCtKey)
+    if (cachedCt) {
+      try {
+        appLogger.debug({
+          debug: 'getting cached UTAC response',
+          cachedCtKey,
+          cachedCt,
+          bodyKey: req.body.key,
+          bodyCode: req.body.code,
+          bodyId: req.body.id,
+        })
+        const ct = decrypt(cachedCt, req.body.key)
+
+        res.status(200).json({
+          success: true,
+          status: res.status,
+          source: 'utac',
+          ct,
+        })
+      } catch (error) {
+        appLogger.warn({
+          error: "Couldn't decrypt cached UTAC response",
+          remote_error: error.message,
+        })
+      }
+    } else {
+      const decrypted = decryptXOR(req.body.utacId, config.utacIdKey)
+      appLogger.debug({ decrypted })
+
+      const plaque = immatNorm(decrypted)
+      appLogger.debug({ plaque })
+
+      try {
+        if (!utacClient) {
+          res.status(503).json({
+            success: false,
             status: res.status,
             source: 'utac',
-            ct,
-          })
-        } catch (error) {
-          appLogger.warn({
-            error: "Couldn't decrypt cached UTAC response",
-            remote_error: error.message,
+            message: 'No UTAC api found',
           })
         }
-      } else {
-        const decrypted = decryptXOR(req.body.utacId, config.utacIdKey)
-        appLogger.debug({ decrypted })
 
-        const plaque = 'AA-612-LQ' // immatNorm(decrypted)
-        appLogger.debug({ plaque })
+        let response = await utacClient.readControlesTechniques(plaque)
 
-        try {
-          if (!utacClient) {
-            res.status(503).json({
-              success: false,
-              status: res.status,
-              source: 'utac',
-              message: 'No UTAC api found',
-            })
-          }
-
-          let response = await utacClient.readControlesTechniques(plaque)
-
-          if (response.status === 200) {
-            await setAsync(
-              hash(req.body.code || req.body.id),
-              encrypt(response.ct, req.body.key),
-              'EX',
-              config.redisPersit
-            )
-            res.status(200).json({
-              success: true,
-              status: response.status,
-              source: 'utac',
-              ct: response.ct,
-              updateDate: response.updateDate,
-            })
-          } else {
-            appLogger.debug({
-              error: 'UTAC response failed',
-              status: response.status,
-              remote_error: response.message,
-            })
-            res.status(response.status).json({
-              success: false,
-              status: response.status,
-              source: 'utac',
-              message: response.message,
-            })
-          }
-        } catch (error) {
-          appLogger.warn({
-            error: 'UTAC error',
-            remote_error: error.message,
+        if (response.status === 200) {
+          await setAsync(
+            hash(req.body.code || req.body.id),
+            encrypt(response.ct, req.body.key),
+            'EX',
+            config.redisPersit
+          )
+          res.status(200).json({
+            success: true,
+            status: response.status,
+            source: 'utac',
+            ct: response.ct,
+            updateDate: response.updateDate,
           })
-          return {
-            status: 500,
-            message: error.message,
-          }
+        } else {
+          appLogger.debug({
+            error: 'UTAC response failed',
+            status: response.status,
+            remote_error: response.message,
+          })
+          res.status(response.status).json({
+            success: false,
+            status: response.status,
+            source: 'utac',
+            message: response.message,
+          })
+        }
+      } catch (error) {
+        appLogger.warn({
+          error: 'UTAC error',
+          remote_error: error.message,
+        })
+        return {
+          status: 500,
+          message: error.message,
         }
       }
     }

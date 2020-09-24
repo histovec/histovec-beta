@@ -175,7 +175,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct.length > 0)"
+                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct.length > 1)"
+                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct || ctError)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -290,8 +290,9 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
               >
                 <tech-control
-                  v-if="ct.length > 0 && tab === 'utac'"
+                  v-if="tab === 'utac'"
                   :ct="ct"
+                  :ct-error="ctError"
                 >
                 </tech-control>
               </div>
@@ -301,10 +302,15 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utacGraph'}]"
               >
                 <tech-control-graph
-                  v-if="tab === 'utacGraph'"
+                  v-if="tab === 'utacGraph' && ct && !ctError"
                   :ct="ct"
                 >
                 </tech-control-graph>
+                <tech-control-graph-error
+                  v-if="tab === 'utacGraph' && ctError"
+                  :ct-error="ctError"
+                >
+                </tech-control-graph-error>
               </div>
               <div
                 v-if="holder"
@@ -374,6 +380,7 @@ import Administrative from './reportParts/Administrative.vue'
 import History from './reportParts/History.vue'
 import TechControl from './reportParts/TechControl.vue'
 const TechControlGraph = loadView('TechControlGraph')
+const TechControlGraphError = loadView('TechControlGraphError')
 const AdministrativeCertificate = loadView('AdministrativeCertificate')
 const AdministrativeCertificateOld = loadView('AdministrativeCertificateOld')
 
@@ -413,6 +420,7 @@ export default {
     History,
     TechControl,
     TechControlGraph,
+    TechControlGraphError,
     AdministrativeCertificate,
     AdministrativeCertificateOld,
     Share,
@@ -472,7 +480,10 @@ export default {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
     },
     ct () {
-      return this.$store.state.utac.ctData.ct || []
+      return this.$store.state.utac.ctData.ct
+    },
+    ctError () {
+      return this.$store.state.utac.ctData.error
     },
     ctUpdateDate () {
       return this.$store.state.utac.ctData.updateDate
@@ -506,11 +517,7 @@ export default {
     const isUtacActivated = this.$store.state.config.v1 && this.$store.state.config.utac
     const isGetSIVSucceeded = this.status === 'ok' && this.v
     if (isUtacActivated && isGetSIVSucceeded && !this.v.administratif.isAnnulationCI) {
-      const isGetUTACCached = this.ctData
-
-      if (!isGetUTACCached) {
-        await this.$store.dispatch('getUTAC')
-      }
+      await this.$store.dispatch('getUTAC')
     }
   },
   methods: {
