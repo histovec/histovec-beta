@@ -176,8 +176,7 @@ export FAKE_UTAC_LATENCY=500
 
 # Default values for dev environement
 
-# How to generate new secret : $(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
-export BACKEND_SECRET?=M--hKdmJNFPz54i60LHAJbqG_6MubpyKe63947d1e15e9d40a294859136eaba48cdff4072547ccf28bbf447ac99b0377c
+export BACKEND_SECRET?=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export IS_UTAC_API_ACTIVATED?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5

@@ -29,8 +29,6 @@ export default {
         return
       }
 
-      commit('clearUTAC')
-
       const response = await api.getUTAC(
         rootState.siv.id,
         rootState.siv.code,

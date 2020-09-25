@@ -4,7 +4,6 @@ import npmVersion from '../package.json'
 const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
-  secret: process.env.BACKEND_SECRET || '%Ch4NGm3+',
   appKey: generateKey(process.env.BACKEND_SECRET || '%Ch4NGm3+'),
   utacIdKey: process.env.UTAC_ID_KEY || '%Ch4NGm3+',
   isProd: process.env.NODE_ENV === 'production',
