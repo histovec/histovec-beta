@@ -38,6 +38,9 @@ export default {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.siv) {
         return
       }
+
+      commit('clearUTAC')
+
       let response
       if (future) {
         response = await api.getSIVv1(state.id, state.key, localStorage.getItem('userId'))
