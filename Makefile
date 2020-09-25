@@ -153,7 +153,7 @@ export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack
 export BACKEND=${APP_PATH}/backend
 export BACKEND_HOST=backend
 export BACKEND_PORT=8000
-
+export BACKEND_SECRET?=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export BACKEND_LOGS=${LOGS}/backend
 # mail confs for backend and fake smtp
 # must be overrided for production mode
@@ -176,7 +176,6 @@ export FAKE_UTAC_LATENCY=500
 
 # Default values for dev environement
 
-export BACKEND_SECRET?=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export IS_UTAC_API_ACTIVATED?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
