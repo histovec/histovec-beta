@@ -69,10 +69,10 @@ export default new Vuex.Store({
   },
   mutations: {
     toggleConfig (state, key) {
-      let leafPath = key.replace(/^.*\./, '')
-      let rootPath = key.replace(/((.*)\..*|.*)/, '$2')
-      rootPath = rootPath === '' ? 'config' : `config.${rootPath}`
-      let model = objectPath.get(state, rootPath)
+      const leafPath = key.replace(/^.*\./, '')
+      const rootPath = key.replace(/((.*)\..*|.*)/, '$2')
+      const fullRootPath = rootPath === '' ? 'config' : `config.${rootPath}`
+      const model = objectPath.get(state, fullRootPath)
       /* eslint-disable-next-line no-console */
       console.log('hidden-feature', key, !model[leafPath])
       Vue.set(model, leafPath, !model[leafPath])
@@ -88,7 +88,7 @@ export default new Vuex.Store({
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
-        let apiName = Object.keys(update[status])[0]
+        const apiName = Object.keys(update[status])[0]
         Vue.set(state.api[status], apiName, update[status][apiName])
       })
     },
@@ -112,7 +112,7 @@ export default new Vuex.Store({
       commit('updateLogCounter')
     },
     async toggleContactModal ({ state, commit, dispatch }, message ) {
-      let subject = ( message && message.subject ) || contact.subject.default
+      const subject = ( message && message.subject ) || contact.subject.default
       await commit('toggleContactModal')
       await commit('updateContactModalSubject', subject)
       if (state.isContactModalVisible) {

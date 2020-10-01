@@ -272,7 +272,7 @@ const writeHistory = ({
 	forceTwoColumns,
 	nextPageSymbol
 }) => {
-	let topY = writeTitle({
+	const topY = writeTitle({
 		page,
 		embeddedFonts,
 		x: BORDER_LEFT_PAGE_X,
@@ -913,7 +913,7 @@ export const writeContent = (
 	// Write all page number
 	const totalPageNumber = doc.getPageCount()
 	for(let i=0; i<totalPageNumber; i++) {
-		let page = doc.getPage(i)
+		const page = doc.getPage(i)
 
 		writePageNumber({
 			page,

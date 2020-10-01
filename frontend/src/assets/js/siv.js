@@ -54,7 +54,7 @@ const computeCertifDepuis = (dateString) => {
   } else {
     const year = Math.floor(nbMonth / 12)
     const yearLabel = year > 1 ? `${year} ans` : `${year} an`
-    let month = nbMonth - 12 * year
+    const month = nbMonth - 12 * year
     if ((month > 0) && (year < 10)) {
       return `${yearLabel} et ${month} mois`
     } else {
@@ -99,8 +99,8 @@ const getVignetteNumero = (genre, categorie, typeCarburant, pollution, datePremI
   } else {
     // Mapping Categorie
     if (categorie) {
-      let categ = categorie.split('-')
-      categorie = categ[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
+      const categorieChunks = categorie.split('-')
+      categorie = categorieChunks[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
       voitureParticuliere = ['M1']
       vehiculeUtilitaireLegers = ['N1']
       motocycle = ['L3e', 'L4e', 'L5e', 'L7e']
@@ -544,7 +544,7 @@ const administratifVehiculeMapping = ({
     }
   }
 
-  let {
+  const {
     ci_vole,
     duplicata,
     perte_ci,
@@ -590,14 +590,14 @@ const administratifVehiculeMapping = ({
     ['desc']
   )
 
-  let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV(s) en attente'] : ['Aucune']
   const pvDates = otcisPv.map((otciPv) => {
     return [
       `- Date du PV :  ${formatDateOrDefault(otciPv.date)}`
     ]
   }).flat()
-  otcisPvCurrentStatusLines = [
-    ...otcisPvCurrentStatusLines,
+
+  const otcisPvCurrentStatusLines = [
+    otcisPv.length > 0 ? 'PV(s) en attente' : 'Aucune',
     ...pvDates
   ]
 

@@ -17,10 +17,11 @@ function immatNorm (plaque) {
   if (!plaque || typeof plaque !== 'string') {
     return undefined
   }
-  let p = plaque.toUpperCase()
-  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
-  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
-  return p
+  return (
+    plaque.toUpperCase()
+      .replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+      .replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  )
 }
 
 async function searchSIV (id, uuid) {
@@ -41,7 +42,7 @@ async function searchSIV (id, uuid) {
         filter_path: 'hits.hits._source.v',
       })
 
-      let hits = response.hits && response.hits.hits
+      const hits = response.hits && response.hits.hits
       if (hits && hits.length > 0) {
         const vehicleData = hits[0]._source && hits[0]._source.v
         if (vehicleData) {
@@ -115,7 +116,7 @@ async function searchSIV (id, uuid) {
 }
 
 export async function getSIV (req, res) {
-  let response = await searchSIV(req.body.id, req.body.uuid)
+  const response = await searchSIV(req.body.id, req.body.uuid)
   if (response.status === 200) {
     res.status(200).json({
       success: true,
@@ -194,7 +195,7 @@ export function generateGetUTAC (utacClient) {
           })
         }
 
-        let response = await utacClient.readControlesTechniques(plaque)
+        const response = await utacClient.readControlesTechniques(plaque)
 
         if (response.status === 200) {
           await setAsync(

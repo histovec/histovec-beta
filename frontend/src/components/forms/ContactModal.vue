@@ -298,29 +298,27 @@ export default {
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
     },
     errors () {
-      let errorList = []
-      if (this.clicked && (this.subject === contact.subject.default)) {
-        errorList.push(contact.error.subject)
+      if (!this.clicked) {
+        return []
       }
-      if (this.clicked && this.email && !this.isEmailValid()) {
-        errorList.push(contact.error.mail)
-      }
-      if (this.clicked && this.$store.state.api && this.$store.state.api.http[this.apiName] && (this.$store.state.api.http[this.apiName] !== 201)) {
-        errorList.push(contact.error.api)
-      }
-      return errorList
+
+      return [
+        ...(this.subject === contact.subject.default ? [contact.error.subject] : []),
+        ...(this.email && !this.isEmailValid() ? [contact.error.mail] : []),
+        ...(this.$store.state.api && this.$store.state.api.http[this.apiName] && this.$store.state.api.http[this.apiName] !== 201 ? [contact.error.api] : []),
+      ]
     },
     status () {
-      if (this.clicked) {
-        if (this.errors.length > 0) {
-          return 'failed'
-        } else if (this.$store.state.api && this.$store.state.api.fetching.contact) {
-          return 'posting'
-        } else {
-          return 'posted'
-        }
-      } else {
+      if (!this.clicked) {
         return 'init'
+      }
+
+      if (this.errors.length > 0) {
+        return 'failed'
+      } else if (this.$store.state.api && this.$store.state.api.fetching.contact) {
+        return 'posting'
+      } else {
+        return 'posted'
       }
     },
     isReadOnlySubject () {
@@ -353,7 +351,7 @@ export default {
           setTimeout(() => this.clicked = false, 3000)
           return
       } else {
-        let data = {
+        const data = {
           'message': this.filteredMessage,
           'email': (this.email === '') ? undefined : this.email,
           'uuid': localStorage.getItem('userId'),
@@ -383,7 +381,7 @@ export default {
       }
     },
     isEmailValid () {
-      let reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return reg.test(this.email)
     }
   }

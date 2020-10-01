@@ -10,8 +10,8 @@ export const formatDate = (isoDate) => {
 		return ''
 	}
 
-	let d = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
-	return Intl.DateTimeFormat('fr-FR').format(d)
+	const date = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
+	return Intl.DateTimeFormat('fr-FR').format(date)
 }
 
 export const formatDateOrDefault = (isoDate, defaultValue=MISSING_VALUE) => {
