@@ -442,8 +442,11 @@ export default {
       return this.holder ? this.$route.params.id : this.$route.query.id
     },
     key () {
-      let k = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
-      return (k !== undefined) ? k.replace(/-/g, '+').replace(/_/g, '/') : undefined
+      const key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
+      if (!key) {
+        return
+      }
+      return key.replace(/-/g, '+').replace(/_/g, '/')
     },
     status () {
       if (this.$store.state.siv.vehicleData) {
@@ -491,7 +494,7 @@ export default {
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      let urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
+      const urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
       return this.baseUrl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },

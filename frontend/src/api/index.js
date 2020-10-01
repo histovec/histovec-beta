@@ -8,7 +8,7 @@ const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_
 
 
 const apiPaths = (apiName, future = false) => {
-  let apiRoute = {
+  const apiRoute = {
     current: {
       log: 'log',
       siv: 'id',
@@ -28,8 +28,8 @@ const apiPaths = (apiName, future = false) => {
 
 const decrypt = (encrypted, key) => {
   key = CryptoJS.enc.Base64.parse(key)
-  let rawData = atob(encrypted)
-  let iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
+  const rawData = atob(encrypted)
+  const iv = CryptoJS.enc.Base64.parse(btoa(rawData.substring(0, 16)))
   encrypted = btoa(rawData.substring(16))
   let decrypted
   try {
@@ -38,7 +38,7 @@ const decrypt = (encrypted, key) => {
       salt: ''
     },
       key, {
-        iv: iv,
+        iv,
         padding: CryptoJS.pad.Pkcs7,
         mode: CryptoJS.mode.CBC
       })
@@ -72,14 +72,13 @@ const checkStatus = async (apiName, response) => {
 }
 
 const checkValidJson = async (apiName, response) => {
-  let json
   try {
     await store.commit('updateApiStatus', { json: { [apiName]: true } })
-    json = await response.json()
+    const json = await response.json()
     return {
       success: json.success,
       status: response.status,
-      json: json
+      json,
     }
   } catch (e) {
     await store.commit('updateApiStatus', {
@@ -97,10 +96,9 @@ const checkValidJson = async (apiName, response) => {
 const checkValidSearch = async (apiName, response) => {
   // check if valid elasticsearch result
   // and return only first result
-  let json
   try {
     if (response.success) {
-      json = await response.json
+      const json = await response.json
       if ((Object.keys(json).length === 0) || (json.hits.hits.length === 0)) {
         await store.commit('updateApiStatus', {
           hit: { [apiName]: false },
@@ -145,12 +143,10 @@ const checkValidSearch = async (apiName, response) => {
 }
 
 const decryptHit = async (apiName, response, objectPath, key) => {
-  let decrypted
-  let encrypted
   try {
     if (response.success) {
-      decrypted = await response.json
-      encrypted = decrypted[objectPath] && decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
+      const decrypted = await response.json
+      const encrypted = decrypted[objectPath] && decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
       decrypted[objectPath] = decrypt(encrypted, key)
       store.commit('updateApiStatus', {
         decrypted: { [apiName]: true }
@@ -158,7 +154,7 @@ const decryptHit = async (apiName, response, objectPath, key) => {
       return {
         success: true,
         status: response.status,
-        decrypted: decrypted
+        decrypted,
       }
     } else {
       await store.commit('updateApiStatus', {
@@ -219,7 +215,7 @@ const apiClient = {
 export default {
   async getSIV (id, key, uuid) {
     const apiName = 'siv'
-    let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
+    const response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
       vehicleData: ((response.decrypted && response.decrypted.vehicleData) || {})
@@ -231,7 +227,7 @@ export default {
       method: 'POST',
       body: JSON.stringify({ id: id, uuid: uuid})
     }
-    let response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'vehicleData', key, options)
+    const response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'vehicleData', key, options)
     return {
       success: response.success,
       token: response.decrypted && response.decrypted.token,
@@ -243,7 +239,7 @@ export default {
     const options = {
       body: JSON.stringify({id: id, code: code, token: token, key: key, utacId: utacId, uuid: uuid})
     }
-    let response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
+    const response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
     return {
       success: response.success,
       status: response.status,
@@ -255,8 +251,8 @@ export default {
   },
   async log (path, uid) {
     const apiName = 'log'
-    let p = path.replace(/^\/\w+\//, '')
-    const json = await apiClient.put(apiName, `${apiPaths(apiName)}/${uid}/${p}`)
+    const normalizedPath = path.replace(/^\/\w+\//, '')
+    const json = await apiClient.put(apiName, `${apiPaths(apiName)}/${uid}/${normalizedPath}`)
     return json
   },
   async sendFeedback (feedback, future=false) {
