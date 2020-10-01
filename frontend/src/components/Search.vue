@@ -901,14 +901,14 @@ export default {
       date = dayjs().add(-7, 'day').format('YYYYMM')
       return date
     },
-    pers_id () {
+    personneId () {
       if (this.typePersonne === 'particulier') {
         return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '')
       } else {
         return this.raisonSociale + this.siren
       }
     },
-    veh_id () {
+    vehicleId () {
       if (this.typeImmatriculation === 'siv') {
         return this.plaque + this.formule
       } else {
@@ -919,10 +919,10 @@ export default {
       return this.code
     },
     code () {
-      return this.hash(this.pers_id + this.veh_id + this.currentMonthNumber)
+      return this.hash(this.personneId + this.vehicleId + this.currentMonthNumber)
     },
     key () {
-      return this.hash(this.veh_id)
+      return this.hash(this.vehicleId)
     }
   },
   created () {

@@ -530,7 +530,7 @@ const syntheseVehiculeMapping = ({
 
 const administratifVehiculeMapping = ({
   date_annulation_ci,
-  ...veh
+  ...vehicleData
 }, isAnnulationCI) => {
   const annulationCurrentStatus = booleanLabel(isAnnulationCI, { upperCase: false })
 
@@ -561,7 +561,7 @@ const administratifVehiculeMapping = ({
       suspensions,
     },
     vehicule_vole
-  } = veh
+  } = vehicleData
 
   // Helpers
   const hasDvs = Boolean(dvs.length)  // DVS = Déclaration valant saisie
@@ -814,45 +814,45 @@ const computeAscendingValidHistorique = ({ historique=[], pve=[] }) => {
   return addPVEInfos(ascendingValidHistorique, pve)
 }
 
-const processRawData = (veh) => {
-  if (veh === undefined) {
+const processVehicleData = (vehicleData) => {
+  if (vehicleData === undefined) {
     return false
   }
 
   /* eslint-disable-next-line no-console */
-  console.log(veh)
+  console.log(vehicleData)
 
-  const isAnnulationCi = veh.annulation_ci === 'OUI'
+  const isAnnulationCi = vehicleData.annulation_ci === 'OUI'
 
-  const ascendingValidHistorique = computeAscendingValidHistorique(veh)
+  const ascendingValidHistorique = computeAscendingValidHistorique(vehicleData)
 
   let fniState
-  if (veh.dos_date_conversion_siv !== undefined && ascendingValidHistorique.length > 0) {
+  if (vehicleData.dos_date_conversion_siv !== undefined && ascendingValidHistorique.length > 0) {
     fniState = ascendingValidHistorique[0].opa_type === 'IMMAT_NORMALE' ? FNI_STATE.CONVERTI : FNI_STATE.CONVERTI_INCERTAIN
   } else {
-    fniState = veh.date_premiere_immat_siv === undefined ? FNI_STATE.OUI : FNI_STATE.NON
+    fniState = vehicleData.date_premiere_immat_siv === undefined ? FNI_STATE.OUI : FNI_STATE.NON
   }
 
-  const certificat = certificatVehiculeMapping(veh, ascendingValidHistorique, isAnnulationCi)
+  const certificat = certificatVehiculeMapping(vehicleData, ascendingValidHistorique, isAnnulationCi)
   const descendingHistoriqueForReport = isAnnulationCi ? [] : computeDescendingHistoriqueForReport(ascendingValidHistorique, certificat, fniState)
 
-  const administratif = administratifVehiculeMapping(veh, isAnnulationCi)
-  const ctec = ctecVehiculeMapping(veh, isAnnulationCi)
-  const titulaire = titulaireVehiculeMapping(veh, isAnnulationCi)
+  const administratif = administratifVehiculeMapping(vehicleData, isAnnulationCi)
+  const ctec = ctecVehiculeMapping(vehicleData, isAnnulationCi)
+  const titulaire = titulaireVehiculeMapping(vehicleData, isAnnulationCi)
 
-  let v = {
+  let processedVehicleData = {
     administratif,
     certificat,
     ctec,
-    dateUpdate: veh.date_update || '25/11/2018',  // @todo: why do we use this default date?
-    plaque: veh.plaq_immat,
+    dateUpdate: vehicleData.date_update || '25/11/2018',  // @todo: why do we use this default date?
+    plaque: vehicleData.plaq_immat,
     titulaire,
   }
 
   if (isAnnulationCi) {
     /* eslint-disable-next-line no-console */
-    console.log(v)
-    return v
+    console.log(processedVehicleData)
+    return processedVehicleData
   }
 
   const sinistres = descendingHistoriqueForReport.filter((sinistre) =>
@@ -885,23 +885,23 @@ const processRawData = (veh) => {
     (!administratif.hasSuspension && !administratif.opposition.hasOve && !administratif.opposition.hasOvei)
   )
 
-  v = {
-    ...v,
-    ageVeh: veh.age_annee,
+  processedVehicleData = {
+    ...processedVehicleData,
+    ageVeh: vehicleData.age_annee,
 
     // véhicule importé : changement de règle de gestion #406
     etranger: (
-      (veh.import === 'NON') ?
+      (vehicleData.import === 'NON') ?
         { hasBeenImported: false } :
-        { hasBeenImported: true, immat: veh.imp_imp_immat, pays: veh.pays_import}
+        { hasBeenImported: true, immat: vehicleData.imp_imp_immat, pays: vehicleData.pays_import}
     ),
 
     fniState,
     historique: descendingHistoriqueForReport,
     isApte,
-    logoVehicule: getVehiculeLogo(veh.CTEC_RLIB_GENRE),
+    logoVehicule: getVehiculeLogo(vehicleData.CTEC_RLIB_GENRE),
 
-    proprietairesCount: veh.nb_proprietaire,
+    proprietairesCount: vehicleData.nb_proprietaire,
     titulairesCount: computeTitulaireCount(descendingHistoriqueForReport, certificat.isIncertain),
 
     hasSinistre,
@@ -913,19 +913,19 @@ const processRawData = (veh) => {
     lastResolutionYear,
     resolutions,
 
-    usages: veh.usage || [],
+    usages: vehicleData.usage || [],
     vignetteNumero: getVignetteNumero(
-      veh.CTEC_RLIB_GENRE,
-      veh.CTEC_RLIB_CATEGORIE,
-      getTypeCarburant(veh.CTEC_RLIB_ENERGIE),
-      veh.CTEC_RLIB_POLLUTION,
-      veh.date_premiere_immat,
+      vehicleData.CTEC_RLIB_GENRE,
+      vehicleData.CTEC_RLIB_CATEGORIE,
+      getTypeCarburant(vehicleData.CTEC_RLIB_ENERGIE),
+      vehicleData.CTEC_RLIB_POLLUTION,
+      vehicleData.date_premiere_immat,
     ),
   }
 
   /* eslint-disable-next-line no-console */
-  console.log(v)
-  return v
+  console.log(processedVehicleData)
+  return processedVehicleData
 }
 
-export default { processRawData }
+export default { processVehicleData }

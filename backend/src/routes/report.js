@@ -43,13 +43,13 @@ async function searchSIV (id, uuid) {
 
       let hits = response.hits && response.hits.hits
       if (hits && hits.length > 0) {
-        let hit = hits[0]._source && hits[0]._source.v
-        if (hit) {
+        const vehicleData = hits[0]._source && hits[0]._source.v
+        if (vehicleData) {
           return {
             status: 200,
             source: 'histovec',
             token: sign(id, config.appKey),
-            v: hit,
+            vehicleData,
           }
         } else {
           appLogger.warn({
@@ -122,7 +122,7 @@ export async function getSIV (req, res) {
       status: response.status,
       source: 'siv',
       token: response.token,
-      v: response.v,
+      vehicleData: response.vehicleData,
     })
   } else {
     res.status(response.status).json({
