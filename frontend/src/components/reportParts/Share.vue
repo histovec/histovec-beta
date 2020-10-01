@@ -81,10 +81,6 @@ export default {
     QrcodeVue
   },
   props: {
-    v: {
-      type: Object,
-      default: () => {}
-    },
     url: {
       type: String,
       default: ''

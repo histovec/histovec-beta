@@ -222,7 +222,7 @@ export default {
     let response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
     return {
       success: response.success,
-      v: ((response.decrypted && response.decrypted.v) || {})
+      vehicleData: ((response.decrypted && response.decrypted.vehicleData) || {})
     }
   },
   async getSIVv1 (id, key, uuid) {
@@ -231,11 +231,11 @@ export default {
       method: 'POST',
       body: JSON.stringify({ id: id, uuid: uuid})
     }
-    let response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'v', key, options)
+    let response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'vehicleData', key, options)
     return {
       success: response.success,
       token: response.decrypted && response.decrypted.token,
-      v: (response.decrypted && response.decrypted.v || {})
+      vehicleData: (response.decrypted && response.decrypted.vehicleData || {})
     }
   },
   async getUTAC (id, code, token, key, utacId, uuid) {

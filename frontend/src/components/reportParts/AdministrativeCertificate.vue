@@ -49,7 +49,7 @@ const downloadBlob = (blob, filename) => {
 
 export default {
   props: {
-    v: {
+    processedVehicleData: {
       type: Object,
       default: () => {}
     },
@@ -85,21 +85,21 @@ export default {
     async generatePdf () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
 
-      const isAnnulationCI = this.v.administratif.isAnnulationCI
-      const csaLabels = this.v.administratif.csaLabels
+      const isAnnulationCI = this.processedVehicleData.administratif.isAnnulationCI
+      const csaLabels = this.processedVehicleData.administratif.csaLabels
 
       const csaPdfBytes = await generateCsa({
         isAnnulationCI,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
-        dateAnnulation: this.v.administratif.dateAnnulation,
+        dateAnnulation: this.processedVehicleData.administratif.dateAnnulation,
         histoVecLogoBytes: this.histoVecLogoBytes,
         marianneImageBytes: this.marianneImageBytes,
-        marque: this.v.ctec.marque,
+        marque: this.processedVehicleData.ctec.marque,
         plaque: this.$store.state.identity.plaque,
-        premierCertificat: this.v.certificat.premier,
+        premierCertificat: this.processedVehicleData.certificat.premier,
         qrCodeUrl: this.url,
         validityDate: this.validityDate,
-        vin: this.v.ctec.vin,
+        vin: this.processedVehicleData.ctec.vin,
         webSiteUrl: this.baseUrl
       },
       (
@@ -107,7 +107,7 @@ export default {
           duplicataTitre: csaLabels.titre.duplicata,
           dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
           gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
-          historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
+          historyItems: this.processedVehicleData.historique.map((item) => `${item.date} ${item.nature}`),
           otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
           otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,

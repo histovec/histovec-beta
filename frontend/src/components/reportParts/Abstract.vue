@@ -50,14 +50,14 @@
     <div class="row">
       <!-- debut voiture  -->
       <div class="col-sm-1">
-        <i :class="'fa fa-' + v.logoVehicule + ' fa-2x'"></i>
+        <i :class="'fa fa-' + processedVehicleData.logoVehicule + ' fa-2x'"></i>
       </div>
       <div class="col-sm-6">
-        <span class="info_red txt-small-13">{{ v.ctec.marque }} {{ v.ctec.modele }}</span>
+        <span class="info_red txt-small-13">{{ processedVehicleData.ctec.marque }} {{ processedVehicleData.ctec.modele }}</span>
         <br />
-        <div v-if="v.ctec.puissance.cv">
+        <div v-if="processedVehicleData.ctec.puissance.cv">
           <span class="txt-small-13">Puissance fiscale : </span>
-          <span class="info_red txt-small-13">{{ v.ctec.puissance.cv }} ch</span>
+          <span class="info_red txt-small-13">{{ processedVehicleData.ctec.puissance.cv }} ch</span>
         </div>
       </div>
       <div
@@ -83,9 +83,9 @@
     </div>
     <!-- fin trait separation  -->
     <!-- debut trait separation  -->
-    <div v-if="v.usages.length">
+    <div v-if="processedVehicleData.usages.length">
       <div
-        v-for="(usage, index) in v.usages"
+        v-for="(usage, index) in processedVehicleData.usages"
         :key="index"
       >
         <div
@@ -134,24 +134,24 @@
         <i class="fa fa-address-card fa-2x pr-10"></i>
       </div>
       <div class="col-sm-6">
-        <span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ v.titulaire.identite }} depuis {{ v.certificat.depuis }} </span>
+        <span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ processedVehicleData.titulaire.identite }} depuis {{ processedVehicleData.certificat.depuis }} </span>
       </div>
       <div class="col-sm-5">
-        <div v-if="!v.certificat.etranger">
+        <div v-if="!processedVehicleData.certificat.etranger">
           <div v-if="holder">
             <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
-            <span class="info_red txt-small-13">{{ v.titulairesCount }}</span><sup class="info_red txt-small">{{ getExposant(v.titulairesCount) }}</sup>
+            <span class="info_red txt-small-13">{{ processedVehicleData.titulairesCount }}</span><sup class="info_red txt-small">{{ getExposant(processedVehicleData.titulairesCount) }}</sup>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
           </div>
           <div v-if="!holder">
             <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
-            <span class="info_red txt-small-13">{{ v.titulairesCount }}</span>
+            <span class="info_red txt-small-13">{{ processedVehicleData.titulairesCount }}</span>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire(s), en l'achetant vous serez le </span>
-            <span class="info_red txt-small-13">{{ v.titulairesCount + 1 }}</span>
-            <sup class="info_red txt-small">{{ getExposant(v.titulairesCount + 1) }}</sup>
+            <span class="info_red txt-small-13">{{ processedVehicleData.titulairesCount + 1 }}</span>
+            <sup class="info_red txt-small">{{ getExposant(processedVehicleData.titulairesCount + 1) }}</sup>
           </div>
         </div>
-        <div v-if="v.certificat.etranger">
+        <div v-if="processedVehicleData.certificat.etranger">
           <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision </span>
           <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
         </div>
@@ -169,7 +169,7 @@
       </div>
       <div class="col-sm-6">
         <span class="txt-small-13">Première immatriculation le </span>
-        <span class="info_red txt-small-13">{{ v.certificat.premier }}</span>
+        <span class="info_red txt-small-13">{{ processedVehicleData.certificat.premier }}</span>
         <br />
         <br />
       </div>
@@ -181,7 +181,7 @@
     </div>
     <!-- fin trait separation  -->
 
-    <div v-if="v.etranger.hasBeenImported">
+    <div v-if="processedVehicleData.etranger.hasBeenImported">
       <div class="row">
         <!-- debut immatriculer  -->
         <div class="col-sm-1">
@@ -206,53 +206,53 @@
     </div>
 
 
-    <div v-if="v.hasSinistre || v.administratif.hasPve">
+    <div v-if="processedVehicleData.hasSinistre || processedVehicleData.administratif.hasPve">
       <div class="row">
         <!-- debut sinistre  -->
         <div class="col-sm-1">
           <i
-            :class="[{'fa fa-thumbs-up fa-2x pr-10' : v.isApte},
-                     {'fa fa-exclamation-triangle info_red fa-2x pr-10' : !v.isApte}]"
+            :class="[{'fa fa-thumbs-up fa-2x pr-10' : processedVehicleData.isApte},
+                     {'fa fa-exclamation-triangle info_red fa-2x pr-10' : !processedVehicleData.isApte}]"
           >
           </i>
         </div>
         <div class="col-sm-6">
           <!-- état - un seul sinistre !-->
-          <span v-if="v.sinistresCount === 1 || (v.sinistresCount === 0 && v.administratif.hasPve)">
+          <span v-if="processedVehicleData.sinistresCount === 1 || (processedVehicleData.sinistresCount === 0 && processedVehicleData.administratif.hasPve)">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">un sinistre déclaré</span>
             <span
-              v-if="v.sinistresCount === 1"
+              v-if="processedVehicleData.sinistresCount === 1"
               class="txt-small-13"
             >
-              en {{ v.lastSinistreYear }}
+              en {{ processedVehicleData.lastSinistreYear }}
             </span>
             <br />
-            <span v-if="v.isApte">
+            <span v-if="processedVehicleData.isApte">
               <span class="txt-small-13">et</span>
               <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
-                v-if="!v.isApte"
+                v-if="!processedVehicleData.isApte"
                 class="txt-small-13"
               >
-                en {{ v.lastResolutionYear }}
+                en {{ processedVehicleData.lastResolutionYear }}
               </span>
             </span>
           </span>
           <!-- état - plusieurs sinistres !-->
-          <span v-if="v.sinistresCount > 1">
+          <span v-if="processedVehicleData.sinistresCount > 1">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">plusieurs sinistres, </span>
-            <span class="txt-small-13">dont le dernier déclaré en {{ v.lastSinistreYear }}</span>
+            <span class="txt-small-13">dont le dernier déclaré en {{ processedVehicleData.lastSinistreYear }}</span>
             <br />
-            <span v-if="v.isApte">
+            <span v-if="processedVehicleData.isApte">
               <span class="txt-small-13">Le véhicule a été</span>
               <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
-                v-if="!v.isApte"
+                v-if="!processedVehicleData.isApte"
                 class="txt-small-13"
               >
-                en {{ v.lastResolutionYear }}
+                en {{ processedVehicleData.lastResolutionYear }}
               </span>
             </span>
           </span>
@@ -268,7 +268,7 @@
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
           <span
-            v-if="v.isApte"
+            v-if="processedVehicleData.isApte"
             class="color-info_2 bold_4 txt-small-13"
           >
             {{ syntheseMapping[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
@@ -282,7 +282,7 @@
 
           <br />
           <span
-            v-if="v.hasSinistre && v.sinistres.length > 1"
+            v-if="processedVehicleData.hasSinistre && processedVehicleData.sinistres.length > 1"
             class="color-info_2 bold_4 txt-small-13"
           >
             {{ syntheseMapping['multi_ove'].adv }}
@@ -294,7 +294,7 @@
       <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="synthese.length === 0 && !v.lastSinistreYear">
+    <div v-if="synthese.length === 0 && !processedVehicleData.lastSinistreYear">
       <div class="row">
         <!-- debut ras  -->
         <div class="col-sm-1">
@@ -362,18 +362,18 @@
     </div>
     <div>
       <div
-        v-if="v.vignetteNumero"
+        v-if="processedVehicleData.vignetteNumero"
         class="row"
       >
         <!-- debut ras  -->
         <div class="col-sm-1">
           <img
             class="img-responsive"
-            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + v.vignetteNumero + '.png'"
+            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + processedVehicleData.vignetteNumero + '.png'"
           >
         </div>
         <div class="col-sm-6">
-          <span class="txt-small-13"> {{ syntheseMapping['critair'].text }} {{ v.vignetteNumero }}</span>
+          <span class="txt-small-13"> {{ syntheseMapping['critair'].text }} {{ processedVehicleData.vignetteNumero }}</span>
         </div>
         <div class="col-sm-5 color-info_2 bold_4 txt-small-13">
           {{ syntheseMapping['critair'].adv }}
@@ -391,7 +391,7 @@
         <!-- fin ras  -->
       </div>
       <div
-        v-if="!v.vignetteNumero && !v.usages.includes('COL')"
+        v-if="!processedVehicleData.vignetteNumero && !processedVehicleData.usages.includes('COL')"
         class="row"
       >
         <!-- debut pas de critair  -->
@@ -430,7 +430,7 @@ import { formatMixin } from '../../mixins/format.js'
 export default {
   mixins: [formatMixin],
   props: {
-    v: {
+    processedVehicleData: {
       type: Object,
       default: () => {}
     },
@@ -442,7 +442,7 @@ export default {
   },
   computed: {
     synthese () {
-      return this.v.administratif.reportLabels.synthese
+      return this.processedVehicleData.administratif.reportLabels.synthese
     }
   },
 
