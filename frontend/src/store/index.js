@@ -48,8 +48,8 @@ export default new Vuex.Store({
       newPdfLib: false,
       csaAnnulationCi: false,
       dataDate: false,
-      utac: false,
-      utacGraph: false,
+      utac: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
+      utacGraph: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
       v1: true,
     },
     configEnabler: {
