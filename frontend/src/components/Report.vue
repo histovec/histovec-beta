@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct || ctError)"
+                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -321,7 +321,6 @@
                   v-if="tab === 'send'"
                   :v="v"
                   :url="url"
-                  :base-url="baseUrl"
                   :holder="holder"
                 >
                 </share>
@@ -522,27 +521,31 @@ export default {
   },
   methods: {
     async getSIV () {
-      if (this.$store.state.siv.v) {
+      const isVCached = this.$store.getters.vWithExpiry
+      if (isVCached) {
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
-      } else {
-        if (
+      }
+
+      const canGetV = this.$store.state.siv.id && this.$store.state.siv.key
+      if (
+        !canGetV && (
           // rapport vendeur via formulaire de recherche, avec un paramètre manquant
           (this.holder && (!this.$route.params.key || !this.$route.params.id)) ||
           // rapport acheteur avec un paramètre manquant
           (!this.holder && (!this.$route.query.key || !this.$route.query.id))
-        ) {
-          await this.$store.dispatch('log',
-            this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
-          return
-        }
-
-        await this.$store.dispatch('getSIV', this.$store.state.config.v1)
+        )
+      ) {
         await this.$store.dispatch('log',
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
+          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
         return
       }
+
+      await this.$store.dispatch('getSIV', this.$store.state.config.v1)
+      await this.$store.dispatch('log',
+        this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
+      return
     },
     showRatingModal () {
       const notShow = localStorage.getItem('notShow') === 'true'

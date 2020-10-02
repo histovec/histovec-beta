@@ -55,14 +55,15 @@ const writeVerticalUrl = ({
 	embeddedFonts,
 	x,
 	y,
-	webSiteUrl
+	qrCodeUrl
 }) => {
+	const truncatedQrCodeUrl = `${qrCodeUrl.substring(0, 30)}...`
 	writeText({
 		page,
 		embeddedFonts,
 		x,
 		y,
-		text: webSiteUrl,
+		text: truncatedQrCodeUrl,
 		size: FONT_SIZES.XS,
 		rotationAngle: 90
 	})
@@ -95,13 +96,12 @@ const writeCSAQrCode = ({
 	y,
 	footerLogoPng,
 	qrCodeUrl,
-	webSiteUrl
 }) => {
 	const qrCodeY = writeQrCodeLogoPng({ page, x, y, footerLogoPng })
 	const qrCodeBottomY = drawQrCode({ page, x, y: qrCodeY, qrCodeUrl })
 
 	const qrCodeTextX = x - FONT_SPACING.S
-	writeVerticalUrl({ page, embeddedFonts, x: qrCodeTextX, y: qrCodeBottomY, webSiteUrl })
+	writeVerticalUrl({ page, embeddedFonts, x: qrCodeTextX, y: qrCodeBottomY, qrCodeUrl })
 
 	const nextY = qrCodeBottomY - FONT_SPACING.M
 	return nextY
@@ -200,7 +200,7 @@ export const writeFooter = ({
 		x: BORDER_LEFT_PAGE_X,
 		y: legalNoticeY,
 		validityDate,
-		webSiteUrl
+		webSiteUrl,
 	})
 
 	const bottomFooterY = writeCSAQrCode({
@@ -210,7 +210,6 @@ export const writeFooter = ({
 		y: topFooterY,
 		footerLogoPng,
 		qrCodeUrl,
-		webSiteUrl
 	})
 
 	return { topFooterY, bottomFooterY }

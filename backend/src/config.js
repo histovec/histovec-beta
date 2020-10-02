@@ -24,7 +24,7 @@ const config = {
 
   // UTAC api
   utac: {
-    isApiActivated: process.env.IS_UTAC_API_ACTIVATED || true, // /!\ value is passed as String
+    isApiActivated: process.env.IS_UTAC_API_ACTIVATED || false, // /!\ value is passed as String
     isFakedApi: false, // /!\ value is passed as String
     apiUrl: process.env.UTAC_URL,
     fakeApiUrl: process.env.FAKE_UTAC_URL,

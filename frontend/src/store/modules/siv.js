@@ -1,15 +1,28 @@
 import api from '@/api'
+import {V_TTL} from '../../constants/v'
 
 export default {
   state: {
     id: undefined,
     key: undefined,
     code: undefined,
-    v: undefined
+    v: undefined,
+    vExpiry: new Date().getTime(), // expired by default
+  },
+  getters: {
+    vWithExpiry: state => {
+      const now = new Date()
+      if (now.getTime() > state.vExpiry) {
+				return null
+			}
+      return state.v
+    }
   },
   mutations: {
     updateV (state, v) {
+      const now = new Date()
       state.v = v
+      state.vExpiry = now.getTime() + V_TTL
     },
     updateCode (state, code) {
       state.code = code
@@ -18,16 +31,19 @@ export default {
       if (key !== state.key) {
         state.key = key
         state.v = undefined
+        state.vExpiry = new Date().getTime() // expired by default
       }
     },
     updateId (state, id) {
       if (id !== state.id) {
         state.id = id
         state.v = undefined
+        state.vExpiry = new Date().getTime() // expired by default
       }
     },
     clearSIV (state) {
       state.v = undefined
+      state.vExpiry = new Date().getTime() // expired by default
       state.key = undefined
       state.code = undefined
       state.id = undefined
