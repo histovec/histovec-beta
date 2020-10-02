@@ -38,12 +38,13 @@ const drawQrCode = (
 }
 
 const writeQrCodeText = (
-	pdf, baseUrl,
+	pdf, qrCodeUrl,
 	{ dryRun }={ dryRun: false },
 	{	x, y, rotation }={ x: 169, y: 281, rotation: 90 }
 ) => {
 	if(!dryRun) {
-		writeText(pdf, x, y, baseUrl, {
+		const truncatedQrCodeUrl = `${qrCodeUrl.substring(0, 30)}...`
+		writeText(pdf, x, y, truncatedQrCodeUrl, {
 			size: FONT_SIZES.XS,
 			rotation
 		})
@@ -71,11 +72,11 @@ const writeQrCodeLogo = (
 }
 
 const writeCSAQrCode = (
-	pdf, histoVecLogo, qrCodeUrl, webSiteUrl,
+	pdf, histoVecLogo, qrCodeUrl,
 	{ dryRun }={ dryRun: false }
 ) => {
 	const { topY: qrCodeTopY } = drawQrCode(pdf, qrCodeUrl, { dryRun })
-	const { topY: qrCodeTextTopY } = writeQrCodeText(pdf, webSiteUrl, { dryRun })
+	const { topY: qrCodeTextTopY } = writeQrCodeText(pdf, qrCodeUrl, { dryRun })
 	const { topY: qrCodeLogoTopY } = writeQrCodeLogo(pdf, histoVecLogo, { dryRun })
 
 	return { topY: Math.min(qrCodeTopY, qrCodeTextTopY, qrCodeLogoTopY) }
@@ -144,7 +145,7 @@ export const writeFooter = (
 ) => {
 	const { topY: validityDateTopY } = writeValidityDate(pdf, { dryRun })
 	const { topY: legalNoticeTopY } = writeLegalNotice(pdf, validityDate, webSiteUrl, { dryRun })
-	const { topY: qrCodeTopY } = writeCSAQrCode(pdf, histoVecLogo, qrCodeUrl, webSiteUrl, { dryRun })
+	const { topY: qrCodeTopY } = writeCSAQrCode(pdf, histoVecLogo, qrCodeUrl, { dryRun })
 
 	return { topY: Math.min(validityDateTopY, legalNoticeTopY, qrCodeTopY) }
 }

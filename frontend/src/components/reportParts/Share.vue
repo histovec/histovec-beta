@@ -89,10 +89,6 @@ export default {
       type: String,
       default: ''
     },
-    baseUrl: {
-      type: String,
-      default: ''
-    },
     holder: Boolean
   },
   data () {

@@ -321,7 +321,6 @@
                   v-if="tab === 'send'"
                   :v="v"
                   :url="url"
-                  :base-url="baseUrl"
                   :holder="holder"
                 >
                 </share>
