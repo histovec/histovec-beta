@@ -75,7 +75,6 @@
                   <div class="separator-2"></div>
                   <div class="btn btn-mon-avis">
                     <a
-                      :href="$store.state.config.v1 ? undefined : contactEmail"
                       title="Contactez-nous"
                       @click="toggleContactModal()"
                     >
@@ -217,8 +216,6 @@ import VueClipboard from 'vue-clipboard2'
 import ContactModal from './components/forms/ContactModal.vue'
 import RatingModal from './components/forms/RatingModal.vue'
 
-import { HISTOVEC_SUPPORT_EMAIL } from './constants/email'
-import { mailTo } from './utils/email'
 import { renderUserInfosBloc } from './utils/dynamicEmail'
 
 Vue.use(VueTheMask)
@@ -236,7 +233,6 @@ Vue.mixin({
       appName: process.env.VUE_APP_TITLE,
       appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
-      apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
       localization,
       syntheseMapping,
       statusMessages,
@@ -256,20 +252,6 @@ Vue.mixin({
 
       return renderUserInfosBloc(context)
     },
-    contactEmail() {
-      return mailTo({
-        recipients: [HISTOVEC_SUPPORT_EMAIL],
-        subject: 'Contacter HistoVec',
-        body: this.userFooter
-      })
-    },
-    reportErrorEmail() {
-      return mailTo({
-        recipients: [HISTOVEC_SUPPORT_EMAIL],
-        subject: 'Signaler une erreur',
-        body: this.userFooter
-      })
-    }
   },
 
   created () {
@@ -287,9 +269,7 @@ export default {
   },
   methods: {
     toggleContactModal (subject = contact.subject.default) {
-      if (this.$store.state.config.v1) {
-        this.$store.dispatch('toggleContactModal', { subject })
-      }
+      this.$store.dispatch('toggleContactModal', { subject })
     }
   }
 

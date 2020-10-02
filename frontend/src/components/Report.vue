@@ -175,7 +175,7 @@
                 </a>
               </li>
               <li
-                v-if="!processedVehicleData.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
+                v-if="!processedVehicleData.administratif.isAnnulationCI && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="!processedVehicleData.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
+                v-if="!processedVehicleData.administratif.isAnnulationCI && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -457,9 +457,8 @@ export default {
       } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         return 'invalid'
       } else if (this.$store.state.api.fetching.siv ||
-                (this.$store.state.api.http.siv === undefined) ||
-                ((this.$store.state.api.hit.siv === undefined) && (!this.$store.state.config.v1)) ||
-                (this.$store.state.api.decrypted.siv === undefined)) {
+                this.$store.state.api.http.siv === undefined ||
+                this.$store.state.api.decrypted.siv === undefined) {
           return 'wait'
       } else if (this.$store.state.api.http.siv !== 200) {
         return this.holder ? statusFromCode.holder[this.$store.state.api.http.siv] :
@@ -515,7 +514,7 @@ export default {
       this.tab = 'csa'
     }
 
-    const isUtacActivated = this.$store.state.config.v1 && this.$store.state.config.utac
+    const isUtacActivated = this.$store.state.config.utac
     const isGetSIVSucceeded = this.status === 'ok' && this.processedVehicleData
     if (isUtacActivated && isGetSIVSucceeded && !this.processedVehicleData.administratif.isAnnulationCI) {
       await this.$store.dispatch('getUTAC')
@@ -544,7 +543,7 @@ export default {
         return
       }
 
-      await this.$store.dispatch('getSIV', this.$store.state.config.v1)
+      await this.$store.dispatch('getVehicleData')
       await this.$store.dispatch('log',
         this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
       return

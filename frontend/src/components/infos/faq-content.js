@@ -6,21 +6,13 @@ import aideFNI from '@/assets/img/aide_fni.jpg'
 import store from '@/store'
 import contact from '@/assets/json/contact.json'
 
-import { mailTo } from '../../utils/email'
-import { HISTOVEC_SUPPORT_EMAIL } from '../../constants/email'
 
-
-const contactHook = (id, subject = contact.subject.default, mailBody = undefined) => {
+const contactHook = (id, subject = contact.subject.default) => {
   return {
     [id]: (e) => {
-      if (store.state.config.v1) {
-        e.removeAttribute('href')
-        e.onclick = async () => {
-          await store.dispatch('toggleContactModal', { subject })
-        }
-      } else {
-        e.href = mailTo({ recipients: [HISTOVEC_SUPPORT_EMAIL], subject, body: mailBody })
-        e.onclick = () => { return }
+      e.removeAttribute('href')
+      e.onclick = async () => {
+        await store.dispatch('toggleContactModal', { subject })
       }
     }
   }
@@ -28,29 +20,6 @@ const contactHook = (id, subject = contact.subject.default, mailBody = undefined
 
 export default function () {
   let id = 0
-  const vehicleNotFoundEmail = {
-    recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: contact.subject.holderNotFound,
-    body: this.userFooter
-  }
-
-  const reportPersonnalDataEmail = {
-    recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: contact.subject.personalData,
-    body: this.userFooter
-  }
-
-  const reportVehicleDataEmail = {
-    recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: contact.subject.vehicleData,
-    body: this.userFooter
-  }
-
-  const reportInvalidLinkEmail = {
-    recipients: [HISTOVEC_SUPPORT_EMAIL],
-    subject: contact.subject.buyerNotFound,
-    body: this.userFooter
-  }
 
   const faqContent = [
     {
@@ -212,15 +181,12 @@ export default function () {
       body: `
         <p class="indented">
         Pour ce faire,
-          <a
-            id="contact_hook_${id}"
-            href="${mailTo(reportPersonnalDataEmail)}"
-          >
+          <a id="contact_hook_${id}">
             contactez-nous
           </a>
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.personalData, reportPersonnalDataEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.personalData),
     },
     {
       title: 'Comment corriger une information manquante ou inexacte sur les données de mon véhicule?',
@@ -229,13 +195,12 @@ export default function () {
         Pour ce faire,
           <a
             id="contact_hook_${id}"
-            href="${mailTo(reportVehicleDataEmail)}"
           >
             contactez-nous
           </a>
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.vehicleData, reportVehicleDataEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.vehicleData),
     },
     {
       title: 'Comment retrouver mon véhicule ?',
@@ -292,11 +257,10 @@ export default function () {
           Si votre véhicule est toujours introuvable,
           <a
             id="contact_hook_${id}"
-            href="${mailTo(vehicleNotFoundEmail)}"
           >contactez-nous</a>.
         </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.holderNotFound, vehicleNotFoundEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.holderNotFound),
     },
     {
       title: 'Où se trouve le numéro de formule ?',
@@ -465,13 +429,12 @@ export default function () {
       Si jamais le problème persiste avec votre vendeur :
         <a
           id="contact_hook_${id}"
-          href="${mailTo(reportInvalidLinkEmail)}"
         >
           contactez-nous
         </a>
       </p>
       `,
-      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.buyerNotFound, reportInvalidLinkEmail.body),
+      callbacks: contactHook(`contact_hook_${id++}`, contact.subject.buyerNotFound),
     },
     {
       title: 'Comment puis-je récupérer le rapport d\'un expert en automobile ?',

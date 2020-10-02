@@ -49,14 +49,12 @@ export default new Vuex.Store({
       csaAnnulationCi: false,
       dataDate: false,
       utac: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
-      v1: true,
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       newPdfLib: ['ctrl', 'alt', 'b'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
-      v1: ['ctrl', 'alt', 'v'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,
@@ -122,12 +120,12 @@ export default new Vuex.Store({
         await dispatch('log', 'feedback')
       }
     },
-    async sendFeedback ({ state, commit }, feedback) {
-      await api.sendFeedback(feedback, state.config.v1)
+    async sendFeedback ({ commit }, feedback) {
+      await api.sendFeedback(feedback)
       commit('updateFeedback')
     },
-    async sendContact ({ state, commit }, contact) {
-      await api.sendContact(contact, state.config.v1)
+    async sendContact ({ commit }, contact) {
+      await api.sendContact(contact)
       commit('updateContact')
     },
     initApiStatus ({ commit }, apiName) {

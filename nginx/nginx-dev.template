@@ -43,7 +43,7 @@ server {
     alias /usr/share/nginx/html/assets/images;
   }
 
-  location ~ "^/<APP>/api/v0/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" {
+  location ~ "^/<APP>/api/v1/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" {
     #valid_referers histovec.interieur.gouv.fr localhost beta.datalab.mi histovec.fr;
     #if ($invalid_referer) {
     #    return 403;
@@ -65,7 +65,7 @@ server {
     # sub_filter '{}' '';
   }
 
-  location ~ "^/<APP>/api/v0/log/exit" {
+  location ~ "^/<APP>/api/v1/log/exit" {
     if ($request_method != POST) {
        return 405;
     }
@@ -73,7 +73,7 @@ server {
     return 200 '{"status":"ok"}';
   }
 
-  location ~ "^/<APP>/api/v0/log/.*" {
+  location ~ "^/<APP>/api/v1/log/.*" {
     if ($request_method != PUT) {
        return 405;
     }
@@ -81,11 +81,11 @@ server {
     return 200 '{"status":"ok"}';
   }
 
-  location ~ ^/<APP>/api/v0/id/.* {
+  location ~ ^/<APP>/api/v1/id/.* {
     return 400;
   }
 
-  location ~ (^/<APP>/api/v0/(contact|feedback)/) {
+  location ~ (^/<APP>/api/v1/(contact|feedback)/) {
     if ($request_method != POST) {
        return 405;
     }

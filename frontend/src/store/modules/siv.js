@@ -50,19 +50,14 @@ export default {
     }
   },
   actions: {
-    async getSIV ({ commit, state, rootState }, future) {
+    async getVehicleData ({ commit, state, rootState }) {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.siv) {
         return
       }
 
       commit('clearUTAC')
 
-      let response
-      if (future) {
-        response = await api.getSIVv1(state.id, state.key, localStorage.getItem('userId'))
-      } else {
-        response = await api.getSIV(state.id, state.key, localStorage.getItem('userId'))
-      }
+      const response = await api.getVehicleData(state.id, state.key, localStorage.getItem('userId'))
       if (response.success) {
         commit('updateVehicleData', response.vehicleData)
         if (response.token) {
