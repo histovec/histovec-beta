@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && $store.state.config.utacGraph && (ct || ctError)"
+                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a

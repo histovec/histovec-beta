@@ -49,7 +49,6 @@ export default new Vuex.Store({
       csaAnnulationCi: false,
       dataDate: false,
       utac: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
-      utacGraph: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
       v1: true,
     },
     configEnabler: {
@@ -57,8 +56,6 @@ export default new Vuex.Store({
       newPdfLib: ['ctrl', 'alt', 'b'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
-      utac: ['ctrl', 'alt', 'o'],
-      utacGraph: ['ctrl', 'alt', 'g'],
       v1: ['ctrl', 'alt', 'v'],
     },
     isContactModalVisible: false,
