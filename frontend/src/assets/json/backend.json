@@ -1,6 +1,5 @@
 {
     "api": {
-        "url": "/<APP>/api/v0/",
-        "futureUrl": "/<APP>/api/v1"
+        "url": "/<APP>/api/v1/"
     }
 }

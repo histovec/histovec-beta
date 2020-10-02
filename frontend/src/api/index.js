@@ -4,26 +4,17 @@ import CryptoJS from 'crypto-js'
 import store from '@/store'
 
 const apiUrl = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
-const apiFutureUrl = apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
 
 
-const apiPaths = (apiName, future = false) => {
+const apiPaths = (apiName) => {
   const apiRoute = {
-    current: {
-      log: 'log',
-      siv: 'id',
-      feedback: 'feedback',
-      contact: 'contact'
-    },
-    future: {
       log: 'log',
       siv: 'siv',
       feedback: 'feedback',
       contact: 'contact',
       utac: 'utac'
-    }
   }
-  return future ? `${apiFutureUrl}/${apiRoute.future[apiName]}` : `${apiUrl}/${apiRoute.current[apiName]}`
+  return `${apiUrl}/${apiRoute[apiName]}`
 }
 
 const decrypt = (encrypted, key) => {
@@ -93,57 +84,9 @@ const checkValidJson = async (apiName, response) => {
   }
 }
 
-const checkValidSearch = async (apiName, response) => {
-  // check if valid elasticsearch result
-  // and return only first result
-  try {
-    if (response.success) {
-      const json = await response.json
-      if ((Object.keys(json).length === 0) || (json.hits.hits.length === 0)) {
-        await store.commit('updateApiStatus', {
-          hit: { [apiName]: false },
-          noHits: { [apiName]: (store.state.api.noHits[apiName] || 0 ) + 1 }
-        })
-        return {
-          success: false,
-          status: response.status
-        }
-      } else {
-        await store.commit('updateApiStatus', {
-          hit: { [apiName]: true },
-          hits: { [apiName]: (store.state.api.hits[apiName] || 0 ) + 1 }
-        })
-        return {
-          success: true,
-          status: response.status,
-          json: json.hits.hits[0]._source
-        }
-      }
-    } else {
-      await store.commit('updateApiStatus', {
-        hit: { [apiName]: false }
-      })
-      return {
-        success: false,
-        status: response.status,
-        error: response.error || 'search_invalid_json'
-      }
-    }
-  } catch (e) {
-    await store.commit('updateApiStatus', {
-      hit: { [apiName]: false },
-      error: { [apiName]: { 'search': e } }
-    })
-    return {
-      success: false,
-      status: response.status,
-      error: { search: e }
-    }
-  }
-}
-
 const decryptHit = async (apiName, response, objectPath, key) => {
   try {
+
     if (response.success) {
       const decrypted = await response.json
       const encrypted = decrypted[objectPath] && decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
@@ -186,8 +129,6 @@ export const fetchInit = (apiName, url, options) => {
 
 export const fetchClient = (apiName, url, options) => fetchInit(apiName, url, options).then(resp => checkStatus(apiName, resp))
 export const jsonClient = (apiName, url, options) => fetchClient(apiName, url, options).then(resp => checkValidJson(apiName, resp))
-export const searchClient = (apiName, url, options) => jsonClient(apiName, url, options).then(resp => checkValidSearch(apiName, resp))
-export const decryptSearchClient = (apiName, url, objectPath, key, options) => searchClient(apiName,url, options).then(resp => decryptHit(apiName, resp, objectPath, key))
 export const decryptClient = (apiName, url, objectPath, key, options) => jsonClient(apiName,url, options).then(resp => decryptHit(apiName, resp, objectPath, key))
 
 const jsonHeader = {
@@ -201,27 +142,13 @@ const apiClient = {
   put: (apiName, url, options) => (
     jsonClient(apiName, url, { ...options, headers: jsonHeader, method: 'PUT' })
   ),
-  search: (apiName, url, options) => (
-    searchClient(apiName, url, { ...options, headers: jsonHeader, method: 'POST' })
-  ),
-  searchAndDecrypt: (apiName, url, objectPath, key, options) => (
-    decryptSearchClient(apiName, url, objectPath, key, { ...options, headers: jsonHeader})
-  ),
   decrypt: (apiName, url, objectPath, key, options) => (
     decryptClient(apiName, url, objectPath, key, { ...options, headers: jsonHeader})
   ),
 }
 
 export default {
-  async getSIV (id, key, uuid) {
-    const apiName = 'siv'
-    const response = await apiClient.searchAndDecrypt(apiName, `${apiPaths(apiName)}/${uuid}/${id}`, 'v', key)
-    return {
-      success: response.success,
-      vehicleData: ((response.decrypted && response.decrypted.vehicleData) || {})
-    }
-  },
-  async getSIVv1 (id, key, uuid) {
+  async getVehicleData (id, key, uuid) {
     const apiName = 'siv'
     const options = {
       method: 'POST',
@@ -255,15 +182,15 @@ export default {
     const json = await apiClient.put(apiName, `${apiPaths(apiName)}/${uid}/${normalizedPath}`)
     return json
   },
-  async sendFeedback (feedback, future=false) {
+  async sendFeedback (feedback) {
     const apiName = 'feedback'
-    const json = await apiClient.post(apiName, `${apiPaths(apiName, future)}/`, {
+    const json = await apiClient.post(apiName, `${apiPaths(apiName)}/`, {
       body: JSON.stringify(feedback)})
     return json
   },
-  async sendContact (contact, future=false) {
+  async sendContact (contact) {
     const apiName = 'contact'
-    const json = await apiClient.post(apiName, `${apiPaths(apiName, future)}/`, {
+    const json = await apiClient.post(apiName, `${apiPaths(apiName)}/`, {
       body: JSON.stringify(contact)})
     return json
   }

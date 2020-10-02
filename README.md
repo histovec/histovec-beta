@@ -14,7 +14,7 @@ Prochainement, HistoVec permettra également de connaître l'historique des cont
 
 # Version [en ligne](https://histovec.interieur.gouv.fr)
 
-La version en ligne v0 a été homologuée par le ministère de l'Intérieur et est en phase de généralisation. HistoVec devrait revêtir un caractère obligatoire à terme. L'application permet aujourd'hui de produire 2500 à 3500 rapports uniques par jour. La mesure obligatoire devrait porter ce nombre à environ 15000.
+La version en ligne a été homologuée par le ministère de l'Intérieur et est en phase de généralisation. HistoVec devrait revêtir un caractère obligatoire à terme. L'application permet aujourd'hui de produire 2500 à 3500 rapports uniques par jour. La mesure obligatoire devrait porter ce nombre à environ 15000.
 
 Le code source du présent site comporte l'ensemble des éléments fonctionnels (frontend), et bien sûr ne comporte pas les données, ni les configurations de déploiement.
 
@@ -41,9 +41,7 @@ Le mode de développement lance les services suivant:
 - le serveur de données elasticsearch (histovec-elasticsearch)
 - un serveur node de développement pour le backend (histovec-backend)
 - un seveur de cache Redis inmemory pour limiter les requêtes à l'API UTAC (histovec-cache)
-- un serveur note de bouchon pour l'API UTAC (otc-fake)
-
-Les 4 derniers services servent au développement de la v1, pas encore en production.
+- un serveur Node.js de bouchon pour l'API UTAC (otc-fake)
 
 ## chargement des données
 
@@ -52,9 +50,9 @@ Il existe plusieurs modes de chargement des données.
 ### données de développement (anonymisées)
 Un jeu de donnée de développement est dorénavant disponible pour permettre de développer HistoVec ou l'utiliser pour des tests en interface avec d'autres applications (Capsule, UTAC-Ceram).
 
-Ce jeu de donnée dispose d'identifiant personnels factices associées à des données de véhicules représentatifs de la diversité des véhicules (~2000 pour les plaques SIV, après 2009, et 800 pour les plaques IVT, avant 2009).
+Ce jeu de données dispose d'identifiants personnels factices associés à des données de véhicules représentatifs de la diversité des véhicules (~2000 pour les plaques SIV, après 2009, et 700 pour les plaques IVT, avant 2009).
 
-Les données sont lisibles via un suite office pour permettre de faire les tests d'insertion dans le formulaire, et seront utilisés prochainement pour des tests fonctionnels automatisés.
+Les données sont lisibles via un suite office pour permettre de faire les tests d'insertion dans le formulaire, et seront utilisées prochainement pour des tests fonctionnels automatisés.
 
 Pour les insérer dans la base HistoVec:
 
@@ -123,19 +121,19 @@ make build
 make up
 ```
 
-Il ne lance à ce stade que la v0 d'HistoVec :
+Il lance actuellement la v1 d'HistoVec :
 - temporairement, un serveur node qui compile l'application
 - nginx (avec le code compilé)
 - elasticsearch
 
-Les deux phases `build` et `up` permettent de construire les différents éléments (fichiers et répertoires) et structures nécessaires au fonctionnement d'HitoVec.
+Les deux phases `build` et `up` permettent de construire les différents éléments (fichiers et répertoires) et structures nécessaires au fonctionnement d'HistoVec.
 
 Pour stopper l'application, vous pouvez utiliser la commande `make down` qui arrête et supprime les conteneurs.
 
 ## performances
 
-HistoVec utilise artillery.io pour scenariser ses tests de performance.
-Pour lancer l'ensemble des scenarios (environ 15 minutes):
+HistoVec utilise artillery.io pour scénariser ses tests de performance.
+Pour lancer l'ensemble des scénarii (environ 15 minutes):
 ```
 make index-stress
 ```
@@ -143,7 +141,6 @@ make index-stress
 Ce test n'a de véritable sens qu'avec un index pleinement chargé. Des données factices peuvent être chargées. La volumétrie actuelle d'HistoVec représente 85M de véhicules.
 
 La performance actuellement évaluée (8 vCPU, 8Go de Ram)
-- 300 sessions utilisateur / seconde (api v0 actuelle)
 - 300 sessions utilisateur / seconde (api v1 avec backend)
 - 200 sessions utilisateur / second (api v1 avec bouchon UTAC)
 
@@ -176,4 +173,3 @@ En affichage, ok jusqu'au search :
   - Safari 10.1+
   - Chrome 49+
   - Firefox 47+
-
