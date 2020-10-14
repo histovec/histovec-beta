@@ -176,7 +176,7 @@ export FAKE_UTAC_LATENCY=500
 
 # Default values for dev environement
 
-export IS_UTAC_API_ACTIVATED?=true
+export IS_UTAC_API_ACTIVATED?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
 export UTAC_TIMEOUT?=5000
