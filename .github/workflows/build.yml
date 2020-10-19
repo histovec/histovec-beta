@@ -11,10 +11,6 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
 
-    env:
-      DOCKER_COMPOSE_VERSION: 1.19.0
-      DOCKER_HOST: ???
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 12.14.0
