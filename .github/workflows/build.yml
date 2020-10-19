@@ -13,6 +13,7 @@ jobs:
 
     env:
       DOCKER_COMPOSE_VERSION: 1.19.0
+      DOCKER_HOST: ???
 
     steps:
       - uses: actions/checkout@v2
@@ -20,5 +21,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.14.0'
+      - uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_channel: nightly
+          # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
+          docker_nightly_version: snapshot-20201008
       - name: Test all (client and server)
         run: ./ci/run-tests.sh
