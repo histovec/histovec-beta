@@ -1,3 +1,4 @@
+
 ##############################################
 # WARNING : THIS FILE SHOULDN'T BE TOUCHED   #
 #    FOR ENVIRONNEMENT CONFIGURATION         #
@@ -34,7 +35,7 @@ export APP=histovec
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_USER := $(shell whoami)
-export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
+export APP_VERSION ?= $(shell git describe --tags || cat VERSION )
 export LOGS=${APP_PATH}/log
 # build options
 export DC_BUILD_ARGS = --pull --no-cache

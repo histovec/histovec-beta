@@ -23,4 +23,6 @@ jobs:
           # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
           docker_nightly_version: snapshot-20201008
       - name: Test all (client and server)
+        env:
+          APP_VERSION: testing
         run: ./ci/run-tests.sh
