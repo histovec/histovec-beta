@@ -45,7 +45,6 @@ export DC := docker-compose
 export NPM_REGISTRY = $(shell echo $$NPM_REGISTRY )
 export SASS_REGISTRY = $(shell echo $$SASS_REGISTRY )
 export dollar = $(shell echo \$$)
-export API_VERSION_V0=v0
 export API_VERSION_V1=v1
 export API_VERSION=${API_VERSION_V1}
 export AB_TESTING_PERCENTAGE=0
@@ -62,7 +61,6 @@ export PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
 ##############################################
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
-export NGINX_SERVER_TEMPLATE_V0=nginx-run-v0.template
 export NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
 export API_USER_LIMIT_RATE=1r/m
 export API_USER_BURST=3 nodelay
@@ -208,7 +206,6 @@ export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 # performance test confs
 export PERF=${APP_PATH}/tests/performance
 export PERF_IDS=${PERF}/ids.csv
-export PERF_SCENARIO_V0=${PERF}/scenarios/test-histovec-v0.yml
 export PERF_SCENARIO_V1=${PERF}/scenarios/test-histovec-v1.yml
 export PERF_SCENARIO_UTAC=${PERF}/scenarios/test-histovec-v1-utac.yml
 export PERF_REPORTS=${PERF}/reports/
@@ -281,16 +278,10 @@ endif
 # run / stop all services in qualification (compiled) mode
 up: up-${API_VERSION}
 
-up-v0: network wait-elasticsearch frontend-v0
-	@echo all services are up in production mode, api v0
-
 up-v1: network wait-elasticsearch backend-start frontend-v1
 	@echo all services are up in production mode, api v1
 
 down: down-${API_VERSION}
-
-down-v0: frontend-stop elasticsearch-stop network-stop
-	@echo all services stopped
 
 down-v1: frontend-stop elasticsearch-stop backend-stop network-stop
 	@echo all services stopped
@@ -367,13 +358,11 @@ publish-latest:
 # Download published images
 
 download-all-images: download-all-images-${API_VERSION}
-download-all-images-v0: build-dir nginx-download-image elasticsearch-download-image
 download-all-images-v1: build-dir nginx-download-image elasticsearch-download-image backend-download-image redis-download-image
 
 
 # Load published images
 load-all-images: load-all-images-${API_VERSION}
-load-all-images-v0: build-dir nginx-load-image elasticsearch-load-image
 load-all-images-v1: build-dir nginx-load-image elasticsearch-load-image backend-load-image redis-load-image
 
 # clean for fresh start
@@ -448,11 +437,6 @@ frontend-nginx-stop: frontend-stop
 
 frontend: frontend-${API_VERSION}
 
-frontend-v0: network
-	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0};\
-		export export EXEC_ENV=production; \
-		${DC} -f $(DC_RUN_NGINX_FRONTEND) up -d 2>&1 | grep -v orphan
-
 frontend-v1: network
 	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V1};\
 		export export EXEC_ENV=production; \
@@ -511,13 +495,6 @@ frontend-clean-image:
         done
 
 nginx-build: tor aws nginx-build-image-${API_VERSION}
-
-nginx-build-image-v0: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
-	@echo building ${APP} nginx
-	cp $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx/
-	@export NGINX_SERVER_TEMPLATE=${NGINX_SERVER_TEMPLATE_V0};\
-		export EXEC_ENV=production; \
-		${DC} -f $(DC_RUN_NGINX_FRONTEND) build $(DC_BUILD_ARGS)
 
 nginx-build-image-v1: $(BUILD_DIR)/$(FILE_FRONTEND_DIST_APP_VERSION) nginx-check-build tor
 	@echo building ${APP} nginx
@@ -904,8 +881,6 @@ smtp-fake-stop:
 ##############################################
 # test production mode
 test-up: test-up-${API_VERSION}
-test-up-v0: wait-elasticsearch test-up-elasticsearch test-up-nginx test-up-$(APP)
-	echo "${APP} ${APP_VERSION} up and running"
 test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-backend test-up-nginx test-up-$(APP)
 	echo "${APP} ${APP_VERSION} up and running"
 test-up-$(APP):
@@ -921,7 +896,7 @@ test-up-backend:
 # not working anymore: test requests in elasticsearch
 index-test: wait-elasticsearch
 	@echo index test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v0/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
+	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v1/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 
 # performance test
 test-ids:
@@ -945,29 +920,24 @@ build-api-injector:
 
 test-perf: wait-elasticsearch build-api-injector
 	@echo perf test
-	@for test in v0 v1 utac; do\
+	@for test in v1 utac; do\
 		make test-perf-$$test;\
 		done
 	@make clean-random-ids
 
 test-api: wait-elasticsearch build-api-injector
 	@echo simple api test
-	@for test in v0 v1 utac; do\
+	@for test in v1 utac; do\
 		make test-api-$$test;\
 		done
 	@make clean-random-ids
 
 test-api-dev: wait-elasticsearch build-api-injector
 	@echo api dev test
-	@for test in v0 v1 utac; do\
+	@for test in v1 utac; do\
 		make test-api-dev-$$test;\
 		done
 	@make clean-random-ids
-
-test-perf-v0: random-ids
-	@export PERF_SCENARIO=${PERF_SCENARIO_V0};\
-		export PERF_TEST_ENV=api-perf;\
-		make test-api-generic
 
 test-perf-v1: random-ids
 	@export PERF_SCENARIO=${PERF_SCENARIO_V1};\
@@ -979,11 +949,6 @@ test-perf-utac: random-ids
 		export PERF_TEST_ENV=api-perf;\
 		make test-api-generic
 
-test-api-v0: random-ids
-	@export PERF_SCENARIO=${PERF_SCENARIO_V0};\
-		export PERF_TEST_ENV=api;\
-		make test-api-generic
-
 test-api-v1: random-ids
 	@export PERF_SCENARIO=${PERF_SCENARIO_V1};\
 		export PERF_TEST_ENV=api;\
@@ -992,11 +957,6 @@ test-api-v1: random-ids
 test-api-utac: random-ids
 	@export PERF_SCENARIO=${PERF_SCENARIO_UTAC};\
 		export PERF_TEST_ENV=api;\
-		make test-api-generic
-
-test-api-dev-v0: random-ids
-	@export PERF_SCENARIO=${PERF_SCENARIO_V0};\
-		export PERF_TEST_ENV=api-dev;\
 		make test-api-generic
 
 test-api-dev-v1: random-ids

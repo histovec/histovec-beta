@@ -34,7 +34,7 @@ export default {
         rootState.siv.code,
         state.token,
         CryptoJS.SHA256(rootState.siv.key).toString(CryptoJS.enc.Base64),
-        rootState.siv.v.utac_id,
+        rootState.siv.vehicleData.utac_id,
         localStorage.getItem('userId')
       )
 

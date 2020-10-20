@@ -11,22 +11,31 @@ const config = {
 }
 
 console.log(JSON.stringify({ start_date: DateTime.local(), config: config }))
-let allCt = {}
 
-require('./utac_sample.json').map( item => allCt[immatNorm(item['plaque'])]=item['ct'])
+const allCt = (
+  require('./utac_sample.json')
+    .map((item) => { return {ct: item['ct'], plaque: item['plaque']} })
+    .reduce((accumulator, {ct, plaque}) => {
+      return {
+        ...accumulator,
+        [immatNorm(plaque)]: ct,
+      }
+    }, {})
+)
 
 function immatNorm (plaque) {
   if (!plaque || typeof plaque != 'string') {
     return undefined
   }
-  let p = plaque.toUpperCase()
-  p = p.replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
-  p = p.replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
-  return p
+  return (
+    plaque.toUpperCase()
+      .replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
+      .replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
+  )
 }
 
 function getCT(plaque) {
-  let myCt = allCt[plaque]
+  const myCt = allCt[plaque]
   console.log({
     plaque: plaque,
     ct: myCt ? `Found ${myCt.length} tech controls` : 'Not Found',

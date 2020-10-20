@@ -54,7 +54,7 @@ const computeCertifDepuis = (dateString) => {
   } else {
     const year = Math.floor(nbMonth / 12)
     const yearLabel = year > 1 ? `${year} ans` : `${year} an`
-    let month = nbMonth - 12 * year
+    const month = nbMonth - 12 * year
     if ((month > 0) && (year < 10)) {
       return `${yearLabel} et ${month} mois`
     } else {
@@ -99,8 +99,8 @@ const getVignetteNumero = (genre, categorie, typeCarburant, pollution, datePremI
   } else {
     // Mapping Categorie
     if (categorie) {
-      let categ = categorie.split('-')
-      categorie = categ[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
+      const categorieChunks = categorie.split('-')
+      categorie = categorieChunks[0] // Cas des categories qui contiennent des sous catégories (ex: L3e-A1) on récupère uniquement la première categorie
       voitureParticuliere = ['M1']
       vehiculeUtilitaireLegers = ['N1']
       motocycle = ['L3e', 'L4e', 'L5e', 'L7e']
@@ -530,7 +530,7 @@ const syntheseVehiculeMapping = ({
 
 const administratifVehiculeMapping = ({
   date_annulation_ci,
-  ...veh
+  ...vehicleData
 }, isAnnulationCI) => {
   const annulationCurrentStatus = booleanLabel(isAnnulationCI, { upperCase: false })
 
@@ -544,7 +544,7 @@ const administratifVehiculeMapping = ({
     }
   }
 
-  let {
+  const {
     ci_vole,
     duplicata,
     perte_ci,
@@ -561,7 +561,7 @@ const administratifVehiculeMapping = ({
       suspensions,
     },
     vehicule_vole
-  } = veh
+  } = vehicleData
 
   // Helpers
   const hasDvs = Boolean(dvs.length)  // DVS = Déclaration valant saisie
@@ -590,14 +590,14 @@ const administratifVehiculeMapping = ({
     ['desc']
   )
 
-  let otcisPvCurrentStatusLines = otcisPv.length > 0 ? ['PV(s) en attente'] : ['Aucune']
   const pvDates = otcisPv.map((otciPv) => {
     return [
       `- Date du PV :  ${formatDateOrDefault(otciPv.date)}`
     ]
   }).flat()
-  otcisPvCurrentStatusLines = [
-    ...otcisPvCurrentStatusLines,
+
+  const otcisPvCurrentStatusLines = [
+    otcisPv.length > 0 ? 'PV(s) en attente' : 'Aucune',
     ...pvDates
   ]
 
@@ -814,45 +814,45 @@ const computeAscendingValidHistorique = ({ historique=[], pve=[] }) => {
   return addPVEInfos(ascendingValidHistorique, pve)
 }
 
-const processRawData = (veh) => {
-  if (veh === undefined) {
+const processVehicleData = (vehicleData) => {
+  if (vehicleData === undefined) {
     return false
   }
 
   /* eslint-disable-next-line no-console */
-  console.log(veh)
+  console.log(vehicleData)
 
-  const isAnnulationCi = veh.annulation_ci === 'OUI'
+  const isAnnulationCi = vehicleData.annulation_ci === 'OUI'
 
-  const ascendingValidHistorique = computeAscendingValidHistorique(veh)
+  const ascendingValidHistorique = computeAscendingValidHistorique(vehicleData)
 
   let fniState
-  if (veh.dos_date_conversion_siv !== undefined && ascendingValidHistorique.length > 0) {
+  if (vehicleData.dos_date_conversion_siv !== undefined && ascendingValidHistorique.length > 0) {
     fniState = ascendingValidHistorique[0].opa_type === 'IMMAT_NORMALE' ? FNI_STATE.CONVERTI : FNI_STATE.CONVERTI_INCERTAIN
   } else {
-    fniState = veh.date_premiere_immat_siv === undefined ? FNI_STATE.OUI : FNI_STATE.NON
+    fniState = vehicleData.date_premiere_immat_siv === undefined ? FNI_STATE.OUI : FNI_STATE.NON
   }
 
-  const certificat = certificatVehiculeMapping(veh, ascendingValidHistorique, isAnnulationCi)
+  const certificat = certificatVehiculeMapping(vehicleData, ascendingValidHistorique, isAnnulationCi)
   const descendingHistoriqueForReport = isAnnulationCi ? [] : computeDescendingHistoriqueForReport(ascendingValidHistorique, certificat, fniState)
 
-  const administratif = administratifVehiculeMapping(veh, isAnnulationCi)
-  const ctec = ctecVehiculeMapping(veh, isAnnulationCi)
-  const titulaire = titulaireVehiculeMapping(veh, isAnnulationCi)
+  const administratif = administratifVehiculeMapping(vehicleData, isAnnulationCi)
+  const ctec = ctecVehiculeMapping(vehicleData, isAnnulationCi)
+  const titulaire = titulaireVehiculeMapping(vehicleData, isAnnulationCi)
 
-  let v = {
+  let processedVehicleData = {
     administratif,
     certificat,
     ctec,
-    dateUpdate: veh.date_update || '25/11/2018',  // @todo: why do we use this default date?
-    plaque: veh.plaq_immat,
+    dateUpdate: vehicleData.date_update || '25/11/2018',  // @todo: why do we use this default date?
+    plaque: vehicleData.plaq_immat,
     titulaire,
   }
 
   if (isAnnulationCi) {
     /* eslint-disable-next-line no-console */
-    console.log(v)
-    return v
+    console.log(processedVehicleData)
+    return processedVehicleData
   }
 
   const sinistres = descendingHistoriqueForReport.filter((sinistre) =>
@@ -885,23 +885,23 @@ const processRawData = (veh) => {
     (!administratif.hasSuspension && !administratif.opposition.hasOve && !administratif.opposition.hasOvei)
   )
 
-  v = {
-    ...v,
-    ageVeh: veh.age_annee,
+  processedVehicleData = {
+    ...processedVehicleData,
+    ageVeh: vehicleData.age_annee,
 
     // véhicule importé : changement de règle de gestion #406
     etranger: (
-      (veh.import === 'NON') ?
+      (vehicleData.import === 'NON') ?
         { hasBeenImported: false } :
-        { hasBeenImported: true, immat: veh.imp_imp_immat, pays: veh.pays_import}
+        { hasBeenImported: true, immat: vehicleData.imp_imp_immat, pays: vehicleData.pays_import}
     ),
 
     fniState,
     historique: descendingHistoriqueForReport,
     isApte,
-    logoVehicule: getVehiculeLogo(veh.CTEC_RLIB_GENRE),
+    logoVehicule: getVehiculeLogo(vehicleData.CTEC_RLIB_GENRE),
 
-    proprietairesCount: veh.nb_proprietaire,
+    proprietairesCount: vehicleData.nb_proprietaire,
     titulairesCount: computeTitulaireCount(descendingHistoriqueForReport, certificat.isIncertain),
 
     hasSinistre,
@@ -913,19 +913,19 @@ const processRawData = (veh) => {
     lastResolutionYear,
     resolutions,
 
-    usages: veh.usage || [],
+    usages: vehicleData.usage || [],
     vignetteNumero: getVignetteNumero(
-      veh.CTEC_RLIB_GENRE,
-      veh.CTEC_RLIB_CATEGORIE,
-      getTypeCarburant(veh.CTEC_RLIB_ENERGIE),
-      veh.CTEC_RLIB_POLLUTION,
-      veh.date_premiere_immat,
+      vehicleData.CTEC_RLIB_GENRE,
+      vehicleData.CTEC_RLIB_CATEGORIE,
+      getTypeCarburant(vehicleData.CTEC_RLIB_ENERGIE),
+      vehicleData.CTEC_RLIB_POLLUTION,
+      vehicleData.date_premiere_immat,
     ),
   }
 
   /* eslint-disable-next-line no-console */
-  console.log(v)
-  return v
+  console.log(processedVehicleData)
+  return processedVehicleData
 }
 
-export default { processRawData }
+export default { processVehicleData }

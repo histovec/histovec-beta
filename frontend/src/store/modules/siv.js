@@ -6,23 +6,23 @@ export default {
     id: undefined,
     key: undefined,
     code: undefined,
-    v: undefined,
-    vExpiry: new Date().getTime(), // expired by default
+    vehicleData: undefined,
+    vehicleDataExpiry: new Date().getTime(), // expired by default
   },
   getters: {
-    vWithExpiry: state => {
+    vehicleDataWithExpiry: state => {
       const now = new Date()
-      if (now.getTime() > state.vExpiry) {
+      if (now.getTime() > state.vehicleDataExpiry) {
 				return null
 			}
-      return state.v
+      return state.vehicleData
     }
   },
   mutations: {
-    updateV (state, v) {
+    updateVehicleData (state, vehicleData) {
       const now = new Date()
-      state.v = v
-      state.vExpiry = now.getTime() + V_TTL
+      state.vehicleData = vehicleData
+      state.vehicleDataExpiry = now.getTime() + V_TTL
     },
     updateCode (state, code) {
       state.code = code
@@ -30,41 +30,36 @@ export default {
     updateKey (state, key) {
       if (key !== state.key) {
         state.key = key
-        state.v = undefined
-        state.vExpiry = new Date().getTime() // expired by default
+        state.vehicleData = undefined
+        state.vehicleDataExpiry = new Date().getTime() // expired by default
       }
     },
     updateId (state, id) {
       if (id !== state.id) {
         state.id = id
-        state.v = undefined
-        state.vExpiry = new Date().getTime() // expired by default
+        state.vehicleData = undefined
+        state.vehicleDataExpiry = new Date().getTime() // expired by default
       }
     },
     clearSIV (state) {
-      state.v = undefined
-      state.vExpiry = new Date().getTime() // expired by default
+      state.vehicleData = undefined
+      state.vehicleDataExpiry = new Date().getTime() // expired by default
       state.key = undefined
       state.code = undefined
       state.id = undefined
     }
   },
   actions: {
-    async getSIV ({ commit, state, rootState }, future) {
+    async getVehicleData ({ commit, state, rootState }) {
       if (rootState.api && rootState.api.fetching && rootState.api.fetching.siv) {
         return
       }
 
       commit('clearUTAC')
 
-      let response
-      if (future) {
-        response = await api.getSIVv1(state.id, state.key, localStorage.getItem('userId'))
-      } else {
-        response = await api.getSIV(state.id, state.key, localStorage.getItem('userId'))
-      }
+      const response = await api.getVehicleData(state.id, state.key, localStorage.getItem('userId'))
       if (response.success) {
-        commit('updateV', response.v)
+        commit('updateVehicleData', response.vehicleData)
         if (response.token) {
           commit('updateToken', response.token)
         }

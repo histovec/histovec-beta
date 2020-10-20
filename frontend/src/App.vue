@@ -15,36 +15,32 @@
       <header class="header">
         <div class="container">
           <div class="row">
-            <div class="col-md-7">
-              <div class="header-left clearfix">
-                <!-- debut bandeau -->
-                <div class="logo">
-                  <router-link
-                    :to="{ name: 'home' }"
-                  >
-                    <img
-                      alt="accueil"
-                      src="assets/images/logo_mi_fond_bleu.png"
-                      class="img-marianne img-responsive col-xs-3 col-md-2"
-                      width="85"
-                      height="100"
-                      @click="show = !show"
+            <div class="col-md-8">
+              <div class="row">
+                <div class="header-left clearfix">
+                  <!-- debut bandeau -->
+                  <div class="logo col-xs-offset-1 col-xs-2 col-md-offset-1 col-md-2">
+                    <router-link
+                      :to="{ name: 'home' }"
                     >
-                  </router-link>
-                </div>
-                <div class="logo">
-                  <router-link
-                    :to="{ name: 'home' }"
-                  >
-                    <img
-                      alt="accueil"
-                      src="assets/images/histovec_header_mobile_sans_marianne.png"
-                      class="img-responsive col-xs-9 col-md-8"
-                      width="460"
-                      height="100"
-                      @click="show = !show"
+                      <img
+                        alt="accueil"
+                        src="assets/images/logo_mi.png"
+                        class="img-responsive"
+                      >
+                    </router-link>
+                  </div>
+                  <div class="logo shift-logo col-xs-offset-1 col-xs-7 col-md-offset-1 col-md-7">
+                    <router-link
+                      :to="{ name: 'home' }"
                     >
-                  </router-link>
+                      <img
+                        alt="accueil"
+                        src="assets/images/histovec_header_mobile_sans_marianne.png"
+                        class="img-responsive"
+                      >
+                    </router-link>
+                  </div>
                 </div>
                 <!-- fin bandeau -->
               </div>
@@ -75,7 +71,6 @@
                   <div class="separator-2"></div>
                   <div class="btn btn-mon-avis">
                     <a
-                      :href="$store.state.config.v1 ? undefined : contactEmail"
                       title="Contactez-nous"
                       @click="toggleContactModal()"
                     >
@@ -93,11 +88,11 @@
                   </h4>
                   <div class="separator-2"></div>
                   <div class="row grid-space-12">
-                    <div class="col-md-3 p-b-10 p-g-17">
+                    <div class="col-xs-2 col-md-4 p-g-17">
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
-                          width="55px"
+                          width="125px"
                           src="assets/images/logos_metiers/logo_mi.png"
                           alt="Ministère de l'Intérieur"
                         >
@@ -109,7 +104,7 @@
                         </a>
                       </div>
                     </div>
-                    <div class="col-md-6 p-b-12 m-h-14">
+                    <div class="col-xs-6 col-md-6 m-h-14">
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
@@ -217,8 +212,6 @@ import VueClipboard from 'vue-clipboard2'
 import ContactModal from './components/forms/ContactModal.vue'
 import RatingModal from './components/forms/RatingModal.vue'
 
-import { HISTOVEC_SUPPORT_EMAIL } from './constants/email'
-import { mailTo } from './utils/email'
 import { renderUserInfosBloc } from './utils/dynamicEmail'
 
 Vue.use(VueTheMask)
@@ -236,13 +229,11 @@ Vue.mixin({
       appName: process.env.VUE_APP_TITLE,
       appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
-      apiFutureUrl: apiConf.api.futureUrl.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
       localization,
       syntheseMapping,
       statusMessages,
       usagesMapping,
       lang: localization.default,
-      show: false
     }
   },
 
@@ -256,20 +247,6 @@ Vue.mixin({
 
       return renderUserInfosBloc(context)
     },
-    contactEmail() {
-      return mailTo({
-        recipients: [HISTOVEC_SUPPORT_EMAIL],
-        subject: 'Contacter HistoVec',
-        body: this.userFooter
-      })
-    },
-    reportErrorEmail() {
-      return mailTo({
-        recipients: [HISTOVEC_SUPPORT_EMAIL],
-        subject: 'Signaler une erreur',
-        body: this.userFooter
-      })
-    }
   },
 
   created () {
@@ -287,9 +264,7 @@ export default {
   },
   methods: {
     toggleContactModal (subject = contact.subject.default) {
-      if (this.$store.state.config.v1) {
-        this.$store.dispatch('toggleContactModal', { subject })
-      }
+      this.$store.dispatch('toggleContactModal', { subject })
     }
   }
 

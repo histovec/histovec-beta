@@ -59,39 +59,39 @@
           <div class="row">
             <div class="col-sm-6">
               <div
-                v-if="!v.administratif.isAnnulationCI"
+                v-if="!processedVehicleData.administratif.isAnnulationCI"
                 class="alert alert-icon alert-info"
                 role="alert"
               >
-                <i :class="'fa fa-' + v.logoVehicule"></i>
-                Numéro - Plaque d'immatriculation : {{ v.plaque }}
+                <i :class="'fa fa-' + processedVehicleData.logoVehicule"></i>
+                Numéro - Plaque d'immatriculation : {{ processedVehicleData.plaque }}
               </div>
               <div
-                v-if="v.administratif.isAnnulationCI"
+                v-if="processedVehicleData.administratif.isAnnulationCI"
                 class="alert alert-icon alert-danger"
                 role="alert"
               >
                 <i class="fa fa-warning"></i>
-                Le certificat demandé a été annulé : {{ v.plaque }}
+                Le certificat demandé a été annulé : {{ processedVehicleData.plaque }}
               </div>
             </div>
             <div class="col-sm-6">
               <div
-                v-if="v.dateUpdate && v.dateUpdate != DEFAULT_DATE_UPDATE"
+                v-if="processedVehicleData.dateUpdate && processedVehicleData.dateUpdate != DEFAULT_DATE_UPDATE"
                 class="alert alert-icon alert-warning"
                 role="alert"
               >
                 <i class="fa fa-calendar-check-o"></i>
                 <span v-if="$store.state.config.dataDate">
                   Informations du ministère de l'Intérieur datant du
-                  <strong>{{ v.dateUpdate }}</strong>
+                  <strong>{{ processedVehicleData.dateUpdate }}</strong>
                 </span>
                 <span v-else>
                   Informations connues d'HistoVec à ce jour
                 </span>
               </div>
               <div
-                v-if="!$store.state.config.dataDate && v.dateUpdate && v.dateUpdate === DEFAULT_DATE_UPDATE"
+                v-if="!$store.state.config.dataDate && processedVehicleData.dateUpdate && processedVehicleData.dateUpdate === DEFAULT_DATE_UPDATE"
                 class="alert alert-icon alert-warning"
                 role="alert"
               >
@@ -115,7 +115,7 @@
               role="tablist"
             >
               <li
-                v-if="!v.administratif.isAnnulationCI"
+                v-if="!processedVehicleData.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'abstract'}]"
               >
                 <a
@@ -127,19 +127,19 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI"
+                v-if="!processedVehicleData.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'vehicle'}]"
               >
                 <a
                   class="clickable"
                   @click="tab = 'vehicle'"
                 >
-                  <i :class="'fa fa-' + v.logoVehicule + ' pr-10'"></i>
+                  <i :class="'fa fa-' + processedVehicleData.logoVehicule + ' pr-10'"></i>
                   Véhicule
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI"
+                v-if="!processedVehicleData.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'holder'}]"
               >
                 <a
@@ -151,7 +151,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI"
+                v-if="!processedVehicleData.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'situation'}]"
               >
                 <a
@@ -163,7 +163,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI"
+                v-if="!processedVehicleData.administratif.isAnnulationCI"
                 :class="[{'active' : tab === 'history'}]"
               >
                 <a
@@ -175,7 +175,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
+                v-if="!processedVehicleData.administratif.isAnnulationCI && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && $store.state.config.v1 && $store.state.config.utac && (ct || ctError)"
+                v-if="!processedVehicleData.administratif.isAnnulationCI && $store.state.config.utac && (ct || ctError)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -211,7 +211,7 @@
                 </a>
               </li>
               <li
-                v-if="!v.administratif.isAnnulationCI && holder"
+                v-if="!processedVehicleData.administratif.isAnnulationCI && holder"
                 :class="[{'active' : tab === 'send'}]"
               >
                 <a
@@ -232,7 +232,7 @@
               >
                 <abstract
                   v-if="tab === 'abstract'"
-                  :v="v"
+                  :processed-vehicle-data="processedVehicleData"
                   :holder="holder"
                   :change-tab="changeTab"
                 >
@@ -245,7 +245,7 @@
               >
                 <tech-chars
                   v-if="tab === 'vehicle'"
-                  :ctec="v.ctec"
+                  :ctec="processedVehicleData.ctec"
                 >
                 </tech-chars>
               </div>
@@ -256,8 +256,8 @@
               >
                 <license
                   v-if="tab === 'holder'"
-                  :certificat="v.certificat"
-                  :titulaire="v.titulaire"
+                  :certificat="processedVehicleData.certificat"
+                  :titulaire="processedVehicleData.titulaire"
                 >
                 </license>
               </div>
@@ -269,8 +269,8 @@
                 <administrative
                   v-if="tab === 'situation'"
                   :holder="holder"
-                  :opposition-section="v.administratif.opposition"
-                  :report-labels="v.administratif.reportLabels"
+                  :opposition-section="processedVehicleData.administratif.opposition"
+                  :report-labels="processedVehicleData.administratif.reportLabels"
                 >
                 </administrative>
               </div>
@@ -281,7 +281,7 @@
               >
                 <history
                   v-if="tab === 'history'"
-                  :v="v"
+                  :processed-vehicle-data="processedVehicleData"
                 >
                 </history>
               </div>
@@ -319,7 +319,6 @@
               >
                 <share
                   v-if="tab === 'send'"
-                  :v="v"
                   :url="url"
                   :holder="holder"
                 >
@@ -333,7 +332,7 @@
                 <div v-if="!$store.state.config.newPdfLib">
                   <administrative-certificate-old
                     v-if="tab === 'csa'"
-                    :v="v"
+                    :processed-vehicle-data="processedVehicleData"
                     :url="url"
                     :base-url="baseUrl"
                   >
@@ -343,7 +342,7 @@
                 <div v-if="$store.state.config.newPdfLib">
                   <administrative-certificate
                     v-if="tab === 'csa'"
-                    :v="v"
+                    :processed-vehicle-data="processedVehicleData"
                     :url="url"
                     :base-url="baseUrl"
                   >
@@ -443,11 +442,14 @@ export default {
       return this.holder ? this.$route.params.id : this.$route.query.id
     },
     key () {
-      let k = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
-      return (k !== undefined) ? k.replace(/-/g, '+').replace(/_/g, '/') : undefined
+      const key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
+      if (!key) {
+        return
+      }
+      return key.replace(/-/g, '+').replace(/_/g, '/')
     },
     status () {
-      if (this.$store.state.siv.v) {
+      if (this.$store.state.siv.vehicleData) {
         this.showRatingModal()
         return 'ok'
       } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
@@ -455,9 +457,8 @@ export default {
       } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
         return 'invalid'
       } else if (this.$store.state.api.fetching.siv ||
-                (this.$store.state.api.http.siv === undefined) ||
-                ((this.$store.state.api.hit.siv === undefined) && (!this.$store.state.config.v1)) ||
-                (this.$store.state.api.decrypted.siv === undefined)) {
+                this.$store.state.api.http.siv === undefined ||
+                this.$store.state.api.decrypted.siv === undefined) {
           return 'wait'
       } else if (this.$store.state.api.http.siv !== 200) {
         return this.holder ? statusFromCode.holder[this.$store.state.api.http.siv] :
@@ -472,8 +473,8 @@ export default {
     typeImmatriculation () {
       return this.$route.params.typeImmatriculation
     },
-    v () {
-      return siv.processRawData(this.$store.state.siv.v)
+    processedVehicleData () {
+      return siv.processVehicleData(this.$store.state.siv.vehicleData)
     },
     holder () {
       return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
@@ -492,7 +493,7 @@ export default {
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      let urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
+      const urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
       return this.baseUrl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
     }
   },
@@ -507,30 +508,30 @@ export default {
       this.$store.commit('updateCode', this.$route.params.code)
     }
 
-    await this.getSIV()
+    await this.getVehicleData()
 
-    if (this.v.administratif.isAnnulationCI) {
+    if (this.processedVehicleData.administratif.isAnnulationCI) {
       this.tab = 'csa'
     }
 
-    const isUtacActivated = this.$store.state.config.v1 && this.$store.state.config.utac
-    const isGetSIVSucceeded = this.status === 'ok' && this.v
-    if (isUtacActivated && isGetSIVSucceeded && !this.v.administratif.isAnnulationCI) {
+    const isUtacActivated = this.$store.state.config.utac
+    const isGetSIVSucceeded = this.status === 'ok' && this.processedVehicleData
+    if (isUtacActivated && isGetSIVSucceeded && !this.processedVehicleData.administratif.isAnnulationCI) {
       await this.$store.dispatch('getUTAC')
     }
   },
   methods: {
-    async getSIV () {
-      const isVCached = this.$store.getters.vWithExpiry
-      if (isVCached) {
+    async getVehicleData () {
+      const isVehicleDataCached = this.$store.getters.vehicleDataWithExpiry
+      if (isVehicleDataCached) {
         await this.$store.dispatch('log',
           this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
         return
       }
 
-      const canGetV = this.$store.state.siv.id && this.$store.state.siv.key
+      const canGetVehicleData = this.$store.state.siv.id && this.$store.state.siv.key
       if (
-        !canGetV && (
+        !canGetVehicleData && (
           // rapport vendeur via formulaire de recherche, avec un paramètre manquant
           (this.holder && (!this.$route.params.key || !this.$route.params.id)) ||
           // rapport acheteur avec un paramètre manquant
@@ -542,7 +543,7 @@ export default {
         return
       }
 
-      await this.$store.dispatch('getSIV', this.$store.state.config.v1)
+      await this.$store.dispatch('getVehicleData')
       await this.$store.dispatch('log',
         this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
       return

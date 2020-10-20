@@ -30,7 +30,7 @@ export function checkSigned (message, key, signature) {
 
 export function encrypt (json, key) {
   try {
-    let encrypted = CryptoJS.AES.encrypt(JSON.stringify(json), key)
+    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(json), key)
     return encrypted.toString()
   } catch (e) {
     appLogger.debug(`encrypt_error: ${e.message}`)
@@ -65,7 +65,7 @@ const B64_TABLE =
 
 export function decryptXOR (encrypted, key) {
   // weak encryption (used for UtacId)
-  let WordArray = b64Decode(encrypted)
+  const WordArray = b64Decode(encrypted)
   return WordArray.map((c, i) => {
     return String.fromCharCode(c ^ keyCharAt(key, i))
   }).join('')

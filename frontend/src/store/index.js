@@ -49,14 +49,12 @@ export default new Vuex.Store({
       csaAnnulationCi: false,
       dataDate: false,
       utac: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
-      v1: true,
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       newPdfLib: ['ctrl', 'alt', 'b'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
-      v1: ['ctrl', 'alt', 'v'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,
@@ -66,10 +64,10 @@ export default new Vuex.Store({
   },
   mutations: {
     toggleConfig (state, key) {
-      let leafPath = key.replace(/^.*\./, '')
-      let rootPath = key.replace(/((.*)\..*|.*)/, '$2')
-      rootPath = rootPath === '' ? 'config' : `config.${rootPath}`
-      let model = objectPath.get(state, rootPath)
+      const leafPath = key.replace(/^.*\./, '')
+      const rootPath = key.replace(/((.*)\..*|.*)/, '$2')
+      const fullRootPath = rootPath === '' ? 'config' : `config.${rootPath}`
+      const model = objectPath.get(state, fullRootPath)
       /* eslint-disable-next-line no-console */
       console.log('hidden-feature', key, !model[leafPath])
       Vue.set(model, leafPath, !model[leafPath])
@@ -85,7 +83,7 @@ export default new Vuex.Store({
     },
     updateApiStatus (state, update) {
       Object.keys(update).forEach( status => {
-        let apiName = Object.keys(update[status])[0]
+        const apiName = Object.keys(update[status])[0]
         Vue.set(state.api[status], apiName, update[status][apiName])
       })
     },
@@ -109,7 +107,7 @@ export default new Vuex.Store({
       commit('updateLogCounter')
     },
     async toggleContactModal ({ state, commit, dispatch }, message ) {
-      let subject = ( message && message.subject ) || contact.subject.default
+      const subject = ( message && message.subject ) || contact.subject.default
       await commit('toggleContactModal')
       await commit('updateContactModalSubject', subject)
       if (state.isContactModalVisible) {
@@ -122,12 +120,12 @@ export default new Vuex.Store({
         await dispatch('log', 'feedback')
       }
     },
-    async sendFeedback ({ state, commit }, feedback) {
-      await api.sendFeedback(feedback, state.config.v1)
+    async sendFeedback ({ commit }, feedback) {
+      await api.sendFeedback(feedback)
       commit('updateFeedback')
     },
-    async sendContact ({ state, commit }, contact) {
-      await api.sendContact(contact, state.config.v1)
+    async sendContact ({ commit }, contact) {
+      await api.sendContact(contact)
       commit('updateContact')
     },
     initApiStatus ({ commit }, apiName) {

@@ -106,9 +106,9 @@ export default {
         return this.$store.state.identity[this.options.model]
       },
       set (value) {
-        let m = this.options.model
-        m = m.charAt(0).toUpperCase() + m.slice(1)
-        this.$store.commit(`update${m}`, value)
+        const modelName = this.options.model
+        const camelizedModelName = modelName.charAt(0).toUpperCase() + modelName.slice(1)
+        this.$store.commit(`update${camelizedModelName}`, value)
       }
     },
     label () {
@@ -140,8 +140,8 @@ export default {
     },
     applyMask (evt) {
       if (!evt.isTrusted) return
-      let el = evt.currentTarget
-      this.model = this.mask(el.value)
+      const target = evt.currentTarget
+      this.model = this.mask(target.value)
     }
   }
 }

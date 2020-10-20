@@ -51,7 +51,7 @@ const writeHeaderLogoPng = ({
 	y,
 	headerLogoPng
 }) => {
-	const pngDims = headerLogoPng.scale(0.15)
+	const pngDims = headerLogoPng.scale(0.035)
 	const pngY = y - pngDims.height
 
 	page.drawImage(headerLogoPng, {
@@ -61,7 +61,7 @@ const writeHeaderLogoPng = ({
 		height: pngDims.height,
 	})
 
-	return pngY - FONT_SPACING.XXL
+	return pngY - FONT_SPACING.XL
 }
 
 const writeCSAMainTitle = ({
@@ -272,7 +272,7 @@ const writeHistory = ({
 	forceTwoColumns,
 	nextPageSymbol
 }) => {
-	let topY = writeTitle({
+	const topY = writeTitle({
 		page,
 		embeddedFonts,
 		x: BORDER_LEFT_PAGE_X,
@@ -913,7 +913,7 @@ export const writeContent = (
 	// Write all page number
 	const totalPageNumber = doc.getPageCount()
 	for(let i=0; i<totalPageNumber; i++) {
-		let page = doc.getPage(i)
+		const page = doc.getPage(i)
 
 		writePageNumber({
 			page,

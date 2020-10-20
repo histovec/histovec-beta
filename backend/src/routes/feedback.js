@@ -24,9 +24,8 @@ const filterMessage = message => {
 }
 
 export async function sendFeedback (req, res) {
-  let errMessage = ''
   if (!(req.body.note && typeof req.body.note === 'number')) {
-    errMessage = 'Bad request: "note" field mandatory and must be an integer'
+    const errMessage = 'Bad request: "note" field mandatory and must be an integer'
     appLogger.debug(errMessage)
     res.status(400).json({
       success: false,
@@ -35,7 +34,7 @@ export async function sendFeedback (req, res) {
   }
 
   if (!(req.body.uuid && checkUuid(req.body.uuid))) {
-    errMessage =
+    const errMessage =
       'Bad request: "uuid" field mandatory and must be RFC 4122 compliant'
     appLogger.debug(errMessage)
     res.status(400).json({
@@ -43,7 +42,7 @@ export async function sendFeedback (req, res) {
       message: errMessage,
     })
   }
-  let feedback = {
+  const feedback = {
     message: filterMessage(req.body.message),
     email: filterEmail(req.body.email),
     uuid: req.body.uuid,
@@ -100,9 +99,8 @@ export async function sendFeedback (req, res) {
 }
 
 export async function sendContact (req, res) {
-  let errMessage
   if (!(req.body.email && emailRegex.test(req.body.email))) {
-    errMessage = 'Bad request: "email" field mandatory and must be valid'
+    const errMessage = 'Bad request: "email" field mandatory and must be valid'
     appLogger.debug(errMessage)
     res.status(400).json({
       success: false,
@@ -110,7 +108,7 @@ export async function sendContact (req, res) {
     })
   }
   if (!(req.body.uuid && checkUuid(req.body.uuid))) {
-    errMessage =
+    const errMessage =
       'Bad request: "uuid" field mandatory and must be RFC 4122 compliant'
     appLogger.debug(errMessage)
     res.status(400).json({

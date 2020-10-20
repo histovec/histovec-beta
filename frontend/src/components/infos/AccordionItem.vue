@@ -90,9 +90,9 @@ export default {
   methods: {
     applyCallbacks () {
       this.callbacks && Object.keys(this.callbacks).length && Object.keys(this.callbacks).forEach((id) => {
-        let elem = document.getElementById(id)
-        if (elem) {
-          this.callbacks[id](elem)
+        const element = document.getElementById(id)
+        if (element) {
+          this.callbacks[id](element)
         }
       })
     }

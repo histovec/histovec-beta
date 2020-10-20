@@ -31,7 +31,7 @@ import { generateCsa } from '../../utils/csaAsPdf'
 
 export default {
   props: {
-    v: {
+    processedVehicleData: {
       type: Object,
       default: () => {}
     },
@@ -49,7 +49,7 @@ export default {
       imagesLoading: -1,
       images: {
         marianne: {
-          url: 'assets/images/logo_mi_header_old.png'
+          url: 'assets/images/logo_mi.png'
         },
         histovec: {
           url: 'assets/images/histovec_logo_droite_name_old.png'
@@ -80,21 +80,21 @@ export default {
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
 
-      const isAnnulationCI = this.v.administratif.isAnnulationCI
-      const csaLabels = this.v.administratif.csaLabels
+      const isAnnulationCI = this.processedVehicleData.administratif.isAnnulationCI
+      const csaLabels = this.processedVehicleData.administratif.csaLabels
 
       generateCsa({
         isAnnulationCI,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
-        dateAnnulation: this.v.administratif.dateAnnulation,
+        dateAnnulation: this.processedVehicleData.administratif.dateAnnulation,
         histoVecLogo: this.images.histovec.img,
         marianneImage: this.images.marianne.img,
-        marque: this.v.ctec.marque,
+        marque: this.processedVehicleData.ctec.marque,
         plaque: this.$store.state.identity.plaque,
-        premierCertificat: this.v.certificat.premier,
+        premierCertificat: this.processedVehicleData.certificat.premier,
         qrCodeUrl: this.url,
         validityDate: this.validityDate,
-        vin: this.v.ctec.vin,
+        vin: this.processedVehicleData.ctec.vin,
         webSiteUrl: this.baseUrl
       },
       (
@@ -102,7 +102,7 @@ export default {
           duplicataTitre: csaLabels.titre.duplicata,
           dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
           gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
-          historyItems: this.v.historique.map((item) => `${item.date} ${item.nature}`),
+          historyItems: this.processedVehicleData.historique.map((item) => `${item.date} ${item.nature}`),
           otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
           otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,

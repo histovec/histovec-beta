@@ -28,18 +28,19 @@ export default {
     },
     updateFormOptions (state, update) {
       Object.keys(update).forEach( keyPathString => {
-        let o = state.formOptions
+        const formOptions = state.formOptions
         const value = update[keyPathString]
-        let keyPathArray = keyPathString.split('.')
+        const keyPathArray = keyPathString.split('.')
+
+        let formOption
         for (let i = 0, n = keyPathArray.length - 1; i < n; ++i) {
-          let k = keyPathArray[i]
-          if (k in o) {
-            o = o[k]
-          } else {
+          const keyPath = keyPathArray[i]
+          if (!(keyPath in formOptions)) {
             throw new Error(`updateFormOptions error: path ${keyPathString} not found in formOptions`)
           }
+          formOption = formOptions[keyPath]
         }
-        Vue.set(o, keyPathArray[keyPathArray.length - 1], value)
+        Vue.set(formOption, keyPathArray[keyPathArray.length - 1], value)
       })
     },
     updateNom (state, nom) {

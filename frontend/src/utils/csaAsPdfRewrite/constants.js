@@ -6,7 +6,7 @@ export const MISSING_VALUE = 'non disponible'
 export const RAPPORT_FILENAME = 'rapport'
 export const TO_BE_CONTINUED_SYMBOL = '... / ...'
 
-export const TOP_PAGE_MARGIN = 20
+export const TOP_PAGE_MARGIN = 10
 export const TOP_FOOTER_MARGIN = 700
 export const TOP_PAGE_NUMBER_MARGIN = 750
 
