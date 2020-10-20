@@ -49,7 +49,7 @@ export default {
       imagesLoading: -1,
       images: {
         marianne: {
-          url: 'assets/images/logo_mi_header_old.png'
+          url: 'assets/images/logo_mi.png'
         },
         histovec: {
           url: 'assets/images/histovec_logo_droite_name_old.png'

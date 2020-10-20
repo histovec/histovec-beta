@@ -30,7 +30,7 @@ import { generateCsa } from '../../utils/csaAsPdfRewrite'
 import { RAPPORT_FILENAME } from '../../utils/csaAsPdfRewrite/constants'
 
 import histoVecLogo from '@/assets/img/histovec_logo_droite_name.png'
-import marianneImage from '@/assets/img/logo_mi_header.png'
+import marianneImage from '@/assets/img/logo_mi.png'
 
 
 const downloadBlob = (blob, filename) => {

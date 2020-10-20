@@ -37,13 +37,13 @@ const writeHeaderLogo = (
 	pdf, image,
 	{ imageFormat, width, height,	x}={
 		imageFormat: IMAGE_FORMAT.PNG,
-		width: 46,
-		height: 24,
-		x: 82,
+		width: 41,
+		height: 31,
+		x: 86,
 	}
 ) => {
 	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height)
-	return TOP_PAGE_Y + height + FONT_SPACING.L
+	return TOP_PAGE_Y + height + FONT_SPACING.XS
 }
 
 const writeCSAMainTitle = (pdf, y) => {

@@ -51,7 +51,7 @@ const writeHeaderLogoPng = ({
 	y,
 	headerLogoPng
 }) => {
-	const pngDims = headerLogoPng.scale(0.15)
+	const pngDims = headerLogoPng.scale(0.035)
 	const pngY = y - pngDims.height
 
 	page.drawImage(headerLogoPng, {
@@ -61,7 +61,7 @@ const writeHeaderLogoPng = ({
 		height: pngDims.height,
 	})
 
-	return pngY - FONT_SPACING.XXL
+	return pngY - FONT_SPACING.XL
 }
 
 const writeCSAMainTitle = ({
