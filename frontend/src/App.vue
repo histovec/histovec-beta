@@ -25,7 +25,7 @@
                     >
                       <img
                         alt="accueil"
-                        src="assets/images/logo_mi.png"
+                        :src="logoMinistereInterieur"
                         class="img-responsive"
                       >
                     </router-link>
@@ -36,7 +36,7 @@
                     >
                       <img
                         alt="accueil"
-                        src="assets/images/histovec_header_mobile_sans_marianne.png"
+                        :src="imageHistovecHeaderMobileSansMarianne"
                         class="img-responsive"
                       >
                     </router-link>
@@ -93,7 +93,7 @@
                         <img
                           class="img-responsive"
                           width="125px"
-                          src="assets/images/logos_metiers/logo_mi.png"
+                          :src="logoMinistereInterieur"
                           alt="Ministère de l'Intérieur"
                         >
                         <a
@@ -109,7 +109,7 @@
                         <img
                           class="img-responsive"
                           width="110px"
-                          src="assets/images/logos_metiers/securite_routiere.png"
+                          :src="logoSecuriteRoutiere"
                           alt="sécurité routière, tous responsables"
                         >
                         <a
@@ -205,8 +205,12 @@ import localization from '@/assets/json/lang.json'
 import syntheseMapping from '@/assets/json/synthese.json'
 import statusMessages from '@/assets/json/status.json'
 import usagesMapping from '@/assets/json/usages.json'
-
 import contact from '@/assets/json/contact.json'
+
+import imageHistovecHeaderMobileSansMarianne from '@/assets/img/histovec_header_mobile_sans_marianne.png'
+import logoMinistereInterieur from '@/assets/img/logo_mi.png'
+import logoSecuriteRoutiere from '@/assets/img/securite_routiere.png'
+
 import VueTheMask from 'vue-the-mask'
 import VueClipboard from 'vue-clipboard2'
 import ContactModal from './components/forms/ContactModal.vue'
@@ -234,6 +238,11 @@ Vue.mixin({
       statusMessages,
       usagesMapping,
       lang: localization.default,
+
+      // images
+      imageHistovecHeaderMobileSansMarianne,
+      logoMinistereInterieur,
+      logoSecuriteRoutiere,
     }
   },
 

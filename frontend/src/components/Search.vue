@@ -26,7 +26,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
+            :style="{ backgroundImage: `url('${imagePoigneeDeMain}')`, backgroundPosition: '50% 50%' }"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -96,7 +96,7 @@
               <img
                 class="img-responsive center-block"
                 :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'siv' }"
-                src="assets/images/plaque_immatriculation_depuis_2009.png"
+                :src="imagePlaqueImmatriculationDepuis2009"
                 width="200"
                 height="44"
               >
@@ -113,7 +113,7 @@
               <img
                 class="img-responsive center-block"
                 :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'fni' }"
-                src="assets/images/plaque_immatriculation_avant_2009.png"
+                :src="imagePlaqueImmatriculationAvant2009"
                 width="200"
                 height="44"
               >
@@ -130,7 +130,7 @@
               <img
                 class="img-responsive center-block"
                 :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'old' }"
-                src="assets/images/plaque_immatriculation_avant_1995.png"
+                :src="imagePlaqueImmatriculationAvant1995"
                 width="200"
                 height="44"
               >
@@ -682,6 +682,10 @@ import imageNomsSIV from '@/assets/img/aide_siv_noms.png'
 import imageNumeroFormuleSIV from '@/assets/img/aide_siv_numero_formule.png'
 import imagePlaqueImmatriculationSIV from '@/assets/img/aide_siv_plaque_immatriculation.png'
 import imagePrenomsSIV from '@/assets/img/aide_siv_prenoms.png'
+import imagePlaqueImmatriculationAvant1995 from '@/assets/img/plaque_immatriculation_avant_1995.png'
+import imagePlaqueImmatriculationAvant2009 from '@/assets/img/plaque_immatriculation_avant_2009.png'
+import imagePlaqueImmatriculationDepuis2009 from '@/assets/img/plaque_immatriculation_depuis_2009.png'
+import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
 
 
 const formInitialOptions = {
@@ -792,6 +796,10 @@ export default {
       imagePrenomsSIV,
       imagePlaqueImmatriculationSIV,
       imageNumeroFormuleSIV,
+      imagePlaqueImmatriculationAvant1995,
+      imagePlaqueImmatriculationAvant2009,
+      imagePlaqueImmatriculationDepuis2009,
+      imagePoigneeDeMain,
 
       status: 'init',
     }

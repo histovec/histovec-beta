@@ -93,15 +93,11 @@
 </template>
 
 <script>
-import imageLogoRepubliqueFrancaisePng from '@/assets/img/logo_de_la_Republique_francaise.png'
 
 export default {
   data () {
     return {
       notShow: localStorage.getItem('notShow') === 'true',
-
-      // images
-      imageLogoRepubliqueFrancaisePng,
     }
   },
   methods: {

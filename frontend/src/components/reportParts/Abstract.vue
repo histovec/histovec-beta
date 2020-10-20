@@ -370,6 +370,7 @@
           <img
             class="img-responsive"
             :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + processedVehicleData.vignetteNumero + '.png'"
+            alt="Vignette Critair"
           >
         </div>
         <div class="col-sm-6">
