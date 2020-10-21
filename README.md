@@ -109,6 +109,11 @@ make index-purge
 Ces opérations peuvent être accélérées en utilisant un copier coller avec les différentes données depuis un tableur.
 
 
+## cache
+
+Le rapport HistoVec d'un véhicule est mis en cache par l'application web durant 24h pour chaque recherche distincte. La base de données n'est actualisée qu'une fois par jour.
+
+
 ## feedback
 
 En tant qu'usager, vous pouvez donner votre avis sur le service HistoVec une fois votre rapport trouvé (après avoir rempli le formulaire avec succès).
