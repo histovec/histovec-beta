@@ -29,11 +29,11 @@
                   </div>
                   <br>
                   <div class="row">
-                    <div class="col-sm-6 p-g-17">
+                    <div class="col-sm-8 p-g-17">
                       <img
-                        :src="imageLogoRepubliqueFrancaisePng"
+                        :src="logoMinistereInterieur"
                         class="img-responsive img-inline"
-                        width="60px"
+                        width="85px"
                         alt="Logo voxusagers.numerique.gouv.fr"
                       >
                       <span>
@@ -94,10 +94,15 @@
 
 <script>
 
+import logoMinistereInterieur from '@/assets/img/logo_mi.png'
+
 export default {
   data () {
     return {
       notShow: localStorage.getItem('notShow') === 'true',
+
+      // images
+      logoMinistereInterieur,
     }
   },
   methods: {
