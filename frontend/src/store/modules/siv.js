@@ -63,9 +63,6 @@ export default {
         if (response.token) {
           commit('updateToken', response.token)
         }
-        if (response.utac_id) {
-          commit('updateUtacId', response.utac_id)
-        }
       }
       return
     },
