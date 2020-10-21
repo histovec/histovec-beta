@@ -184,7 +184,6 @@ export UTAC_USERNAME?=Ch@ng€-m€
 export UTAC_PASSWORD?=Ch@ng€-m€-t0o
 export HISTOVEC_PFX?=src/utac/histovec.pfx
 export HISTOVEC_PFX_PASSPHRASE?=Ch@ng€-m€-pl€@se
-export INES_PEM?=src/utac/ines.pem
 export INES_TOKEN?=yOu-t0k€n-t0-m€?
 export UTAC_PEM?=src/utac/utac.pem
 
