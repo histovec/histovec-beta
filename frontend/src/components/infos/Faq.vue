@@ -22,7 +22,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
+            :style="{ backgroundImage: `url('${imagePoigneeDeMain}')`, backgroundPosition: '50% 50%' }"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -91,7 +91,8 @@
 <script>
 import Accordion from '@/components/infos/Accordion'
 import faqContent from './faq-content'
-// import delay from 'delay'
+import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
+
 
 export default {
   components: {
@@ -102,6 +103,9 @@ export default {
     return {
       faqContent,
       activeQuestion: this.$route.hash.substring(1),
+
+      // images
+      imagePoigneeDeMain,
     }
   },
 
@@ -119,7 +123,6 @@ export default {
     async highlightQuestion(id) {
       const hash = `#${id}`
       this.activeQuestion = id
-      // await delay(10)
       setTimeout(() => {
         this.$scrollTo(hash)
         this.$router.push({ name: 'faq', hash })

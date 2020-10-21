@@ -2,7 +2,7 @@
   <main role="main">
     <div
       class="banner banner-big-height padding-bottom-clear"
-      style="background-image:url('assets/images/accueil_4.jpg'); background-size: 1200px; background-position: 50% -100px;"
+      :style="{ backgroundImage: `url('${imageAccueil}')`, backgroundSize: '1200px', backgroundPosition: '50% -100px' }"
     >
       <div class="container">
         <div class="row justify-content-lg-center">
@@ -218,7 +218,7 @@
                   </h2>
                   <h6>
                     <img
-                      src="assets/images/exemple_rapport.png"
+                      :src="imageExempleRapportTiny"
                       width="1044"
                       height="113"
                       alt="type véhicule, puissance fiscale, propriétaire actuel, depuis quelle année, nombre de propriétaires"
@@ -365,7 +365,7 @@
                   style="height: 350px; overflow-y: auto;"
                 >
                   <img
-                    src="assets/images/exemple_rapport_g.png"
+                    :src="imageExempleRapportFull"
                     class="img-responsive"
                     style="margin: 0 auto;"
                   >
@@ -390,12 +390,22 @@
 </template>
 
 <script>
+
+import imageAccueil from '@/assets/img/accueil.jpg'
+import imageExempleRapportTiny from '@/assets/img/exemple_rapport.png'
+import imageExempleRapportFull from '@/assets/img/exemple_rapport_g.png'
+
 export default {
   components: {
   },
   data () {
     return {
-      modal: false
+      modal: false,
+
+      // images
+      imageAccueil,
+      imageExempleRapportTiny,
+      imageExempleRapportFull,
     }
   },
   created () {

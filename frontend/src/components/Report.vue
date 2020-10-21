@@ -24,7 +24,7 @@
           <!-- section start -->
           <section
             class="dark-translucent-bg"
-            style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
+            :style="{ backgroundImage: `url('${imagePoigneeDeMain}')`, backgroundPosition: '50% 50%' }"
           >
             <div class="container">
               <div class="row justify-content-lg-center">
@@ -387,6 +387,9 @@ import Status from './reportParts/Status.vue'
 import siv from '../assets/js/siv'
 import { DEFAULT_DATE_UPDATE } from '../constants/v'
 
+import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
+
+
 
 const statusFromCode = {
   'holder': {
@@ -433,8 +436,10 @@ export default {
       conf: [],
       timeout: 10000,
       ratingModalTimer: 120000,
-
       DEFAULT_DATE_UPDATE,
+
+      // images
+      imagePoigneeDeMain,
     }
   },
   computed: {

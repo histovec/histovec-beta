@@ -253,7 +253,6 @@
 <script>
 import { detect } from 'detect-browser'
 import contact from '@/assets/json/contact.json'
-import imageLogoRepubliqueFrancaisePng from '@/assets/img/logo_de_la_Republique_francaise.png'
 
 export default {
   data () {
@@ -271,9 +270,6 @@ export default {
         contact.subject.vehicleData
       ],
       contact,
-
-      // images
-      imageLogoRepubliqueFrancaisePng,
     }
   },
   computed: {

@@ -14,7 +14,7 @@
     </div>
     <section
       class="dark-translucent-bg"
-      style="background-image:url(assets/images/poignee_de_main.jpg); background-position: 50% 50%;"
+      :style="{ backgroundImage: `url('${imagePoigneeDeMain}')`, backgroundPosition: '50% 50%' }"
     >
       <div class="container">
         <div class="row justify-content-lg-center">
@@ -94,7 +94,15 @@
 import { mailTo } from '../../utils/email'
 import { ASK_REPORT_EMAIL } from '../../constants/email'
 
+import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
+
 export default {
+  data () {
+    return {
+      // images
+      imagePoigneeDeMain,
+    }
+  },
   created () {
     this.$store.dispatch('log', this.$route.path)
     this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
