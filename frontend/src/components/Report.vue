@@ -499,7 +499,8 @@ export default {
     },
     url () {
       const urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
-      return this.baseUrl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.id || this.$route.params.id) + '&key=' + encodeURIComponent(urlKey)
+      const queryString = `?id=${encodeURIComponent(this.$store.state.siv.id || this.$route.params.id)}&key=${encodeURIComponent(urlKey)}`
+      return `${this.baseUrl}/histovec/report${queryString}`
     }
   },
   async created () {
