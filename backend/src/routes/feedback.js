@@ -7,7 +7,7 @@ export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(
 export async function sendContact (req, res) {
   if (!(req.body.email && emailRegex.test(req.body.email))) {
     const errMessage = 'Bad request: "email" field mandatory and must be valid'
-    appLogger.debug(errMessage)
+    appLogger.error(errMessage)
     res.status(400).json({
       success: false,
       message: errMessage,
@@ -16,7 +16,7 @@ export async function sendContact (req, res) {
   if (!(req.body.uuid && checkUuid(req.body.uuid))) {
     const errMessage =
       'Bad request: "uuid" field mandatory and must be RFC 4122 compliant'
-    appLogger.debug(errMessage)
+    appLogger.error(errMessage)
     res.status(400).json({
       success: false,
       message: errMessage,

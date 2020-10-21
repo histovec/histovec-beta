@@ -60,12 +60,9 @@ module.exports.UTACClient = class UTACClient {
         return response
       },
       error => {
-        techLogger.info(`-- response interceptor -- ${error}`)
-
         if (error.response && (error.response.status === 429 || error.response.status === 503)) {
           this.isApiAvailable = false
           setTimeout(async () => {
-            techLogger.info('-- healthcheck --')
             const response = await this.healthCheck()
             this.isApiAvailable = response.status === 200
           }, config.utac.healthCheckRetrySeconds)
@@ -73,14 +70,11 @@ module.exports.UTACClient = class UTACClient {
         if (error.response && error.response.status === 401) {
           this.isApiAvailable = false
           setTimeout(async () => {
-            techLogger.info('-- RE auth --')
             const response = await this._authenticate()
 
             this.isAuthenticated = response.status === 200
           }, config.utac.authenticateRetrySeconds)
         } else {
-          techLogger.info('-- response REJECT --')
-
           return Promise.reject(error)
         }
       }
@@ -108,7 +102,7 @@ module.exports.UTACClient = class UTACClient {
         // @todo: use https://www.npmjs.com/package/request-rate-limiter instead
         const errorMessage = 'Too many request'
 
-        appLogger.debug({
+        appLogger.error({
           error: errorMessage,
           remote_error: error.message,
         })
@@ -120,7 +114,7 @@ module.exports.UTACClient = class UTACClient {
       } else if (error.response && error.response.status === 503) {
         const errorMessage = 'Unavailable UTAC api'
 
-        appLogger.debug({
+        appLogger.error({
           error: errorMessage,
           remote_error: error.message,
         })
@@ -132,7 +126,7 @@ module.exports.UTACClient = class UTACClient {
       } else {
         const errorMessage = 'Unexpected UTAC api error'
 
-        appLogger.debug({
+        appLogger.error({
           error: errorMessage,
           remote_error: error.message,
         })
@@ -185,7 +179,7 @@ module.exports.UTACClient = class UTACClient {
           status: 200,
         }
       } else {
-        appLogger.warn({
+        appLogger.error({
           error: 'Token not found while authenticating to UTAC api',
           response,
         })
@@ -197,7 +191,7 @@ module.exports.UTACClient = class UTACClient {
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[401],
           remote_error: error.message,
         })
@@ -206,7 +200,7 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[401],
         }
       } else {
-        appLogger.warn({
+        appLogger.error({
           error: errorMessages['default'],
           remote_error: error.message,
         })
@@ -236,7 +230,7 @@ module.exports.UTACClient = class UTACClient {
       this.isAuthenticated = true
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        appLogger.warn({
+        appLogger.error({
           error: 'UTACClient - Failed to authenticate',
           response: error.response,
         })
@@ -318,7 +312,7 @@ module.exports.UTACClient = class UTACClient {
           updateDate: response.data.update_date,
         }
       } else {
-        appLogger.warn({
+        appLogger.error({
           error: errorMessages[500],
           response: response,
         })
@@ -338,9 +332,8 @@ module.exports.UTACClient = class UTACClient {
         }
 
         // The second one is real a login / password error
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[401],
-          plaque,
           remote_error: error.message,
         })
 
@@ -349,9 +342,8 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[401],
         }
       } else if (error.response && error.response.status === 403) {
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[403],
-          plaque,
           remote_error: error.message,
         })
 
@@ -360,9 +352,8 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[403],
         }
       } else if (error.response && error.response.status === 404) {
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[404],
-          plaque,
           remote_error: error.message,
         })
 
@@ -371,9 +362,8 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[404],
         }
       } else if (error.response && error.response.status === 406) {
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[406],
-          plaque,
           remote_error: error.message,
         })
 
@@ -382,9 +372,8 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[406],
         }
       } else if (error.response && error.response.status === 429) {
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[429],
-          plaque,
           remote_error: error.message,
         })
 
@@ -393,9 +382,8 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[429],
         }
       } else if (error.response && error.response.status === 503) {
-        appLogger.debug({
+        appLogger.error({
           error: errorMessages[503],
-          plaque,
           remote_error: error.message,
         })
 
@@ -404,9 +392,8 @@ module.exports.UTACClient = class UTACClient {
           message: errorMessages[503],
         }
       } else {
-        appLogger.warn({
+        appLogger.error({
           error: errorMessages['default'],
-          plaque,
           remote_error: error.message,
         })
 
