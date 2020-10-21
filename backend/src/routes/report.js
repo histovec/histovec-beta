@@ -152,7 +152,7 @@ export function generateGetUTAC (utacClient) {
       return
     }
 
-    const cachedCtKey = hash(req.body.code || req.body.id)
+    const cachedCtKey = hash(req.body.id)
     const cachedCt = await getAsync(cachedCtKey)
     if (cachedCt) {
       try {
@@ -161,7 +161,6 @@ export function generateGetUTAC (utacClient) {
           cachedCtKey,
           cachedCt,
           bodyKey: req.body.key,
-          bodyCode: req.body.code,
           bodyId: req.body.id,
         })
         const ct = decrypt(cachedCt, req.body.key)
@@ -199,7 +198,7 @@ export function generateGetUTAC (utacClient) {
 
         if (response.status === 200) {
           await setAsync(
-            hash(req.body.code || req.body.id),
+            hash(req.body.id),
             encrypt(response.ct, req.body.key),
             'EX',
             config.redisPersit

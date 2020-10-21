@@ -151,7 +151,7 @@ export default {
     const apiName = 'siv'
     const options = {
       method: 'POST',
-      body: JSON.stringify({ id: id, uuid: uuid})
+      body: JSON.stringify({id, uuid})
     }
     const response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'vehicleData', key, options)
     return {
@@ -160,10 +160,10 @@ export default {
       vehicleData: (response.decrypted && response.decrypted.vehicleData || {})
     }
   },
-  async getUTAC (id, code, token, key, utacId, uuid) {
+  async getUTAC (id, token, key, utacId, uuid) {
     const apiName = 'utac'
     const options = {
-      body: JSON.stringify({id: id, code: code, token: token, key: key, utacId: utacId, uuid: uuid})
+      body: JSON.stringify({id, token, key, utacId, uuid})
     }
     const response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
     return {
