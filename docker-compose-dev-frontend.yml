@@ -77,7 +77,6 @@ services:
       - ${FRONTEND}/.editorconfig:/${APP}/.editorconfig
       - ${FRONTEND}/.eslintignore:/${APP}/.eslintignore
       - ${FRONTEND}/.eslintrc.js:/${APP}/.eslintrc.js
-      - ${FRONTEND}/config:/${APP}/config/
       - ${FRONTEND}/src:/${APP}/src/
       - ${FRONTEND}/build:/${APP}/build/
       - /${APP}/node_modules
