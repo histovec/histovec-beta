@@ -15,7 +15,6 @@ const config = {
   redisPersit: process.env.REDIS_PERSIST || 86400, // 24h
   esUrl: process.env.ES_URL,
   esSIVIndex: process.env.ES_INDEX,
-  esFeedbackIndex: 'feedback',
   smtpServer: process.env.SMTP_SERVER,
   smtpPort: process.env.SMTP_PORT,
   mailFrom: process.env.MAIL_FROM,

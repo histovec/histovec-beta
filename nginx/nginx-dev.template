@@ -85,11 +85,11 @@ server {
     return 400;
   }
 
-  location ~ (^/<APP>/api/v1/(contact|feedback)/) {
+  location ~ (^/<APP>/api/v1/(contact)/) {
     if ($request_method != POST) {
        return 405;
     }
-    rewrite "^/.*/(contact|feedback)/$" /$1/_doc break;
+    rewrite "^/.*/(contact)/$" /$1/_doc break;
     proxy_pass http://elasticsearch;
     proxy_redirect off;
     proxy_hide_header Content-Type;
@@ -98,7 +98,7 @@ server {
     proxy_http_version 1.1;
   }
 
-  location ~ "^/<APP>/api/v1/(siv|utac|contact|feedback)" {
+  location ~ "^/<APP>/api/v1/(siv|utac|contact)" {
     if ($request_method != POST) {
        return 405;
     }

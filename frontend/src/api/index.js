@@ -10,7 +10,6 @@ const apiPaths = (apiName) => {
   const apiRoute = {
       log: 'log',
       siv: 'siv',
-      feedback: 'feedback',
       contact: 'contact',
       utac: 'utac'
   }
@@ -180,12 +179,6 @@ export default {
     const apiName = 'log'
     const normalizedPath = path.replace(/^\/\w+\//, '')
     const json = await apiClient.put(apiName, `${apiPaths(apiName)}/${uid}/${normalizedPath}`)
-    return json
-  },
-  async sendFeedback (feedback) {
-    const apiName = 'feedback'
-    const json = await apiClient.post(apiName, `${apiPaths(apiName)}/`, {
-      body: JSON.stringify(feedback)})
     return json
   },
   async sendContact (contact) {
