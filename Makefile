@@ -464,7 +464,6 @@ frontend-prepare-build:
          .eslintignore \
          .eslintrc.js \
 				 vue.config.js \
-         config \
          src \
          public )
 
