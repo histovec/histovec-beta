@@ -23,10 +23,10 @@ export function sign (message, key) {
   const hashDigest = CryptoJS.SHA256(nonce + message)
   return CryptoJS.enc.Base64.stringify(CryptoJS.HmacSHA512(hashDigest, key))
 }
-
 export function checkSigned (message, key, signature) {
   return signature === sign(message, key)
 }
+
 
 export function encrypt (json, key) {
   try {
@@ -87,25 +87,6 @@ export function checkUuid (uuid) {
 
 export function checkId (id) {
   return id ? id.match(/[A-Za-z0-9_-]{43}=/) : false
-}
-
-export function str2hex (str) {
-  var res = ''
-  for (var i = 0; i < str.length; i++) {
-    res = res + ('k' + str.charCodeAt(i).toString(16))
-  }
-  return res
-}
-
-export function hex2str (str) {
-  var strarr = str.split('k')
-  var res = ''
-  for (var i = 0; i < strarr.length; i++) {
-    if (strarr[i] && parseInt(strarr[i], 16)) {
-      res = res + String.fromCharCode(parseInt(strarr[i], 16))
-    }
-  }
-  return res
 }
 
 function b64Decode (data) {
