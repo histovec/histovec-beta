@@ -184,7 +184,6 @@ export UTAC_USERNAME?=Ch@ng€-m€
 export UTAC_PASSWORD?=Ch@ng€-m€-t0o
 export HISTOVEC_PFX?=src/utac/histovec.pfx
 export HISTOVEC_PFX_PASSPHRASE?=Ch@ng€-m€-pl€@se
-export INES_PEM?=src/utac/ines.pem
 export INES_TOKEN?=yOu-t0k€n-t0-m€?
 export UTAC_PEM?=src/utac/utac.pem
 
@@ -464,7 +463,6 @@ frontend-prepare-build:
          .eslintignore \
          .eslintrc.js \
 				 vue.config.js \
-         config \
          src \
          public )
 
@@ -614,7 +612,6 @@ index-purge: wait-elasticsearch
 	@docker exec ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index prepared for deletion\n/;s/.*no such index.*//'
 	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/${dataset} | sed 's/{"acknowledged":true.*/${dataset} index purged\n/;s/.*no such index.*//'
 	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index purged\n/;s/.*no such index.*//'
-	@docker exec ${APP}-elasticsearch curl -s -XDELETE localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback purged\n/;s/.*no such index.*//'
 
 index-unlock: wait-elasticsearch
 	docker exec ${APP}-elasticsearch curl -s -XPUT localhost:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index unlocked\n/;s/.*no such index.*//'
@@ -625,7 +622,6 @@ index-lock: wait-elasticsearch
 index-create: wait-index-purge
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -H "Content-Type: application/json" -XPUT localhost:9200/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true.*/${dataset} index created with mapping\n/'
 	@docker exec -i ${USER_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/contact | sed 's/{"acknowledged":true.*/contact index created\n/'
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT localhost:9200/feedback | sed 's/{"acknowledged":true.*/feedback created\n/'
 
 index-status: wait-elasticsearch
 	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET localhost:9200/${dataset}?pretty

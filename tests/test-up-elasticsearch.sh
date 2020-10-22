@@ -83,13 +83,13 @@ if [ "$test_result" -gt "0" ] ; then
 fi
 echo "$test_output"
 
-echo "# elasticsearch _cat/indices >= 3"
+echo "# elasticsearch _cat/indices >= 2"
 # test nb indice == 3
-[ "$(echo "$test_output" | wc -l)" -ge 3 ]
+[ "$(echo "$test_output" | wc -l)" -ge 2 ]
 test_result=$?
 
 if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: nombre indices different de 3"
+  echo "ERROR: nombre indices different de 2"
   ret=$test_result
 fi
 echo "$test_output"
@@ -115,7 +115,7 @@ fi
 
 # verification indice en read_only_allow_delete
 echo "# elasticsearch indice en read_only_allow_delete ?"
-list_indice="$dataset contact feedback"
+list_indice="$dataset contact"
 test_result=0
 for indice in $list_indice ; do
   if ( docker exec -i ${USE_TTY} ${APP}-$container_name curl -s --fail -XGET localhost:9200/$indice | jq -e '.error' || \

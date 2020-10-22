@@ -78,7 +78,6 @@ ENV VUE_APP_PORT ${VUE_APP_PORT}
 ENV VUE_UI_PORT ${VUE_UI_PORT}
 
 VOLUME /$app_path/src
-VOLUME /$app_path/config
 VOLUME /$app_path/public
 
 EXPOSE ${VUE_APP_PORT}
@@ -107,7 +106,6 @@ VOLUME /$app_path/dist
 
 COPY .babelrc .editorconfig .eslintignore .eslintrc.js vue.config.js ./
 COPY src src
-COPY config config
 COPY public public
 
 CMD ["./run.sh", "build"]

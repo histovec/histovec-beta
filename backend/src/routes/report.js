@@ -53,7 +53,7 @@ async function searchSIV (id, uuid) {
             vehicleData,
           }
         } else {
-          appLogger.warn({
+          appLogger.error({
             error: 'Bad Content in elasticsearch response',
             response: response,
           })
@@ -64,7 +64,7 @@ async function searchSIV (id, uuid) {
           }
         }
       } else {
-        appLogger.debug({
+        appLogger.warn({
           error: 'No hit',
           response: response,
         })
@@ -75,7 +75,7 @@ async function searchSIV (id, uuid) {
         }
       }
     } else {
-      appLogger.debug({
+      appLogger.error({
         error: 'Bad request - invalid uuid or id',
         id: id,
         uuid: uuid,
@@ -88,7 +88,7 @@ async function searchSIV (id, uuid) {
     }
   } catch (error) {
     if (error.message === 'No Living connections') {
-      appLogger.warn({
+      appLogger.error({
         error: 'Elasticsearch service not available',
         id: id,
         uuid: uuid,
@@ -100,7 +100,7 @@ async function searchSIV (id, uuid) {
         message: error.message,
       }
     } else {
-      appLogger.warn({
+      appLogger.error({
         error: "Couldn't process elasticsearch response",
         id: id,
         uuid: uuid,
@@ -138,7 +138,7 @@ export async function getSIV (req, res) {
 export function generateGetUTAC (utacClient) {
   return async function getUTAC (req, res) {
     if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
-      appLogger.debug({
+      appLogger.error({
         error: 'Not authentified - mismatched id and token',
         id: req.body.id,
         token: req.body.token,
@@ -152,16 +152,15 @@ export function generateGetUTAC (utacClient) {
       return
     }
 
-    const cachedCtKey = hash(req.body.code || req.body.id)
+    const cachedCtKey = hash(req.body.id)
     const cachedCt = await getAsync(cachedCtKey)
     if (cachedCt) {
       try {
-        appLogger.debug({
+        appLogger.error({
           debug: 'getting cached UTAC response',
           cachedCtKey,
           cachedCt,
           bodyKey: req.body.key,
-          bodyCode: req.body.code,
           bodyId: req.body.id,
         })
         const ct = decrypt(cachedCt, req.body.key)
@@ -173,7 +172,7 @@ export function generateGetUTAC (utacClient) {
           ct,
         })
       } catch (error) {
-        appLogger.warn({
+        appLogger.error({
           error: "Couldn't decrypt cached UTAC response",
           remote_error: error.message,
         })
@@ -199,7 +198,7 @@ export function generateGetUTAC (utacClient) {
 
         if (response.status === 200) {
           await setAsync(
-            hash(req.body.code || req.body.id),
+            hash(req.body.id),
             encrypt(response.ct, req.body.key),
             'EX',
             config.redisPersit
@@ -212,7 +211,7 @@ export function generateGetUTAC (utacClient) {
             updateDate: response.updateDate,
           })
         } else {
-          appLogger.debug({
+          appLogger.error({
             error: 'UTAC response failed',
             status: response.status,
             remote_error: response.message,
@@ -225,7 +224,7 @@ export function generateGetUTAC (utacClient) {
           })
         }
       } catch (error) {
-        appLogger.warn({
+        appLogger.error({
           error: 'UTAC error',
           remote_error: error.message,
         })

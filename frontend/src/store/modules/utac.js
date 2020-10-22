@@ -31,7 +31,6 @@ export default {
 
       const response = await api.getUTAC(
         rootState.siv.id,
-        rootState.siv.code,
         state.token,
         CryptoJS.SHA256(rootState.siv.key).toString(CryptoJS.enc.Base64),
         rootState.siv.vehicleData.utac_id,

@@ -548,7 +548,7 @@ const writeFirstSituationColumn = ({
 	const	ovesCurrentStatus = (ovesCurrentStatusLines || !oveisCurrentStatusLines) ?
 		[{
 			key: `${SECTION_TITLE_BULLET} Opposition véhicule endommagé`,
-			values: ovesCurrentStatusLines || ['Aucun']
+			values: ovesCurrentStatusLines || ['Aucune']
 		}] : []
 
 	const situationItems = [

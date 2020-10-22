@@ -59,7 +59,6 @@ export default new Vuex.Store({
     isContactModalVisible: false,
     isRatingModalVisible: false,
     contactModalSubject: '',
-    feedback: {},
     contact: {}
   },
   mutations: {
@@ -94,9 +93,6 @@ export default new Vuex.Store({
     updateLogCounter (state) {
       state.logCounter++
     },
-    updateFeedback (state, feedback) {
-      state.feedback = feedback
-    },
     updateContact (state, contact) {
       state.contact = contact
     }
@@ -119,10 +115,6 @@ export default new Vuex.Store({
       if (state.isRatingModalVisible) {
         await dispatch('log', 'feedback')
       }
-    },
-    async sendFeedback ({ commit }, feedback) {
-      await api.sendFeedback(feedback)
-      commit('updateFeedback')
     },
     async sendContact ({ commit }, contact) {
       await api.sendContact(contact)

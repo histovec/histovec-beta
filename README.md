@@ -108,6 +108,24 @@ make index-purge
 
 Ces opérations peuvent être accélérées en utilisant un copier coller avec les différentes données depuis un tableur.
 
+
+## cache
+
+Le rapport HistoVec d'un véhicule est mis en cache par l'application web durant 24h pour chaque recherche distincte. La base de données n'est actualisée qu'une fois par jour.
+
+
+## feedback
+
+En tant qu'usager, vous pouvez donner votre avis sur le service HistoVec une fois votre rapport trouvé (après avoir rempli le formulaire avec succès).
+Une pop-up apparaîtra au bout de 2 minutes, vous proposant de donner votre avis.
+Elle réapparaîtra 2 minutes après chaque nouvelle recherche disctincte.
+Si vous ne souhaitez plus le revoir, il vous suffit de cocher la case "ne plus afficher".
+Si vous souhaitez que la pop-up réapparaisse car vous n'aviez pas encore voté, il vous suffit de vider votre local storage.
+
+Le feedback est aujourd'hui géré par la procédure MonAvis du Ministère de l'intérieur.
+Par le passé, HistoVec disposait de son propre mécanisme de feedback.
+
+
 ## mode iso-production (compilé)
 
 L'arrêt des services se fait ainsi :

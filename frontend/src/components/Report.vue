@@ -482,7 +482,7 @@ export default {
       return siv.processVehicleData(this.$store.state.siv.vehicleData)
     },
     holder () {
-      return (this.$route.query.id === undefined) && ((this.$route.params.code !== undefined) || (this.$store.state.siv.code !== undefined))
+      return (this.$route.query.id === undefined) && ((this.$route.params.id !== undefined) || (this.$store.state.siv.id !== undefined))
     },
     ct () {
       return this.$store.state.utac.ctData.ct
@@ -499,18 +499,16 @@ export default {
     },
     url () {
       const urlKey = (this.$store.state.siv.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
-      return this.baseUrl + '/histovec/report?id=' + encodeURIComponent(this.$store.state.siv.code || this.$route.params.code) + '&key=' + encodeURIComponent(urlKey)
+      const queryString = `?id=${encodeURIComponent(this.$store.state.siv.id || this.$route.params.id)}&key=${encodeURIComponent(urlKey)}`
+      return `${this.baseUrl}/histovec/report${queryString}`
     }
   },
   async created () {
-    if (this.id !== undefined) {
+    if (this.id) {
       this.$store.commit('updateId', this.id)
     }
     if (this.key !== undefined) {
       this.$store.commit('updateKey', this.key)
-    }
-    if (this.$route.params.code !== undefined) {
-      this.$store.commit('updateCode', this.$route.params.code)
     }
 
     await this.getVehicleData()

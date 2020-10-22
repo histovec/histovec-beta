@@ -4,8 +4,8 @@ import npmVersion from '../package.json'
 const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
-  appKey: generateKey(process.env.BACKEND_SECRET || '%Ch4NGm3+'),
-  utacIdKey: process.env.UTAC_ID_KEY || '%Ch4NGm3+',
+  appKey: generateKey(process.env.BACKEND_SECRET),
+  utacIdKey: process.env.UTAC_ID_KEY,
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
   isDevelopment: process.env.NODE_ENV === 'development',
@@ -15,7 +15,6 @@ const config = {
   redisPersit: process.env.REDIS_PERSIST || 86400, // 24h
   esUrl: process.env.ES_URL,
   esSIVIndex: process.env.ES_INDEX,
-  esFeedbackIndex: 'feedback',
   smtpServer: process.env.SMTP_SERVER,
   smtpPort: process.env.SMTP_PORT,
   mailFrom: process.env.MAIL_FROM,
