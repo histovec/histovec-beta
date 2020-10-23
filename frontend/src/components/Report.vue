@@ -231,7 +231,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'abstract'}]"
               >
                 <abstract
-                  v-if="tab === 'abstract'"
+                  v-if="tab === 'abstract' && !processedVehicleData.administratif.isAnnulationCI"
                   :processed-vehicle-data="processedVehicleData"
                   :holder="holder"
                   :change-tab="changeTab"
