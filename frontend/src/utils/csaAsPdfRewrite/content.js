@@ -783,7 +783,7 @@ export const writeContent = (
 
 	if (isAnnulationCI) {
 		const annulationY = vehicleIdentificationBottomY
-		writeAnnulation({ page, embeddedFonts, annulationY, dateAnnulation })
+		writeAnnulation({ page, embeddedFonts, y: annulationY, dateAnnulation })
 		writePageNumber({ page, embeddedFonts, y: bottomFooterY, pageNumber: 1, totalPageNumber: 1 })
 
 		return
