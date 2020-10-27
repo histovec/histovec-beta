@@ -42,7 +42,7 @@ const writeHeaderLogo = (
 		x: 83.2,
 	}
 ) => {
-	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height)
+	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height, null, 'SLOW')
 	return TOP_PAGE_Y + height + FONT_SPACING.XS
 }
 
