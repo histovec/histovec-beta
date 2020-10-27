@@ -33,7 +33,7 @@
                       <img
                         :src="logoMinistereInterieur"
                         class="img-responsive img-inline"
-                        width="85px"
+                        width="140px"
                         alt="Logo voxusagers.numerique.gouv.fr"
                       >
                       <span>

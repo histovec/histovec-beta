@@ -37,12 +37,12 @@ const writeHeaderLogo = (
 	pdf, image,
 	{ imageFormat, width, height,	x}={
 		imageFormat: IMAGE_FORMAT.PNG,
-		width: 41,
-		height: 31,
-		x: 86,
+		width: 43.4,
+		height: 32.86,
+		x: 83.2,
 	}
 ) => {
-	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height)
+	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height, null, 'SLOW')
 	return TOP_PAGE_Y + height + FONT_SPACING.XS
 }
 
@@ -58,7 +58,7 @@ const writeCSAMainTitle = (pdf, y) => {
 
 const writeVehicleIdentification = (
 	pdf, plaque, premierCertificat, vin, marque,
-	{ y }={ y: 67 }
+	{ y }={ y: 65 }
 ) => {
 	writeTitle(pdf, FIRST_COLUMN_X, y, 'Identification du véhicule')
 
