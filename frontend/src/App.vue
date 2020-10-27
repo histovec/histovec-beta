@@ -19,18 +19,19 @@
               <div class="row">
                 <div class="header-left clearfix">
                   <!-- debut bandeau -->
-                  <div class="logo col-xs-offset-1 col-xs-2 col-md-offset-1 col-md-2">
+                  <div class="logo col-xs-offset-1 col-xs-3 col-md-offset-1 col-md-3">
                     <router-link
                       :to="{ name: 'home' }"
                     >
                       <img
                         alt="accueil"
                         :src="logoMinistereInterieur"
+                        width="140px"
                         class="img-responsive"
                       >
                     </router-link>
                   </div>
-                  <div class="logo shift-logo col-xs-offset-1 col-xs-7 col-md-offset-1 col-md-7">
+                  <div class="logo shift-logo-histovec col-xs-7 col-md-7">
                     <router-link
                       :to="{ name: 'home' }"
                     >
@@ -104,7 +105,7 @@
                         </a>
                       </div>
                     </div>
-                    <div class="col-xs-6 col-md-6 m-h-14">
+                    <div class="shift-logo-securite-routiere col-xs-6 col-md-6 m-h-14">
                       <div class="overlay-container">
                         <img
                           class="img-responsive"
