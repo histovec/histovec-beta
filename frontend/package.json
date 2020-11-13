@@ -23,6 +23,7 @@
     "ui": "vue ui --host 0.0.0.0"
   },
   "dependencies": {
+    "base64-arraybuffer": "^0.2.0",
     "bootstrap": "3.4.1",
     "chart.js": "^2.8.0",
     "core-js": "^3.7.0",

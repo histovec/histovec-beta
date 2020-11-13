@@ -670,9 +670,10 @@
 </template>
 
 <script>
-import CryptoJS from 'crypto-js'
 import Shake from 'shake.js'
 import dayjs from 'dayjs'
+import { urlSafeBase64Encode } from '../utils/IE11EncodingPolyfill'
+import { normalizeAsDataPreparation } from '../utils/dataPreparationFormat'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
 import imageDateImmatriculationFNI from '@/assets/img/aide_fni_date_immatriculation.png'
@@ -925,7 +926,7 @@ export default {
     },
     id () {
       return this.hash(this.personneId + this.vehicleId + this.currentMonthNumber)
-    },
+  },
     key () {
       return this.hash(this.vehicleId)
     }
@@ -1036,19 +1037,8 @@ export default {
       await this.$store.commit('clearIdentity')
       this.clearReports()
     },
-    normalize (string) {
-      try {
-        return string.normalize('NFD')
-      } catch (e) {
-        return string.replace(/[\u0300-\u036f]*/g, '')
-      }
-    },
-    hash (string) {
-      var hash = string
-      hash = this.normalize(hash).toLowerCase().replace(/[^0-9a-z]/g, '')
-      hash = CryptoJS.SHA256(hash).toString(CryptoJS.enc.Base64)
-      hash = hash.replace(/\+/g, '-').replace(/\//g, '_')
-      return hash
+    hash (utf8) {
+      return urlSafeBase64Encode(normalizeAsDataPreparation(utf8))
     },
     async onSubmit () {
       this.status = 'posting'
