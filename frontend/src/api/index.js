@@ -258,8 +258,9 @@ export default {
   },
   async sendContact (contact) {
     const apiName = 'contact'
-    const json = await apiClient.post(apiName, `${apiPaths(apiName)}/`, {
-      body: JSON.stringify(contact)})
+    const json = await apiClient.post(apiName, `${apiPaths(apiName)}`, {
+      body: JSON.stringify(contact)
+    })
     return json
   }
 }
