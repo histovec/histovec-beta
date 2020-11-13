@@ -50,7 +50,7 @@
     </section>
 
     <div
-      v-if="status === 'ok'"
+      v-if="processedVehicleData"
       class="container"
     >
       <div class="row">
@@ -231,7 +231,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'abstract'}]"
               >
                 <abstract
-                  v-if="tab === 'abstract' && !processedVehicleData.administratif.isAnnulationCI"
+                  v-if="tab === 'abstract' && processedVehicleData && !processedVehicleData.administratif.isAnnulationCI"
                   :processed-vehicle-data="processedVehicleData"
                   :holder="holder"
                   :change-tab="changeTab"
@@ -513,7 +513,13 @@ export default {
 
     await this.getVehicleData()
 
-    if (this.processedVehicleData.administratif.isAnnulationCI) {
+    const isAnnulationCI = (
+      this.processedVehicleData &&
+      this.processedVehicleData.administratif &&
+      this.processedVehicleData.administratif.isAnnulationCI
+    ) || false
+
+    if (isAnnulationCI) {
       this.tab = 'csa'
     }
 

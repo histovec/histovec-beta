@@ -816,7 +816,7 @@ const computeAscendingValidHistorique = ({ historique=[], pve=[] }) => {
 
 const processVehicleData = (vehicleData) => {
   if (vehicleData === undefined) {
-    return false
+    return null
   }
 
   /* eslint-disable-next-line no-console */
