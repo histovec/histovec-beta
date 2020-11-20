@@ -26,7 +26,8 @@ NUM_THREADS = 2            # number of parallel threads
 COMMON_TRANSFER_SCHEMA = [
     {'name': 'ida1', 'type': 'string'},
     {'name': 'ida2', 'type': 'string'},
-    {'name': 'v', 'type': 'string'}
+    {'name': 'v', 'type': 'string'},
+    {'name': 'utac_id', 'type': 'string'}
 ]
 
 TRANSFER_COLUMNS = [c['name'] for c in COMMON_TRANSFER_SCHEMA]
@@ -106,7 +107,7 @@ def encrypt_df(df):
 
     df['key']=df['key'].apply(lambda x: base64.b64encode(x).decode('utf8'))
 
-    df = df[['idv', 'ida1', 'ida2', 'v']]
+    df = df[['idv', 'ida1', 'ida2', 'v', 'utac_id']]
 
     return df
 

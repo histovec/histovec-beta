@@ -672,8 +672,7 @@
 <script>
 import Shake from 'shake.js'
 import dayjs from 'dayjs'
-import { urlSafeBase64Encode } from '../utils/IE11EncodingPolyfill'
-import { normalizeAsDataPreparation } from '../utils/dataPreparationFormat'
+import { hash } from '../utils/dataPreparationFormat'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
 import imageDateImmatriculationFNI from '@/assets/img/aide_fni_date_immatriculation.png'
@@ -687,7 +686,6 @@ import imagePlaqueImmatriculationAvant1995 from '@/assets/img/plaque_immatricula
 import imagePlaqueImmatriculationAvant2009 from '@/assets/img/plaque_immatriculation_avant_2009.png'
 import imagePlaqueImmatriculationDepuis2009 from '@/assets/img/plaque_immatriculation_depuis_2009.png'
 import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
-
 
 const formInitialOptions = {
   default: {
@@ -768,7 +766,7 @@ export default {
   },
   directives: {
     focus: {
-      inserted: function (el) {
+      inserted: (el) => {
         el.focus()
       }
     }
@@ -925,10 +923,10 @@ export default {
       }
     },
     id () {
-      return this.hash(this.personneId + this.vehicleId + this.currentMonthNumber)
-  },
+      return `${this.personneId}${this.vehicleId}${this.currentMonthNumber}`
+    },
     key () {
-      return this.hash(this.vehicleId)
+      return this.vehicleId
     }
   },
   created () {
@@ -1029,26 +1027,33 @@ export default {
         }
       }
     },
-    async clearReports () {
-      await this.$store.commit('clearSIV')
-      await this.$store.commit('clearUTAC')
+    async clearReport () {
+      await this.$store.commit('clearReport')
     },
     async clearAll () {
       await this.$store.commit('clearIdentity')
-      this.clearReports()
-    },
-    hash (utf8) {
-      return urlSafeBase64Encode(normalizeAsDataPreparation(utf8))
+      this.clearReport()
     },
     async onSubmit () {
       this.status = 'posting'
       this.defaultEmtpyFields()
 
+      const hashedId = await hash(this.id)
+      const hashedKey = await hash(this.key)
+
       if (this.checkFields) {
-        if (this.id !== this.$store.state.siv.id) {
-          this.clearReports()
+        if (hashedId !== this.$store.state.histovec.id) {
+          this.clearReport()
         }
-        this.$router.push({name: 'report', params: {id: this.id, key: this.key, typeImmatriculation: this.typeImmatriculation}})
+
+        this.$router.push({
+          name: 'report',
+          params: {
+            id: hashedId,
+            key: hashedKey,
+            typeImmatriculation: this.typeImmatriculation
+          }
+        })
       } else {
         this.status = 'failed'
       }

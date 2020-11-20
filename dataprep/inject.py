@@ -13,7 +13,7 @@ from elasticsearch import Elasticsearch
 
 SWIFT_CONTAINER = "histovec-data"
 
-CSV_FIELDS = ["idv", "ida1", "ida2", "v"]
+CSV_FIELDS = ["idv", "ida1", "ida2", "v", "utac_id"]
 MANIFEST_EXTENSION = "md5"
 
 ES_HOST = "localhost:9200"

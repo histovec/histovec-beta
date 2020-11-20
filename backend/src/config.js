@@ -1,10 +1,8 @@
-import { generateKey } from './util/crypto'
 import npmVersion from '../package.json'
 
 const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
-  appKey: generateKey(process.env.BACKEND_SECRET),
   utacIdKey: process.env.UTAC_ID_KEY,
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
@@ -29,8 +27,7 @@ const config = {
     fakeApiUrl: process.env.FAKE_UTAC_URL,
     timeout: process.env.UTAC_TIMEOUT || 30,
     healthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 30,
-    authenticateRetrySeconds:
-      process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30,
+    authenticateRetrySeconds: process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30,
     username: process.env.UTAC_USERNAME,
     password: process.env.UTAC_PASSWORD,
     histovecPfx: process.env.HISTOVEC_PFX || 'src/utac/histovec.pfx',

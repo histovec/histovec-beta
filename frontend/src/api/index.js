@@ -1,5 +1,6 @@
 import 'whatwg-fetch'
 import store from '@/store'
+import base64ArrayBuffer from 'base64-arraybuffer'
 import { urlSafeBase64Decode } from '../utils/IE11EncodingPolyfill'
 import { stringifyCodePostal } from '../utils/dataPreparationFormat'
 
@@ -12,10 +13,9 @@ const apiUrl = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).repla
 
 const apiPaths = (apiName) => {
   const apiRoute = {
-      log: 'log',
-      siv: 'siv',
-      contact: 'contact',
-      utac: 'utac',
+    log: 'log',
+    report: 'report',
+    contact: 'contact',
   }
   return `${apiUrl}/${apiRoute[apiName]}`
 }
@@ -23,55 +23,53 @@ const apiPaths = (apiName) => {
 const oldDecrypt = async (urlSafeBase64Input, rawKey) => {
   const CryptoJS = (await import(/* webpackChunkName: 'crypto-js', webpackPrefetch: false */ 'crypto-js')).default
 
-	const ivAndEncrypted = urlSafeBase64Decode(urlSafeBase64Input)
-	const iv = ivAndEncrypted.substring(0, AES_BLOCK_SIZE)
-	const encrypted = ivAndEncrypted.substring(AES_BLOCK_SIZE)
+  const ivAndEncrypted = await urlSafeBase64Decode(urlSafeBase64Input)
+  const iv = ivAndEncrypted.substring(0, AES_BLOCK_SIZE)
+  const encrypted = ivAndEncrypted.substring(AES_BLOCK_SIZE)
 
-	// Convert to CryptoJs.WordArray type before to decrypt
-	const keyAsWordArray = CryptoJS.enc.Base64.parse(rawKey)
-	const ivAsWordArray = CryptoJS.enc.Base64.parse(window.btoa(iv))
-	const encryptedAsWordArray = CryptoJS.enc.Base64.parse(window.btoa(encrypted))
+  // Convert to CryptoJs.WordArray type before to decrypt
+  const keyAsWordArray = CryptoJS.enc.Base64.parse(rawKey)
+  const ivAsWordArray = CryptoJS.enc.Base64.parse(window.btoa(iv))
+  const encryptedAsWordArray = CryptoJS.enc.Base64.parse(window.btoa(encrypted))
 
-	let decrypted
-	try {
-		decrypted = CryptoJS.AES.decrypt({
-			ciphertext: encryptedAsWordArray,
-				salt: ''
-			},
-			keyAsWordArray,
-			{
-				iv: ivAsWordArray,
-				padding: CryptoJS.pad.Pkcs7,
-				mode: CryptoJS.mode.CBC
-			}
-		)
-	} catch (e) {
-		/* eslint-disable-next-line no-console */
-		console.log('decrypt_error', e)
-		throw new Error(`decrypt_error: ${e}`)
-	}
-	try {
-		decrypted = decrypted.toString(CryptoJS.enc.Utf8)
-		decrypted = stringifyCodePostal(decrypted)
-	} catch (e) {
-		/* eslint-disable-next-line no-console */
-		console.log('decrypt_toString_failure', e)
-		throw new Error(`decrypt_toString_failure: ${e}`)
-	}
-	try {
-		return JSON.parse(decrypted)
-	} catch (e) {
-		/* eslint-disable-next-line no-console */
-		console.log('decrypt_JSON_parse_error', decrypted, e)
-		throw new Error(`decrypt_JSON_parse_error: ${e}`)
-	}
+  let decrypted
+  try {
+    decrypted = CryptoJS.AES.decrypt({
+      ciphertext: encryptedAsWordArray,
+      salt: ''
+    },
+      keyAsWordArray,
+      {
+        iv: ivAsWordArray,
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+      }
+    )
+  } catch (e) {
+    /* eslint-disable-next-line no-console */
+    console.log('decrypt_error', e)
+    throw new Error(`decrypt_error: ${e}`)
+  }
+  try {
+    decrypted = decrypted.toString(CryptoJS.enc.Utf8)
+    decrypted = stringifyCodePostal(decrypted)
+  } catch (e) {
+    /* eslint-disable-next-line no-console */
+    console.log('decrypt_toString_failure', e)
+    throw new Error(`decrypt_toString_failure: ${e}`)
+  }
+  try {
+    return JSON.parse(decrypted)
+  } catch (e) {
+    /* eslint-disable-next-line no-console */
+    console.log('decrypt_JSON_parse_error', decrypted, e)
+    throw new Error(`decrypt_JSON_parse_error: ${e}`)
+  }
 }
 
 const utf8TextDecoder = window.TextDecoder && new window.TextDecoder('utf8')
 
 const newDecrypt = async (urlSafeBase64Input, rawKey) => {
-  const base64ArrayBuffer = (await import(/* webpackChunkName: 'base64-arraybuffer', webpackPrefetch: false */ 'base64-arraybuffer')).default
-
   const ALGORITHM = 'AES-CBC'
 
   const keyArrayBuffer = base64ArrayBuffer.decode(rawKey)
@@ -84,7 +82,7 @@ const newDecrypt = async (urlSafeBase64Input, rawKey) => {
   )
 
   const urlUnsafeBase64IvAndEncrypted = urlSafeBase64Input.replace(/[-_]/g, char => char === '-' ? '+' : '/')
-  const ivAndEncryptedArrayBuffer = base64ArrayBuffer.decode(urlUnsafeBase64IvAndEncrypted) // ivAndEncrypted)
+  const ivAndEncryptedArrayBuffer = base64ArrayBuffer.decode(urlUnsafeBase64IvAndEncrypted)
   const iv = ivAndEncryptedArrayBuffer.slice(0, AES_BLOCK_SIZE)
   const encodedData = ivAndEncryptedArrayBuffer.slice(AES_BLOCK_SIZE)
 
@@ -111,6 +109,15 @@ const newDecrypt = async (urlSafeBase64Input, rawKey) => {
   }
 }
 
+/*
+  Equivalent of dataprep Python function :
+
+  def decrypt_string(key, string):
+    enc = base64.urlsafe_b64decode(string)
+    iv = enc[:16]
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    return unpad(cipher.decrypt(enc[16:]))
+*/
 const decrypt = (window.crypto && window.TextDecoder) ? newDecrypt : oldDecrypt
 
 const checkStatus = async (apiName, response) => {
@@ -145,20 +152,26 @@ const checkValidJson = async (apiName, response) => {
   }
 }
 
-const decryptHit = async (apiName, response, objectPath, key) => {
+const decryptReport = async (apiName, response, { sivDataPath, utacDataPath, sivDataKey }) => {
   try {
-
     if (response.success) {
-      const decrypted = await response.json
-      const encrypted = decrypted[objectPath] && decrypted[objectPath].replace(/-/g, '+').replace(/_/g, '/')
-      decrypted[objectPath] = await decrypt(encrypted, key)
+      const json = await response.json
+      const sivData = await decrypt(json[sivDataPath], sivDataKey)
+      const utacData = await decrypt(json[utacDataPath], json.utacDataKey)
+
+      const decrypted = {
+        [sivDataPath]: sivData,
+        [utacDataPath]: utacData,
+      }
+
       store.commit('updateApiStatus', {
         decrypted: { [apiName]: true }
       })
+
       return {
         success: true,
         status: response.status,
-        decrypted,
+        ...decrypted,
       }
     } else {
       await store.commit('updateApiStatus', {
@@ -180,83 +193,66 @@ const decryptHit = async (apiName, response, objectPath, key) => {
     return {
       success: false,
       error: { decrypt: error },
-      decrypted: {}
     }
   }
 }
 
-const fetchInit = async (apiName, url, options) => {
-  await store.commit('initApiStatus', apiName)
-  return fetch(url, options)
-}
-
 const fetchClient = async (apiName, url, options) => {
-  const resp = await fetchInit(apiName, url, options)
+  await store.commit('initApiStatus', apiName)
+  const resp = fetch(url, options)
+
   return checkStatus(apiName, resp)
 }
 
 const jsonClient = async (apiName, url, options) => {
-  const resp = await fetchClient(apiName, url, options)
+  const resp = await fetchClient(
+    apiName, url,
+    { ...options, headers: { 'Content-Type': 'application/json' } }
+  )
   return checkValidJson(apiName, resp)
-}
-
-const decryptClient = async (apiName, url, encryptedObjectPaths, key, options) => {
-  const resp = await jsonClient(apiName,url, options)
-  return decryptHit(apiName, resp, encryptedObjectPaths, key)
-}
-
-const jsonHeader = {
-  'Content-Type': 'application/json',
 }
 
 const apiClient = {
   post: async (apiName, url, options) => {
-    return jsonClient(apiName, url, { ...options, headers: jsonHeader, method: 'POST' })
+    return jsonClient(apiName, url, { ...options, method: 'POST' })
   },
   put: async (apiName, url, options) => {
-    return jsonClient(apiName, url, { ...options, headers: jsonHeader, method: 'PUT' })
-  },
-  decrypt: async (apiName, url, encryptedObjectPaths, key, options) => {
-    return decryptClient(apiName, url, encryptedObjectPaths, key, { ...options, headers: jsonHeader})
+    return jsonClient(apiName, url, { ...options, method: 'PUT' })
   },
 }
 
 export default {
-  async getVehicleData (id, key, uuid) {
-    const apiName = 'siv'
+  getReport: async (id, key, uuid) => {
+    const apiName = 'report'
     const options = {
       method: 'POST',
-      body: JSON.stringify({id, uuid})
+      body: JSON.stringify({ id, uuid })
     }
-    const response = await apiClient.decrypt(apiName, `${apiPaths(apiName, true)}`, 'vehicleData', key, options)
-    return {
-      success: response.success,
-      token: response.decrypted && response.decrypted.token,
-      vehicleData: (response.decrypted && response.decrypted.vehicleData || {})
-    }
-  },
-  async getUTAC (id, token, key, utacId, uuid) {
-    const apiName = 'utac'
-    const options = {
-      body: JSON.stringify({id, token, key, utacId, uuid})
-    }
-    const response = await apiClient.post(apiName, `${apiPaths(apiName, true)}`, options)
-    return {
-      success: response.success,
-      status: response.status,
-      ctData: {
-        ct: response.json.ct,
-        updateDate: response.json.update_date
+    const reportResponse = await jsonClient(apiName, `${apiPaths(apiName)}`, options)
+
+    const { success, sivData, utacData } = await decryptReport(
+      apiName,
+      reportResponse,
+      {
+        sivDataPath: 'sivData',
+        utacDataPath: 'utacData',
+        sivDataKey: key,
       }
+    )
+
+    return {
+      success,
+      sivData,
+      utacData,
     }
   },
-  async log (path, uid) {
+  log: async (path, uid) => {
     const apiName = 'log'
     const normalizedPath = path.replace(/^\/\w+\//, '')
     const json = await apiClient.put(apiName, `${apiPaths(apiName)}/${uid}/${normalizedPath}`)
     return json
   },
-  async sendContact (contact) {
+  sendContact: async (contact) => {
     const apiName = 'contact'
     const json = await apiClient.post(apiName, `${apiPaths(apiName)}`, {
       body: JSON.stringify(contact)

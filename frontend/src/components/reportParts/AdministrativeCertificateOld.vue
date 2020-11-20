@@ -31,7 +31,7 @@ import { generateCsa } from '../../utils/csaAsPdf'
 
 export default {
   props: {
-    processedVehicleData: {
+    processedSivData: {
       type: Object,
       default: () => {}
     },
@@ -80,21 +80,21 @@ export default {
     generatePDF () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
 
-      const isAnnulationCI = this.processedVehicleData.administratif.isAnnulationCI
-      const csaLabels = this.processedVehicleData.administratif.csaLabels
+      const isAnnulationCI = this.processedSivData.administratif.isAnnulationCI
+      const csaLabels = this.processedSivData.administratif.csaLabels
 
       generateCsa({
         isAnnulationCI,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
-        dateAnnulation: this.processedVehicleData.administratif.dateAnnulation,
+        dateAnnulation: this.processedSivData.administratif.dateAnnulation,
         histoVecLogo: this.images.histovec.img,
         marianneImage: this.images.marianne.img,
-        marque: this.processedVehicleData.ctec.marque,
+        marque: this.processedSivData.ctec.marque,
         plaque: this.$store.state.identity.plaque,
-        premierCertificat: this.processedVehicleData.certificat.premier,
+        premierCertificat: this.processedSivData.certificat.premier,
         qrCodeUrl: this.url,
         validityDate: this.validityDate,
-        vin: this.processedVehicleData.ctec.vin,
+        vin: this.processedSivData.ctec.vin,
         webSiteUrl: this.baseUrl
       },
       (
@@ -102,7 +102,7 @@ export default {
           duplicataTitre: csaLabels.titre.duplicata,
           dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
           gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
-          historyItems: this.processedVehicleData.historique.map((item) => `${item.date} ${item.nature}`),
+          historyItems: this.processedSivData.historique.map((item) => `${item.date} ${item.nature}`),
           otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
           otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,

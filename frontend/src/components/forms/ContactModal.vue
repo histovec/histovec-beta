@@ -103,7 +103,7 @@
                           l'Agence nationale de traitement automatisé des infractions (ANTAI)
                         </a>.
                       </span>
-                      <span v-if="subject === contact.subject.personalData || subject === contact.subject.vehicleData">
+                      <span v-if="subject === contact.subject.personalData || subject === contact.subject.reportData">
                         HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d'Immatriculation des Véhicules).
                         <br>
                         <br>
@@ -161,7 +161,7 @@
                       </p>
                     </div>
                     <div
-                      v-if="$store.state.siv.id"
+                      v-if="$store.state.histovec.id"
                     >
                       <label> Données transmises pour l'assistance </label>
                       <div class="row txt-small-11">
@@ -267,14 +267,14 @@ export default {
         contact.subject.registrationCardLoss,
         contact.subject.resolvePV,
         contact.subject.personalData,
-        contact.subject.vehicleData
+        contact.subject.reportData
       ],
       contact,
     }
   },
   computed: {
     who () {
-      return this.$store.state.siv.id ? (this.$store.state.siv.code ? 'holder' : 'buyer') : undefined
+      return this.$store.state.histovec.id ? (this.$store.state.histovec.code ? 'holder' : 'buyer') : undefined
     },
     subject: {
       get () {

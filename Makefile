@@ -134,7 +134,7 @@ export ES_VERBOSE=100000
 export ES_VERBOSE_UPDATE=1000
 export ES_TIMEOUT=60
 export ES_JOBS=4
-export header="idv;ida1;ida2;v"
+export header="idv;ida1;ida2;v;utac_id"
 # openstack swift source parameters
 # auth token has to be provided before within env
 export openstack_retry=10

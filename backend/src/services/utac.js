@@ -2,9 +2,7 @@ import axios from 'axios'
 import { readFileSync } from 'fs'
 import config from '../config'
 import { Agent as HttpsAgent } from 'https'
-
 import { appLogger } from '../util/logger'
-import { techLogger } from '../util'
 
 module.exports.UTACClient = class UTACClient {
   constructor () {
@@ -79,10 +77,6 @@ module.exports.UTACClient = class UTACClient {
         }
       }
     )
-  }
-
-  async ensureTokenValidity () {
-
   }
 
   async healthCheck () {
@@ -307,7 +301,6 @@ module.exports.UTACClient = class UTACClient {
 
         return {
           status: response.status,
-          source: 'utac',
           ct: response.data.ct,
           updateDate: response.data.update_date,
         }

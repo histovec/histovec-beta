@@ -23,7 +23,7 @@ const allCt = (
     }, {})
 )
 
-function immatNorm (plaque) {
+const immatNorm = (plaque) => {
   if (!plaque || typeof plaque != 'string') {
     return undefined
   }
@@ -34,7 +34,7 @@ function immatNorm (plaque) {
   )
 }
 
-function getCT(plaque) {
+const getCT = (plaque) => {
   const myCt = allCt[plaque]
   console.log({
     plaque: plaque,
@@ -49,16 +49,15 @@ function getCT(plaque) {
   return res
 }
 
-function erlangWait() {
+const erlangWait = () =>
   // Erelang generated response time with lambda = 1 and k = 5
-  return - ( config.latency / 4 ) * Math.log(Math.random() * Math.random() * Math.random() * Math.random() * Math.random())
-}
+  - ( config.latency / 4 ) * Math.log(Math.random() * Math.random() * Math.random() * Math.random() * Math.random())
 
-async function latencyResSend(req, res, response, time) {
-  return await setTimeout(function(){
-    res.send(response, response.status)
-  }, erlangWait() )
-}
+const latencyResSend = async (req, res, response, time) => setTimeout(
+  () => res.send(response, response.status),
+  erlangWait()
+)
+
 
 service.get(`/${config.apiPath}/auth`, async (req, res) => {
   res.setHeader("Content-Type", "application/json")
