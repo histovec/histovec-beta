@@ -48,7 +48,6 @@ export default new Vuex.Store({
       newPdfLib: false,
       csaAnnulationCi: false,
       dataDate: false,
-      utac: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],

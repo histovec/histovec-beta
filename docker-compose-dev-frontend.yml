@@ -32,7 +32,6 @@ services:
       - API_USER_BURST
       - API_WRITE_LIMIT_RATE
       - API_WRITE_BURST
-      - IS_UTAC_API_ACTIVATED
     volumes:
       - ${APP_PATH}/nginx/nginx-dev.template:/etc/nginx/conf.d/default.template
       - ${APP_PATH}/nginx/tor-ip.conf:/etc/nginx/tor-ip.conf
@@ -69,7 +68,6 @@ services:
       - VUE_APP_PORT=${FRONTEND_DEV_PORT}
       - VUE_UI_PORT=${FRONTEND_CONF_PORT}
       - VUE_APP_AB_TESTING_PERCENTAGE=${AB_TESTING_PERCENTAGE}
-      - VUE_APP_IS_UTAC_API_ACTIVATED=${IS_UTAC_API_ACTIVATED}
     volumes:
       - ${FRONTEND}/public:/${APP}/public
       - ${FRONTEND}/vue.config.js:/${APP}/vue.config.js
