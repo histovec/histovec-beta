@@ -2,6 +2,7 @@ import axios from 'axios'
 import { readFileSync } from 'fs'
 import config from '../config'
 import { Agent as HttpsAgent } from 'https'
+import { decodingJWT } from '../util/jwt'
 import { appLogger } from '../util/logger'
 
 module.exports.UTACClient = class UTACClient {
@@ -34,11 +35,9 @@ module.exports.UTACClient = class UTACClient {
     }
 
     this.axios = axios.create(options)
-    this.isApiAvailable = true
-    this.isAuthenticated = false
 
     this.axios.interceptors.request.use(
-      request => {
+      async (request) => {
         appLogger.debug({
           debug: `UTAC - ${request.url}`,
           data: request.data || {},
@@ -46,35 +45,34 @@ module.exports.UTACClient = class UTACClient {
           headers: request.headers || {},
         })
 
+        if (request.url !== '/auth') {
+          const authorizationHeader = this.axios.defaults.headers.common['Authorization']
+
+          if (authorizationHeader) {
+            const utacApiJWT = authorizationHeader.split(' ')[1]
+            const { exp: expirationTimeAsSeconds } = decodingJWT(utacApiJWT)
+
+            // Convert Date.getTime() to seconds since JWT uses time with seconds
+            const nowTimeAsSeconds = Math.floor(new Date().getTime() / 1000)
+
+            if (nowTimeAsSeconds > expirationTimeAsSeconds) {
+              const authorizationHeader = await this._authenticate()
+              if (authorizationHeader) {
+                request.headers.Authorization = authorizationHeader
+              }
+            }
+          } else {
+            const authorizationHeader = await this._authenticate()
+            if (authorizationHeader) {
+              request.headers.Authorization = authorizationHeader
+            }
+          }
+        }
+
         return request
       },
       error => {
         return Promise.reject(error)
-      }
-    )
-
-    this.axios.interceptors.response.use(
-      response => {
-        return response
-      },
-      error => {
-        if (error.response && (error.response.status === 429 || error.response.status === 503)) {
-          this.isApiAvailable = false
-          setTimeout(async () => {
-            const response = await this.healthCheck()
-            this.isApiAvailable = response.status === 200
-          }, config.utac.healthCheckRetrySeconds)
-        }
-        if (error.response && error.response.status === 401) {
-          this.isApiAvailable = false
-          setTimeout(async () => {
-            const response = await this._authenticate()
-
-            this.isAuthenticated = response.status === 200
-          }, config.utac.authenticateRetrySeconds)
-        } else {
-          return Promise.reject(error)
-        }
       }
     )
   }
@@ -138,107 +136,24 @@ module.exports.UTACClient = class UTACClient {
       debug: 'UTACClient - authenticate',
     })
 
-    const errorMessages = {
-      401: 'Authentication to UTAC api failed',
-      500: 'Missing information in UTAC response',
-      503: 'Unavailable UTAC api',
-      default: 'Unexpected error from UTAC api',
-    }
-
-    if (!this.isApiAvailable) {
-      return {
-        status: 503,
-        message: errorMessages[503],
-      }
-    }
-
-    try {
-      const response = await this.axios.get('/auth', {
-        auth: {
-          username: config.utac.username,
-          password: config.utac.password,
-        },
-      })
-
-      const token = response.data && response.data.token
-      if (token) {
-        appLogger.debug({
-          debug: 'UTAC authentication succeed',
-          token: token,
-        })
-
-        this.axios.defaults.headers.common['Authorization'] = `bearer ${token}`
-
-        return {
-          status: 200,
-        }
-      } else {
-        appLogger.error({
-          error: 'Token not found while authenticating to UTAC api',
-          response,
-        })
-
-        return {
-          status: 500,
-          message: errorMessages[500],
-        }
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        appLogger.error({
-          error: errorMessages[401],
-          remote_error: error.message,
-        })
-        return {
-          status: 401,
-          message: errorMessages[401],
-        }
-      } else {
-        appLogger.error({
-          error: errorMessages['default'],
-          remote_error: error.message,
-        })
-        return {
-          status: 500,
-          message: errorMessages['default'],
-        }
-      }
-    }
-  }
-
-  async _resetAuthenticate () {
-    appLogger.debug({
-      debug: 'reset UTAC authentication',
+    const response = await this.axios.get('/auth', {
+      auth: {
+        username: config.utac.username,
+        password: config.utac.password,
+      },
     })
 
-    this.axios.defaults.headers.common['Authorization'] = null
-    this.isAuthenticated = false
+    const token = response.data && response.data.token
+    if (token) {
+      appLogger.debug({
+        debug: 'UTAC authentication succeed',
+        token: token,
+      })
 
-    return this._authenticate()
-  }
+      const authorizationHeader = `bearer ${token}`
+      this.axios.defaults.headers.common.Authorization = authorizationHeader
 
-  // /!\ This method must be called to configure UTACClient before using it /!\
-  async initialize () {
-    try {
-      await this._authenticate()
-      this.isAuthenticated = true
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        appLogger.error({
-          error: 'UTACClient - Failed to authenticate',
-          response: error.response,
-        })
-      }
-    }
-
-    this.isInitialized = true
-  }
-
-  checkInitialization () {
-    if (!this.isInitialized) {
-      throw new Error(
-        'You should call UTACClient.initialize() before using this method'
-      )
+      return authorizationHeader
     }
   }
 
@@ -257,33 +172,6 @@ module.exports.UTACClient = class UTACClient {
       500: 'Missing information in UTAC response',
       503: 'Unavailable UTAC api',
       default: 'Unexpected error from UTAC api',
-    }
-
-    this.checkInitialization()
-    if (!this.isApiAvailable) {
-      return {
-        status: 503,
-        message: errorMessages[503],
-      }
-    }
-
-    if (resetAuthentication) {
-      try {
-        this._resetAuthenticate()
-        this.isAuthenticated = true
-      } catch (error) {
-        return {
-          status: 403,
-          message: errorMessages[403],
-        }
-      }
-    }
-
-    if (!this.isAuthenticated) {
-      return {
-        status: 403,
-        message: errorMessages[403],
-      }
     }
 
     try {
@@ -316,15 +204,6 @@ module.exports.UTACClient = class UTACClient {
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        // The first 401 may be due to a token expiration
-        if (!resetAuthentication) {
-          return this.readControlesTechniques(
-            plaque,
-            (resetAuthentication = true)
-          )
-        }
-
-        // The second one is real a login / password error
         appLogger.error({
           error: errorMessages[401],
           remote_error: error.message,

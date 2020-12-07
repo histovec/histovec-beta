@@ -26,8 +26,6 @@ const config = {
     apiUrl: process.env.UTAC_URL,
     fakeApiUrl: process.env.FAKE_UTAC_URL,
     timeout: process.env.UTAC_TIMEOUT || 30,
-    healthCheckRetrySeconds: process.env.UTAC_HEALTHCHECK_RETRY_SECONDS || 30,
-    authenticateRetrySeconds: process.env.UTAC_AUTHENTICATE_RETRY_SECONDS || 30,
     username: process.env.UTAC_USERNAME,
     password: process.env.UTAC_PASSWORD,
     histovecPfx: process.env.HISTOVEC_PFX || 'src/utac/histovec.pfx',
