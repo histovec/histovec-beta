@@ -175,7 +175,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI && (ct || ctError)"
+                v-if="!isAnnulationCI && (ct.length > 0 || ctError)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -187,7 +187,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI && (ct || ctError)"
+                v-if="!isAnnulationCI && (ct.length > 0 || ctError)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -290,7 +290,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
               >
                 <tech-control
-                  v-if="tab === 'utac' && !isAnnulationCI"
+                  v-if="tab === 'utac' && !isAnnulationCI && ct.length > 0"
                   :ct="ct"
                   :ct-error="ctError"
                 >
@@ -302,7 +302,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utacGraph'}]"
               >
                 <tech-control-graph
-                  v-if="tab === 'utacGraph' && !ctError"
+                  v-if="tab === 'utacGraph' && !ctError && ct.length > 0"
                   :ct="ct"
                 >
                 </tech-control-graph>

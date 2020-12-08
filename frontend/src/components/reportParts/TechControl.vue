@@ -9,7 +9,7 @@
       </i>
       {{ ctError }}
     </div>
-    <div v-if="!ctError">
+    <div v-if="!ctError && ct.length > 0">
       <div class="row">
         <div class="col-sm-2">
           <span class="txt-small-12"><h6>Date</h6></span>
