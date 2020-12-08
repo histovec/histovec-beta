@@ -14,17 +14,17 @@
                   <span aria-hidden="true">&times;</span>
                   <span class="sr-only">Fermer</span>
                 </button>
-                <h6 class="modal-title">
+                <h5 class="modal-title">
                   Votre évaluation
-                </h6>
+                </h5>
               </div>
               <div class="modal-body">
                 <div class="content">
                   <div class="row">
                     <div class="p-g-17 text-center">
-                      <h7>
+                      <h6>
                         <b>Vous pouvez donner votre avis sur le service HistoVec :</b>
-                      </h7>
+                      </h6>
                     </div>
                   </div>
                   <br>
