@@ -1,6 +1,16 @@
 import api from '@/api'
 import { labelizeTechnicalControls } from '../../utils/vehicle/technicalControlFormat'
-import { V_TTL } from '../../constants/v'
+
+const getTomorrowTime = () => {
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  return new Date(tomorrow.toDateString()).getTime()
+}
+
+const getTodayTime = () => {
+  const today = new Date()
+  return new Date(today.toDateString()).getTime()
+}
 
 export default {
   state: {
@@ -8,12 +18,13 @@ export default {
     key: undefined,
     code: undefined,
     report: undefined,
-    reportExpiry: new Date().getTime(), // expired by default
+    reportExpiry: getTodayTime(), // expired by default
   },
   getters: {
     reportWithExpiry: state => {
-      const now = new Date()
-      if (now.getTime() > state.reportExpiry) {
+      const now = getTodayTime()
+
+      if (now >= state.reportExpiry) {
         return null
       }
       return state.report
@@ -24,8 +35,6 @@ export default {
       sivData,
       utacData: { ct, ctUpdateDate, utacError },
     }) {
-      const now = new Date()
-
       const ctError = (
         utacError ?
           'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.' :
@@ -45,7 +54,8 @@ export default {
             }
         ),
       }
-      state.reportExpiry = now.getTime() + V_TTL
+
+      state.reportExpiry = getTomorrowTime()
     },
     updateCode(state, code) {
       state.code = code
@@ -54,14 +64,14 @@ export default {
       if (key !== state.key) {
         state.key = key
         state.report = undefined
-        state.reportExpiry = new Date().getTime() // expired by default
+        state.reportExpiry = getTodayTime() // expired by default
       }
     },
     updateId(state, id) {
       if (id !== state.id) {
         state.id = id
         state.report = undefined
-        state.reportExpiry = new Date().getTime() // expired by default
+        state.reportExpiry = getTodayTime() // expired by default
       }
     },
     clearReport(state) {
@@ -69,7 +79,7 @@ export default {
       state.key = undefined
       state.code = undefined
       state.report = undefined
-      state.reportExpiry = new Date().getTime() // expired by default
+      state.reportExpiry = getTodayTime() // expired by default
     }
   },
   actions: {
