@@ -27,7 +27,6 @@ elasticsearch.Client.search({
         const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
         if (isApiActivated) {
           utacClient = new UTACClient()
-          await utacClient.initialize()
         }
 
         const app = createApp(utacClient)

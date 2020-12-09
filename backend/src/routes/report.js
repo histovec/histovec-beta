@@ -1,19 +1,17 @@
 import elasticsearch from '../connectors/elasticsearch'
 import {
-  sign,
-  checkSigned,
-  encrypt,
-  decrypt,
+  encryptJson,
   decryptXOR,
-  hash,
   checkId,
   checkUuid,
+  hash,
+  urlSafeBase64Encode,
 } from '../util/crypto'
 import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-function immatNorm (plaque) {
+const normalizePlaqueForUtac = (plaque) => {
   if (!plaque || typeof plaque !== 'string') {
     return undefined
   }
@@ -24,215 +22,256 @@ function immatNorm (plaque) {
   )
 }
 
-async function searchSIV (id, uuid) {
+const getSIV = async (id, uuid) => {
   try {
-    if (checkUuid(uuid) && checkId(id)) {
-      const response = await elasticsearch.Client.search({
-        index: config.esSIVIndex,
-        body: {
-          query: {
-            multi_match: {
-              query: id,
-              fields: ['ida1', 'ida2'],
-            },
+    const response = await elasticsearch.Client.search({
+      index: config.esSIVIndex,
+      body: {
+        query: {
+          multi_match: {
+            query: id,
+            fields: ['ida1', 'ida2'],
           },
         },
-        size: 1,
-        terminate_after: 1,
-        filter_path: 'hits.hits._source.v',
+      },
+      size: 1,
+      terminate_after: 1,
+      filter_path: 'hits.hits._source.v,hits.hits._source.utac_id',
+    })
+
+    const hits = (response && response.hits && response.hits.hits) || []
+
+    if (hits.length <= 0) {
+      appLogger.warn({
+        error: 'No hit',
       })
 
-      const hits = response.hits && response.hits.hits
-      if (hits && hits.length > 0) {
-        const vehicleData = hits[0]._source && hits[0]._source.v
-        if (vehicleData) {
-          return {
-            status: 200,
-            source: 'histovec',
-            token: sign(id, config.appKey),
-            vehicleData,
-          }
-        } else {
-          appLogger.error({
-            error: 'Bad Content in elasticsearch response',
-            response: response,
-          })
-          return {
-            status: 500,
-            source: 'siv',
-            message: 'Bad Content',
-          }
-        }
-      } else {
-        appLogger.warn({
-          error: 'No hit',
-          response: response,
-        })
-        return {
-          status: 404,
-          source: 'siv',
-          message: 'Not Found',
-        }
+      return {
+        status: 404,
+        message: 'Not Found',
       }
-    } else {
+    }
+
+    const sivData = hits[0]._source && hits[0]._source.v
+    const utacId = hits[0]._source && hits[0]._source.utac_id
+
+    if (!sivData || !utacId) {
+      appLogger.error({
+        error: 'Bad Content in elasticsearch response',
+        response: hits,
+      })
+
+      return {
+        status: 500,
+        message: 'Bad Content from Elasticsearch',
+      }
+    }
+
+    return {
+      status: 200,
+      sivData,
+      utacId,
+    }
+  } catch ({ message: errorMessage }) {
+    if (errorMessage === 'No Living connections') {
+      appLogger.error({
+        error: 'Elasticsearch service not available',
+        id,
+        uuid,
+        remote_error: errorMessage,
+      })
+
+      return {
+        status: 502,
+        message: errorMessage,
+      }
+    }
+
+    appLogger.error({
+      error: 'Couldn\'t process Elasticsearch response',
+      id,
+      uuid,
+      remote_error: errorMessage,
+    })
+
+    return {
+      status: 500,
+      message: errorMessage,
+    }
+  }
+}
+
+const computeUtacDataKey = (utacId) => {
+  const urlSafeBase64UtacIdHash = hash(utacId)
+  const truncatedUtacIdHash = Buffer.from(urlSafeBase64UtacIdHash, 'base64').slice(0, 32).toString('base64')
+
+  return {
+    utacDataKey: truncatedUtacIdHash,
+    utacDataKeyAsBuffer: Buffer.from(truncatedUtacIdHash, 'base64'),
+  }
+}
+
+export const generateGetReport = (utacClient) =>
+  async (req, res) => {
+    const { id, uuid } = req.body
+
+    if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({
         error: 'Bad request - invalid uuid or id',
         id: id,
         uuid: uuid,
       })
-      return {
-        status: 400,
-        source: 'siv',
-        message: 'Bad Request',
-      }
-    }
-  } catch (error) {
-    if (error.message === 'No Living connections') {
-      appLogger.error({
-        error: 'Elasticsearch service not available',
-        id: id,
-        uuid: uuid,
-        remote_error: error.message,
-      })
-      return {
-        status: 502,
-        source: 'histovec',
-        message: error.message,
-      }
-    } else {
-      appLogger.error({
-        error: "Couldn't process elasticsearch response",
-        id: id,
-        uuid: uuid,
-        remote_error: error.message,
-      })
-      return {
-        status: 500,
-        source: 'histovec',
-        message: error.message,
-      }
-    }
-  }
-}
 
-export async function getSIV (req, res) {
-  const response = await searchSIV(req.body.id, req.body.uuid)
-  if (response.status === 200) {
-    res.status(200).json({
-      success: true,
-      status: response.status,
-      source: 'siv',
-      token: response.token,
-      vehicleData: response.vehicleData,
-    })
-  } else {
-    res.status(response.status).json({
-      success: false,
-      status: response.status,
-      source: 'siv',
-      message: response.message,
-    })
-  }
-}
-
-export function generateGetUTAC (utacClient) {
-  return async function getUTAC (req, res) {
-    if (!checkSigned(req.body.id, config.appKey, req.body.token)) {
-      appLogger.error({
-        error: 'Not authentified - mismatched id and token',
-        id: req.body.id,
-        token: req.body.token,
-      })
-      res.status(401).json({
+      res.status(400).json({
         success: false,
-        status: res.status,
-        source: 'utac',
-        message: 'Not authentified',
+        message: 'Bad Request',
       })
       return
     }
 
-    const cachedCtKey = hash(req.body.id)
-    const cachedCt = await getAsync(cachedCtKey)
-    if (cachedCt) {
-      try {
-        appLogger.error({
-          debug: 'getting cached UTAC response',
-          cachedCtKey,
-          cachedCt,
-          bodyKey: req.body.key,
-          bodyId: req.body.id,
-        })
-        const ct = decrypt(cachedCt, req.body.key)
+    // 1 - SIV
+    const {
+      status: sivStatus,
+      message: sivMessage,
+      sivData,
+      utacId,
+    } = await getSIV(id, uuid)
 
+    if (sivStatus !== 200) {
+      res.status(sivStatus).json({
+        success: false,
+        message: sivMessage,
+      })
+      return
+    }
+
+    // 2 - UTAC
+
+    // Utac data encryption is not really useful since UTAC api doesn't return crypted data.
+    // But we still encrypt to sent coherent format to the front: encrypted siv and utac data.
+    // Since HistoVec uses https, it is not a security issue.
+
+    const { utacDataKey, utacDataKeyAsBuffer } = computeUtacDataKey(utacId)
+
+    const utacDataCacheId = urlSafeBase64Encode(id)
+    const utacData = await getAsync(utacDataCacheId)
+
+    if (utacData) {
+      try {
         res.status(200).json({
           success: true,
-          status: res.status,
-          source: 'utac',
-          ct,
+          sivData,
+          utacData,
+          utacDataKey,
         })
+        return
       } catch (error) {
         appLogger.error({
           error: "Couldn't decrypt cached UTAC response",
           remote_error: error.message,
         })
-      }
-    } else {
-      const decrypted = decryptXOR(req.body.utacId, config.utacIdKey)
-      appLogger.debug({ decrypted })
 
-      const plaque = immatNorm(decrypted)
-      appLogger.debug({ plaque })
-
-      try {
-        if (!utacClient) {
-          res.status(503).json({
-            success: false,
-            status: res.status,
-            source: 'utac',
-            message: 'No UTAC api found',
-          })
-        }
-
-        const response = await utacClient.readControlesTechniques(plaque)
-
-        if (response.status === 200) {
-          await setAsync(
-            hash(req.body.id),
-            encrypt(response.ct, req.body.key),
-            'EX',
-            config.redisPersit
-          )
-          res.status(200).json({
-            success: true,
-            status: response.status,
-            source: 'utac',
-            ct: response.ct,
-            updateDate: response.updateDate,
-          })
-        } else {
-          appLogger.error({
-            error: 'UTAC response failed',
-            status: response.status,
-            remote_error: response.message,
-          })
-          res.status(response.status).json({
-            success: false,
-            status: response.status,
-            source: 'utac',
-            message: response.message,
-          })
-        }
-      } catch (error) {
-        appLogger.error({
-          error: 'UTAC error',
-          remote_error: error.message,
-        })
-        return {
-          status: 500,
-          message: error.message,
-        }
+        // Let's asking UTAC api to fix it
       }
     }
+
+    const plaque = decryptXOR(utacId, config.utacIdKey)
+    const normalizedPlaque = normalizePlaqueForUtac(plaque)
+
+    try {
+      if (!utacClient) {
+        const errorMessage = 'No UTAC api found'
+        appLogger.error({
+          message: errorMessage,
+        })
+
+        res.status(200).json({
+          success: true,
+          sivData,
+          utacData: encryptJson({
+            ct: [],
+            ctUpdateDate: null,
+            utacError: errorMessage,
+          }, utacDataKeyAsBuffer),
+          utacDataKey,
+        })
+        return
+      }
+
+      const {
+        status: utacStatus,
+        message: utacMessage,
+        ct,
+        updateDate: ctUpdateDate,
+      } = await utacClient.readControlesTechniques(normalizedPlaque)
+
+      const freshUtacData = encryptJson({
+        ct,
+        ctUpdateDate,
+      }, utacDataKeyAsBuffer)
+
+      await setAsync(
+        utacDataCacheId,
+        freshUtacData,
+        'EX',
+        config.redisPersit
+      )
+
+      if (utacStatus !== 200) {
+        appLogger.error({
+          error: 'UTAC response failed',
+          status: utacStatus,
+          remote_error: utacMessage,
+        })
+
+        if (utacStatus === 404 || utacStatus === 406) {
+          res.status(200).json({
+            success: true,
+            sivData,
+            utacData: encryptJson({
+              ct: [],
+              ctUpdateDate: null,
+            }, utacDataKeyAsBuffer),
+            utacDataKey,
+          })
+          return
+        }
+
+        res.status(200).json({
+          success: true,
+          sivData,
+          utacData: encryptJson({
+            ct: [],
+            ctUpdateDate: null,
+            utacError: utacMessage,
+          }, utacDataKeyAsBuffer),
+          utacDataKey,
+        })
+        return
+      }
+
+      res.status(200).json({
+        success: true,
+        sivData,
+        utacData: freshUtacData,
+        utacDataKey,
+      })
+      return
+    } catch ({ message: errorMessage }) {
+      appLogger.error({
+        error: 'UTAC error',
+        remote_error: errorMessage,
+      })
+
+      res.status(200).json({
+        success: true,
+        sivData,
+        utacData: encryptJson({
+          ct: [],
+          ctUpdateDate: null,
+          utacError: errorMessage,
+        }, utacDataKeyAsBuffer),
+        utacDataKey,
+      })
+    }
   }
-}

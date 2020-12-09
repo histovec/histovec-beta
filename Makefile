@@ -134,7 +134,7 @@ export ES_VERBOSE=100000
 export ES_VERBOSE_UPDATE=1000
 export ES_TIMEOUT=60
 export ES_JOBS=4
-export header="idv;ida1;ida2;v"
+export header="idv;ida1;ida2;v;utac_id"
 # openstack swift source parameters
 # auth token has to be provided before within env
 export openstack_retry=10
@@ -178,8 +178,6 @@ export IS_UTAC_API_ACTIVATED?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
 export UTAC_TIMEOUT?=5000
-export UTAC_HEALTHCHECK_RETRY_SECONDS?=30
-export UTAC_AUTHENTICATE_RETRY_SECONDS?=30
 export UTAC_USERNAME?=Ch@ng€-m€
 export UTAC_PASSWORD?=Ch@ng€-m€-t0o
 export HISTOVEC_PFX?=src/utac/histovec.pfx

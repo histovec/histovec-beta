@@ -1,5 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
 import 'es6-promise/auto'
 import Vue from 'vue'
 import App from './App'
@@ -8,6 +11,11 @@ import store from './store'
 import './plugins'
 
 import apiConf from './assets/json/backend.json'
+
+// Preload CryptoJS at application initialization if needed
+if (!window.crypto || !window.TextEncoder || !window.TextDecoder) {
+  import(/* webpackChunkName: 'crypto-js', webpackPrefetch: false */ 'crypto-js')
+}
 
 Vue.config.productionTip = false
 

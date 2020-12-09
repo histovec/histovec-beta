@@ -1,17 +1,19 @@
 import express from 'express'
 import config from '../config'
-import { getSIV, generateGetUTAC } from './report'
+import { generateGetReport } from './report'
 import { sendContact } from './feedback'
 
-export default function getRouter (utacClient) {
+// @todo : use hapi and joi to validate req.body for every endpoint
+const getRouter = (utacClient) => {
   const router = express.Router()
-  const getUTAC = generateGetUTAC(utacClient)
+  const getReport = generateGetReport(utacClient)
 
   router.get('/version', (req, res) => res.send({ version: config.version }))
   router.get('/health', (req, res) => res.send({ status: 'ok' }))
-  router.post('/siv', getSIV)
-  router.post('/utac', getUTAC)
+  router.post('/report', getReport)
   router.post('/contact', sendContact)
 
   return router
 }
+
+export default getRouter

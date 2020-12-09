@@ -98,7 +98,7 @@ server {
     return 200 '{"status":"ok"}';
   }
 
-  location ~ "^/<APP>/api/v1/(siv|utac)" {
+  location ~ "^/<APP>/api/v1/(report)" {
     include tor-ip.conf;
     include aws-ip.conf;
     if ($request_method != POST) {

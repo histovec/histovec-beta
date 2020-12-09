@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import identity from './modules/identity.js'
-import siv from './modules/siv.js'
-import utac from './modules/utac.js'
+import histovec from './modules/histovec.js'
 import VuexPersistence from 'vuex-persist'
 import objectPath from 'object-path'
 
@@ -16,13 +15,11 @@ const vuexLocal = new VuexPersistence({
 
 Vue.use(Vuex)
 
-function s4 () {
-  return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-}
+const s4 = () =>
+  Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
 
-function guid () {
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
-}
+const guid = () =>
+  s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 
 if (localStorage.getItem('userId') === null) {
   const uuid = guid()
@@ -48,7 +45,6 @@ export default new Vuex.Store({
       newPdfLib: false,
       csaAnnulationCi: false,
       dataDate: false,
-      utac: process.env.VUE_APP_IS_UTAC_API_ACTIVATED === 'true',
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
@@ -126,8 +122,7 @@ export default new Vuex.Store({
   },
   modules: {
     identity,
-    siv,
-    utac
+    histovec,
   },
   plugins: [vuexLocal.plugin]
 })

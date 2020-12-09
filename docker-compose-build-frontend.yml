@@ -26,6 +26,5 @@ services:
         NPM_VERBOSE: ${NPM_VERBOSE}
         VUE_APP_V1_PERCENTAGE: ${API_V1_PERCENTAGE}
         VUE_APP_SOURCE_MAP: ${FRONTEND_SOURCE_MAP}
-        VUE_APP_IS_UTAC_API_ACTIVATED: ${IS_UTAC_API_ACTIVATED}
     image: ${APP}-frontend-${EXEC_ENV}:${APP_VERSION}
     container_name: ${APP}-frontend-${EXEC_ENV}
