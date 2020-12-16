@@ -67,6 +67,9 @@ const oldDecrypt = async (urlSafeBase64Input, rawKey) => {
   }
 }
 
+// eslint-disable-next-line no-console
+console.log(oldDecrypt, newDecrypt)
+
 const utf8TextDecoder = window.TextDecoder && new window.TextDecoder('utf8')
 
 const newDecrypt = async (urlSafeBase64Input, rawKey) => {
@@ -118,7 +121,7 @@ const newDecrypt = async (urlSafeBase64Input, rawKey) => {
     cipher = AES.new(key, AES.MODE_CBC, iv)
     return unpad(cipher.decrypt(enc[16:]))
 */
-const decrypt = (window.crypto && window.TextDecoder) ? newDecrypt : oldDecrypt
+const decrypt = newDecrypt // @TODO: remove oldDecrypt? (window.crypto && window.TextDecoder) ? newDecrypt : oldDecrypt
 
 const checkStatus = async (apiName, response) => {
   await store.commit('updateApiStatus', {
@@ -185,6 +188,9 @@ const decryptReport = async (apiName, response, { sivDataPath, utacDataPath, siv
       }
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('DECRYPT = ', error)
+
     store.commit('updateApiStatus', {
       decrypted: { [apiName]: false },
       error: { [apiName]: { decrypt: error.toString() } }
