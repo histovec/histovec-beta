@@ -290,7 +290,7 @@
                 :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
               >
                 <tech-control
-                  v-if="tab === 'utac' && !isAnnulationCI && ct.length > 0"
+                  v-if="tab === 'utac' && !isAnnulationCI && (ct.length > 0 || ctError)"
                   :ct="ct"
                   :ct-error="ctError"
                 >
