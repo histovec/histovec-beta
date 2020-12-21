@@ -236,7 +236,7 @@ export default {
     }
     const reportResponse = await jsonClient(apiName, `${apiPaths(apiName)}`, options)
 
-    const { success, sivData, utacData } = await decryptReport(
+    const { success, sivData = {}, utacData = {}} = await decryptReport(
       apiName,
       reportResponse,
       {
