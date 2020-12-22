@@ -205,7 +205,7 @@ const decryptReport = async (apiName, response, { sivDataPath, utacDataPath, siv
 
 const fetchClient = async (apiName, url, options) => {
   await store.commit('initApiStatus', apiName)
-  const resp = fetch(url, options)
+  const resp = await fetch(url, options)
 
   return checkStatus(apiName, resp)
 }
@@ -236,7 +236,7 @@ export default {
     }
     const reportResponse = await jsonClient(apiName, `${apiPaths(apiName)}`, options)
 
-    const { success, sivData = {}, utacData = {}} = await decryptReport(
+    const { success, sivData = {}, utacData = {} } = await decryptReport(
       apiName,
       reportResponse,
       {
