@@ -206,18 +206,6 @@ export const generateGetReport = (utacClient) =>
         updateDate: ctUpdateDate,
       } = await utacClient.readControlesTechniques(normalizedPlaque)
 
-      const freshUtacData = encryptJson({
-        ct,
-        ctUpdateDate,
-      }, utacDataKeyAsBuffer)
-
-      await setAsync(
-        utacDataCacheId,
-        freshUtacData,
-        'EX',
-        config.redisPersit
-      )
-
       if (utacStatus !== 200) {
         appLogger.error({
           error: 'UTAC response failed',
@@ -226,18 +214,29 @@ export const generateGetReport = (utacClient) =>
         })
 
         if (utacStatus === 404 || utacStatus === 406) {
+          const emptyUtacData = encryptJson({
+            ct: [],
+            ctUpdateDate: null,
+          }, utacDataKeyAsBuffer)
+
+          // Cache unsupported vehicles
+          await setAsync(
+            utacDataCacheId,
+            emptyUtacData,
+            'EX',
+            config.redisPersit
+          )
+
           res.status(200).json({
             success: true,
             sivData,
-            utacData: encryptJson({
-              ct: [],
-              ctUpdateDate: null,
-            }, utacDataKeyAsBuffer),
+            utacData: emptyUtacData,
             utacDataKey,
           })
           return
         }
 
+        // Don't cache errors
         res.status(200).json({
           success: true,
           sivData,
@@ -251,19 +250,32 @@ export const generateGetReport = (utacClient) =>
         return
       }
 
+      const freshUtacData = encryptJson({
+        ct,
+        ctUpdateDate,
+      }, utacDataKeyAsBuffer)
+
+      // Cache supported vehicles
+      await setAsync(
+        utacDataCacheId,
+        freshUtacData,
+        'EX',
+        config.redisPersit
+      )
+
       res.status(200).json({
         success: true,
         sivData,
         utacData: freshUtacData,
         utacDataKey,
       })
-      return
     } catch ({ message: errorMessage }) {
       appLogger.error({
         error: 'UTAC error',
         remote_error: errorMessage,
       })
 
+      // Don't cache errors
       res.status(200).json({
         success: true,
         sivData,
