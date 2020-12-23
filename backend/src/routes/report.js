@@ -53,9 +53,10 @@ const getSIV = async (id, uuid) => {
     }
 
     const sivData = hits[0]._source && hits[0]._source.v
-    const utacId = hits[0]._source && hits[0]._source.utac_id
 
-    if (!sivData || !utacId) {
+    const utacId = (hits[0]._source && hits[0]._source.utac_id) || ''
+
+    if (!sivData) {
       appLogger.error({
         error: 'Bad Content in elasticsearch response',
         response: hits,
@@ -153,6 +154,25 @@ export const generateGetReport = (utacClient) =>
 
     const { utacDataKey, utacDataKeyAsBuffer } = computeUtacDataKey(utacId)
 
+    // /!\ boolean setting is passed as string /!\
+    // @todo: we should use typed yaml to load settings
+    const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
+
+    // Only annulationCI vehicles don't have utacId
+    const isAnnulationCI = !utacId
+    if (isAnnulationCI || !isApiActivated) {
+      res.status(200).json({
+        success: true,
+        sivData,
+        utacData: encryptJson({
+          ct: [],
+          ctUpdateDate: null,
+        }, utacDataKeyAsBuffer),
+        utacDataKey,
+      })
+      return
+    }
+
     const utacDataCacheId = urlSafeBase64Encode(id)
     const utacData = await getAsync(utacDataCacheId)
 
@@ -179,25 +199,6 @@ export const generateGetReport = (utacClient) =>
     const normalizedPlaque = normalizePlaqueForUtac(plaque)
 
     try {
-      if (!utacClient) {
-        const errorMessage = 'No UTAC api found'
-        appLogger.error({
-          message: errorMessage,
-        })
-
-        res.status(200).json({
-          success: true,
-          sivData,
-          utacData: encryptJson({
-            ct: [],
-            ctUpdateDate: null,
-            utacError: errorMessage,
-          }, utacDataKeyAsBuffer),
-          utacDataKey,
-        })
-        return
-      }
-
       const {
         status: utacStatus,
         message: utacMessage,
