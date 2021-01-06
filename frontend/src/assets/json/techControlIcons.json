@@ -1,17 +1,61 @@
 {
   "nature": {
-    "VTP": { "icon":"fa fa-tachometer", "color":"icon_black", "size": "fa-lg" },
-    "VTC": { "icon":"fa fa-fire", "color":"icon_black", "size": "fa-lg" },
-    "CV": { "icon":"fa fa-tachometer", "color":"icon_black", "size": "fa-lg" },
-    "CVC": { "icon":"fa fa-fire", "color":"icon_black", "size": "fa-lg" }
+    "VTP": {
+      "icon": "fa fa-tachometer",
+      "color": "icon_black",
+      "size": "fa-lg"
+    },
+    "VTC": {
+      "icon": "fa fa-tachometer",
+      "color": "icon_black",
+      "size": "fa-lg"
+    },
+    "CV": {
+      "icon": "fa fa-tachometer",
+      "color": "icon_black",
+      "size": "fa-lg"
+    },
+    "CVC": {
+      "icon": "fa fa-tachometer",
+      "color": "icon_black",
+      "size": "fa-lg"
+    }
   },
   "resultat": {
-    "A": { "icon":"fa fa-check-circle", "color":"icon_green", "size": "fa-lg" },
-    "AP": { "icon":"fa fa-check-circle", "color":"icon_green", "size": "fa-lg" },
-    "S": { "icon":"fa fa-plus-circle", "color":"icon_orange", "size": "fa-lg" },
-    "SP": { "icon":"fa fa-plus-circle", "color":"icon_orange", "size": "fa-lg" },
-    "R": { "icon":"fa fa-times-circle", "color":"icon_red", "size": "fa-lg" },
-    "RP": { "icon":"fa fa-times-circle", "color":"icon_red", "size": "fa-lg" },
-    "X": { "icon":"fa fa-times", "color":"icon_black", "size": "fa-lg" }
+    "A": {
+      "icon": "fa fa-check-circle",
+      "color": "icon_green",
+      "size": "fa-lg"
+    },
+    "AP": {
+      "icon": "fa fa-check-circle",
+      "color": "icon_green",
+      "size": "fa-lg"
+    },
+    "S": {
+      "icon": "fa fa-plus-circle",
+      "color": "icon_orange",
+      "size": "fa-lg"
+    },
+    "SP": {
+      "icon": "fa fa-plus-circle",
+      "color": "icon_orange",
+      "size": "fa-lg"
+    },
+    "R": {
+      "icon": "fa fa-times-circle",
+      "color": "icon_red",
+      "size": "fa-lg"
+    },
+    "RP": {
+      "icon": "fa fa-times-circle",
+      "color": "icon_red",
+      "size": "fa-lg"
+    },
+    "X": {
+      "icon": "fa fa-times",
+      "color": "icon_black",
+      "size": "fa-lg"
+    }
   }
 }
