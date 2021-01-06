@@ -158,6 +158,11 @@ export const generateGetReport = (utacClient) =>
     // @todo: we should use typed yaml to load settings
     const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
 
+    const emptyUtacData = encryptJson({
+      ct: [],
+      ctUpdateDate: null,
+    }, utacDataKeyAsBuffer)
+
     // Only annulationCI vehicles don't have utacId
     const isAnnulationCI = !utacId
     if (isAnnulationCI || !isApiActivated) {
@@ -198,6 +203,29 @@ export const generateGetReport = (utacClient) =>
     const plaque = decryptXOR(utacId, config.utacIdKey)
     const normalizedPlaque = normalizePlaqueForUtac(plaque)
 
+    const validPlaqueRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
+    if (!validPlaqueRegex.test(normalizedPlaque)) {
+      appLogger.error({
+        error: 'Invalid plaque for UTAC api',
+      })
+
+      // Cache unsupported vehicles
+      await setAsync(
+        utacDataCacheId,
+        emptyUtacData,
+        'EX',
+        config.redisPersit
+      )
+
+      res.status(200).json({
+        success: true,
+        sivData,
+        utacData: emptyUtacData,
+        utacDataKey,
+      })
+      return
+    }
+
     try {
       const {
         status: utacStatus,
@@ -214,11 +242,6 @@ export const generateGetReport = (utacClient) =>
         })
 
         if (utacStatus === 404 || utacStatus === 406) {
-          const emptyUtacData = encryptJson({
-            ct: [],
-            ctUpdateDate: null,
-          }, utacDataKeyAsBuffer)
-
           // Cache unsupported vehicles
           await setAsync(
             utacDataCacheId,

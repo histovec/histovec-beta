@@ -132,28 +132,34 @@ module.exports.UTACClient = class UTACClient {
   }
 
   async _authenticate () {
-    appLogger.debug({
-      debug: 'UTACClient - authenticate',
-    })
-
-    const response = await this.axios.get('/auth', {
-      auth: {
-        username: config.utac.username,
-        password: config.utac.password,
-      },
-    })
-
-    const token = response.data && response.data.token
-    if (token) {
-      appLogger.debug({
-        debug: 'UTAC authentication succeed',
-        token: token,
+    try {
+      const response = await this.axios.get('/auth', {
+        auth: {
+          username: config.utac.username,
+          password: config.utac.password,
+        },
       })
 
-      const authorizationHeader = `bearer ${token}`
-      this.axios.defaults.headers.common.Authorization = authorizationHeader
+      const token = response.data && response.data.token
+      if (token) {
+        appLogger.debug({
+          debug: 'UTAC authentication succeed',
+          token: token,
+        })
 
-      return authorizationHeader
+        const authorizationHeader = `bearer ${token}`
+        this.axios.defaults.headers.common.Authorization = authorizationHeader
+
+        return authorizationHeader
+      }
+      appLogger.error({
+        error: 'UTAC authentication error : no token',
+      })
+    } catch (error) {
+      appLogger.error({
+        error: 'UTAC authentication failed',
+        remote_error: error,
+      })
     }
   }
 
