@@ -95,7 +95,8 @@ export default {
       } = await api.getReport(
         state.id,
         state.key,
-        localStorage.getItem('userId')
+        localStorage.getItem('userId'),
+        rootState.config.isUtacActivated
       )
 
       if (success) {
