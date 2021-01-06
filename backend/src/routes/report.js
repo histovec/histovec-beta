@@ -114,7 +114,7 @@ const computeUtacDataKey = (utacId) => {
 
 export const generateGetReport = (utacClient) =>
   async (req, res) => {
-    const { id, uuid } = req.body
+    const { id, uuid, isUtacActivated } = req.body
 
     if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({
@@ -165,7 +165,11 @@ export const generateGetReport = (utacClient) =>
 
     // Only annulationCI vehicles don't have utacId
     const isAnnulationCI = !utacId
-    if (isAnnulationCI || !isApiActivated) {
+    if (isAnnulationCI || !isApiActivated || !isUtacActivated) {
+      appLogger.info({
+        message: 'No call to UTAC api',
+      })
+
       res.status(200).json({
         success: true,
         sivData,
