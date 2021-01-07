@@ -159,11 +159,6 @@ export const generateGetReport = (utacClient) =>
     // @todo: we should use typed yaml to load settings
     const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
 
-    const emptyUtacData = encryptJson({
-      ct: [],
-      ctUpdateDate: null,
-    }, utacDataKeyAsBuffer)
-
     // Only annulationCI vehicles don't have utacId
     const isAnnulationCI = !utacId
     if (isAnnulationCI || !isApiActivated || !isUtacActivated) {
@@ -182,6 +177,11 @@ export const generateGetReport = (utacClient) =>
       })
       return
     }
+
+    const emptyUtacData = encryptJson({
+      ct: [],
+      ctUpdateDate: null,
+    }, utacDataKeyAsBuffer)
 
     const utacDataCacheId = urlSafeBase64Encode(id)
     const utacData = await getAsync(utacDataCacheId)
