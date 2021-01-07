@@ -162,9 +162,17 @@ export const generateGetReport = (utacClient) =>
     // Only annulationCI vehicles don't have utacId
     const isAnnulationCI = !utacId
     if (isAnnulationCI || !isApiActivated || !isUtacActivated) {
-      appLogger.info({
-        message: 'No call to UTAC api',
-      })
+      appLogger.info({ message: 'No call to UTAC api' })
+
+      appLogger.info({ utacId: utacId || 'no utac id found' })
+
+      appLogger.info({ isApiActivated: isApiActivated })
+
+      appLogger.info({ castIsApiActivated: Boolean(isApiActivated) })
+
+      appLogger.info({ isUtacActivated: isUtacActivated })
+
+      appLogger.info({ castIsUtacActivated: Boolean(isUtacActivated) })
 
       res.status(200).json({
         success: true,
