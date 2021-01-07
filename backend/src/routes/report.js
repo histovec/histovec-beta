@@ -102,7 +102,8 @@ const getSIV = async (id, uuid) => {
   }
 }
 
-const computeUtacDataKey = (utacId) => {
+// Use a default value to compute utacDataKey for annulationCI vehicles
+const computeUtacDataKey = (utacId = 'h4ZWsQLmpOZf') => {
   const urlSafeBase64UtacIdHash = hash(utacId)
   const truncatedUtacIdHash = Buffer.from(urlSafeBase64UtacIdHash, 'base64').slice(0, 32).toString('base64')
 
@@ -158,17 +159,20 @@ export const generateGetReport = (utacClient) =>
     // @todo: we should use typed yaml to load settings
     const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
 
-    const emptyUtacData = encryptJson({
-      ct: [],
-      ctUpdateDate: null,
-    }, utacDataKeyAsBuffer)
-
     // Only annulationCI vehicles don't have utacId
     const isAnnulationCI = !utacId
     if (isAnnulationCI || !isApiActivated || !isUtacActivated) {
-      appLogger.info({
-        message: 'No call to UTAC api',
-      })
+      appLogger.info({ message: 'No call to UTAC api' })
+
+      appLogger.info({ utacId: utacId || 'no utac id found' })
+
+      appLogger.info({ isApiActivated: isApiActivated })
+
+      appLogger.info({ castIsApiActivated: Boolean(isApiActivated) })
+
+      appLogger.info({ isUtacActivated: isUtacActivated })
+
+      appLogger.info({ castIsUtacActivated: Boolean(isUtacActivated) })
 
       res.status(200).json({
         success: true,
@@ -181,6 +185,11 @@ export const generateGetReport = (utacClient) =>
       })
       return
     }
+
+    const emptyUtacData = encryptJson({
+      ct: [],
+      ctUpdateDate: null,
+    }, utacDataKeyAsBuffer)
 
     const utacDataCacheId = urlSafeBase64Encode(id)
     const utacData = await getAsync(utacDataCacheId)
