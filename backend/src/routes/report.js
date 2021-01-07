@@ -102,7 +102,8 @@ const getSIV = async (id, uuid) => {
   }
 }
 
-const computeUtacDataKey = (utacId) => {
+// Use a default value to compute utacDataKey for annulationCI vehicles
+const computeUtacDataKey = (utacId = 'h4ZWsQLmpOZf') => {
   const urlSafeBase64UtacIdHash = hash(utacId)
   const truncatedUtacIdHash = Buffer.from(urlSafeBase64UtacIdHash, 'base64').slice(0, 32).toString('base64')
 
