@@ -96,7 +96,6 @@ export default {
         state.id,
         state.key,
         localStorage.getItem('userId'),
-        rootState.config.isUtacActivated
       )
 
       if (success) {

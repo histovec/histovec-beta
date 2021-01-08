@@ -228,11 +228,11 @@ const apiClient = {
 }
 
 export default {
-  getReport: async (id, key, uuid, isUtacActivated) => {
+  getReport: async (id, key, uuid) => {
     const apiName = 'report'
     const options = {
       method: 'POST',
-      body: JSON.stringify({ id, uuid, isUtacActivated })
+      body: JSON.stringify({ id, uuid })
     }
     const reportResponse = await jsonClient(apiName, `${apiPaths(apiName)}`, options)
 
