@@ -164,7 +164,7 @@ export const generateGetReport = (utacClient) =>
     if (isAnnulationCI || !isApiActivated || !isUtacActivated) {
       appLogger.info({ message: 'No call to UTAC api' })
 
-      appLogger.info({ utacId: utacId || 'no utac id found' })
+      appLogger.info({ utacId: isAnnulationCI || 'no utac id found' })
 
       appLogger.info({ isApiActivated: isApiActivated })
 
