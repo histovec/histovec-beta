@@ -28,6 +28,7 @@ services:
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
       - REDIS_URL=${REDIS_URL}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_PERSIST=${REDIS_PERSIST}
       - ES_URL=${ES_HOST}:${ES_PORT}
       - ES_INDEX=${ES_INDEX}
@@ -62,14 +63,14 @@ services:
 
 
   redis:
-    image: ${APP}-cache:${APP_VERSION}
-    build:
-      context: ${REDIS}
-      target: cache
-      dockerfile: Dockerfile
+    image: redis:6-alpine
     container_name: ${APP}-cache
+    command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - ${REDIS_DATA}:/data
+      - ${REDIS_DATA}:/var/lib/redis
+      - ${REDIS}/redis.conf:/usr/local/etc/redis/redis.conf
     sysctls:
       - net.core.somaxconn=65535
 
