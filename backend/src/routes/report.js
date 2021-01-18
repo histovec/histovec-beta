@@ -187,6 +187,7 @@ export const generateGetReport = (utacClient) =>
     const utacData = await getAsync(utacDataCacheId)
 
     if (utacData) {
+      appLogger.info('-- Cached CT')
       try {
         res.status(200).json({
           success: true,
@@ -206,7 +207,10 @@ export const generateGetReport = (utacClient) =>
     }
 
     const plaque = decryptXOR(utacId, config.utacIdKey)
+    appLogger.info(`-- plaque = ${plaque}`)
+
     const normalizedPlaque = normalizePlaqueForUtac(plaque)
+    appLogger.info(`-- normalizedPlaque = ${normalizedPlaque}`)
 
     const validPlaqueRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
     if (!validPlaqueRegex.test(normalizedPlaque)) {
