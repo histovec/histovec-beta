@@ -11,6 +11,7 @@ const config = {
   app: process.env.APP,
   redisUrl: `redis://${process.env.REDIS_URL}`,
   redisPersit: process.env.REDIS_PERSIST || 86400, // 24h
+  redisPassword: process.env.REDIS_PASSWORD,
   esUrl: process.env.ES_URL,
   esSIVIndex: process.env.ES_INDEX,
   smtpServer: process.env.SMTP_SERVER,

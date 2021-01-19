@@ -161,9 +161,10 @@ export SMTP_SERVER=smtp
 export SMTP_PORT=25
 # redis confs for backend and cache of utac data
 export REDIS=${BACKEND}/redis
-export REDIS_DATA=${BACKEND}/redis/data-dummy
+export REDIS_DATA=${REDIS}/data-dummy
 export REDIS_PERSIST=86400
 export REDIS_URL=redis
+export REDIS_PASSWORD
 # utac confs for backend and fake api
 export FAKE_UTAC_SCHEME=http
 export FAKE_UTAC_HOST=utac
