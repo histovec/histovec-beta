@@ -206,8 +206,13 @@ export const generateGetReport = (utacClient) =>
       }
     }
 
+    appLogger.info({ message: `UTAC_ID_KEY = ${config.utacIdKey}` })
+
     const plaque = decryptXOR(utacId, config.utacIdKey)
+    appLogger.info({ message: `plaque = ${plaque}` })
+
     const normalizedPlaque = normalizePlaqueForUtac(plaque)
+    appLogger.info({ message: `normalizedPlaque = ${normalizedPlaque}` })
 
     const validPlaqueRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
     if (!validPlaqueRegex.test(normalizedPlaque)) {
