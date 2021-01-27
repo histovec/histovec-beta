@@ -57,7 +57,6 @@ services:
       retries: 3
       start_period: 40s
 
-
   redis:
     image: ${APP}-cache:${APP_VERSION}
     build:
@@ -67,6 +66,7 @@ services:
       target: cache
       dockerfile: Dockerfile
     container_name: ${APP}-cache
+    command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
     volumes:
       - ${REDIS_DATA}:/data
     sysctls:
