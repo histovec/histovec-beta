@@ -59,14 +59,16 @@ services:
 
 
   redis:
-    image: redis:6-alpine
+    image: ${APP}-cache:${APP_VERSION}
+    build:
+      args:
+        redis_password: ${REDIS_PASSWORD}
+      context: ${REDIS}
+      target: cache
+      dockerfile: Dockerfile
     container_name: ${APP}-cache
-    command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
-    environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - ${REDIS_DATA}:/var/lib/redis
-      - ${REDIS}/redis.conf:/usr/local/etc/redis/redis.conf
+      - ${REDIS_DATA}:/data
     sysctls:
       - net.core.somaxconn=65535
 
