@@ -1,12 +1,3 @@
-/* /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
-  Only import for code supporting :
-    window.TextDecoder
-      AND
-    window.crypto support
-
-		NB: IE11 doesn't support it
-/!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ */
-
 import base64ArrayBuffer from 'base64-arraybuffer'
 
 const textEncoder = window.TextEncoder && new window.TextEncoder()

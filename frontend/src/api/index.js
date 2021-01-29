@@ -1,7 +1,6 @@
 import 'whatwg-fetch'
 import store from '@/store'
 import base64ArrayBuffer from 'base64-arraybuffer'
-import { urlSafeBase64Decode } from '../utils/IE11EncodingPolyfill'
 import { stringifyCodePostal } from '../utils/dataPreparationFormat'
 
 import apiConf from '@/assets/json/backend.json'
@@ -20,59 +19,18 @@ const apiPaths = (apiName) => {
   return `${apiUrl}/${apiRoute[apiName]}`
 }
 
-const oldDecrypt = async (urlSafeBase64Input, rawKey) => {
-  const CryptoJS = (await import(/* webpackChunkName: 'crypto-js', webpackPrefetch: false */ 'crypto-js')).default
-
-  const ivAndEncrypted = await urlSafeBase64Decode(urlSafeBase64Input)
-  const iv = ivAndEncrypted.substring(0, AES_BLOCK_SIZE)
-  const encrypted = ivAndEncrypted.substring(AES_BLOCK_SIZE)
-
-  // Convert to CryptoJs.WordArray type before to decrypt
-  const keyAsWordArray = CryptoJS.enc.Base64.parse(rawKey)
-  const ivAsWordArray = CryptoJS.enc.Base64.parse(window.btoa(iv))
-  const encryptedAsWordArray = CryptoJS.enc.Base64.parse(window.btoa(encrypted))
-
-  let decrypted
-  try {
-    decrypted = CryptoJS.AES.decrypt({
-      ciphertext: encryptedAsWordArray,
-      salt: ''
-    },
-      keyAsWordArray,
-      {
-        iv: ivAsWordArray,
-        padding: CryptoJS.pad.Pkcs7,
-        mode: CryptoJS.mode.CBC
-      }
-    )
-  } catch (e) {
-    /* eslint-disable-next-line no-console */
-    console.log('decrypt_error', e)
-    throw new Error(`decrypt_error: ${e}`)
-  }
-  try {
-    decrypted = decrypted.toString(CryptoJS.enc.Utf8)
-    decrypted = stringifyCodePostal(decrypted)
-  } catch (e) {
-    /* eslint-disable-next-line no-console */
-    console.log('decrypt_toString_failure', e)
-    throw new Error(`decrypt_toString_failure: ${e}`)
-  }
-  try {
-    return JSON.parse(decrypted)
-  } catch (e) {
-    /* eslint-disable-next-line no-console */
-    console.log('decrypt_JSON_parse_error', decrypted, e)
-    throw new Error(`decrypt_JSON_parse_error: ${e}`)
-  }
-}
-
-// eslint-disable-next-line no-console
-console.log(oldDecrypt, newDecrypt)
-
 const utf8TextDecoder = window.TextDecoder && new window.TextDecoder('utf8')
 
-const newDecrypt = async (urlSafeBase64Input, rawKey) => {
+/*
+  Equivalent of dataprep Python function :
+
+  def decrypt_string(key, string):
+    enc = base64.urlsafe_b64decode(string)
+    iv = enc[:16]
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    return unpad(cipher.decrypt(enc[16:]))
+*/
+const decrypt = async (urlSafeBase64Input, rawKey) => {
   const ALGORITHM = 'AES-CBC'
 
   const keyArrayBuffer = base64ArrayBuffer.decode(rawKey)
@@ -111,17 +69,6 @@ const newDecrypt = async (urlSafeBase64Input, rawKey) => {
     throw new Error(`decrypt_JSON_parse_error: ${e}`)
   }
 }
-
-/*
-  Equivalent of dataprep Python function :
-
-  def decrypt_string(key, string):
-    enc = base64.urlsafe_b64decode(string)
-    iv = enc[:16]
-    cipher = AES.new(key, AES.MODE_CBC, iv)
-    return unpad(cipher.decrypt(enc[16:]))
-*/
-const decrypt = newDecrypt // @TODO: remove oldDecrypt? (window.crypto && window.TextDecoder) ? newDecrypt : oldDecrypt
 
 const checkStatus = async (apiName, response) => {
   await store.commit('updateApiStatus', {
