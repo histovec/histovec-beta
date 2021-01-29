@@ -8,6 +8,9 @@ import config from './config'
 export default function createApp (utacClient) {
   const app = express()
 
+  // Remove x-powered-by header for security reason
+  app.disable('x-powered-by')
+
   morgan.token('id', function (req) {
     return req.body.id
   })
