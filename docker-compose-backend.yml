@@ -60,8 +60,6 @@ services:
   redis:
     image: ${APP}-cache:${APP_VERSION}
     build:
-      args:
-        redis_password: ${REDIS_PASSWORD}
       context: ${REDIS}
       target: cache
       dockerfile: Dockerfile
