@@ -115,7 +115,7 @@ fi
 
 # verification indice en read_only_allow_delete
 echo "# elasticsearch indice en read_only_allow_delete ?"
-list_indice="$dataset contact"
+list_indice="$dataset"
 test_result=0
 for indice in $list_indice ; do
   if ( docker exec -i ${USE_TTY} ${APP}-$container_name curl -s --fail -XGET localhost:9200/$indice | jq -e '.error' || \
