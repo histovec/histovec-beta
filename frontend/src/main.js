@@ -12,11 +12,6 @@ import './plugins'
 
 import apiConf from './assets/json/backend.json'
 
-// Preload CryptoJS at application initialization if needed
-if (!window.crypto || !window.TextEncoder || !window.TextDecoder) {
-  import(/* webpackChunkName: 'crypto-js', webpackPrefetch: false */ 'crypto-js')
-}
-
 Vue.config.productionTip = false
 
 window.addEventListener('beforeunload', function () {

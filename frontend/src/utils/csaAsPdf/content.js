@@ -1,22 +1,23 @@
 import { writeFooter } from './footer'
 
 import {
-	ALIGN,
+	COLUMN_WIDTH,
+	LARGE_COLUMN_WIDTH,
 	FONT_SIZES,
 	FONT_SPACING,
 	FONT_STYLES,
-	FIRST_COLUMN_X,
-	SECOND_COLUMN_X,
+	BORDER_LEFT_PAGE_X,
+	MIDDLE_PAGE_X,
 	NEXT_PAGE_SYMBOL_X,
+	MULTILINES_MARGIN,
 	HORIZONTAL_TABULATION,
-	IMAGE_FORMAT,
 	MISSING_VALUE,
 	TO_BE_CONTINUED_SYMBOL,
-	TOP_PAGE_Y
+	TOP_PAGE_MARGIN
 } from './constants'
 
 import {
-	getTextLinesWithSplit,
+	getEmbeddedFont,
 	writeMainTitle,
 	writePageNumber,
 	writeText,
@@ -25,44 +26,87 @@ import {
 } from './utils'
 
 
-const writeNextPageSymbol = (pdf, y) => {
-	writeText(pdf, NEXT_PAGE_SYMBOL_X, y, TO_BE_CONTINUED_SYMBOL,
-		{
-			size: FONT_SIZES.M,
-			style: FONT_STYLES.BOLD
-		})
+const SECTION_TITLE_BULLET = '-'
+
+const writeNextPageSymbol = ({
+  page,
+  embeddedFonts,
+	y,
+	dryRun
+}) => {
+  return writeText({
+		page,
+		embeddedFonts,
+		x: NEXT_PAGE_SYMBOL_X,
+		y,
+		text: TO_BE_CONTINUED_SYMBOL,
+		size: FONT_SIZES.M,
+		style: FONT_STYLES.BOLD,
+		dryRun
+  })
 }
 
-const writeHeaderLogo = (
-	pdf, image,
-	{ imageFormat, width, height,	x}={
-		imageFormat: IMAGE_FORMAT.PNG,
-		width: 43.4,
-		height: 32.86,
-		x: 83.2,
-	}
-) => {
-	pdf.addImage(image, imageFormat, x, TOP_PAGE_Y, width, height, null, 'SLOW')
-	return TOP_PAGE_Y + height + FONT_SPACING.XS
+const writeHeaderLogoPng = ({
+	page,
+	y,
+	headerLogoPng
+}) => {
+	const pngDims = headerLogoPng.scale(0.035)
+	const pngY = y - pngDims.height
+
+	page.drawImage(headerLogoPng, {
+		x: page.getWidth() / 2 - pngDims.width / 2,
+		y: pngY,
+		width: pngDims.width,
+		height: pngDims.height,
+	})
+
+	return pngY - FONT_SPACING.XL
 }
 
-const writeCSAMainTitle = (pdf, y) => {
-	writeMainTitle(pdf, SECOND_COLUMN_X, y, 'Certificat de situation administrative détaillé')
-	const titleY = writeTitle(pdf, SECOND_COLUMN_X, y + FONT_SPACING.S, '(Articles L.322-2 et R.322-4 du code de la route)', {
-		align: ALIGN.CENTER,
+const writeCSAMainTitle = ({
+	page,
+	embeddedFonts,
+	y
+}) => {
+	const subTitleY = writeMainTitle({
+		page,
+		embeddedFonts,
+		x: MIDDLE_PAGE_X,
+		y,
+		title: 'Certificat de situation administrative détaillé'
+	})
+
+	const titleY = writeTitle({
+		page,
+		embeddedFonts,
+		x: MIDDLE_PAGE_X,
+		y: subTitleY,
+		title: '(Articles L.322-2 et R.322-4 du code de la route)',
+		center: true,
 		style: FONT_STYLES.NORMAL
 	})
 
-	return titleY + FONT_SPACING.L * 2
+	const nextY = titleY - FONT_SPACING.XXL
+	return nextY
 }
 
-const writeVehicleIdentification = (
-	pdf, plaque, premierCertificat, vin, marque,
-	{ y }={ y: 65 }
-) => {
-	writeTitle(pdf, FIRST_COLUMN_X, y, 'Identification du véhicule')
-
-	const nextY = y + FONT_SPACING.L
+const writeVehicleIdentification = ({
+	page,
+	embeddedFonts,
+	y,
+	plaque,
+	premierCertificat,
+	vin,
+	marque
+}) => {
+	const vehicleIdentificationInfosY = writeTitle({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y,
+		title: 'Identification du véhicule'
+	})
 
 	const labels = [
 		'Numéro d\'immatriculation du véhicule :',
@@ -70,7 +114,14 @@ const writeVehicleIdentification = (
 		'Numéro VIN du véhicule (ou numéro de série) :',
 		'Marque :'
 	]
-	writeWithSpacing(pdf, FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.S, labels)
+	const leftPartY = writeWithSpacing({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X + HORIZONTAL_TABULATION.XS,
+		y: vehicleIdentificationInfosY,
+		textLines: labels,
+		increaseLineHeightOf: MULTILINES_MARGIN
+	})
 
 	const values = [
 		plaque.toUpperCase() || MISSING_VALUE,
@@ -78,302 +129,411 @@ const writeVehicleIdentification = (
 		vin || MISSING_VALUE,
 		marque || MISSING_VALUE
 	]
-	const lastY = writeWithSpacing(pdf, SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS, nextY, FONT_SPACING.S, values)
+	const rightPartY = writeWithSpacing({
+		page,
+		embeddedFonts,
+		x: MIDDLE_PAGE_X + HORIZONTAL_TABULATION.XS,
+		y: vehicleIdentificationInfosY,
+		textLines: values,
+		increaseLineHeightOf: MULTILINES_MARGIN
+	})
 
-	return lastY + FONT_SPACING.M
+	const nextY = Math.min(leftPartY, rightPartY) - FONT_SPACING.XXL
+	return nextY
 }
 
 /* **********************  writeHistory  ********************** */
 
-const getCutIndex = (itemsWithSplit, maxNbLinesToCut) => {
-	const result = itemsWithSplit.reduce(
-		({ linesCount, cutIndex }, { splittedContent: { length: itemLines } }, i) => {
-			const updatedLinesCount = linesCount + itemLines
+const addPage = ({
+	doc,
+	embeddedFonts,
+	writeHeaderCallback,
+	writeFooterCallback,
+	title = ''
+}) => {
+	const page = doc.addPage()
+  page.setFont(embeddedFonts[FONT_STYLES.NORMAL])
 
-			return {
-				linesCount: updatedLinesCount,
-				cutIndex: updatedLinesCount <= maxNbLinesToCut ? i +1 : cutIndex
-			}
-		},
-		{ linesCount: 0, cutIndex: 0 }
-	)
+	let nextY = writeHeaderCallback({ page, embeddedFonts })
+	if (title) {
+		nextY = writeTitle({ page, embeddedFonts, x: BORDER_LEFT_PAGE_X, y: nextY, title })
+	}
 
-	return result.cutIndex
+	const { topFooterY, bottomFooterY } = writeFooterCallback({ page, embeddedFonts })
+	return { page, nextY, topFooterY, bottomFooterY }
 }
 
-const getBalancedTextLinesForPage = (
-	topY, remainingHeight, maxColumnLinesForPage, itemsWithSplit,
-	{ onlyOneColumn }={ onlyOneColumn: false }
-) => {
-	if (remainingHeight < 0) {
-		throw new Error('Bad use for getBalancedTextLinesForPage...')
-	}
+const getWeightedLines = (lines, embeddedFont, size, maxColumnWidth) => {
+	const getTextWidth = (text) => embeddedFont.widthOfTextAtSize(text, size)
+	const weightedLines = lines.map((line) => {
+		const textWidth = getTextWidth(line)
+		const weight = Math.ceil(textWidth / maxColumnWidth)
 
-	if (onlyOneColumn && itemsWithSplit.length > maxColumnLinesForPage) {
-		throw new Error('Bad use for getBalancedTextLinesForPage...')
-	}
-
-	if (onlyOneColumn) {
 		return {
-			firstColumn: {
-				x: FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS,
-				y: topY,
-				items: itemsWithSplit
-			},
-			remainingItems: []
+			line,
+			weight
+		}
+	})
+
+	weightedLines.forEach(function (weightedLine, i) {
+		const previousTotalWeight = (i === 0) ? 0 : this[i-1].totalWeight
+
+		this[i].totalWeight = previousTotalWeight + weightedLine.weight
+	}, weightedLines)
+
+	return weightedLines
+}
+
+const getNextColumnIndex = (weigthedLines, maxColumnLinesForPage) => {
+	return weigthedLines.findIndex((weightedLine) => {
+		return weightedLine.totalWeight > maxColumnLinesForPage
+	})
+}
+
+const getNextColumns = (weightedLines, maxColumnLinesForPage, isFirstPage) => {
+	let remainingWeightedLines
+	const totalWeight = weightedLines[weightedLines.length-1].totalWeight
+	const secondColumnBeginIndex = getNextColumnIndex(weightedLines, maxColumnLinesForPage)
+
+	if (secondColumnBeginIndex < 0) {  // Only one column
+		if (isFirstPage) {  // Only one column for first page
+			return {
+				firstColumnItems: getLinesAndTotalWeigth(weightedLines),
+				secondColumnItems: { lines: [], totalWeight: 0 },
+				remainingItems: { lines: [], totalWeight: 0 }
+			}
+		}
+
+		// Two balanced columns for last page
+		const secondColumnIndex = getNextColumnIndex(weightedLines, Math.ceil(totalWeight / 2))
+		const firstColumnItems = getLinesAndTotalWeigth(weightedLines, secondColumnIndex)
+		remainingWeightedLines = weightedLines.slice(secondColumnIndex)
+		const secondColumnItems = getLinesAndTotalWeigth(remainingWeightedLines)
+
+		return {
+			firstColumnItems,
+			secondColumnItems,
+			remainingItems: { lines: [], totalWeight: 0 }
 		}
 	}
 
-	const totalLines = itemsWithSplit.reduce((count, { splittedContent: { length: itemLines }}) => count + itemLines, 0)
-	const maxLinesForPage = maxColumnLinesForPage * 2
+	// Two balanced columns for next page (not the last page)
 
-	const totalLinesToWriteForPage = totalLines < maxLinesForPage ? totalLines : maxLinesForPage
-	const remainder = totalLinesToWriteForPage % 2
+	// Columns are not full : there are no remaining items
+	if (totalWeight <= maxColumnLinesForPage * 2) {
+		const secondColumnIndex = getNextColumnIndex(weightedLines, Math.ceil(totalWeight / 2))
+		const firstColumnItems = getLinesAndTotalWeigth(weightedLines, secondColumnIndex)
+		remainingWeightedLines = weightedLines.slice(secondColumnIndex)
+		const secondColumnItems = getLinesAndTotalWeigth(remainingWeightedLines)
 
-	const getMaxLineToWriteForColumn = (itemsLength) => {
-		if (itemsLength === 1) {
-			return maxColumnLinesForPage
+		return {
+			firstColumnItems,
+			secondColumnItems,
+			remainingItems: { lines: [], totalWeight: 0 }
 		}
-
-		return Math.min(maxColumnLinesForPage, Math.floor(totalLinesToWriteForPage / 2) + remainder)
 	}
 
-	const firstColumnCutIndex = getCutIndex(itemsWithSplit, getMaxLineToWriteForColumn(itemsWithSplit.length))
-	const firstColumnItems = itemsWithSplit.slice(0, firstColumnCutIndex)
+	// Columns are full : thera are remaining items
+	const firstColumnItems = getLinesAndTotalWeigth(weightedLines, secondColumnBeginIndex)
+	remainingWeightedLines = weightedLines.slice(secondColumnBeginIndex)
 
-	const itemsWithoutFirstColumn = itemsWithSplit.slice(firstColumnCutIndex)
-
-	const secondColumnCutIndex = getCutIndex(itemsWithoutFirstColumn, getMaxLineToWriteForColumn(itemsWithoutFirstColumn.length))
-	const secondColumnItems = itemsWithoutFirstColumn.slice(0, secondColumnCutIndex)
-
-	const remainingItems = itemsWithoutFirstColumn.slice(secondColumnCutIndex)
+	const nextPageFirstColumnIndex = getNextColumnIndex(remainingWeightedLines, maxColumnLinesForPage * 2)
+	const secondColumnItems = getLinesAndTotalWeigth(remainingWeightedLines, nextPageFirstColumnIndex)
+	remainingWeightedLines = remainingWeightedLines.slice(nextPageFirstColumnIndex)
 
 	return {
-		firstColumn: {
-			x: FIRST_COLUMN_X + HORIZONTAL_TABULATION.XS,
-			y: topY,
-			items: firstColumnItems
-		},
-		secondColumn: {
-			x: SECOND_COLUMN_X + HORIZONTAL_TABULATION.XS,
-			y: topY,
-			items: secondColumnItems
-		},
-		remainingItems
+		firstColumnItems,
+		secondColumnItems,
+		remainingItems: getLinesAndTotalWeigth(remainingWeightedLines)
 	}
 }
 
-const getHistoryItemsByPage = (
-	pdf, firstPageTopY, bottomY, bottomHistoryTitleForNextPage, historyItemSize, historyItems,
-	{ forceTwoColumns } = { forceTwoColumns: false }
-) => {
-	let remainingHeight = bottomY - firstPageTopY
-	let maxColumnLinesForPage = Math.floor(remainingHeight / historyItemSize)
+const getLinesAndTotalWeigth = (weightedLines, i) => {
+	const slicedWeightedLines = i ? weightedLines.slice(0, i) : weightedLines
 
-	let historyItemsWithSplit, firstColumn, secondColumn, remainingItems
+	return {
+		lines: slicedWeightedLines.map((weightedLine) => weightedLine.line),
+		totalWeight: slicedWeightedLines[slicedWeightedLines.length-1].totalWeight
+	}
+}
+
+const writeHistory = ({
+	doc,
+	page,
+	embeddedFonts,
+	y,
+	topFooterY,
+	bottomHeaderY,
+	historyItems,
+	plaque,
+	writeFooterCallback,
+	writeHeaderCallback,
+	dryRun,
+	forceTwoColumns,
+	nextPageSymbol
+}) => {
+	const topY = writeTitle({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y,
+		title: 'Historique du véhicule',
+		dryRun
+	})
+
+	const style = FONT_STYLES.NORMAL
+	const historyItemSize = FONT_SIZES.M
+	const historyItemHeight = historyItemSize + MULTILINES_MARGIN
+
+	let remainingHeight = topY - (topFooterY + FONT_SPACING.L)
+	let maxColumnLinesForPage = Math.floor(remainingHeight / historyItemHeight)
+
+	let firstColumnLastY = topY
+	let secondColumnLastY = topY
+	let lastY = topY
+
+	let firstPageColumnsCount = historyItems.length ? 1 : 0
+	let currentPage = page
+
+	let pageNumber = 1
+	let doesLastPageHasSymbol = false
 
 	// All lines fit in first page and one column
 	if (historyItems.length <= maxColumnLinesForPage && !forceTwoColumns ) {
-		historyItemsWithSplit = getTextLinesWithSplit(pdf, historyItems, { onlyOneColumn: true });
-		({
-			firstColumn,
-			secondColumn,
-			remainingItems
-		} = getBalancedTextLinesForPage(firstPageTopY, remainingHeight, maxColumnLinesForPage, historyItemsWithSplit, { onlyOneColumn: true })
-		)
+		lastY = writeWithSpacing({
+			page: currentPage,
+			embeddedFonts,
+			x: BORDER_LEFT_PAGE_X + HORIZONTAL_TABULATION.XS,
+			y: topY,
+			textLines: historyItems,
+			increaseLineHeightOf: MULTILINES_MARGIN,
+			maxWidth: LARGE_COLUMN_WIDTH,
+			size: historyItemSize,
+			dryRun
+		})
 
-	} else {  // First page with many columns
-		historyItemsWithSplit = getTextLinesWithSplit(pdf, historyItems);
-		({
-			firstColumn,
-			secondColumn,
-			remainingItems
-		} = getBalancedTextLinesForPage(firstPageTopY, remainingHeight, maxColumnLinesForPage, historyItemsWithSplit)
-		)
-	}
-
-	let pageNumber = 1
-	let historyItemsByPage = {
-		[pageNumber]: {
-			firstColumn,
-			secondColumn
+		return {
+			y: lastY - FONT_SPACING.XXL,
+			currentPage,
+			currentPageNumber: pageNumber,
+			forceTwoColumns: firstPageColumnsCount === 2,
+			doesLastPageHasSymbol,
 		}
 	}
 
-	while (remainingItems.length) {
-		remainingHeight = bottomY - bottomHistoryTitleForNextPage
-		maxColumnLinesForPage = Math.floor(remainingHeight / historyItemSize);
+	const embeddedFont = getEmbeddedFont({ style, embeddedFonts })
+	const weightedLines = getWeightedLines(historyItems, embeddedFont, historyItemSize, COLUMN_WIDTH)
+	let {
+		firstColumnItems: { lines: firstColumnLines, totalWeight: firstColumnTotalWeight },
+		secondColumnItems: { lines: secondColumnLines, totalWeight: secondColumnTotalWeight },
+		remainingItems: { lines: remainingItems }
+	} = getNextColumns(weightedLines, maxColumnLinesForPage, true)
 
-		// Always display 2 columns for next pages since first page has 2 columns
+	let remainingWeightedLines = getWeightedLines(remainingItems, embeddedFont, historyItemSize, COLUMN_WIDTH)
+
+	firstPageColumnsCount = firstColumnLines.length && secondColumnLines.length ? 2 : firstPageColumnsCount
+
+	if (firstColumnLines.length) {
+		firstColumnLastY = writeWithSpacing({
+			page: currentPage,
+			embeddedFonts,
+			x: BORDER_LEFT_PAGE_X + HORIZONTAL_TABULATION.XS,
+			y: topY,
+			textLines: firstColumnLines,
+			increaseLineHeightOf: MULTILINES_MARGIN,
+			maxWidth: COLUMN_WIDTH,
+			size: historyItemSize,
+			dryRun
+		})
+	}
+
+	if (secondColumnLines.length) {
+		secondColumnLastY = writeWithSpacing({
+			page: currentPage,
+			embeddedFonts,
+			x: MIDDLE_PAGE_X + HORIZONTAL_TABULATION.XS,
+			y: topY,
+			textLines: secondColumnLines,
+			increaseLineHeightOf: MULTILINES_MARGIN,
+			maxWidth: COLUMN_WIDTH,
+			size: historyItemSize,
+			dryRun
+		})
+	}
+
+	lastY = Math.min(firstColumnLastY, secondColumnLastY)
+
+	let isTheLastPage = remainingWeightedLines.length === 0
+	if (!isTheLastPage) {
+		if (nextPageSymbol) {
+			writeNextPageSymbol({
+				page: currentPage,
+				embeddedFonts,
+				y: lastY + FONT_SPACING.S,
+				dryRun
+			})
+			doesLastPageHasSymbol = !remainingWeightedLines.length
+		}
+	}
+
+	const repeatedHistoryTitle = `Suite historique du véhicule - ${plaque}`
+	const simulatedBottomTitleY = writeTitle({
+		page: currentPage,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y: bottomHeaderY,
+		repeatedHistoryTitle,
+		dryRun: true
+	})
+
+	// Always display 2 columns for next pages since first page has 2 columns
+	while (remainingWeightedLines.length) {
+		if (!dryRun) {
+			({ page: currentPage } = addPage({
+				doc,
+				embeddedFonts,
+				writeHeaderCallback,
+				writeFooterCallback,
+				title: repeatedHistoryTitle
+				}))
+		}
+
+		remainingHeight = simulatedBottomTitleY - topFooterY
+		maxColumnLinesForPage = Math.floor(remainingHeight / historyItemHeight);
+
 		({
-			firstColumn,
-			secondColumn,
-			remainingItems
-		} = getBalancedTextLinesForPage(bottomHistoryTitleForNextPage, remainingHeight, maxColumnLinesForPage, remainingItems))
+			firstColumnItems: { lines: firstColumnLines, totalWeight: firstColumnTotalWeight },
+			secondColumnItems: { lines: secondColumnLines, totalWeight: secondColumnTotalWeight },
+			remainingItems: { lines: remainingItems }
+		} = getNextColumns(remainingWeightedLines, maxColumnLinesForPage))
+
+		if (firstColumnLines.length) {
+			firstColumnLastY = writeWithSpacing({
+				page: currentPage,
+				embeddedFonts,
+				x: BORDER_LEFT_PAGE_X + HORIZONTAL_TABULATION.XS,
+				y: simulatedBottomTitleY,
+				textLines: firstColumnLines,
+				increaseLineHeightOf: MULTILINES_MARGIN,
+				maxWidth: COLUMN_WIDTH,
+				size: historyItemSize,
+				dryRun
+			})
+		}
+
+		if (secondColumnLines.length) {
+			secondColumnLastY = writeWithSpacing({
+				page: currentPage,
+				embeddedFonts,
+				x: MIDDLE_PAGE_X + HORIZONTAL_TABULATION.XS,
+				y: simulatedBottomTitleY,
+				textLines: secondColumnLines,
+				increaseLineHeightOf: MULTILINES_MARGIN,
+				maxWidth: COLUMN_WIDTH,
+				size: historyItemSize,
+				dryRun
+			})
+		}
+
+		lastY = Math.min(firstColumnLastY, secondColumnLastY)
+
+		remainingWeightedLines = getWeightedLines(remainingItems, embeddedFont, historyItemSize, COLUMN_WIDTH)
+
+		isTheLastPage = remainingWeightedLines.length === 0
+		if (!isTheLastPage) {
+			if (nextPageSymbol) {
+				writeNextPageSymbol({
+					page: currentPage,
+					embeddedFonts,
+					y: lastY + FONT_SPACING.S,
+					dryRun
+				})
+				doesLastPageHasSymbol = true
+			}
+		}
 
 		pageNumber = pageNumber + 1
-		historyItemsByPage[pageNumber] = {
-			firstColumn,
-			secondColumn
-		}
 	}
 
-	return historyItemsByPage
-}
-
-
-const addPage = (pdf, writeHeaderCallback, writeFooterCallback, title) => {
-	pdf.addPage()
-	const nextY = writeHeaderCallback(pdf)
-	if (title) {
-		writeTitle(pdf, FIRST_COLUMN_X, nextY, title)
-	}
-	writeFooterCallback(pdf)
-}
-
-const writeHistory = (
-	pdf, y, topFooterY, bottomHistoryTitleForNextPage, historyItems, plaque, writeFooterCallback, writeHeaderCallback,
-	{ dryRun, forceTwoColumns, nextPageSymbol }={ dryRun: false, forceTwoColumns: false, nextPageSymbol: false },
-	{ totalPageCount }={ totalPageCount: null }
-) => {
-	if (!dryRun) {
-		writeTitle(pdf, FIRST_COLUMN_X, y, 'Historique du véhicule')
-	} else {
-		// force a fake write to configure the method pdf.splitTextToSize while using dryRun
-		// (this method need some text on pdf to know font size and correctly split text)
-		writeTitle(pdf, FIRST_COLUMN_X, -10, 'Fake')
-	}
-	const topY = y + FONT_SPACING.L
-	const historyItemSize = FONT_SPACING.S
-	const historyItemsByPage = getHistoryItemsByPage(
-		pdf, topY, topFooterY, bottomHistoryTitleForNextPage, historyItemSize, historyItems,
-		{ forceTwoColumns }
-	)
-	const totalPageNumber =  totalPageCount ? totalPageCount : Object.keys(historyItemsByPage).length
-
-	let firstColumnLastY = y
-	let secondColumnLastY = y
-	let firstPageColumnsCount = 0
-	let lastY = y
-	let pageNumber
-	let hasSymbol = false
-
-	for (let [pageNumberStr, historyItemsForPage] of Object.entries(historyItemsByPage)) {
-		pageNumber = parseInt(pageNumberStr)
-		if (!dryRun) {
-			if (pageNumber > 1) {
-				addPage(pdf, writeHeaderCallback, writeFooterCallback, `Suite historique du véhicule - ${plaque}`)
-			}
-			writePageNumber(pdf, pageNumber, totalPageNumber)
-		}
-		const firstColumnSplittedLines = historyItemsForPage.firstColumn.items.map(
-			(item) => item.splittedContent
-		).flat()
-
-		firstColumnLastY = writeWithSpacing(
-			pdf,
-			historyItemsForPage.firstColumn.x,
-			historyItemsForPage.firstColumn.y,
-			historyItemSize,
-			firstColumnSplittedLines,
-			{ dryRun }
-		)
-
-		if (historyItemsForPage.secondColumn) {
-			const secondColumnSplittedLines = historyItemsForPage.secondColumn.items.map(
-				(item) => item.splittedContent
-			).flat()
-
-			secondColumnLastY = writeWithSpacing(
-				pdf,
-				historyItemsForPage.secondColumn.x,
-				historyItemsForPage.secondColumn.y,
-				historyItemSize,
-				secondColumnSplittedLines,
-				{ dryRun }
-			)
-		}
-
-		if (pageNumber === 1) {
-			if (historyItemsForPage.firstColumn) {
-				firstPageColumnsCount = firstPageColumnsCount + 1
-			}
-
-			if (historyItemsForPage.secondColumn) {
-				firstPageColumnsCount = firstPageColumnsCount + 1
-			}
-		}
-
-		lastY = Math.max(firstColumnLastY, secondColumnLastY)
-
-		if (pageNumber < totalPageNumber && totalPageNumber > 1) {
-			if (!dryRun) {
-				if (nextPageSymbol) {
-					writeNextPageSymbol(pdf, lastY + FONT_SPACING.S)
-					hasSymbol = true
-				}
-			}
-		}
-	}
+	const margin = firstColumnTotalWeight === maxColumnLinesForPage || secondColumnTotalWeight === maxColumnLinesForPage ? FONT_SPACING.M : FONT_SPACING.XXL
 
 	return {
-		y: lastY + FONT_SPACING.M,
+		y: lastY - margin,
+		currentPage,
 		currentPageNumber: pageNumber,
-		firstPageColumnsCount,
-		hasSymbol,
+		forceTwoColumns: firstPageColumnsCount === 2,
+		doesLastPageHasSymbol,
 	}
 }
 /* ************************************************************ */
 
 /* ********************** writeSituation *********************** */
 
-const writeSituationColumn = (
-	pdf, previousY, situationItems,
-	{ x, y },
-	{ dryRun }={ dryRun: false }
-) => {
-	const newY = previousY + y
+const writeSituationColumn = ({
+	page,
+	embeddedFonts,
+	x,
+	y,
+	situationItems,
+	dryRun
+}) => {
+	const sectionTitleX = x + HORIZONTAL_TABULATION.XS
+	const valueX = x + HORIZONTAL_TABULATION.S
 
-	let offset = 0
-	situationItems.forEach(item => {
-		const titleX = x + HORIZONTAL_TABULATION.XS
-		const titleY = newY + offset
-		if (!dryRun) {
-			writeText(pdf, titleX, titleY, item.key, {
-				size: FONT_SIZES.M,
-				style: FONT_STYLES.BOLD
+	let nextY = y
+	situationItems.forEach(({ key: sectionTitle, values: sectionValues }) => {
+		const sectionTitleBottomY = writeWithSpacing({
+			page,
+			embeddedFonts,
+			x: sectionTitleX,
+			y: nextY,
+			textLines: [sectionTitle],
+			increaseLineHeightOf: 2,
+			maxWidth: COLUMN_WIDTH,
+			size: FONT_SIZES.M,
+			style: FONT_STYLES.BOLD,
+			dryRun
+		})
+
+		nextY = sectionTitleBottomY - FONT_SPACING.XXS
+
+		sectionValues.forEach((value, i) => {
+			const valueBottomY = writeWithSpacing({
+				page,
+				embeddedFonts,
+				x: valueX,
+				y: nextY,
+				textLines: [value],
+				maxWidth: COLUMN_WIDTH,
+				dryRun
 			})
-		}
-		offset = offset + FONT_SPACING.XS * (item.key.split('\n').length - 1) + FONT_SPACING.S
+			const isLastLine = (i === sectionValues.length-1)
+			const spacing = isLastLine ? FONT_SPACING.M : FONT_SPACING.S
 
-		item.values.forEach((value, i) => {
-			const valueX = x + HORIZONTAL_TABULATION.S
-			const valueY = newY + offset
-
-			if (!dryRun) {
-				writeText(pdf, valueX, valueY, value)
-			}
-			const spacing = (i === item.values.length-1) ? FONT_SPACING.M : FONT_SPACING.S
-			offset = offset + FONT_SPACING.XS * (value.split('\n').length - 1) + spacing
+			nextY = valueBottomY - spacing
 		})
 	})
 
-	const lastY = newY + offset
-	return lastY
+	return nextY
 }
 
-const writeFirstSituationColumn = (
-	pdf, previousY,
-	{
-		dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines, otcisPvCurrentStatusLines,
-		oveisCurrentStatusLines, ovesCurrentStatusLines, proceduresReparationControleeStatus,
-		x, y
-	},
-	{ dryRun }={ dryRun: false }
-) => {
+const writeFirstSituationColumn = ({
+	page,
+	embeddedFonts,
+	x,
+	y,
+	dvsCurrentStatusLines,
+	gagesCurrentStatusLines,
+	otcisCurrentStatusLines,
+	otcisPvCurrentStatusLines,
+	oveisCurrentStatusLines,
+	ovesCurrentStatusLines,
+	proceduresReparationControleeStatus,
+	dryRun
+}) => {
 	const	proceduresReparationControlee = proceduresReparationControleeStatus ?
 		[{
-			key: '- Procédure de réparation contrôlée',
+			key: `${SECTION_TITLE_BULLET} Procédure de réparation contrôlée`,
 			values: [
 				proceduresReparationControleeStatus,
 			]
@@ -381,143 +541,174 @@ const writeFirstSituationColumn = (
 
 	const	oveisCurrentStatus = oveisCurrentStatusLines ?
 		[{
-			key: '- Opposition véhicule économiquement irréparable',
+			key: `${SECTION_TITLE_BULLET} Opposition véhicule économiquement irréparable`,
 			values: oveisCurrentStatusLines
 		}] : []
 
 	const	ovesCurrentStatus = (ovesCurrentStatusLines || !oveisCurrentStatusLines) ?
 		[{
-			key: '- Opposition véhicule endommagé',
-			values: ovesCurrentStatusLines || ['Aucun']
+			key: `${SECTION_TITLE_BULLET} Opposition véhicule endommagé`,
+			values: ovesCurrentStatusLines || ['Aucune']
 		}] : []
 
 	const situationItems = [
 		{
-			key: '- Opposition au transfert du certificat\n  d\'immatriculation (OTCI)',
+			key: `${SECTION_TITLE_BULLET} Opposition au transfert du certificat\n  d'immatriculation (OTCI)`,
 			values:	otcisPvCurrentStatusLines[0] === 'Aucune' ? otcisCurrentStatusLines : otcisPvCurrentStatusLines,
 		},
 		...oveisCurrentStatus,
 		...ovesCurrentStatus,
 		...proceduresReparationControlee,
 		{
-			key: '- Déclaration valant saisie',
+			key: `${SECTION_TITLE_BULLET} Déclaration valant saisie`,
 			values: dvsCurrentStatusLines,
 		},
 		{
-			key: '- Gage',
+			key: `${SECTION_TITLE_BULLET} Gage`,
 			values:	gagesCurrentStatusLines
 		}
 	]
 
-	return writeSituationColumn(pdf, previousY, situationItems, { x, y }, { dryRun })
+	return writeSituationColumn({ page, embeddedFonts, x, y, situationItems, dryRun })
 }
 
-const writeSecondSituationColumn = (
-	pdf, previousY,
-	{
-		annulationCurrentStatus, volVehicule, volTitre, perteTitre, duplicataTitre,
-		suspensionsCurrentStatusLines, x, y
-	},
-	{ dryRun }={ dryRun: false }
-) => {
+const writeSecondSituationColumn = ({
+	page,
+	embeddedFonts,
+	x,
+	y,
+	annulationCurrentStatus,
+	volVehicule,
+	volTitre,
+	perteTitre,
+	duplicataTitre,
+	suspensionsCurrentStatusLines,
+	dryRun
+}) => {
 	const situationItems = [
 		{
-			key: '- Immatriculation suspendue',
+			key: `${SECTION_TITLE_BULLET} Immatriculation suspendue`,
 			values: suspensionsCurrentStatusLines
 		},
 		{
-			key: '- Immatriculation annulée',
+			key: `${SECTION_TITLE_BULLET} Immatriculation annulée`,
 			values: [
 				annulationCurrentStatus,
 			]
 		},
 		{
-			key: '- Véhicule volé',
+			key: `${SECTION_TITLE_BULLET} Véhicule volé`,
 			values: [
 				volVehicule === 'NON' ? 'Non' : 'Oui',
 			]
 		},
 		{
-			key: '- Certificat d\'immatriculation volé',
+			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation volé`,
 			values: [
 				volTitre === 'NON' ? 'Non' : 'Oui',
 			]
 		},
 		{
-			key: '- Certificat d\'immatriculation perdu',
+			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation perdu`,
 			values: [
 				perteTitre === 'NON' ? 'Non' : 'Oui',
 			]
 		},
 		{
-			key: '- Certificat d\'immatriculation duplicata',
+			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation duplicata`,
 			values: [
 				duplicataTitre === 'NON' ? 'Non' : 'Oui',
 			]
 		}
 	]
 
-	return writeSituationColumn(pdf, previousY, situationItems, { x, y }, { dryRun })
+	return writeSituationColumn({ page, embeddedFonts, x, y, situationItems, dryRun })
 }
 
-const writeSituation = (
-	pdf, y,
-	{
-		annulationCurrentStatus,
-		duplicataTitre,
+const writeSituation = ({
+	page,
+	embeddedFonts,
+	y,
+	annulationCurrentStatus,
+	duplicataTitre,
+	dvsCurrentStatusLines,
+	gagesCurrentStatusLines,
+	otcisCurrentStatusLines,
+	otcisPvCurrentStatusLines,
+	oveisCurrentStatusLines,
+	ovesCurrentStatusLines,
+	perteTitre,
+	plaque,
+	proceduresReparationControleeStatus,
+	suspensionsCurrentStatusLines,
+	volTitre,
+	volVehicule,
+	dryRun
+}) => {
+	const title = plaque ? `Situation administrative du véhicule - ${plaque}` : 'Situation administrative du véhicule'
+	const situationY = writeTitle({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y,
+		title,
+		dryRun
+	})
+
+	const firstSituationColumnBottomY = writeFirstSituationColumn({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y: situationY,
 		dvsCurrentStatusLines,
 		gagesCurrentStatusLines,
 		otcisCurrentStatusLines,
 		otcisPvCurrentStatusLines,
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
-		perteTitre,
-		plaque,
 		proceduresReparationControleeStatus,
+		dryRun
+	})
+
+	const secondSituationColumnBottomY = writeSecondSituationColumn({
+		page,
+		embeddedFonts,
+		x: MIDDLE_PAGE_X,
+		y: situationY,
+		annulationCurrentStatus,
+		duplicataTitre,
+		perteTitre,
 		suspensionsCurrentStatusLines,
 		volTitre,
-		volVehicule
-	},
-	{ dryRun }={ dryRun: false }
-) => {
-	const spacing = FONT_SPACING.M
+		volVehicule,
+		dryRun
+	})
 
-	if (!dryRun) {
-		if (plaque) {
-			writeTitle(pdf, FIRST_COLUMN_X, y, `Situation administrative du véhicule - ${plaque}`)
-		} else {
-			writeTitle(pdf, FIRST_COLUMN_X, y, 'Situation administrative du véhicule')
-		}
-	}
-
-	const lastFirstY = writeFirstSituationColumn(
-		pdf, y,
-		{
-			dvsCurrentStatusLines, gagesCurrentStatusLines, otcisCurrentStatusLines,
-			otcisPvCurrentStatusLines, oveisCurrentStatusLines, ovesCurrentStatusLines,
-			proceduresReparationControleeStatus, x: FIRST_COLUMN_X, y: spacing
-		},
-		{ dryRun }
-	)
-	const lastSecondY = writeSecondSituationColumn(
-		pdf, y,
-		{
-			annulationCurrentStatus, duplicataTitre, perteTitre, suspensionsCurrentStatusLines,
-			volTitre, volVehicule, x: SECOND_COLUMN_X, y: spacing
-		},
-		{ dryRun }
-	)
-
-	return Math.max(lastFirstY, lastSecondY)
+	return Math.min(firstSituationColumnBottomY, secondSituationColumnBottomY)
 }
 
-const writeAnnulation = (pdf, y, dateAnnulation) => {
-	const textY = writeText(pdf, FIRST_COLUMN_X, y, 'Le certificat demandé a été annulé.', {
+const writeAnnulation = ({
+	page,
+	embeddedFonts,
+	y,
+	dateAnnulation
+}) => {
+	const textY = writeText({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y,
+		text: 'Le certificat demandé a été annulé.',
 		size: FONT_SIZES.L,
 		style: FONT_STYLES.BOLD
 	})
 
-	return writeText(pdf, FIRST_COLUMN_X, textY + FONT_SPACING.S, `Immatriculation annulée le : ${dateAnnulation}.`, {
+	return writeText({
+		page,
+		embeddedFonts,
+		x: BORDER_LEFT_PAGE_X,
+		y: textY - FONT_SPACING.S,
+		text: `Immatriculation annulée le : ${dateAnnulation}.`,
 		size: FONT_SIZES.L,
 		style: FONT_STYLES.BOLD
 	})
@@ -526,14 +717,14 @@ const writeAnnulation = (pdf, y, dateAnnulation) => {
 
 /* ********************** CONTENT ********************** */
 export const writeContent = (
-	pdf,
 	// Complete CSA and annulation
 	{
+		doc,
+		embeddedFonts,
+		embeddedLogos: { headerLogoPng, footerLogoPng },
 		isAnnulationCI,
 		annulationCurrentStatus,
 		dateAnnulation,
-		histoVecLogo,
-		marianneImage,
 		marque,
 		plaque,
 		premierCertificat,
@@ -557,41 +748,52 @@ export const writeContent = (
 		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
-	}={}
+	} = {}
 ) => {
-	const writeHeaderCallback = (pdf) => {
-		const headerY = writeHeaderLogo(pdf, marianneImage)
-		return writeCSAMainTitle(pdf, headerY + FONT_SPACING.L)
+	const writeHeaderCallback = ({ page, embeddedFonts }) => {
+		const { height } = page.getSize()
+		const topPageY = height - TOP_PAGE_MARGIN
+
+		const afterHeaderY = writeHeaderLogoPng({ page, y: topPageY, headerLogoPng })
+		const csaMainTitleY = writeCSAMainTitle({ page, embeddedFonts, y: afterHeaderY })
+
+		return csaMainTitleY
 	}
 
-	const writeFooterCallback = (
-		pdf,
-		{ dryRun }={ dryRun: false }
-	) => {
-		return writeFooter(pdf, { histoVecLogo, qrCodeUrl, validityDate, webSiteUrl }, { dryRun })
+	const writeFooterCallback = ({ page, embeddedFonts }) => {
+    return writeFooter({ page, embeddedFonts, footerLogoPng, qrCodeUrl, validityDate, webSiteUrl })
 	}
 
-	const bottomHeaderY = writeHeaderCallback(pdf)
+	const {
+		page,
+		nextY: bottomHeaderY,
+		topFooterY,
+		bottomFooterY
+	} = addPage({ doc, embeddedFonts, writeHeaderCallback, writeFooterCallback })
+
+	const vehicleIdentificationBottomY = writeVehicleIdentification({
+		page,
+		embeddedFonts,
+		y: bottomHeaderY,
+		plaque,
+		premierCertificat,
+		vin,
+		marque
+	})
+
 	if (isAnnulationCI) {
-		const vehicleIdentificationAnnulationY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
-		const annulationY = vehicleIdentificationAnnulationY + FONT_SPACING.XL * 2
-		writeAnnulation(pdf, annulationY, dateAnnulation)
-		writeFooterCallback(pdf)
-		writePageNumber(pdf, 1, 1)
+		const annulationY = vehicleIdentificationBottomY
+		writeAnnulation({ page, embeddedFonts, y: annulationY, dateAnnulation })
+		writePageNumber({ page, embeddedFonts, y: bottomFooterY, pageNumber: 1, totalPageNumber: 1 })
 
 		return
 	}
-	const vehicleIdentificationBottomY = writeVehicleIdentification(pdf, plaque, premierCertificat, vin, marque)
 
-	const { topY: footerTopY } = writeFooterCallback(pdf)
-
-	const nextPageTopY = bottomHeaderY
-	const historyNextPageTopY = nextPageTopY + FONT_SIZES.S  // Adding history title dynamically for each new page
 
 	/***** REVERSE simulation (1-SITUATION ADMINISTRATIVE, 2-HISTORY) *****/
 	/*
 		1- Simulate writeSituation call to :
-			a - get bottom situation Y position
+			a - get bottom situation Y position (Situation always fit into the first page if written first)
 
 		2 - Simulate writeHistory :
 			a - to know if history Y size will fit into one page document
@@ -599,85 +801,126 @@ export const writeContent = (
 
 		=> we know if we need to force two columns write for history
 	*/
-
-
-	const simulatedSituationBottomY = writeSituation(
-		pdf, vehicleIdentificationBottomY,
-		{
-			annulationCurrentStatus,
-			duplicataTitre,
-			dvsCurrentStatusLines,
-			gagesCurrentStatusLines,
-			otcisCurrentStatusLines,
-			otcisPvCurrentStatusLines,
-			oveisCurrentStatusLines,
-			ovesCurrentStatusLines,
-			perteTitre,
-			plaque,
-			proceduresReparationControleeStatus,
-			suspensionsCurrentStatusLines,
-			volTitre,
-			volVehicule
-		},
-		{ dryRun: true }
-	)
+	const simulatedSituationBottomY = writeSituation({
+		page,
+		embeddedFonts,
+		y: vehicleIdentificationBottomY,
+		annulationCurrentStatus,
+		duplicataTitre,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
+		ovesCurrentStatusLines,
+		perteTitre,
+		plaque,
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
+		volTitre,
+		volVehicule,
+		dryRun: true
+	})
 
 	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
 	// 1 - know if document would fit into one page, in order to force 2 columns history or not
 	const {
-		firstPageColumnsCount,
-		currentPageNumber: simulatedCurrentPageNumber,
-		y: simulatedHistoryWithMarginBottomY,
-	} = writeHistory(
-		pdf, simulatedSituationBottomY, footerTopY, historyNextPageTopY,
-		historyItems, plaque, writeFooterCallback, writeHeaderCallback,
-		{ dryRun: true }
-	)
+		forceTwoColumns,
+		currentPageNumber: lastPageNumber,
+	} = writeHistory({
+		doc,
+		page,
+		embeddedFonts,
+		y: simulatedSituationBottomY,
+		topFooterY,
+		bottomHeaderY,
+		historyItems,
+		plaque,
+		writeFooterCallback,
+		writeHeaderCallback,
+		dryRun: true
+	})
 
-	const forceTwoColumns = firstPageColumnsCount == 2
-	const lastPageNumber = simulatedHistoryWithMarginBottomY > footerTopY ? simulatedCurrentPageNumber + 1 : simulatedCurrentPageNumber
-	const isSituationSectionOnNewPage = simulatedHistoryWithMarginBottomY > footerTopY || lastPageNumber > 1
+	const situationHeight = vehicleIdentificationBottomY - simulatedSituationBottomY + FONT_SPACING.L
+	const isSituationSectionOnNewPage = lastPageNumber > 1
+
 	/**********************************************************************/
 
-	// Since we have all needed informations, let's write the pdf file for real!
+	// All non simulated previous operations (writeHeaderCallback, writeVehicleIdentification, writeFooterCallback) always fit into first page
+	// intial page argument is sufficient for these operations
+	let currentPage = page
+	const topBottomY = !isSituationSectionOnNewPage ? topFooterY + situationHeight : topFooterY
+
+	// // Since we have all needed informations, let's write the pdf file for real!
 	const {
 		y: historyWithMarginBottomY,
+		currentPage: lastHistoryPage,
 		currentPageNumber,
-		hasSymbol,
-	} = writeHistory(
-		pdf, vehicleIdentificationBottomY, footerTopY, historyNextPageTopY,
-		historyItems, plaque, writeFooterCallback, writeHeaderCallback,
-		{ dryRun: false, forceTwoColumns, nextPageSymbol: isSituationSectionOnNewPage },
-		{ totalPageCount: lastPageNumber }
-	)
+		doesLastPageHasSymbol
+	} = writeHistory({
+		doc,
+		page,
+		embeddedFonts,
+		y: vehicleIdentificationBottomY,
+		topFooterY: topBottomY,
+		bottomHeaderY,
+		historyItems,
+		plaque,
+		writeFooterCallback,
+		writeHeaderCallback,
+		forceTwoColumns,
+		nextPageSymbol: isSituationSectionOnNewPage
+	})
 
-	if (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) {
-		if (!hasSymbol) {
-			writeNextPageSymbol(pdf, historyWithMarginBottomY - FONT_SPACING.S)
+	currentPage = lastHistoryPage
+
+	const needToAddSituationPage = isSituationSectionOnNewPage && currentPageNumber < lastPageNumber
+	let situationTopY = historyWithMarginBottomY
+
+	if (needToAddSituationPage) {
+		if (!doesLastPageHasSymbol) {
+			writeNextPageSymbol({ page: currentPage, embeddedFonts, y: historyWithMarginBottomY + FONT_SPACING.S })
 		}
-		addPage(pdf, writeHeaderCallback, writeFooterCallback)
-		writePageNumber(pdf, lastPageNumber, lastPageNumber)
+		({ page: currentPage, nextY: situationTopY } = addPage({
+			doc,
+			embeddedFonts,
+			writeHeaderCallback,
+			writeFooterCallback
+		}))
 	}
 
-	const situationTopY = (isSituationSectionOnNewPage && currentPageNumber < lastPageNumber) ? nextPageTopY : historyWithMarginBottomY
+	// Situation will always be written in a single page, by construction
+	writeSituation({
+		page: currentPage,
+		embeddedFonts,
+		y: situationTopY,
+		annulationCurrentStatus,
+		duplicataTitre,
+		dvsCurrentStatusLines,
+		gagesCurrentStatusLines,
+		otcisCurrentStatusLines,
+		otcisPvCurrentStatusLines,
+		oveisCurrentStatusLines,
+		ovesCurrentStatusLines,
+		perteTitre,
+		plaque: isSituationSectionOnNewPage ? plaque : '',
+		proceduresReparationControleeStatus,
+		suspensionsCurrentStatusLines,
+		volTitre,
+		volVehicule
+	})
 
-	writeSituation(
-		pdf, situationTopY,
-		{
-			annulationCurrentStatus,
-			duplicataTitre,
-			dvsCurrentStatusLines,
-			gagesCurrentStatusLines,
-			otcisCurrentStatusLines,
-			otcisPvCurrentStatusLines,
-			oveisCurrentStatusLines,
-			ovesCurrentStatusLines,
-			perteTitre,
-			plaque: isSituationSectionOnNewPage ? plaque : '',
-			proceduresReparationControleeStatus,
-			suspensionsCurrentStatusLines,
-			volTitre,
-			volVehicule
-		}
-	)
+	// Write all page number
+	const totalPageNumber = doc.getPageCount()
+	for(let i=0; i<totalPageNumber; i++) {
+		const page = doc.getPage(i)
+
+		writePageNumber({
+			page,
+			embeddedFonts,
+			y: bottomFooterY,
+			pageNumber: i+1,
+			totalPageNumber
+		})
+	}
 }

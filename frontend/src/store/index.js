@@ -42,7 +42,7 @@ export default new Vuex.Store({
     },
     config: {
       allTabs: false,
-      newPdfLib: false,
+      newPdfLib: true,
       csaAnnulationCi: false,
       dataDate: false,
     },

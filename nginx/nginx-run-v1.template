@@ -53,31 +53,6 @@ server {
     alias /usr/share/nginx/html/assets;
   }
 
-  location ~ "^/<APP>/api/v1/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" {
-    include tor-ip.conf;
-    include aws-ip.conf;
-    if ($request_method != GET) {
-       return 405;
-    }
-    add_header Access-Control-Allow-Origin '$http_origin';
-    limit_req zone=api burst=<API_USER_BURST>;
-    limit_req zone=server burst=<API_GLOBAL_BURST>;
-    limit_req_status 429;
-    rewrite "^/.*/id/[a-f0-9-]{36}/([A-Za-z0-9_-]{43}=)$" /<ES_INDEX>/_search?q="$1"&size=1&terminate_after=1&filter_path=hits.hits._source.v break;
-    proxy_pass http://elasticsearch;
-    proxy_redirect off;
-    proxy_hide_header Content-Type;
-    proxy_set_body '{"_source": "v"}';
-    proxy_set_header content-type "application/json";
-    proxy_method POST;
-    proxy_buffering off;
-    proxy_http_version 1.1;
-  }
-
-  location ~ ^/<APP>/api/v1/id/.* {
-    return 400;
-  }
-
   location ~ "^/<APP>/api/v1/log/exit" {
     if ($request_method != POST) {
        return 405;
@@ -136,6 +111,5 @@ server {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
   }
-
 
 }

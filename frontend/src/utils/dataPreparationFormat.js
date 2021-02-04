@@ -1,5 +1,7 @@
 // This is the bridge between data pipeline logic and web application logic
 
+import { urlSafeBase64Encode } from '../utils/encoding'
+
 // Useful to build id and key
 export const normalizeAsDataPreparation = (text) => text.toLowerCase().replace(/[^0-9a-z]/g, '')
 
@@ -9,11 +11,4 @@ export const normalizeAsDataPreparation = (text) => text.toLowerCase().replace(/
 export const stringifyCodePostal = (stringifiedObject) => stringifiedObject.replace(/: (0[0-9]+)/g, ': "$1"')
 
 
-export const hash = async (text) => {
-  const urlSafeBase64Encode =
-    (window.crypto && window.textEncoder) ?
-      (await import('../utils/encoding')).urlSafeBase64Encode :
-      (await import('../utils/IE11EncodingPolyfill')).urlSafeBase64Encode
-
-  return urlSafeBase64Encode(normalizeAsDataPreparation(text))
-}
+export const hash = async (text) => urlSafeBase64Encode(normalizeAsDataPreparation(text))

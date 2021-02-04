@@ -26,8 +26,8 @@
 <script>
 
 import dayjs from 'dayjs'
-import { generateCsa } from '../../utils/csaAsPdfRewrite'
-import { RAPPORT_FILENAME } from '../../utils/csaAsPdfRewrite/constants'
+import { generateCsa } from '../../utils/csaAsPdf'
+import { RAPPORT_FILENAME } from '../../utils/csaAsPdf/constants'
 
 import histoVecLogo from '@/assets/img/histovec_logo_droite_name.png'
 import marianneImage from '@/assets/img/logo_mi.png'
