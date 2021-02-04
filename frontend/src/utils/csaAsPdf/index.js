@@ -1,16 +1,17 @@
-import jsPDF from 'jspdf'
+import { PDFDocument } from 'pdf-lib'
 
 import { writeContent } from './content'
-import { FONT, RAPPORT_FILENAME } from './constants'
+import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from './constants'
 
-export const generateCsa = (
+
+export const generateCsa = async (
 	// Complete CSA and annulation
 	{
 		isAnnulationCI,
 		annulationCurrentStatus,
 		dateAnnulation,
-		histoVecLogo,
-		marianneImage,
+		histoVecLogoBytes,
+		marianneImageBytes,
 		marque,
 		plaque,
 		premierCertificat,
@@ -34,24 +35,36 @@ export const generateCsa = (
 		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
-	}={}
+	} = {}
 ) => {
-	const pdf = new jsPDF({
-		orientation: 'portrait',
-		unit: 'mm',
-		putOnlyUsedFonts: true,
-		compress: true
-	})
+	const doc = await PDFDocument.create()
 
-	pdf.setFont(FONT)
+	const font = await doc.embedFont(FONT)
+	const fontItalic = await doc.embedFont(FONT_ITALIC)
+	const fontBold = await doc.embedFont(FONT_BOLD)
 
-	writeContent(pdf,
+	const embeddedFonts = {
+		[FONT_STYLES.NORMAL]: font,
+		[FONT_STYLES.ITALIC]: fontItalic,
+		[FONT_STYLES.BOLD]: fontBold
+	}
+
+	const headerLogoPng = await doc.embedPng(marianneImageBytes)
+	const footerLogoPng = await doc.embedPng(histoVecLogoBytes)
+
+	const embeddedLogos = {
+		headerLogoPng,
+		footerLogoPng
+	}
+
+	writeContent(
 		{
+			doc,
+			embeddedFonts,
+			embeddedLogos,
 			isAnnulationCI,
 			annulationCurrentStatus,
 			dateAnnulation,
-			histoVecLogo,
-			marianneImage,
 			marque,
 			plaque,
 			premierCertificat,
@@ -79,5 +92,12 @@ export const generateCsa = (
 		)
 	)
 
-	pdf.save(`${RAPPORT_FILENAME}.pdf`)
+	// Returns pdf bytes that can be:
+	//   • Written to a file in Node
+	//   • Downloaded from the browser
+	//   • Rendered in an <iframe>
+	//   etc.
+	const pdfBytes = await doc.save(`${RAPPORT_FILENAME}.pdf`)
+
+	return pdfBytes
 }
