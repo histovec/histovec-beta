@@ -72,7 +72,7 @@ if [ "$test_result" -gt "0" ] ; then
   ret=$test_result
 fi
 
-# test _cat/indices == 3
+# test _cat/indices == 1
 echo "# elasticsearch _cat/indices"
 test_output=$(docker exec -i ${USE_TTY} ${APP}-$container_name /bin/bash -c 'curl -s --fail -XGET "localhost:9200/_cat/indices"')
 test_result=$?
@@ -83,14 +83,13 @@ if [ "$test_result" -gt "0" ] ; then
 fi
 echo "$test_output"
 
-echo "# elasticsearch _cat/indices >= 2"
-# test nb indice == 3
-[ "$(echo "$test_output" | wc -l)" -ge 2 ]
-test_result=$?
+echo "# elasticsearch _cat/indices == 1"
+# test nb indice == 1
+nb_indice=$(echo "$test_output" | wc -l)
 
-if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: nombre indices different de 2"
-  ret=$test_result
+if [ "$nb_indice" -ne "1" ] ; then
+  echo "ERROR: nombre d'indices ($nb_indice) different de 1"
+  ret=-1
 fi
 echo "$test_output"
 
