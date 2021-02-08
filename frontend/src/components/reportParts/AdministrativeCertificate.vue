@@ -64,7 +64,8 @@ export default {
   },
   computed: {
     validityDate () {
-      return dayjs().add(1, 'month').date(8).format('DD/MM/YYYY')
+      return dayjs().date(8).format('DD/MM/YYYY')
+      // return dayjs().add(1, 'month').date(8).format('DD/MM/YYYY')
     }
   },
   async mounted () {
