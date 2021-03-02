@@ -904,9 +904,13 @@ export default {
       return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni')) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
     },
     currentMonthNumber () {
-      var date = new Date()
-      date = dayjs().add(-7, 'day').format('YYYYMM')
-      return date
+      let date = dayjs().add(-7, 'day')
+
+      if (this.usePreviousMonthForData) {
+          date = date.add(-1, 'month')
+      }
+
+      return date.format('YYYYMM')
     },
     personneId () {
       if (this.typePersonne === 'particulier') {
