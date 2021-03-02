@@ -42,15 +42,14 @@ export default new Vuex.Store({
     },
     config: {
       allTabs: false,
-      newPdfLib: true,
       csaAnnulationCi: false,
       dataDate: false,
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
-      newPdfLib: ['ctrl', 'alt', 'b'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
+
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,
