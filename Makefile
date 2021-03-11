@@ -486,7 +486,7 @@ frontend-clean-dist-archive:
 
 frontend-clean-image:
 	@( export EXEC_ENV=build-deploy && ${DC} -f $(DC_BUILD_FRONTEND) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
@@ -504,20 +504,20 @@ nginx-check-build:
 	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_FRONTEND) config -q
 
 nginx-save-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
         nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$nginx_image_name $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
 
 nginx-check-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
 	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker image inspect $$nginx_image_name_version
 
 nginx-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
@@ -571,13 +571,13 @@ elasticsearch-check-build:
 	${DC} -f $(DC_ELASTICSEARCH) config -q
 
 elasticsearch-save-image:
-	elasticsearch_image_name=$$(${DC} -f $(DC_ELASTICSEARCH) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.elasticsearch.image); \
+	elasticsearch_image_name=$$(${DC} -f $(DC_ELASTICSEARCH) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.elasticsearch.image); \
 	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) $$elasticsearch_image_name ; \
 	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) $$elasticsearch_image_name
 
 elasticsearch-clean-image:
 	@( ${DC} -f $(DC_ELASTICSEARCH) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
@@ -795,21 +795,21 @@ backend-build-image: $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) backend-check
 	export EXEC_ENV=production; ${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) backend
 
 backend-save-image:
-	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
         backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_LATEST_VERSION) $$backend_image_name
 
 backend-check-image:
-	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
 	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
 	docker image inspect $$backend_image_name_version
 
 
 backend-clean-image:
 	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_BACKEND) config | \
-           python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
         done
@@ -848,7 +848,7 @@ redis-build-image: redis-check-build
 redis-check-build: backend-check-build
 
 redis-save-image: backend-check-build
-	redis_image_name=$$(${DC} -f $(DC_RUN_BACKEND) config | python -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.redis.image); \
+	redis_image_name=$$(${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.redis.image); \
 	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) $$redis_image_name ; \
 	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_LATEST_VERSION) $$redis_image_name
 
