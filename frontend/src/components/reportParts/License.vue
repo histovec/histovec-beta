@@ -28,7 +28,7 @@
 
     <div class="row">
       <div class="col-sm-5">
-        <span class="txt-small-12">Code Postal</span>
+        <span class="txt-small-12">Code postal</span>
       </div>
       <div class="col-sm-7">
         <span class="info_red txt-small-12">{{ titulaire.adresse }}</span>
