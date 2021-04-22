@@ -19,10 +19,6 @@ export default function createApp (utacClient) {
     return req.body.uuid
   })
 
-  morgan.token('utacId', function (req) {
-    return req.body.utacId
-  })
-
   morgan.token('fwd-addr', function (req) {
     return req.headers['x-forwarded-for']
   })
@@ -44,7 +40,6 @@ export default function createApp (utacClient) {
         'user-agent': tokens['user-agent'](req, res),
         id: tokens['id'](req, res),
         uuid: tokens['uuid'](req, res),
-        utacId: tokens['utacId'](req, res),
       },
     })
   }
