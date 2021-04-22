@@ -87,7 +87,7 @@ def encrypt_df(df):
 
     for col in ['idv', 'ida', 'key']:
         df[col]=df[col].str.lower()
-        df[col]=df[col].str.replace(r'\W', '')
+        df[col]=df[col].str.replace(r'\W', '', regex=True)
 
     df['idv']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x).encode('utf8','ignore')).digest()).decode('utf8'))
     df['ida1']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('utf8','ignore')).digest()).decode('utf8'))
