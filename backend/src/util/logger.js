@@ -1,5 +1,7 @@
 import { createLogger, format, transports } from 'winston'
 import config from '../config'
+import { inspect } from 'util'
+
 const { combine, timestamp, label, printf } = format
 
 const isProd = config.isProd
@@ -19,14 +21,14 @@ const options = {
 }
 
 const logJsonFormat = printf(({ label, level, message, timestamp }) => {
-  return JSON.stringify({
+  return inspect({
     content: typeof message === 'string' ? { default: message } : message,
     meta: {
       level,
       label,
       timestamp,
     },
-  })
+  }, { colors: true })
 })
 
 const logFormat = printf(({ level, message }) => `${level} ${message}`)
