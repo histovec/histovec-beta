@@ -163,7 +163,7 @@ module.exports.UTACClient = class UTACClient {
     }
   }
 
-  async readControlesTechniques (immat, resetAuthentication = false) {
+  async readControlesTechniques (immat) {
     appLogger.debug({
       debug: 'UTACClient - readControlesTechniques',
       immat,
