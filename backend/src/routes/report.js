@@ -11,12 +11,12 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-const normalizePlaqueForUtac = (plaque) => {
-  if (!plaque || typeof plaque !== 'string') {
+const normalizeImmatForUtac = (immat) => {
+  if (!immat || typeof immat !== 'string') {
     return undefined
   }
   return (
-    plaque.toUpperCase()
+    immat.toUpperCase()
       .replace(/^([A-Z]+)(\s|-)*([0-9]+)(\s|-)*([A-Z]+)$/, '$1-$3-$5')
       .replace(/^([0-9]+)(\s|-)*([A-Z]+)(\s|-)*([0-9]+)$/, '$1$3$5')
   )
@@ -160,7 +160,7 @@ export const generateGetReport = (utacClient) =>
     const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
 
     // Only annulationCI vehicles don't have utacId
-    const isAnnulationCI = !utacId
+    const isAnnulationCI = !immat
     if (isAnnulationCI || !isApiActivated) {
       appLogger.info({ message: 'No call to UTAC api' })
       appLogger.info({ utacId: isAnnulationCI || 'no utac id found' })
@@ -206,16 +206,18 @@ export const generateGetReport = (utacClient) =>
       }
     }
 
-    const plaque = decryptXOR(utacId, config.utacIdKey)
-    appLogger.info(`-- plaque ==> ${plaque}`)
+    const immat = decryptXOR(utacId, config.utacIdKey)
+    appLogger.info(`-- immat ==> ${immat}`)
 
-    const normalizedPlaque = normalizePlaqueForUtac(plaque)
-    appLogger.info(`-- normalized plaque ==> ${normalizedPlaque}`)
+    const normalizedImmat = normalizeImmatForUtac(immat)
+    appLogger.info(`-- normalized immat ==> ${normalizedImmat}`)
 
-    const validPlaqueRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
-    if (!validPlaqueRegex.test(normalizedPlaque)) {
+    const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
+    const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
+
+    if (!isValidImmat) {
       appLogger.error({
-        error: 'Invalid plaque for UTAC api',
+        error: 'Invalid immatriculation for UTAC api',
       })
 
       // Cache unsupported vehicles
@@ -241,7 +243,7 @@ export const generateGetReport = (utacClient) =>
         message: utacMessage,
         ct,
         updateDate: ctUpdateDate,
-      } = await utacClient.readControlesTechniques(normalizedPlaque)
+      } = await utacClient.readControlesTechniques(immat: normalizedImmat)
 
       if (utacStatus !== 200) {
         appLogger.error({
