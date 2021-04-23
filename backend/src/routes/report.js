@@ -36,7 +36,11 @@ const getSIV = async (id, uuid) => {
       },
       size: 1,
       terminate_after: 1,
-      filter_path: 'hits.hits._source.v,hits.hits._source.utac_id',
+      filter_path: `
+        hits.hits._source.v,
+        hits.hits._source.utac_ask_ct,
+        hits.hits._source.utac_encrypted_immat,
+        hits.hits._source.utac_encrypted_vin`,
     })
 
     const hits = (response && response.hits && response.hits.hits) || []
@@ -52,9 +56,20 @@ const getSIV = async (id, uuid) => {
       }
     }
 
-    const sivData = hits[0]._source && hits[0]._source.v
+    const {
+      v: sivData,
+      utac_ask_ct: rawAskCt = '',
+      utac_encrypted_immat: encryptedImmat = '',
+      utac_encrypted_vin: encryptedVin = '',
+    } = hits[0]._source
 
-    const utacId = (hits[0]._source && hits[0]._source.utac_id) || ''
+    // @todo: remove logs after MEP success about ask_ct
+    appLogger.info(`-- utac_ask_ct ==> ${rawAskCt}`)
+    appLogger.info(`-- utac_encrypted_immat ==> ${encryptedImmat}`)
+    appLogger.info(`-- utac_encrypted_vin ==> ${encryptedVin}`)
+
+    const askCt = rawAskCt !== 'NON'  // /!\ default to true during until production deployement to avoid beaking change with actual behaviour
+    // const askCt = rawAskCt === 'OUI'  // @todo: uncomment when production data will be operational with askCt (and remove previous line)
 
     if (!sivData) {
       appLogger.error({
@@ -71,7 +86,11 @@ const getSIV = async (id, uuid) => {
     return {
       status: 200,
       sivData,
-      utacId,
+      utac: {
+        askCt,
+        encryptedImmat,
+        encryptedVin,
+      },
     }
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
@@ -102,9 +121,23 @@ const getSIV = async (id, uuid) => {
   }
 }
 
+const validateTechnicalControls = (sentVin, technicalControls) => {
+  const inconsistentVin = technicalControls.find(ct => ct.vin !== sentVin)
+  if (inconsistentVin) {
+    appLogger.error({
+      message: 'VINs are differents',
+    })
+    return false
+  }
+
+  // Immatriculations could have change while changing from FNI to SIV
+
+  return true
+}
+
 // Use a default value to compute utacDataKey for annulationCI vehicles
-const computeUtacDataKey = (utacId = 'h4ZWsQLmpOZf') => {
-  const urlSafeBase64UtacIdHash = hash(utacId)
+const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
+  const urlSafeBase64UtacIdHash = hash(encryptedImmat)
   const truncatedUtacIdHash = Buffer.from(urlSafeBase64UtacIdHash, 'base64').slice(0, 32).toString('base64')
 
   return {
@@ -136,7 +169,11 @@ export const generateGetReport = (utacClient) =>
       status: sivStatus,
       message: sivMessage,
       sivData,
-      utacId,
+      utac: {
+          askCt,
+          encryptedImmat,
+          encryptedVin,
+      },
     } = await getSIV(id, uuid)
 
     if (sivStatus !== 200) {
@@ -147,23 +184,28 @@ export const generateGetReport = (utacClient) =>
       return
     }
 
+    appLogger.info(`-- encryptedImmat ==> ${encryptedImmat}`)
+
+    const immat = decryptXOR(encryptedImmat, config.utacIdKey)
+    appLogger.info(`-- immat ==> ${immat}`)
+
     // 2 - UTAC
 
     // Utac data encryption is not really useful since UTAC api doesn't return crypted data.
     // But we still encrypt to sent coherent format to the front: encrypted siv and utac data.
     // Since HistoVec uses https, it is not a security issue.
 
-    const { utacDataKey, utacDataKeyAsBuffer } = computeUtacDataKey(utacId)
+    const { utacDataKey, utacDataKeyAsBuffer } = computeUtacDataKey(encryptedImmat)
 
     // /!\ boolean setting is passed as string /!\
     // @todo: we should use typed yaml to load settings
     const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
 
-    // Only annulationCI vehicles don't have utacId
-    const isAnnulationCI = !immat
-    if (isAnnulationCI || !isApiActivated) {
+    // Only annulationCI vehicles don't have encryptedImmat
+    const isAnnulationCI = Boolean(!immat)
+    if (!askCt || isAnnulationCI || !isApiActivated) {
       appLogger.info({ message: 'No call to UTAC api' })
-      appLogger.info({ utacId: isAnnulationCI || 'no utac id found' })
+      appLogger.info({ encryptedImmat: isAnnulationCI ? 'no encrypted immat found' : encryptedImmat })
       appLogger.info({ isApiActivated: Boolean(isApiActivated) })
 
       res.status(200).json({
@@ -206,18 +248,29 @@ export const generateGetReport = (utacClient) =>
       }
     }
 
-    const immat = decryptXOR(utacId, config.utacIdKey)
-    appLogger.info(`-- immat ==> ${immat}`)
-
     const normalizedImmat = normalizeImmatForUtac(immat)
     appLogger.info(`-- normalized immat ==> ${normalizedImmat}`)
 
     const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
     const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
-    if (!isValidImmat) {
+    const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
+    appLogger.info(`-- vin ==> ${vin}`)
+
+    const normalizedVin = vin.toUpperCase()
+    appLogger.info(`-- normalized vin ==> ${normalizedVin}`)
+
+    const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
+    const isValidVin = Boolean(validVinRegex.test(vin))
+
+    if (!isValidImmat || (config.utac.isVinSentToUtac && !isValidVin)) {
+      const invalidParameters = (
+        !isValidImmat && !isValidVin
+          ? 'immatriculation and vin'
+          : (!isValidImmat ? 'immatriculation' : 'vin')
+      )
       appLogger.error({
-        error: 'Invalid immatriculation for UTAC api',
+        error: `Invalid ${invalidParameters} for UTAC api`,
       })
 
       // Cache unsupported vehicles
@@ -243,7 +296,7 @@ export const generateGetReport = (utacClient) =>
         message: utacMessage,
         ct,
         updateDate: ctUpdateDate,
-      } = await utacClient.readControlesTechniques(immat: normalizedImmat)
+      } = await utacClient.readControlesTechniques({ immat: normalizedImmat, vin: normalizedVin })
 
       if (utacStatus !== 200) {
         appLogger.error({
@@ -282,6 +335,14 @@ export const generateGetReport = (utacClient) =>
           utacDataKey,
         })
         return
+      }
+
+      // /!\ boolean setting is passed as string /!\
+      // @todo: we should use typed yaml to load settings
+      const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
+
+      if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+        throw new Error("Inconsistency for technical control")
       }
 
       const freshUtacData = encryptJson({

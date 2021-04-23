@@ -163,7 +163,7 @@ module.exports.UTACClient = class UTACClient {
     }
   }
 
-  async readControlesTechniques (immat) {
+  async readControlesTechniques ({ immat, vin }) {
     appLogger.debug({
       debug: 'UTACClient - readControlesTechniques',
       immat,
@@ -183,6 +183,7 @@ module.exports.UTACClient = class UTACClient {
     try {
       const response = await this.axios.post('/immat/search', {
         immat,
+        ...(config.utac.isVinSentToUtac ? { vin } : {}),
       })
 
       if (response.data && response.data.ct && response.data.update_date) {

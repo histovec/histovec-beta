@@ -134,7 +134,7 @@ export ES_VERBOSE=100000
 export ES_VERBOSE_UPDATE=1000
 export ES_TIMEOUT=300  # 60
 export ES_JOBS=4
-export header="idv;ida1;ida2;v;utac_id"
+export header="idv;ida1;ida2;v;utac_ask_ct;utac_encrypted_immat;utac_encrypted_vin"
 # openstack swift source parameters
 # auth token has to be provided before within env
 export openstack_retry=10
@@ -176,6 +176,7 @@ export FAKE_UTAC_LATENCY=500
 # Default values for dev environement
 
 export IS_UTAC_API_ACTIVATED?=false
+export IS_VIN_SENT_TO_UTAC?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
 export UTAC_TIMEOUT?=5000
@@ -528,10 +529,7 @@ frontend-clean:
 	sudo rm -rf ${FRONTEND}/dist
 
 # download nginx and load it in docker
-nginx-download-image: ## Download nginx image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_NGINX_APP_VERSION) \
-          $(curl_progress_bar)
-
+nginx-download-image: ## Download nginx image==
 nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 
