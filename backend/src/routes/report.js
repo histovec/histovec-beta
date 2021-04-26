@@ -11,6 +11,11 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
+
+// /!\ boolean setting is passed as string /!\
+// @todo: we should use typed yaml to load settings
+const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
+
 const normalizeImmatForUtac = (immat) => {
   if (!immat || typeof immat !== 'string') {
     return undefined
@@ -263,7 +268,7 @@ export const generateGetReport = (utacClient) =>
     const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
     const isValidVin = Boolean(validVinRegex.test(vin))
 
-    if (!isValidImmat || (config.utac.isVinSentToUtac && !isValidVin)) {
+    if (!isValidImmat || (isVinSentToUtac && !isValidVin)) {
       const invalidParameters = (
         !isValidImmat && !isValidVin
           ? 'immatriculation and vin'
@@ -336,10 +341,6 @@ export const generateGetReport = (utacClient) =>
         })
         return
       }
-
-      // /!\ boolean setting is passed as string /!\
-      // @todo: we should use typed yaml to load settings
-      const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
       if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
         throw new Error("Inconsistency for technical control")
