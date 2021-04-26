@@ -5,6 +5,11 @@ import { Agent as HttpsAgent } from 'https'
 import { decodingJWT } from '../util/jwt'
 import { appLogger } from '../util/logger'
 
+
+// /!\ boolean setting is passed as string /!\
+// @todo: we should use typed yaml to load settings
+const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
+
 module.exports.UTACClient = class UTACClient {
   constructor () {
     // /!\ boolean setting is passed as string /!\
@@ -183,7 +188,7 @@ module.exports.UTACClient = class UTACClient {
     try {
       const response = await this.axios.post('/immat/search', {
         immat,
-        ...(config.utac.isVinSentToUtac ? { vin } : {}),
+        ...(isVinSentToUtac ? { vin } : {}),
       })
 
       if (response.data && response.data.ct && response.data.update_date) {
