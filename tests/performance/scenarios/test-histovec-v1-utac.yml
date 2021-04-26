@@ -71,7 +71,7 @@ scenarios:
           code: "{{ idv }}"
           key: "eetuDnUDIB7AsbOibYClLxSz2pPWSP2kyj2qWn0REpY="
           token: "{{ token }}"
-          utacId: "{{ token }}"
+          encryptedImmat: "{{ token }}"
         capture:
           json: "$.ct"
           as: "ct"

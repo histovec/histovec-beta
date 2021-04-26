@@ -27,7 +27,10 @@ COMMON_TRANSFER_SCHEMA = [
     {'name': 'ida1', 'type': 'string'},
     {'name': 'ida2', 'type': 'string'},
     {'name': 'v', 'type': 'string'},
-    {'name': 'utac_id', 'type': 'string'}
+    {'name': 'utac_ask_ct', 'type': 'string'},
+    {'name': 'utac_encrypted_immat', 'type': 'string'},
+    {'name': 'utac_encrypted_vin', 'type': 'string'}
+
 ]
 
 TRANSFER_COLUMNS = [c['name'] for c in COMMON_TRANSFER_SCHEMA]
@@ -87,7 +90,7 @@ def encrypt_df(df):
 
     for col in ['idv', 'ida', 'key']:
         df[col]=df[col].str.lower()
-        df[col]=df[col].str.replace(r'\W', '')
+        df[col]=df[col].str.replace(r'\W', '', regex=True)
 
     df['idv']=df['idv'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x).encode('utf8','ignore')).digest()).decode('utf8'))
     df['ida1']=df['ida'].apply(lambda x: base64.urlsafe_b64encode(hashlib.sha256((x+month).encode('utf8','ignore')).digest()).decode('utf8'))
@@ -107,7 +110,7 @@ def encrypt_df(df):
 
     df['key']=df['key'].apply(lambda x: base64.b64encode(x).decode('utf8'))
 
-    df = df[['idv', 'ida1', 'ida2', 'v', 'utac_id']]
+    df = df[['idv', 'ida1', 'ida2', 'v', 'utac_ask_ct', 'utac_encrypted_immat', 'utac_encrypted_vin']]
 
     return df
 

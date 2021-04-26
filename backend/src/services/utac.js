@@ -163,10 +163,10 @@ module.exports.UTACClient = class UTACClient {
     }
   }
 
-  async readControlesTechniques (plaque, resetAuthentication = false) {
+  async readControlesTechniques ({ immat, vin }) {
     appLogger.debug({
       debug: 'UTACClient - readControlesTechniques',
-      plaque,
+      immat,
     })
 
     const errorMessages = {
@@ -182,13 +182,14 @@ module.exports.UTACClient = class UTACClient {
 
     try {
       const response = await this.axios.post('/immat/search', {
-        immat: plaque,
+        immat,
+        ...(config.utac.isVinSentToUtac ? { vin } : {}),
       })
 
       if (response.data && response.data.ct && response.data.update_date) {
         appLogger.debug({
           debug: 'UTAC result found',
-          plaque,
+          immat,
           ct: response.data.ct,
           update_date: response.data.update_date,
         })

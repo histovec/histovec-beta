@@ -26,7 +26,7 @@ export const hash = (text) => urlSafeBase64Encode(
   crypto.createHash('sha256').update(text).digest()
 )
 
-// weak encryption (used for UtacId)
+// weak encryption (used for encryptedImmat)
 export const decryptXOR = (encrypted, key) => String.fromCharCode(
   ...Buffer.from(encrypted, 'base64')
     .map((char, index) => char ^ key.charCodeAt(index % key.length))
