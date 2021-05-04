@@ -11,7 +11,6 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-
 // /!\ boolean setting is passed as string /!\
 // @todo: we should use typed yaml to load settings
 const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
@@ -73,9 +72,7 @@ const getSIV = async (id, uuid) => {
     appLogger.info(`-- utac_encrypted_immat ==> ${encryptedImmat}`)
     appLogger.info(`-- utac_encrypted_vin ==> ${encryptedVin}`)
 
-    const askCt = rawAskCt !== 'NON'  // /!\ default to true during until production deployement to avoid beaking change with actual behaviour
-    // const askCt = rawAskCt === 'OUI'  // @todo: uncomment when production data will be operational with askCt (and remove previous line)
-
+    const askCt = rawAskCt === 'OUI'
     if (!sivData) {
       appLogger.error({
         error: 'Bad Content in elasticsearch response',
@@ -127,7 +124,8 @@ const getSIV = async (id, uuid) => {
 }
 
 const validateTechnicalControls = (sentVin, technicalControls) => {
-  const inconsistentVin = technicalControls.find(ct => ct.vin !== sentVin)
+  const inconsistentVin = technicalControls.find(ct => ct.ct_vin !== sentVin)
+
   if (inconsistentVin) {
     appLogger.error({
       message: 'VINs are differents',
@@ -175,9 +173,9 @@ export const generateGetReport = (utacClient) =>
       message: sivMessage,
       sivData,
       utac: {
-          askCt,
-          encryptedImmat,
-          encryptedVin,
+        askCt,
+        encryptedImmat,
+        encryptedVin,
       },
     } = await getSIV(id, uuid)
 
@@ -343,7 +341,7 @@ export const generateGetReport = (utacClient) =>
       }
 
       if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
-        throw new Error("Inconsistency for technical control")
+        throw new Error('Inconsistency for technical control')
       }
 
       const freshUtacData = encryptJson({
