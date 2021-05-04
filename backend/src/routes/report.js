@@ -73,9 +73,7 @@ const getSIV = async (id, uuid) => {
     appLogger.info(`-- utac_encrypted_immat ==> ${encryptedImmat}`)
     appLogger.info(`-- utac_encrypted_vin ==> ${encryptedVin}`)
 
-    const askCt = rawAskCt !== 'NON'  // /!\ default to true during until production deployement to avoid beaking change with actual behaviour
-    // const askCt = rawAskCt === 'OUI'  // @todo: uncomment when production data will be operational with askCt (and remove previous line)
-
+    const askCt = rawAskCt === 'OUI'
     if (!sivData) {
       appLogger.error({
         error: 'Bad Content in elasticsearch response',
