@@ -11,7 +11,6 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
-
 // /!\ boolean setting is passed as string /!\
 // @todo: we should use typed yaml to load settings
 const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
@@ -173,9 +172,9 @@ export const generateGetReport = (utacClient) =>
       message: sivMessage,
       sivData,
       utac: {
-          askCt,
-          encryptedImmat,
-          encryptedVin,
+        askCt,
+        encryptedImmat,
+        encryptedVin,
       },
     } = await getSIV(id, uuid)
 
@@ -341,7 +340,7 @@ export const generateGetReport = (utacClient) =>
       }
 
       if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
-        throw new Error("Inconsistency for technical control")
+        throw new Error('Inconsistency for technical control')
       }
 
       const freshUtacData = encryptJson({
