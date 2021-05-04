@@ -124,7 +124,8 @@ const getSIV = async (id, uuid) => {
 }
 
 const validateTechnicalControls = (sentVin, technicalControls) => {
-  const inconsistentVin = technicalControls.find(ct => ct.vin !== sentVin)
+  const inconsistentVin = technicalControls.find(ct => ct.ct_vin !== sentVin)
+
   if (inconsistentVin) {
     appLogger.error({
       message: 'VINs are differents',
