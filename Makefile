@@ -529,7 +529,10 @@ frontend-clean:
 	sudo rm -rf ${FRONTEND}/dist
 
 # download nginx and load it in docker
-nginx-download-image: ## Download nginx image==
+nginx-download-image:
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_NGINX_APP_VERSION) \
+        $(curl_progress_bar)
+
 nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 
