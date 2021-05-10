@@ -51,12 +51,12 @@ RUN if [ -z "${NPM_VERBOSE}" ]; then\
       npm install --verbose; \
     fi
 
-RUN npm config set audit-level high
-RUN if [ -z "${NPM_FIX}" ]; then \
-      npm audit --registry=https://registry.npmjs.org; \
-    else \
-      npm audit fix --registry=https://registry.npmjs.org; \
-    fi
+# RUN npm config set audit-level high
+# RUN if [ -z "${NPM_FIX}" ]; then \
+#       npm audit --registry=https://registry.npmjs.org; \
+#     else \
+#       npm audit fix --registry=https://registry.npmjs.org; \
+#     fi
 
 COPY run.sh .
 RUN chmod +x run.sh

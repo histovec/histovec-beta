@@ -45,11 +45,11 @@ RUN if [ -z "${NPM_VERBOSE}" ]; then\
       npm install --verbose; \
     fi
 
-RUN if [ -z "${NPM_FIX}" ]; then \
-      npm audit --registry=https://registry.npmjs.org; \
-    else \
-      npm audit fix --registry=https://registry.npmjs.org; \
-    fi
+# RUN if [ -z "${NPM_FIX}" ]; then \
+#       npm audit --registry=https://registry.npmjs.org; \
+#     else \
+#       npm audit fix --registry=https://registry.npmjs.org; \
+#     fi
 
 ################################
 # Step 2: "development" target #
@@ -113,8 +113,8 @@ COPY package.json ./
 # Install production dependencies and clean cache
 RUN npm --no-git-tag-version version ${APP_VERSION} && \
     npm install --production && \
-    npm config set audit-level high && \
-    npm audit --json --registry=https://registry.npmjs.org || ${NPM_AUDIT_DRY_RUN:-false} && \
+    # npm config set audit-level high && \
+    # npm audit --json --registry=https://registry.npmjs.org || ${NPM_AUDIT_DRY_RUN:-false} && \
     npm cache clean --force
 
 # Install pm2
