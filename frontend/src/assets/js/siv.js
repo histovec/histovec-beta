@@ -368,7 +368,7 @@ const ctecVehiculeMapping = ({
   CTEC_PLACES_ASSISES,
   CTEC_PLACES_DEBOUT,
   CTEC_PUISS_CV,
-  CTEC_PUISS_NETTE,
+  CTEC_PUISSANCE_NETTE,
   CTEC_RAPPORT_PUIS_MASSE,
   CTEC_RLIB_CARROSSERIE_CE,
   CTEC_RLIB_CARROSSERIE_NAT,
@@ -408,7 +408,7 @@ const ctecVehiculeMapping = ({
     puissance: {
       cv: CTEC_PUISS_CV,
       cylindres: CTEC_CYLINDREE,
-      nette: CTEC_PUISS_NETTE,
+      nette: CTEC_PUISSANCE_NETTE,
       norm: CTEC_RAPPORT_PUIS_MASSE,
     },
     reception: {
