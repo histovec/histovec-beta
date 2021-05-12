@@ -195,7 +195,7 @@
     <div v-if="ctec.categorie">
       <div class="row">
         <div class="col-sm-6">
-          <span class="txt-small-12">Catégorie (Ce)</span>
+          <span class="txt-small-12">Catégorie (CE)</span>
         </div>
         <div class="col-sm-2">
           <span class="bold txt-small-12">J</span>
@@ -223,7 +223,7 @@
     <div v-if="ctec.carrosserie.ce">
       <div class="row">
         <div class="col-sm-6">
-          <span class="txt-small-12">Carrosserie (Ce)</span>
+          <span class="txt-small-12">Carrosserie (CE)</span>
         </div>
         <div class="col-sm-2">
           <span class="bold txt-small-12">J.2</span>
