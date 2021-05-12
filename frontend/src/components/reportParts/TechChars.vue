@@ -33,18 +33,6 @@
     <div class="separator"></div>
     <div class="row">
       <div class="col-sm-6">
-        <span class="txt-small-12">Nom commercial</span>
-      </div>
-      <div class="col-sm-2">
-        <span class="bold txt-small-12">D.3</span>
-      </div>
-      <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.modele }}</span>
-      </div>
-    </div>
-    <div class="separator"></div>
-    <div class="row">
-      <div class="col-sm-6">
         <span class="txt-small-12">Numéro CNIT</span>
       </div>
       <div class="col-sm-2">
@@ -52,6 +40,18 @@
       </div>
       <div class="col-sm-4">
         <span class="info_red txt-small-12">{{ ctec.cnit }}</span>
+      </div>
+    </div>
+    <div class="separator"></div>
+    <div class="row">
+      <div class="col-sm-6">
+        <span class="txt-small-12">Nom commercial</span>
+      </div>
+      <div class="col-sm-2">
+        <span class="bold txt-small-12">D.3</span>
+      </div>
+      <div class="col-sm-4">
+        <span class="info_red txt-small-12">{{ ctec.modele }}</span>
       </div>
     </div>
     <div class="separator"></div>
