@@ -69,13 +69,13 @@
     <div class="separator"></div>
     <div class="row">
       <div class="col-sm-6">
-        <span class="txt-small-12">Type de reception</span>
+        <span class="txt-small-12">Type de réception</span>
       </div>
       <div class="col-sm-2">
         <span class="bold txt-small-12">&nbsp;</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">CE</span>
+        <span class="info_red txt-small-12">{{ ctec.reception.type }}</span>
       </div>
     </div>
     <div class="separator"></div>
