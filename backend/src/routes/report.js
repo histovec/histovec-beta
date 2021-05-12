@@ -57,6 +57,7 @@ const getSIV = async (id, uuid) => {
       return {
         status: 404,
         message: 'Not Found',
+        utac: {},
       }
     }
 
@@ -82,6 +83,7 @@ const getSIV = async (id, uuid) => {
       return {
         status: 500,
         message: 'Bad Content from Elasticsearch',
+        utac: {},
       }
     }
 
@@ -106,6 +108,7 @@ const getSIV = async (id, uuid) => {
       return {
         status: 502,
         message: errorMessage,
+        utac: {},
       }
     }
 
@@ -119,6 +122,7 @@ const getSIV = async (id, uuid) => {
     return {
       status: 500,
       message: errorMessage,
+      utac: {},
     }
   }
 }
