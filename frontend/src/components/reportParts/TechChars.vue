@@ -148,7 +148,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.admissible || ctec.PT.admissible || ctec.PT.AC || ctec.PT.RA">
+    <div v-if="ctec.PT.admissible || ctec.PT.AC || ctec.PT.RA">
       <div class="row">
         <td colspan="3">
           &nbsp;
