@@ -370,16 +370,21 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.places.debout">
+    <div>
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Places debout</span>
         </div>
         <div class="col-sm-2">
-          <span class="bold txt-small-12">S.3</span>
+          <span class="bold txt-small-12">S.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.places.debout }}</span>
+          <span
+            v-if="ctec.places.debout"
+            class="info_red txt-small-12"
+          >
+            {{ ctec.places.debout }}
+          </span>
         </div>
       </div>
       <div class="separator"></div>
