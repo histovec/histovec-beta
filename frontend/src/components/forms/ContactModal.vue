@@ -291,6 +291,7 @@ export default {
       return 'sendContact'
     },
     filteredMessage () {
+      // eslint-disable-next-line no-misleading-character-class
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
     },
     errors () {
