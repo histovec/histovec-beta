@@ -348,7 +348,7 @@ const addPVEInfos = (historique=[], pves=[]) => {
   return updatedHistorique
 }
 
-const ctecVehiculeMapping = ({
+const vehiculeMapping = ({
   couleur,
   cveh_num_reception,
   marque,
@@ -427,7 +427,7 @@ const ctecVehiculeMapping = ({
   }
 }
 
-const certificatVehiculeMapping = ({
+const certificatMapping = ({
   date_emission_CI,
   date_premiere_immat,
   date_premiere_immat_siv,
@@ -460,7 +460,7 @@ const certificatVehiculeMapping = ({
   {'opa_date': date_premiere_immat}
 
   return {
-    courant: date_emission_CI || MISSING_VALUE,
+  courant: date_emission_CI || MISSING_VALUE,
     depuis: computeCertifDepuis(olderImmatriculationHistoriqueItem.opa_date),
     depuisMonths: computeCertifMonths(olderImmatriculationHistoriqueItem.opa_date),
     etranger: isImported,  // véhicule importé: changement de règle de gestion #406
@@ -469,12 +469,12 @@ const certificatVehiculeMapping = ({
       !isImported && (sivImportDate !== franceImportDate) &&
       ((historique.length === 0) || (historique[0].opa_type !== 'IMMAT_NORMALE'))
     ),
-    premier,
+  premier,
     siv: sivImportDate,
   }
 }
 
-const titulaireVehiculeMapping = ({
+const titulaireMapping = ({
   pers_raison_soc_tit,
   pers_siren_tit,
   pers_nom_naissance_tit,
@@ -858,12 +858,12 @@ const processSivData = (sivData) => {
     fniState = sivData.date_premiere_immat_siv === undefined ? FNI_STATE.OUI : FNI_STATE.NON
   }
 
-  const certificat = certificatVehiculeMapping(sivData, ascendingValidHistorique, isAnnulationCi)
+  const certificat = certificatMapping(sivData, ascendingValidHistorique, isAnnulationCi)
   const descendingHistoriqueForReport = isAnnulationCi ? [] : computeDescendingHistoriqueForReport(ascendingValidHistorique, certificat, fniState)
 
   const administratif = administratifVehiculeMapping(sivData, isAnnulationCi)
-  const ctec = ctecVehiculeMapping(sivData, isAnnulationCi)
-  const titulaire = titulaireVehiculeMapping(sivData, isAnnulationCi)
+  const ctec = vehiculeMapping(sivData, isAnnulationCi)
+  const titulaire = titulaireMapping(sivData, isAnnulationCi)
 
   let processedSivData = {
     administratif,
