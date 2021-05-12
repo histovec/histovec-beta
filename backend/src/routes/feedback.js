@@ -32,6 +32,8 @@ export async function sendContact (req, res) {
       ),
     })
   } catch (error) {
+    appLogger.error(`Error while sending mail : ${error.message}`)
+
     res.status(500).json({
       success: false,
       message: error.message,

@@ -16,7 +16,6 @@ const config = {
   esSIVIndex: process.env.ES_INDEX,
   smtpServer: process.env.SMTP_SERVER,
   smtpPort: process.env.SMTP_PORT,
-  mailFrom: process.env.MAIL_FROM,
   mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`,
 
