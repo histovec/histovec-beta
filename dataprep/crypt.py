@@ -29,8 +29,8 @@ COMMON_TRANSFER_SCHEMA = [
     {'name': 'v', 'type': 'string'},
     {'name': 'utac_ask_ct', 'type': 'string'},
     {'name': 'utac_encrypted_immat', 'type': 'string'},
-    {'name': 'utac_encrypted_vin', 'type': 'string'}
-
+    {'name': 'utac_encrypted_vin', 'type': 'string'},
+    {'name': 'controle_qualite', 'type': 'string'}
 ]
 
 TRANSFER_COLUMNS = [c['name'] for c in COMMON_TRANSFER_SCHEMA]
@@ -81,7 +81,7 @@ def encrypt_df(df):
     if ('numero_formule' in list(df)):
         df['id_vehicle'] = df['id_vehicle'] + df['numero_formule'] #SIV
     else:
-        df['id_vehicle'] = df['id_vehicle'] + df['date_emission_ci'] #FNI
+        df['id_vehicle'] = df['id_vehicle'] + df['date_emission_CI'] #FNI
 
     df['idv'] = df['id_personne'] + df['id_vehicle']
     df['ida'] = df['idv']
@@ -110,7 +110,7 @@ def encrypt_df(df):
 
     df['key']=df['key'].apply(lambda x: base64.b64encode(x).decode('utf8'))
 
-    df = df[['idv', 'ida1', 'ida2', 'v', 'utac_ask_ct', 'utac_encrypted_immat', 'utac_encrypted_vin']]
+    df = df[['idv', 'ida1', 'ida2', 'v', 'utac_ask_ct', 'utac_encrypted_immat', 'utac_encrypted_vin', 'controle_qualite']]
 
     return df
 
