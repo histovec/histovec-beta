@@ -81,7 +81,7 @@ def encrypt_df(df):
     if ('numero_formule' in list(df)):
         df['id_vehicle'] = df['id_vehicle'] + df['numero_formule'] #SIV
     else:
-        df['id_vehicle'] = df['id_vehicle'] + df['date_emission_ci'] #FNI
+        df['id_vehicle'] = df['id_vehicle'] + df['date_emission_CI'] #FNI
 
     df['idv'] = df['id_personne'] + df['id_vehicle']
     df['ida'] = df['idv']
