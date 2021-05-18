@@ -209,11 +209,11 @@ export const generateGetReport = (utacClient) =>
     const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
 
     // Only annulationCI vehicles don't have encryptedImmat
-    const isAnnulationCI = Boolean(!immat)
+    const isAnnulationCI = Boolean(!encryptedImmat)
     if (!askCt || isAnnulationCI || !isApiActivated) {
       appLogger.info({ message: 'No call to UTAC api' })
       appLogger.info({ encryptedImmat: isAnnulationCI ? 'no encrypted immat found' : encryptedImmat })
-      appLogger.info({ isApiActivated: Boolean(isApiActivated) })
+      appLogger.info({ isApiActivated })
 
       res.status(200).json({
         success: true,
