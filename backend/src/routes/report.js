@@ -44,7 +44,8 @@ const getSIV = async (id, uuid) => {
         hits.hits._source.v,
         hits.hits._source.utac_ask_ct,
         hits.hits._source.utac_encrypted_immat,
-        hits.hits._source.utac_encrypted_vin`,
+        hits.hits._source.utac_encrypted_vin,
+        hits.hits._source.controle_qualite`,
     })
 
     const hits = (response && response.hits && response.hits.hits) || []
@@ -66,12 +67,14 @@ const getSIV = async (id, uuid) => {
       utac_ask_ct: rawAskCt = '',
       utac_encrypted_immat: encryptedImmat = '',
       utac_encrypted_vin: encryptedVin = '',
+      controle_qualite = '',
     } = hits[0]._source
 
     // @todo: remove logs after MEP success about ask_ct
     appLogger.info(`-- utac_ask_ct ==> ${rawAskCt}`)
     appLogger.info(`-- utac_encrypted_immat ==> ${encryptedImmat}`)
     appLogger.info(`-- utac_encrypted_vin ==> ${encryptedVin}`)
+    appLogger.info(`-- controle_qualite ==> ${controle_qualite}`)
 
     const askCt = rawAskCt === 'OUI'
     if (!sivData) {
