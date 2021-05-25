@@ -3,6 +3,42 @@
     class="container-fluid"
   >
     <div
+      class="row"
+    >
+      <div class="col-md-3 col-sm-5">
+        <a
+            class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-15 no-padding"
+            href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
+            target="_blank"
+          >
+            <img
+              class="img-responsive"
+              width="150px"
+              :src="imageLogoSimplimmat"
+              alt="Application Simplimmat"
+            >
+        </a>
+        <br/>
+      </div>
+      <div class="col-md-9 col-sm-7">
+        <div class="txt-small-14">
+          Utilisez maintenant l’application officielle
+          <a
+            class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-14 no-padding"
+            href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
+            target="_blank"
+          >
+            Simplimmat <i class="fa fa-external-link pl-5"></i>
+          </a>.
+          <br/>
+          Elle <span class="info_red">simplifiera</span> et <span class="info_red">sécurisera</span> vos formalités administratives pour la <span class="info_red">cession</span> ou <span class="info_red">l'immatriculation</span> de votre véhicule.
+        </div>
+      </div>
+    </div>
+
+    <div v-if="holder" class="separator-2 separator-lg"></div>
+
+    <div
       v-if="holder"
       class="row"
     >
@@ -20,12 +56,12 @@
         <i class="fa fa-print fa-3x"></i>
       </div>
       <div class="col-md-10 col-sm-10">
-        <div class="txt-small-13">
+        <div class="txt-small-14">
           Pour imprimer le <span class="info_red">Certificat de Situation Administrative</span>
           (<b>certificat de non gage</b>),
           <br>
           <a
-            class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-14 no-padding"
             @click="changeTab('csa')"
           >
             rendez-vous ici<i class="fa fa-external-link pl-5"></i>
@@ -427,6 +463,7 @@
 <script>
 
 import { formatMixin } from '../../mixins/format.js'
+import imageLogoSimplimmat from '@/assets/img/simplimmat.png'
 
 export default {
   mixins: [formatMixin],
@@ -440,6 +477,11 @@ export default {
       type: Function,
       default: () => {}
     },
+  },
+  data () {
+    return {
+      imageLogoSimplimmat,
+    }
   },
   computed: {
     synthese () {
