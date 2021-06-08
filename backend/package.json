@@ -30,7 +30,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "cross-env": "^5.2.0",
-    "delay": "^4.2.0",
+    "delay": "^4.4.1",
     "elasticsearch": "^16.0.0",
     "express": "^4.16.4",
     "luxon": "^1.12.1",
