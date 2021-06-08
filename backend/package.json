@@ -33,7 +33,7 @@
     "delay": "^4.2.0",
     "elasticsearch": "^16.0.0",
     "express": "^4.16.4",
-    "luxon": "^1.12.1",
+    "luxon": "^1.27.0",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "nodemailer": "^6.1.0",
