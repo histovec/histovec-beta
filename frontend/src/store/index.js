@@ -44,11 +44,13 @@ export default new Vuex.Store({
       csaAnnulationCi: false,
       dataDate: false,
       ignoreUtacCache: false,
+      newData: false,
     },
     configEnabler: {
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
       ignoreUtacCache: ['ctrl', 'alt', 'a'],
+      newData: ['ctrl', 'alt', 'b'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,

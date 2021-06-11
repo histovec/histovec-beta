@@ -1,8 +1,8 @@
 export const FNI_STATE = {
-	CONVERTI: 'converti',
-	CONVERTI_INCERTAIN: 'converti_incertain',
-	OUI: 'oui',
-	NON: 'non',
+	CONVERTI: 'CONVERTI',
+	CONVERTI_INCERTAIN: 'CONVERTI_INCERTAIN',
+	OUI: 'OUI',
+	NON: 'NON',
 }
 
 export const TITULAIRE_CHANGE_OPERATIONS = [
