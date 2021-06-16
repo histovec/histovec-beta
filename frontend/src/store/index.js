@@ -50,7 +50,7 @@ export default new Vuex.Store({
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
       useVinForUtac: ['ctrl', 'alt', 'v'],
-      ignoreUtacCache: ['ctrl', 'alt', 'c'],
+      ignoreUtacCache: ['ctrl', 'alt', 'a'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,
