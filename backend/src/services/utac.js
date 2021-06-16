@@ -169,10 +169,6 @@ module.exports.UTACClient = class UTACClient {
   }
 
   async readControlesTechniques ({ immat, vin, useVinForUtac }) {
-    appLogger.warn({
-      useVinForUtac,
-    })
-
     appLogger.debug({
       debug: 'UTACClient - readControlesTechniques',
       immat,
