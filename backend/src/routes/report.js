@@ -158,7 +158,9 @@ const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
 
 export const generateGetReport = (utacClient) =>
   async (req, res) => {
-    const { id, uuid, useVinForUtac } = req.body
+    const { id, uuid, options: { useVinForUtac, ignoreUtacCache } } = req.body
+    appLogger.warn(`-- CONFIG -- useVinForUtac => ${useVinForUtac}`)
+    appLogger.warn(`-- CONFIG -- ignoreUtacCache => ${ignoreUtacCache}`)
 
     if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({
@@ -238,8 +240,8 @@ export const generateGetReport = (utacClient) =>
     const utacDataCacheId = urlSafeBase64Encode(id)
     const utacData = await getAsync(utacDataCacheId)
 
-    if (utacData) {
-      appLogger.info('-- Cached CT')
+    if (!ignoreUtacCache && utacData) {
+      appLogger.warn('-- Cached CT')
       try {
         res.status(200).json({
           success: true,

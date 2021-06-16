@@ -88,8 +88,7 @@ export default {
         return
       }
 
-      // eslint-disable-next-line no-console
-      console.log('useUtacForVin = ', rootState.config.useVinForUtac)
+      const { useVinForUtac, ignoreUtacCache } = rootState.config
 
       const {
         sivData,
@@ -99,7 +98,7 @@ export default {
         state.id,
         state.key,
         localStorage.getItem('userId'),
-        rootState.config.useVinForUtac
+        { useVinForUtac, ignoreUtacCache },
       )
 
       if (success) {
