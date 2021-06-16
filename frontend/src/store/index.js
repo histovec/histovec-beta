@@ -44,12 +44,13 @@ export default new Vuex.Store({
       allTabs: false,
       csaAnnulationCi: false,
       dataDate: false,
+      useVinForUtac: false,
     },
     configEnabler: {
       allTabs: ['ctrl', 'alt', 'a'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
-
+      useVinForUtac: ['ctrl', 'alt', 'w'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,

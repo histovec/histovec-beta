@@ -67,14 +67,14 @@ const getSIV = async (id, uuid) => {
       utac_ask_ct: rawAskCt = '',
       utac_encrypted_immat: encryptedImmat = '',
       utac_encrypted_vin: encryptedVin = '',
-      controle_qualite = '',
+      controle_qualite: controleQualite = '',
     } = hits[0]._source
 
     // @todo: remove logs after MEP success about ask_ct
     appLogger.info(`-- utac_ask_ct ==> ${rawAskCt}`)
     appLogger.info(`-- utac_encrypted_immat ==> ${encryptedImmat}`)
     appLogger.info(`-- utac_encrypted_vin ==> ${encryptedVin}`)
-    appLogger.info(`-- controle_qualite ==> ${controle_qualite}`)
+    appLogger.info(`-- controle_qualite ==> ${controleQualite}`)
 
     const askCt = rawAskCt === 'OUI'
     if (!sivData) {
@@ -158,7 +158,7 @@ const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
 
 export const generateGetReport = (utacClient) =>
   async (req, res) => {
-    const { id, uuid } = req.body
+    const { id, uuid, useVinForUtac } = req.body
 
     if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({
@@ -273,7 +273,7 @@ export const generateGetReport = (utacClient) =>
     const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
     const isValidVin = Boolean(validVinRegex.test(vin))
 
-    if (!isValidImmat || (isVinSentToUtac && !isValidVin)) {
+    if (!isValidImmat || (useVinForUtac && isVinSentToUtac && !isValidVin)) {
       const invalidParameters = (
         !isValidImmat && !isValidVin
           ? 'immatriculation and vin'
@@ -306,7 +306,11 @@ export const generateGetReport = (utacClient) =>
         message: utacMessage,
         ct,
         updateDate: ctUpdateDate,
-      } = await utacClient.readControlesTechniques({ immat: normalizedImmat, vin: normalizedVin })
+      } = await utacClient.readControlesTechniques({
+        immat: normalizedImmat,
+        vin: normalizedVin,
+        useVinForUtac,
+      })
 
       if (utacStatus !== 200) {
         appLogger.error({
@@ -347,7 +351,7 @@ export const generateGetReport = (utacClient) =>
         return
       }
 
-      if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+      if (useVinForUtac && isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
         throw new Error('Inconsistency for technical control')
       }
 
