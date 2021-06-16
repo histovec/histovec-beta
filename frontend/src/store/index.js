@@ -41,14 +41,12 @@ export default new Vuex.Store({
       error: {}
     },
     config: {
-      allTabs: false,
       csaAnnulationCi: false,
       dataDate: false,
       useVinForUtac: false,
       ignoreUtacCache: false,
     },
     configEnabler: {
-      allTabs: ['ctrl', 'alt', 'a'],
       csaAnnulationCi: ['ctrl', 'alt', 'm'],
       dataDate: ['ctrl', 'alt', 'd'],
       useVinForUtac: ['ctrl', 'alt', 'v'],
