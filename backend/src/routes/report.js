@@ -275,14 +275,9 @@ export const generateGetReport = (utacClient) =>
     const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
     const isValidVin = Boolean(validVinRegex.test(vin))
 
-    if (!isValidImmat || (useVinForUtac && isVinSentToUtac && !isValidVin)) {
-      const invalidParameters = (
-        !isValidImmat && !isValidVin
-          ? 'immatriculation and vin'
-          : (!isValidImmat ? 'immatriculation' : 'vin')
-      )
+    if (!isValidImmat) {
       appLogger.error({
-        error: `Invalid ${invalidParameters} for UTAC api`,
+        error: `Invalid immatriculation for UTAC api`,
       })
 
       // Cache unsupported vehicles
@@ -300,6 +295,12 @@ export const generateGetReport = (utacClient) =>
         utacDataKey,
       })
       return
+    }
+
+    if (useVinForUtac && isVinSentToUtac && !isValidVin) {
+      appLogger.warn({
+        error: `Malformed VIN`,
+      })
     }
 
     try {
