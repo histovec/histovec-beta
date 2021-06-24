@@ -158,8 +158,7 @@ const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
 
 export const generateGetReport = (utacClient) =>
   async (req, res) => {
-    const { id, uuid, options: { useVinForUtac, ignoreUtacCache } } = req.body
-    appLogger.warn(`-- CONFIG -- useVinForUtac => ${useVinForUtac}`)
+    const { id, uuid, options: { ignoreUtacCache } } = req.body
     appLogger.warn(`-- CONFIG -- ignoreUtacCache => ${ignoreUtacCache}`)
 
     if (!checkUuid(uuid) || !checkId(id)) {
@@ -297,7 +296,7 @@ export const generateGetReport = (utacClient) =>
       return
     }
 
-    if (useVinForUtac && isVinSentToUtac && !isValidVin) {
+    if (isVinSentToUtac && !isValidVin) {
       appLogger.warn({
         error: `Malformed VIN`,
       })
@@ -312,7 +311,6 @@ export const generateGetReport = (utacClient) =>
       } = await utacClient.readControlesTechniques({
         immat: normalizedImmat,
         vin: normalizedVin,
-        useVinForUtac,
       })
 
       if (utacStatus !== 200) {
@@ -354,7 +352,7 @@ export const generateGetReport = (utacClient) =>
         return
       }
 
-      if (useVinForUtac && isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+      if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
         throw new Error('Inconsistency for technical control')
       }
 

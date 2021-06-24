@@ -175,11 +175,11 @@ const apiClient = {
 }
 
 export default {
-  getReport: async (id, key, uuid, { useVinForUtac, ignoreUtacCache }) => {
+  getReport: async (id, key, uuid, { ignoreUtacCache }) => {
     const apiName = 'report'
     const options = {
       method: 'POST',
-      body: JSON.stringify({ id, uuid, options: { useVinForUtac, ignoreUtacCache } })
+      body: JSON.stringify({ id, uuid, options: { ignoreUtacCache } })
     }
     const reportResponse = await jsonClient(apiName, `${apiPaths(apiName)}`, options)
 

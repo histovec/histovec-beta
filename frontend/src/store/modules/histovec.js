@@ -88,7 +88,7 @@ export default {
         return
       }
 
-      const { useVinForUtac, ignoreUtacCache } = rootState.config
+      const { ignoreUtacCache } = rootState.config
 
       const {
         sivData,
@@ -98,7 +98,7 @@ export default {
         state.id,
         state.key,
         localStorage.getItem('userId'),
-        { useVinForUtac, ignoreUtacCache },
+        { ignoreUtacCache },
       )
 
       if (success) {
