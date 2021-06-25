@@ -73,6 +73,8 @@ const getSIV = async (id, uuid) => {
     appLogger.info(`-- controle_qualite ==> ${controleQualite}`)
 
     const askCt = rawAskCt === 'OUI'
+    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
+
     if (!sivData) {
       appLogger.error({
         error: 'Bad Content in elasticsearch response',
@@ -209,6 +211,17 @@ export const generateGetReport = (utacClient) =>
     // Only annulationCI vehicles don't have encryptedImmat
     const isAnnulationCI = Boolean(!encryptedImmat)
     if (!askCt || isAnnulationCI || !isApiActivated) {
+      if (!askCt) {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call ask_ct_false`)
+      }
+
+      if (isAnnulationCI) {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call annulation_CI`)
+      }
+
+      if (!isApiActivated) {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call api_not_activated`)
+      }
 
       res.status(200).json({
         success: true,
@@ -230,7 +243,13 @@ export const generateGetReport = (utacClient) =>
     const utacDataCacheId = urlSafeBase64Encode(id)
     const utacData = await getAsync(utacDataCacheId)
 
+    if (ignoreUtacCache) {
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
+    }
+
     if (!ignoreUtacCache && utacData) {
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
+
       try {
         res.status(200).json({
           success: true,
@@ -301,6 +320,9 @@ export const generateGetReport = (utacClient) =>
       } = await utacClient.readControlesTechniques({
         immat: normalizedImmat,
         vin: normalizedVin,
+      },
+      {
+        uuid, encryptedImmat, encryptedVin,
       })
 
       if (utacStatus !== 200) {
