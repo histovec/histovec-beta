@@ -371,14 +371,22 @@ export default {
         await this.$store.dispatch(this.dispatchName, data)
         if (this.$store.state.api.http[this.apiName] === 201) {
           this.isMessageSent = true
+          this.logMailDispatchOk()
         } else {
           this.clicked = true
+          this.logMailDispatchKo()
         }
       }
     },
     isEmailValid () {
       const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return reg.test(this.email)
+    },
+    logMailDispatchOk () {
+      this.$store.dispatch('log', `${this.$route.path}/mail/ok`)
+    },
+    logMailDispatchKo () {
+      this.$store.dispatch('log', `${this.$route.path}/mail/ko`)
     }
   }
 }
