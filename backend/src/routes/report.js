@@ -70,10 +70,6 @@ const getSIV = async (id, uuid) => {
       controle_qualite: controleQualite = '',
     } = hits[0]._source
 
-    // @todo: remove logs after MEP success about ask_ct
-    appLogger.info(`-- utac_ask_ct ==> ${rawAskCt}`)
-    appLogger.info(`-- utac_encrypted_immat ==> ${encryptedImmat}`)
-    appLogger.info(`-- utac_encrypted_vin ==> ${encryptedVin}`)
     appLogger.info(`-- controle_qualite ==> ${controleQualite}`)
 
     const askCt = rawAskCt === 'OUI'
@@ -195,10 +191,8 @@ export const generateGetReport = (utacClient) =>
       return
     }
 
-    appLogger.info(`-- encryptedImmat ==> ${encryptedImmat}`)
-
     const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-    appLogger.info(`-- immat ==> ${immat}`)
+    appLogger.debug(`-- immat ==> ${immat}`)
 
     // 2 - UTAC
 
@@ -215,9 +209,6 @@ export const generateGetReport = (utacClient) =>
     // Only annulationCI vehicles don't have encryptedImmat
     const isAnnulationCI = Boolean(!encryptedImmat)
     if (!askCt || isAnnulationCI || !isApiActivated) {
-      appLogger.info({ message: 'No call to UTAC api' })
-      appLogger.info({ encryptedImmat: isAnnulationCI ? 'no encrypted immat found' : encryptedImmat })
-      appLogger.info({ isApiActivated })
 
       res.status(200).json({
         success: true,
@@ -240,7 +231,6 @@ export const generateGetReport = (utacClient) =>
     const utacData = await getAsync(utacDataCacheId)
 
     if (!ignoreUtacCache && utacData) {
-      appLogger.warn('-- Cached CT')
       try {
         res.status(200).json({
           success: true,
@@ -260,16 +250,16 @@ export const generateGetReport = (utacClient) =>
     }
 
     const normalizedImmat = normalizeImmatForUtac(immat)
-    appLogger.info(`-- normalized immat ==> ${normalizedImmat}`)
+    appLogger.debug(`-- normalized immat ==> ${normalizedImmat}`)
 
     const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
     const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
     const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
-    appLogger.info(`-- vin ==> ${vin}`)
+    appLogger.debug(`-- vin ==> ${vin}`)
 
     const normalizedVin = vin.toUpperCase()
-    appLogger.info(`-- normalized vin ==> ${normalizedVin}`)
+    appLogger.debug(`-- normalized vin ==> ${normalizedVin}`)
 
     const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
     const isValidVin = Boolean(validVinRegex.test(vin))
