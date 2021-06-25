@@ -10,6 +10,7 @@
             class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-15 no-padding"
             href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
             target="_blank"
+            @click="logSimplimmatImage"
           >
             <img
               class="img-responsive"
@@ -27,6 +28,7 @@
             class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-14 no-padding"
             href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
             target="_blank"
+            @click="logSimplimmatLink"
           >
             Simplimmat <i class="fa fa-external-link pl-5"></i>
           </a>.
@@ -489,6 +491,15 @@ export default {
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/synthesis`)
   },
+
+  methods: {
+    logSimplimmatImage () {
+      this.$store.dispatch('log', `${this.$route.path}/simplimmat/image`)
+    },
+    logSimplimmatLink () {
+      this.$store.dispatch('log', `${this.$route.path}/simplimmat/link`)
+    }
+  }
 }
 
 </script>

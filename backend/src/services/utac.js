@@ -168,7 +168,10 @@ module.exports.UTACClient = class UTACClient {
     }
   }
 
-  async readControlesTechniques ({ immat, vin }) {
+  async readControlesTechniques ({ immat, vin }, { uuid, encryptedImmat, encryptedVin }) {
+    const start = new Date()
+    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_start`)
+
     appLogger.debug({
       debug: 'UTACClient - readControlesTechniques',
       immat,
@@ -191,7 +194,13 @@ module.exports.UTACClient = class UTACClient {
         ...(isVinSentToUtac ? { vin } : {}),
       })
 
+      const end = new Date()
+      const executionTime = end - start
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
+
       if (response.data && response.data.ct && response.data.update_date) {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
+
         appLogger.debug({
           debug: 'UTAC result found',
           immat,
@@ -205,6 +214,8 @@ module.exports.UTACClient = class UTACClient {
           updateDate: response.data.update_date,
         }
       } else {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
+
         appLogger.error({
           error: errorMessages[500],
           response: response,
@@ -215,6 +226,12 @@ module.exports.UTACClient = class UTACClient {
         }
       }
     } catch (error) {
+      const end = new Date()
+      const executionTime = end - start
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
+
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
+
       if (error.response && error.response.status === 401) {
         appLogger.error({
           error: errorMessages[401],
