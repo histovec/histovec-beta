@@ -47,20 +47,31 @@ const computeCertifDepuis = (dateString) => {
       dateString
   )
 
-  const nbMonth = Math.floor(dayjs().diff(new Date(convertedDateString), 'month'))
+  const nbMonths = Math.floor(dayjs().diff(new Date(convertedDateString), 'month'))
 
-  if (nbMonth <= 18) {
-    return `${nbMonth} mois`
+  if (nbMonths <= 18) {
+    return `${nbMonths} mois`
   } else {
-    const year = Math.floor(nbMonth / 12)
+    const year = Math.floor(nbMonths / 12)
     const yearLabel = year > 1 ? `${year} ans` : `${year} an`
-    const month = nbMonth - 12 * year
+    const month = nbMonths - 12 * year
     if ((month > 0) && (year < 10)) {
       return `${yearLabel} et ${month} mois`
     } else {
       return yearLabel
     }
   }
+}
+
+const computeCertifMonths = (dateString) => {
+  // Si on détecte que la date est au format FR alors on la convertie
+  const convertedDateString = (
+    dayjs(dateString, 'DD/MM/YYYY').isValid() ?
+      dayjs(dateString, 'DD/MM/YYYY').format('YYYY-MM-DD') :
+      dateString
+  )
+
+  return Math.floor(dayjs().diff(new Date(convertedDateString), 'month'))
 }
 
 // @todo: use utils/vehicle
@@ -74,6 +85,19 @@ const getVehiculeLogo = (genre) => {
     return 'truck'
   } else {
     return 'car'
+  }
+}
+
+const getNormalizedVehiculeLogo = (genre) => {
+  const moto = ['MTL', 'MTT1', 'MTT2', 'MTTE', 'CL']
+  const truck = ['CAM', 'Deriv-VP', 'TRA', 'TRR', 'TCP']
+
+  if (moto.includes(genre)) {
+    return 'MOTO'
+  } else if (truck.includes(genre)) {
+    return 'CAMION'
+  } else {
+    return 'VOITURE'
   }
 }
 
@@ -438,6 +462,7 @@ const certificatVehiculeMapping = ({
   return {
     courant: date_emission_CI || MISSING_VALUE,
     depuis: computeCertifDepuis(olderImmatriculationHistoriqueItem.opa_date),
+    depuisMonths: computeCertifMonths(olderImmatriculationHistoriqueItem.opa_date),
     etranger: isImported,  // véhicule importé: changement de règle de gestion #406
     fr: franceImportDate,
     isIncertain: (
@@ -864,6 +889,8 @@ const processSivData = (sivData) => {
   const hasSinistre = Boolean(sinistres.length)
   const lastSinistreYear = hasSinistre ? sinistresYears[0] : undefined
 
+  const lastSinistreDate = hasSinistre ? sinistres[0].date : undefined
+
   let sinistresCount = sinistres.map((sinistre) =>
     (sinistre.opa_type === 'INSCRIRE_OVE') ? 10 : 0
   )
@@ -879,15 +906,127 @@ const processSivData = (sivData) => {
   })
   const hasResolution = Boolean(resolutions.length)
   const lastResolutionYear = hasResolution ? resolutionsYears[0] : undefined
+  const lastResolutionDate = hasResolution ? resolutions[0].date : undefined
 
   const isApte = (
     lastResolutionYear > lastSinistreYear ||
     (!administratif.hasSuspension && !administratif.opposition.hasOve && !administratif.opposition.hasOvei)
   )
 
+  const vignetteNumero = getVignetteNumero(
+    sivData.CTEC_RLIB_GENRE,
+    sivData.CTEC_RLIB_CATEGORIE,
+    getTypeCarburant(sivData.CTEC_RLIB_ENERGIE),
+    sivData.CTEC_RLIB_POLLUTION,
+    sivData.date_premiere_immat,
+  )
+
+  const isFniConverti = Boolean(descendingHistoriqueForReport.find(entry => entry.opa_type === 'CONVERSION_DOSSIER_FNI'))
+
+  const logoVehicule = getVehiculeLogo(sivData.CTEC_RLIB_GENRE)
+  const normalizedLogoVehicule = getNormalizedVehiculeLogo(sivData.CTEC_RLIB_GENRE)
+
+  const titulairesCount = computeTitulaireCount(descendingHistoriqueForReport, certificat.isIncertain)
+
+  const newHistorique = sivData.new_historique.map(elt => (
+    {
+      ...elt,
+      opa_date: dayjs(elt.opa_date).format('DD/MM/YYYY'),
+      nature: operationsMapping[elt.opa_type],
+    }
+  ))
+
+  const areHistoriquesEquals = (h1, h2) => {
+    if (h1.length !== h2.length) {
+      return false
+    }
+
+    for (let i = 0; i < h1.length; i++) {
+      if (h1[i].date !== h2[i].opa_date || h1[i].opa_type !== h2[i].opa_type) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  /* eslint-disable-next-line no-console */
+  console.log('lastResolutionDate = ', lastResolutionDate)
+  /* eslint-disable-next-line no-console */
+  console.log('sivData.date_derniere_resolution = ', sivData.date_derniere_resolution)
+
+  const dataToCompare = {
+    age_certificat: {
+      old: certificat.depuisMonths,
+      new: parseInt(sivData.age_certificat),
+    },
+    critair: {
+      old: vignetteNumero,
+      new: sivData.critair,
+    },
+    date_derniere_resolution: {
+      old: lastResolutionDate,
+      new: sivData.date_derniere_resolution,
+    },
+    date_dernier_sinistre: {
+      old: lastSinistreDate,
+      new: sivData.date_dernier_sinistre,
+    },
+    date_import_france: {
+      old: certificat.fr,
+      new: sivData.date_import_france,
+    },
+    date_premiere_immat_etranger: {
+      old: certificat.etranger ? sivData.date_premiere_immat : undefined,
+      new: sivData.date_premiere_immat_etranger ? dayjs(sivData.date_premiere_immat_etranger).format('DD/MM/YYYY') : undefined,
+    },
+    has_pve: {
+      old: administratif.hasPve,
+      new: sivData.has_pve === 'OUI',
+    },
+    new_historique: {
+      old: descendingHistoriqueForReport,
+      new: newHistorique,
+    },
+    is_apte_a_circuler: {
+      old: isApte,
+      new: sivData.is_apte_a_circuler === 'OUI',
+    },
+    is_fni: {
+      old: fniState === 'OUI',
+      new: sivData.is_fni === 'OUI',
+      intermediateField: true,
+    },
+    is_fni_converti: {
+      old: isFniConverti,
+      new: sivData.is_fni_converti === 'OUI',
+      intermediateField: true,
+    },
+    is_incertain: {
+      old: certificat.isIncertain,
+      new: sivData.is_incertain === 'OUI',
+      intermediateField: true,
+    },
+    logo_genre: {
+      old: normalizedLogoVehicule,
+      new: sivData.logo_genre,
+    },
+    nb_sinistres: {
+      old: sinistresCount,
+      new: parseInt(sivData.nb_sinistres),
+    },
+    nb_titulaires: {
+      old: titulairesCount,
+      new: parseInt(sivData.nb_titulaires),
+    },
+  }
+
   processedSivData = {
     ...processedSivData,
     ageVeh: sivData.age_annee,
+
+    dataToCompare,
+    areHistoriquesEquals,
 
     // véhicule importé : changement de règle de gestion #406
     etranger: (
@@ -899,10 +1038,10 @@ const processSivData = (sivData) => {
     fniState,
     historique: descendingHistoriqueForReport,
     isApte,
-    logoVehicule: getVehiculeLogo(sivData.CTEC_RLIB_GENRE),
+    logoVehicule,
 
     proprietairesCount: sivData.nb_proprietaire,
-    titulairesCount: computeTitulaireCount(descendingHistoriqueForReport, certificat.isIncertain),
+    titulairesCount,
 
     hasSinistre,
     lastSinistreYear,
@@ -914,13 +1053,7 @@ const processSivData = (sivData) => {
     resolutions,
 
     usages: sivData.usage || [],
-    vignetteNumero: getVignetteNumero(
-      sivData.CTEC_RLIB_GENRE,
-      sivData.CTEC_RLIB_CATEGORIE,
-      getTypeCarburant(sivData.CTEC_RLIB_ENERGIE),
-      sivData.CTEC_RLIB_POLLUTION,
-      sivData.date_premiere_immat,
-    ),
+    vignetteNumero,
   }
 
   /* eslint-disable-next-line no-console */

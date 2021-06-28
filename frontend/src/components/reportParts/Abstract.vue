@@ -40,6 +40,107 @@
 
     <div v-if="holder" class="separator-2 separator-lg"></div>
 
+    <div v-if="$store.state.config.newData">
+      <div
+        v-if="$store.state.config.newData"
+        class="row"
+      >
+        <div class="col-md-7">
+          <h6 class="title p-h-15">
+            Nouvelles données du V
+          </h6>
+        </div>
+      </div>
+      <div
+        v-for="(entry, fieldName) in processedSivData.dataToCompare"
+        :key="fieldName"
+      >
+        <div
+          class="row"
+        >
+          <div class="col-md-12 col-sm-12">
+            <span>
+              <span v-if="fieldName === 'new_historique'">
+                <span v-if="processedSivData.areHistoriquesEquals(entry.old, entry.new)">
+                  <i class="fa fa-check info_green fa-2x"></i>
+                </span>
+                <span v-else>
+                  <i class="fa fa-times-circle info_red fa-2x"></i>
+                </span>
+              </span>
+              <span v-else>
+                <span v-if="entry.old === entry.new">
+                  <i class="fa fa-check info_green fa-2x"></i>
+                </span>
+                <span v-else>
+                  <i class="fa fa-times-circle info_red fa-2x"></i>
+                </span>
+              </span>
+              &nbsp;
+              <span style="font-weight: bold">{{fieldName}}</span>
+              &nbsp;
+              <span v-if="entry.intermediateField">
+                <i class="fa fa-eye-slash info_red fa-2x"></i>
+              </span>
+              <span v-else>
+                <i class="fa fa-eye info_green fa-2x"></i>
+              </span>
+            </span>
+          </div>
+          <div class="col-md-12 col-sm-12">
+            <span v-if="fieldName === 'new_historique'">
+              <div class="col-md-6 col-sm-6">
+                <div style="text-align: center">OLD</div>
+                <ul>
+                  <li v-for="oldItem in entry.old" :key="'old' + fieldName + oldItem.opa_type + oldItem.date">
+                    <ul>
+                      <li>
+                        opa_date: {{ oldItem.date }}
+                      </li>
+                      <li>
+                        opa_type: {{ oldItem.opa_type }}
+                      </li>
+                      <li>
+                        nature: {{ oldItem.nature }}
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-md-6 col-sm-6">
+                <div style="text-align: center">NEW</div>
+                <ul>
+                  <li v-for="newItem in entry.new" :key="'new' + fieldName + newItem.opa_type + newItem.opa_date">
+                    <ul>
+                      <li>
+                        opa_date: {{ newItem.opa_date }}
+                      </li>
+                      <li>
+                        opa_type: {{ newItem.opa_type }}
+                      </li>
+                      <li>
+                        nature: {{ newItem.nature }}
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </span>
+            <span v-else>
+              <div>old = {{entry.old}}</div>
+              <div>new = {{entry.new}}</div>
+            </span>
+          </div>
+          <div class="separator-2 separator-lg"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div v-if="$store.state.config.newData" class="separator-2 separator-lg"></div>
+
+
     <div
       v-if="holder"
       class="row"
@@ -144,7 +245,7 @@
             class="col-sm-5"
           >
             <span class="color-info_2 bold_4 txt-small-13">{{ usagesMapping[usage].adv }}</span>
-            <br />
+  <br />
             <a
               v-if="usagesMapping[usage].adv"
               :href="usagesMapping[usage].link"
