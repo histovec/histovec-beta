@@ -1,7 +1,7 @@
 #######################
 # Step 1: Base target #
 #######################
-FROM node:15.12.0-slim as base
+FROM node:16-slim as base
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
@@ -19,6 +19,8 @@ ENV APP ${APP}
 ENV APP_VERSION ${app_ver}
 
 WORKDIR /$app_path
+
+RUN apt-get update || : && apt-get install python3 build-essential -y
 
 # update debian w/proxy & mirror then installs git in case of git dependencies
 RUN if [ ! -z "${NPM_GIT}" ]; then \

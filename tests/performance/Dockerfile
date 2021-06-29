@@ -1,7 +1,7 @@
 ############################
 # Artillery.io load tester #
 ############################
-FROM node:15.12.0-slim
+FROM node:16-slim
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
