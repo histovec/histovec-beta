@@ -1,5 +1,5 @@
 #### MINIMAL RESTANA SERVER NOT MEANT FOR PRODUCTION #####
-FROM node:14.15.0-slim as base
+FROM node:16-slim as base
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy

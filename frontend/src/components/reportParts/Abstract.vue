@@ -7,19 +7,19 @@
     >
       <div class="col-md-3 col-sm-5">
         <a
-            class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-15 no-padding"
-            href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
-            target="_blank"
-            @click="logSimplimmatImage"
+          class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-15 no-padding"
+          href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
+          target="_blank"
+          @click="logSimplimmatImage"
+        >
+          <img
+            class="img-responsive"
+            width="150px"
+            :src="imageLogoSimplimmat"
+            alt="Application Simplimmat"
           >
-            <img
-              class="img-responsive"
-              width="150px"
-              :src="imageLogoSimplimmat"
-              alt="Application Simplimmat"
-            >
         </a>
-        <br/>
+        <br />
       </div>
       <div class="col-md-9 col-sm-7">
         <div class="txt-small-14">
@@ -32,13 +32,17 @@
           >
             Simplimmat <i class="fa fa-external-link pl-5"></i>
           </a>.
-          <br/>
+          <br />
           Elle <span class="info_red">simplifiera</span> et <span class="info_red">sécurisera</span> vos formalités administratives pour la <span class="info_red">cession</span> ou <span class="info_red">l'immatriculation</span> de votre véhicule.
         </div>
       </div>
     </div>
 
-    <div v-if="holder" class="separator-2 separator-lg"></div>
+    <div
+      v-if="holder"
+      class="separator-2 separator-lg"
+    >
+    </div>
 
     <div v-if="$store.state.config.newData">
       <div
@@ -77,7 +81,7 @@
                 </span>
               </span>
               &nbsp;
-              <span style="font-weight: bold">{{fieldName}}</span>
+              <span style="font-weight: bold">{{ fieldName }}</span>
               &nbsp;
               <span v-if="entry.intermediateField">
                 <i class="fa fa-eye-slash info_red fa-2x"></i>
@@ -92,7 +96,10 @@
               <div class="col-md-6 col-sm-6">
                 <div style="text-align: center">OLD</div>
                 <ul>
-                  <li v-for="oldItem in entry.old" :key="'old' + fieldName + oldItem.opa_type + oldItem.date">
+                  <li
+                    v-for="oldItem in entry.old"
+                    :key="'old' + fieldName + oldItem.opa_type + oldItem.date"
+                  >
                     <ul>
                       <li>
                         opa_date: {{ oldItem.date }}
@@ -111,7 +118,10 @@
               <div class="col-md-6 col-sm-6">
                 <div style="text-align: center">NEW</div>
                 <ul>
-                  <li v-for="newItem in entry.new" :key="'new' + fieldName + newItem.opa_type + newItem.opa_date">
+                  <li
+                    v-for="newItem in entry.new"
+                    :key="'new' + fieldName + newItem.opa_type + newItem.opa_date"
+                  >
                     <ul>
                       <li>
                         opa_date: {{ newItem.opa_date }}
@@ -128,17 +138,23 @@
               </div>
             </span>
             <span v-else>
-              <div>old = {{entry.old}}</div>
-              <div>new = {{entry.new}}</div>
+              <div>old = {{ entry.old }}</div>
+              <div>new = {{ entry.new }}</div>
             </span>
           </div>
-          <div class="separator-2 separator-lg"></div>
-
+          <div
+            class="separator-2 separator-lg"
+          >
+          </div>
         </div>
       </div>
     </div>
 
-    <div v-if="$store.state.config.newData" class="separator-2 separator-lg"></div>
+    <div
+      v-if="$store.state.config.newData"
+      class="separator-2 separator-lg"
+    >
+    </div>
 
 
     <div
@@ -245,7 +261,7 @@
             class="col-sm-5"
           >
             <span class="color-info_2 bold_4 txt-small-13">{{ usagesMapping[usage].adv }}</span>
-  <br />
+            <br />
             <a
               v-if="usagesMapping[usage].adv"
               :href="usagesMapping[usage].link"

@@ -33,18 +33,6 @@
     <div class="separator"></div>
     <div class="row">
       <div class="col-sm-6">
-        <span class="txt-small-12">Nom commercial</span>
-      </div>
-      <div class="col-sm-2">
-        <span class="bold txt-small-12">D.3</span>
-      </div>
-      <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.modele }}</span>
-      </div>
-    </div>
-    <div class="separator"></div>
-    <div class="row">
-      <div class="col-sm-6">
         <span class="txt-small-12">Numéro CNIT</span>
       </div>
       <div class="col-sm-2">
@@ -52,6 +40,18 @@
       </div>
       <div class="col-sm-4">
         <span class="info_red txt-small-12">{{ ctec.cnit }}</span>
+      </div>
+    </div>
+    <div class="separator"></div>
+    <div class="row">
+      <div class="col-sm-6">
+        <span class="txt-small-12">Nom commercial</span>
+      </div>
+      <div class="col-sm-2">
+        <span class="bold txt-small-12">D.3</span>
+      </div>
+      <div class="col-sm-4">
+        <span class="info_red txt-small-12">{{ ctec.modele }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -69,13 +69,13 @@
     <div class="separator"></div>
     <div class="row">
       <div class="col-sm-6">
-        <span class="txt-small-12">Type de reception</span>
+        <span class="txt-small-12">Type de réception</span>
       </div>
       <div class="col-sm-2">
         <span class="bold txt-small-12">&nbsp;</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">CE</span>
+        <span class="info_red txt-small-12">{{ ctec.reception.type }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -148,7 +148,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.admissible || ctec.PT.admissible || ctec.PT.AC || ctec.PT.RA">
+    <div v-if="ctec.PT.admissible || ctec.PT.AC || ctec.PT.RA">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -195,7 +195,7 @@
     <div v-if="ctec.categorie">
       <div class="row">
         <div class="col-sm-6">
-          <span class="txt-small-12">Catégorie (Ce)</span>
+          <span class="txt-small-12">Catégorie (CE)</span>
         </div>
         <div class="col-sm-2">
           <span class="bold txt-small-12">J</span>
@@ -223,7 +223,7 @@
     <div v-if="ctec.carrosserie.ce">
       <div class="row">
         <div class="col-sm-6">
-          <span class="txt-small-12">Carrosserie (Ce)</span>
+          <span class="txt-small-12">Carrosserie (CE)</span>
         </div>
         <div class="col-sm-2">
           <span class="bold txt-small-12">J.2</span>
@@ -370,16 +370,21 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.places.debout">
+    <div>
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Places debout</span>
         </div>
         <div class="col-sm-2">
-          <span class="bold txt-small-12">S.3</span>
+          <span class="bold txt-small-12">S.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.places.debout }}</span>
+          <span
+            v-if="ctec.places.debout"
+            class="info_red txt-small-12"
+          >
+            {{ ctec.places.debout }}
+          </span>
         </div>
       </div>
       <div class="separator"></div>
