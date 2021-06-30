@@ -950,11 +950,6 @@ const processSivData = (sivData) => {
     return true
   }
 
-  /* eslint-disable-next-line no-console */
-  console.log('lastResolutionDate = ', lastResolutionDate)
-  /* eslint-disable-next-line no-console */
-  console.log('sivData.date_derniere_resolution = ', sivData.date_derniere_resolution)
-
   const dataToCompare = {
     age_certificat: {
       old: certificat.depuisMonths,
