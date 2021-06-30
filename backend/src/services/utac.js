@@ -5,10 +5,20 @@ import { Agent as HttpsAgent } from 'https'
 import { decodingJWT } from '../util/jwt'
 import { appLogger } from '../util/logger'
 
-
 // /!\ boolean setting is passed as string /!\
 // @todo: we should use typed yaml to load settings
 const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
+
+const ERROR_MESSAGES = {
+  401: 'Authentication to UTAC api failed',
+  403: 'Forbidden',
+  404: 'Unknown immatriculation',
+  406: 'Invalid request',
+  429: 'Too many request',
+  503: 'Unavailable UTAC api',
+  malformedResponse: 'Missing information in UTAC response',
+  default: 'Unexpected error from UTAC api',
+}
 
 module.exports.UTACClient = class UTACClient {
   constructor () {
@@ -18,68 +28,87 @@ module.exports.UTACClient = class UTACClient {
     const baseURL = isFakedUtacApi ? config.utac.fakeApiUrl : config.utac.apiUrl
 
     const options = {
-      ...(
-        // No https needed for local faked api
-        // For production, https certificate is managed by the PIO
-        isFakedUtacApi || config.isProd
-          ? {}
-          : { httpsAgent: new HttpsAgent({
-            keepAlive: true,
-            ca: readFileSync(config.utac.utacPem),
-            pfx: readFileSync(config.utac.histovecPfx),
-            passphrase: config.utac.histovecPfxPassphrase,
-          }) }
-      ),
+      // No https needed for local faked api
+      // For production, https certificate is managed by the PIO
+      httpsAgent: !config.isProd && !isFakedUtacApi
+        ? new HttpsAgent({
+          keepAlive: true,
+          ca: readFileSync(config.utac.utacPem),
+          pfx: readFileSync(config.utac.histovecPfx),
+          passphrase: config.utac.histovecPfxPassphrase,
+        }) : undefined,
       baseURL,
       timeout: config.utac.timeout,
       headers: {
         Accepts: 'application/json',
         'Content-Type': 'application/json',
-        ...((config.isProd && !isFakedUtacApi) ? { Token: config.utac.inesToken } : {}),
+        Token: config.isProd && !isFakedUtacApi ? config.utac.inesToken : '',
       },
     }
 
     this.axios = axios.create(options)
 
-    this.axios.interceptors.request.use(
-      async (request) => {
-        appLogger.debug({
-          debug: `UTAC - ${request.url}`,
-          data: request.data || {},
-          auth: request.auth || {},
-          headers: request.headers || {},
-        })
-
-        if (request.url !== '/auth') {
-          const authorizationHeader = this.axios.defaults.headers.common['Authorization']
-
-          if (authorizationHeader) {
-            const utacApiJWT = authorizationHeader.split(' ')[1]
-            const { exp: expirationTimeAsSeconds } = decodingJWT(utacApiJWT)
-
-            // Convert Date.getTime() to seconds since JWT uses time with seconds
-            const nowTimeAsSeconds = Math.floor(new Date().getTime() / 1000)
-
-            if (nowTimeAsSeconds > expirationTimeAsSeconds) {
-              const authorizationHeader = await this._authenticate()
-              if (authorizationHeader) {
-                request.headers.Authorization = authorizationHeader
-              }
-            }
-          } else {
-            const authorizationHeader = await this._authenticate()
-            if (authorizationHeader) {
-              request.headers.Authorization = authorizationHeader
-            }
-          }
-        }
-
-        return request
-      },
-      error => {
-        return Promise.reject(error)
+    const needAuth = (request) => {
+      if (request.url === '/auth') {
+        return false
       }
-    )
+
+      const authorizationHeader = this.axios.defaults.headers.common['Authorization']
+
+      if (!authorizationHeader) {
+        return true
+      }
+
+      const utacApiJWT = authorizationHeader.split(' ')[1]
+      const { exp: expirationTimeAsSeconds } = decodingJWT(utacApiJWT)
+
+      // Convert Date.getTime() to seconds since JWT uses time with seconds
+      const nowTimeAsSeconds = Math.floor(new Date().getTime() / 1000)
+
+      return nowTimeAsSeconds > expirationTimeAsSeconds
+    }
+
+    const authInterceptor = async (request) => {
+      appLogger.debug({
+        debug: `UTAC - ${request.url}`,
+        data: request.data || {},
+        auth: request.auth || {},
+        headersCommon: request.headers.common || {},
+        headers: request.headers || {},
+      })
+
+      if (!needAuth(request)) {
+        return request
+      }
+
+      const authorizationHeader = await this._authenticate()
+      if (authorizationHeader) {
+        request.headers.Authorization = authorizationHeader
+      }
+
+      return request
+    }
+
+    const errorInterceptor = (error) => {
+      const status = error?.response?.status || 'default'
+      const message = ERROR_MESSAGES[status]
+
+      appLogger.debug({
+        debug: 'errorInterceptor',
+        error,
+        status,
+        message,
+      })
+
+      return Promise.reject({
+        status: status === 'default' ? 500 : status,
+        message,
+      })
+    }
+
+    // @todo: use 'runWhen' when it will be released
+    this.axios.interceptors.request.use(authInterceptor) //, null, { runWhen: needAuth })
+    this.axios.interceptors.response.use(null, errorInterceptor)
   }
 
   async healthCheck () {
@@ -87,53 +116,9 @@ module.exports.UTACClient = class UTACClient {
       debug: 'UTACClient - healthCheck',
     })
 
-    try {
-      const response = await this.axios.get('/healthcheck')
+    const { status } = await this.axios.get('/healthcheck').catch(err => err)
 
-      return {
-        status: response.status,
-        message: 'OK',
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 429) {
-        // @todo: use https://www.npmjs.com/package/request-rate-limiter instead
-        const errorMessage = 'Too many request'
-
-        appLogger.error({
-          error: errorMessage,
-          remote_error: error.message,
-        })
-
-        return {
-          status: 429,
-          message: errorMessage,
-        }
-      } else if (error.response && error.response.status === 503) {
-        const errorMessage = 'Unavailable UTAC api'
-
-        appLogger.error({
-          error: errorMessage,
-          remote_error: error.message,
-        })
-
-        return {
-          status: 503,
-          message: errorMessage,
-        }
-      } else {
-        const errorMessage = 'Unexpected UTAC api error'
-
-        appLogger.error({
-          error: errorMessage,
-          remote_error: error.message,
-        })
-
-        return {
-          status: 500,
-          message: errorMessage,
-        }
-      }
-    }
+    return { status }
   }
 
   async _authenticate () {
@@ -157,13 +142,14 @@ module.exports.UTACClient = class UTACClient {
 
         return authorizationHeader
       }
+
       appLogger.error({
         error: 'UTAC authentication error : no token',
       })
     } catch (error) {
       appLogger.error({
         error: 'UTAC authentication failed',
-        remote_error: error,
+        remoteError: error,
       })
     }
   }
@@ -177,54 +163,18 @@ module.exports.UTACClient = class UTACClient {
       immat,
     })
 
-    const errorMessages = {
-      401: 'Authentication to UTAC api failed',
-      403: 'Forbidden',
-      404: 'Unknown immatriculation',
-      406: 'Invalid request',
-      429: 'Too many request',
-      500: 'Missing information in UTAC response',
-      503: 'Unavailable UTAC api',
-      default: 'Unexpected error from UTAC api',
-    }
+    let response = null
 
     try {
-      const response = await this.axios.post('/immat/search', {
+      response = await this.axios.post('/immat/search', {
         immat,
         ...(isVinSentToUtac ? { vin } : {}),
       })
-
       const end = new Date()
       const executionTime = end - start
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
 
-      if (response.data && response.data.ct && response.data.update_date) {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
-
-        appLogger.debug({
-          debug: 'UTAC result found',
-          immat,
-          ct: response.data.ct,
-          update_date: response.data.update_date,
-        })
-
-        return {
-          status: response.status,
-          ct: response.data.ct,
-          updateDate: response.data.update_date,
-        }
-      } else {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
-
-        appLogger.error({
-          error: errorMessages[500],
-          response: response,
-        })
-        return {
-          status: 500,
-          message: errorMessages[500],
-        }
-      }
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
     } catch (error) {
       const end = new Date()
       const executionTime = end - start
@@ -232,77 +182,32 @@ module.exports.UTACClient = class UTACClient {
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
 
-      if (error.response && error.response.status === 401) {
-        appLogger.error({
-          error: errorMessages[401],
-          remote_error: error.message,
-        })
+      return error
+    }
 
-        return {
-          status: 401,
-          message: errorMessages[401],
-        }
-      } else if (error.response && error.response.status === 403) {
-        appLogger.error({
-          error: errorMessages[403],
-          remote_error: error.message,
-        })
+    if (!response?.data?.ct || !response?.data?.update_date) {
+      appLogger.error({
+        error: ERROR_MESSAGES.malformedResponse,
+        response,
+      })
 
-        return {
-          status: 403,
-          message: errorMessages[403],
-        }
-      } else if (error.response && error.response.status === 404) {
-        appLogger.error({
-          error: errorMessages[404],
-          remote_error: error.message,
-        })
-
-        return {
-          status: 404,
-          message: errorMessages[404],
-        }
-      } else if (error.response && error.response.status === 406) {
-        appLogger.error({
-          error: errorMessages[406],
-          remote_error: error.message,
-        })
-
-        return {
-          status: 406,
-          message: errorMessages[406],
-        }
-      } else if (error.response && error.response.status === 429) {
-        appLogger.error({
-          error: errorMessages[429],
-          remote_error: error.message,
-        })
-
-        return {
-          status: 429,
-          message: errorMessages[429],
-        }
-      } else if (error.response && error.response.status === 503) {
-        appLogger.error({
-          error: errorMessages[503],
-          remote_error: error.message,
-        })
-
-        return {
-          status: 503,
-          message: errorMessages[503],
-        }
-      } else {
-        appLogger.error({
-          error: errorMessages['default'],
-          remote_error: error.message,
-        })
-
-        return {
-          status: error.response.status,
-          message: errorMessages['default'],
-        }
+      return {
+        status: 500,
+        message: ERROR_MESSAGES.malformedResponse,
       }
+    }
+
+    appLogger.debug({
+      debug: 'UTAC result found',
+      immat,
+      ct: response.data.ct,
+      update_date: response.data.update_date,
+    })
+
+    return {
+      status: response.status,
+      ct: response.data.ct,
+      updateDate: response.data.update_date,
     }
   }
 }
