@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import orderBy from 'lodash.orderby'
 
-import { booleanLabel, camelize, formatDate, formatDateOrDefault, padString } from '../js/format'
+import { booleanLabel, camelize, formatDate, formatDateOrDefault } from '../js/format'
 import { getTypeCarburant } from '../../utils/vehicle/energie'
 
 import { NUMERO_EURO } from '../../constants/vehicle/numeroEuro'
@@ -488,7 +488,7 @@ const titulaireMapping = ({
 
   return {
     identite: [pers_raison_soc_tit, pers_siren_tit, pers_nom_naissance_tit, pers_prenom_tit].join(' '),
-    adresse: adr_code_postal_tit ? padString(adr_code_postal_tit, 5) : MISSING_VALUE,
+    adresse: adr_code_postal_tit || MISSING_VALUE,
   }
 }
 

@@ -1,8 +1,6 @@
 import 'whatwg-fetch'
 import store from '@/store'
 import base64ArrayBuffer from 'base64-arraybuffer'
-import { stringifyCodePostal } from '../utils/dataPreparationFormat'
-
 import apiConf from '@/assets/json/backend.json'
 
 const AES_BLOCK_SIZE = 16
@@ -54,7 +52,7 @@ const decrypt = async (urlSafeBase64Input, rawKey) => {
   })
 
   try {
-    decrypted = stringifyCodePostal(utf8TextDecoder.decode(decrypted))
+    decrypted = utf8TextDecoder.decode(decrypted)
   } catch (e) {
     /* eslint-disable-next-line no-console */
     console.log('decrypt_toString_failure', e)

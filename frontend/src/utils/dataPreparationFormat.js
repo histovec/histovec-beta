@@ -13,7 +13,3 @@ export const normalizeKeyAsDataPreparation = (key) => {
 
   return lowerAlphaNumericKey
 }
-
-// Useful to normalize code postal 000NNN integer to string
-// /!\ @todo: should be stringified at data preparation step
-export const stringifyCodePostal = (stringifiedObject) => stringifiedObject.replace(/: (0[0-9]+)/g, ': "$1"')
