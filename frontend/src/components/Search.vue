@@ -672,7 +672,10 @@
 <script>
 import Shake from 'shake.js'
 import dayjs from 'dayjs'
-import { hash } from '../utils/dataPreparationFormat'
+
+import { hash } from '../utils/crypto'
+import { urlSafeBase64Encode } from '../utils/encoding'
+import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../utils/dataPreparationFormat'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
 import imageDateImmatriculationFNI from '@/assets/img/aide_fni_date_immatriculation.png'
@@ -927,10 +930,11 @@ export default {
       }
     },
     id () {
-      return `${this.personneId}${this.vehicleId}${this.currentMonthNumber}`
+      const id = `${this.personneId}${this.vehicleId}${this.currentMonthNumber}`
+      return normalizeIdvAsDataPreparation(id)
     },
     key () {
-      return this.vehicleId
+      return normalizeKeyAsDataPreparation(this.vehicleId)
     }
   },
   created () {
@@ -1042,19 +1046,22 @@ export default {
       this.status = 'posting'
       this.defaultEmtpyFields()
 
-      const hashedId = await hash(this.id)
-      const hashedKey = await hash(this.key)
+      const hashedIdBuffer = await hash(this.id)
+      const encodedHashedId = urlSafeBase64Encode(hashedIdBuffer)
+
+      const hashedKeyBuffer = await hash(this.key)
+      const encodedHashedKey = urlSafeBase64Encode(hashedKeyBuffer)
 
       if (this.checkFields) {
-        if (hashedId !== this.$store.state.histovec.id) {
+        if (encodedHashedId !== this.$store.state.histovec.id) {
           this.clearReport()
         }
 
         this.$router.push({
           name: 'report',
           params: {
-            id: hashedId,
-            key: hashedKey,
+            id: encodedHashedId,
+            key: encodedHashedKey,
             typeImmatriculation: this.typeImmatriculation
           }
         })
