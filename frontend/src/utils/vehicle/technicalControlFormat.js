@@ -2,12 +2,13 @@ import dayjs from 'dayjs'
 
 import icons from '@/assets/json/techControlIcons.json'
 import { LABELS_SINCE_20_05_2018, LABELS_BEFORE_20_05_2018 } from '../../constants/vehicle/technicalControl'
+import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '../../assets/js/format.js'
 
 
 const labelize = (controle) => {
 	const iconNature = icons.nature[controle.ct_nature]
 	const iconResultat = icons.resultat[controle.ct_resultat]
-	const controleDate = dayjs(controle.ct_date, 'DD/MM/YYYY')
+	const controleDate = dayjs(controle.ct_date, FR_DATE_FORMAT)
 
 	const CHANGE_LABEL_DATE = dayjs('2018-05-20')
 	const isOldLabel = controleDate.isBefore(CHANGE_LABEL_DATE)
@@ -17,7 +18,7 @@ const labelize = (controle) => {
 	return {
 		id: controle.ct_id,
 		date: controle.ct_date,
-		isoFormatDate: controleDate.format('YYYY-MM-DD'),
+		isoFormatDate: controleDate.format(ISO_DATE_FORMAT),
 		nature: controle.ct_nature,
 		natureLabel: labels.nature[controle.ct_nature],
 		natureIcon: [iconNature.icon, iconNature.color, iconNature.size],
