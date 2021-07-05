@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  backend:
+  public-backend:
     image: ${APP}-backend-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${BACKEND}
@@ -16,14 +16,17 @@ services:
         app_path: /${APP}
         app_name: ${APP}
         app_ver: ${APP_VERSION}
-        port: ${BACKEND_PORT}
+        port: ${PUBLIC_BACKEND_PORT}
         NPM_FIX: ${NPM_FIX}
         NPM_LATEST: ${NPM_LATEST}
         NPM_VERBOSE: ${NPM_VERBOSE}
     container_name: ${APP}-backend-${EXEC_ENV}
+    ports:
+      - ${PUBLIC_BACKEND_PORT}:${PUBLIC_BACKEND_PORT}
     environment:
       - NODE_ENV=${EXEC_ENV}
-      - BACKEND_PORT=${BACKEND_PORT}
+      - BACKEND_NAME=${BACKEND_NAME}
+      - BACKEND_PORT=${PUBLIC_BACKEND_PORT}
       - BACKEND_SECRET=${BACKEND_SECRET}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
@@ -48,32 +51,16 @@ services:
       - SMTP_PORT=${SMTP_PORT}
       - MAIL_FROM=${MAIL_FROM}
       - MAIL_TO=${MAIL_TO}
-      - PUBLIC_BACKEND=false
+      - PUBLIC_BACKEND=true
     restart: on-failure
-    links:
-      - redis
+    # volumes:
+      # - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT}/${APP}/api/v1/health"]
       interval: 60s
       timeout: 5s
       retries: 3
       start_period: 40s
-
-  redis:
-    image: ${APP}-cache:${APP_VERSION}
-    build:
-      context: ${REDIS}
-      target: cache
-      dockerfile: Dockerfile
-    container_name: ${APP}-cache
-    ports:
-      - 6379:6379
-    command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
-    volumes:
-      - ${REDIS_DATA}:/data
-      # - /var/run/docker.sock:/var/run/docker.sock
-    sysctls:
-      - net.core.somaxconn=65535
 
 networks:
   default:

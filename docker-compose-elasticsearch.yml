@@ -13,9 +13,14 @@ services:
       - cluster.name=${APP}
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM}"
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+    ports:
+      - 9200:9200
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - ${ES_DATA}:/usr/share/elasticsearch/data
+      # - /var/run/docker.sock:/var/run/docker.sock

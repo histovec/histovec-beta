@@ -1,8 +1,21 @@
 ##############################################
-# WARNING : THIS FILE SHOULDN'T BE TOUCHED   #
-#    FOR ENVIRONNEMENT CONFIGURATION         #
+#              /!\ WARNING /!\               #
+#                                            #
+#     THIS FILE SHOULDN'T BE TOUCHED FOR     #
+#        ENVIRONNEMENT CONFIGURATION         #
+#                                            #
 # CONFIGURABLE VARIABLES SHOULD BE OVERRIDED #
 # IN THE 'artifacts' FILE, AS NOT COMMITTED  #
+##############################################
+
+##############################################
+#              /!\ WARNING /!\               #
+#                                            #
+#  ALL public-backend TARGETS ARE SUPPOSED   #
+#    TO RUN AFTER RUNNING backend    #
+#       TARGETS IN ORDER TO MUTUALIZE        #
+#     ElasticSearch AND Redis INSTANCES      #
+#  AND TO SCALE public-backed HORIZONTALLY   #
 ##############################################
 
 
@@ -25,6 +38,7 @@ endif
 
 export USE_TTY := $(shell test -t 1 && USE_TTY="-t")
 export curl_progress_bar=--progress-bar --write 'Downloaded %{url_effective} %{size_download} bytes in %{time_connect} seconds (%{speed_download} bytes/s)\n'
+
 
 ##############################################
 #         APP configuration section          #
@@ -55,6 +69,9 @@ export FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
 export PUBLISH_URL_BASE           = histovec-docker-images
 export PUBLISH_URL_APP_VERSION    = $(PUBLISH_URL_BASE)/$(APP_VERSION)
 export PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
+# link VMs containers
+export LOCAL_IP=$(shell hostname -I | awk '{print $$1}')
+
 
 ##############################################
 #              reverse-proxy                 #
@@ -74,6 +91,7 @@ export FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
 export FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
 export DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
 
+
 ##############################################
 #                 frontend                   #
 ##############################################
@@ -91,13 +109,15 @@ export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
 
 ##############################################
 #           elasticsearch confs              #
+#                                            #
 #          ES_MEM should be 4096m            #
 #            in production mode              #
 ##############################################
 export ES_DATA=${BACKEND}/esdata
 export ES_DATA_BACKUP=${BACKEND}/backup/
 export ES_MEM=512m
-export ES_HOST=elasticsearch
+# Pass a FIP here
+export ES_HOST?=${LOCAL_IP}
 export ES_PORT=9200
 # vm_max_count has to be fixed into the vm host
 # or elasticsearch won't start
@@ -144,27 +164,31 @@ export openstack_url := $(shell echo $$openstack_url )
 export openstack_auth_id := $(shell echo $$openstack_auth_id )
 export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack_token | tr '\n' ' ')
 
+
 ##############################################
-#               backend confs                #
-#                 v1+ only                   #
+#          common backend confs              #
 ##############################################
+
 export BACKEND=${APP_PATH}/backend
 export BACKEND_HOST=backend
-export BACKEND_PORT=8000
 export BACKEND_SECRET?=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export BACKEND_LOGS=${LOGS}/backend
+
 # mail confs for backend and fake smtp
 # must be overrided for production mode
 export MAIL_FROM=histovec@interieur.gouv.fr
 export MAIL_TO=histovec@interieur.gouv.fr
 export SMTP_SERVER=smtp
 export SMTP_PORT=25
+
 # redis confs for backend and cache of utac data
 export REDIS=${BACKEND}/redis
 export REDIS_DATA=${REDIS}/data-dummy
 export REDIS_PERSIST=86400
-export REDIS_URL=redis
+# Pass a FIP here
+export REDIS_HOST?=${LOCAL_IP}
 export REDIS_PASSWORD
+
 # utac confs for backend and fake api
 export FAKE_UTAC_SCHEME=http
 export FAKE_UTAC_HOST=utac
@@ -174,7 +198,6 @@ export FAKE_UTAC_TIMEOUT=5000
 export FAKE_UTAC_LATENCY=500
 
 # Default values for dev environement
-
 export IS_UTAC_API_ACTIVATED?=false
 export IS_VIN_SENT_TO_UTAC?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
@@ -187,6 +210,14 @@ export HISTOVEC_PFX_PASSPHRASE?=Ch@ng€-m€-pl€@se
 export INES_TOKEN?=yOu-t0k€n-t0-m€?
 export UTAC_PEM?=src/utac/utac.pem
 
+##############################################
+#               backend confs                #
+##############################################
+
+# public-backend should use 80 or 443
+# local mode should use default value
+export BACKEND_PORT?=8010
+
 # packaging
 export DC_DEV_BACKEND = ${DC_PREFIX}-dev-backend.yml
 export DC_BUILD_BACKEND = ${DC_PREFIX}-backend.yml
@@ -196,8 +227,32 @@ export FILE_BACKEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-backend-dist.tar.gz
 export FILE_BACKEND_DIST_LATEST_VERSION = $(APP)-latest-backend-dist.tar.gz
 export FILE_IMAGE_BACKEND_APP_VERSION = $(APP)-backend-$(APP_VERSION)-image.tar
 export FILE_IMAGE_BACKEND_LATEST_VERSION = $(APP)-backend-latest-image.tar
+
 export FILE_IMAGE_REDIS_APP_VERSION = $(APP)-redis-$(APP_VERSION)-image.tar
 export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
+
+##############################################
+#            public backend confs            #
+##############################################
+
+# Arbitrary uuid to let public-backend call backend api (uuid is needed) with a common UUID
+export PUBLIC_BACKEND_API_UUID?=d6696bfd-4f12-42a9-9604-1378602f4ec4
+export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
+
+# public-backend should use 80 or 443
+# local mode should use default value
+export PUBLIC_BACKEND_PORT?=8020
+
+# packaging
+export DC_DEV_PUBLIC_BACKEND = ${DC_PREFIX}-dev-public-backend.yml
+export DC_BUILD_PUBLIC_BACKEND = ${DC_PREFIX}-public-backend.yml
+export DC_RUN_PUBLIC_BACKEND = ${DC_PREFIX}-public-backend.yml
+export FILE_PUBLIC_BACKEND_APP_VERSION = $(APP)-$(APP_VERSION)-public-backend.tar.gz
+export FILE_PUBLIC_BACKEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-public-backend-dist.tar.gz
+export FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION = $(APP)-latest-public-backend-dist.tar.gz
+export FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION = $(APP)-public-backend-$(APP_VERSION)-image.tar
+export FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION = $(APP)-public-backend-latest-image.tar
+
 
 ##############################################
 #                 test confs                 #
@@ -215,12 +270,6 @@ include ./artifacts
 # combined variables should not be overrided
 export CURL_OS_OPTS=-k --retry ${openstack_retry} --retry-delay ${openstack_delay} --connect-timeout ${openstack_timeout} --fail
 
-
-##############################################
-##############################################
-####           PROCEDURES                 ####
-##############################################
-##############################################
 
 ##############################################
 #       host configuration procedures        #
@@ -292,7 +341,7 @@ down-all: down
 # production mode with fake
 up-fake: network utac-fake-start smtp-fake up
 
-down-fake: smtp-fake-stop utac-fake-stop down
+down-fake: smtp-fake-stop utac-fake-stop down  # @todo: missing network-stop?
 
 # package for production mode
 build: frontend-build backend-build
@@ -377,9 +426,9 @@ clean-archive:
 clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image backend-clean-image
 
 # development mode
-dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev
+dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev public-backend-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop public-backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
 
 dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
@@ -421,6 +470,91 @@ build-dir:
 
 build-dir-clean:
 	if [ -d "$(BUILD_DIR)" ] ; then rm -rf $(BUILD_DIR) ; fi
+
+
+##############################################
+#          RUN PUBLIC_BACKEND APP            #
+##############################################
+
+# run / stop public-backend in qualification (compiled) mode
+
+up-public-backend: up-public-backend-${API_VERSION}
+
+up-public-backend-v1: public-backend-start
+	@echo all public-backend services are up in production mode, api v1
+
+down-public-backend: down-public-backend-${API_VERSION}
+
+down-public-backend-v1: public-backend-stop
+	@echo all public-backend services stopped
+
+# build equivalent for public-backend
+# JUST USE public-backend-build
+
+build-public-backend-if-necessary:
+	(make public-backend-check-image >/dev/null 2>&1) || make public-backend-build
+
+build-all-public-backend: public-backend-build public-backend-save-image
+
+build-all-public-backend-image: build-dir public-backend-build
+
+# publish packages
+publish-public-backend: publish-public-backend-$(APP_VERSION) publish-public-backend-latest
+
+publish-public-backend-$(APP_VERSION):
+	@echo "Publish $(APP) $(APP_VERSION) artifacts"
+	if [ -z "$(openstack_url)" -o -z "$(openstack_auth_id)" -o -z "$(openstack_token)" ] ; then exit 1 ; fi
+	( cd $(BUILD_DIR) ;\
+	  ls -alrt ;\
+	    for file in \
+                $(APP)-VERSION \
+                $(FILE_ARCHIVE_APP_VERSION) \
+                $(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) \
+           ; do \
+            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_APP_VERSION)/$$file ; \
+           done ; \
+	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=${APP_VERSION}/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
+	)
+
+publish-latest-public-backend:
+	@echo "Publish $(APP) latest public-backend artifacts"
+	if [ -z "$(openstack_url)" -o -z "$(openstack_auth_id)" -o -z "$(openstack_token)" ] ; then exit 1 ; fi
+	( cd $(BUILD_DIR) ;\
+	    for file in \
+                $(APP)-VERSION \
+                $(FILE_ARCHIVE_LATEST_VERSION) \
+                $(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) \
+           ; do \
+            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/$$file ; \
+           done ; \
+	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=latest/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
+	)
+
+# Download published images
+
+download-public-backend-image: download-public-backend-image-${API_VERSION}
+download-public-backend-image-v1: build-dir public-backend-download-image
+
+# Load published images
+
+load-public-backend-image: load-public-backend-image-${API_VERSION}
+load-public-backend-image-v1: build-dir public-backend-load-image
+
+# clean-image equivalent for public-backend
+# JUST USE public-backend-clean-image
+
+# development mode
+
+# dev equivalent for public-backend
+# JUST USE make dev as usual
+
+# dev-stop equivalent for public-backend
+# JUST USE make dev-stop as usual
+
+dev-public-backend-log:
+	${DC} -f ${DC_PREFIX}-public-backend.yml logs
+
+update-public-backend: git-pull build-public-backend-if-necessary up-public-backend
 
 ##############################################
 #               reverse-proxy                #
@@ -725,17 +859,11 @@ index-direct-check: install-prerequisites-injection wait-elasticsearch
 		xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o - | awk 'BEGIN{n=0}{n+=$$1}END{print n}' && \
 		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
 
+
 ##############################################
-#                  backend                   #
+#              common backend                #
 ##############################################
 # production mode
-backend-start: backend-host-config
-	@echo docker-compose up backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
-
-backend-stop:
-	@echo docker-compose down backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 backend-host-config: redis-host-config
 
@@ -752,16 +880,11 @@ ifeq ("$(transparent_hugepage)", "")
 	echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled || echo
 endif
 
-# package for production
-backend-build: backend-build-unlock build-dir backend-build-lock backend-build-all backend-build-unlock
-
 backend-build-lock:
 	@if [ -f "${BACKEND}/.build-lock" ]; then exit 1; else touch "${BACKEND}/.build-lock"; fi
 
 backend-build-unlock:
 	@if [ -f "${BACKEND}/.build-lock" ]; then rm "${BACKEND}/.build-lock"; fi
-
-backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
 
 backend-prepare-build:
 	if [ -f "${BACKEND}/$(FILE_BACKEND_APP_VERSION)" ] ; then rm -rf ${BACKEND}/$(FILE_BACKEND_APP_VERSION) ; fi
@@ -770,6 +893,45 @@ backend-prepare-build:
          boot-dev.js \
          src \
          ecosystem.config.js )
+
+# download image and load it in docker
+
+redis-download-image: ## Download redis image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_REDIS_APP_VERSION) \
+          $(curl_progress_bar)
+redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
+
+redis-build: redis-build-image
+
+redis-build-image: redis-check-build
+	@echo building ${APP} redis
+	${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) redis
+
+redis-check-build: backend-check-build
+
+redis-save-image: backend-check-build
+	redis_image_name=$$(${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.redis.image); \
+	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) $$redis_image_name ; \
+	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_LATEST_VERSION) $$redis_image_name
+
+##############################################
+#                 backend                    #
+##############################################
+# production mode
+
+backend-start: backend-host-config
+	@echo docker-compose up backend for production ${VERSION}
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
+
+backend-stop:
+	@echo docker-compose down backend for production ${VERSION}
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
+
+# package for production
+backend-build: backend-build-unlock build-dir backend-build-lock backend-build-all backend-build-unlock
+
+backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
 
 backend-check-build:
 	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) config -q
@@ -817,18 +979,11 @@ backend-clean-image:
 
 # download image and load it in docker
 
-backend-download-image: ## Download backend image
+backend-download-image:  ## Download backend image
 	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_BACKEND_APP_VERSION) \
           $(curl_progress_bar)
 backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
-
-redis-download-image: ## Download redis image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_REDIS_APP_VERSION) \
-          $(curl_progress_bar)
-redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
-	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
-
 
 # development mode
 backend-dev: backend-host-config
@@ -840,18 +995,84 @@ backend-dev: backend-host-config
 backend-dev-stop:
 	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
 
-redis-build: redis-build-image
+##############################################
+#              public backend                #
+##############################################
+# production mode
 
-redis-build-image: redis-check-build
-	@echo building ${APP} redis
-	${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) redis
+public-backend-start: backend-host-config
+	@echo docker-compose up public-backend for production ${VERSION}
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
 
-redis-check-build: backend-check-build
+public-backend-stop:
+	@echo docker-compose down public-backend for production ${VERSION}
+	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
-redis-save-image: backend-check-build
-	redis_image_name=$$(${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.redis.image); \
-	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) $$redis_image_name ; \
-	  docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_REDIS_LATEST_VERSION) $$redis_image_name
+# package for production
+public-backend-build: backend-build-unlock build-dir backend-build-lock public-backend-build-all backend-build-unlock
+
+public-backend-build-all: public-backend-build-dist public-backend-build-dist-archive public-backend-build-image
+
+public-backend-check-build:
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config -q
+
+public-backend-build-dist: backend-prepare-build backend-check-build
+	@echo building ${APP} public-backend in ${BACKEND}
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
+
+public-backend-build-dist-archive:
+	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public-backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
+	  cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION)
+	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ; fi
+	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ; fi
+
+public-backend-clean-dist:
+	@rm -rf $(FILE_PUBLIC_BACKEND_APP_VERSION)
+
+public-backend-clean-dist-archive:
+	@rm -rf $(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
+
+public-backend-build-image: $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) public-backend-check-build
+	@echo building ${APP} public-backend image
+	cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ${BACKEND}/
+	export EXEC_ENV=production; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
+
+public-backend-save-image:
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
+        backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker tag $$backend_image_name $$backend_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) $$backend_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) $$backend_image_name
+
+public-backend-check-image:
+	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
+	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+	docker image inspect $$backend_image_name_version
+
+public-backend-clean-image:
+	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config | \
+           python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
+           docker rmi $$image_name || true ; \
+        done
+
+# download image and load it in docker
+
+public-backend-download-image: ## Download public-backend image
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) \
+          $(curl_progress_bar)
+public-backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
+
+# development mode
+public-backend-dev: backend-host-config
+	@echo docker-compose up public-backend for dev ${VERSION}
+	@echo secret ${BACKEND_SECRET}
+	@export EXEC_ENV=development;\
+		${DC} -f ${DC_DEV_PUBLIC_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
+
+public-backend-dev-stop:
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
 ##############################################
 #              fake services                 #
@@ -885,7 +1106,6 @@ test-up-elasticsearch: wait-elasticsearch
 	time bash tests/test-up-elasticsearch.sh
 test-up-backend:
 	time bash tests/test-up-backend.sh
-
 
 # not working anymore: test requests in elasticsearch
 index-test: wait-elasticsearch
@@ -967,4 +1187,3 @@ test-api-generic:
 	export report=reports/`basename ${PERF_SCENARIO} .yml`-${PERF_TEST_ENV}.json ;\
 		${DC} -f ${DC_PREFIX}-artillery.yml run artillery run -e ${PERF_TEST_ENV} -o $${report} scenario.yml; \
 		${DC} -f ${DC_PREFIX}-artillery.yml run artillery report $${report}
-

@@ -20,7 +20,8 @@ ENV APP_VERSION ${app_ver}
 
 WORKDIR /$app_path
 
-RUN apt-get update || : && apt-get install python3 build-essential -y
+RUN apt-get update
+RUN apt-get install python3 build-essential -y
 
 # update debian w/proxy & mirror then installs git in case of git dependencies
 RUN if [ ! -z "${NPM_GIT}" ]; then \
