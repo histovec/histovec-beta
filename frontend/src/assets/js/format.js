@@ -1,11 +1,14 @@
 import { MISSING_VALUE } from './constants'
 
+export const FR_DATE_FORMAT = 'DD/MM/YYYY'
+export const ISO_DATE_FORMAT = 'YYYY-MM-DD'
+
 export const booleanLabel = (test, { upperCase }={ upperCase: true }) => {
 	const label = test ? 'Oui' : 'Non'
 	return upperCase ? label.toUpperCase() : label
 }
 
-export const formatDate = (isoDate) => {
+export const formatIsoToFrDate = (isoDate) => {
 	if(!isoDate){
 		return ''
 	}
@@ -14,8 +17,8 @@ export const formatDate = (isoDate) => {
 	return Intl.DateTimeFormat('fr-FR').format(date)
 }
 
-export const formatDateOrDefault = (isoDate, defaultValue=MISSING_VALUE) => {
-	return isoDate ? formatDate(isoDate) : defaultValue
+export const formatIsoToFrDateOrDefault = (isoDate, defaultValue=MISSING_VALUE) => {
+	return isoDate ? formatIsoToFrDate(isoDate) : defaultValue
 }
 
 export const padString = (n, width, padChar='0') => {

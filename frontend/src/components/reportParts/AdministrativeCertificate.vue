@@ -28,6 +28,7 @@
 import dayjs from 'dayjs'
 import { generateCsa } from '../../utils/csaAsPdf'
 import { RAPPORT_FILENAME } from '../../utils/csaAsPdf/constants'
+import { FR_DATE_FORMAT } from '../../assets/js/format.js'
 
 import histoVecLogo from '@/assets/img/histovec_logo_droite_name.png'
 import marianneImage from '@/assets/img/logo_mi.png'
@@ -64,7 +65,7 @@ export default {
   },
   computed: {
     validityDate () {
-      return dayjs().add(1, 'month').date(8).format('DD/MM/YYYY')
+      return dayjs().add(1, 'month').date(8).format(FR_DATE_FORMAT)
     }
   },
   async mounted () {

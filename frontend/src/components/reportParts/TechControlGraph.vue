@@ -4,6 +4,8 @@ import orderBy from 'lodash.orderby'
 import { Line } from 'vue-chartjs'
 import dayjs from 'dayjs'
 
+import { FR_DATE_FORMAT } from '../../assets/js/format.js'
+
 export default {
   extends: Line,
   props: {
@@ -47,7 +49,7 @@ export default {
         tooltips: {
           callbacks: {
             title: (tooltipItem) => {
-              const day = dayjs(tooltipItem[0].xLabel).format('DD/MM/YYYY')
+              const day = dayjs(tooltipItem[0].xLabel).format(FR_DATE_FORMAT)
               const km = Math.round(tooltipItem[0].yLabel * 100) / 100
               const formattedKm = new Intl.NumberFormat().format(km)
 

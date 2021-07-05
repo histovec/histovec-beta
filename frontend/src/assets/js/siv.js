@@ -1,7 +1,10 @@
 import dayjs from 'dayjs'
 import orderBy from 'lodash.orderby'
 
-import { booleanLabel, camelize, formatDate, formatDateOrDefault } from '../js/format'
+import {
+  booleanLabel, camelize, formatIsoToFrDate, formatIsoToFrDateOrDefault,
+  FR_DATE_FORMAT, ISO_DATE_FORMAT
+} from '../js/format'
 import { getTypeCarburant } from '../../utils/vehicle/energie'
 
 import { NUMERO_EURO } from '../../constants/vehicle/numeroEuro'
@@ -41,13 +44,13 @@ const DATE_2018_01_01 = new Date('2018-01-01')
 
 const computeCertifDepuis = (dateString) => {
   // Si on détecte que la date est au format FR alors on la convertie
-  const convertedDateString = (
-    dayjs(dateString, 'DD/MM/YYYY').isValid() ?
-      dayjs(dateString, 'DD/MM/YYYY').format('YYYY-MM-DD') :
+  const isoDateString = (
+    dayjs(dateString, FR_DATE_FORMAT).isValid() ?
+      dayjs(dateString, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
       dateString
   )
 
-  const nbMonths = Math.floor(dayjs().diff(new Date(convertedDateString), 'month'))
+  const nbMonths = Math.floor(dayjs().diff(new Date(isoDateString), 'month'))
 
   if (nbMonths <= 18) {
     return `${nbMonths} mois`
@@ -65,13 +68,13 @@ const computeCertifDepuis = (dateString) => {
 
 const computeCertifMonths = (dateString) => {
   // Si on détecte que la date est au format FR alors on la convertie
-  const convertedDateString = (
-    dayjs(dateString, 'DD/MM/YYYY').isValid() ?
-      dayjs(dateString, 'DD/MM/YYYY').format('YYYY-MM-DD') :
+  const isoDateString = (
+    dayjs(dateString, FR_DATE_FORMAT).isValid() ?
+      dayjs(dateString, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
       dateString
   )
 
-  return Math.floor(dayjs().diff(new Date(convertedDateString), 'month'))
+  return Math.floor(dayjs().diff(new Date(isoDateString), 'month'))
 }
 
 // @todo: use utils/vehicle
@@ -442,7 +445,7 @@ const certificatMapping = ({
   }
 
   const isImported = isImportedVehicule === 'OUI'
-  const franceImportDate = isImported && (historique.length > 0) ? formatDate(historique[0].opa_date) : premier
+  const franceImportDate = isImported && (historique.length > 0) ? formatIsoToFrDate(historique[0].opa_date) : premier
   const sivImportDate = date_premiere_immat_siv || MISSING_VALUE
 
   const immatriculationHistoriqueItems = historique.filter(e => (
@@ -602,14 +605,14 @@ const administratifVehiculeMapping = ({
 
   const oppositionsInfos = orderBy(
     [
-      ...(hasOvei ? [{ date: formatDate(oveis[0].date), label: 'Véhicule économiquement irréparable' }] : []),
+      ...(hasOvei ? [{ date: formatIsoToFrDate(oveis[0].date), label: 'Véhicule économiquement irréparable' }] : []),
       // Pour les OVEs, le CSA afficher "Véhicule endommagé".
       // Il a été convenu par la DSR qu'on préfère afficher "Procédure de réparation contrôlée" dans le cas du rapport HistoVec,
       // même si cela crée une incohérence entre le rapport HistoVec et le CSA.
-      ...(hasOve ? [{ date: formatDate(oves[0].date), label: 'Procédure de réparation contrôlée' }] : []),
+      ...(hasOve ? [{ date: formatIsoToFrDate(oves[0].date), label: 'Procédure de réparation contrôlée' }] : []),
       // On pourrait identifier les différents motifs d'OTCI (trésor, véhicule bloqué, etc.) mais il a été décidé de laisser "Opposition temporaire" pour le moment
-      ...(hasOtci ? [{ date: formatDate(otcis[0].date), label: 'Opposition temporaire'}] : []),
-      ...(hasOtciPv ? [{ date: formatDate(otcisPv[0].date), label: 'PV en attente' }] : [])
+      ...(hasOtci ? [{ date: formatIsoToFrDate(otcis[0].date), label: 'Opposition temporaire'}] : []),
+      ...(hasOtciPv ? [{ date: formatIsoToFrDate(otcisPv[0].date), label: 'PV en attente' }] : [])
     ],
     ['date'],
     ['desc']
@@ -617,7 +620,7 @@ const administratifVehiculeMapping = ({
 
   const pvDates = otcisPv.map((otciPv) => {
     return [
-      `- Date du PV :  ${formatDateOrDefault(otciPv.date)}`
+      `- Date du PV :  ${formatIsoToFrDateOrDefault(otciPv.date)}`
     ]
   }).flat()
 
@@ -628,27 +631,27 @@ const administratifVehiculeMapping = ({
 
   const otcisCurrentStatusLines = otcis.map((otci) => {
     return [
-      `- Date de l'opposition :  ${formatDateOrDefault(otci.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(otci.date)}`
     ]
   }).flat()
 
 
   const ovesCurrentStatusLines = oves.map((ove) => {
     return [
-      `- Date de l'opposition :  ${formatDateOrDefault(ove.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ove.date)}`
     ]
   }).flat()
 
   const oveisCurrentStatusLines = oveis.map((ovei) => {
     return [
-      `- Date de l'opposition :  ${formatDateOrDefault(ovei.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ovei.date)}`
     ]
   }).flat()
 
   const suspensionsCurrentStatusLines = suspensions.map((suspension) => {
     return [
       `- Motif :  ${suspensionsMapping[suspension.motif]}`,
-      `  Date de la suspension :  ${formatDateOrDefault(suspension.date)}`
+      `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`
       // @todo: missing functional rules from SIV/DSR to build these data on JSON :
       // `  Remise titre :  ${suspension.remise_titre}`,
       // `  Retrait titre :  ${suspension.retrait_titre}`
@@ -657,7 +660,7 @@ const administratifVehiculeMapping = ({
 
   const suspensionsInfos = orderBy(
     suspensions.map((suspension) => {
-      return { date: formatDate(suspension.date), label: suspensionsMapping[suspension.motif] }
+      return { date: formatIsoToFrDate(suspension.date), label: suspensionsMapping[suspension.motif] }
     }),
     ['date'],
     ['desc']
@@ -667,13 +670,13 @@ const administratifVehiculeMapping = ({
   const gagesCurrentStatusLines = gages.map((gage) => {
     return [
       `- Nom du créancier :  ${gage.nom_creancier}`,
-      `  Date du gage :  ${formatDateOrDefault(gage.date)}`
+      `  Date du gage :  ${formatIsoToFrDateOrDefault(gage.date)}`
     ]
   }).flat()
 
   const gagesInfos = orderBy(
     gages.map((gage) => {
-      return { date: formatDate(gage.date), label: gage.nom_creancier }
+      return { date: formatIsoToFrDate(gage.date), label: gage.nom_creancier }
     }),
     ['date'],
     ['desc']
@@ -683,13 +686,13 @@ const administratifVehiculeMapping = ({
     return [
       '- Nom de l\'autorité à l\'origine de l\'inscription :',
       `    ${_dvs.dvs_autorite}`,
-      `  Date de la déclaration valant saisie :  ${formatDateOrDefault(_dvs.date)}`
+      `  Date de la déclaration valant saisie :  ${formatIsoToFrDateOrDefault(_dvs.date)}`
     ]
   }).flat()
 
   const dvsInfos = orderBy(
     dvs.map((_dvs) => {
-      return { date: formatDate(_dvs.date), label: _dvs.dvs_autorite }
+      return { date: formatIsoToFrDate(_dvs.date), label: _dvs.dvs_autorite }
     }),
     ['date'],
     ['desc']
@@ -815,7 +818,7 @@ const computeDescendingHistoriqueForReport = (
   // Only keep useful elements to compute HistoVec report and CSA
   return descendingHistoriqueWithFNIConversion.map(({numAgree, opa_date, opa_type}) => {
     return {
-      date: formatDateOrDefault(opa_date),
+      date: formatIsoToFrDateOrDefault(opa_date),
       nature: operationsMapping[opa_type],
       ...(numAgree ? { 'numAgree': numAgree } : undefined),
       opa_type,
@@ -973,7 +976,7 @@ const processSivData = (sivData) => {
     },
     date_premiere_immat_etranger: {
       old: certificat.etranger ? sivData.date_premiere_immat : undefined,
-      new: sivData.date_premiere_immat_etranger ? dayjs(sivData.date_premiere_immat_etranger).format('DD/MM/YYYY') : undefined,
+      new: sivData.date_premiere_immat_etranger ? dayjs(sivData.date_premiere_immat_etranger).format(FR_DATE_FORMAT) : undefined,
     },
     has_pve: {
       old: administratif.hasPve,
