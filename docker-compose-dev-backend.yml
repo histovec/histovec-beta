@@ -27,7 +27,7 @@ services:
       - BACKEND_SECRET=${BACKEND_SECRET}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
-      - REDIS_URL=${REDIS_URL}
+      - REDIS_URL=${REDIS_HOST}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_PERSIST=${REDIS_PERSIST}
       - ES_URL=${ES_HOST}:${ES_PORT}
@@ -69,9 +69,12 @@ services:
       target: cache
       dockerfile: Dockerfile
     container_name: ${APP}-cache
+    ports:
+      - 6379:6379
     command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
     volumes:
       - ${REDIS_DATA}:/var/lib/redis
+      # - /var/run/docker.sock:/var/run/docker.sock
     sysctls:
       - net.core.somaxconn=65535
 
