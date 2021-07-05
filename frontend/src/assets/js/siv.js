@@ -934,7 +934,6 @@ const processSivData = (sivData) => {
   const newHistorique = sivData.new_historique.map(elt => (
     {
       ...elt,
-      opa_date: dayjs(elt.opa_date).format('DD/MM/YYYY'),
       nature: operationsMapping[elt.opa_type],
     }
   ))
