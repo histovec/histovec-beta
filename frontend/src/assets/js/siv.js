@@ -1035,6 +1035,19 @@ const processSivData = (sivData) => {
     fniState,
     historique: descendingHistoriqueForReport,
     isApte,
+
+    // @todo: We will develop other categories later using data pipeline.
+    // For now, we'll class other categories as AUTRE we'll use VOITURE logo by default (as it was already implemented)
+    //
+    // @todo: To implement while branching computed date fields :
+    // LOGO_VEHICULE_BY_LOGO_GENRE = {
+    //  'AUTRE': 'car',
+    //  'CAMION': 'truck',
+    //  'MOTO': 'motorcycle',
+    //  'VOITURE': 'car',
+    // }
+    //
+    // logoVehicule = LOGO_VEHICULE_BY_LOGO_GENRE[logo_genre],
     logoVehicule,
 
     proprietairesCount: sivData.nb_proprietaire,
