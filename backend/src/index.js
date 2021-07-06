@@ -13,7 +13,7 @@ const PORT = config.port || 8000
 techLogger.debug({ config: config })
 
 elasticsearch.Client.search({
-  index: config.esIndex,
+  index: config.esSIVIndex,
   q: 'version',
   size: '1',
 })
