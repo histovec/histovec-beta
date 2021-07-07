@@ -1,6 +1,7 @@
-import { json2html, getHtmlBody } from './body-mail-template'
-import config from '../config'
-import { sendMail } from '../connectors/send-mail'
+import { json2html, getHtmlBody } from './body-mail-template.js'
+import { sendMail } from '../connectors/send-mail.js'
+import config from '../config.js'
+
 
 const formDataShortcut = (identity) => {
   const {
@@ -61,10 +62,10 @@ export const sendMailToSupport = async (from, subject, json) => {
   const shortcut = formDataShortcut(json.identity)
 
   await sendMail({
-    from: from,
+    from,
     cc: from,
     to: config.mailTo,
-    subject: subject,
+    subject,
     content: getHtmlBody({
       content: `
         <b> message </b>: <br />
