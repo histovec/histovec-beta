@@ -43,8 +43,8 @@ RUN if [ ! -z "$http_proxy" ] ; then \
    [ -z "$npm_registry" ] || npm config set strict-ssl false ; \
    [ -z "${sass_registry}" ] || npm config set sass_binary_site=$sass_registry;
 
-# 10 min
-RUN npm config set fetch-timeout 600000
+# 15 min
+RUN npm config set fetch-timeout 900000
 
 RUN [ -z "${NPM_LATEST}" ] || npm i npm@latest -g
 
