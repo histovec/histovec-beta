@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import config from '../config'
-import { appLogger, techLogger } from '../util'
+import { appLogger, techLogger } from '../util/logger'
 
 export const sendMail = async ({ from, to, cc, subject, content: html }) => {
   let transporter

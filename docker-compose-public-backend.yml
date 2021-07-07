@@ -52,9 +52,10 @@ services:
       - MAIL_FROM=${MAIL_FROM}
       - MAIL_TO=${MAIL_TO}
       - PUBLIC_BACKEND=true
+      - IS_UTAC_CACHE_IGNORABLE=${IS_UTAC_CACHE_IGNORABLE}
+      - PUBLIC_BACKEND_API_UUID=${PUBLIC_BACKEND_API_UUID}
+      - PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA=${PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA}
     restart: on-failure
-    # volumes:
-      # - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT}/${APP}/api/v1/health"]
       interval: 60s

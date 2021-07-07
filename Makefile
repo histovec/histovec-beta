@@ -199,6 +199,7 @@ export FAKE_UTAC_LATENCY=500
 
 # Default values for dev environement
 export IS_UTAC_API_ACTIVATED?=false
+export IS_UTAC_CACHE_IGNORABLE?=false
 export IS_VIN_SENT_TO_UTAC?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
@@ -209,6 +210,7 @@ export HISTOVEC_PFX?=src/utac/histovec.pfx
 export HISTOVEC_PFX_PASSPHRASE?=Ch@ng€-m€-pl€@se
 export INES_TOKEN?=yOu-t0k€n-t0-m€?
 export UTAC_PEM?=src/utac/utac.pem
+
 
 ##############################################
 #               backend confs                #
@@ -934,14 +936,14 @@ backend-build: backend-build-unlock build-dir backend-build-lock backend-build-a
 backend-build-all: network backend-build-dist backend-build-dist-archive backend-build-image
 
 backend-check-build:
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) config -q
+	export EXEC_ENV=build BACKEND_NAME=backend; ${DC} -f $(DC_BUILD_BACKEND) config -q
 
 backend-build-dist: backend-prepare-build backend-check-build
 	@echo building ${APP} backend in ${BACKEND}
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) build $(DC_BUILD_ARGS) backend
+	export EXEC_ENV=build BACKEND_NAME=backend; ${DC} -f $(DC_BUILD_BACKEND) build $(DC_BUILD_ARGS) backend
 
 backend-build-dist-archive:
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_BACKEND) run -T --no-deps --rm backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
+	export EXEC_ENV=build BACKEND_NAME=backend; ${DC} -f $(DC_BUILD_BACKEND) run -T --no-deps --rm backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ; fi
@@ -955,23 +957,23 @@ backend-clean-dist-archive:
 backend-build-image: $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) backend-check-build
 	@echo building ${APP} backend image
 	cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ${BACKEND}/
-	export EXEC_ENV=production; ${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) backend
+	export EXEC_ENV=production BACKEND_NAME=backend; ${DC} -f $(DC_RUN_BACKEND) build $(DC_BUILD_ARGS) backend
 
 backend-save-image:
-	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=backend && ${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
         backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_LATEST_VERSION) $$backend_image_name
 
 backend-check-image:
-	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=backend && ${DC} -f $(DC_RUN_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.backend.image) ; \
 	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
 	docker image inspect $$backend_image_name_version
 
 
 backend-clean-image:
-	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_BACKEND) config | \
+	@( export EXEC_ENV=production BACKEND_NAME=backend && ${DC} -f $(DC_BUILD_BACKEND) config | \
            python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
@@ -989,7 +991,7 @@ backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
 backend-dev: backend-host-config
 	@echo docker-compose up backend for dev ${VERSION}
 	@echo secret ${BACKEND_SECRET}
-	@export EXEC_ENV=development;\
+	@export EXEC_ENV=development BACKEND_NAME=backend;\
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 backend-dev-stop:
@@ -1014,14 +1016,14 @@ public-backend-build: backend-build-unlock build-dir backend-build-lock public-b
 public-backend-build-all: public-backend-build-dist public-backend-build-dist-archive public-backend-build-image
 
 public-backend-check-build:
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config -q
+	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config -q
 
 public-backend-build-dist: backend-prepare-build backend-check-build
 	@echo building ${APP} public-backend in ${BACKEND}
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
+	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
 public-backend-build-dist-archive:
-	export EXEC_ENV=build; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public-backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
+	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public-backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ; fi
@@ -1035,22 +1037,22 @@ public-backend-clean-dist-archive:
 public-backend-build-image: $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) public-backend-check-build
 	@echo building ${APP} public-backend image
 	cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ${BACKEND}/
-	export EXEC_ENV=production; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
+	export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
 public-backend-save-image:
-	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
         backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) $$backend_image_name
 
 public-backend-check-image:
-	backend_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
 	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
 	docker image inspect $$backend_image_name_version
 
 public-backend-clean-image:
-	@( export EXEC_ENV=production && ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config | \
+	@( export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config | \
            python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
            docker rmi $$image_name || true ; \
@@ -1068,7 +1070,7 @@ public-backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
 public-backend-dev: backend-host-config
 	@echo docker-compose up public-backend for dev ${VERSION}
 	@echo secret ${BACKEND_SECRET}
-	@export EXEC_ENV=development;\
+	@export EXEC_ENV=development BACKEND_NAME=public-backend;\
 		${DC} -f ${DC_DEV_PUBLIC_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 public-backend-dev-stop:

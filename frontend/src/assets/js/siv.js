@@ -958,7 +958,7 @@ const processSivData = (sivData) => {
   const dataToCompare = {
     age_certificat: {
       old: certificat.depuisMonths,
-      new: parseInt(sivData.age_certificat),
+      new: sivData.age_certificat,
     },
     critair: {
       old: vignetteNumero,
@@ -1013,11 +1013,11 @@ const processSivData = (sivData) => {
     },
     nb_sinistres: {
       old: sinistresCount,
-      new: parseInt(sivData.nb_sinistres),
+      new: sivData.nb_sinistres,
     },
     nb_titulaires: {
       old: titulairesCount,
-      new: parseInt(sivData.nb_titulaires),
+      new: sivData.nb_titulaires,
     },
   }
 

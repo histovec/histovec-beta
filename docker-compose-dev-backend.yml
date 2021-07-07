@@ -21,8 +21,11 @@ services:
         NPM_LATEST: ${NPM_LATEST}
         NPM_VERBOSE: ${NPM_VERBOSE}
     container_name: ${APP}-backend-${EXEC_ENV}
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
       - NODE_ENV=${EXEC_ENV}
+      - BACKEND_NAME=${BACKEND_NAME}
       - BACKEND_PORT=${BACKEND_PORT}
       - BACKEND_SECRET=${BACKEND_SECRET}
       - APP=${APP}
@@ -48,6 +51,8 @@ services:
       - SMTP_PORT=${SMTP_PORT}
       - MAIL_FROM=${MAIL_FROM}
       - MAIL_TO=${MAIL_TO}
+      - PUBLIC_BACKEND=false
+      - IS_UTAC_CACHE_IGNORABLE=${IS_UTAC_CACHE_IGNORABLE}
     volumes:
       - ${BACKEND}/src:/${APP}/src/
       - ${BACKEND}/dist:/${APP}/dist/
@@ -74,7 +79,6 @@ services:
     command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
     volumes:
       - ${REDIS_DATA}:/var/lib/redis
-      # - /var/run/docker.sock:/var/run/docker.sock
     sysctls:
       - net.core.somaxconn=65535
 

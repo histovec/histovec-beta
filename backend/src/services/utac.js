@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { readFileSync } from 'fs'
-import config from '../config'
 import { Agent as HttpsAgent } from 'https'
-import { decodingJWT } from '../util/jwt'
-import { appLogger } from '../util/logger'
+import { appLogger } from '../util/logger.js'
+import { decodingJWT } from '../util/jwt.js'
+import config from '../config.js'
 
 // /!\ boolean setting is passed as string /!\
 // @todo: we should use typed yaml to load settings
