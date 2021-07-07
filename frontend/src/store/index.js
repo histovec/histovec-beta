@@ -4,6 +4,8 @@ import identity from './modules/identity.js'
 import histovec from './modules/histovec.js'
 import VuexPersistence from 'vuex-persist'
 import objectPath from 'object-path'
+import { v4 as uuidv4 } from 'uuid'
+
 
 import api from '@/api'
 
@@ -15,14 +17,9 @@ const vuexLocal = new VuexPersistence({
 
 Vue.use(Vuex)
 
-const s4 = () =>
-  Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
-
-const guid = () =>
-  s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 
 if (localStorage.getItem('userId') === null) {
-  const uuid = guid()
+  const uuid = uuidv4()
   localStorage.setItem('userId', uuid, 1)
 }
 
