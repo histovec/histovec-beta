@@ -679,7 +679,7 @@ index-load: install-prerequisites-injection wait-index
 
 index-check: install-prerequisites-injection wait-elasticsearch
 		@(cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | wc -l | awk '{print $$1}' && \
-		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
+		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
 
 # dataprep production mode - from swift to elasticsearch
 source-list:
@@ -723,7 +723,7 @@ index-direct-update: install-prerequisites-injection index-unlock
 index-direct-check: install-prerequisites-injection wait-elasticsearch
 	@(curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.md5' | \
 		xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o - | awk 'BEGIN{n=0}{n+=$$1}END{print n}' && \
-		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines" > "/dev/stderr";exit 1} else {print "number of lines is ok"}}'
+		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET 'localhost:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
 
 ##############################################
 #                  backend                   #
