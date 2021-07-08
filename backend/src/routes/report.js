@@ -159,6 +159,8 @@ export const generateGetReport = (utacClient) =>
     const { id, uuid, options: { ignoreUtacCache } } = req.body
     appLogger.warn(`-- CONFIG -- ignoreUtacCache => ${ignoreUtacCache}`)
 
+    appLogger.info(`-- idv ==> ${id}`)
+
     if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({
         error: 'Bad request - invalid uuid or id',
