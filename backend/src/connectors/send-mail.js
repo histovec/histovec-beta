@@ -25,7 +25,7 @@ export const sendMail = async ({ from, to, cc, subject, content: html }) => {
         },
       })
     } else {
-      transporter = nodemailer.createTransport(config.smtpOptions)
+      transporter = nodemailer.createTransport(config.smtp)
     }
 
     const info = await transporter.sendMail({
