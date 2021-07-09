@@ -1,5 +1,4 @@
 import express from 'express'
-import helmet from 'helmet'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import { loggerStream } from './util/logger'
@@ -9,8 +8,8 @@ import config from './config'
 export default function createApp (utacClient) {
   const app = express()
 
-  // Protect our application from common security vulnerabilities
-  app.use(helmet())
+  // Remove x-powered-by header for security reason
+  app.disable('x-powered-by')
 
   morgan.token('id', function (req) {
     return req.body.id
