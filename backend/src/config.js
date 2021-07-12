@@ -14,8 +14,6 @@ const config = {
   redisPassword: process.env.REDIS_PASSWORD,
   esUrl: process.env.ES_URL,
   esSIVIndex: process.env.ES_INDEX,
-  smtpServer: process.env.SMTP_SERVER,
-  smtpPort: process.env.SMTP_PORT,
   mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`,
 
@@ -34,15 +32,15 @@ const config = {
     inesToken: process.env.INES_TOKEN,
     utacPem: process.env.UTAC_PEM || 'src/utac/utac.pem',
   },
-}
 
-export const smtpOptions = {
-  host: config.smtpServer,
-  port: config.smtpPort,
-  secure: false,
-  tls: {
-    // do not failed with selfsign certificates
-    rejectUnauthorized: false,
+  smtp: {
+    host: process.env.SMTP_SERVER,
+    port: process.env.SMTP_PORT,
+    secure: false,
+    tls: {
+      // do not failed with selfsign certificates
+      rejectUnauthorized: false,
+    },
   },
 }
 
