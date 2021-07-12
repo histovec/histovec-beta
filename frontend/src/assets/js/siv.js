@@ -931,12 +931,15 @@ const processSivData = (sivData) => {
 
   const titulairesCount = computeTitulaireCount(descendingHistoriqueForReport, certificat.isIncertain)
 
-  const newHistorique = sivData.new_historique.map(elt => (
-    {
-      ...elt,
-      nature: operationsMapping[elt.opa_type],
-    }
-  ))
+  const newHistorique = []
+  if (sivData.new_historique) {
+    sivData.new_historique.map(elt => (
+      {
+        ...elt,
+        nature: operationsMapping[elt.opa_type],
+      }
+    ))
+  }
 
   const areHistoriquesEquals = (h1, h2) => {
     if (h1.length !== h2.length) {
