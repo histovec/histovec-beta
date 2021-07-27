@@ -372,6 +372,9 @@ const Status = loadView('Status')
 
 import siv from '../assets/js/siv'
 import { DEFAULT_DATE_UPDATE } from '../constants/v'
+import { getDepartement } from '../utils/codePostal'
+import { hash } from '../utils/crypto'
+import { urlSafeBase64Encode } from '../utils/encoding'
 
 import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
 
@@ -505,6 +508,11 @@ export default {
 
     await this.getReport()
 
+    const sivData = this.$store.state.histovec.report && this.$store.state.histovec.report.sivData
+    if (sivData) {
+      await this.logVehicleData(sivData)  // @todo: remove and move to backend while backend will access decrypted report
+    }
+
     const isAnnulationCI = (
       this.processedSivData &&
       this.processedSivData.administratif &&
@@ -560,6 +568,47 @@ export default {
       if (['abstract', 'vehicle', 'holder', 'situation', 'history', 'utac', 'utacGraph', 'send', 'csa'].includes(tab)) {
         this.tab = tab
       }
+    },
+    async logVehicleData ({
+      adr_code_postal_tit = '',
+      age_certificat,
+      couleur,
+      CTEC_RLIB_ENERGIE,
+      CTEC_RLIB_CATEGORIE,
+      CTEC_RLIB_GENRE,
+      date_premiere_immat,
+      is_apte_a_circuler,
+      is_fni,
+      marque,
+      nom_commercial,
+      nb_titulaires,
+      tvv,
+    }) {
+      const departement = getDepartement(adr_code_postal_tit)
+      const anonymizedReportId = urlSafeBase64Encode(await hash(this.id))
+
+      const vehicleData = {
+        age_certificat,
+        couleur,
+        CTEC_RLIB_ENERGIE,
+        CTEC_RLIB_CATEGORIE,
+        CTEC_RLIB_GENRE,
+        date_premiere_immat,
+        departement,
+        is_apte_a_circuler,
+        is_fni,
+        marque,
+        nom_commercial,
+        nb_titulaires,
+        tvv,
+      }
+      /* eslint-disable-next-line no-console */
+      console.log('vehicleData', vehicleData)
+
+      const bufferedStringifiedVehicleData = Buffer.from(JSON.stringify(vehicleData), 'utf8')
+      const urlSafeBase64EncodedVehicleData = urlSafeBase64Encode(bufferedStringifiedVehicleData)
+
+      await this.$store.dispatch('log', `${this.$route.path}/vehicle/${anonymizedReportId}/${urlSafeBase64EncodedVehicleData}`)
     }
   }
 }
