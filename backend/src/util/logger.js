@@ -30,7 +30,7 @@ const logJsonFormat = printf(({ label, level, message, timestamp }) => {
     },
   },
   {
-    colors: true,
+    colors: config.isDevelopment,
     compact: !config.isDevelopment,
   })
 })
