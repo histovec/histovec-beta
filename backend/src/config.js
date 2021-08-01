@@ -30,6 +30,7 @@ const config = {
   utac: {
     isApiActivated: process.env.IS_UTAC_API_ACTIVATED === 'true',
     isVinSentToUtac: process.env.IS_VIN_SENT_TO_UTAC === 'true',
+    isUtacMockForBpsaActivated: process.env.IS_UTAC_MOCK_FOR_BPSA_ACTIVATED === 'true',
     isFakedApi: false,  // /!\ value is passed as String
     apiUrl: process.env.UTAC_URL,
     fakeApiUrl: process.env.FAKE_UTAC_URL,

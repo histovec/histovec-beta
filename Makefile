@@ -200,6 +200,7 @@ export FAKE_UTAC_LATENCY=500
 # Default values for dev environement
 export IS_UTAC_API_ACTIVATED?=false
 export IS_UTAC_CACHE_IGNORABLE?=false
+export IS_UTAC_MOCK_FOR_BPSA_ACTIVATED?=false
 export IS_VIN_SENT_TO_UTAC?=false
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
