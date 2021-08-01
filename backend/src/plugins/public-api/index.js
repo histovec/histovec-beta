@@ -1,4 +1,6 @@
 import reportByData from './routes/reportByData.js'
+import reportById from './routes/reportById.js'
+
 import { appLogger } from '../../util/logger.js'
 
 export const plugin = {
@@ -11,9 +13,12 @@ export const plugin = {
     server.expose('privateApiReportUrl', privateApiReportUrl)
 
     reportByData.path = options.apiPrefix + reportByData.path
+    appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByData.path}`)  // @todo: remove after validation in development environment
 
-		appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByData.path}`)  // @todo: remove after validation in development environment
-    const routes = [reportByData]
+    reportById.path = options.apiPrefix + reportById.path
+    appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportById.path}`)  // @todo: remove after validation in development environment
+
+    const routes = [reportByData, reportById]
 
     server.route(routes)
   },
