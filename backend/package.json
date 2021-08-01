@@ -41,7 +41,6 @@
     "nodemailer": "^6.6.0",
     "redis": "^3.1.2",
     "util": "^0.12.3",
-    "uuid": "^8.3.2",
     "winston": "^3.3.3"
   },
   "devDependencies": {
