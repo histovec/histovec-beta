@@ -9,12 +9,8 @@ import { getUtacClient } from '../../../connectors/utac.js'
 import { appLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
 
-// /!\ boolean setting is passed as string /!\
-// @todo: we should use typed yaml to load settings
-const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
 const utacClient = getUtacClient()
-
 
 export const getReport = async (request, h) => {
   const { id, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
@@ -53,10 +49,6 @@ export const getReport = async (request, h) => {
 
   // 2 - UTAC
 
-  // /!\ boolean setting is passed as string /!\
-  // @todo: we should use typed yaml to load settings
-  const isApiActivated = config.utac.isApiActivated === true || config.utac.isApiActivated === 'true'
-
   // Utac data encryption is not really useful since UTAC api doesn't return crypted data.
   // But we still encrypt to sent coherent format to the front: encrypted siv and utac data.
   // Since HistoVec uses https, it is not a security issue.
@@ -65,7 +57,7 @@ export const getReport = async (request, h) => {
 
   // Only annulationCI vehicles don't have encryptedImmat
   const isAnnulationCI = Boolean(!encryptedImmat)
-  if (!askCt || isAnnulationCI || !isApiActivated) {
+  if (!askCt || isAnnulationCI || !config.utac.isApiActivated) {
     if (!askCt) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call ask_ct_false`)
     }
@@ -74,7 +66,7 @@ export const getReport = async (request, h) => {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call annulation_CI`)
     }
 
-    if (!isApiActivated) {
+    if (!config.utac.isApiActivated) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call api_not_activated`)
     }
 
@@ -150,7 +142,7 @@ export const getReport = async (request, h) => {
     }
   }
 
-  if (isVinSentToUtac && !isValidVin) {
+  if (config.utac.isVinSentToUtac && !isValidVin) {
     appLogger.warn({
       error: `Malformed VIN`,
     })
@@ -207,7 +199,7 @@ export const getReport = async (request, h) => {
       }
     }
 
-    if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+    if (config.utac.isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
       throw new Error('Inconsistency for technical control')
     }
 

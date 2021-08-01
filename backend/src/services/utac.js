@@ -5,9 +5,6 @@ import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 
-// /!\ boolean setting is passed as string /!\
-// @todo: we should use typed yaml to load settings
-const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
 const anonymize = (text, nbVisibleCharAtPrefixAndSuffix=2) => {
   const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
@@ -184,7 +181,7 @@ module.exports.UTACClient = class UTACClient {
 
       response = await this.axios.post('/immat/search', {
         immat,
-        ...(isVinSentToUtac ? { vin } : {}),
+        ...(config.utac.isVinSentToUtac ? { vin } : {}),
       })
       const end = new Date()
       const executionTime = end - start
