@@ -1,8 +1,16 @@
 import crypto from 'crypto'
 
 
+export const base64Encode = (text) => {
+  return Buffer.from(text, 'binary').toString('base64')
+}
+
+export const base64Decode = (text) => {
+  return Buffer.from(text, 'base64').toString('binary')
+}
+
 export const urlSafeBase64Encode = (text) => {
-  const urlUnsafeBase64Encoded = Buffer.from(text).toString('base64')
+  const urlUnsafeBase64Encoded = base64Encode(text)
 
   // Equivalent to replace(/\+/g, '-').replace(/\//g, '_') but faster
   return urlUnsafeBase64Encoded.replace(/[+/]/g, char => char === '+' ? '-' : '_')
@@ -12,7 +20,7 @@ export const urlSafeBase64Decode = (text) => {
   // Equivalent to replace(/\-/g, '+').replace(/_/g, '/') but faster
   const urlUnsafeBase64Encoded = text.replace(/[\-_]/g, char => char === '-' ? '+' : '/')
 
-  return Buffer.from(urlUnsafeBase64Encoded, 'base64').toString('binary')
+  return base64Decode(urlUnsafeBase64Encoded)
 }
 
 export const hash = (text) => crypto.createHash('sha256').update(text).digest()
@@ -61,7 +69,6 @@ const encrypt = (input, key) => {
 
 const decrypt = (urlSafeBase64EncodedIvAndEncrypted, key) => {
   const bufferedKey = Buffer.from(key, 'binary')
-
   const ivAndEncrypted = urlSafeBase64Decode(urlSafeBase64EncodedIvAndEncrypted)
   const iv = Buffer.from(ivAndEncrypted.slice(0, AES_BLOCK_SIZE), 'binary')
   const encrypted = Buffer.from(ivAndEncrypted.slice(AES_BLOCK_SIZE), 'binary')
