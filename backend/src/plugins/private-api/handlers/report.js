@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom'
 
 import { getSIV } from '../../../services/siv.js'
-import { encryptJson, decryptXOR, urlSafeBase64Encode } from '../../../util/crypto.js'
+import { encryptJson, decryptXOR, urlSafeBase64Encode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
 import { getAsync, setAsync } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
@@ -94,7 +94,7 @@ export const getReport = async (request, h) => {
     ctUpdateDate: null,
   }, utacDataKeyAsBuffer)
 
-  const utacDataCacheId = urlSafeBase64Encode(id)
+  const utacDataCacheId = urlSafeBase64Encode(hash(id))
   const utacData = await getAsync(utacDataCacheId)
 
   const ignoreCache = config.isUtacCacheIgnorable && ignoreUtacCache
