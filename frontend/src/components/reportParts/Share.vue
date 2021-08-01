@@ -66,6 +66,27 @@
           </qrcode-vue>
         </div>
       </div>
+      <div class="col-md-12 p-h-10">
+        <p>
+          Vous pouvez transmettre votre <b>code de partage HistoVec</b> à nos partenaires afin qu'ils puissent utiliser les informations de votre véhicule pour vous fournir un service.
+          <br />
+          Ce code de partage HistoVec ne donne accès à vos données que jusqu'au 8 du mois suivant (tout comme le lien permettant le partage de votre rapport HistoVec).
+          <br />
+          Votre <b>code partage HistoVec</b> est :  <b>{{ codePartageHistoVec }}</b>
+          <br />
+        </p>
+
+        <p class="text-center">
+          <button
+            v-clipboard:copy="codePartageHistoVec"
+            class="btn radius-30 btn-dark btn-animated btn"
+            @click="showNotifSuccess"
+          >
+            Copier le code partage HistoVec
+            <i class="fa fa-copy"></i>
+          </button>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +96,7 @@
 import QrcodeVue from 'qrcode.vue'
 import { mailTo } from '../../utils/email'
 import { getShareReportEmail } from '../../utils/dynamicEmail'
+import { urlSafeDecode } from '../../utils/encoding.js'
 
 export default {
   components: {
@@ -93,6 +115,16 @@ export default {
       timerNotifSuccess: 10000
     }
   },
+  computed: {
+    codePartageHistoVec () {
+      // key is not urlSafe encoded by DATA pipeline while encrypting sivData
+      // By urlSafeDecoding key now, we make key ready to use once received by the public-backend
+      const key = urlSafeDecode(this.$store.state.histovec.key)
+
+      return `${this.$store.state.histovec.id}-${key}`
+    },
+  },
+
   created () {
     const SHARE_REPORT_EMAIL = getShareReportEmail({reportUrl: this.url})
     this.shareReportEmail = mailTo(SHARE_REPORT_EMAIL)
