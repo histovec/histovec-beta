@@ -28,9 +28,9 @@ const config = {
 
   // UTAC api
   utac: {
-    isApiActivated: process.env.IS_UTAC_API_ACTIVATED || false, // /!\ value is passed as String
-    isVinSentToUtac: process.env.IS_VIN_SENT_TO_UTAC || false, // /!\ value is passed as String
-    isFakedApi: false, // /!\ value is passed as String
+    isApiActivated: process.env.IS_UTAC_API_ACTIVATED === 'true',
+    isVinSentToUtac: process.env.IS_VIN_SENT_TO_UTAC === 'true',
+    isFakedApi: false,  // /!\ value is passed as String
     apiUrl: process.env.UTAC_URL,
     fakeApiUrl: process.env.FAKE_UTAC_URL,
     timeout: parseInt(process.env.UTAC_TIMEOUT, 10) || 30,
