@@ -55,7 +55,9 @@ const AES_BLOCK_SIZE = 16
 
 const encrypt = (input, key) => {
   const iv = crypto.randomBytes(AES_BLOCK_SIZE)
-  const cipher = crypto.createCipheriv(AES_ALGORITHM, key, iv)
+  const bufferedKey = Buffer.from(key, 'base64')
+
+  const cipher = crypto.createCipheriv(AES_ALGORITHM, bufferedKey, iv)
 
   const encrypted = Buffer.concat([
     cipher.update(Buffer.from(input, 'utf8')),

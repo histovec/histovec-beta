@@ -4,12 +4,12 @@ import { hash } from '../../../util/crypto.js'
 // Use a default value to compute utacDataKey for annulationCI vehicles
 export const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
   const hashedEncryptedImmat = hash(encryptedImmat)
+
+  // SivData is encrypted with a base64 encoded key,
+  // so we do the same for utacData key in order to have the same way to encrypt / decrypt all our data (sivData and utacData)
   const truncatedHashedEncryptedImmat = Buffer.from(hashedEncryptedImmat, 'base64').slice(0, 32).toString('base64')
 
-  return {
-    utacDataKey: truncatedHashedEncryptedImmat,
-    utacDataKeyAsBuffer: Buffer.from(truncatedHashedEncryptedImmat, 'base64'),
-  }
+  return truncatedHashedEncryptedImmat
 }
 
 export const normalizeImmatForUtac = (immat) => {

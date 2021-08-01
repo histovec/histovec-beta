@@ -61,7 +61,7 @@ export const getReport = async (request, h) => {
   // But we still encrypt to sent coherent format to the front: encrypted siv and utac data.
   // Since HistoVec uses https, it is not a security issue.
 
-  const { utacDataKey, utacDataKeyAsBuffer } = computeUtacDataKey(encryptedImmat)
+  const utacDataKey = computeUtacDataKey(encryptedImmat)
 
   // Only annulationCI vehicles don't have encryptedImmat
   const isAnnulationCI = Boolean(!encryptedImmat)
@@ -84,7 +84,7 @@ export const getReport = async (request, h) => {
       utacData: encryptJson({
         ct: [],
         ctUpdateDate: null,
-      }, utacDataKeyAsBuffer),
+      }, utacDataKey),
       utacDataKey,
     }
   }
@@ -92,7 +92,7 @@ export const getReport = async (request, h) => {
   const emptyUtacData = encryptJson({
     ct: [],
     ctUpdateDate: null,
-  }, utacDataKeyAsBuffer)
+  }, utacDataKey)
 
   const utacDataCacheId = urlSafeBase64Encode(hash(id))
   const utacData = await getAsync(utacDataCacheId)
@@ -202,7 +202,7 @@ export const getReport = async (request, h) => {
           ct: [],
           ctUpdateDate: null,
           utacError: utacMessage,
-        }, utacDataKeyAsBuffer),
+        }, utacDataKey),
         utacDataKey,
       }
     }
@@ -214,7 +214,7 @@ export const getReport = async (request, h) => {
     const freshUtacData = encryptJson({
       ct,
       ctUpdateDate,
-    }, utacDataKeyAsBuffer)
+    }, utacDataKey)
 
     // Cache supported vehicles
     await setAsync(
@@ -244,7 +244,7 @@ export const getReport = async (request, h) => {
         ct: [],
         ctUpdateDate: null,
         utacError: errorMessage,
-      }, utacDataKeyAsBuffer),
+      }, utacDataKey),
       utacDataKey,
     }
   }
