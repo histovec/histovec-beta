@@ -9,6 +9,11 @@ import { appLogger } from '../util/logger'
 // @todo: we should use typed yaml to load settings
 const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
+const anonymize = (text, nbVisibleCharAtPrefixAndSuffix=2) => {
+  const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
+  return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
+}
+
 const ERROR_MESSAGES = {
   401: 'Authentication to UTAC api failed',
   403: 'Forbidden',
@@ -166,6 +171,17 @@ module.exports.UTACClient = class UTACClient {
     let response = null
 
     try {
+      const body = {
+        immat,
+        ...(isVinSentToUtac ? { vin } : {}),
+      }
+
+      const anonymizedUtacImmat = anonymize(immat)
+      const anonymizedUtacVin = anonymize(vin)
+
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
+
       response = await this.axios.post('/immat/search', {
         immat,
         ...(isVinSentToUtac ? { vin } : {}),

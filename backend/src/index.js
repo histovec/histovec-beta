@@ -3,7 +3,7 @@ import http from 'http'
 import createApp from './app'
 import { getAsync } from './connectors/redis'
 import elasticsearch from './connectors/elasticsearch'
-import { techLogger } from './util'
+import { appLogger, techLogger } from './util'
 
 import config from './config'
 const { UTACClient } = require('./services/utac')
@@ -11,6 +11,8 @@ const { UTACClient } = require('./services/utac')
 const PORT = config.port || 8000
 
 techLogger.debug({ config: config })
+
+appLogger.info(`[CONFIG] isVinSentToUtac ${config.utac.isVinSentToUtac}`)
 
 elasticsearch.Client.search({
   index: config.esSIVIndex,
