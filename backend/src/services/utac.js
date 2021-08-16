@@ -173,7 +173,7 @@ module.exports.UTACClient = class UTACClient {
     try {
       const body = {
         immat,
-        ...(isVinSentToUtac ? { vin } : {}),
+        ...(config.utac.isVinSentToUtac ? { vin } : {}),
       }
 
       const anonymizedUtacImmat = anonymize(immat)
