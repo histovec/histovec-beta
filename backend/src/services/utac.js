@@ -171,16 +171,13 @@ module.exports.UTACClient = class UTACClient {
     let response = null
 
     try {
-      const body = {
-        immat,
-        ...(config.utac.isVinSentToUtac ? { vin } : {}),
-      }
-
       const anonymizedUtacImmat = anonymize(immat)
       const anonymizedUtacVin = anonymize(vin)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
+      if (isVinSentToUtac) {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
+      }
 
       response = await this.axios.post('/immat/search', {
         immat,
