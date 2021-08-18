@@ -2,6 +2,8 @@ import Joi from 'joi'
 import { NATURE, RESULTAT } from '../../constant/controlesTechniques.js'
 import { VIGNETTE } from '../../constant/critair.js'
 
+const RESPONSE_PREFIX = 'resp-'
+
 
 export const reportResponseSchema = Joi.object({
   vehicule: Joi.object({
@@ -9,21 +11,21 @@ export const reportResponseSchema = Joi.object({
     certificat_immatriculation: Joi.object({
       age_certificat_immatriculation: Joi.number().integer().min(0).description('Age du certificat d\'immatriculation en cours (en mois).'),
       date_premiere_immatriculation: Joi.date().description('B : Date de la première immatriculation du véhicule.'),
-      plaque_immatriculation_anonymisee: Joi.string().description('A : Numéro d\'immatriculation anonymisé.'),
+      plaque_immatriculation_anonymisee: Joi.string().description('A : Numéro d\'immatriculation (anonymisé).'),
       titulaire: Joi.object({
         particulier: Joi.object({
           nom_anonymise: Joi.string().description('C.1 : Nom (anonymisé) dans l’Etat membre d’immatriculation, à la date de délivrance du document, du titulaire du certificat d’immatriculation.'),
           prenoms_anonymises: Joi.string().description('C.1 : Prénoms (anonymisés) dans l’Etat membre d’immatriculation, à la date de délivrance du document, du titulaire du certificat d’immatriculation.'),
           // @todo question: use departement instead of code_postal ?
           code_postal: Joi.string().description('C.1 : Code postal de l\'adresse dans l’Etat membre d’immatriculation, à la date de délivrance du document, du titulaire du certificat d’immatriculation.'),
-        }),
+        }).label(`${RESPONSE_PREFIX}particulier`),
         personne_morale: Joi.object({
           raison_sociale_anonymisee: Joi.string().description('C.1 : Raison sociale (anonymisée) dans l’Etat membre d’immatriculation, à la date de délivrance du document, du titulaire du certificat d’immatriculation.'),
           siren_anonymise: Joi.string().description('C.1 : Numéro SIREN (anonymisé) dans l’Etat membre d’immatriculation, à la date de délivrance du document, du titulaire du certificat d’immatriculation.'),
           // @todo question: use departement instead of code_postal ?
           code_postal: Joi.string().description('C.1 : Code postal de l\'adresse dans l’Etat membre d’immatriculation, à la date de délivrance du document, du titulaire du certificat d’immatriculation.'),
-        }),
-      }),
+        }).label(`${RESPONSE_PREFIX}personne_morale`),
+      }).label(`${RESPONSE_PREFIX}titulaire`),
       caracteristiques_techniques: Joi.object({
         marque: Joi.string().description('D.1 : Marque du véhicule.'),
         tvv: Joi.string().description('D.2 : Type, variante (si disponible), version (si disponible).'),
@@ -56,40 +58,45 @@ export const reportResponseSchema = Joi.object({
         vitesse_du_moteur: Joi.number().integer().min(0).description('U.2 : Vitesse du moteur (en min-1).'),
         emission_co2: Joi.number().integer().min(0).description('V.7 : Emission de CO2 (en g/km).'),
         classe_environnementale_ce: Joi.string().description('V.9 : Indication de la classe environnementale de réception CE : mention de la version applicable en vertu de la directive 70/220/CEE ou de la directive 88/77/CEE.'),
-      }),
-      etat:  Joi.object({
-        duplicata: Joi.boolean().description('Un duplicata a été émis pour ce certificat d\'immatriculation.'),
-        annule: Joi.boolean().description('Le certificat d\'immatriculation est annulé.'),
-        perdu: Joi.boolean().description('Le certificat d\'immatriculation a été perdu.'),
-        vole: Joi.boolean().description('Le certificat d\'immatriculation a été volé.'),
-      }),
-    }),
+      }).label(`${RESPONSE_PREFIX}caracteristiques_techniques`),
+      etat: Joi.object({
+        duplicata: Joi.boolean().description('Un duplicata a été émis pour ce certificat d\'immatriculation.')
+          .label(`${RESPONSE_PREFIX}duplicata`),
+        annule: Joi.boolean().description('Le certificat d\'immatriculation est annulé.')
+          .label(`${RESPONSE_PREFIX}annule`),
+        perdu: Joi.boolean().description('Le certificat d\'immatriculation a été perdu.')
+          .label(`${RESPONSE_PREFIX}perdu`),
+        vole: Joi.boolean().description('Le certificat d\'immatriculation a été volé.')
+          .label(`${RESPONSE_PREFIX}certificat_immatriculation_vole`),
+      }).label(`${RESPONSE_PREFIX}etat_certificat_immatriculation`),
+    }).label(`${RESPONSE_PREFIX}certificat_immatriculation`),
     etat: Joi.object({
       nombre_de_titulaires: Joi.number().integer().min(0).description('Nombre de titulaire(s) depuis la 1ère vente du véhicule (titulaire actuel compris).'),
       vignette_critair: Joi.string().valid(...Object.values(VIGNETTE)).description('Numéro de la vignette Critair.'),
       vole: Joi.boolean().description('Le véhicule a été volé.'),
-      sinistres: {
+      sinistres: Joi.object({
         a_une_plaque_fni: Joi.boolean().description('Le véhicule possède encore une plaque au format FNI.'),
         date_dernier_sinistre: Joi.date().description('Date du dernier sinistre subi par le véhicule.'),
         date_derniere_resolution: Joi.date().description('Date de la dernière résolution d\'un sinitre sur le véhicule.'),
         est_apte_a_circuler: Joi.boolean().description('Le véhicule peut circuler.'),
         nombre_de_sinistres: Joi.number().integer().min(0).description('Nombres de sinistre(s) en cours.'),
         procedure_vehicule_endommage_en_cours: Joi.boolean().description('Le véhicule a une Procédure Véhicule Endommagé en cours.'),
-      }
-    }),
+      }).label(`${RESPONSE_PREFIX}sinistres`),
+
+    }).label(`${RESPONSE_PREFIX}etat`),
     historique: Joi.array().items(
       Joi.object({
         date: Joi.date(),
         date_annulation: Joi.date(),
         type: Joi.string(),
         numero_agrement_expert: Joi.string(),
-      })
-    ),
+      }).label(`${RESPONSE_PREFIX}element_historique_vehicule`)
+    ).label(`${RESPONSE_PREFIX}historique_vehicule`),
     import_en_france: Joi.object({
       vehicule_etranger_importe: Joi.boolean().description('Véhicule ayant déjà roulé à l\'étranger avant.'),
       date_import: Joi.date().description('Date d\'import en France, que le véhicule soit neuf ou importé depuis l\'étranger.'),
       date_premiere_immatriculation_etranger: Joi.date().description('Date de première immatriculation à l\'étranger, avant d\'arriver en France.'),
-    }),
+    }).label(`${RESPONSE_PREFIX}import_en_france`),
     situation_administrative: Joi.object({
       suspensions: Joi.array().items(
         Joi.object({
@@ -97,44 +104,51 @@ export const reportResponseSchema = Joi.object({
           motif: Joi.string(),
           remise_du_titre: Joi.boolean().description('Remise du certificat d\'immatriculation aux forces de l\'ordre.'),
           retrait_du_titre: Joi.boolean().description('Retrait du certificat d\'immatriculation par les forces de l\'ordre.'),
-        })
-      ).description('Liste des suspensions en cours sur le véhicule.'),
+        }).label(`${RESPONSE_PREFIX}suspension`)
+      ).label(`${RESPONSE_PREFIX}suspensions`)
+        .description('Liste des suspensions en cours sur le véhicule.'),
       declarations_valant_saisie: Joi.array().items(
         Joi.object({
           date: Joi.date(),
           nom_autorite: Joi.string(),
-        })
-      ).description('Liste des déclarations valant saisie en cours liées au véhicule.'),
+        }).label(`${RESPONSE_PREFIX}declaration_valant_saisie`)
+      ).label(`${RESPONSE_PREFIX}declarations_valant_saisie`)
+        .description('Liste des déclarations valant saisie en cours liées au véhicule.'),
       gages: Joi.array().items(
         Joi.object({
           date: Joi.date(),
           nom_creancier: Joi.string(),
-        })
-      ).description('Liste des gages en cours liés au véhicule.'),
+        }).label(`${RESPONSE_PREFIX}gage`)
+      ).label(`${RESPONSE_PREFIX}gages`)
+        .description('Liste des gages en cours liés au véhicule.'),
       opposition : Joi.object({
         oves: Joi.array().items(
           Joi.object({
             date: Joi.date(),
-          })
-        ).description('Liste des Oppositions en cours dues à un Véhicule Endommagé.'),
+          }).label(`${RESPONSE_PREFIX}ove`)
+        ).label(`${RESPONSE_PREFIX}oves`)
+          .description('Liste des Oppositions en cours dues à un Véhicule Endommagé.'),
         oveis: Joi.array().items(
           Joi.object({
             date: Joi.date(),
-          })
-        ).description('Liste des Oppositions en cours dues à un véhicule économiquement irréparable.'),
+          }).label(`${RESPONSE_PREFIX}ovei`)
+        ).label(`${RESPONSE_PREFIX}oveis`)
+          .description('Liste des Oppositions en cours dues à un véhicule économiquement irréparable.'),
         otcis: Joi.array().items(
           Joi.object({
             date: Joi.date(),
-          })
-        ).description('Liste des oppositions au transfert du certificat d\'immatriculation en cours.'),
+          }).label(`${RESPONSE_PREFIX}otci`)
+        ).label(`${RESPONSE_PREFIX}otcis`)
+          .description('Liste des oppositions au transfert du certificat d\'immatriculation en cours.'),
         otcis_pv: Joi.array().items(
           Joi.object({
             date: Joi.date(),
-          })
-        ).description('Liste des oppositions au transfert du certificat d\'immatriculation en cours dues à un PV non payé.'),
-      }),
+          }).label(`${RESPONSE_PREFIX}otci_pv`)
+        ).label(`${RESPONSE_PREFIX}otcis_pv`)
+          .description('Liste des oppositions au transfert du certificat d\'immatriculation en cours dues à un PV non payé.'),
+      }).label(`${RESPONSE_PREFIX}opposition`),
     }).description('Liste des anomalies en cours sur le véhicule.'),
-  }),
+  }).label(`${RESPONSE_PREFIX}vehicule`),
   controles_techniques: Joi.object({
     historique: Joi.array().items(
       Joi.object({
@@ -144,8 +158,8 @@ export const reportResponseSchema = Joi.object({
         resultat: Joi.string().valid(...Object.values(RESULTAT)).description('Code représentant le résultat du contrôle technique (pour plus de détail, voir le champ "resultat_label").'),
         resultat_label: Joi.string().description('Interprétation textuelle du résultat (dépend de la date du contrôle technique).'),
         km: Joi.number().integer().min(0).description('Relevé du kilométrage à la date du contrôle technique.'),
-      })
-    ),
+      }).label(`${RESPONSE_PREFIX}element_historique_controles_techniques`)
+    ).label(`${RESPONSE_PREFIX}historique_controles_techniques`),
     date_mise_a_jour: Joi.date().description('Date de mise à jour de la donnée des contrôles techniques.'),
-  }),
-})
+  }).label(`${RESPONSE_PREFIX}controles_techniques`)
+}).label('ReportResponse')

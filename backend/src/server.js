@@ -28,6 +28,7 @@ const routes = [
     method: 'GET',
     path:'/version',
     options: {
+      // hapi options
       response: {
         schema: Joi.object({
           version: Joi.string().pattern(VERSION_REGEX)
@@ -130,6 +131,7 @@ export const createServer = async () => {
   plugins.push({
     plugin: await import('./plugins/private-api'),
     options: {
+      // Custom options
       apiPrefix: config.apiPrefix,
       basePrivateUrl: BASE_PRIVATE_URL,
       private: config.isPublicApi,
@@ -143,6 +145,11 @@ export const createServer = async () => {
     plugins.push({
       plugin: await import('./plugins/public-api'),
       options: {
+        // hapi-swagger options
+        definitionPrefix: 'useLabel',
+        reuseDefinitions: false,
+
+        // Custom options
         apiPrefix: config.apiPrefix,
         basePrivateUrl: BASE_PRIVATE_URL,
         privateApiReportPath: PRIVATE_API_REPORT_PATH,
