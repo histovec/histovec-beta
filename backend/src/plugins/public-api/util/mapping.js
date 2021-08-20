@@ -182,9 +182,9 @@ export const controlesTechniquesMapping = (controlesTechniques) => {
     {
       date: controleTechnique.ct_date,
       nature: controleTechnique.ct_nature,
-      nature_label: controleTechnique.natureLabel,
+      nature_libelle: controleTechnique.natureLibelle,
       resultat: controleTechnique.ct_resultat,
-      resultat_label: controleTechnique.resultatLabel,
+      resultat_libelle: controleTechnique.resultatLibelle,
       km: controleTechnique.ct_km,
     }
   ))

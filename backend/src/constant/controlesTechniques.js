@@ -17,14 +17,14 @@ export const RESULTAT = {
 
 export const DATE_2018_05_20 = '2018-05-20'
 
-export const NATURE_LABELS = {
+export const NATURE_LIBELLES = {
   'VTP': 'Contrôle Technique Périodique',
   'VTC': 'Contrôle Technique Complémentaire (Pollution)',
   'CV': 'Contre-Visite',
   'CVC': 'Contre-Visite Complémentaire'
 }
 
-export const RESULTAT_LABELS_SINCE_20_05_2018 = {
+export const RESULTAT_LIBELLES_SINCE_20_05_2018 = {
   'A': 'Favorable',
   'AP': 'Favorable',
   'S': 'Défavorable pour défaillances majeures',
@@ -34,7 +34,7 @@ export const RESULTAT_LABELS_SINCE_20_05_2018 = {
   'X': 'N/A'
 }
 
-export const RESULTAT_LABELS_BEFORE_20_05_2018 = {
+export const RESULTAT_LIBELLES_BEFORE_20_05_2018 = {
   'A': 'Favorable',
   'AP': 'Favorable',
   'S': 'Défavorable',
