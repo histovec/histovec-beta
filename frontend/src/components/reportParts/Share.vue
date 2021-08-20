@@ -37,8 +37,8 @@
           </button>
           &nbsp;
           <a
-            :href="shareReportEmail"
             class="btn radius-30 btn-default btn-animated btn"
+            :href="shareReportEmail"
             @click="logReportMailDispatch"
           >
             Envoyer le rapport à un acheteur

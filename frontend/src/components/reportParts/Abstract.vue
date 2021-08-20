@@ -9,6 +9,7 @@
         <a
           class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-15 no-padding"
           href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
+          rel="noopener noreferrer"
           target="_blank"
           @click="logSimplimmatImage"
         >
@@ -27,6 +28,7 @@
           <a
             class="alert-link clickable btn-sm-link pop color-info_3 bold_4 txt-small-14 no-padding"
             href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
+            rel="noopener noreferrer"
             target="_blank"
             @click="logSimplimmatLink"
           >
@@ -222,10 +224,11 @@
         <span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span>
         <br />
         <a
-          href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
           class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
-          title="Simulateur"
+          href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
+          rel="noopener noreferrer"
           target="_blank"
+          title="Simulateur"
         >
           Accédez au simulateur de calcul
           <i class="fa fa-external-link pl-10"></i>
@@ -264,10 +267,11 @@
             <br />
             <a
               v-if="usagesMapping[usage].adv"
-              :href="usagesMapping[usage].link"
               class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
-              :title="usagesMapping[usage].adv"
+              :href="usagesMapping[usage].link"
+              rel="noopener noreferrer"
               target="_blank"
+              :title="usagesMapping[usage].adv"
             >
               En savoir plus
               <i class="fa fa-external-link pl-10"></i>
@@ -502,9 +506,10 @@
           <br />
           <a
             v-if="syntheseMapping[entry].link"
-            :href="syntheseMapping[entry].link"
-            target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            :href="syntheseMapping[entry].link"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             En savoir plus
             <i class="fa fa-external-link pl-5"></i>
@@ -536,9 +541,10 @@
           <br />
           <a
             v-if="syntheseMapping['critair'].link"
-            :href="syntheseMapping['critair'].link"
-            target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            :href="syntheseMapping['critair'].link"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             En savoir plus
             <i class="fa fa-external-link pl-5"></i>
@@ -562,9 +568,10 @@
           <br />
           <a
             v-if="syntheseMapping['critair'].link"
-            :href="syntheseMapping['critair'].link"
-            target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            :href="syntheseMapping['critair'].link"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             En savoir plus
             <i class="fa fa-external-link pl-5"></i>

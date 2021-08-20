@@ -78,8 +78,8 @@
         </p>
         <p class="text-center">
           <a
-            :href="askReportEmail"
             class="btn radius-30 btn-default btn-animated btn"
+            :href="askReportEmail"
           >
             Je demande le rapport au vendeur <i class="fa fa-send"></i>
           </a>

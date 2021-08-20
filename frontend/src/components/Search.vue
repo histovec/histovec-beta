@@ -157,6 +157,8 @@
               <a
                 class="btn btn-default btn-m center-block m-h-05"
                 href="https://siv.interieur.gouv.fr/map-usg-ui/do/csa_retour_dem_certificat"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 Obtenir le CSA via l'ANTS
               </a>
@@ -650,6 +652,7 @@
           Vous pouvez aussi l'obtenir sur ce
           <a
             href="https://www.societe.com/"
+            rel="noopener noreferrer"
             target="_blank"
           >
             site

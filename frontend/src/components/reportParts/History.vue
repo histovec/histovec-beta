@@ -91,6 +91,7 @@
           Pour davantage de précisions sur un rapport, vous pouvez rechercher les coordonnées d’un expert en automobile sur la
           <a
             href="https://www.securite-routiere.gouv.fr/sites/default/files/2019-10/liste_nationale_des_experts_en_automobile.pdf"
+            rel="noopener noreferrer"
             target="_blank"
           >
             liste nationale

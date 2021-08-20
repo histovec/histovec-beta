@@ -6,9 +6,9 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a
-          :href="`#${id}`"
           class="clickable"
           :class="[{ collapsed: !active }]"
+          :href="`#${id}`"
           @click.prevent="$emit('click', id)"
         >
           <i

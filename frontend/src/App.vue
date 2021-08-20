@@ -98,9 +98,10 @@
                           alt="Ministère de l'Intérieur"
                         >
                         <a
-                          href="https://www.interieur.gouv.fr/"
-                          target="_blank"
                           class="overlay-link small"
+                          href="https://www.interieur.gouv.fr/"
+                          rel="noopener noreferrer"
+                          target="_blank"
                         >
                         </a>
                       </div>
@@ -114,9 +115,10 @@
                           alt="sécurité routière, tous responsables"
                         >
                         <a
-                          href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites"
-                          target="_blank"
                           class="overlay-link small"
+                          href="http://www.securite-routiere.gouv.fr/la-securite-routiere/actualites"
+                          rel="noopener noreferrer"
+                          target="_blank"
                         >
                         </a>
                       </div>
@@ -152,6 +154,7 @@
                     <li class="facebook">
                       <a
                         href="https://www.facebook.com/Histovec/"
+                        rel="noopener noreferrer"
                         target="_blank"
                         title="facebook"
                       >
@@ -161,6 +164,7 @@
                     <li class="twitter">
                       <a
                         href="https://twitter.com/histovec"
+                        rel="noopener noreferrer"
                         target="_blank"
                         title="twitter"
                       >
