@@ -198,7 +198,6 @@ module.exports.UTACClient = class UTACClient {
     if (!response?.data?.ct || !response?.data?.update_date) {
       appLogger.error({
         error: ERROR_MESSAGES.malformedResponse,
-        response,
       })
 
       return {
