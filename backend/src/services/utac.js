@@ -172,7 +172,7 @@ module.exports.UTACClient = class UTACClient {
       const anonymizedUtacVin = anonymize(vin)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      if (isVinSentToUtac) {
+      if (config.utac.isVinSentToUtac) {
         appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
       }
 
