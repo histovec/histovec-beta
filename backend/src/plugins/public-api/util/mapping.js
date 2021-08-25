@@ -65,7 +65,7 @@ export const vehiculeMapping = (report) => {
   const declarations_valant_saisie = reportDeclarationsValantSaisie.map((dvs) => (
     {
       date: dvs.date,
-      nom_autorite: dvs.dvs_autorite,
+      nom_personne_morale: dvs.dvs_autorite,
     }
   ))
 
@@ -97,9 +97,9 @@ export const vehiculeMapping = (report) => {
   return {
     date_mise_a_jour: report.date_update,
     certificat_immatriculation: {
-      age_certificat_immatriculation: report.age_certificat,
       date_premiere_immatriculation: report.date_premiere_immat,
-      plaque_immatriculation_anonymisee: report.plaq_immat,
+      nombre_de_mois_depuis_date_emission_certificat_immatriculation: report.age_certificat,
+      numero_immatriculation_anonymisee: report.plaq_immat,
       titulaire,
       caracteristiques_techniques: {
         marque: report.marque,
@@ -109,15 +109,15 @@ export const vehiculeMapping = (report) => {
         couleur: report.couleur,
         type_de_reception: report.type_reception,
         vin_anonymise: report.vin,
-        ptta: report.pt_tech_adm_f1,  // @todo question: mmta ou ptta?
-        ptac: report.ptac_f2,  // @todo question: mma ou ptac?
+        ptta: report.pt_tech_adm_f1,
+        ptac: report.ptac_f2,
         ptra: report.ptra_f3,
         ptes: report.pt_service_g,
         ptav: report.ptav_g1,
         date_emission: report.date_emission_CI,
-        categorie_ce: report.CTEC_RLIB_CATEGORIE,
-        genre: report.CTEC_RLIB_GENRE,
-        carrosserie_ce: report.CTEC_RLIB_CARROSSERIE_CE,
+        categorie_ue: report.CTEC_RLIB_CATEGORIE,
+        genre_national: report.CTEC_RLIB_GENRE,
+        carrosserie_ue: report.CTEC_RLIB_CARROSSERIE_CE,
         carrosserie_fr: report.CTEC_RLIB_CARROSSERIE_NAT,
         numero_de_reception: report.cveh_num_reception,
         cylindree: report.CTEC_CYLINDREE,
@@ -130,7 +130,7 @@ export const vehiculeMapping = (report) => {
         niveau_sonore: report.CTEC_NIVEAU_SONORE,
         vitesse_du_moteur: report.CTEC_VITESSE_MOTEUR,
         emission_co2: report.CTEC_CO2,
-        classe_environnementale_ce: report.CTEC_RLIB_POLLUTION,
+        classe_environnementale_ue: report.CTEC_RLIB_POLLUTION,
       },
       etat:  {
         duplicata: report.duplicata,
@@ -145,16 +145,17 @@ export const vehiculeMapping = (report) => {
       vole: report.vehicule_vole,
       sinistres: {
         a_une_plaque_fni: report.is_fni,
-        date_dernier_sinistre: report.date_dernier_sinistre,
-        date_derniere_resolution: report.date_derniere_resolution,
-        est_apte_a_circuler: report.is_apte_a_circuler,
-        nombre_de_sinistres: report.nb_sinistres,
-        procedure_vehicule_endommage_en_cours: report.has_pve,
+        date_derniere_procedure_ve: report.date_dernier_sinistre,
+        // @todo: transformer date_derniere_resolution en date_fin_derniere_procedure_ve en intégrant cette logique
+        date_fin_derniere_procedure_ve: report.date_dernier_sinistre < report.date_derniere_resolution ? report.date_derniere_resolution : undefined,
+        apte_a_circuler: report.is_apte_a_circuler,
+        nombre_de_procedures_ve: report.nb_sinistres,
+        procedure_ve_en_cours: report.has_pve,
       }
     },
     historique: mappedNewHistorique ? mappedNewHistorique : mappedHistorique,
     import_en_france: {
-      vehicule_etranger_importe: report.import,
+      vehicule_importe_depuis_etranger: report.import,
       date_import: report.date_import_france,
       date_premiere_immatriculation_etranger: report.date_premiere_immat_etranger,
     },

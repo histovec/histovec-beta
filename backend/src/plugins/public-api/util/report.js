@@ -11,7 +11,7 @@ import config from '../../../config.js'
 export const buildReportId = (
   {
     nom = '', prenoms = '', raisonSociale = '', siren = '',
-    plaqueImmatriculation = '', numeroFormule = '', dateEmissionCertificatImmatriculation = '',
+    numeroImmatriculation = '', numeroFormule = '', dateEmissionCertificatImmatriculation = '',
   },
   {
     typeImmatriculation, typePersonne,
@@ -27,8 +27,8 @@ export const buildReportId = (
 
   const vehicleId = (
     typeImmatriculation === TYPE_IMMATRICULATION.SIV
-      ? plaqueImmatriculation + numeroFormule
-      : plaqueImmatriculation + dateEmissionCertificatImmatriculationFrance
+      ? numeroImmatriculation + numeroFormule
+      : numeroImmatriculation + dateEmissionCertificatImmatriculationFrance
   )
 
   // Control about data validity date
@@ -53,7 +53,7 @@ export const buildReportId = (
 
 export const buildReportKey = (
   {
-    plaqueImmatriculation = '', numeroFormule = '', dateEmissionCertificatImmatriculation = '',
+    numeroImmatriculation = '', numeroFormule = '', dateEmissionCertificatImmatriculation = '',
   },
   {
     typeImmatriculation,
@@ -63,8 +63,8 @@ export const buildReportKey = (
 
   const rawReportKey = (
     typeImmatriculation === TYPE_IMMATRICULATION.SIV
-      ? `${plaqueImmatriculation}${numeroFormule}`
-      : `${plaqueImmatriculation}${dateEmissionCertificatImmatriculationFrance}`
+      ? `${numeroImmatriculation}${numeroFormule}`
+      : `${numeroImmatriculation}${dateEmissionCertificatImmatriculationFrance}`
   )
 
   // /!\ Do NOT change this normalization without changing it in the data side too.

@@ -6,7 +6,7 @@ import HapiSwagger from 'hapi-swagger'
 import Joi from 'joi'
 
 import { sendContact } from './handlers/feedback.js'
-import { NUMERO_FORMULE_REGEX, PLAQUE_REGEX, SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
+import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from './constant/type.js'
 
 import config from './config.js'
@@ -50,7 +50,6 @@ const routes = [
   {
     method: 'POST',
     path:'/contact',
-    // description: 'Envoi de mail au support d\'HistoVec',
     options: {
       validate: {
         payload: Joi.object({
@@ -90,8 +89,8 @@ const routes = [
               .description('Nom du propriétaire du véhicule'),
             prenom: Joi.string().trim()  // @todo use prenoms instead of prenom
               .description('Prénoms du propriétaire du véhicule'),
-            plaque: Joi.string().pattern(PLAQUE_REGEX)
-              .description('Plaque d\'immatriculation du véhicule'),
+            plaque: Joi.string().pattern(NUMERO_IMMATRICULATION_REGEX)
+              .description('Numéro d\'immatriculation du véhicule'),
             formule: Joi.string().pattern(NUMERO_FORMULE_REGEX)
               .description('Numéro de formule du certificat d\immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
             dateCertificat: Joi.date().iso()

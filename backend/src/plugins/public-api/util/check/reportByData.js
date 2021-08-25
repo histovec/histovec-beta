@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
 
-import { PLAQUE_FNI_REGEX, PLAQUE_SIV_REGEX } from '../../../../constant/regex.js'
+import { NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../../constant/regex.js'
 
 
 const TITULAIRE_PATH = 'vehicule.titulaire'
@@ -12,14 +12,14 @@ const RAISON_SOCIALE = `${TITULAIRE_PERSONNE_MORALE_PATH}.raison_sociale`
 const SIREN = `${TITULAIRE_PERSONNE_MORALE_PATH}.siren`
 
 const CERTIFICAT_IMMATRICULATION_PATH = 'vehicule.certificat_immatriculation'
-const PLAQUE_IMMATRICULATION = `${CERTIFICAT_IMMATRICULATION_PATH}.plaque_immatriculation`
+const NUMERO_IMMATRICULATION = `${CERTIFICAT_IMMATRICULATION_PATH}.numero_immatriculation`
 const NUMERO_FORMULE = `${CERTIFICAT_IMMATRICULATION_PATH}.numero_formule`
 const DATE_EMISSION_CERTIFICAT_IMMATRICULATION = `${CERTIFICAT_IMMATRICULATION_PATH}.date_emission_certificat_immatriculation`
 
 const PUBLIC_ROUTE_REPORT_BY_DATA = 'PUBLIC_ROUTE_REPORT_BY_DATA'
 
 
-export const checkPayload = ({ nom, prenoms, raisonSociale, siren, plaqueImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation }) => {
+export const checkPayload = ({ nom, prenoms, raisonSociale, siren, numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation }) => {
   const hasPrenoms = prenoms?.length > 0
 
   if (!nom && !hasPrenoms && !raisonSociale && !siren) {
@@ -70,15 +70,15 @@ export const checkPayload = ({ nom, prenoms, raisonSociale, siren, plaqueImmatri
     )
   }
 
-  if (!plaqueImmatriculation) {
-    throw Boom.badRequest(`Le champ '${PLAQUE_IMMATRICULATION}' est obligatoire et doit être au format SIV (${PLAQUE_SIV_REGEX}) ou FNI (${PLAQUE_FNI_REGEX}).`)
+  if (!numeroImmatriculation) {
+    throw Boom.badRequest(`Le champ '${NUMERO_IMMATRICULATION}' est obligatoire et doit être au format SIV (${NUMERO_IMMATRICULATION_SIV_REGEX}) ou FNI (${NUMERO_IMMATRICULATION_FNI_REGEX}).`)
   }
 
-  if (PLAQUE_SIV_REGEX.test(plaqueImmatriculation) && !numeroFormule) {
+  if (NUMERO_IMMATRICULATION_SIV_REGEX.test(numeroImmatriculation) && !numeroFormule) {
     throw Boom.badRequest(`Le champ '${NUMERO_FORMULE}' est obligatoire pour un véhicule SIV.`)
   }
 
-  if (PLAQUE_FNI_REGEX.test(plaqueImmatriculation) && !dateEmissionCertificatImmatriculation) {
+  if (NUMERO_IMMATRICULATION_FNI_REGEX.test(numeroImmatriculation) && !dateEmissionCertificatImmatriculation) {
     throw Boom.badRequest(`Le champ '${DATE_EMISSION_CERTIFICAT_IMMATRICULATION}' est obligatoire pour un véhicule FNI.`)
   }
 }
