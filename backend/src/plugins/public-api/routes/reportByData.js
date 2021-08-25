@@ -37,4 +37,4 @@ const reportByDataPayloadSchema = Joi.object({
   }),
 }).label('Report_by_data_payload')
 
-export default generateReportRoute({ path: '/report-by-data', logLabel: 'PUBLIC_ROUTE_REPORT_BY_DATA', payloadSchema: reportByDataPayloadSchema })
+export default generateReportRoute({ path: '/report_by_data', logLabel: 'PUBLIC_ROUTE_REPORT_BY_DATA', payloadSchema: reportByDataPayloadSchema })
