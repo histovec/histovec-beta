@@ -10,7 +10,7 @@ echo "# Start test: $basename ${APP} ${APP_VERSION}"
 ret=0
 container_name=backend-production
 
-if [ -z "${APP}" -o -z "${APP_VERSION}" -o -e "${BACKEND_PORT}" -o -e "${IS_UTAC_CACHE_IGNORABLE}" ]; then
+if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" ]; then
  test_result=1
 else
  test_result=0

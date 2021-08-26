@@ -10,7 +10,7 @@ echo "# Start test: $basename ${APP} ${APP_VERSION}"
 ret=0
 container_name=public-backend-production
 
-if [ -z "${APP}" -o -z "${APP_VERSION}" -o -e "${PUBLIC_BACKEND_PORT}" -o -e "${ES_HOST}" -o -e "${REDIS_HOST}" -o -e "${IS_UTAC_CACHE_IGNORABLE}" -o -e "${PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA}" ]; then
+if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${PUBLIC_BACKEND_PORT}" -o -z "${ES_HOST}" -o -z "${REDIS_HOST}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" -o -z "${PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA}" ]; then
  test_result=1
 else
  test_result=0
