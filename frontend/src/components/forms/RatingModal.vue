@@ -45,6 +45,7 @@
                   <div class="row">
                     <a
                       href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
+                      rel="noopener noreferrer"
                       target="_blank"
                       @click="setEvaluation"
                     >

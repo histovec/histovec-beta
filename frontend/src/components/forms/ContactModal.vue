@@ -65,6 +65,7 @@
                         Il convient d'effectuer les
                         <a
                           href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
+                          rel="noopener noreferrer"
                           target="_blank"
                         >
                           démarches de déclaration de cession du véhicule
@@ -76,6 +77,7 @@
                         Il convient d'effectuer les
                         <a
                           href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
+                          rel="noopener noreferrer"
                           target="_blank"
                         >
                           démarches de changement de titulaire du certificat d'immatriculation
@@ -87,6 +89,7 @@
                         Il convient d'effectuer les
                         <a
                           href="https://immatriculation.ants.gouv.fr/Vos-demarches/Obtenir-un-duplicata-en-cas-de-perte-vol-deterioration"
+                          rel="noopener noreferrer"
                           target="_blank"
                         >
                           démarches de déclaration de perte ou de vol du certificat d'immatriculation
@@ -98,6 +101,7 @@
                         Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou
                         <a
                           href="https://www.antai.gouv.fr"
+                          rel="noopener noreferrer"
                           target="_blank"
                         >
                           l'Agence nationale de traitement automatisé des infractions (ANTAI)
@@ -110,6 +114,7 @@
                         Pour toute modification de vos données, rendez-vous sur
                         <a
                           href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande"
+                          rel="noopener noreferrer"
                           target="_blank"
                         >
                           les démarches

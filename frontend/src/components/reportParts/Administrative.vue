@@ -5,9 +5,10 @@
         <h6 class="title">
           Gages
           <a
-            :href="syntheseMapping['otci'].link"
-            target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            :href="syntheseMapping['otci'].link"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <i class="fa fa-external-link pl-5"></i>
           </a>
@@ -51,9 +52,10 @@
         <h6 class="title">
           Oppositions
           <a
-            :href="syntheseMapping['otci'].link"
-            target="_blank"
             class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+            :href="syntheseMapping['otci'].link"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <i class="fa fa-external-link pl-5"></i>
           </a>

@@ -390,7 +390,7 @@ export default function () {
       Vendre un véhicule vous impose de remettre certains documents au nouveau propriétaire
       et d'avertir l'administration via un téléservice. Afin de connaitre les conditions préalables
       à la vente ainsi que les démarches à entreprendre, nous vous invitons à consulter
-      le site du <a href="https://www.service-public.fr/particuliers/vosdroits/F1707">Service Public</a>
+      le site du <a href="https://www.service-public.fr/particuliers/vosdroits/F1707" rel="noopener noreferrer" target="_blank">Service Public</a>
       </p>
       <p class="indented">
         Ce que vous pouvez faire grâce à HistoVec:

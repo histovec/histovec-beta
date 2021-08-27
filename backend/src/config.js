@@ -1,27 +1,37 @@
 import npmVersion from '../package.json'
 
+
+const isDevelopmentMode = process.env.NODE_ENV === 'development'
+
 const config = {
   port: process.env.BACKEND_PORT,
+  apiName: process.env.BACKEND_NAME,
+  apiUuid: process.env.PUBLIC_BACKEND_API_UUID,
   version: npmVersion.version,
+  publicApiVersion: '1.0.0',
   utacIdKey: process.env.UTAC_ID_KEY,
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
-  isDevelopment: process.env.NODE_ENV === 'development',
+  isDevelopmentMode,
+  isPublicApi: process.env.PUBLIC_BACKEND === 'true',
+  isUtacCacheIgnorable: isDevelopmentMode || process.env.IS_UTAC_CACHE_IGNORABLE === 'true',
   env: process.env.NODE_ENV,
   app: process.env.APP,
   redisUrl: `redis://${process.env.REDIS_URL}`,
-  redisPersit: parseInt(process.env.REDIS_PERSIST, 10) || 86400, // 24h
+  redisPersit: parseInt(process.env.REDIS_PERSIST, 10) || 86400,  // 24h
   redisPassword: process.env.REDIS_PASSWORD,
   esUrl: process.env.ES_URL,
   esSIVIndex: process.env.ES_INDEX,
   mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`,
+  usePreviousMonthForData: process.env.PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA === 'true',
 
   // UTAC api
   utac: {
-    isApiActivated: process.env.IS_UTAC_API_ACTIVATED || false, // /!\ value is passed as String
-    isVinSentToUtac: process.env.IS_VIN_SENT_TO_UTAC || false, // /!\ value is passed as String
-    isFakedApi: false, // /!\ value is passed as String
+    isApiActivated: process.env.IS_UTAC_API_ACTIVATED === 'true',
+    isVinSentToUtac: process.env.IS_VIN_SENT_TO_UTAC === 'true',
+    isUtacMockForBpsaActivated: process.env.IS_UTAC_MOCK_FOR_BPSA_ACTIVATED === 'true',
+    isFakedApi: false,  // /!\ value is passed as String
     apiUrl: process.env.UTAC_URL,
     fakeApiUrl: process.env.FAKE_UTAC_URL,
     timeout: parseInt(process.env.UTAC_TIMEOUT, 10) || 30,

@@ -21,18 +21,22 @@ services:
         NPM_LATEST: ${NPM_LATEST}
         NPM_VERBOSE: ${NPM_VERBOSE}
     container_name: ${APP}-backend-${EXEC_ENV}
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     environment:
       - NODE_ENV=${EXEC_ENV}
+      - BACKEND_NAME=${BACKEND_NAME}
       - BACKEND_PORT=${BACKEND_PORT}
       - BACKEND_SECRET=${BACKEND_SECRET}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
-      - REDIS_URL=${REDIS_URL}
+      - REDIS_URL=${REDIS_HOST}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_PERSIST=${REDIS_PERSIST}
       - ES_URL=${ES_HOST}:${ES_PORT}
       - ES_INDEX=${ES_INDEX}
       - IS_UTAC_API_ACTIVATED=${IS_UTAC_API_ACTIVATED}
+      - IS_UTAC_MOCK_FOR_BPSA_ACTIVATED=${IS_UTAC_MOCK_FOR_BPSA_ACTIVATED}
       - IS_VIN_SENT_TO_UTAC=${IS_VIN_SENT_TO_UTAC}
       - FAKE_UTAC_URL=${FAKE_UTAC_SCHEME}://${FAKE_UTAC_HOST}:${FAKE_UTAC_PORT}/${FAKE_UTAC_API}
       - UTAC_ID_KEY=${UTAC_ID_KEY}
@@ -48,6 +52,8 @@ services:
       - SMTP_PORT=${SMTP_PORT}
       - MAIL_FROM=${MAIL_FROM}
       - MAIL_TO=${MAIL_TO}
+      - PUBLIC_BACKEND=false
+      - IS_UTAC_CACHE_IGNORABLE=${IS_UTAC_CACHE_IGNORABLE}
     restart: on-failure
     links:
       - redis
@@ -65,6 +71,8 @@ services:
       target: cache
       dockerfile: Dockerfile
     container_name: ${APP}-cache
+    ports:
+      - 6379:6379
     command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
     volumes:
       - ${REDIS_DATA}:/data

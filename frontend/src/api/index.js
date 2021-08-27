@@ -2,6 +2,7 @@ import 'whatwg-fetch'
 import store from '@/store'
 import base64ArrayBuffer from 'base64-arraybuffer'
 import apiConf from '@/assets/json/backend.json'
+import { urlSafeDecode } from '../utils/encoding.js'
 
 const AES_BLOCK_SIZE = 16
 
@@ -181,13 +182,16 @@ export default {
     }
     const reportResponse = await jsonClient(apiName, `${apiPaths(apiName)}`, options)
 
+    // key is not urlSafe encoded by DATA pipeline while encrypting sivData
+    const sivDataKey = urlSafeDecode(key)
+
     const { success, sivData = {}, utacData = {} } = await decryptReport(
       apiName,
       reportResponse,
       {
         sivDataPath: 'sivData',
         utacDataPath: 'utacData',
-        sivDataKey: key,
+        sivDataKey,
       }
     )
 

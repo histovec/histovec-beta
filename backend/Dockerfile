@@ -17,9 +17,6 @@ ARG port
 # Base dir /app
 WORKDIR /$app_path
 
-# Expose the listening port of your app
-EXPOSE ${port}
-
 # update debian w/proxy & mirror
 RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
    sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list
@@ -125,4 +122,4 @@ RUN npm install pm2 -g
 # Copy the pm2 config
 COPY ecosystem.config.js .
 
-CMD [ "pm2-runtime", "start", "ecosystem.config.js", "--env", "production"  ]
+CMD [ "pm2-runtime", "start", "ecosystem.config.js", "--env", "production" ]

@@ -1,8 +1,8 @@
-// redis-client.js
 import redis from 'redis'
 import { promisify } from 'util'
-import { appLogger } from '../util/logger'
-import config from '../config'
+import { appLogger } from '../util/logger.js'
+import config from '../config.js'
+
 const client = redis.createClient(config.redisUrl)
 
 client.auth(config.redisPassword, (err, response) => {

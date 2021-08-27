@@ -123,9 +123,10 @@
               Toute demande de renseignement ou de correction de votre dossier
               doit être adressée à l'Agence Nationale des titres Sécurisés
               <a
-                href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande/"
-                target="_blank"
                 class="link-default"
+                href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande/"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 ANTS
                 <i class="fa fa-external-link"></i>
@@ -161,9 +162,10 @@
               <p>
                 Données officielles du <span class="text-defaut text-defaut-i-g">Ministère de l’Intérieur</span> issues du
                 <a
+                  href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV"
+                  rel="noopener noreferrer"
                   target="_blank"
                   title="Système d'Immatriculation des Véhicules"
-                  href="https://immatriculation.ants.gouv.fr/Tout-savoir-sur-le-SIV/Le-Systeme-d-Immatriculation-des-Vehicules-SIV"
                 >
                   SIV
                 </a>
@@ -270,6 +272,7 @@
                     (
                     <a
                       href="https://www.service-public.fr/particuliers/vosdroits/F1707"
+                      rel="noopener noreferrer"
                       target="_blank"
                     >
                       Service Public
@@ -281,7 +284,6 @@
                     (
                     <a
                       href="/histovec/search"
-                      target="_blank"
                     >
                       HistoVec
                     </a>
@@ -292,6 +294,7 @@
                     (
                     <a
                       href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
+                      rel="noopener noreferrer"
                       target="_blank"
                     >
                       ANTS
@@ -318,6 +321,7 @@
                     (
                     <a
                       href="https://www.service-public.fr/particuliers/vosdroits/F24254"
+                      rel="noopener noreferrer"
                       target="_blank"
                     >
                       Service Public
@@ -329,6 +333,7 @@
                     (
                     <a
                       href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
+                      rel="noopener noreferrer"
                       target="_blank"
                     >
                       ANTS
@@ -372,8 +377,8 @@
                 </div>
                 <div class="modal-footer">
                   <a
-                    href="#"
                     class="btn radius-30 btn btn-animated btn-default"
+                    href="#"
                     @click="modal = false"
                   >
                     Fermer

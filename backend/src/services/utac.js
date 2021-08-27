@@ -1,13 +1,10 @@
 import axios from 'axios'
 import { readFileSync } from 'fs'
-import config from '../config'
 import { Agent as HttpsAgent } from 'https'
-import { decodingJWT } from '../util/jwt'
-import { appLogger } from '../util/logger'
+import { appLogger } from '../util/logger.js'
+import { decodingJWT } from '../util/jwt.js'
+import config from '../config.js'
 
-// /!\ boolean setting is passed as string /!\
-// @todo: we should use typed yaml to load settings
-const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
 const anonymize = (text, nbVisibleCharAtPrefixAndSuffix=2) => {
   const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
@@ -175,13 +172,13 @@ module.exports.UTACClient = class UTACClient {
       const anonymizedUtacVin = anonymize(vin)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      if (isVinSentToUtac) {
+      if (config.utac.isVinSentToUtac) {
         appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
       }
 
       response = await this.axios.post('/immat/search', {
         immat,
-        ...(isVinSentToUtac ? { vin } : {}),
+        ...(config.utac.isVinSentToUtac ? { vin } : {}),
       })
       const end = new Date()
       const executionTime = end - start
@@ -201,7 +198,6 @@ module.exports.UTACClient = class UTACClient {
     if (!response?.data?.ct || !response?.data?.update_date) {
       appLogger.error({
         error: ERROR_MESSAGES.malformedResponse,
-        response,
       })
 
       return {

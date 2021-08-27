@@ -1,4 +1,4 @@
-const { DateTime } = require('luxon')
+import dayjs from 'dayjs'
 const bodyParser = require('body-parser')
 const service = require('restana')()
 
@@ -10,7 +10,7 @@ const config = {
   port: process.env.FAKE_UTAC_PORT || 9000
 }
 
-console.log(JSON.stringify({ start_date: DateTime.local(), config: config }))
+console.log(JSON.stringify({ start_date: dayjs().toISOString(), config: config }))
 
 const allCt = (
   require('./utac_sample.json')
@@ -42,7 +42,7 @@ const getCT = (plaque) => {
   })
   const res = {
     status: myCt ? 200 : 404,
-    update_date: DateTime.local(),
+    update_date: dayjs().toISOString(),
     ct: myCt
   }
   console.log(res)

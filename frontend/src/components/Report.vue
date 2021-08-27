@@ -441,11 +441,7 @@ export default {
       return this.holder ? this.$route.params.id : this.$route.query.id
     },
     key () {
-      const key = ((this.$route.params.key !== undefined) ? this.$route.params.key : this.$route.query.key)
-      if (!key) {
-        return
-      }
-      return key.replace(/-/g, '+').replace(/_/g, '/')
+      return this.$route.params.key ? this.$route.params.key : this.$route.query.key
     },
     status () {
       if (this.$store.state.histovec.report) {
@@ -493,8 +489,10 @@ export default {
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      const urlKey = (this.$store.state.histovec.key || this.key).replace(/\+/g, '-').replace(/\//g, '_')
-      const queryString = `?id=${encodeURIComponent(this.$store.state.histovec.id || this.$route.params.id)}&key=${encodeURIComponent(urlKey)}`
+      const idParam = encodeURIComponent(this.$store.state.histovec.id || this.$route.params.id)
+      const keyParam = encodeURIComponent(this.$store.state.histovec.key || this.key)
+      const queryString = `?id=${idParam}&key=${keyParam}`
+
       return `${this.baseUrl}/histovec/report${queryString}`
     }
   },
