@@ -74,9 +74,35 @@
                   titulaires de droits. Pour toute demande de reproduction,
                   <a :href="reproductionRequestEmail">contactez-nous</a>
                 </p>
-                <p>Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com" rel="noopener noreferrer" target="_blank">picjumbo.com</a> et libres de droits.</p>
+                <p>
+                  Sauf mention contraire, les photographies sont issues du site
+                  <a
+                    href="http://picjumbo.com"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    picjumbo.com
+                  </a>
+                  et libres de droits.
+                </p>
                 <h5>Conception et réalisation</h5>
-                Conception et réalisation Lab <a href="https://www.interieur.gouv.fr/Le-ministere/Secretariat-general/Direction-des-systemes-d-information-et-de-communication" rel="noopener noreferrer" target="_blank">DNUM</a> du ministère de l'Intérieur avec le Bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (<a href="http://www.securite-routiere.gouv.fr/la-securite-routiere/qui-sommes-nous/la-delegation-a-la-securite-routiere" rel="noopener noreferrer" target="_blank">DSR</a>)
+                Conception et réalisation Lab
+                <a
+                  href="https://www.interieur.gouv.fr/Le-ministere/Secretariat-general/Direction-des-systemes-d-information-et-de-communication"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  DNUM
+                </a>
+                du ministère de l'Intérieur avec le Bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (
+                <a
+                  href="http://www.securite-routiere.gouv.fr/la-securite-routiere/qui-sommes-nous/la-delegation-a-la-securite-routiere"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  DSR
+                </a>
+                )
 
                 <h6> Liens hypertextes entrants </h6>
                 Tout site public ou privé est autorisé à établir, sans autorisation préalable, un lien vers les informations diffusées dans ce site.
@@ -91,7 +117,30 @@
                 <h6>Droit d’auteur</h6>
                 Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Au terme de l’article L. 122-4 du Code de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.
                 <h6>Code applicatif open source</h6>
-                Conformément à la <a href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14" rel="noopener noreferrer" target="_blank">loi pour une République numérique</a>, le code de l'application HistoVec est libre et opensource, publié sous <a href="https://www.gnu.org/licenses/lgpl-3.0.fr.html" rel="noopener noreferrer" target="_blank">licence LGPL</a> sur <a href="https://github.com/histovec/histovec-beta" rel="noopener noreferrer" target="_blank">Github</a>.
+                Conformément à la
+                <a
+                  href="https://www.legifrance.gouv.fr/affichLoiPubliee.do?idDocument=JORFDOLE000031589829&type=general&legislature=14"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  loi pour une République numérique
+                </a>
+                , le code de l'application HistoVec est libre et opensource, publié sous
+                <a
+                  href="https://www.gnu.org/licenses/lgpl-3.0.fr.html"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  licence LGPL
+                </a>
+                sur
+                <a
+                  href="https://github.com/histovec/histovec-beta"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Github
+                </a>.
                 <h6>Limitations de responsabilité</h6>
                 Le site HistoVec fournit les informations issues du Système d’Immatriculation des Véhicules (SIV).
                 La responsabilité de l'éditeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’Immatriculation des Véhicules, ou d’anomalies de traitement informatique.

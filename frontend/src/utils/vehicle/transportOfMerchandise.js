@@ -178,7 +178,7 @@ export const isTracteurRoutier = (genre, categorie, carrosserieNat) => {
 }
 
 // Camionnettes (véhicules d'un poids total autorisé en charge inférieur ou égal à 3 500 kg autres que les tracteurs routiers).
-export const isCamionnetteLimitee = (genre, categorie, carrosserieNat) => {
+export const isCamionnetteLimitee = (genre, categorie) => {
 	// 2009-04-15 to 2016-06-11
 	if (
 		genre === GENRE.CTTE && (
