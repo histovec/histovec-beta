@@ -66,6 +66,7 @@
           </qrcode-vue>
         </div>
       </div>
+      <!-- Unplugged feature for now
       <div class="col-md-12 p-h-10">
         <p>
           Vous pouvez transmettre votre <b>code de partage HistoVec</b> à nos partenaires afin qu'ils puissent utiliser les informations de votre véhicule pour vous fournir un service.
@@ -86,7 +87,7 @@
             <i class="fa fa-copy"></i>
           </button>
         </p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -122,6 +123,8 @@ export default {
       const key = urlSafeDecode(this.$store.state.histovec.key)
 
       return `${this.$store.state.histovec.id}-${key}`
+
+
     },
   },
 
