@@ -195,7 +195,7 @@ export const isSemiRemorqueAgricole = (genre, categorie, carrosserieNat) => {
 	return false
 }
 
-export const isMachineAgricoleAutomotrice = (genre, categorie) => {
+export const isMachineAgricoleAutomotrice = (genre, categorie, carroserieNat) => {
 	if (
 		genre === GENRE.MAGA && (
 			// added on 2009-04-14
