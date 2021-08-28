@@ -31,7 +31,7 @@
     "es6-promise": "^4.2.8",
     "font-awesome": "^4.7.0",
     "lodash.orderby": "^4.6.0",
-    "object-path": "^0.11.5",
+    "object-path": "^0.11.6",
     "pdf-lib": "^1.16.0",
     "qr.js": "^0.0.0",
     "qrcode.vue": "^1.7.0",
