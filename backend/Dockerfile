@@ -74,13 +74,14 @@ FROM base as build
 ENV NPM_CONFIG_LOGLEVEL warn
 ARG app_name
 ARG app_ver
+ARG file_app_version
 ENV APP_VERSION ${app_ver}
 
-COPY ${app_name}-${app_ver}-backend.tar.gz .
+COPY ${file_app_version} .
 
-RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-backend.tar.gz  && \
+RUN  set -ex ; tar -zxvf ${file_app_version} && \
      npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
-     rm -rf ${app_name}-${app_ver}-backend.tar.gz
+     rm -rf ${file_app_version}
 
 CMD ["npm","run",  "build"]
 
@@ -96,17 +97,18 @@ ARG MIRROR_DEBIAN
 ARG app_path
 ARG app_name
 ARG app_ver
+ARG file_dist_app_version
 ARG port
 ARG NPM_AUDIT_DRY_RUN
 ENV NODE_ENV=production
 ENV APP_VERSION=${app_ver}
 # Copy the transpiled code to use in production (in /app)
 
-COPY ${app_name}-${app_ver}-backend-dist.tar.gz .
+COPY ${file_dist_app_version} .
 
-RUN  [ -f "${app_name}-${app_ver}-backend-dist.tar.gz" ] && \
-     tar -zxvf ${app_name}-${app_ver}-backend-dist.tar.gz  && \
-     rm -rf ${app_name}-${app_ver}-backend-dist.tar.gz
+RUN  [ -f ${file_dist_app_version} ] && \
+     tar -zxvf ${file_dist_app_version} && \
+     rm -rf ${file_dist_app_version}
 
 COPY package.json ./
 
