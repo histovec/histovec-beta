@@ -16,6 +16,8 @@ services:
         app_path: /${APP}
         app_name: ${APP}
         app_ver: ${APP_VERSION}
+        file_app_version: ${FILE_PUBLIC_BACKEND_APP_VERSION}
+        file_dist_app_version: ${FILE_PUBLIC_BACKEND_DIST_APP_VERSION}
         port: ${PUBLIC_BACKEND_PORT}
         NPM_FIX: ${NPM_FIX}
         NPM_LATEST: ${NPM_LATEST}
