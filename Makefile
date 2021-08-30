@@ -52,7 +52,7 @@ export PORT=80
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_USER := $(shell whoami)
-export APP_VERSION	:= $(shell git describe --tags || cat VERSION )
+export APP_VERSION	:= $(shell git describe --tags || cat VERSION)
 export LOGS=${APP_PATH}/log
 # build options
 export DC_BUILD_ARGS = --pull --no-cache
@@ -530,7 +530,7 @@ public-backend-build-archive: public-backend-clean-archive build-dir
 	echo "$(APP_VERSION)" > VERSION ; cp VERSION $(BUILD_DIR)/$(API)-VERSION
 	tar -zcvf $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) --exclude $$(basename $(BUILD_DIR)) *
 	@echo "Build $(APP) $(APP)-latest archive"
-	cp $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_API_LATEST_VERSION)
+	cp $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_API_LATEST_VERSION)
 
 # publish packages
 publish-public-backend: publish-public-backend-$(APP_VERSION) publish-public-backend-latest
