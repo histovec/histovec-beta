@@ -1054,11 +1054,19 @@ public-backend-build: backend-build-unlock build-dir backend-build-lock public-b
 
 public-backend-build-all: public-backend-build-dist public-backend-build-dist-archive public-backend-build-image
 
+public-backend-prepare-build:
+	if [ -f "${BACKEND}/$(FILE_PUBLIC_BACKEND_APP_VERSION)" ] ; then rm -rf ${BACKEND}/$(FILE_PUBLIC_BACKEND_APP_VERSION) ; fi
+	( cd ${BACKEND} && tar -zcvf $(FILE_PUBLIC_BACKEND_APP_VERSION) \
+         babel.config.js \
+         boot-dev.js \
+         src \
+         ecosystem.config.js )
+
 public-backend-check-build:
 	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config -q
 
-public-backend-build-dist: backend-prepare-build backend-check-build
-	@echo building ${APP} public-backend in ${BACKEND}
+public-backend-build-dist: public-backend-prepare-build public-backend-check-build
+	@echo building ${API} in ${BACKEND}
 	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
 public-backend-build-dist-archive:
@@ -1074,7 +1082,7 @@ public-backend-clean-dist-archive:
 	@rm -rf $(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
 
 public-backend-build-image: $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) public-backend-check-build
-	@echo building ${APP} public-backend image
+	@echo building ${API} image
 	cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ${BACKEND}/
 	export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
