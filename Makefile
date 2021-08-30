@@ -43,8 +43,12 @@ export curl_progress_bar=--progress-bar --write 'Downloaded %{url_effective} %{s
 ##############################################
 #         APP configuration section          #
 ##############################################
-export PORT=80
+# HistoVec configuration
 export APP=histovec
+# HistoVec api configuration
+export API=histovec-api
+# common configuration
+export PORT=80
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_USER := $(shell whoami)
@@ -62,13 +66,21 @@ export dollar = $(shell echo \$$)
 export API_VERSION_V1=v1
 export API_VERSION=${API_VERSION_V1}
 export AB_TESTING_PERCENTAGE=0
-# packaging
+# packaging HistoVec
 export FILE_ARCHIVE_APP_VERSION = $(APP)-$(APP_VERSION)-archive.tar.gz
-export FILE_ARCHIVE_LATEST_VERSION = $(APP)-latest-archive.tar.gz
-# publish
+export FILE_ARCHIVE_APP_LATEST_VERSION = $(APP)-latest-archive.tar.gz
+# packaging HistoVec api
+export FILE_ARCHIVE_API_VERSION = $(API)-$(APP_VERSION)-archive.tar.gz
+export FILE_ARCHIVE_API_LATEST_VERSION = $(API)-latest-archive.tar.gz
+
+# publish common
 export PUBLISH_URL_BASE           = histovec-docker-images
+# publish HistoVec
 export PUBLISH_URL_APP_VERSION    = $(PUBLISH_URL_BASE)/$(APP_VERSION)
 export PUBLISH_URL_LATEST_VERSION = $(PUBLISH_URL_BASE)/latest
+# publish HistoVec api
+export PUBLISH_URL_API_VERSION    = $(PUBLISH_URL_BASE)/$(API)-$(APP_VERSION)
+export PUBLISH_URL_API_LATEST_VERSION = $(PUBLISH_URL_BASE)/$(API)-latest
 # link VMs containers
 export LOCAL_IP=$(shell hostname -I | awk '{print $$1}')
 
@@ -251,11 +263,11 @@ export PUBLIC_BACKEND_PORT?=8020
 export DC_DEV_PUBLIC_BACKEND = ${DC_PREFIX}-dev-public-backend.yml
 export DC_BUILD_PUBLIC_BACKEND = ${DC_PREFIX}-public-backend.yml
 export DC_RUN_PUBLIC_BACKEND = ${DC_PREFIX}-public-backend.yml
-export FILE_PUBLIC_BACKEND_APP_VERSION = $(APP)-$(APP_VERSION)-public-backend.tar.gz
-export FILE_PUBLIC_BACKEND_DIST_APP_VERSION = $(APP)-$(APP_VERSION)-public-backend-dist.tar.gz
-export FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION = $(APP)-latest-public-backend-dist.tar.gz
-export FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION = $(APP)-public-backend-$(APP_VERSION)-image.tar
-export FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION = $(APP)-public-backend-latest-image.tar
+export FILE_PUBLIC_BACKEND_APP_VERSION = $(API)-$(APP_VERSION)-public-backend.tar.gz
+export FILE_PUBLIC_BACKEND_DIST_APP_VERSION = $(API)-$(APP_VERSION)-public-backend-dist.tar.gz
+export FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION = $(API)-latest-public-backend-dist.tar.gz
+export FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION = $(API)-public-backend-$(APP_VERSION)-image.tar
+export FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION = $(API)-public-backend-latest-image.tar
 
 
 ##############################################
@@ -355,6 +367,7 @@ build-if-necessary:
 	(make backend-check-image >/dev/null 2>&1) || make backend-build
 	(make nginx-check-image >/dev/null 2>&1) || make frontend-build
 
+# @todo: est-ce qu'on s'en sert ?
 build-all: build save-images
 
 save-images: elasticsearch-save-image nginx-save-image backend-save-image redis-save-image
@@ -366,7 +379,7 @@ build-archive: clean-archive build-dir
 	echo "$(APP_VERSION)" > VERSION ; cp VERSION $(BUILD_DIR)/$(APP)-VERSION
 	tar -zcvf $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) --exclude $$(basename $(BUILD_DIR)) --exclude nginx/*.tar.gz --exclude frontend/*.tar.gz *
 	@echo "Build $(APP) $(APP)-latest archive"
-	cp $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_LATEST_VERSION)
+	cp $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_APP_LATEST_VERSION)
 
 # publish packages
 publish: publish-$(APP_VERSION) publish-latest
@@ -396,7 +409,7 @@ publish-latest:
 	( cd $(BUILD_DIR) ;\
 	    for file in \
                 $(APP)-VERSION \
-                $(FILE_ARCHIVE_LATEST_VERSION) \
+                $(FILE_ARCHIVE_APP_LATEST_VERSION) \
                 $(FILE_FRONTEND_DIST_LATEST_VERSION) \
                 $(FILE_IMAGE_NGINX_LATEST_VERSION) \
                 $(FILE_IMAGE_ELASTICSEARCH_LATEST_VERSION) \
@@ -503,38 +516,50 @@ down-public-backend-v1: public-backend-stop
 build-public-backend-if-necessary:
 	(make public-backend-check-image >/dev/null 2>&1) || make public-backend-build
 
+# @todo: est-ce qu'on s'en sert ?
+# build-all for public-backend
 build-all-public-backend: public-backend-build public-backend-save-image
 
+# build-all-images for public-backend
 build-all-public-backend-image: build-dir public-backend-build
+
+
+# build-archive for public-backend
+public-backend-build-archive: public-backend-clean-archive build-dir
+	@echo "Build $(API) $(API)-$(APP_VERSION) archive"
+	echo "$(APP_VERSION)" > VERSION ; cp VERSION $(BUILD_DIR)/$(API)-VERSION
+	tar -zcvf $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) --exclude $$(basename $(BUILD_DIR)) *
+	@echo "Build $(APP) $(APP)-latest archive"
+	cp $(BUILD_DIR)/$(FILE_ARCHIVE_APP_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_API_LATEST_VERSION)
 
 # publish packages
 publish-public-backend: publish-public-backend-$(APP_VERSION) publish-public-backend-latest
 
 publish-public-backend-$(APP_VERSION):
-	@echo "Publish $(APP) $(APP_VERSION) artifacts"
+	@echo "Publish $(API) $(APP_VERSION) artifacts"
 	if [ -z "$(openstack_url)" -o -z "$(openstack_auth_id)" -o -z "$(openstack_token)" ] ; then exit 1 ; fi
 	( cd $(BUILD_DIR) ;\
 	  ls -alrt ;\
 	    for file in \
-                $(APP)-VERSION \
-                $(FILE_ARCHIVE_APP_VERSION) \
+                $(API)-VERSION \
+                $(FILE_ARCHIVE_API_VERSION) \
                 $(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) \
            ; do \
-            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_APP_VERSION)/$$file ; \
+            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_API_VERSION)/$$file ; \
            done ; \
 	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=${APP_VERSION}/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
 	)
 
 publish-latest-public-backend:
-	@echo "Publish $(APP) latest public-backend artifacts"
+	@echo "Publish $(API) latest artifacts"
 	if [ -z "$(openstack_url)" -o -z "$(openstack_auth_id)" -o -z "$(openstack_token)" ] ; then exit 1 ; fi
 	( cd $(BUILD_DIR) ;\
 	    for file in \
-                $(APP)-VERSION \
-                $(FILE_ARCHIVE_LATEST_VERSION) \
+                $(API)-VERSION \
+                $(FILE_ARCHIVE_API_LATEST_VERSION) \
                 $(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) \
            ; do \
-            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_LATEST_VERSION)/$$file ; \
+            curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_API_LATEST_VERSION)/$$file ; \
            done ; \
 	  curl -k -H 'X-Auth-Token: $(openstack_token)' "$(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_BASE)?prefix=latest/&format=json" -s --fail | jq '.[] | [  .content_type, .hash, .last_modified , .name + ": " + (.bytes|tostring) ] | join(" ")' ; \
 	)
@@ -548,6 +573,12 @@ download-public-backend-image-v1: build-dir public-backend-download-image
 
 load-public-backend-image: load-public-backend-image-${API_VERSION}
 load-public-backend-image-v1: build-dir public-backend-load-image
+
+# clean-archive for public-backend
+# equivalent to public-backend-clean-dist
+public-backend-clean-archive:
+	@echo "Clean $(API) archive"
+	rm -rf $(FILE_PUBLIC_BACKEND_APP_VERSION)
 
 # clean-image equivalent for public-backend
 # JUST USE public-backend-clean-image
@@ -728,7 +759,7 @@ elasticsearch-clean-image:
 
 # download image and load it to docker
 
-elasticsearch-download-image: ## Download elasticsearch image
+elasticsearch-download-image:
 	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_ELASTICSEARCH_APP_VERSION) \
           $(curl_progress_bar)
 
@@ -905,7 +936,7 @@ backend-prepare-build:
 
 # download image and load it in docker
 
-redis-download-image: ## Download redis image
+redis-download-image:
 	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_REDIS_APP_VERSION) \
           $(curl_progress_bar)
 redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
@@ -988,9 +1019,10 @@ backend-clean-image:
 
 # download image and load it in docker
 
-backend-download-image:  ## Download backend image
+backend-download-image:
 	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_BACKEND_APP_VERSION) \
           $(curl_progress_bar)
+
 backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
 
@@ -1046,6 +1078,7 @@ public-backend-build-image: $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
 	cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ${BACKEND}/
 	export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
+# save-images for public-backend
 public-backend-save-image:
 	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public-backend.image) ; \
         backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
@@ -1067,9 +1100,10 @@ public-backend-clean-image:
 
 # download image and load it in docker
 
-public-backend-download-image: ## Download public-backend image
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) \
+public-backend-download-image:
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_API_VERSION}/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) \
           $(curl_progress_bar)
+
 public-backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
 
