@@ -533,7 +533,7 @@ public-backend-build-archive: public-backend-clean-archive build-dir
 	cp $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_API_LATEST_VERSION)
 
 # publish packages
-publish-public-backend: publish-public-backend-$(APP_VERSION) publish-public-backend-latest
+publish-public-backend: publish-public-backend-$(APP_VERSION) publish-latest-public-backend
 
 publish-public-backend-$(APP_VERSION):
 	@echo "Publish $(API) $(APP_VERSION) artifacts"
