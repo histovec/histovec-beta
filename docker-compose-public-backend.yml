@@ -60,7 +60,7 @@ services:
       - PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA=${PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA}
     restart: on-failure
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT}/${APP}/api/v1/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:${PUBLIC_BACKEND_PORT}/${APP}/api/v1/health"]
       interval: 60s
       timeout: 5s
       retries: 3
