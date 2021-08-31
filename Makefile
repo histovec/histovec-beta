@@ -503,12 +503,12 @@ build-dir-clean:
 up-public-backend: up-public-backend-${API_VERSION}
 
 up-public-backend-v1: public-backend-start
-	@echo all public-backend services are up in production mode, api v1
+	@echo all $(API) services are up in production mode, api v1
 
 down-public-backend: down-public-backend-${API_VERSION}
 
 down-public-backend-v1: public-backend-stop
-	@echo all public-backend services stopped
+	@echo all $(API) services stopped
 
 # build equivalent for public-backend
 # JUST USE public-backend-build
