@@ -1052,7 +1052,7 @@ public-backend-stop:
 # package for production
 public-backend-build: backend-build-unlock build-dir backend-build-lock public-backend-build-all backend-build-unlock
 
-public-backend-build-all: public-backend-build-dist public-backend-build-dist-archive public-backend-build-image
+public-backend-build-all: network public-backend-build-dist public-backend-build-dist-archive public-backend-build-image
 
 public-backend-prepare-build:
 	if [ -f "${BACKEND}/$(FILE_PUBLIC_BACKEND_APP_VERSION)" ] ; then rm -rf ${BACKEND}/$(FILE_PUBLIC_BACKEND_APP_VERSION) ; fi
