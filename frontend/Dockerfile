@@ -47,28 +47,31 @@ RUN if [ ! -z "$http_proxy" ] ; then \
 # 15 min
 RUN npm config set fetch-timeout 900000
 
-RUN echo "NPM_LATEST = $NPM_LATEST"
-RUN if [ "$NPM_LATEST" = "true" ]; then\
-     echo "Let's install npm latest version"; \
-     npm i npm@latest -g;  \
+RUN echo "NPM_LATEST = ${NPM_LATEST}"
+RUN if [ "${NPM_LATEST}" = "true" ]; then\
+    echo "Let's install npm latest version"; \
+    npm i npm@latest -g;  \
   else \
-     echo "Don't install npm latest version"; \
+    echo "Don't install npm latest version"; \
   fi
 
 COPY package.json ./
 RUN npm --no-git-tag-version version ${APP_VERSION}
-RUN if [ -z "${NPM_VERBOSE}" ]; then\
-      npm install;  \
-    else \
-      npm install --verbose; \
-    fi
+
+RUN echo "NPM_VERBOSE = ${NPM_VERBOSE}"
+RUN if [ "${NPM_VERBOSE}" = "true" ]; then\
+    npm install --verbose;  \
+  else \
+     npm install; \
+  fi
 
 # RUN npm config set audit-level high
-# RUN if [ -z "${NPM_FIX}" ]; then \
-#       npm audit --registry=https://registry.npmjs.org; \
-#     else \
-#       npm audit fix --registry=https://registry.npmjs.org; \
-#     fi
+# RUN echo "NPM_FIX = ${NPM_FIX}"
+# RUN if [ "${NPM_FIX}" = "true" ]; then \
+#     npm audit fix --registry=https://registry.npmjs.org; \
+#   else \
+#     npm audit --registry=https://registry.npmjs.org; \
+#   fi
 
 COPY run.sh .
 RUN chmod +x run.sh
