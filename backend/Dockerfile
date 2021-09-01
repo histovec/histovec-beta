@@ -35,7 +35,13 @@ RUN if [ ! -z "$http_proxy" ] ; then \
 # 10 min
 RUN npm config set fetch-timeout 600000
 
-RUN [ -z "${NPM_LATEST}" ] || npm i npm@latest -g
+RUN echo "NPM_LATEST = $NPM_LATEST"
+RUN if [ "$NPM_LATEST" = "true" ]; then\
+     echo "Let's install npm latest version"; \
+     npm i npm@latest -g;  \
+  else \
+     echo "Don't install npm latest version"; \
+  fi
 
 COPY package.json ./
 RUN npm --no-git-tag-version version ${APP_VERSION}
