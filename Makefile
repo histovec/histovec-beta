@@ -425,15 +425,11 @@ publish-latest:
 download-all-images: download-all-images-${API_VERSION}
 download-all-images-v1: build-dir nginx-download-image elasticsearch-download-image backend-download-image redis-download-image
 
-download-all-public-backend-images: download-all-public-backend-${API_VERSION}
-download-all-public-backend-images-v1: build-dir backend-download-image
 
 # Load published images
 load-all-images: load-all-images-${API_VERSION}
 load-all-images-v1: build-dir nginx-load-image elasticsearch-load-image backend-load-image redis-load-image
 
-load-all-public-backend-images: load-all-public-backend-images-${API_VERSION}
-load-all-public-backend-images-v1: build-dir backend-load-image
 
 # clean for fresh start
 clean: index-purge docker-clean frontend-clean
@@ -565,12 +561,12 @@ publish-latest-public-backend:
 	)
 
 # Download published images
-
+# download-all-images equivalent for public-backend
 download-public-backend-image: download-public-backend-image-${API_VERSION}
 download-public-backend-image-v1: build-dir public-backend-download-image
 
 # Load published images
-
+# load-all-images equivalent for public-backend
 load-public-backend-image: load-public-backend-image-${API_VERSION}
 load-public-backend-image-v1: build-dir public-backend-load-image
 
