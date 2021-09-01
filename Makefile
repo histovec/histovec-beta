@@ -1037,7 +1037,7 @@ backend-dev-stop:
 ##############################################
 # production mode
 
-public-backend-start: backend-host-config
+public-backend-start:
 	@echo docker-compose up public-backend for production ${VERSION}
 	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
 
@@ -1112,7 +1112,7 @@ public-backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
 
 # development mode
-public-backend-dev: backend-host-config
+public-backend-dev:
 	@echo docker-compose up public-backend for dev ${VERSION}
 	@echo secret ${BACKEND_SECRET}
 	@export EXEC_ENV=development BACKEND_NAME=public-backend;\
