@@ -17,7 +17,8 @@ const config = {
   isUtacCacheIgnorable: isDevelopmentMode || process.env.IS_UTAC_CACHE_IGNORABLE === 'true',
   env: process.env.NODE_ENV,
   app: process.env.APP,
-  redisUrl: `redis://${process.env.REDIS_URL}`,
+  redisHost: process.env.REDIS_HOST,
+  redisPort: process.env.REDIS_PORT,
   redisPersit: parseInt(process.env.REDIS_PERSIST, 10) || 86400,  // 24h
   redisPassword: process.env.REDIS_PASSWORD,
   esUrl: process.env.ES_URL,

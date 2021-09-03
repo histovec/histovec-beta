@@ -85,6 +85,8 @@ export const getReport = async (request, h) => {
         throw Boom.notFound(sivMessage, {	success: false, message: sivMessage })
       case 502:
         throw Boom.badGateway(sivMessage, {	success: false, message: sivMessage })
+      case 503:
+        throw Boom.serverUnavailable(sivMessage, {	success: false, message: sivMessage })
       case 500:
       default:
         throw Boom.badImplementation(sivMessage, { success: false, message: sivMessage })
@@ -159,24 +161,29 @@ export const getReport = async (request, h) => {
   }, utacDataKey)
 
   const utacDataCacheId = urlSafeBase64Encode(hash(id))
-  const utacData = await getAsync(utacDataCacheId)
 
   const ignoreCache = config.isUtacCacheIgnorable && ignoreUtacCache
 
-  if (ignoreCache) {
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
-  }
+  if (!ignoreCache) {
+    try {
+      const utacData = await getAsync(utacDataCacheId)
 
-  if (!ignoreCache && utacData) {
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
-
-    return {
-      success: true,
-      sivData,
-      utacData,
-      utacDataKey,
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
+      if (utacData) {
+        return {
+          success: true,
+          sivData,
+          utacData,
+          utacDataKey,
+        }
+      }
+    } catch (e) {
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down get_vehicle`)
+      appLogger.info('-- redis is down => cannot read vehicle in UTAC cache')
     }
   }
+
+  appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
 
   const normalizedImmat = normalizeImmatForUtac(immat)
   appLogger.debug(`-- normalized immat ==> ${normalizedImmat}`)
@@ -198,13 +205,18 @@ export const getReport = async (request, h) => {
       error: `Invalid immatriculation for UTAC api`,
     })
 
-    // Cache unsupported vehicles
-    await setAsync(
-      utacDataCacheId,
-      emptyUtacData,
-      'EX',
-      config.redisPersit
-    )
+    try {
+      // Cache unsupported vehicles
+      await setAsync(
+        utacDataCacheId,
+        emptyUtacData,
+        'EX',
+        config.redisPersit
+      )
+    } catch (e) {
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_utac_invalid_immat_vehicle`)
+      appLogger.info('-- redis is down => cannot set vehicle with invalid immat in UTAC cache')
+    }
 
     return {
       success: true,
@@ -242,13 +254,18 @@ export const getReport = async (request, h) => {
       })
 
       if (utacStatus === 404 || utacStatus === 406) {
-        // Cache unsupported vehicles
-        await setAsync(
-          utacDataCacheId,
-          emptyUtacData,
-          'EX',
-          config.redisPersit
-        )
+        try {
+          // Cache unsupported vehicles
+          await setAsync(
+            utacDataCacheId,
+            emptyUtacData,
+            'EX',
+            config.redisPersit
+          )
+        } catch (e) {
+          appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_utac_not_found_vehicle`)
+          appLogger.info('-- redis is down => cannot set UTAC not found vehicle in UTAC cache')
+        }
 
         return {
           success: true,
@@ -280,13 +297,18 @@ export const getReport = async (request, h) => {
       ctUpdateDate,
     }, utacDataKey)
 
-    // Cache supported vehicles
-    await setAsync(
-      utacDataCacheId,
-      freshUtacData,
-      'EX',
-      config.redisPersit
-    )
+    try {
+      // Cache supported vehicles
+      await setAsync(
+        utacDataCacheId,
+        freshUtacData,
+        'EX',
+        config.redisPersit
+      )
+    } catch (e) {
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_vehicle`)
+      appLogger.info('-- redis is down => cannot set vehicle in UTAC cache')
+    }
 
     return {
       success: true,

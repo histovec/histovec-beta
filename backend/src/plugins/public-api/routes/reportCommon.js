@@ -97,7 +97,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
 
       const { privateApiReportUrl } = request.server.plugins.publicApi
 
-      const { result: { sivData, utacData, utacDataKey } } = await request.server.inject({
+      const { result } = await request.server.inject({
         method: 'POST',
         url: privateApiReportUrl,
         payload: {
@@ -109,6 +109,15 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         },
         allowInternals: true,
       })
+
+      if (statusCode != 200) {
+        syslogLogger.debug({ key: 'ERROR AT GET REPORT', tag: logLabel, value: { result } })
+        // @todo: do better error management
+        return result
+      }
+
+      const { sivData, statusCode, utacData, utacDataKey, error, message } = result
+
       syslogLogger.debug({ key: 'encrypted_raw_report', tag: logLabel, value: { sivData, utacData, utacDataKey } })
 
       const report = decryptJson(sivData, reportKey)
