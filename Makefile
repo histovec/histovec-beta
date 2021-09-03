@@ -199,6 +199,7 @@ export REDIS_DATA=${REDIS}/data-dummy
 export REDIS_PERSIST=86400
 # Pass a FIP here
 export REDIS_HOST?=${LOCAL_IP}
+export REDIS_PORT=6379
 export REDIS_PASSWORD
 
 # utac confs for backend and fake api
