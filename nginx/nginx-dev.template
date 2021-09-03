@@ -1,7 +1,3 @@
-upstream elasticsearch {
-  server <ES_HOST>:<ES_PORT>;
-}
-
 upstream backend {
   server <BACKEND_HOST>:<BACKEND_PORT>;
 }
