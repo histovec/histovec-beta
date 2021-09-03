@@ -59,6 +59,8 @@ const initServer = async () => {
       `❌  ${API_NAME} REST server could not connect to redis…`
     )
     techLogger.error(error)
+    appLogger.info(`[UTAC] undefined undefined_undefined redis_down unable_to_connect`)
+    appLogger.info('-- redis is down => cannot connect to redis')
   }
 
   try {
