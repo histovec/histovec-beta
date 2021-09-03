@@ -37,18 +37,26 @@ const initServer = async () => {
       q: 'version',
       size: '1',
     })
+    techLogger.info(
+      `✅  ${API_NAME} REST server connected to elasticsearch`
+    )
   } catch (error) {
     techLogger.error(
-      `❌  ${API_NAME} REST server could not connect to elasticsearch, exiting…`
+      `❌  ${API_NAME} REST server could not connect to elasticsearch…`
     )
     techLogger.error(error)
+    appLogger.info(`[SIV] undefined undefined_undefined elasticsearch_down unable_to_connect`)
+    appLogger.info('-- elasticsearch is down => cannot connect to elasticsearch')
   }
 
   try {
     await getAsync('')
+    techLogger.info(
+      `✅  ${API_NAME} REST server connected to redis`
+    )
   } catch (error) {
     techLogger.error(
-      `❌  ${API_NAME} REST server could not connect to redis, exiting…`
+      `❌  ${API_NAME} REST server could not connect to redis…`
     )
     techLogger.error(error)
   }

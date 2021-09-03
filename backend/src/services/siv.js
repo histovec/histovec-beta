@@ -80,7 +80,7 @@ export const getSIV = async (id, uuid) => {
     }
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
-      const message = 'Elasticsearch service not available'
+      const message = 'Unreachable database'
 			appLogger.error({
         error: message,
         id,
@@ -88,8 +88,11 @@ export const getSIV = async (id, uuid) => {
         remote_error: errorMessage,
       })
 
+      appLogger.info(`[SIV] ${uuid} undefined_undefined elasticsearch_down get_report ${id}`)
+      appLogger.info('-- elasticsearch is down => cannot get SIV report from elasticsearch')
+
       return {
-        status: 502,
+        status: 503,
         message,
         utac: {},
       }

@@ -85,6 +85,8 @@ export const getReport = async (request, h) => {
         throw Boom.notFound(sivMessage, {	success: false, message: sivMessage })
       case 502:
         throw Boom.badGateway(sivMessage, {	success: false, message: sivMessage })
+      case 503:
+        throw Boom.serverUnavailable(sivMessage, {	success: false, message: sivMessage })
       case 500:
       default:
         throw Boom.badImplementation(sivMessage, { success: false, message: sivMessage })
