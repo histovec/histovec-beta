@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     name: 'histovec-backend',
     script: './dist/index.js',
-    instances: 2,
+    instances: -1,
     exec_mode: 'cluster',
     watch: ['src'],
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
