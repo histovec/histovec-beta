@@ -1,3 +1,5 @@
+import Boom from '@hapi/boom'
+
 import { appLogger } from '../util/logger.js'
 import { sendMailToSupport } from '../mail/send-mail-to-support.js'
 
@@ -15,11 +17,11 @@ export const sendContact = async (request, h) => {
       h.response({
         success: true,
         message
-      }).statusCode(201)
+      }).code(201)
     )
   } catch ({ message: errorMessage }) {
     appLogger.error(`Error while sending mail : ${errorMessage}`)
 
-    throw Boom.badImplementation(sivMessage, { success: false, message: errorMessage })
+    throw Boom.badImplementation(errorMessage, { success: false, message: errorMessage })
   }
 }

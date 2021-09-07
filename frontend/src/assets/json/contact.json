@@ -13,7 +13,8 @@
   },
   "error": {
     "subject": "Veuillez choisir un objet",
-    "mail": "L'adresse email n'est pas valide",
+    "invalidEmail": "L'adresse email n'est pas valide",
+    "requiredEmail": "L'adresse email est obligatoire (pour vous permettre de recevoir notre réponse)",
     "note": "L'évaluation est obligatoire",
     "api": "Service indisponible, votre retour n'a pas pu être pris en compte"
   }

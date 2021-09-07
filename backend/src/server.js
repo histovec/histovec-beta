@@ -53,49 +53,49 @@ const routes = [
     options: {
       validate: {
         payload: Joi.object({
+          browser: Joi.object({
+            name: Joi.string().required(),
+            os: Joi.string().required(),
+            type: Joi.string().required(),
+            version: Joi.string().required(),
+          }).required()
+            .description('Données techniques qualifiant le navigateur web utilisé par l\'usager'),
+          date: Joi.date().iso().required()
+            .description('Date d\'envoi du message'),
+          email: Joi.string().email().required()
+            .description('Adresse email de l\'usager'),
+          holder: Joi.boolean().allow('').required()
+            .description('L\'usager est-il propriétaire du véhicule ?'),
+          identity: Joi.object({
+            dateCertificat: Joi.date().iso().allow('')
+              .description('Date d\'émission du certificat d\'immatriculation du véhicule (pour les véhicules FNI : immatriculés avant 2009)'),
+            formule: Joi.string().allow('').pattern(NUMERO_FORMULE_REGEX)
+              .description('Numéro de formule du certificat d\immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
+            nom: Joi.string().allow('').trim()
+              .description('Nom du propriétaire du véhicule'),
+            plaque: Joi.string().allow('').pattern(NUMERO_IMMATRICULATION_REGEX)
+              .description('Numéro d\'immatriculation du véhicule'),
+            prenoms: Joi.string().allow('').trim()
+              .description('Prénoms du propriétaire du véhicule'),
+            raisonSociale: Joi.string().allow('').trim()
+              .description('Raison sociale de la société propriétaire du véhicule'),
+            siren: Joi.string().allow('').pattern(SIREN_REGEX)
+              .description('Numéro de SIREN de la société propriétaire du véhicule'),
+            typeImmatriculation: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_IMMATRICULATION))
+              .description('Type d\'immatriculation du véhicule (FNI pour les véhicules immatriculés avant 2009, SIV pour les autres)'),
+            typePersonne: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_PERSONNE))
+              .description('Type de propriétaire du véhicule'),
+          }),
+          message: Joi.string().allow('').trim()
+            .description('Message envoyé par l\'usager'),
+          subject: Joi.string().required()
+            .description('Sujet de la demande envoyée par l\'usager'),
           uuid: Joi.string().guid({
             version: [
               'uuidv4'
             ]
           }).required()
-            .description('Identifiant anonyme (pour réaliser des statistiques métier)'),
-          email: Joi.string().email().required()
-            .description('Adresse email de l\'usager'),
-          message: Joi.string().trim()
-            .description('Message envoyé par l\'usager'),
-          date: Joi.date().iso().required()
-            .description('Date d\'envoi du message'),
-          holder: Joi.boolean().required()
-            .description('L\'usager est-il propriétaire du véhicule ?'),
-          browser: Joi.object({
-            name: Joi.string().required(),
-            version: Joi.string().required(),
-            os: Joi.string().required(),
-            type: Joi.string().required(),
-          }).required()
-            .description('Données techniques qualifiant le navigateur web utilisé par l\'usager'),
-          subject: Joi.string().required()
-            .description('Sujet de la demande envoyée par l\'usager'),
-          identity: Joi.object({
-            typeImmatriculation: Joi.string().valid(TYPE_IMMATRICULATION.SIV).insensitive()
-              .description('Type d\'immatriculation du véhicule (FNI pour les véhicules immatriculés avant 2009, SIV pour les autres)'),
-            typePersonne: Joi.string().valid(TYPE_PERSONNE.PRO).insensitive()
-              .description('Type de propriétaire du véhicule'),
-            raisonSociale: Joi.string().trim()
-              .description('Raison sociale de la société propriétaire du véhicule'),
-            siren: Joi.string().pattern(SIREN_REGEX)
-              .description('Numéro de SIREN de la société propriétaire du véhicule'),
-            nom: Joi.string().trim()
-              .description('Nom du propriétaire du véhicule'),
-            prenom: Joi.string().trim()  // @todo use prenoms instead of prenom
-              .description('Prénoms du propriétaire du véhicule'),
-            plaque: Joi.string().pattern(NUMERO_IMMATRICULATION_REGEX)
-              .description('Numéro d\'immatriculation du véhicule'),
-            formule: Joi.string().pattern(NUMERO_FORMULE_REGEX)
-              .description('Numéro de formule du certificat d\immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
-            dateCertificat: Joi.date().iso()
-              .description('Date d\'émission du certificat d\'immatriculation du véhicule (pour les véhicules FNI : immatriculés avant 2009)'),
-          })
+            .description('Identifiant anonyme (pour réaliser des statistiques métier)')
         }),
       },
     },
