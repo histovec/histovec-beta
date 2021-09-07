@@ -202,7 +202,6 @@
 
 <script>
 import Vue from 'vue'
-import { detect } from 'detect-browser'
 
 import npmConf from '../package.json'
 import apiConf from '@/assets/json/backend.json'
@@ -221,7 +220,6 @@ import VueClipboard from 'vue-clipboard2'
 import ContactModal from './components/forms/ContactModal.vue'
 import RatingModal from './components/forms/RatingModal.vue'
 
-import { renderUserInfosBloc } from './utils/dynamicEmail'
 
 Vue.use(VueTheMask)
 Vue.use(VueClipboard)
@@ -250,18 +248,6 @@ Vue.mixin({
       logoMinistereInterieur,
       logoSecuriteRoutiere,
     }
-  },
-
-  computed: {
-    userFooter() {
-      const context = {
-        browser: detect(),
-        identity: this.$store.state.identity,
-        userId: localStorage.getItem('userId')
-      }
-
-      return renderUserInfosBloc(context)
-    },
   },
 
   created () {

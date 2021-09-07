@@ -128,17 +128,23 @@
                   <div
                     v-if="!isReadOnlySubject && !isDefaultSubject"
                     class="form-group has-feedback"
-                    :class="[{'has-error' : (errors.includes(contact.error.email))}]"
+                    :class="[{'has-error' : (errors.includes(contact.error.invalidEmail) || errors.includes(contact.error.requiredEmail))}]"
                   >
                     <p>
                       <label>
                         Courriel
                       </label>
                       <span
-                        v-if="errors.includes(contact.error.mail)"
+                        v-if="errors.includes(contact.error.invalidEmail)"
                         class="info_red txt-small-11"
                       >
-                        {{ contact.error.mail }}
+                        {{ contact.error.invalidEmail }}
+                      </span>
+                      <span
+                        v-if="errors.includes(contact.error.requiredEmail)"
+                        class="info_red txt-small-11"
+                      >
+                        {{ contact.error.requiredEmail }}
                       </span>
                       <input
                         id="email"
@@ -257,7 +263,12 @@
 
 <script>
 import { detect } from 'detect-browser'
+import dayjs from 'dayjs'
 import contact from '@/assets/json/contact.json'
+import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '../../assets/js/format.js'
+
+const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
 
 export default {
   data () {
@@ -279,7 +290,7 @@ export default {
   },
   computed: {
     who () {
-      return this.$store.state.histovec.id ? (this.$store.state.histovec.code ? 'holder' : 'buyer') : undefined
+      return this.$store.state.histovec.id ? (this.$store.state.identity.plaque ? 'holder' : 'buyer') : undefined
     },
     subject: {
       get () {
@@ -306,7 +317,8 @@ export default {
 
       return [
         ...(this.subject === contact.subject.default ? [contact.error.subject] : []),
-        ...(this.email && !this.isEmailValid() ? [contact.error.mail] : []),
+        ...(this.email && !this.isEmailValid() ? [contact.error.invalidEmail] : []),
+        ...(!this.email ? [contact.error.requiredEmail] : []),
         ...(this.$store.state.api && this.$store.state.api.http[this.apiName] && this.$store.state.api.http[this.apiName] !== 201 ? [contact.error.api] : []),
       ]
     },
@@ -353,25 +365,38 @@ export default {
           setTimeout(() => this.clicked = false, 3000)
           return
       } else {
+        const isoDateCertificat = (
+          this.$store.state.identity.dateCertificat ?
+            dayjs(this.$store.state.identity.dateCertificat, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
+            ''
+        )
+
         const data = {
-          'message': this.filteredMessage,
-          'email': (this.email === '') ? undefined : this.email,
-          'uuid': localStorage.getItem('userId'),
-          'date': new Date().toUTCString(),
-          'holder': (this.who === 'holder'),
           'browser': detect(),
+          'date': new Date().toISOString(),
+          'email': (this.email === '') ? undefined : this.email,
+          'holder': (
+            this.who === 'holder' ?
+              true :
+              (this.who === 'buyer' ?
+                false :
+                ''
+              )
+          ),
           'identity':{
-            typeImmatriculation: this.$store.state.identity.typeImmatriculation,
-            typePersonne: this.$store.state.identity.typePersonne,
+            dateCertificat: isoDateCertificat,
+            formule: this.$store.state.identity.formule,
+            nom: this.$store.state.identity.nom,
+            plaque: this.$store.state.identity.plaque,
+            prenoms: this.$store.state.identity.prenom,
             raisonSociale: this.$store.state.identity.raisonSociale,
             siren: this.$store.state.identity.siren,
-            nom: this.$store.state.identity.nom,
-            prenom: this.$store.state.identity.prenom,
-            plaque: this.$store.state.identity.plaque,
-            formule: this.$store.state.identity.formule,
-            dateCertificat: this.$store.state.identity.dateCertificat
+            typeImmatriculation: this.$store.state.identity.typeImmatriculation,
+            typePersonne: this.$store.state.identity.typePersonne
           },
-          'subject': this.subject
+          'message': this.filteredMessage,
+          'subject': this.subject,
+          'uuid': localStorage.getItem('userId')
         }
 
         await this.$store.dispatch(this.dispatchName, data)
@@ -385,8 +410,8 @@ export default {
       }
     },
     isEmailValid () {
-      const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return reg.test(this.email)
+      // @todo: use Joi.string.email to validate email
+      return EMAIL_REGEX.test(this.email)
     },
     logMailDispatchOk () {
       this.$store.dispatch('log', `${this.$route.path}/mail/ok`)

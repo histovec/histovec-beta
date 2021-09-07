@@ -57,9 +57,6 @@ export default {
 
       state.reportExpiry = getTomorrowTime()
     },
-    updateCode(state, code) {
-      state.code = code
-    },
     updateKey(state, key) {
       if (key !== state.key) {
         state.key = key
@@ -77,7 +74,6 @@ export default {
     clearReport(state) {
       state.id = undefined
       state.key = undefined
-      state.code = undefined
       state.report = undefined
       state.reportExpiry = getTodayTime() // expired by default
     }

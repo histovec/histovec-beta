@@ -43,7 +43,7 @@ const DATE_2018_01_01 = new Date('2018-01-01')
 
 
 const computeCertifDepuis = (dateString) => {
-  // Si on détecte que la date est au format FR alors on la convertie
+  // Si on détecte que la date est au format FR alors on la convertit
   const isoDateString = (
     dayjs(dateString, FR_DATE_FORMAT).isValid() ?
       dayjs(dateString, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
