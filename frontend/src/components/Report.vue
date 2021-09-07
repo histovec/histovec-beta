@@ -582,7 +582,7 @@ export default {
       nb_titulaires,
       tvv,
     }) {
-      const departement = getDepartement(adr_code_postal_tit)
+      const departement = adr_code_postal_tit ? getDepartement(adr_code_postal_tit) : undefined
       const anonymizedReportId = urlSafeBase64Encode(await hash(this.id))
 
       const vehicleData = {
