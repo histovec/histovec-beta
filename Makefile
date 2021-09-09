@@ -164,7 +164,7 @@ export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id
 export ES_CHUNK=5000
 export ES_VERBOSE=100000
 export ES_VERBOSE_UPDATE=1000
-export ES_TIMEOUT=300  # 60
+export ES_TIMEOUT=60
 export ES_JOBS=4
 export header="idv;ida1;ida2;v;utac_ask_ct;utac_encrypted_immat;utac_encrypted_vin;controle_qualite"
 # openstack swift source parameters
