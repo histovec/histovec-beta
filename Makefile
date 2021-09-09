@@ -959,11 +959,11 @@ redis-save-image: backend-check-build
 
 backend-start: backend-host-config
 	@echo docker-compose up backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
+	@export EXEC_ENV=production BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
 
 backend-stop:
 	@echo docker-compose down backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
+	@export EXEC_ENV=production BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 # package for production
 backend-build: backend-build-unlock build-dir backend-build-lock backend-build-all backend-build-unlock
@@ -1031,7 +1031,7 @@ backend-dev: backend-host-config
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 backend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
+	@export EXEC_ENV=development BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 ##############################################
 #              public backend                #
@@ -1040,11 +1040,11 @@ backend-dev-stop:
 
 public-backend-start:
 	@echo docker-compose up public-backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
+	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
 
 public-backend-stop:
 	@echo docker-compose down public-backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml down
+	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
 # package for production
 public-backend-build: backend-build-unlock build-dir backend-build-lock public-backend-build-all backend-build-unlock
@@ -1120,7 +1120,7 @@ public-backend-dev:
 		${DC} -f ${DC_DEV_PUBLIC_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 public-backend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-public-backend.yml down
+	@export EXEC_ENV=development BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
 ##############################################
 #              fake services                 #
