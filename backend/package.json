@@ -40,7 +40,6 @@
     "joi": "^17.4.1",
     "morgan": "^1.10.0",
     "nodemailer": "^6.6.0",
-    "util": "^0.12.3",
     "winston": "^3.3.3"
   },
   "devDependencies": {
