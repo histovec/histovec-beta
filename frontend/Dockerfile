@@ -37,7 +37,9 @@ RUN if [ ! -z "${NPM_GIT}" ]; then \
 RUN if [ ! -z "$http_proxy" ] ; then \
         npm config delete proxy; \
         npm config set proxy $http_proxy; \
-        npm config set https-proxy $https_proxy ; \
+        npm config set proxy $http_proxy --global; \
+        npm config set https-proxy $https_proxy; \
+        npm config set https-proxy $https_proxy --global; \
         npm config set no-proxy $no_proxy; \
    fi ; \
    [ -z "${npm_registry}" ] || npm config set registry=$npm_registry; \
