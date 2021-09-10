@@ -1,0 +1,18 @@
+import Joi from 'joi'
+
+import { generateReportRoute } from './reportCommon.js'
+
+
+const reportByCodePayloadSchema = Joi.object({
+  vehicule: Joi.object({
+    // @todo: Clean base64 encoding (EVERYWHERE) while merging private and public APIs
+    code: Joi.string().required()
+      .description('Code HistoVec du rapport HistoVec demandé.'),
+  }).label('code_partage_histovec'),
+  options: Joi.object({
+    controles_techniques: Joi.boolean()
+      .description('Récupérer les contrôles techniques du véhicule dans le rapport. Non par défaut.'),
+  }),
+}).label('Report_by_code_payload')
+
+export default generateReportRoute({ path: '/report_by_code', logLabel: 'PUBLIC_ROUTE_REPORT_BY_CODE', payloadSchema: reportByCodePayloadSchema })

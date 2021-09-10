@@ -1,3 +1,4 @@
+import Boom from '@hapi/boom'
 import { appLogger, syslogLogger } from '../../../util/logger.js'
 import { base64Decode, decryptJson, hash, urlSafeBase64Encode } from '../../../util/crypto.js'
 import { getDepartement } from '../../../util/codePostal.js'
@@ -30,9 +31,8 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
     handler: async (request, h) => {
       const {
         vehicule: {
-          // report by id payload
-          id,
-          key,
+          // report by code payload
+          code,
 
           // report by data payload
           certificat_immatriculation: {
@@ -55,6 +55,12 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
           controles_techniques: askTechnicalControls,
         } = {},
       } = request.payload
+
+      const { id, key, isInvalidCode } = buildIdAndKey(code)
+
+      if (isInvalidCode) {
+        throw Boom.badRequest('Malformed HistoVec code')
+      }
 
       const alreadyHasIdAndKey = Boolean(id) && Boolean(key)
       syslogLogger.debug({ key: 'payload', tag: logLabel, value: { nom, prenoms, raisonSociale, siren, numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation, id, key } })
