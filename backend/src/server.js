@@ -123,6 +123,7 @@ export const createServer = async () => {
           title: config.isPublicApi ? 'Api grand publique HistoVec' : 'Api HistoVec',
           version: config.version,
         },
+        cors: true,  // Enable cors for api.gouv.fr
       }
     }
   ]
