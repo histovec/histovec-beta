@@ -3,7 +3,7 @@ import Boom from '@hapi/boom'
 import { getSIV } from '../../../services/siv.js'
 import { encryptJson, decryptXOR, urlSafeBase64Encode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
-import { getAsync, setAsync } from '../../../connectors/redis.js'
+import { redisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 
 import { appLogger } from '../../../util/logger.js'
@@ -166,7 +166,7 @@ export const getReport = async (request, h) => {
 
   if (!ignoreCache) {
     try {
-      const utacData = await getAsync(utacDataCacheId)
+      const utacData = await redisClient.get(utacDataCacheId)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
       if (utacData) {
@@ -207,7 +207,7 @@ export const getReport = async (request, h) => {
 
     try {
       // Cache unsupported vehicles
-      await setAsync(
+      await redisClient.set(
         utacDataCacheId,
         emptyUtacData,
         'EX',
@@ -256,7 +256,7 @@ export const getReport = async (request, h) => {
       if (utacStatus === 404 || utacStatus === 406) {
         try {
           // Cache unsupported vehicles
-          await setAsync(
+          await redisClient.set(
             utacDataCacheId,
             emptyUtacData,
             'EX',
@@ -299,7 +299,7 @@ export const getReport = async (request, h) => {
 
     try {
       // Cache supported vehicles
-      await setAsync(
+      await redisClient.set(
         utacDataCacheId,
         freshUtacData,
         'EX',
