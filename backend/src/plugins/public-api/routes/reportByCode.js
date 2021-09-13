@@ -13,8 +13,9 @@ const reportByCodePayloadSchema = Joi.object({
   }),
   options: Joi.object({
     controles_techniques: Joi.boolean()
-      .description('Récupérer les contrôles techniques du véhicule dans le rapport. Non par défaut.'),
-  }),
+      .description('Récupérer les contrôles techniques du véhicule dans le rapport. Non par défaut.')
+  }).label('controles_techniques_option_by_code'),
+
 }).label('Report_by_code_payload')
 
 export default generateReportRoute({ path: '/report_by_code', logLabel: 'PUBLIC_ROUTE_REPORT_BY_CODE', payloadSchema: reportByCodePayloadSchema })
