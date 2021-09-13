@@ -1,10 +1,9 @@
 import Joi from 'joi'
 
-import { appLogger } from '../../util/logger.js'
+import { appLogger } from '../../../../util/logger.js'
 
-
-const idSchema = Joi.string().base64({ paddingRequired: true, urlSafe: true }).max(44).required()  // @todo: remove urlSafe in v2
-const keySchema = Joi.string().base64({ paddingRequired: true, urlSafe: true }).required()  // @todo: remove urlSafe in v2
+const idSchema = Joi.string().base64({ paddingRequired: true }).max(44).required()
+const keySchema = Joi.string().base64({ paddingRequired: true }).required()
 
 
 export const checkId = (id) => {

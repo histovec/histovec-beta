@@ -16,7 +16,8 @@ export default {
 					separator: '-',
 				}).required()
 					.description('Identifiant anonyme (pour réaliser des statistiques métier).'),
-				id: Joi.string().base64({ paddingRequired: true, urlSafe: true }).max(44).required()  // @todo: remove urlSafe in v2
+				// @todo: Clean base64 encoding (EVERYWHERE) while merging private and public APIs
+				id: Joi.string().base64({ paddingRequired: true }).max(44).required()
 					.description('Identifiant du rapport HistoVec demandé.'),
 				options: Joi.object({
 					ignoreTechnicalControls: Joi.boolean()

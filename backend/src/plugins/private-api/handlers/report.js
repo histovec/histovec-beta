@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom'
 
 import { getSIV } from '../../../services/siv.js'
-import { encryptJson, decryptXOR, urlSafeBase64Encode, hash } from '../../../util/crypto.js'
+import { encryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
 import { redisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
@@ -59,12 +59,13 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const utacClient = getUtacClient()
 
 export const getReport = async (request, h) => {
-  const { id, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
+  const { id: base64EncodedId, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
   appLogger.info(`-- [CONFIG] -- ignoreUtacCache => ${ignoreUtacCache}`)
   appLogger.info(`-- [CONFIG] -- ignoreTechnicalControls => ${ignoreTechnicalControls}`)
   appLogger.info(`-- [CONFIG] -- isUtacMockForBpsaActivated => ${config.utac.isUtacMockForBpsaActivated}`)
 
-  appLogger.info(`-- [backend] idv ==> ${id}`)
+  const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
+  appLogger.info(`-- [backend] idv ==> ${urlSafeBase64EncodedId}`)
 
   // 1 - SIV
   const {
@@ -76,9 +77,8 @@ export const getReport = async (request, h) => {
       encryptedImmat,
       encryptedVin,
     },
-  } = await getSIV(id, uuid)
+  } = await getSIV(urlSafeBase64EncodedId, uuid)
 
-  // @todo: correctly use Joi and Hapi to return 404 when no result is found (instead of 500)
   if (sivStatus !== 200) {
     switch (sivStatus) {
       case 404:
@@ -94,7 +94,7 @@ export const getReport = async (request, h) => {
   }
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  appLogger.debug(`-- immat ==> ${immat}`)
+  appLogger.debug(`-- [backend] immat ==> ${immat}`)
 
   // 2 - UTAC
 
@@ -128,7 +128,6 @@ export const getReport = async (request, h) => {
     }
   }
 
-
   // Only annulationCI vehicles don't have encryptedImmat
   const isAnnulationCI = Boolean(!encryptedImmat)
   if (!askCt || isAnnulationCI || !config.utac.isApiActivated) {
@@ -160,7 +159,7 @@ export const getReport = async (request, h) => {
     ctUpdateDate: null,
   }, utacDataKey)
 
-  const utacDataCacheId = urlSafeBase64Encode(hash(id))
+  const utacDataCacheId = urlSafeBase64Encode(hash(urlSafeBase64EncodedId))
 
   const ignoreCache = config.isUtacCacheIgnorable && ignoreUtacCache
 
@@ -250,7 +249,7 @@ export const getReport = async (request, h) => {
       appLogger.error({
         error: 'UTAC response failed',
         status: utacStatus,
-        remote_error: utacMessage,
+        remoteError: utacMessage,
       })
 
       if (utacStatus === 404 || utacStatus === 406) {
@@ -319,7 +318,7 @@ export const getReport = async (request, h) => {
   } catch ({ message: errorMessage }) {
     appLogger.error({
       error: 'UTAC error',
-      remote_error: errorMessage,
+      remoteError: errorMessage,
     })
 
     // Don't cache errors

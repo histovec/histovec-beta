@@ -85,7 +85,7 @@ export const getSIV = async (id, uuid) => {
         error: message,
         id,
         uuid,
-        remote_error: errorMessage,
+        remoteError: errorMessage,
       })
 
       appLogger.info(`[SIV] ${uuid} undefined_undefined elasticsearch_down get_report ${id}`)
@@ -104,7 +104,7 @@ export const getSIV = async (id, uuid) => {
       error: message,
       id,
       uuid,
-      remote_error: errorMessage,
+      remoteError: errorMessage,
     })
 
     return {

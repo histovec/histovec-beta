@@ -1,14 +1,16 @@
 import Joi from 'joi'
 
 import { generateReportRoute } from './reportCommon.js'
+import { ID_REGEX } from '../../../constant/regex.js'
 
 
 const reportByCodePayloadSchema = Joi.object({
   vehicule: Joi.object({
     // @todo: Clean base64 encoding (EVERYWHERE) while merging private and public APIs
-    code: Joi.string().required()
-      .description('Code HistoVec du rapport HistoVec demandé.'),
-  }).label('code_partage_histovec'),
+    code: Joi.string().pattern(ID_REGEX).required()
+      .description('Code HistoVec du rapport HistoVec demandé.')
+      .label('code_partage_histovec')
+  }),
   options: Joi.object({
     controles_techniques: Joi.boolean()
       .description('Récupérer les contrôles techniques du véhicule dans le rapport. Non par défaut.'),

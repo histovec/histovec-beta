@@ -11,18 +11,18 @@ import config from '../../../config.js'
 
 export const buildIdAndKey = (code) => {
   if (!code) {
-    return {}
+    return { isInvalidCode: false }
   }
-
   const chunks = code.split('-')
   if (chunks.length !== 2) {
     appLogger.info(`[Code_HistoVec] invalid_code ${code}`)
-    return {}
+    return { isInvalidCode: true }
   }
 
   const [id, key] = chunks
 
   if (!checkId(id) || !checkKey(key)) {
+    appLogger.info(`[Code_HistoVec] invalid_id_or_key ${code}`)
     return { isInvalidCode: true }
   }
 
@@ -31,7 +31,6 @@ export const buildIdAndKey = (code) => {
     key
   }
 }
-
 
 export const buildReportId = (
   {

@@ -9,18 +9,26 @@ export const base64Decode = (text) => {
   return Buffer.from(text, 'base64').toString('binary')
 }
 
-export const urlSafeBase64Encode = (text) => {
-  const urlUnsafeBase64Encoded = base64Encode(text)
-
+export const urlSafeEncode = (text) => {
   // Equivalent to replace(/\+/g, '-').replace(/\//g, '_') but faster
-  return urlUnsafeBase64Encoded.replace(/[+/]/g, char => char === '+' ? '-' : '_')
+  return text.replace(/[+/]/g, char => char === '+' ? '-' : '_')
+}
+
+export const urlSafeDecode = (text) => {
+  // Equivalent to replace(/\-/g, '+').replace(/_/g, '/') but faster
+  return text.replace(/[\-_]/g, char => char === '-' ? '+' : '/')
+}
+
+export const urlSafeBase64Encode = (text) => {
+  const base64Encoded = base64Encode(text)
+
+  return urlSafeEncode(base64Encoded)
 }
 
 export const urlSafeBase64Decode = (text) => {
-  // Equivalent to replace(/\-/g, '+').replace(/_/g, '/') but faster
-  const urlUnsafeBase64Encoded = text.replace(/[\-_]/g, char => char === '-' ? '+' : '/')
+  const base64Encoded = urlSafeDecode(text)
 
-  return base64Decode(urlUnsafeBase64Encoded)
+  return base64Decode(base64Encoded)
 }
 
 export const hash = (text) => crypto.createHash('sha256').update(text).digest()

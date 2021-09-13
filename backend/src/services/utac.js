@@ -17,6 +17,7 @@ const ERROR_MESSAGES = {
   404: 'Unknown immatriculation',
   406: 'Invalid request',
   429: 'Too many request',
+  500: 'Error while asking UTAC API',
   503: 'Unavailable UTAC api',
   malformedResponse: 'Missing information in UTAC response',
   default: 'Unexpected error from UTAC api',
@@ -183,16 +184,18 @@ module.exports.UTACClient = class UTACClient {
       const end = new Date()
       const executionTime = end - start
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
     } catch (error) {
+      // That should never happen
       const end = new Date()
       const executionTime = end - start
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
 
-      return error
+      return {
+        status: 500,
+        message: ERROR_MESSAGES[500],
+      }
     }
 
     if (!response?.data?.ct || !response?.data?.update_date) {
