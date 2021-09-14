@@ -1,15 +1,16 @@
 import http from 'http'
 
 import { createServer } from './server.js'
-import { redisClient } from './connectors/redis.js'
+import { getRedisClient } from './connectors/redis.js'
 import { getElasticsearchClient } from './connectors/elasticsearch.js'
 import { appLogger, techLogger } from './util/logger.js'
 import config from './config.js'
 
 const API_NAME = config.apiName  // 'backend' or 'public-backend'
 
-
 const elasticsearchClient = getElasticsearchClient()
+const redisClient = getRedisClient()
+
 
 // Graceful shutdown : React to a SIGTERM and SIGINT signal for a quick and proper shutdown
 const cleanUp = async (server) => {
