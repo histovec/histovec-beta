@@ -131,6 +131,7 @@ export ES_MEM=512m
 # Pass a FIP here
 export ES_HOST?=${LOCAL_IP}
 export ES_PORT=9200
+export ES_URL=${ES_HOST}:${ES_PORT}
 # vm_max_count has to be fixed into the vm host
 # or elasticsearch won't start
 export MAX_MAP_COUNT=262144
@@ -164,7 +165,7 @@ export mapping={"_all": {"enabled": false}, "dynamic": false, "properties": {"id
 export ES_CHUNK=5000
 export ES_VERBOSE=100000
 export ES_VERBOSE_UPDATE=1000
-export ES_TIMEOUT=300  # 60
+export ES_TIMEOUT=60
 export ES_JOBS=4
 export header="idv;ida1;ida2;v;utac_ask_ct;utac_encrypted_immat;utac_encrypted_vin;controle_qualite"
 # openstack swift source parameters
@@ -214,7 +215,7 @@ export FAKE_UTAC_LATENCY=500
 export IS_UTAC_API_ACTIVATED?=false
 export IS_UTAC_CACHE_IGNORABLE?=false
 export IS_UTAC_MOCK_FOR_BPSA_ACTIVATED?=false
-export IS_VIN_SENT_TO_UTAC?=false
+export IS_VIN_SENT_TO_UTAC?=true
 export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
 export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
 export UTAC_TIMEOUT?=5000
@@ -770,31 +771,31 @@ ifeq ("$(vm_max_count)", "")
 endif
 
 wait-elasticsearch: elasticsearch
-	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET ${ES_HOST}:9200/_cat/indices > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for elasticsearch to start $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
+	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET ${ES_URL}/_cat/indices > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for elasticsearch to start $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
 # index relative operations
 wait-index: index-create
-	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET ${ES_HOST}:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for ${dataset} index - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
+	@timeout=${ES_TIMEOUT} ; ret=1 ; until [ "$$timeout" -le 0 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET ${ES_URL}/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "0" ] ; then echo "waiting for ${dataset} index - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
 wait-index-purge: index-purge
-	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET ${ES_HOST}:9200/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
+	@timeout=${ES_TIMEOUT} ; ret=0 ; until [ "$$timeout" -le 1 -o "$$ret" -eq "0"  ] ; do (docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s --fail -XGET ${ES_URL}/${dataset} > /dev/null) ; ret=$$? ; if [ "$$ret" -ne "1" ] ; then echo "waiting for ${dataset} index to be purged - $$timeout" ; fi ; ((timeout--)); sleep 1 ; done ; exit $$ret
 
 index-purge: wait-elasticsearch
-	@docker exec ${APP}-elasticsearch curl -s -XPUT ${ES_HOST}:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index prepared for deletion\n/;s/.*no such index.*//'
-	@docker exec ${APP}-elasticsearch curl -s -XDELETE ${ES_HOST}:9200/${dataset} | sed 's/{"acknowledged":true.*/${dataset} index purged\n/;s/.*no such index.*//'
+	@docker exec ${APP}-elasticsearch curl -s -XPUT ${ES_URL}/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index prepared for deletion\n/;s/.*no such index.*//'
+	@docker exec ${APP}-elasticsearch curl -s -XDELETE ${ES_URL}/${dataset} | sed 's/{"acknowledged":true.*/${dataset} index purged\n/;s/.*no such index.*//'
 
 index-unlock: wait-elasticsearch
-	docker exec ${APP}-elasticsearch curl -s -XPUT ${ES_HOST}:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index unlocked\n/;s/.*no such index.*//'
+	docker exec ${APP}-elasticsearch curl -s -XPUT ${ES_URL}/${dataset}/_settings -H 'content-type:application/json' -d'{"index.blocks.read_only": false}' | sed 's/{"acknowledged":true.*/${dataset} index unlocked\n/;s/.*no such index.*//'
 
 index-lock: wait-elasticsearch
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_HOST}:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_URL}/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
 index-create: wait-index-purge
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -H "Content-Type: application/json" -XPUT ${ES_HOST}:9200/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true.*/${dataset} index created with mapping\n/'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -H "Content-Type: application/json" -XPUT ${ES_URL}/${dataset} -d '{"settings": ${settings}, "mappings": { "${dataset}": ${mapping}}}' | sed 's/{"acknowledged":true.*/${dataset} index created with mapping\n/'
 
 index-status: wait-elasticsearch
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET ${ES_HOST}:9200/${dataset}?pretty
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET ${ES_HOST}:9200/_cat/indices
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET ${ES_URL}/${dataset}?pretty
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET ${ES_URL}/_cat/indices
 
 # elasticsearch backup operations
 first-backup:
@@ -839,18 +840,18 @@ data-check: network
 	@cd ${datadir} && (diff -wb checksums1 checksums2 && echo data checked) || exit 1
 
 index-load: install-prerequisites-injection wait-index
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET '${ES_HOST}:9200/${dataset}' | grep mapping | wc -l | awk '{print $$1}' > /dev/null
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET '${ES_URL}/${dataset}' | grep mapping | wc -l | awk '{print $$1}' > /dev/null
 	@(find ${datadir} | egrep '${data_remote_files}.gz' | xargs cat | gunzip ) | \
 		awk 'BEGIN{n = 1;print "injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "decrypted " n " lines" > "/dev/stderr";} n++}' |\
 	  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e 'use Digest::SHA "sha256_base64"; $$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {@values=split(/;/,$$_);$$id=substr(sha256_base64(shift @values),0,20);print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\", \"_id\": \"$$id\"}}\n";$$i=1;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",@values))."}\n";}}' | \
 		sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | \
-		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" ${ES_HOST}:9200/_bulk  --data-binary @-;echo ' | \
+		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" ${ES_URL}/_bulk  --data-binary @-;echo ' | \
 		jq -c '.items[]' | awk 'BEGIN{ok=${FROM}-1;ko=0;lastko=""}{if ($$0 ~ "\"result\":\"created\"") { ok++ } else {ko++;lastko=$$0} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko; if (ko>0) {print "last error was : " lastko; lastko="" }}}'
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_HOST}:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_URL}/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
 index-check: install-prerequisites-injection wait-elasticsearch
 		@(cd ${datadir} && ls | egrep '${data_remote_files}.gz' | xargs zcat | wc -l | awk '{print $$1}' && \
-		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET '${ES_HOST}:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
+		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET '${ES_URL}/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
 
 # dataprep production mode - from swift to elasticsearch
 source-list:
@@ -865,9 +866,9 @@ index-direct-load: install-prerequisites-injection wait-index
 		awk 'BEGIN{n = 1;print "injection into elasticsearch will begin from line ${FROM}" > "/dev/stderr"; print ${header}}{if ((n == 1) || (n>=${FROM})) {print};if ((n%1000000)==0) {print "read " n " lines" > "/dev/stderr";} n++}' |\
 	  perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | perl -e 'use Digest::SHA "sha256_base64"; $$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {@values=split(/;/,$$_);$$id=substr(sha256_base64(shift @values),0,20);print "{\"index\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\", \"_id\": \"$$id\"}}\n";$$i=1;print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",@values))."}\n";}}' | \
 		sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | \
-		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" ${ES_HOST}:9200/_bulk  --data-binary @-;echo ' | \
+		parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" ${ES_URL}/_bulk  --data-binary @-;echo ' | \
 		jq -c '.items[]' | awk 'BEGIN{ok=${FROM}-1;ko=0;lastko=""}{if ($$0 ~ "\"result\":\"created\"") { ok++ } else {ko++;lastko=$$0} if (((ok+ko)%${ES_VERBOSE} == 0)) {print strftime("%Y%m%d-%H:%M") " indexed:" ok " rejected:" ko; if (ko>0) {print "last error was : " lastko; lastko="" }}}'
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_HOST}:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_URL}/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
 py-index-direct-load: wait-elasticsearch
 	@mkdir -p ${decrypted_datadir} ${datadir}
@@ -884,17 +885,17 @@ index-direct-update: install-prerequisites-injection index-unlock
 					perl -e 'while(<>){s/\"(.*?);(.*?)\"/\1,\2/g;print}' | \
 					perl -e 'use Digest::SHA "sha256_base64"; $$action="'"$$action"'";$$header=1;while(<>){ chomp;if ($$header) {@fields=split(/;/,$$_);$$header=0; }else {@values=split(/;/,$$_);$$id=substr(sha256_base64(shift @values),0,20);print "{\"$$action\": {\"_index\": \"'"${dataset}"'\", \"_type\": \"'"${dataset}"'\", \"_id\": \"$$id\"}}\n";$$i=1;if ($$action eq "update") {print "{ \"doc\": "} if ($$action ne "delete") {print "{".join(", ",map("\"@fields[$$i++]\": \"$$_\"",@values))."}";} if ($$action eq "update") {print "}\n"} elsif ($$action eq "create") {print "\n" }}}' | \
 					sed 's/\\//g;s/""/"/g;s/ ",/ "",/g;s/"{/{/g;s/}"/}/g;s/"\[/[/g;s/\]"/]/g' | \
-					parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" ${ES_HOST}:9200/_bulk  --data-binary @-;echo ' | \
+					parallel --block-size 10M -N ${ES_CHUNK} -j${ES_JOBS} --pipe 'docker exec -i ${APP}-elasticsearch curl -s -H "Content-Type: application/json" ${ES_URL}/_bulk  --data-binary @-;echo ' | \
 					jq -c '.items[]' | \
 					awk -v action=$$action 'BEGIN{ok=${FROM}-1;ko=0;lastko=""}{matchstr="\"result\":\""action"d\"";if ($$0 ~ matchstr) { ok++ } else {ko++;lastko=$$0} if (((ok+ko)%${ES_VERBOSE_UPDATE} == 0)) {print strftime("%Y%m%d-%H:%M") " " action "d:" ok " rejected:" ko; if (ko>0) {print "last error was : " lastko; lastko="" }}} END {print strftime("%Y%m%d-%H:%M") " " action "d:" ok " rejected:" ko " end of batch"}' #| \
 				done; \
 		done
-	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_HOST}:9200/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
+	@docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XPUT ${ES_URL}/${dataset}/_settings -H 'content-type:application/json' -d'{"index.refresh_interval": "1s", "index.blocks.read_only": true}' | sed 's/{"acknowledged":true.*/${dataset} index locked\n/;s/.*no such index.*//'
 
 index-direct-check: install-prerequisites-injection wait-elasticsearch
 	@(curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/ | egrep '${data_remote_files}.md5' | \
 		xargs -I{} curl ${CURL_OS_OPTS} -s -H "X-Auth-Token: ${openstack_token}"   ${openstack_url}/${openstack_auth_id}/${data_remote_dir}/{} -o - | awk 'BEGIN{n=0}{n+=$$1}END{print n}' && \
-		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET '${ES_HOST}:9200/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
+		(docker exec -i ${USE_TTY} ${APP}-elasticsearch curl -s -XGET '${ES_URL}/${dataset}/_search?q=*' | jq '.hits.total')) | tr '\n' ' ' | awk '{if ($$1 != $$2) {print "injection failed: wrong number of lines (swift: " $$1 " / elasticsearch: " $$2 ")" > "/dev/stderr";exit 1} else {print "number of lines is ok (swift: " $$1 " / elasticsearch: " $$2 ")"}}'
 
 
 ##############################################
@@ -959,11 +960,11 @@ redis-save-image: backend-check-build
 
 backend-start: backend-host-config
 	@echo docker-compose up backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
+	@export EXEC_ENV=production BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml up -d 2>&1 | grep -v orphan
 
 backend-stop:
 	@echo docker-compose down backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-backend.yml down
+	@export EXEC_ENV=production BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 # package for production
 backend-build: backend-build-unlock build-dir backend-build-lock backend-build-all backend-build-unlock
@@ -1031,7 +1032,7 @@ backend-dev: backend-host-config
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 backend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-backend.yml down
+	@export EXEC_ENV=development BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml down
 
 ##############################################
 #              public backend                #
@@ -1040,11 +1041,11 @@ backend-dev-stop:
 
 public-backend-start:
 	@echo docker-compose up public-backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
+	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
 
 public-backend-stop:
 	@echo docker-compose down public-backend for production ${VERSION}
-	@export EXEC_ENV=production; ${DC} -f ${DC_PREFIX}-public-backend.yml down
+	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
 # package for production
 public-backend-build: backend-build-unlock build-dir backend-build-lock public-backend-build-all backend-build-unlock
@@ -1120,7 +1121,7 @@ public-backend-dev:
 		${DC} -f ${DC_DEV_PUBLIC_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
 public-backend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-public-backend.yml down
+	@export EXEC_ENV=development BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
 ##############################################
 #              fake services                 #

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { readFileSync } from 'fs'
+import { utacResponseSchema } from '../services/utac/schemas/response.js'
 import { Agent as HttpsAgent } from 'https'
 import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
@@ -17,6 +18,7 @@ const ERROR_MESSAGES = {
   404: 'Unknown immatriculation',
   406: 'Invalid request',
   429: 'Too many request',
+  500: 'Error while asking UTAC API',
   503: 'Unavailable UTAC api',
   malformedResponse: 'Missing information in UTAC response',
   default: 'Unexpected error from UTAC api',
@@ -180,29 +182,31 @@ module.exports.UTACClient = class UTACClient {
         immat,
         ...(config.utac.isVinSentToUtac ? { vin } : {}),
       })
+      const { data } = response
+
       const end = new Date()
       const executionTime = end - start
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
 
+      const { error } = utacResponseSchema.validate(data)
+      if (error) {
+        return {
+          status: 500,
+          message: ERROR_MESSAGES.malformedResponse,
+        }
+      }
+
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
     } catch (error) {
+      // That should never happen
       const end = new Date()
       const executionTime = end - start
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
-
-      return error
-    }
-
-    if (!response?.data?.ct || !response?.data?.update_date) {
-      appLogger.error({
-        error: ERROR_MESSAGES.malformedResponse,
-      })
 
       return {
         status: 500,
-        message: ERROR_MESSAGES.malformedResponse,
+        message: ERROR_MESSAGES[500],
       }
     }
 

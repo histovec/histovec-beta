@@ -212,14 +212,26 @@
               </li>
               <li
                 v-if="!isAnnulationCI && holder"
-                :class="[{'active' : tab === 'send'}]"
+                :class="[{'active' : tab === 'share-report'}]"
               >
                 <a
                   class="clickable"
-                  @click="tab = 'send'"
+                  @click="tab = 'share-report'"
                 >
                   <i class="fa fa-send pr-10"></i>
                   Transmettre le rapport
+                </a>
+              </li>
+              <li
+                v-if="!isAnnulationCI && holder"
+                :class="[{'active' : tab === 'share-code-partage'}]"
+              >
+                <a
+                  class="clickable"
+                  @click="tab = 'share-code-partage'"
+                >
+                  <i class="fa fa-share pr-10"></i>
+                  Transmettre le code partage
                 </a>
               </li>
             </ul>
@@ -228,7 +240,7 @@
               <!-- /* ----------------- synthese ----------------- */ -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'abstract'}]"
+                :class="[{'in active' : tab === 'abstract'}]"
               >
                 <abstract
                   v-if="tab === 'abstract' && !isAnnulationCI"
@@ -241,7 +253,7 @@
               <!-- /* ----------------- vehicule ----------------- */ -->
               <div
                 class="tab-pane fade pr-20"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'vehicle'}]"
+                :class="[{'in active' : tab === 'vehicle'}]"
               >
                 <tech-chars
                   v-if="tab === 'vehicle'"
@@ -252,7 +264,7 @@
               <!-- /* ----------------- titre ----------------- */ -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'holder'}]"
+                :class="[{'in active' : tab === 'holder'}]"
               >
                 <license
                   v-if="tab === 'holder'"
@@ -264,7 +276,7 @@
               <!-- situation administrative -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'situation'}]"
+                :class="[{'in active' : tab === 'situation'}]"
               >
                 <administrative
                   v-if="tab === 'situation'"
@@ -277,7 +289,7 @@
               <!-- historique des opérations -->
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'history'}]"
+                :class="[{'in active' : tab === 'history'}]"
               >
                 <history
                   v-if="tab === 'history'"
@@ -287,7 +299,7 @@
               </div>
               <div
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'utac'}]"
+                :class="[{'in active' : tab === 'utac'}]"
               >
                 <tech-control
                   v-if="tab === 'utac' && !isAnnulationCI && (ct.length > 0 || ctError)"
@@ -299,7 +311,7 @@
               <div
                 v-if="tab === 'utacGraph' && !isAnnulationCI"
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'utacGraph'}]"
+                :class="[{'in active' : tab === 'utacGraph'}]"
               >
                 <tech-control-graph
                   v-if="tab === 'utacGraph' && !ctError && ct.length > 0"
@@ -315,18 +327,6 @@
               <div
                 v-if="holder"
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.allTabs || tab === 'send'}]"
-              >
-                <share
-                  v-if="tab === 'send'"
-                  :url="url"
-                  :holder="holder"
-                >
-                </share>
-              </div>
-              <div
-                v-if="holder"
-                class="tab-pane fade"
                 :class="[{'in active' : tab === 'csa'}]"
               >
                 <administrative-certificate
@@ -337,6 +337,30 @@
                 >
                 </administrative-certificate>
               </div>
+              <div
+                v-if="holder"
+                class="tab-pane fade"
+                :class="[{'in active' : tab === 'share-report'}]"
+              >
+                <share-report
+                  v-if="tab === 'share-report'"
+                  :url="url"
+                >
+                </share-report>
+              </div>
+              <div
+                v-if="holder"
+                class="tab-pane fade"
+                :class="[{'in active' : $store.state.config.useCodePartageHistoVec || tab === 'share-code-partage'}]"
+              >
+                <share-code-partage
+                  v-if="tab === 'share-code-partage'"
+                  :report-id="$store.state.histovec.id"
+                  :report-key="$store.state.histovec.key"
+                >
+                </share-code-partage>
+              </div>
+
             </div>
           </div>
           <!-- tabs end -->
@@ -367,7 +391,9 @@ const TechControl = loadView('TechControl')
 const TechControlGraph = loadView('TechControlGraph')
 const TechControlGraphError = loadView('TechControlGraphError')
 const AdministrativeCertificate = loadView('AdministrativeCertificate')
-const Share = loadView('Share')
+const ShareReport = loadView('ShareReport')
+const ShareCodePartage = loadView('ShareCodePartage')
+
 const Status = loadView('Status')
 
 import siv from '../assets/js/siv'
@@ -411,8 +437,9 @@ export default {
     TechControlGraph,
     TechControlGraphError,
     AdministrativeCertificate,
-    Share,
-    Status
+    ShareReport,
+    ShareCodePartage,
+    Status,
   },
   data () {
     return {
@@ -563,7 +590,7 @@ export default {
       }
     },
     changeTab (tab) {
-      if (['abstract', 'vehicle', 'holder', 'situation', 'history', 'utac', 'utacGraph', 'send', 'csa'].includes(tab)) {
+      if (['abstract', 'vehicle', 'holder', 'situation', 'history', 'utac', 'utacGraph', 'csa', 'share-report', 'share-code-partage'].includes(tab)) {
         this.tab = tab
       }
     },

@@ -14,6 +14,9 @@ export const urlSafeEncode = (text) => {
 export const urlSafeBase64Encode = (buffer) => {
 	const base64Encoded = base64ArrayBuffer.encode(buffer)
 
-  // Replace + by - and / by _ in a single pass
   return urlSafeEncode(base64Encoded)
+}
+
+export const base64Encode = (buffer) => {
+  return base64ArrayBuffer.encode(buffer)
 }

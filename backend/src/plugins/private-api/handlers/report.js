@@ -1,9 +1,10 @@
 import Boom from '@hapi/boom'
 
 import { getSIV } from '../../../services/siv.js'
-import { encryptJson, decryptXOR, urlSafeBase64Encode, hash } from '../../../util/crypto.js'
+import { encryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
-import { getAsync, setAsync } from '../../../connectors/redis.js'
+import { utacResponseSchema } from '../../../services/utac/schemas/response.js'
+import { redisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 
 import { appLogger } from '../../../util/logger.js'
@@ -22,7 +23,7 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_nature: 'VTP',
       ct_resultat: 'A',
       ct_km: 98429,
-      ct_immat: 'HBGI999',
+      ct_immat: 'AW-753-TD',
       ct_vin: 'VF7JM8HZC97374672'
     },
     {
@@ -52,19 +53,21 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_vin: 'VF7JM8HZC97374672'
     }
   ],
-  update_date: '01/08/2021'
+  update_date: '01/08/2021',
+  status: 200
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const utacClient = getUtacClient()
 
 export const getReport = async (request, h) => {
-  const { id, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
+  const { id: base64EncodedId, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
   appLogger.info(`-- [CONFIG] -- ignoreUtacCache => ${ignoreUtacCache}`)
   appLogger.info(`-- [CONFIG] -- ignoreTechnicalControls => ${ignoreTechnicalControls}`)
   appLogger.info(`-- [CONFIG] -- isUtacMockForBpsaActivated => ${config.utac.isUtacMockForBpsaActivated}`)
 
-  appLogger.info(`-- [backend] idv ==> ${id}`)
+  const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
+  appLogger.info(`-- [backend] idv ==> ${urlSafeBase64EncodedId}`)
 
   // 1 - SIV
   const {
@@ -76,9 +79,8 @@ export const getReport = async (request, h) => {
       encryptedImmat,
       encryptedVin,
     },
-  } = await getSIV(id, uuid)
+  } = await getSIV(urlSafeBase64EncodedId, uuid)
 
-  // @todo: correctly use Joi and Hapi to return 404 when no result is found (instead of 500)
   if (sivStatus !== 200) {
     switch (sivStatus) {
       case 404:
@@ -94,7 +96,7 @@ export const getReport = async (request, h) => {
   }
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  appLogger.debug(`-- immat ==> ${immat}`)
+  appLogger.debug(`-- [backend] immat ==> ${immat}`)
 
   // 2 - UTAC
 
@@ -103,6 +105,11 @@ export const getReport = async (request, h) => {
   // Since HistoVec uses https, it is not a security issue.
 
   const utacDataKey = computeUtacDataKey(encryptedImmat)
+
+  const emptyUtacData = encryptJson({
+    ct: [],
+    ctUpdateDate: null,
+  }, utacDataKey)
 
   // @todo: remove after BPSA test
   if (config.utac.isUtacMockForBpsaActivated) {
@@ -120,6 +127,19 @@ export const getReport = async (request, h) => {
     const executionTime = end - start
     appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_end ${executionTime}`)
 
+    const { error } = utacResponseSchema.validate(CONTROL_TECHNIQUES_MOCK_FOR_BPSA)
+    if (error) {
+      appLogger.info(`UTAC response validation error : ${error}`)
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
+
+      return {
+        success: true,
+        sivData,
+        utacData: emptyUtacData,
+        utacDataKey,
+      }
+    }
+
     return {
       success: true,
       sivData,
@@ -127,7 +147,6 @@ export const getReport = async (request, h) => {
       utacDataKey,
     }
   }
-
 
   // Only annulationCI vehicles don't have encryptedImmat
   const isAnnulationCI = Boolean(!encryptedImmat)
@@ -155,18 +174,13 @@ export const getReport = async (request, h) => {
     }
   }
 
-  const emptyUtacData = encryptJson({
-    ct: [],
-    ctUpdateDate: null,
-  }, utacDataKey)
-
-  const utacDataCacheId = urlSafeBase64Encode(hash(id))
+  const utacDataCacheId = urlSafeBase64Encode(hash(urlSafeBase64EncodedId))
 
   const ignoreCache = config.isUtacCacheIgnorable && ignoreUtacCache
 
   if (!ignoreCache) {
     try {
-      const utacData = await getAsync(utacDataCacheId)
+      const utacData = await redisClient.get(utacDataCacheId)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
       if (utacData) {
@@ -207,7 +221,7 @@ export const getReport = async (request, h) => {
 
     try {
       // Cache unsupported vehicles
-      await setAsync(
+      await redisClient.set(
         utacDataCacheId,
         emptyUtacData,
         'EX',
@@ -250,13 +264,13 @@ export const getReport = async (request, h) => {
       appLogger.error({
         error: 'UTAC response failed',
         status: utacStatus,
-        remote_error: utacMessage,
+        remoteError: utacMessage,
       })
 
       if (utacStatus === 404 || utacStatus === 406) {
         try {
           // Cache unsupported vehicles
-          await setAsync(
+          await redisClient.set(
             utacDataCacheId,
             emptyUtacData,
             'EX',
@@ -299,7 +313,7 @@ export const getReport = async (request, h) => {
 
     try {
       // Cache supported vehicles
-      await setAsync(
+      await redisClient.set(
         utacDataCacheId,
         freshUtacData,
         'EX',
@@ -319,7 +333,7 @@ export const getReport = async (request, h) => {
   } catch ({ message: errorMessage }) {
     appLogger.error({
       error: 'UTAC error',
-      remote_error: errorMessage,
+      remoteError: errorMessage,
     })
 
     // Don't cache errors

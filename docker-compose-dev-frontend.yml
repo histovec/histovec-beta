@@ -17,9 +17,6 @@ services:
       - frontend-dev
     environment:
       - APP
-      - ES_HOST
-      - ES_PORT
-      - ES_INDEX
       - BACKEND_HOST
       - BACKEND_PORT
       - FRONTEND_DEV_HOST

@@ -28,12 +28,14 @@ const routes = [
     method: 'GET',
     path:'/version',
     options: {
+      tags: ['api'],  // add to swagger documentation
+
       // hapi options
       response: {
         schema: Joi.object({
           version: Joi.string().pattern(VERSION_REGEX)
             .description('Version du backend'),
-        }),
+        }).label('VersionReponse'),
       }
     },
     handler: (request, h) => {
@@ -43,6 +45,9 @@ const routes = [
   {
     method: 'GET',
     path:'/health',
+    options: {
+      tags: ['api'],  // add to swagger documentation
+    },
     handler: (request, h) => {
       return { status: 'ok' }
     },
@@ -96,7 +101,7 @@ const routes = [
             ]
           }).required()
             .description('Identifiant anonyme (pour réaliser des statistiques métier)')
-        }),
+        }).label('ContactPayload'),
       },
     },
     handler: sendContact,
@@ -109,9 +114,6 @@ export const createServer = async () => {
     port: PORT,
   })
 
-  // Static routes
-  server.route(routes.map(prefixize))
-
   // load & register plugins
   const plugins = [
     Inert,
@@ -123,6 +125,7 @@ export const createServer = async () => {
           title: config.isPublicApi ? 'Api grand publique HistoVec' : 'Api HistoVec',
           version: config.version,
         },
+        cors: true,  // Enable cors for api.gouv.fr (and all origins because hapi-swagger dont let us choose specific origins)
       }
     }
   ]
@@ -157,6 +160,9 @@ export const createServer = async () => {
   }
 
   await server.register(plugins)
+
+  // Static routes
+  server.route(routes.map(prefixize))
 
   return server
 }

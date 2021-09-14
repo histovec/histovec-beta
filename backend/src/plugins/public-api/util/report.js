@@ -2,11 +2,35 @@ import dayjs from 'dayjs'
 
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../../../util/dataPreparationFormat.js'
 import { hash } from '../../../util/crypto.js'
+import { checkId, checkKey } from './check/reportByCode.js'
+import { appLogger } from '../../../util/logger.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
 import { FR_DATE_FORMAT } from '../../../constant/date/format.js'
-
 import config from '../../../config.js'
 
+
+export const buildIdAndKey = (code) => {
+  if (!code) {
+    return { isInvalidCode: false }
+  }
+  const chunks = code.split('-')
+  if (chunks.length !== 2) {
+    appLogger.info(`[Code_HistoVec] invalid_code ${code}`)
+    return { isInvalidCode: true }
+  }
+
+  const [id, key] = chunks
+
+  if (!checkId(id) || !checkKey(key)) {
+    appLogger.info(`[Code_HistoVec] invalid_id_or_key ${code}`)
+    return { isInvalidCode: true }
+  }
+
+  return {
+    id,
+    key
+  }
+}
 
 export const buildReportId = (
   {

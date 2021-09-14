@@ -29,12 +29,12 @@ const reportByDataPayloadSchema = Joi.object({
         .description('Numéro de formule tel que renseigné sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format SIV.'),
       date_emission_certificat_immatriculation: Joi.date()
         .description('Date d\'émission du certificat d\'immatriculation telle que renseignée sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format FNI.'),
-    }),
-  }),
+    }).label('certificat_immatriculation')
+  }).label('vehicule'),
   options: Joi.object({
     controles_techniques: Joi.boolean()
-      .description('Récupérer les contrôles techniques du véhicule dans le rapport HistoVec. Désactivé par défaut.'),
-  }),
+      .description('Récupérer les contrôles techniques du véhicule dans le rapport HistoVec. Désactivé par défaut.')
+  }).label('controles_techniques_option_by_data'),
 }).label('Report_by_data_payload')
 
 export default generateReportRoute({ path: '/report_by_data', logLabel: 'PUBLIC_ROUTE_REPORT_BY_DATA', payloadSchema: reportByDataPayloadSchema })

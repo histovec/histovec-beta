@@ -677,7 +677,7 @@ import Shake from 'shake.js'
 import dayjs from 'dayjs'
 
 import { hash } from '../utils/crypto'
-import { urlSafeBase64Encode } from '../utils/encoding'
+import { base64Encode } from '../utils/encoding'
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../utils/dataPreparationFormat'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
@@ -1050,10 +1050,10 @@ export default {
       this.defaultEmtpyFields()
 
       const hashedIdBuffer = await hash(this.id)
-      const encodedHashedId = urlSafeBase64Encode(hashedIdBuffer)
+      const encodedHashedId = base64Encode(hashedIdBuffer)
 
       const hashedKeyBuffer = await hash(this.key)
-      const encodedHashedKey = urlSafeBase64Encode(hashedKeyBuffer)
+      const encodedHashedKey = base64Encode(hashedKeyBuffer)
 
       if (this.checkFields) {
         if (encodedHashedId !== this.$store.state.histovec.id) {

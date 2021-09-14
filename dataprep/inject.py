@@ -16,7 +16,7 @@ SWIFT_CONTAINER = "histovec-data"
 CSV_FIELDS = ["idv", "ida1", "ida2", "v", "utac_ask_ct", "utac_encrypted_immat", "utac_encrypted_vin", "controle_qualite"]
 MANIFEST_EXTENSION = "md5"
 
-ES_HOST = "localhost:9200"
+ES_URL = "localhost:9200"
 ES_NUM_JOBS = 4
 ES_CHUNK_SIZE = 5000
 ES_TYPE = "siv"
@@ -103,7 +103,7 @@ def get_and_inject_chunk(chunk_spec, op_type, index, swift_conn, es, cache_dir=N
 def index_direct_load(manifest_name, cache_dir=None):
     es.indices.create(index='siv', body=...)
     chunk_specs = download_manifest(manifest_name, swift_conn, cache_dir)
-    es = Elasticsearch(ES_HOST)
+    es = Elasticsearch(ES_URL)
 
 
 def parse_args():

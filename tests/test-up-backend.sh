@@ -10,13 +10,13 @@ echo "# Start test: $basename ${APP} ${APP_VERSION}"
 ret=0
 container_name=backend-production
 
-if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" ]; then
+if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" -o -z "${ES_URL}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" -o -z "${IS_VIN_SENT_TO_UTAC}" -o -z "${REDIS_PASSWORD}" ]; then
  test_result=1
 else
  test_result=0
 fi
 if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: variable manquante: APP|APP_VERSION|BACKEND_PORT|IS_UTAC_CACHE_IGNORABLE"
+  echo "ERROR: variable manquante: APP|APP_VERSION|BACKEND_PORT|ES_URL|IS_UTAC_CACHE_IGNORABLE|IS_VIN_SENT_TO_UTAC|REDIS_PASSWORD"
   ret=$test_result
   exit $ret
 fi
