@@ -12,12 +12,11 @@ const elasticsearchClient = getElasticsearchClient()
 const redisClient = getRedisClient()
 
 
-// Graceful shutdown : React to a SIGTERM and SIGINT signal for a quick and proper shutdown
-const cleanUp = async (server) => {
-  appLogger.info(`${server.name} REST server shutting down…`)
+const cleanUp = async (server, code, reason) => {
+  appLogger.info(`${API_NAME} REST server shutting down… (${reason})`)
 
-  // Closing redis connection
   try {
+    // Closing redis connection
     await redisClient.quit()
     appLogger.info('redis client is shutting down properly…')
     appLogger.info('[SERVER-STOP] redis quit')
@@ -33,21 +32,19 @@ const cleanUp = async (server) => {
   // Stopping server
   try {
     await server.stop({ timeout: 10000 })  // Wait 10s to stop
-    appLogger.info(`${server.name} REST server shutdown complete`)
+    appLogger.info(`${API_NAME} REST server shutdown complete`)
     appLogger.info('[SERVER-STOP] server graceful-stop')
-    process.exit(0)
   } catch(error) {
-    appLogger.info(`${server.name} REST server shutdown complete with error: ${error}`)
+    appLogger.info(`${API_NAME} REST server shutdown complete with error: ${error}`)
     appLogger.info('[SERVER-STOP] server hard-stop')
-    process.exit(1)
   }
+  process.exit(code)
 }
 
 const initServer = async () => {
   techLogger.debug(
     `🔧  ${JSON.stringify(config)}`
   )
-
   appLogger.info(`[CONFIG] isVinSentToUtac ${config.utac.isVinSentToUtac}`)
 
   const server = await createServer()
@@ -98,9 +95,13 @@ const initServer = async () => {
     techLogger.error(error)
   }
 
+  // Uncatched errors
+  process.on('uncaughtException', async () => cleanUp(server, 1, 'uncaughtException'))
+  process.on('unhandledRejection', async () => cleanUp(server, 1, 'unhandledRejection'))
+
   // Graceful shutdown
-  process.on('SIGTERM', async () => cleanUp(server, redisClient))
-  process.on('SIGINT', async () => cleanUp(server, redisClient))
+  process.on('SIGTERM', async () => cleanUp(server, 0, 'SIGTERM'))
+  process.on('SIGINT', async () => cleanUp(server, 0, 'SIGINT'))
 }
 
 (async () => {
