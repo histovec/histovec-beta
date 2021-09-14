@@ -3,6 +3,7 @@ import Boom from '@hapi/boom'
 import { getSIV } from '../../../services/siv.js'
 import { encryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
+import { utacResponseSchema } from '../../../services/utac/schemas/response.js'
 import { redisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 
@@ -22,7 +23,7 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_nature: 'VTP',
       ct_resultat: 'A',
       ct_km: 98429,
-      ct_immat: 'HBGI999',
+      ct_immat: 'AW-753-TD',
       ct_vin: 'VF7JM8HZC97374672'
     },
     {
@@ -52,7 +53,8 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_vin: 'VF7JM8HZC97374672'
     }
   ],
-  update_date: '01/08/2021'
+  update_date: '01/08/2021',
+  status: 200
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -104,6 +106,11 @@ export const getReport = async (request, h) => {
 
   const utacDataKey = computeUtacDataKey(encryptedImmat)
 
+  const emptyUtacData = encryptJson({
+    ct: [],
+    ctUpdateDate: null,
+  }, utacDataKey)
+
   // @todo: remove after BPSA test
   if (config.utac.isUtacMockForBpsaActivated) {
     // Wait same times as production UTAC api response time
@@ -119,6 +126,19 @@ export const getReport = async (request, h) => {
     const end = new Date()
     const executionTime = end - start
     appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_end ${executionTime}`)
+
+    const { error } = utacResponseSchema.validate(CONTROL_TECHNIQUES_MOCK_FOR_BPSA)
+    if (error) {
+      appLogger.info(`UTAC response validation error : ${error}`)
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
+
+      return {
+        success: true,
+        sivData,
+        utacData: emptyUtacData,
+        utacDataKey,
+      }
+    }
 
     return {
       success: true,
@@ -153,11 +173,6 @@ export const getReport = async (request, h) => {
       utacDataKey,
     }
   }
-
-  const emptyUtacData = encryptJson({
-    ct: [],
-    ctUpdateDate: null,
-  }, utacDataKey)
 
   const utacDataCacheId = urlSafeBase64Encode(hash(urlSafeBase64EncodedId))
 

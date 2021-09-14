@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { readFileSync } from 'fs'
+import { utacResponseSchema } from '../services/utac/schemas/response.js'
 import { Agent as HttpsAgent } from 'https'
 import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
@@ -181,8 +182,19 @@ module.exports.UTACClient = class UTACClient {
         immat,
         ...(config.utac.isVinSentToUtac ? { vin } : {}),
       })
+      const { data } = response
+
       const end = new Date()
       const executionTime = end - start
+
+      const { error } = utacResponseSchema.validate(data)
+      if (error) {
+        return {
+          status: 500,
+          message: ERROR_MESSAGES.malformedResponse,
+        }
+      }
+
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
     } catch (error) {
@@ -195,17 +207,6 @@ module.exports.UTACClient = class UTACClient {
       return {
         status: 500,
         message: ERROR_MESSAGES[500],
-      }
-    }
-
-    if (!response?.data?.ct || !response?.data?.update_date) {
-      appLogger.error({
-        error: ERROR_MESSAGES.malformedResponse,
-      })
-
-      return {
-        status: 500,
-        message: ERROR_MESSAGES.malformedResponse,
       }
     }
 
