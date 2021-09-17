@@ -10,13 +10,22 @@ echo "# Start test: $basename ${APP} ${APP_VERSION}"
 ret=0
 container_name=backend-production
 
-if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" -o -z "${ES_URL}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" -o -z "${IS_VIN_SENT_TO_UTAC}" -o -z "${REDIS_PASSWORD}" ]; then
+echo "[ENV VAR] APP = ${APP} -- (fixed at histovec)"
+echo "[ENV VAR] APP_VERSION = ${APP_VERSION} -- (required)"
+echo "[ENV VAR] BACKEND_PORT = ${BACKEND_PORT} -- (default is 8010)"
+echo "[ENV VAR] ES_HOST = ${ES_HOST} -- (default to local IP)"
+echo "[ENV VAR] IS_UTAC_CACHE_IGNORABLE = ${IS_UTAC_CACHE_IGNORABLE} -- (default to false)"
+echo "[ENV VAR] IS_VIN_SENT_TO_UTAC = ${IS_VIN_SENT_TO_UTAC} -- (default to true)"
+echo "[ENV VAR] REDIS_HOST = ${REDIS_HOST} -- (default to local IP)"
+echo "[ENV VAR] REDIS_PASSWORD = ${REDIS_PASSWORD} -- (required)"
+
+if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" -o -z "${ES_HOST}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" -o -z "${IS_VIN_SENT_TO_UTAC}" -o -z "${REDIS_HOST}" -o -z "${REDIS_PASSWORD}" ]; then
  test_result=1
 else
  test_result=0
 fi
 if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: variable manquante: APP|APP_VERSION|BACKEND_PORT|ES_URL|IS_UTAC_CACHE_IGNORABLE|IS_VIN_SENT_TO_UTAC|REDIS_PASSWORD"
+  echo "ERROR: variable manquante: APP|APP_VERSION|BACKEND_PORT|ES_HOST|IS_UTAC_CACHE_IGNORABLE|IS_VIN_SENT_TO_UTAC|REDIS_HOST|REDIS_PASSWORD"
   ret=$test_result
   exit $ret
 fi
