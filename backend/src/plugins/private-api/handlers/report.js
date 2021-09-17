@@ -4,7 +4,7 @@ import { getSIV } from '../../../services/siv.js'
 import { encryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
 import { utacResponseSchema } from '../../../services/utac/schemas/response.js'
-import { redisClient } from '../../../connectors/redis.js'
+import { getRedisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 
 import { appLogger } from '../../../util/logger.js'
@@ -59,6 +59,7 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const utacClient = getUtacClient()
+const redisClient = getRedisClient()
 
 export const getReport = async (request, h) => {
   const { id: base64EncodedId, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
