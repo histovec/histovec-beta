@@ -22,13 +22,13 @@ echo "[ENV VAR] REDIS_HOST = ${REDIS_HOST} -- (should be VM APP IP)"
 echo "[ENV VAR] REDIS_PASSWORD = ${REDIS_PASSWORD} -- (required)"
 
 
-if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${ES_HOST}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" -o -z "${IS_VIN_SENT_TO_UTAC}" -o -z "${PUBLIC_BACKEND_PORT}" -o -z "${PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA}" -o -z "${REDIS_HOST}" -o -z "${REDIS_PASSWORD}"]; then
+if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${PUBLIC_BACKEND_PORT}" ]; then
  test_result=1
 else
  test_result=0
 fi
 if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: variable manquante: APP|APP_VERSION|ES_HOST|IS_UTAC_CACHE_IGNORABLE|IS_VIN_SENT_TO_UTAC|PUBLIC_BACKEND_PORT|PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA|REDIS_HOST|REDIS_PASSWORD"
+  echo "ERROR: variable manquante: APP|APP_VERSION|PUBLIC_BACKEND_PORT"
   ret=$test_result
   exit $ret
 fi
