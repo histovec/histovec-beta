@@ -10,7 +10,7 @@ const reportByCodePayloadSchema = Joi.object({
     code: Joi.string().pattern(ID_REGEX).required()
       .description('Code HistoVec du rapport HistoVec demandé.')
       .label('code_partage_histovec')
-  }),
+  }).label('vehicule_by_code'),
   options: Joi.object({
     controles_techniques: Joi.boolean()
       .description('Récupérer les contrôles techniques du véhicule dans le rapport. Non par défaut.')
