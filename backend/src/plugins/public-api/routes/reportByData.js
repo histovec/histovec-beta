@@ -29,8 +29,8 @@ const reportByDataPayloadSchema = Joi.object({
         .description('Numéro de formule tel que renseigné sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format SIV.'),
       date_emission_certificat_immatriculation: Joi.date()
         .description('Date d\'émission du certificat d\'immatriculation telle que renseignée sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format FNI.'),
-    }).label('certificat_immatriculation')
-  }).label('vehicule'),
+    })
+  }).label('vehicule_by_data'),
   options: Joi.object({
     controles_techniques: Joi.boolean()
       .description('Récupérer les contrôles techniques du véhicule dans le rapport HistoVec. Désactivé par défaut.')

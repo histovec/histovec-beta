@@ -19,13 +19,13 @@ echo "[ENV VAR] IS_VIN_SENT_TO_UTAC = ${IS_VIN_SENT_TO_UTAC} -- (default to true
 echo "[ENV VAR] REDIS_HOST = ${REDIS_HOST} -- (default to local IP)"
 echo "[ENV VAR] REDIS_PASSWORD = ${REDIS_PASSWORD} -- (required)"
 
-if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" -o -z "${ES_HOST}" -o -z "${IS_UTAC_CACHE_IGNORABLE}" -o -z "${IS_VIN_SENT_TO_UTAC}" -o -z "${REDIS_HOST}" -o -z "${REDIS_PASSWORD}" ]; then
+if [ -z "${APP}" -o -z "${APP_VERSION}" -o -z "${BACKEND_PORT}" ]; then
  test_result=1
 else
  test_result=0
 fi
 if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: variable manquante: APP|APP_VERSION|BACKEND_PORT|ES_HOST|IS_UTAC_CACHE_IGNORABLE|IS_VIN_SENT_TO_UTAC|REDIS_HOST|REDIS_PASSWORD"
+  echo "ERROR: variable manquante: APP|APP_VERSION|BACKEND_PORT"
   ret=$test_result
   exit $ret
 fi
