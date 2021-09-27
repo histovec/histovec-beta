@@ -143,10 +143,10 @@ export const vehiculeMapping = (report) => {
       nombre_de_titulaires: report.nb_titulaires,
       vignette_critair: report.critair,
       vole: report.vehicule_vole,
-      sinistres: {
-        a_une_plaque_fni: report.is_fni,
+      procedures_ve: {
+        numero_immatriculation_au_format_fni: report.is_fni,
         date_derniere_procedure_ve: report.date_dernier_sinistre,
-        // @todo: transformer date_derniere_resolution en date_fin_derniere_procedure_ve en intégrant cette logique
+        // @todo: transformer date_derniere_resolution en date_fin_derniere_procedure_ve en intégrant cette logique côté data
         date_fin_derniere_procedure_ve: report.date_dernier_sinistre < report.date_derniere_resolution ? report.date_derniere_resolution : undefined,
         apte_a_circuler: report.is_apte_a_circuler,
         nombre_de_procedures_ve: report.nb_sinistres,
