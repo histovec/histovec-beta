@@ -70,20 +70,17 @@ export const reportResponseSchema = Joi.object({
       }).label(`${RESPONSE_PREFIX}etat_certificat_immatriculation`),
     }).label(`${RESPONSE_PREFIX}certificat_immatriculation`),
     etat: Joi.object({
-      // @todo: voir si on a un +1 lors d'un import depuis l'étranger => si oui, je le retire
-      nombre_de_titulaires: Joi.number().integer().min(0).description('Nombre de titulaire(s) depuis la date de 1ère immatriculation en France du véhicule (titulaire actuel compris).'),
+      nombre_de_titulaires: Joi.number().integer().min(0).description('Nombre de titulaire(s) depuis la date de 1ère immatriculation en France du véhicule (titulaire actuel compris). Seules les immatriculations en France sont comptabilisées.'),
       vignette_critair: Joi.string().valid(...Object.values(VIGNETTE)).description('Numéro de la vignette Critair.'),
       vole: Joi.boolean().description('Le véhicule a été volé.'),
-      sinistres: Joi.object({
-        // @todo: voir avec Valérie pour expliquer à quoi sert cette information
-        // @todo: ask Valerie pour a_une_plaque_fni -> numero_immatriculation_au_format_fni
-        a_une_plaque_fni: Joi.boolean().description('Le véhicule possède encore un numéro d\'immatriculation au format FNI.'),
+      procedures_ve: Joi.object({
+        numero_immatriculation_au_format_fni: Joi.boolean().description('Le véhicule possède encore un numéro d\'immatriculation au format FNI.'),
         date_derniere_procedure_ve: Joi.date().description('Date de la dernière procédure VE du véhicule.'),
         date_fin_derniere_procedure_ve: Joi.date().description('Date de fin de la dernière procédure VE du véhicule.'),
         apte_a_circuler: Joi.boolean().description('Le véhicule est apte à circuler.'),  // @todo: revoir le calcul (retirer les ove / ovei ?)
-        nombre_de_procedures_ve: Joi.number().integer().min(0).description('Nombre de procédure(s) VE en cours.'), // @todo compter LEVER_OVE ou 1 suspension en cours (motif PVE) ?
+        nombre_de_procedures_ve: Joi.number().integer().min(0).description('Nombre de procédure(s) VE en cours.'), // @todo compter IMMO_VE ?
         procedure_ve_en_cours: Joi.boolean().description('Le véhicule a au moins une Procédure VE en cours.'),
-      }).label(`${RESPONSE_PREFIX}sinistres`),
+      }).label(`${RESPONSE_PREFIX}procedures_ve`),
     }).label(`${RESPONSE_PREFIX}etat`),
     historique: Joi.array().items(
       Joi.object({
