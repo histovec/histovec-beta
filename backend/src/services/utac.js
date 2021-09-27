@@ -201,6 +201,8 @@ module.exports.UTACClient = class UTACClient {
       // That should never happen
       const end = new Date()
       const executionTime = end - start
+      appLogger.info(`Error while reading technical controls (${uuid}): ${error}`)
+
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
 
