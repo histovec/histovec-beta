@@ -57,6 +57,36 @@
         <div class="col-lg-12 mb-20">
           <!-- debut vignette -->
           <div class="row">
+            <div
+              class="col-sm-12"
+            >
+              <div
+                v-if="outdatedData"
+                class="alert alert-danger alert-icon text-center"
+                role="alert"
+              >
+                <i class="fa fa-exclamation-triangle"></i>
+                HistoVec rencontre actuellement des difficultés techniques dans la mise à jour des données relatives aux véhicules qu'il vous permet de consulter.
+                <br>
+                Seul le certificat de situation administrative disponible sur le site de l'ANTS fait foi.
+                <br>
+                Veuillez nous excuser pour la gêne occasionnée.
+                <br>
+                <br>
+                <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4">
+                  <a
+                    class="btn btn-default btn-m center-block m-h-05"
+                    href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Obtenir le CSA à jour via l'ANTS
+                  </a>
+                </div>
+                <br>
+                <br>
+              </div>
+            </div>
             <div class="col-sm-6">
               <div
                 v-if="!isAnnulationCI"
@@ -77,26 +107,31 @@
             </div>
             <div class="col-sm-6">
               <div
-                v-if="processedSivData.dateUpdate && processedSivData.dateUpdate != DEFAULT_DATE_UPDATE"
-                class="alert alert-icon alert-warning"
+                v-if="showDataDate"
+                :class="'alert-' + (isDefaultDataDate ? 'danger' : 'warning')"
+                class="alert alert-icon"
                 role="alert"
               >
-                <i class="fa fa-calendar-check-o"></i>
-                <span v-if="$store.state.config.dataDate">
+                <i
+                  :class="'fa-calendar-' + (isDefaultDataDate ? 'times-o' : 'check-o')"
+                  class="fa"
+                >
+                </i>
+                <span v-if="!isDefaultDataDate">
                   Informations du ministère de l'Intérieur datant du
                   <strong>{{ processedSivData.dateUpdate }}</strong>
                 </span>
-                <span v-else>
-                  Informations connues d'HistoVec à ce jour
+                <span v-if="isDefaultDataDate">
+                  Informations connues d'HistoVec non à jour
                 </span>
               </div>
               <div
-                v-if="!$store.state.config.dataDate && processedSivData.dateUpdate && processedSivData.dateUpdate === DEFAULT_DATE_UPDATE"
+                v-else
                 class="alert alert-icon alert-warning"
                 role="alert"
               >
                 <i class="fa fa-calendar-check-o"></i>
-                <span v-if="!$store.state.config.dataDate">
+                <span>
                   Informations connues d'HistoVec à ce jour
                 </span>
               </div>
@@ -475,6 +510,9 @@ export default {
     processedSivData () {
       const sivData = this.$store.state.histovec.report && this.$store.state.histovec.report.sivData
       return siv.processSivData(sivData)
+    },
+    isDefaultDataDate () {
+      return this.processedSivData.dateUpdate && this.processedSivData.dateUpdate === DEFAULT_DATE_UPDATE
     },
     holder () {
       return (this.$route.query.id === undefined) && ((this.$route.params.id !== undefined) || (this.$store.state.histovec.id !== undefined))

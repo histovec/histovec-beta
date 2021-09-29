@@ -233,6 +233,8 @@ Vue.mixin({
     return {
       appName: process.env.VUE_APP_TITLE,
       usePreviousMonthForData: false,
+      outdatedData: false,
+      showDataDate: false,
       appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
       localization,

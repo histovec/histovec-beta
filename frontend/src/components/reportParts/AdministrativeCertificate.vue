@@ -16,7 +16,7 @@
         title="certificat de situation administrative"
         @click="generatePdf"
       >
-        Imprimer le CSA
+        Imprimer le CSA HistoVec
         <i class="fa fa-print"></i>
       </button>
     </p>
@@ -93,6 +93,7 @@ export default {
         isAnnulationCI,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
         dateAnnulation: this.processedSivData.administratif.dateAnnulation,
+        dateDonnees: this.showDataDate ? this.processedSivData.dateUpdate : null,
         histoVecLogoBytes: this.histoVecLogoBytes,
         marianneImageBytes: this.marianneImageBytes,
         marque: this.processedSivData.ctec.marque,

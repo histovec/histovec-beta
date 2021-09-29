@@ -1,4 +1,5 @@
 import Qr from 'qr.js'
+import dayjs from 'dayjs'
 
 import {
 	BORDER_LEFT_PAGE_X,
@@ -12,8 +13,7 @@ import {
 	TOP_FOOTER_MARGIN
 } from './constants'
 import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from './utils'
-import { padString } from '../../assets/js/format'
-
+import { FR_DATE_FORMAT, padString } from '../../assets/js/format'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = ({
@@ -114,14 +114,16 @@ const writeValidityDate = ({
 	page,
 	embeddedFonts,
 	x,
-	y
+	y,
+	dateDonnees
 }) => {
-	const date = new Date()
-	const humanReadableDateString = date.toLocaleDateString(
+	const now = new Date()
+	const nowHumanReadableDateString = now.toLocaleDateString(
 		'fr-FR',
 		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 	)
-	const humanReadableHourString = `${padString(date.getHours(), 2)}h${padString(date.getMinutes(), 2)}`
+	const nowHumanReadableHourString = `${padString(now.getHours(), 2)}h${padString(now.getMinutes(), 2)}`
+
 	const validityDateTextY = writeTitle({
 		page,
 		embeddedFonts,
@@ -130,12 +132,23 @@ const writeValidityDate = ({
 		title: 'Certificat attestant la situation administrative au :'
 	})
 
+	const dateDonneesHumanReadableDateString = dayjs(dateDonnees, FR_DATE_FORMAT).toDate().toLocaleDateString(
+		'fr-FR',
+		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+	)
+
+	const datesText = (
+		dateDonnees ?
+			`${dateDonneesHumanReadableDateString} (généré le ${nowHumanReadableDateString} à ${nowHumanReadableHourString})` :
+			`${nowHumanReadableDateString} à ${nowHumanReadableHourString}`
+	)
+
 	const validityDateEndY = writeText({
 		page,
 		embeddedFonts,
 		x: x + HORIZONTAL_TABULATION.XS,
 		y: validityDateTextY,
-		text: `${humanReadableDateString} à ${humanReadableHourString}`,
+		text: datesText,
 		size: FONT_SIZES.M,
 		style: FONT_STYLES.BOLD
 	})
@@ -179,6 +192,7 @@ const writeLegalNotice = ({
 export const writeFooter = ({
 	page,
 	embeddedFonts,
+	dateDonnees,
 	footerLogoPng,
 	qrCodeUrl,
 	validityDate,
@@ -191,7 +205,8 @@ export const writeFooter = ({
 		page,
 		embeddedFonts,
 		x: BORDER_LEFT_PAGE_X,
-		y: topFooterY
+		y: topFooterY,
+		dateDonnees,
 	})
 
 	writeLegalNotice({
