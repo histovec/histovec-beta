@@ -10,6 +10,7 @@ export const generateCsa = async (
 		isAnnulationCI,
 		annulationCurrentStatus,
 		dateAnnulation,
+		dateDonnees,
 		histoVecLogoBytes,
 		marianneImageBytes,
 		marque,
@@ -18,7 +19,7 @@ export const generateCsa = async (
 		qrCodeUrl,
 		validityDate,
 		vin,
-		webSiteUrl
+		webSiteUrl,
 	},
 	// Only complete CSA
 	{
@@ -65,6 +66,7 @@ export const generateCsa = async (
 			isAnnulationCI,
 			annulationCurrentStatus,
 			dateAnnulation,
+			dateDonnees,
 			marque,
 			plaque,
 			premierCertificat,

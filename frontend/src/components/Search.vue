@@ -51,6 +51,39 @@
       <div class="container">
         <div class="row">
           <div
+            v-if="outdatedData"
+            class="col-md-12"
+          >
+            <div class="col-md-1"></div>
+            <div class="col-md-12">
+              <div
+                class="alert alert-danger alert-icon text-center"
+                role="alert"
+              >
+                <i class="fa fa-exclamation-triangle"></i>
+                HistoVec rencontre actuellement des difficultés techniques dans la mise à jour des données relatives aux véhicules qu'il vous permet de consulter.
+                <br>
+                Seul le certificat de situation administrative disponible sur le site de l'ANTS fait foi.
+                <br>
+                Veuillez nous excuser pour la gêne occasionnée.
+                <br>
+                <br>
+                <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4">
+                  <a
+                    class="btn btn-default btn-m center-block m-h-05"
+                    href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Obtenir le CSA à jour via l'ANTS
+                  </a>
+                </div>
+                <br>
+                <br>
+              </div>
+            </div>
+          </div>
+          <div
             v-if="typeImmatriculation === ''"
             class="col-md-12"
           >
@@ -158,7 +191,7 @@
             <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4">
               <a
                 class="btn btn-default btn-m center-block m-h-05"
-                href="https://siv.interieur.gouv.fr/map-usg-ui/do/csa_retour_dem_certificat"
+                href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
                 rel="noopener noreferrer"
                 target="_blank"
               >

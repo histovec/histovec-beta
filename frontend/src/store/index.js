@@ -38,15 +38,11 @@ export default new Vuex.Store({
       error: {}
     },
     config: {
-      csaAnnulationCi: false,
-      dataDate: false,
       ignoreUtacCache: false,
       newData: false,
       useCodePartageHistoVec: false,
     },
     configEnabler: {
-      csaAnnulationCi: ['ctrl', 'alt', 'm'],
-      dataDate: ['ctrl', 'alt', 'd'],
       ignoreUtacCache: ['ctrl', 'alt', 'a'],
       newData: ['ctrl', 'alt', 'b'],
       useCodePartageHistoVec: ['ctrl', 'alt', 'v'],
