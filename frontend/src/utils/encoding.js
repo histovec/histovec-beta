@@ -12,11 +12,21 @@ export const urlSafeEncode = (text) => {
 }
 
 export const urlSafeBase64Encode = (buffer) => {
-	const base64Encoded = base64ArrayBuffer.encode(buffer)
+	const base64Encoded = base64Encode(buffer)
 
   return urlSafeEncode(base64Encoded)
 }
 
+export const urlSafeBase64Decode = (text) => {
+  const base64Encoded = urlSafeDecode(text)
+
+  return base64Decode(base64Encoded)
+}
+
 export const base64Encode = (buffer) => {
   return base64ArrayBuffer.encode(buffer)
+}
+
+export const base64Decode = (text) => {
+  return base64ArrayBuffer.decode(text)
 }

@@ -400,7 +400,7 @@ import siv from '../assets/js/siv'
 import { DEFAULT_DATE_UPDATE } from '../constants/v'
 import { getDepartement } from '../utils/codePostal'
 import { hash } from '../utils/crypto'
-import { urlSafeBase64Encode } from '../utils/encoding'
+import { urlSafeBase64Encode, base64Encode, urlSafeBase64Decode } from '../utils/encoding'
 
 import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
 
@@ -516,19 +516,37 @@ export default {
       return window.location.protocol + '//' + window.location.host
     },
     url () {
+
       const idParam = encodeURIComponent(this.$store.state.histovec.id || this.$route.params.id)
       const keyParam = encodeURIComponent(this.$store.state.histovec.key || this.key)
       const queryString = `?id=${idParam}&key=${keyParam}`
 
-      return `${this.baseUrl}/histovec/report${queryString}`
+      // Add 'urlUnsafe' queryParameter to make new buyer urls (urlUnsafeBase64 encoded parameters) recognizable for frontend and backend
+      // @todo remove 'urlUnsafe' queryParam while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      return `${this.baseUrl}/histovec/report${queryString}&urlUnsafe=true`
     }
   },
   async created () {
     if (this.id) {
-      this.$store.commit('updateId', this.id)
+      // old share report link
+      if (!this.$route.query.urlUnsafe && this.$route.query.id) {
+        const id = base64Encode(urlSafeBase64Decode(this.id))
+        this.$store.commit('updateId', id)
+      } else {
+        // @todo only keep this line while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+        this.$store.commit('updateId', this.id)
+      }
     }
+
     if (this.key) {
-      this.$store.commit('updateKey', this.key)
+      // old share report link
+      if (!this.$route.query.urlUnsafe && this.$route.query.key) {
+        const key = base64Encode(urlSafeBase64Decode(this.key))
+        this.$store.commit('updateKey', key)
+      } else {
+        // @todo only keep this line while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+        this.$store.commit('updateKey', this.key)
+      }
     }
 
     await this.getReport()
