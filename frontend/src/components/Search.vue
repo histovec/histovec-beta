@@ -677,7 +677,7 @@ import Shake from 'shake.js'
 import dayjs from 'dayjs'
 
 import { hash } from '../utils/crypto'
-import { base64Encode } from '../utils/encoding'
+import { base64Encode, urlSafeBase64Encode, base64Decode } from '../utils/encoding'
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../utils/dataPreparationFormat'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
@@ -1051,9 +1051,29 @@ export default {
 
       const hashedIdBuffer = await hash(this.id)
       const encodedHashedId = base64Encode(hashedIdBuffer)
+      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // eslint-disable-next-line no-console
+      console.log(`[NEW] id base64Encoded = ${encodedHashedId}`)
+
+      const urlSafeBase64EncodedId = urlSafeBase64Encode(base64Decode(encodedHashedId))
+      // eslint-disable-next-line no-console
+      console.log(`[OLD] id urlSafeBase64Encoded = ${urlSafeBase64EncodedId}`)
+
+      // // eslint-disable-next-line no-console
+      console.log(`[ID] are they different ? ${encodedHashedId !== urlSafeBase64EncodedId}`)
 
       const hashedKeyBuffer = await hash(this.key)
       const encodedHashedKey = base64Encode(hashedKeyBuffer)
+      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // eslint-disable-next-line no-console
+      console.log(`[NEW] key base64Encoded = ${encodedHashedKey}`)
+
+      const urlSafeBase64EncodedKey = urlSafeBase64Encode(base64Decode(encodedHashedKey))
+      // eslint-disable-next-line no-console
+      console.log(`[OLD] key urlSafeBase64Encoded = ${urlSafeBase64EncodedKey}`)
+
+      // // eslint-disable-next-line no-console
+      console.log(`[KEY] are they different ? ${encodedHashedKey !== urlSafeBase64EncodedKey}`)
 
       if (this.checkFields) {
         if (encodedHashedId !== this.$store.state.histovec.id) {
