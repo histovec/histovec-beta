@@ -22,7 +22,7 @@ services:
         NPM_FIX: ${NPM_FIX}
         NPM_LATEST: ${NPM_LATEST}
         NPM_VERBOSE: ${NPM_VERBOSE}
-    container_name: ${APP}-backend-${EXEC_ENV}
+    container_name: ${APP}-public-backend-${EXEC_ENV}
     ports:
       - ${PUBLIC_BACKEND_PORT}:${PUBLIC_BACKEND_PORT}
     environment:
