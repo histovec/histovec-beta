@@ -1,13 +1,14 @@
 import Joi from 'joi'
 import Boom from '@hapi/boom'
 
+import { REPORT_PATH } from '../constants/path.js'
 import { getReport } from '../handlers/report.js'
 import config from '../../../config.js'
 
 
 export default {
 	method: 'POST',
-	path: '/report',
+	path: REPORT_PATH,
 	options: {
 		validate: {
 			payload: Joi.object({

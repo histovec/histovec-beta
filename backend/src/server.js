@@ -8,13 +8,12 @@ import Joi from 'joi'
 import { sendContact } from './handlers/feedback.js'
 import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from './constant/type.js'
+import { REPORT_PATH as PRIVATE_REPORT_PATH } from './plugins/private-api/constants/path.js'
 
 import config from './config.js'
 
 
 const PORT = Number(config.port) || 8000
-const BASE_PRIVATE_URL = '/private'
-const PRIVATE_API_REPORT_PATH = '/report'
 
 const prefixize = (route) => {
   return {
@@ -115,10 +114,13 @@ export const createServer = async () => {
   })
 
   // load & register plugins
-  const plugins = [
-    Inert,
-    Vision,
-    {
+  const plugins = []
+
+
+  if (config.isPublicApi) {
+    plugins.push(Inert)
+    plugins.push(Vision)
+    plugins.push({
       plugin: HapiSwagger,
       options: {
         info: {
@@ -127,22 +129,11 @@ export const createServer = async () => {
         },
         cors: true,  // Enable cors for api.gouv.fr (and all origins because hapi-swagger dont let us choose specific origins)
       }
-    }
-  ]
+    })
 
-  plugins.push({
-    plugin: await import('./plugins/private-api'),
-    options: {
-      // Custom options
-      apiPrefix: config.apiPrefix,
-      basePrivateUrl: BASE_PRIVATE_URL,
-      private: config.isPublicApi,
-    },
-  })
+    const privateApiHost = `${config.appHost}:${config.appPort}`
+    const privateApiPath = PRIVATE_REPORT_PATH
 
-
-  if (config.isPublicApi) {
-    // @todo: s'assurer que le swagger ne soit pas accessible en PROD pour l'api backend classique
 
     plugins.push({
       plugin: await import('./plugins/public-api'),
@@ -153,8 +144,16 @@ export const createServer = async () => {
 
         // Custom options
         apiPrefix: config.apiPrefix,
-        basePrivateUrl: BASE_PRIVATE_URL,
-        privateApiReportPath: PRIVATE_API_REPORT_PATH,
+        privateApiHost,
+        privateApiPath,
+      },
+    })
+  } else {
+    plugins.push({
+      plugin: await import('./plugins/private-api'),
+      options: {
+        // Custom options
+        apiPrefix: config.apiPrefix,
       },
     })
   }
