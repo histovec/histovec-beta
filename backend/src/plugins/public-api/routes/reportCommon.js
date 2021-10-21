@@ -107,20 +107,29 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
 
       const { privateReportApiUrl } = request.server.plugins.publicApi
 
-      const { status: statusCode, data: result } = await axios.post(privateReportApiUrl, {
-        id: base64EncodedReportId,
-        uuid: config.apiUuid,
-        options: {
-          ignoreTechnicalControls: !askTechnicalControls,
-        },
-      },
-      {
-        timeout: config.appTimeout,
-        headers: {
-          Accepts: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
+      let response = null
+      try {
+        response = await axios.post(
+          privateReportApiUrl, {
+            id: base64EncodedReportId,
+            uuid: config.apiUuid,
+            options: {
+              ignoreTechnicalControls: !askTechnicalControls,
+            },
+          },
+          {
+            timeout: config.appTimeout,
+            headers: {
+              Accepts: 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      } catch (error) {
+        response = error.response
+      }
+
+      const { status: statusCode, data: result } = response
 
       const { sivData, utacData, utacDataKey, error, message } = result
 
