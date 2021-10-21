@@ -46,6 +46,7 @@ const initServer = async () => {
     `🔧  ${JSON.stringify(config)}`
   )
   appLogger.info(`[CONFIG] isVinSentToUtac ${config.utac.isVinSentToUtac}`)
+  appLogger.info(`[CONFIG] usePreviousMonthForData ${config.usePreviousMonthForData}`)
 
   const server = await createServer()
 
