@@ -34,7 +34,7 @@ export const reportResponseSchema = Joi.object({
         vin_anonymise: Joi.string().description('Rubrique E : Numéro d’identification du véhicule (VIN : Vehicle Identification Number) anonymisé.'),
         // @todo: Pt techniquement Admissible => A changer HistoVec
         ptta: Joi.number().integer().min(0).description('Rubrique F.1 : Masse en charge maximale techniquement admissible (en kg), sauf pour les motocycles, plus communément appelé PT techniquement admissible pour Poids Total Techniquement Admissible.'),
-        ptac: Joi.number().integer().min(0).description('Rubrique F.2 : Masse en charge maximale admissible du véhicule en service dans l’Etat membre d’immatriculation (en kg), anciennement appelé PTAC pour Poids Total Autorisé en Charge.'),
+        ptac: Joi.number().min(0).description('Rubrique F.2 : Masse en charge maximale admissible du véhicule en service dans l’Etat membre d’immatriculation (en kg), anciennement appelé PTAC pour Poids Total Autorisé en Charge.'),
         ptra: Joi.number().integer().min(0).description('Rubrique F.3 : Masse en charge maximale admissible de l’ensemble en service dans l’Etat membre d’immatriculation (en kg), plus communément appelé PTRA pour Poids Total Roulant Autorisé.'),
         // @todo: PT service pour Poids Total en Service (ou ptes)
         ptes: Joi.number().integer().min(0).description('Rubrique G : Masse du véhicule en service avec carrosserie et dispositif d’attelage en cas de véhicule tracteur de catégorie autre que M1, plus communément appelé PT service pour Poids Total en Service.'),
@@ -46,8 +46,8 @@ export const reportResponseSchema = Joi.object({
         // @todo: carrosserie_fr ou carrosserie_nationale ?
         carrosserie_fr: Joi.string().description('Rubrique J.3 : Carrosserie (désignation nationale).'),
         numero_de_reception: Joi.string().description('Rubrique K : Numéro de réception par type (si disponible).'),
-        cylindree: Joi.number().integer().min(0).description('Rubrique P.1 : Cylindrée (en cm3).'),
-        puissance_nette: Joi.number().integer().min(0).description('Rubrique P.2 : Puissance nette maximale (en kW) (si disponible).'),
+        cylindree: Joi.number().min(0).description('Rubrique P.1 : Cylindrée (en cm3).'),
+        puissance_nette: Joi.number().min(0).description('Rubrique P.2 : Puissance nette maximale (en kW) (si disponible).'),
         energie: Joi.string().description('Rubrique P.3 : Type de carburant ou source d’énergie.'),
         puissance_cv: Joi.number().integer().min(0).description('Rubrique P.6 : Puissance administrative nationale (chevaux fiscaux).'),
         rapport_puissance_masse: Joi.number().min(0).description('Rubrique Q : Rapport puissance / masse en kW/kg (uniquement pour les motocycles).'),

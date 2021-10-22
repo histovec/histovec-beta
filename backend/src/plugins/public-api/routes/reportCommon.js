@@ -196,7 +196,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         const reportWithoutControlesTechniques = {
           vehicule: mappedVehicule,
         }
-        syslogLogger.debug({ key: 'report_with_controles_techniques', tag: logLabel, value: { ...reportWithoutControlesTechniques } })
+        syslogLogger.debug({ key: 'report_without_controles_techniques', tag: logLabel, value: { ...reportWithoutControlesTechniques } })
 
         return reportWithoutControlesTechniques
       }
