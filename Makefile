@@ -128,7 +128,8 @@ export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
 export ES_DATA=${BACKEND}/esdata
 export ES_DATA_BACKUP=${BACKEND}/backup/
 export ES_MEM=512m
-export ES_HOST=${LOCAL_IP}
+# Pass a FIP here
+export ES_HOST?=${LOCAL_IP}
 export ES_PORT=9200
 export ES_URL=${ES_HOST}:${ES_PORT}
 # vm_max_count has to be fixed into the vm host
@@ -197,7 +198,8 @@ export SMTP_PORT=25
 export REDIS=${BACKEND}/redis
 export REDIS_DATA=${REDIS}/data-dummy
 export REDIS_PERSIST=86400
-export REDIS_HOST=${LOCAL_IP}
+# Pass a FIP here
+export REDIS_HOST?=${LOCAL_IP}
 export REDIS_PORT=6379
 export REDIS_PASSWORD
 
@@ -229,7 +231,7 @@ export UTAC_PEM?=src/utac/utac.pem
 #               backend confs                #
 ##############################################
 
-# backend should use 80 (PIO will convert to 443)
+# backend should use 80 or 443
 # local mode should use default value
 export BACKEND_PORT?=8010
 
@@ -251,22 +253,11 @@ export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 #            public backend confs            #
 ##############################################
 
-# Way to contact Application VM
-
-# Pass VM APP FIP here while launching public-backend
-# local mode should use default value
-export APP_HOST?=${LOCAL_IP}
-# Should be the same as BACKEND_PORT value in VM APP
-# local mode should use default value
-export APP_PORT?=8010
-export APP_TIMEOUT?=5000
-
-
 # Arbitrary uuid to let public-backend call backend api (uuid is needed) with a common UUID
 export PUBLIC_BACKEND_API_UUID?=d6696bfd-4f12-42a9-9604-1378602f4ec4
 export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
 
-# public-backend should use 80 (PIO will convert to 443)
+# public-backend should use 80 or 443
 # local mode should use default value
 export PUBLIC_BACKEND_PORT?=8020
 
