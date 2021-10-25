@@ -1,6 +1,4 @@
 import Boom from '@hapi/boom'
-import axios from 'axios'
-
 import { appLogger, syslogLogger } from '../../../util/logger.js'
 import { base64Decode, decryptJson, hash, base64Encode, urlSafeBase64Encode } from '../../../util/crypto.js'
 import { getDepartement } from '../../../util/codePostal.js'
@@ -105,31 +103,20 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         })
       }
 
-      const { privateReportApiUrl } = request.server.plugins.publicApi
+      const { privateApiReportUrl } = request.server.plugins.publicApi
 
-      let response = null
-      try {
-        response = await axios.post(
-          privateReportApiUrl, {
-            id: base64EncodedReportId,
-            uuid: config.apiUuid,
-            options: {
-              ignoreTechnicalControls: !askTechnicalControls,
-            },
+      const { statusCode, result } = await request.server.inject({
+        method: 'POST',
+        url: privateApiReportUrl,
+        payload: {
+          id: base64EncodedReportId,
+          uuid: config.apiUuid,
+          options: {
+            ignoreTechnicalControls: !askTechnicalControls,
           },
-          {
-            timeout: config.appTimeout,
-            headers: {
-              Accepts: 'application/json',
-              'Content-Type': 'application/json',
-            },
-          }
-        )
-      } catch (error) {
-        response = error.response
-      }
-
-      const { status: statusCode, data: result } = response
+        },
+        allowInternals: true,
+      })
 
       const { sivData, utacData, utacDataKey, error, message } = result
 

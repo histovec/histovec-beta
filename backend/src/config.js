@@ -2,7 +2,6 @@ import npmVersion from '../package.json'
 
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development'
-const isPublicApi = process.env.PUBLIC_BACKEND === 'true'
 
 const config = {
   port: process.env.BACKEND_PORT,
@@ -14,13 +13,10 @@ const config = {
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
   isDevelopmentMode,
-  isPublicApi,
+  isPublicApi: process.env.PUBLIC_BACKEND === 'true',
   isUtacCacheIgnorable: isDevelopmentMode || process.env.IS_UTAC_CACHE_IGNORABLE === 'true',
   env: process.env.NODE_ENV,
   app: process.env.APP,
-  appHost: process.env.APP_HOST,
-  appPort: process.env.APP_PORT,
-  appTimeout: parseInt(process.env.APP_TIMEOUT, 10) || 5000,
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   redisPersit: parseInt(process.env.REDIS_PERSIST, 10) || 86400,  // 24h
@@ -39,7 +35,7 @@ const config = {
     isFakedApi: false,  // /!\ value is passed as String
     apiUrl: process.env.UTAC_URL,
     fakeApiUrl: process.env.FAKE_UTAC_URL,
-    timeout: parseInt(process.env.UTAC_TIMEOUT, 10) || 5000,
+    timeout: parseInt(process.env.UTAC_TIMEOUT, 10) || 30,
     username: process.env.UTAC_USERNAME,
     password: process.env.UTAC_PASSWORD,
     histovecPfx: process.env.HISTOVEC_PFX || 'src/utac/histovec.pfx',
