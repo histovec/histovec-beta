@@ -39,14 +39,21 @@ const routes = [
       }
     },
     handler: (request, h) => {
+      // HistoVec backend and HistoVec public-backend will be merged soon, so version number is share between both
       return { version: config.version }
     },
   },
   {
     method: 'GET',
-    path:'/health',
-    // Not in documentation : for internal use only
+    path:'/health',  // @todo: rename to 'healthcheck' and change code using it
+    tags: ['api'],  // add to swagger documentation
+
     handler: (request, h) => {
+      /* @todo: change code using it
+      - Backend down -> 500 (via Nginx front/api)
+      - Backend up and ES down -> 200 { 'status': { 'base': 'KO' } }
+      - Backend up and ES up -> 200 { 'status': { 'base': 'OK' } }
+      */
       return { status: 'ok' }
     },
   },
