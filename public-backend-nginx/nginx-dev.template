@@ -17,7 +17,7 @@ server {
     proxy_set_header Connection "upgrade";
   }
 
-  location ~ "^/(version|swagger.json|documentation|swaggerui/swagger-ui-bundle.js|swaggerui/swagger-ui-standalone-preset.js|swaggerui/extend.js|swaggerui/swagger-ui.css)" {
+  location ~ "^/(health|version|swagger.json|documentation|swaggerui/swagger-ui-bundle.js|swaggerui/swagger-ui-standalone-preset.js|swaggerui/extend.js|swaggerui/swagger-ui.css)" {
     if ($request_method != GET) {
        return 405;
     }
