@@ -49,6 +49,7 @@ export APP=histovec
 export API=histovec-api
 # common configuration
 export PORT=80
+export PORT_DEV=81
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_USER := $(shell whoami)
@@ -86,18 +87,18 @@ export LOCAL_IP=$(shell hostname -I | awk '{print $$1}')
 
 
 ##############################################
-#              reverse-proxy                 #
+#          APP reverse-proxy                 #
 ##############################################
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
 export NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
-export API_USER_LIMIT_RATE=1r/m
-export API_USER_BURST=3 nodelay
-export API_USER_SCOPE=http_x_forwarded_for
-export API_GLOBAL_LIMIT_RATE=5r/s
-export API_GLOBAL_BURST=20 nodelay
-export API_WRITE_LIMIT_RATE=10r/m
-export API_WRITE_BURST=20 nodelay
+export BACKEND_API_USER_LIMIT_RATE=1r/m
+export BACKEND_API_USER_BURST=3 nodelay
+export BACKEND_API_USER_SCOPE=http_x_forwarded_for
+export BACKEND_API_GLOBAL_LIMIT_RATE=5r/s
+export BACKEND_API_GLOBAL_BURST=20 nodelay
+export BACKEND_API_WRITE_LIMIT_RATE=10r/m
+export BACKEND_API_WRITE_BURST=20 nodelay
 # packaging
 export FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
 export FILE_IMAGE_NGINX_LATEST_VERSION = $(APP)-nginx-latest-image.tar
@@ -250,6 +251,24 @@ export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 
 
 ##############################################
+#          API reverse-proxy                 #
+##############################################
+export PUBLIC_BACKEND_NGINX=${APP_PATH}/public-backend-nginx
+export PUBLIC_BACKEND_NGINX_LOGS=${LOGS}/public-backend-nginx
+export PUBLIC_BACKEND_NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
+export PUBLIC_BACKEND_API_USER_LIMIT_RATE=1r/m
+export PUBLIC_BACKEND_API_USER_BURST=3 nodelay
+export PUBLIC_BACKEND_API_USER_SCOPE=http_x_forwarded_for
+export PUBLIC_BACKEND_API_GLOBAL_LIMIT_RATE=5r/s
+export PUBLIC_BACKEND_API_GLOBAL_BURST=20 nodelay
+export PUBLIC_BACKEND_API_WRITE_LIMIT_RATE=10r/m
+# packaging
+export FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION = $(API)-public-backend-nginx-$(APP_VERSION)-image.tar
+export FILE_IMAGE_PUBLIC_BACKEND_NGINX_LATEST_VERSION = $(API)-public-backend-nginx-latest-image.tar
+export DC_RUN_NGINX_PUBLIC_BACKEND_NGINX = ${DC_PREFIX}-run-public-backend-nginx.yml
+
+
+##############################################
 #            public backend confs            #
 ##############################################
 
@@ -257,6 +276,7 @@ export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 export PUBLIC_BACKEND_API_UUID?=d6696bfd-4f12-42a9-9604-1378602f4ec4
 export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
 
+export PUBLIC_BACKEND_HOST=public_backend
 # public-backend should use 80 or 443
 # local mode should use default value
 export PUBLIC_BACKEND_PORT?=8020
@@ -446,13 +466,15 @@ clean-archive:
 clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image backend-clean-image
 
 # development mode
-dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev public-backend-dev
+dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev public-backend-dev public-backend-nginx-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop public-backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
+dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop public-backend-nginx-dev-stop public-backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
 
 dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
-	${DC} -f ${DC_PREFIX}-backend.yml logs
+	${DC} -f ${DC_PREFIX}-dev-backend.yml logs
+	${DC} -f ${DC_PREFIX}-dev-public-backend-nginx.yml logs
+	${DC} -f ${DC_PREFIX}-dev-public-backend.yml logs
 
 # network operations
 network: install-prerequisites
@@ -500,12 +522,12 @@ build-dir-clean:
 
 up-public-backend: up-public-backend-${API_VERSION}
 
-up-public-backend-v1: public-backend-start
+up-public-backend-v1: public-backend-start public-backend-nginx-start
 	@echo all $(API) services are up in production mode, api v1
 
 down-public-backend: down-public-backend-${API_VERSION}
 
-down-public-backend-v1: public-backend-stop
+down-public-backend-v1: public-backend-stop public-backend-nginx-stop
 	@echo all $(API) services stopped
 
 # build equivalent for public-backend
@@ -526,7 +548,7 @@ build-all-public-backend-image: build-dir public-backend-build
 public-backend-build-archive: public-backend-clean-archive build-dir
 	@echo "Build $(API) $(API)-$(APP_VERSION) archive"
 	echo "$(APP_VERSION)" > VERSION ; cp VERSION $(BUILD_DIR)/$(API)-VERSION
-	tar -zcvf $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) --exclude $$(basename $(BUILD_DIR)) *
+	tar -zcvf $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) --exclude public-backend-nginx/*.tar.gz --exclude $$(basename $(BUILD_DIR)) *
 	@echo "Build $(APP) $(APP)-latest archive"
 	cp $(BUILD_DIR)/$(FILE_ARCHIVE_API_VERSION) $(BUILD_DIR)/$(FILE_ARCHIVE_API_LATEST_VERSION)
 
@@ -565,12 +587,12 @@ publish-latest-public-backend:
 # Download published images
 # download-all-images equivalent for public-backend
 download-public-backend-image: download-public-backend-image-${API_VERSION}
-download-public-backend-image-v1: build-dir public-backend-download-image
+download-public-backend-image-v1: build-dir public-backend-nginx-download-image public-backend-download-image
 
 # Load published images
 # load-all-images equivalent for public-backend
 load-public-backend-image: load-public-backend-image-${API_VERSION}
-load-public-backend-image-v1: build-dir public-backend-load-image
+load-public-backend-image-v1: build-dir public-backend-nginx-load-image public-backend-load-image
 
 # clean-archive for public-backend
 # equivalent to public-backend-clean-dist
@@ -590,7 +612,7 @@ public-backend-clean-archive:
 # JUST USE make dev-stop as usual
 
 dev-public-backend-log:
-	${DC} -f ${DC_PREFIX}-public-backend.yml logs
+	${DC} -f ${DC_PREFIX}-dev-public-backend.yml logs
 
 update-public-backend: git-pull build-public-backend-if-necessary up-public-backend
 
@@ -603,8 +625,6 @@ update-public-backend: git-pull build-public-backend-if-necessary up-public-back
 frontend-nginx: frontend
 
 frontend-nginx-stop: frontend-stop
-
-# qualification (compiled) mode
 
 frontend: frontend-${API_VERSION}
 
@@ -677,14 +697,14 @@ nginx-check-build:
 	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_FRONTEND) config -q
 
 nginx-save-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.frontend_nginx.image) ; \
         nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$nginx_image_name $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
 
 nginx-check-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.frontend_nginx.image) ; \
 	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker image inspect $$nginx_image_name_version
 
@@ -1034,21 +1054,32 @@ backend-dev: backend-host-config
 backend-dev-stop:
 	@export EXEC_ENV=development BACKEND_NAME=backend; ${DC} -f ${DC_PREFIX}-backend.yml down
 
+
 ##############################################
+#               reverse-proxy                #
+#                    and                     #
 #              public backend                #
 ##############################################
 # production mode
 
-public-backend-start:
+public-backend-start: public-backend-nginx-start
 	@echo docker-compose up public-backend for production ${VERSION}
 	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
 
-public-backend-stop:
+public-backend-stop: public-backend-nginx-stop
 	@echo docker-compose down public-backend for production ${VERSION}
 	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
+public-backend-nginx-start: network
+	@export NGINX_SERVER_TEMPLATE=${PUBLIC_BACKEND_NGINX_SERVER_TEMPLATE_V1};\
+		export export EXEC_ENV=production; \
+		${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) up -d 2>&1 | grep -v orphan
+
+public-backend-nginx-stop:
+	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) down
+
 # package for production
-public-backend-build: backend-build-unlock build-dir backend-build-lock public-backend-build-all backend-build-unlock
+public-backend-build: backend-build-unlock build-dir backend-build-lock public-backend-build-all public-backend-nginx-build backend-build-unlock
 
 public-backend-build-all: network public-backend-build-dist public-backend-build-dist-archive public-backend-build-image
 
@@ -1079,25 +1110,65 @@ public-backend-clean-dist:
 public-backend-clean-dist-archive:
 	@rm -rf $(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
 
+
+public-backend-nginx-build: public-backend-nginx-build-image-${API_VERSION}
+
+public-backend-nginx-build-image-v1: public-backend-nginx-check-build
+	@echo building ${API} nginx
+	@export NGINX_SERVER_TEMPLATE=${PUBLIC_BACKEND_NGINX_SERVER_TEMPLATE_V1};\
+		export EXEC_ENV=production; \
+		${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) build $(DC_BUILD_ARGS)
+
+public-backend-nginx-check-build:
+	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config -q
+
+public-backend-nginx-save-image:
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend_nginx.image) ; \
+        nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker tag $$nginx_image_name $$nginx_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) $$nginx_image_name_version ; \
+	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_LATEST_VERSION) $$nginx_image_name
+
+public-backend-nginx-check-image:
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend_nginx.image) ; \
+	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
+        docker image inspect $$nginx_image_name_version
+
+public-backend-nginx-clean-image: public-backend-nginx-clean-image
+	@( export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | \
+           python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
+           jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
+           docker rmi $$image_name || true ; \
+        done
+
+# download nginx and load it in docker
+public-backend-nginx-download-image:
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) \
+        $(curl_progress_bar)
+
+public-backend-nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION)
+	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION)
+
+
 public-backend-build-image: $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) public-backend-check-build
 	@echo building ${API} image
 	cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ${BACKEND}/
 	export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public_backend
 
 # save-images for public-backend
-public-backend-save-image:
+public-backend-save-image: public-backend-nginx-save-image
 	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend.image) ; \
         backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) $$backend_image_name
 
-public-backend-check-image:
+public-backend-check-image: public-backend-nginx-check-image
 	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend.image) ; \
 	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
 	docker image inspect $$backend_image_name_version
 
-public-backend-clean-image:
+public-backend-clean-image: public-backend-nginx-clean-image
 	@( export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config | \
            python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | \
            jq -r '.services[] | . as $(dollar)a | select($(dollar)a.build) | .image' ) | while read image_name ; do \
@@ -1122,6 +1193,13 @@ public-backend-dev:
 
 public-backend-dev-stop:
 	@export EXEC_ENV=development BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
+
+public-backend-nginx-dev: network
+	@echo docker-compose up public-backend-nginx for dev ${VERSION}
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-public-backend-nginx.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+
+public-backend-nginx-dev-stop:
+	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-public-backend-nginx.yml down
 
 ##############################################
 #              fake services                 #

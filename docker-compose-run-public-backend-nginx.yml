@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  public_backend_nginx:
+    image: ${APP}-public-backend-nginx-${EXEC_ENV}:${APP_VERSION}
+    build:
+      context: ${PUBLIC_BACKEND_NGINX}
+      target: ${EXEC_ENV}
+      dockerfile: Dockerfile
+      args:
+        app_name: ${APP}
+        app_ver: ${APP_VERSION}
+        NGINX_SERVER_TEMPLATE: ${NGINX_SERVER_TEMPLATE}
+    container_name: ${APP}-public-backend-nginx-${EXEC_ENV}
+    environment:
+      - APP
+      - PUBLIC_BACKEND_HOST
+      - PUBLIC_BACKEND_PORT
+      - PUBLIC_BACKEND_API_GLOBAL_BURST
+      - PUBLIC_BACKEND_API_GLOBAL_LIMIT_RATE
+      - PUBLIC_BACKEND_API_USER_LIMIT_RATE
+      - PUBLIC_BACKEND_API_USER_SCOPE
+      - PUBLIC_BACKEND_API_USER_BURST
+      - PUBLIC_BACKEND_API_WRITE_LIMIT_RATE
+    volumes:
+      - ${PUBLIC_BACKEND_NGINX_LOGS}:/var/log/nginx/
+    ports:
+      - ${PORT}:80
+    restart: always
+
+networks:
+  default:
+    external:
+      name: ${APP}

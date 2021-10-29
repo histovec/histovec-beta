@@ -45,9 +45,7 @@ const routes = [
   {
     method: 'GET',
     path:'/health',
-    options: {
-      tags: ['api'],  // add to swagger documentation
-    },
+    // Not in documentation : for internal use only
     handler: (request, h) => {
       return { status: 'ok' }
     },

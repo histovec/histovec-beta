@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  nginx:
-    image: ${APP}-nginx-${EXEC_ENV}:${APP_VERSION}
+  frontend_nginx:
+    image: ${APP}-frontend-nginx-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${NGINX}
       target: ${EXEC_ENV}
@@ -11,22 +11,22 @@ services:
         app_name: ${APP}
         app_ver: ${APP_VERSION}
         NGINX_SERVER_TEMPLATE: ${NGINX_SERVER_TEMPLATE}
-    container_name: ${APP}-nginx-${EXEC_ENV}
+    container_name: ${APP}-frontend-nginx-${EXEC_ENV}
     environment:
       - APP
       - BACKEND_HOST
       - BACKEND_PORT
       - FRONTEND_DEV_HOST
       - FRONTEND_DEV_PORT
-      - API_GLOBAL_BURST
-      - API_GLOBAL_LIMIT_RATE
-      - API_USER_LIMIT_RATE
-      - API_USER_SCOPE
-      - API_USER_BURST
-      - API_WRITE_LIMIT_RATE
-      - API_WRITE_BURST
+      - BACKEND_API_GLOBAL_BURST
+      - BACKEND_API_GLOBAL_LIMIT_RATE
+      - BACKEND_API_USER_LIMIT_RATE
+      - BACKEND_API_USER_SCOPE
+      - BACKEND_API_USER_BURST
+      - BACKEND_API_WRITE_LIMIT_RATE
+      - BACKEND_API_WRITE_BURST
     volumes:
-      - ${LOGS}/nginx:/var/log/nginx/
+      - ${NGINX_LOGS}:/var/log/nginx/
     ports:
       - ${PORT}:80
     restart: always
