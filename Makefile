@@ -43,6 +43,10 @@ export curl_progress_bar=--progress-bar --write 'Downloaded %{url_effective} %{s
 ##############################################
 #         APP configuration section          #
 ##############################################
+NPM_VERBOSE?=false
+NPM_LATEST?=false
+NPM_FIX?=false
+
 # HistoVec configuration
 export APP=histovec
 # HistoVec api configuration
