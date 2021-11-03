@@ -32,7 +32,7 @@ RUN if [ ! -z "$http_proxy" ] ; then \
         npm config set no-proxy $no_proxy; \
    fi ; \
    [ -z "$npm_registry" ] || npm config set registry=$npm_registry ; \
-   [ -z "$npm_registry" ] || npm config set strict-ssl false
+   [ -z "$npm_registry" ] || npm config set strict-ssl true
 
 # 10 min
 RUN npm config set fetch-timeout 600000
