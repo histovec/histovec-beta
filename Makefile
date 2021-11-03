@@ -1223,20 +1223,22 @@ smtp-fake-stop:
 ##############################################
 # test production mode
 test-up: test-up-${API_VERSION}
-test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-backend test-up-nginx test-up-$(APP)
+test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-backend test-up-frontend-nginx test-up-$(APP)
 	echo "${APP} ${APP_VERSION} up and running"
 test-up-$(APP):
 	time bash tests/test-up-$(APP).sh
-test-up-nginx:
-	time bash tests/test-up-nginx.sh
+test-up-frontend-nginx:
+	time bash tests/test-up-frontend-nginx.sh
 test-up-elasticsearch: wait-elasticsearch
 	time bash tests/test-up-elasticsearch.sh
 test-up-backend:
 	time bash tests/test-up-backend.sh
 
 # test-up for public-backend
-test-up-public-backend:
+test-up-public-backend: test-up-public-backend-nginx
 	time bash tests/test-up-public-backend.sh
+test-up-public-backend-nginx:
+	time bash tests/test-up-public-backend-nginx.sh
 
 # not working anymore: test requests in elasticsearch
 index-test: wait-elasticsearch
