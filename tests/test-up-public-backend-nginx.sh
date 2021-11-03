@@ -8,7 +8,7 @@ basename=$(basename $0)
 echo "# $basename ${APP} ${APP_VERSION}"
 
 ret=0
-container_name=nginx-production
+container_name=public-backend-nginx-production
 
 echo "# Wait ${APP}-$container_name up"
 set +e
