@@ -43,7 +43,7 @@ RUN if [ ! -z "$http_proxy" ] ; then \
         npm config set no-proxy $no_proxy; \
    fi ; \
    [ -z "${npm_registry}" ] || npm config set registry=$npm_registry; \
-   [ -z "$npm_registry" ] || npm config set strict-ssl true ; \
+   [ -z "$npm_registry" ] || npm config set strict-ssl false ; \
    [ -z "${sass_registry}" ] || npm config set sass_binary_site=$sass_registry;
 
 # 15 min
