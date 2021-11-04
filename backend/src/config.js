@@ -26,6 +26,7 @@ const config = {
   mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`,
   usePreviousMonthForData: process.env.PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA === 'true',
+  previousMonthShift: parseInt(process.env.PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT, 10) || 1,
 
   // UTAC api
   utac: {

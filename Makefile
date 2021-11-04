@@ -279,6 +279,7 @@ export DC_RUN_NGINX_PUBLIC_BACKEND_NGINX = ${DC_PREFIX}-run-public-backend-nginx
 # Arbitrary uuid to let public-backend call backend api (uuid is needed) with a common UUID
 export PUBLIC_BACKEND_API_UUID?=d6696bfd-4f12-42a9-9604-1378602f4ec4
 export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
+export PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
 export PUBLIC_BACKEND_HOST=public_backend
 # public-backend should use 80 or 443
