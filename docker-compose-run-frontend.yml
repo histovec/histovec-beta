@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  frontend_nginx:
-    image: ${APP}-frontend-nginx-${EXEC_ENV}:${APP_VERSION}
+  nginx:
+    image: ${APP}-nginx-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${NGINX}
       target: ${EXEC_ENV}
@@ -11,7 +11,7 @@ services:
         app_name: ${APP}
         app_ver: ${APP_VERSION}
         NGINX_SERVER_TEMPLATE: ${NGINX_SERVER_TEMPLATE}
-    container_name: ${APP}-frontend-nginx-${EXEC_ENV}
+    container_name: ${APP}-nginx-${EXEC_ENV}
     environment:
       - APP
       - BACKEND_HOST
