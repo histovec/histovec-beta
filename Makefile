@@ -626,9 +626,9 @@ update-public-backend: git-pull build-public-backend-if-necessary up-public-back
 #                 frontend                   #
 ##############################################
 # production mode
-frontend-nginx: frontend
+nginx: frontend
 
-frontend-nginx-stop: frontend-stop
+nginx-stop: frontend-stop
 
 frontend: frontend-${API_VERSION}
 
@@ -701,14 +701,14 @@ nginx-check-build:
 	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_FRONTEND) config -q
 
 nginx-save-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.frontend_nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
         nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$nginx_image_name $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_NGINX_LATEST_VERSION) $$nginx_image_name
 
 nginx-check-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.frontend_nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_FRONTEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.nginx.image) ; \
 	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker image inspect $$nginx_image_name_version
 
@@ -1227,12 +1227,12 @@ smtp-fake-stop:
 ##############################################
 # test production mode
 test-up: test-up-${API_VERSION}
-test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-backend test-up-frontend-nginx test-up-$(APP)
+test-up-v1: wait-elasticsearch test-up-elasticsearch test-up-backend test-up-nginx test-up-$(APP)
 	echo "${APP} ${APP_VERSION} up and running"
 test-up-$(APP):
 	time bash tests/test-up-$(APP).sh
-test-up-frontend-nginx:
-	time bash tests/test-up-frontend-nginx.sh
+test-up-nginx:
+	time bash tests/test-up-nginx.sh
 test-up-elasticsearch: wait-elasticsearch
 	time bash tests/test-up-elasticsearch.sh
 test-up-backend:
