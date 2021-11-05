@@ -569,6 +569,7 @@ publish-public-backend-$(APP_VERSION):
                 $(API)-VERSION \
                 $(FILE_ARCHIVE_API_VERSION) \
                 $(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) \
+                $(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) \
            ; do \
             curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_API_VERSION)/$$file ; \
            done ; \
@@ -583,6 +584,7 @@ publish-latest-public-backend:
                 $(API)-VERSION \
                 $(FILE_ARCHIVE_API_LATEST_VERSION) \
                 $(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) \
+                $(FILE_IMAGE_PUBLIC_BACKEND_NGINX_LATEST_VERSION) \
            ; do \
             curl -k -X PUT -T $$file -H 'X-Auth-Token: $(openstack_token)' $(openstack_url)/$(openstack_auth_id)/$(PUBLISH_URL_API_LATEST_VERSION)/$$file ; \
            done ; \
