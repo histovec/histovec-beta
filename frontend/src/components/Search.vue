@@ -913,7 +913,7 @@ export default {
       let date = dayjs().add(-7, 'day')
 
       if (this.usePreviousMonthForData) {
-          date = date.add(-1, 'month')
+          date = date.add(-this.previousMonthShift, 'month')
       }
 
       return date.format('YYYYMM')

@@ -46,8 +46,9 @@ const routes = [
   {
     method: 'GET',
     path:'/health',  // @todo: rename to 'healthcheck' and change code using it
-    tags: ['api'],  // add to swagger documentation
-
+    options: {
+      tags: ['api'],  // add to swagger documentation
+    },
     handler: (request, h) => {
       /* @todo: change code using it
       - Backend down -> 500 (via Nginx front/api)

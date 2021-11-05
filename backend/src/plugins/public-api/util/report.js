@@ -59,7 +59,7 @@ export const buildReportId = (
   let dataValidityDate = dayjs().add(-7, 'day')
 
   if (config.usePreviousMonthForData) {
-    dataValidityDate = dataValidityDate.add(-1, 'month')
+    dataValidityDate = dataValidityDate.add(-config.previousMonthShift, 'month')
   }
 
   const dataValidityMonth = dataValidityDate.format('YYYYMM')
