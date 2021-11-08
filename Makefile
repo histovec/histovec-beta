@@ -1150,7 +1150,7 @@ public-backend-nginx-clean-image: public-backend-nginx-clean-image
 
 # download nginx and load it in docker
 public-backend-nginx-download-image:
-	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_APP_VERSION}/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) \
+	@curl $(CURL_OS_OPTS) -s -k -X GET -o $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) ${openstack_url}/${openstack_auth_id}/${PUBLISH_URL_API_VERSION}/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) \
         $(curl_progress_bar)
 
 public-backend-nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION)
