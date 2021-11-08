@@ -281,7 +281,7 @@ export PUBLIC_BACKEND_API_UUID?=d6696bfd-4f12-42a9-9604-1378602f4ec4
 export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
 export PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
-export PUBLIC_BACKEND_HOST=public_backend
+export PUBLIC_BACKEND_HOST=public-backend
 # public-backend should use 80 or 443
 # local mode should use default value
 export PUBLIC_BACKEND_PORT?=8020
