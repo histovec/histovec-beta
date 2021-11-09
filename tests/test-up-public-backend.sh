@@ -37,11 +37,11 @@ fi
 test -t 1 && USE_TTY="-t"
 
 # test _cluster/health
-echo "# backend health"
+echo "# backend-backend health"
 docker exec -i ${USE_TTY} ${APP}-$container_name /bin/bash -c "curl -s --fail -XGET localhost:${PUBLIC_BACKEND_PORT}/${APP}/api/v1/health" | jq -e 'if .status then .status=="ok" else false end'
 test_result=$?
 if [ "$test_result" -gt "0" ] ; then
-  echo "ERROR: backend en erreur"
+  echo "ERROR: public-backend en erreur"
   ret=$test_result
   exit $ret
 fi

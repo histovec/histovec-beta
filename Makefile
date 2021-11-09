@@ -236,8 +236,6 @@ export UTAC_PEM?=src/utac/utac.pem
 #               backend confs                #
 ##############################################
 
-# backend should use 80 or 443
-# local mode should use default value
 export BACKEND_PORT?=8010
 
 # packaging
@@ -282,8 +280,6 @@ export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
 export PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
 export PUBLIC_BACKEND_HOST=public_backend
-# public-backend should use 80 or 443
-# local mode should use default value
 export PUBLIC_BACKEND_PORT?=8020
 
 # packaging
