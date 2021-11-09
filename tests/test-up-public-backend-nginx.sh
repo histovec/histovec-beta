@@ -5,29 +5,24 @@
 set -e
 
 basename=$(basename $0)
-echo "# $basename ${APP} ${APP_VERSION}"
+echo "# Start test: $basename ${APP} ${APP_VERSION}"
 
 ret=0
 container_name=public-backend-nginx-production
 
-echo "# Wait ${APP}-$container_name up"
-set +e
-timeout=20;
-test_result=1
-dirname=$(dirname $0)
-docker cp $dirname/fake-curl.sh ${APP}-$container_name:/tmp/
-until [ "$timeout" -le 0 -o "$test_result" -eq "0" ] ; do
-  docker exec -i ${USE_TTY} ${APP}-$container_name /bin/bash /tmp/fake-curl.sh /histovec/home | grep '<!DOCTYPE html>'
-  test_result=$?
-  echo "Wait $timeout seconds: ${APP}-$container_name up $test_result";
-  (( timeout-- ))
-  sleep 1
-done
+# tty or not
+test -t 1 && USE_TTY="-t"
+
+# test _cluster/health
+echo "# public-backend health through public-backend-nginx"
+docker exec -i ${USE_TTY} ${APP}-$container_name /bin/bash -c "curl -s --fail -XGET localhost:${PORT}/${APP}/api/v1/health" | jq -e 'if .status then .status=="ok" else false end'
+test_result=$?
 if [ "$test_result" -gt "0" ] ; then
+  echo "ERROR: public-backend-nginx en erreur"
   ret=$test_result
-  echo "ERROR: ${APP}-$container_name en erreur"
   exit $ret
 fi
 
-
+set -e
+echo "# End test: $basename ${APP} ${APP_VERSION} status($ret)"
 exit $ret
