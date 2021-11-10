@@ -21,7 +21,7 @@ server {
   }
 
   location ~ (__webpack_hmr|sockjs-node|app.js|^/static|.*hot-update.(js|json)) {
-  	proxy_pass http://frontend-dev;
+  	proxy_pass http://<FRONTEND_DEV_HOST>;
       # Allow protocol upgrade to websocket
       proxy_http_version 1.1;
       proxy_next_upstream off;
@@ -32,7 +32,7 @@ server {
   }
 
   location /<APP> {
-    proxy_pass http://frontend-dev;
+    proxy_pass http://<FRONTEND_DEV_HOST>;
   }
 
   location /<APP>/assets/images {
@@ -59,7 +59,7 @@ server {
     if ($request_method != POST) {
        return 405;
     }
-    proxy_pass http://backend;
+    proxy_pass http://<BACKEND_HOST>;
     proxy_http_version 1.1;
     proxy_next_upstream off;
     proxy_set_header Host $http_host;

@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  public_backend_nginx:
+  public-backend-nginx:
     image: ${APP}-public-backend-nginx-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${PUBLIC_BACKEND_NGINX}
