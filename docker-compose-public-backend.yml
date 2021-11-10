@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  public_backend:
+  public-backend:
     image: ${APP}-public-backend-${EXEC_ENV}:${APP_VERSION}
     build:
       context: ${BACKEND}

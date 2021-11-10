@@ -279,7 +279,7 @@ export PUBLIC_BACKEND_API_UUID?=d6696bfd-4f12-42a9-9604-1378602f4ec4
 export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
 export PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
-export PUBLIC_BACKEND_HOST=public_backend
+export PUBLIC_BACKEND_HOST=public-backend
 export PUBLIC_BACKEND_PORT?=8020
 
 # packaging
@@ -1099,10 +1099,10 @@ public-backend-check-build:
 
 public-backend-build-dist: public-backend-prepare-build public-backend-check-build
 	@echo building ${API} in ${BACKEND}
-	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public_backend
+	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
 public-backend-build-dist-archive:
-	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public_backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
+	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public-backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ; fi
@@ -1126,14 +1126,14 @@ public-backend-nginx-check-build:
 	export EXEC_ENV=production;${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config -q
 
 public-backend-nginx-save-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend_nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.["public-backend-nginx"].image) ; \
         nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$nginx_image_name $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION) $$nginx_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_LATEST_VERSION) $$nginx_image_name
 
 public-backend-nginx-check-image:
-	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend_nginx.image) ; \
+	nginx_image_name=$$(export EXEC_ENV=production && ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.["public-backend-nginx"].image) ; \
 	nginx_image_name_version=$$(echo $$nginx_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker image inspect $$nginx_image_name_version
 
@@ -1156,18 +1156,18 @@ public-backend-nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_NGINX_
 public-backend-build-image: $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) public-backend-check-build
 	@echo building ${API} image
 	cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ${BACKEND}/
-	export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public_backend
+	export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f $(DC_RUN_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
 # save-images for public-backend
 public-backend-save-image: public-backend-nginx-save-image
-	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.["public-backend"].image) ; \
         backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
         docker tag $$backend_image_name $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION) $$backend_image_name_version ; \
 	docker image save -o  $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_LATEST_VERSION) $$backend_image_name
 
 public-backend-check-image: public-backend-nginx-check-image
-	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.public_backend.image) ; \
+	backend_image_name=$$(export EXEC_ENV=production BACKEND_NAME=public-backend && ${DC} -f $(DC_RUN_PUBLIC_BACKEND) config | python2 -c 'import sys, yaml, json; json.dump(yaml.load(sys.stdin), sys.stdout, indent=4)' | jq -r .services.["public-backend"].image) ; \
 	backend_image_name_version=$$(echo $$backend_image_name | sed -e "s/\(.*\):\(.*\)/\1:$(APP_VERSION)/g") ; \
 	docker image inspect $$backend_image_name_version
 

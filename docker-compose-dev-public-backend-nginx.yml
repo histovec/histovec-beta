@@ -3,7 +3,7 @@ version: '3.4'
 # this docker configuation is for dev use only
 
 services:
-  public_backend_nginx_dev:
+  public-backend-nginx-dev:
     image: ${APP}-public-backend-nginx-${EXEC_ENV}
     build:
       context: ${PUBLIC_BACKEND_NGINX}
