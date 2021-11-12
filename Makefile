@@ -528,7 +528,7 @@ up-public-backend-v1: public-backend-start public-backend-nginx-start
 
 down-public-backend: down-public-backend-${API_VERSION}
 
-down-public-backend-v1: public-backend-stop public-backend-nginx-stop
+down-public-backend-v1: public-backend-nginx-stop public-backend-stop
 	@echo all $(API) services stopped
 
 # build equivalent for public-backend
@@ -1065,20 +1065,22 @@ backend-dev-stop:
 ##############################################
 # production mode
 
-public-backend-start: public-backend-nginx-start
+public-backend-start:
 	@echo docker-compose up public-backend for production ${VERSION}
 	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml up -d 2>&1 | grep -v orphan
 
-public-backend-stop: public-backend-nginx-stop
+public-backend-stop:
 	@echo docker-compose down public-backend for production ${VERSION}
 	@export EXEC_ENV=production BACKEND_NAME=public-backend; ${DC} -f ${DC_PREFIX}-public-backend.yml down
 
 public-backend-nginx-start: network
+	@echo docker-compose up public-backend-nginx for production ${VERSION}
 	@export NGINX_SERVER_TEMPLATE=${PUBLIC_BACKEND_NGINX_SERVER_TEMPLATE_V1};\
 		export export EXEC_ENV=production; \
 		${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) up -d 2>&1 | grep -v orphan
 
 public-backend-nginx-stop:
+	@echo docker-compose down public-backend-nginx for production ${VERSION}
 	@export EXEC_ENV=production; ${DC} -f $(DC_RUN_NGINX_PUBLIC_BACKEND_NGINX) down
 
 # package for production
