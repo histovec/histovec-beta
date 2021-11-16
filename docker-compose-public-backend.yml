@@ -24,8 +24,6 @@ services:
         NPM_VERBOSE: ${NPM_VERBOSE}
     container_name: ${APP}-public-backend-${EXEC_ENV}
     ports:
-      - ${ES_PORT}:${ES_PORT}
-      - ${REDIS_PORT}:${REDIS_PORT}
       - ${PUBLIC_BACKEND_PORT}:${PUBLIC_BACKEND_PORT}
     environment:
       - NODE_ENV=${EXEC_ENV}
