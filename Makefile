@@ -18,7 +18,7 @@
 #  AND TO SCALE public-backed HORIZONTALLY   #
 ##############################################
 
-# COMMENT TO REMOVE AFTER TESTING A NEW BUILD 17 #
+# COMMENT TO REMOVE AFTER TESTING A NEW BUILD 18 #
 
 ##############################################
 #              general OS vars               #
