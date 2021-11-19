@@ -89,6 +89,7 @@
             class="col-xs-12 col-xs-offset-0 col-sm-3 col-sm-offset-1"
           >
             <a
+              id="plaque-siv"
               class="clickable"
               title="Immatriculation depuis 2009"
               @click="typeImmatriculation = 'siv'"
@@ -106,6 +107,7 @@
             class="col-xs-12 col-xs-offset-0 col-sm-4"
           >
             <a
+              id="plaque-fni"
               class="clickable"
               title="Immatriculation avant 2009"
               @click="typeImmatriculation = 'fni'"
@@ -187,6 +189,7 @@
             </li>
             <li :class="[{'in active' : typePersonne === 'pro'}]">
               <a
+                id="pro"
                 class="clickable"
                 @click="typePersonne = 'pro'"
               >
@@ -482,6 +485,7 @@
                       </div>
                       <div class="col-sm-2">
                         <button
+                          id="search"
                           class="btn btn-animated btn-default btn-sm btn-block"
                           tabindex="6"
                           @click="onSubmit"
