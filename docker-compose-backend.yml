@@ -80,7 +80,11 @@ services:
     volumes:
       - ${REDIS_DATA}:/data
     sysctls:
-      - net.core.somaxconn=65535
+      - net.core.somaxconn=100000
+    ulimits:
+      nofile:
+        soft: 100000
+        hard: 100000
 
 networks:
   default:

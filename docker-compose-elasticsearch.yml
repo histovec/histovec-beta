@@ -18,6 +18,9 @@ services:
     ports:
       - 9200:9200
     ulimits:
+      nofile:
+        soft: 100000
+        hard: 100000
       memlock:
         soft: -1
         hard: -1
