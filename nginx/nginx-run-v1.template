@@ -75,9 +75,6 @@ server {
     if ($request_method != POST) {
        return 405;
     }
-    limit_req zone=api burst=<BACKEND_API_USER_BURST>;
-    limit_req zone=server burst=<BACKEND_API_GLOBAL_BURST>;
-    limit_req_status 429;
 
     proxy_pass http://<BACKEND_HOST>;
     proxy_http_version 1.1;
