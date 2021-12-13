@@ -12,7 +12,7 @@ services:
     environment:
       - cluster.name=${APP}
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM}"
+      - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM} -Dlog4j2.formatMsgNoLookups=True"
       - http.cors.enabled=true
       - http.cors.allow-origin=*
     ports:
