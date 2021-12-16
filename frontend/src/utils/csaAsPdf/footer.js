@@ -75,7 +75,7 @@ const writeQrCodeLogoPng = ({
 	y,
 	footerLogoPng
 }) => {
-	const pngDims = footerLogoPng.scale(0.13)
+	const pngDims = footerLogoPng.scale(0.26)
 	const pngY = y - pngDims.height
 
 	page.drawImage(footerLogoPng, {

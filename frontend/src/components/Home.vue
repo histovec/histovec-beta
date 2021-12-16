@@ -2,7 +2,7 @@
   <main role="main">
     <div
       class="banner banner-big-height padding-bottom-clear"
-      :style="{ backgroundImage: `url('${imageAccueil}')`, backgroundSize: '1200px', backgroundPosition: '50% -100px' }"
+      :style="{ backgroundImage: `url('${imageAccueil}')`, backgroundSize: '1200px', backgroundPosition: '50% -50px' }"
     >
       <div class="container">
         <div class="row justify-content-lg-center">
