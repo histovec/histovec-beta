@@ -31,7 +31,7 @@ import { RAPPORT_FILENAME } from '../../utils/csaAsPdf/constants'
 import { FR_DATE_FORMAT } from '../../assets/js/format.js'
 
 import histoVecLogo from '@/assets/img/histovec_logo_droite_name.png'
-import marianneImage from '@/assets/img/logo_mi.png'
+import marianneImage from '@/assets/img/logo_mi_csa.png'
 
 
 const downloadBlob = (blob, filename) => {

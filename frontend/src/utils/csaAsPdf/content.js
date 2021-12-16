@@ -51,7 +51,7 @@ const writeHeaderLogoPng = ({
 	y,
 	headerLogoPng
 }) => {
-	const pngDims = headerLogoPng.scale(0.035)
+	const pngDims = headerLogoPng.scale(0.45)
 	const pngY = y - pngDims.height
 
 	page.drawImage(headerLogoPng, {
