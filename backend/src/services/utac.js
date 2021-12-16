@@ -9,6 +9,54 @@ import { appLogger } from '../util/logger'
 // @todo: we should use typed yaml to load settings
 const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
+// @todo: remove after BPSA test
+const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
+  ct: [
+    {
+      ct_id: 1,
+      ct_pv: null,
+      ct_centre: null,
+      ct_date: '11/12/2014',
+      ct_deb: null,
+      ct_fin: null,
+      ct_nature: 'VTP',
+      ct_resultat: 'A',
+      ct_km: 98429,
+      ct_immat: 'AW-753-TD',
+      ct_vin: 'VF7JM8HZC97374672'
+    },
+    {
+      ct_id: 2,
+      ct_pv: null,
+      ct_centre: null,
+      ct_date: '10/12/2016',
+      ct_deb: null,
+      ct_fin: null,
+      ct_nature: 'VTP',
+      ct_resultat: 'A',
+      ct_km: 132874,
+      ct_immat: 'DN-134-AG',
+      ct_vin: 'VF7JM8HZC97374672'
+    },
+    {
+      ct_id: 3,
+      ct_pv: null,
+      ct_centre: null,
+      ct_date: '26/12/2018',
+      ct_deb: null,
+      ct_fin: null,
+      ct_nature: 'VTP',
+      ct_resultat: 'A',
+      ct_km: 160532,
+      ct_immat: 'DN-134-AG',
+      ct_vin: 'VF7JM8HZC97374672'
+    }
+  ],
+  update_date: '01/08/2021',
+  status: 200
+}
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
 const anonymize = (text, nbVisibleCharAtPrefixAndSuffix=2) => {
   const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
   return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
@@ -159,11 +207,29 @@ module.exports.UTACClient = class UTACClient {
     }
   }
 
-  async readControlesTechniques ({ immat, vin }, { uuid, encryptedImmat, encryptedVin }) {
-    if (config.utac.forceUtacHealthcheck) {
-      const response = await this.healthCheck()
+  async readControlesTechniques ({ immat, vin }, { uuid, encryptedImmat, encryptedVin, isMocked }) {
+    if (isMocked) {
+      // Wait same times as production UTAC api response time
+      const utacResponseTimeEstimationInMs = Math.trunc(248 + (100*Math.random() - 100/2))
+      appLogger.debug(`-- utacResponseTimeEstimationInMs begin ==> ${utacResponseTimeEstimationInMs}`)
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_time_to_wait ${utacResponseTimeEstimationInMs}`)
 
-      appLogger.info(`[UTAC] forceUtacHealthcheck ${response.status}`)
+      const start = new Date()
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_start`)
+
+      await sleep(utacResponseTimeEstimationInMs)
+
+      const end = new Date()
+      const executionTime = end - start
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_end ${executionTime}`)
+
+      const data = CONTROL_TECHNIQUES_MOCK_FOR_BPSA
+
+      return {
+        status: data.status,
+        ct: data.ct,
+        updateDate: data.update_date,
+      }
     }
 
     const start = new Date()

@@ -1,5 +1,7 @@
 import npmVersion from '../package.json'
 
+const isUtacMockForBpsaActivated = process.env.IS_UTAC_MOCK_FOR_BPSA_ACTIVATED === 'true'
+
 const config = {
   port: process.env.BACKEND_PORT,
   version: npmVersion.version,
@@ -20,8 +22,9 @@ const config = {
   // UTAC api
   utac: {
     isApiActivated: process.env.IS_UTAC_API_ACTIVATED || false, // /!\ value is passed as String
+    isUtacMockForBpsaActivated,
     isVinSentToUtac: process.env.IS_VIN_SENT_TO_UTAC || false, // /!\ value is passed as String
-    isFakedApi: false, // /!\ value is passed as String
+    isFakedApi: isUtacMockForBpsaActivated,
     apiUrl: process.env.UTAC_URL,
     forceUtacHealthcheck: process.env.FORCE_UTAC_HEALTHCHECK === 'true',
     fakeApiUrl: process.env.FAKE_UTAC_URL,

@@ -314,6 +314,8 @@ export const generateGetReport = (utacClient) =>
       })
     }
 
+    const isMocked = config.utac.isUtacMockForBpsaActivated
+
     try {
       const {
         status: utacStatus,
@@ -325,7 +327,7 @@ export const generateGetReport = (utacClient) =>
         vin: normalizedVin,
       },
       {
-        uuid, encryptedImmat, encryptedVin,
+        uuid, encryptedImmat, encryptedVin, isMocked,
       })
 
       if (utacStatus !== 200) {
@@ -367,7 +369,7 @@ export const generateGetReport = (utacClient) =>
         return
       }
 
-      if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+      if (isVinSentToUtac && !validateTechnicalControls(vin, ct) && !isMocked) {
         throw new Error('Inconsistency for technical control')
       }
 
