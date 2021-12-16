@@ -10,53 +10,6 @@ import { getUtacClient } from '../../../connectors/utac.js'
 import { appLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
 
-// @todo: remove after BPSA test
-const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
-  ct: [
-    {
-      ct_id: 1,
-      ct_pv: null,
-      ct_centre: null,
-      ct_date: '11/12/2014',
-      ct_deb: null,
-      ct_fin: null,
-      ct_nature: 'VTP',
-      ct_resultat: 'A',
-      ct_km: 98429,
-      ct_immat: 'AW-753-TD',
-      ct_vin: 'VF7JM8HZC97374672'
-    },
-    {
-      ct_id: 2,
-      ct_pv: null,
-      ct_centre: null,
-      ct_date: '10/12/2016',
-      ct_deb: null,
-      ct_fin: null,
-      ct_nature: 'VTP',
-      ct_resultat: 'A',
-      ct_km: 132874,
-      ct_immat: 'DN-134-AG',
-      ct_vin: 'VF7JM8HZC97374672'
-    },
-    {
-      ct_id: 3,
-      ct_pv: null,
-      ct_centre: null,
-      ct_date: '26/12/2018',
-      ct_deb: null,
-      ct_fin: null,
-      ct_nature: 'VTP',
-      ct_resultat: 'A',
-      ct_km: 160532,
-      ct_immat: 'DN-134-AG',
-      ct_vin: 'VF7JM8HZC97374672'
-    }
-  ],
-  update_date: '01/08/2021',
-  status: 200
-}
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
@@ -112,43 +65,6 @@ export const getReport = async (request, h) => {
     ctUpdateDate: null,
   }, utacDataKey)
 
-  // @todo: remove after BPSA test
-  if (config.utac.isUtacMockForBpsaActivated) {
-    // Wait same times as production UTAC api response time
-    const utacResponseTimeEstimationInMs = Math.trunc(248 + (100*Math.random() - 100/2))
-    appLogger.debug(`-- utacResponseTimeEstimationInMs begin ==> ${utacResponseTimeEstimationInMs}`)
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_time_to_wait ${utacResponseTimeEstimationInMs}`)
-
-    const start = new Date()
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_start`)
-
-    await sleep(utacResponseTimeEstimationInMs)
-
-    const end = new Date()
-    const executionTime = end - start
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_end ${executionTime}`)
-
-    const { error } = utacResponseSchema.validate(CONTROL_TECHNIQUES_MOCK_FOR_BPSA)
-    if (error) {
-      appLogger.info(`UTAC response validation error : ${error}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
-
-      return {
-        success: true,
-        sivData,
-        utacData: emptyUtacData,
-        utacDataKey,
-      }
-    }
-
-    return {
-      success: true,
-      sivData,
-      utacData: encryptJson(CONTROL_TECHNIQUES_MOCK_FOR_BPSA, utacDataKey),
-      utacDataKey,
-    }
-  }
-
   // Only annulationCI vehicles don't have encryptedImmat
   const isAnnulationCI = Boolean(!encryptedImmat)
   if (!askCt || isAnnulationCI || !config.utac.isApiActivated) {
@@ -191,14 +107,16 @@ export const getReport = async (request, h) => {
           utacData,
           utacDataKey,
         }
+      } else {
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} cache_miss`)
       }
     } catch (e) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down get_vehicle`)
       appLogger.info('-- redis is down => cannot read vehicle in UTAC cache')
     }
+  } else {
+    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
   }
-
-  appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
 
   const normalizedImmat = normalizeImmatForUtac(immat)
   appLogger.debug(`-- normalized immat ==> ${normalizedImmat}`)
@@ -247,6 +165,8 @@ export const getReport = async (request, h) => {
     })
   }
 
+  const isMocked = config.utac.isUtacMockForBpsaActivated
+
   try {
     const {
       status: utacStatus,
@@ -258,7 +178,7 @@ export const getReport = async (request, h) => {
       vin: normalizedVin,
     },
     {
-      uuid, encryptedImmat, encryptedVin,
+      uuid, encryptedImmat, encryptedVin, isMocked
     })
 
     if (utacStatus !== 200) {
@@ -303,7 +223,7 @@ export const getReport = async (request, h) => {
       }
     }
 
-    if (config.utac.isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+    if (!isMocked && config.utac.isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
       throw new Error('Inconsistency for technical control')
     }
 
