@@ -16,6 +16,17 @@ const cleanUp = async (server, code, reason) => {
   appLogger.info(`${API_NAME} REST server shutting down… (${reason})`)
 
   try {
+    // Closing elasticsearch connection
+    await elasticsearchClient.close()
+    appLogger.info('elasticsearch client is shutting down properly…')
+    appLogger.info('[SERVER-STOP] elasticsearch quit')
+
+  } catch (error) {
+    appLogger.info(`elasticsearch client shutdown with error: ${error}`)
+    appLogger.info('[SERVER-STOP] elasticsearch error')
+  }
+
+  try {
     // Closing redis connection
     await redisClient.quit()
     appLogger.info('redis client is shutting down properly…')

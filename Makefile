@@ -133,7 +133,7 @@ export FILE_FRONTEND_DIST_LATEST_VERSION = $(APP)-latest-frontend-dist.tar.gz
 ##############################################
 export ES_DATA=${BACKEND}/esdata
 export ES_DATA_BACKUP=${BACKEND}/backup/
-export ES_MEM=512m
+export ES_MEM?=512m
 # Pass a FIP here
 export ES_HOST?=${LOCAL_IP}
 export ES_PORT=9200
