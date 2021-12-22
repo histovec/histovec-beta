@@ -1,4 +1,5 @@
 import Boom from '@hapi/boom'
+import { appLogger } from '../../../../util/logger.js'
 
 import { NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../../constant/regex.js'
 
@@ -23,11 +24,13 @@ export const checkPayload = ({ nom, prenoms, raisonSociale, siren, numeroImmatri
   const hasPrenoms = prenoms?.length > 0
 
   if (!nom && !hasPrenoms && !raisonSociale && !siren) {
-    throw Boom.badRequest(
+    appLogger.info(
       `Vous n'avez fourni aucune information concernant le titulaire du véhicule.
       Si vous souhaitez interroger un véhicule particulier, vous devez fournir les 2 champs '${NOM}' et '${PRENOMS}'.
       Si vous souhaitez interroger un véhicule de société, vous devez fournir les 2 champs '${RAISON_SOCIALE}' et '${SIREN}'.`
     )
+
+    throw Boom.badRequest()
   }
 
   const vehiculeProReminder = (
@@ -35,19 +38,23 @@ export const checkPayload = ({ nom, prenoms, raisonSociale, siren, numeroImmatri
   )
 
   if (hasPrenoms && !nom) {
-    throw Boom.badRequest(
+    appLogger.info(
       `Vous avez fourni le champ '${PRENOMS}', vous souhaitez donc interroger un véhicule particulier.
       Les 2 champs '${NOM}' et '${PRENOMS}' doivent être renseignés pour interroger un véhicule particulier.
       ${vehiculeProReminder}`
     )
+
+    throw Boom.badRequest()
   }
 
   if (nom && !hasPrenoms) {
-    throw Boom.badRequest(
+    appLogger.info(
       `Vous avez fourni le champ '${NOM}', vous souhaitez donc interroger un véhicule particulier.
       Les 2 champs '${NOM}' et '${PRENOMS}' doivent être renseignés pour interroger un véhicule particulier.
       ${vehiculeProReminder}`
     )
+
+    throw Boom.badRequest()
   }
 
   const vehiculeParticulierReminder = (
@@ -55,30 +62,22 @@ export const checkPayload = ({ nom, prenoms, raisonSociale, siren, numeroImmatri
   )
 
   if (siren && !raisonSociale) {
-    throw Boom.badRequest(
+    appLogger.info(
       `Vous avez fourni le champ '${SIREN}', vous souhaitez donc interroger un véhicule de société.
       Les 2 champs '${RAISON_SOCIALE}' et '${SIREN}' doivent être renseignés pour interroger un véhicule de société.
       ${vehiculeParticulierReminder}`
     )
+
+    throw Boom.badRequest()
   }
 
   if (raisonSociale && !siren) {
-    throw Boom.badRequest(
+    appLogger.info(
       `Vous avez fourni le champ '${RAISON_SOCIALE}', vous souhaitez donc interroger un véhicule de société.
       Les 2 champs '${RAISON_SOCIALE}' et '${SIREN}' doivent être renseignés pour interroger un véhicule de société.
       ${vehiculeParticulierReminder}`
     )
-  }
 
-  if (!numeroImmatriculation) {
-    throw Boom.badRequest(`Le champ '${NUMERO_IMMATRICULATION}' est obligatoire et doit être au format SIV (${NUMERO_IMMATRICULATION_SIV_REGEX}) ou FNI (${NUMERO_IMMATRICULATION_FNI_REGEX}).`)
-  }
-
-  if (NUMERO_IMMATRICULATION_SIV_REGEX.test(numeroImmatriculation) && !numeroFormule) {
-    throw Boom.badRequest(`Le champ '${NUMERO_FORMULE}' est obligatoire pour un véhicule SIV.`)
-  }
-
-  if (NUMERO_IMMATRICULATION_FNI_REGEX.test(numeroImmatriculation) && !dateEmissionCertificatImmatriculation) {
-    throw Boom.badRequest(`Le champ '${DATE_EMISSION_CERTIFICAT_IMMATRICULATION}' est obligatoire pour un véhicule FNI.`)
+    throw Boom.badRequest()
   }
 }
