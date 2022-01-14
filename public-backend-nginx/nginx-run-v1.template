@@ -8,7 +8,12 @@ server {
   real_ip_header X-Real-IP;
   real_ip_recursive on;
 
+  set $maintenance <PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE>;
+
   location ~ "^/<APP>/api/v1/(report_by_data|report_by_code)" {
+    if ($maintenance = true) {
+      return 503;
+    }
     if ($request_method != POST) {
        return 405;
     }

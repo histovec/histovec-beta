@@ -15,30 +15,32 @@ const redisClient = getRedisClient()
 const cleanUp = async (server, code, reason) => {
   appLogger.info(`${API_NAME} REST server shutting down… (${reason})`)
 
-  try {
-    // Closing elasticsearch connection
-    await elasticsearchClient.close()
-    appLogger.info('elasticsearch client is shutting down properly…')
-    appLogger.info('[SERVER-STOP] elasticsearch quit')
+  if (!config.isHistovecUnavailable) {
+    try {
+      // Closing elasticsearch connection
+      await elasticsearchClient.close()
+      appLogger.info('elasticsearch client is shutting down properly…')
+      appLogger.info('[SERVER-STOP] elasticsearch quit')
 
-  } catch (error) {
-    appLogger.info(`elasticsearch client shutdown with error: ${error}`)
-    appLogger.info('[SERVER-STOP] elasticsearch error')
+    } catch (error) {
+      appLogger.info(`elasticsearch client shutdown with error: ${error}`)
+      appLogger.info('[SERVER-STOP] elasticsearch error')
+    }
+
+    try {
+      // Closing redis connection
+      await redisClient.quit()
+      appLogger.info('redis client is shutting down properly…')
+      appLogger.info('[SERVER-STOP] redis quit')
+
+    } catch (error) {
+      appLogger.info('Error while shutting down properly.')
+      appLogger.info('redis client is shutting down hardly…')
+      await redisClient.disconnect()
+      appLogger.info('[SERVER-STOP] redis disconnect')
+    }
+    appLogger.info('redis client shutdown complete')
   }
-
-  try {
-    // Closing redis connection
-    await redisClient.quit()
-    appLogger.info('redis client is shutting down properly…')
-    appLogger.info('[SERVER-STOP] redis quit')
-
-  } catch (error) {
-    appLogger.info('Error while shutting down properly.')
-    appLogger.info('redis client is shutting down hardly…')
-    await redisClient.disconnect()
-    appLogger.info('[SERVER-STOP] redis disconnect')
-  }
-  appLogger.info('redis client shutdown complete')
 
   // Stopping server
   try {
@@ -62,38 +64,40 @@ const initServer = async () => {
 
   const server = await createServer()
 
-  try {
-    await elasticsearchClient.search({
-      index: config.esIndex,
-      q: 'version',
-      size: '1',
-    })
-    techLogger.info(
-      `✅  ${API_NAME} REST server connected to elasticsearch`
-    )
-    appLogger.info('[SERVER-START] elasticsearch connect')
-  } catch (error) {
-    techLogger.error(
-      `❌  ${API_NAME} REST server could not connect to elasticsearch…`
-    )
-    techLogger.error(error)
-    appLogger.info('[SERVER-START] elasticsearch_down unable_to_connect_at_start')
-    appLogger.info('-- elasticsearch is down => cannot connect to elasticsearch')
-  }
+  if (!config.isHistovecUnavailable) {
+    try {
+      await elasticsearchClient.search({
+        index: config.esIndex,
+        q: 'version',
+        size: '1',
+      })
+      techLogger.info(
+        `✅  ${API_NAME} REST server connected to elasticsearch`
+      )
+      appLogger.info('[SERVER-START] elasticsearch connect')
+    } catch (error) {
+      techLogger.error(
+        `❌  ${API_NAME} REST server could not connect to elasticsearch…`
+      )
+      techLogger.error(error)
+      appLogger.info('[SERVER-START] elasticsearch_down unable_to_connect_at_start')
+      appLogger.info('-- elasticsearch is down => cannot connect to elasticsearch')
+    }
 
-  try {
-    await redisClient.get('')
-    techLogger.info(
-      `✅  ${API_NAME} REST server connected to redis`
-    )
-    appLogger.info('[SERVER-START] redis connect')
-  } catch (error) {
-    techLogger.error(
-      `❌  ${API_NAME} REST server could not connect to redis…`
-    )
-    techLogger.error(error)
-    appLogger.info('[SERVER-START] redis_down unable_to_connect_at_start')
-    appLogger.info('-- redis is down => cannot connect to redis')
+    try {
+      await redisClient.get('')
+      techLogger.info(
+        `✅  ${API_NAME} REST server connected to redis`
+      )
+      appLogger.info('[SERVER-START] redis connect')
+    } catch (error) {
+      techLogger.error(
+        `❌  ${API_NAME} REST server could not connect to redis…`
+      )
+      techLogger.error(error)
+      appLogger.info('[SERVER-START] redis_down unable_to_connect_at_start')
+      appLogger.info('-- redis is down => cannot connect to redis')
+    }
   }
 
   try {
