@@ -28,6 +28,7 @@ services:
       - API_USER_BURST
       - API_WRITE_LIMIT_RATE
       - API_WRITE_BURST
+      - IS_HISTOVEC_UNAVAILABLE
     volumes:
       - ${LOGS}/nginx:/var/log/nginx/
     ports:

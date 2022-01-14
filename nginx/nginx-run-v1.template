@@ -12,13 +12,15 @@ server {
   real_ip_header X-Real-IP;
   real_ip_recursive on;
 
+  set $maintenance <IS_HISTOVEC_UNAVAILABLE>;
+
   location / {
     try_files $uri @rew;
   }
 
   location /google6d56c7b24593249c.html {
     expires 24h;
-     return 200 "google-site-verification: google6d56c7b24593249c.html";
+    return 200 "google-site-verification: google6d56c7b24593249c.html";
   }
 
   location /robots.txt {
@@ -55,7 +57,7 @@ server {
 
   location ~ "^/<APP>/api/v1/log/exit" {
     if ($request_method != POST) {
-       return 405;
+      return 405;
     }
     limit_req zone=log burst=80 nodelay;
     limit_req_status 429;
@@ -65,7 +67,7 @@ server {
 
   location ~ "^/<APP>/api/v1/log/.*" {
     if ($request_method != PUT) {
-       return 405;
+      return 405;
     }
     limit_req zone=log burst=80 nodelay;
     limit_req_status 429;
@@ -76,8 +78,11 @@ server {
   location ~ "^/<APP>/api/v1/(report)" {
     include tor-ip.conf;
     include aws-ip.conf;
+    if ($maintenance = true) {
+      return 503;
+    }
     if ($request_method != POST) {
-       return 405;
+      return 405;
     }
     limit_req zone=api burst=<API_USER_BURST>;
     limit_req zone=server burst=<API_GLOBAL_BURST>;
@@ -94,8 +99,11 @@ server {
   }
 
   location ~ "^/<APP>/api/v1/(contact)" {
+    if ($maintenance = true) {
+      return 503;
+    }
     if ($request_method != POST) {
-       return 405;
+      return 405;
     }
 
     limit_req zone=api burst=<API_USER_BURST>;
