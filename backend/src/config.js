@@ -14,6 +14,7 @@ const config = {
   isTest: process.env.NODE_ENV === 'test',
   isDevelopmentMode,
   isPublicApi: process.env.PUBLIC_BACKEND === 'true',
+  isHistovecUnavailable: process.env.PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE === 'true',
   isUtacCacheIgnorable: isDevelopmentMode || process.env.IS_UTAC_CACHE_IGNORABLE === 'true',
   env: process.env.NODE_ENV,
   app: process.env.APP,

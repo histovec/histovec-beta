@@ -25,6 +25,7 @@ services:
       - BACKEND_API_USER_BURST
       - BACKEND_API_WRITE_LIMIT_RATE
       - BACKEND_API_WRITE_BURST
+      - BACKEND_IS_HISTOVEC_UNAVAILABLE
     volumes:
       - ${NGINX_LOGS}:/var/log/nginx/
     ports:

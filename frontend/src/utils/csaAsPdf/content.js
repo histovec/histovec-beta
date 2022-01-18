@@ -725,13 +725,14 @@ export const writeContent = (
 		isAnnulationCI,
 		annulationCurrentStatus,
 		dateAnnulation,
+		dateDonnees,
 		marque,
 		plaque,
 		premierCertificat,
 		qrCodeUrl,
 		validityDate,
 		vin,
-		webSiteUrl
+		webSiteUrl,
 	},
 	// Only complete CSA
 	{
@@ -761,7 +762,7 @@ export const writeContent = (
 	}
 
 	const writeFooterCallback = ({ page, embeddedFonts }) => {
-    return writeFooter({ page, embeddedFonts, footerLogoPng, qrCodeUrl, validityDate, webSiteUrl })
+    return writeFooter({ page, embeddedFonts, dateDonnees, footerLogoPng, qrCodeUrl, validityDate, webSiteUrl })
 	}
 
 	const {
