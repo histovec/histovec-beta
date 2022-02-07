@@ -232,7 +232,7 @@ Vue.mixin({
   data () {
     return {
       appName: process.env.VUE_APP_TITLE,
-      usePreviousMonthForData: false,
+      usePreviousMonthForData: true,
       outdatedData: true,
       showDataDate: true,
       appVersion: npmConf.version,
