@@ -163,7 +163,6 @@ export data_remote_files=.*_(siv|ivt)_api_.*
 export data_remote_files_inc=.*_(siv|ivt)_api-inc_.*
 export dataset=siv
 export FROM=1
-export PASSPHRASE=CHANGEME
 # elasticsearch parameters
 export ES_INDEX=${dataset}
 export settings={"index": {"number_of_shards": 1, "refresh_interval": "300s", "number_of_replicas": 0}}
@@ -190,7 +189,6 @@ export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack
 
 export BACKEND=${APP_PATH}/backend
 export BACKEND_HOST=backend
-export BACKEND_SECRET?=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export BACKEND_LOGS=${LOGS}/backend
 
 # mail confs for backend and fake smtp
@@ -1053,7 +1051,6 @@ backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_BACKEND_APP_VERSION)
 # development mode
 backend-dev: backend-host-config
 	@echo docker-compose up backend for dev ${VERSION}
-	@echo secret ${BACKEND_SECRET}
 	@export EXEC_ENV=development BACKEND_NAME=backend;\
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
@@ -1195,7 +1192,6 @@ public-backend-load-image: $(BUILD_DIR)/$(FILE_IMAGE_PUBLIC_BACKEND_APP_VERSION)
 # development mode
 public-backend-dev:
 	@echo docker-compose up public-backend for dev ${VERSION}
-	@echo secret ${BACKEND_SECRET}
 	@export EXEC_ENV=development BACKEND_NAME=public-backend;\
 		${DC} -f ${DC_DEV_PUBLIC_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
@@ -1251,7 +1247,7 @@ test-up-public-backend-nginx:
 # not working anymore: test requests in elasticsearch
 index-test: wait-elasticsearch
 	@echo index test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v1/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
+	@gpg --quiet --batch --yes -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v1/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 
 # performance test
 test-ids:
