@@ -129,7 +129,6 @@ export data_remote_files=.*_(siv|ivt)_api_.*
 export data_remote_files_inc=.*_(siv|ivt)_api-inc_.*
 export dataset=siv
 export FROM=1
-export PASSPHRASE=CHANGEME
 # elasticsearch parameters
 export ES_INDEX=${dataset}
 export settings={"index": {"number_of_shards": 1, "refresh_interval": "300s", "number_of_replicas": 0}}
@@ -156,7 +155,6 @@ export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack
 export BACKEND=${APP_PATH}/backend
 export BACKEND_HOST=backend
 export BACKEND_PORT=8000
-export BACKEND_SECRET?=$(shell < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c$${1:-32};echo;)
 export BACKEND_LOGS=${LOGS}/backend
 # mail confs for backend and fake smtp
 # must be overrided for production mode
@@ -839,7 +837,6 @@ redis-load-image: $(BUILD_DIR)/$(FILE_IMAGE_REDIS_APP_VERSION)
 # development mode
 backend-dev: backend-host-config
 	@echo docker-compose up backend for dev ${VERSION}
-	@echo secret ${BACKEND_SECRET}
 	@export EXEC_ENV=development;\
 		${DC} -f ${DC_DEV_BACKEND} up --build -d --force-recreate 2>&1 | grep -v orphan
 
@@ -896,7 +893,7 @@ test-up-backend:
 # not working anymore: test requests in elasticsearch
 index-test: wait-elasticsearch
 	@echo index test
-	@gpg --quiet --batch --yes --passphrase "${PASSPHRASE}" -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v1/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
+	@gpg --quiet --batch --yes -d sample_data/siv.csv.gz.gpg | gunzip| awk -F ';' 'BEGIN{n=0}{n++;if (n>1){print $$1}}' | parallel -j1 'curl -s -XGET localhost:${PORT}/histovec/api/v1/id/{} ' | jq -c '{"took": .took, "hit": .hits.total}'
 
 # performance test
 test-ids:

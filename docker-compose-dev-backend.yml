@@ -24,7 +24,6 @@ services:
     environment:
       - NODE_ENV=${EXEC_ENV}
       - BACKEND_PORT=${BACKEND_PORT}
-      - BACKEND_SECRET=${BACKEND_SECRET}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
       - REDIS_URL=${REDIS_URL}
