@@ -1,4 +1,4 @@
-import base64ArrayBuffer from 'base64-arraybuffer'
+import { decode, encode } from 'base64-arraybuffer'
 
 
 export const urlSafeDecode = (text) => {
@@ -24,9 +24,9 @@ export const urlSafeBase64Decode = (text) => {
 }
 
 export const base64Encode = (buffer) => {
-  return base64ArrayBuffer.encode(buffer)
+  return encode(buffer)
 }
 
 export const base64Decode = (text) => {
-  return base64ArrayBuffer.decode(text)
+  return decode(text)
 }
