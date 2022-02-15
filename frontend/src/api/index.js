@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import store from '@/store'
-import base64ArrayBuffer from 'base64-arraybuffer'
+import { decode } from 'base64-arraybuffer'
 import apiConf from '@/assets/json/backend.json'
 
 const AES_BLOCK_SIZE = 16
@@ -31,7 +31,7 @@ const utf8TextDecoder = window.TextDecoder && new window.TextDecoder('utf8')
 const decrypt = async (urlSafeBase64Input, rawKey) => {
   const ALGORITHM = 'AES-CBC'
 
-  const keyArrayBuffer = base64ArrayBuffer.decode(rawKey)
+  const keyArrayBuffer = decode(rawKey)
   const key = await window.crypto.subtle.importKey(
     'raw',
     keyArrayBuffer,
@@ -41,7 +41,7 @@ const decrypt = async (urlSafeBase64Input, rawKey) => {
   )
 
   const urlUnsafeBase64IvAndEncrypted = urlSafeBase64Input.replace(/[-_]/g, char => char === '-' ? '+' : '/')
-  const ivAndEncryptedArrayBuffer = base64ArrayBuffer.decode(urlUnsafeBase64IvAndEncrypted)
+  const ivAndEncryptedArrayBuffer = decode(urlUnsafeBase64IvAndEncrypted)
   const iv = ivAndEncryptedArrayBuffer.slice(0, AES_BLOCK_SIZE)
   const encodedData = ivAndEncryptedArrayBuffer.slice(AES_BLOCK_SIZE)
 
