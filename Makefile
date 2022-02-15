@@ -5,6 +5,10 @@
 # IN THE 'artifacts' FILE, AS NOT COMMITTED  #
 ##############################################
 
+ifneq ("$(wildcard \.env)","")
+    include .env
+    export
+endif
 
 ##############################################
 #              general OS vars               #
@@ -175,18 +179,19 @@ export FAKE_UTAC_TIMEOUT=5000
 export FAKE_UTAC_LATENCY=500
 
 # Default values for dev environement
-
-export IS_UTAC_API_ACTIVATED?=false
-export IS_VIN_SENT_TO_UTAC?=false
-export UTAC_URL?=https://histovectest.utac-otc.com/histovec/api/v1.0
-export UTAC_ID_KEY?=D2K8qvwHn36yBoENi5
+export IS_UTAC_API_ACTIVATED?=true
+export IS_UTAC_CACHE_IGNORABLE?=false
+export IS_UTAC_MOCK_FOR_BPSA_ACTIVATED?=false
+export IS_VIN_SENT_TO_UTAC?=true
+export UTAC_URL
+export UTAC_ID_KEY
 export UTAC_TIMEOUT?=5000
-export UTAC_USERNAME?=Ch@ng€-m€
-export UTAC_PASSWORD?=Ch@ng€-m€-t0o
-export HISTOVEC_PFX?=src/utac/histovec.pfx
-export HISTOVEC_PFX_PASSPHRASE?=Ch@ng€-m€-pl€@se
-export INES_TOKEN?=yOu-t0k€n-t0-m€?
-export UTAC_PEM?=src/utac/utac.pem
+export UTAC_USERNAME
+export UTAC_PASSWORD
+export HISTOVEC_PFX
+export HISTOVEC_PFX_PASSPHRASE
+export INES_TOKEN
+export UTAC_PEM
 
 # packaging
 export DC_DEV_BACKEND = ${DC_PREFIX}-dev-backend.yml
