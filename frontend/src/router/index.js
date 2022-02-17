@@ -38,8 +38,8 @@ if (isHistovecUnavailable) {
     {name: 'faq', path: '/faq', component: Faq, meta: { title: 'HistoVec - FAQ' }},
     {name: 'legal', path: '/legal', component: Legal, meta: { title: 'HistoVec - Mentions Légales' }},
     {name: 'buyer', path: '/buyer', component: Buyer, meta: { title: 'HistoVec - Acheteur' }},
-    {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Page d\'indisponibilité' }},
-    {name: 'notfound', path: '/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
+    {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Service indisponible' }},
+    {name: 'not-found', path: '/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
   ]
 }
 
