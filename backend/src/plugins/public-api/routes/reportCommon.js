@@ -11,6 +11,7 @@ import { reportResponseSchema } from '../../schemas/report.js'
 
 import { NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
+import { TITULAIRE_CHANGE_OPERATIONS } from '../../../constant/historique.js'
 
 import config from '../../../config.js'
 
@@ -143,6 +144,12 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       const normalizedReport = normalizeReport(report)
       syslogLogger.debug({ key: 'normalized_report', tag: logLabel, value: { ...normalizedReport } })
 
+      const { new_historique = [] } = normalizedReport
+      const titulaireChangeOperations = new_historique.filter(event => TITULAIRE_CHANGE_OPERATIONS.includes(event.opa_type))
+      const lastTitulaireChangeOperation = titulaireChangeOperations.length && titulaireChangeOperations[0]
+      const derniereOperationChangementTitulaire = lastTitulaireChangeOperation.opa_type
+      const dateDerniereOperationChangementTitulaire = lastTitulaireChangeOperation.opa_date
+
       const {
         adr_code_postal_tit = '',
         age_certificat,
@@ -175,6 +182,8 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       appLogger.info(`[VEHICLE] ${anonymizedReportId} nom_commercial ${nom_commercial}`)
       appLogger.info(`[VEHICLE] ${anonymizedReportId} nb_titulaires ${nb_titulaires}`)
       appLogger.info(`[VEHICLE] ${anonymizedReportId} tvv ${tvv}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} type_derniere_operation_changement_titulaire ${derniereOperationChangementTitulaire}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} date_derniere_operation_changement_titulaire ${dateDerniereOperationChangementTitulaire}`)
 
       const mappedVehicule = vehiculeMapping(normalizedReport)
       syslogLogger.debug({ key: 'mapped_report', tag: logLabel, value: { ...mappedVehicule } })
