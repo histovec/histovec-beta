@@ -11,6 +11,7 @@ import { reportResponseSchema } from '../../schemas/report.js'
 
 import { NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
+import { TITULAIRE_CHANGE_OPERATIONS } from '../../../constant/historique.js'
 
 import config from '../../../config.js'
 
@@ -82,6 +83,9 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         const typeImmatriculation = NUMERO_IMMATRICULATION_SIV_REGEX.test(numeroImmatriculation) ? TYPE_IMMATRICULATION.SIV : TYPE_IMMATRICULATION.FNI
         const typePersonne = nom ? TYPE_PERSONNE.PARTICULIER : TYPE_PERSONNE.PRO
 
+        syslogLogger.info({ key: 'type_immatriculation', tag: logLabel, value: typeImmatriculation })
+        syslogLogger.info({ key: 'type_personne', tag: logLabel, value: typePersonne })
+
         const reportIdBuffer = buildReportId(
           { nom, prenoms, raisonSociale, siren, numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation },
           { typeImmatriculation, typePersonne }
@@ -143,6 +147,12 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       const normalizedReport = normalizeReport(report)
       syslogLogger.debug({ key: 'normalized_report', tag: logLabel, value: { ...normalizedReport } })
 
+      const { new_historique = [] } = normalizedReport
+      const titulaireChangeOperations = new_historique.filter(event => TITULAIRE_CHANGE_OPERATIONS.includes(event.opa_type))
+      const lastTitulaireChangeOperation = titulaireChangeOperations.length && titulaireChangeOperations[0]
+      const derniereOperationChangementTitulaire = lastTitulaireChangeOperation.opa_type
+      const dateDerniereOperationChangementTitulaire = lastTitulaireChangeOperation.opa_date
+
       const {
         adr_code_postal_tit = '',
         age_certificat,
@@ -162,19 +172,21 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       const departement = adr_code_postal_tit ? getDepartement(adr_code_postal_tit) : undefined
       const anonymizedReportId = urlSafeBase64Encode(hash(base64EncodedReportId))
 
-      appLogger.info(`[Demande] ${anonymizedReportId} age_certificat ${age_certificat}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} couleur ${couleur}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} CTEC_RLIB_ENERGIE ${CTEC_RLIB_ENERGIE}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} CTEC_RLIB_CATEGORIE ${CTEC_RLIB_CATEGORIE}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} CTEC_RLIB_GENRE ${CTEC_RLIB_GENRE}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} date_premiere_immat ${date_premiere_immat}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} departement ${departement}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} is_apte_a_circuler ${is_apte_a_circuler}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} is_fni ${is_fni}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} marque ${marque}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} nom_commercial ${nom_commercial}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} nb_titulaires ${nb_titulaires}`)
-      appLogger.info(`[Demande] ${anonymizedReportId} tvv ${tvv}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} age_certificat ${age_certificat}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} couleur ${couleur}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} CTEC_RLIB_ENERGIE ${CTEC_RLIB_ENERGIE}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} CTEC_RLIB_CATEGORIE ${CTEC_RLIB_CATEGORIE}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} CTEC_RLIB_GENRE ${CTEC_RLIB_GENRE}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} date_premiere_immat ${date_premiere_immat}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} departement ${departement}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} is_apte_a_circuler ${is_apte_a_circuler}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} is_fni ${is_fni}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} marque ${marque}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} nom_commercial ${nom_commercial}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} nb_titulaires ${nb_titulaires}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} tvv ${tvv}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} type_derniere_operation_changement_titulaire ${derniereOperationChangementTitulaire}`)
+      appLogger.info(`[VEHICLE] ${anonymizedReportId} date_derniere_operation_changement_titulaire ${dateDerniereOperationChangementTitulaire}`)
 
       const mappedVehicule = vehiculeMapping(normalizedReport)
       syslogLogger.debug({ key: 'mapped_report', tag: logLabel, value: { ...mappedVehicule } })

@@ -587,6 +587,9 @@ export default {
       }
     }
 
+    // Counting api requests from HistoVec frontend
+    this.$store.dispatch('log', `${this.$route.path}/count`)
+
     await this.getReport()
 
     const sivData = this.$store.state.histovec.report && this.$store.state.histovec.report.sivData
