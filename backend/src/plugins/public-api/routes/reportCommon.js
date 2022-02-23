@@ -83,6 +83,9 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         const typeImmatriculation = NUMERO_IMMATRICULATION_SIV_REGEX.test(numeroImmatriculation) ? TYPE_IMMATRICULATION.SIV : TYPE_IMMATRICULATION.FNI
         const typePersonne = nom ? TYPE_PERSONNE.PARTICULIER : TYPE_PERSONNE.PRO
 
+        syslogLogger.info({ key: 'type_immatriculation', tag: logLabel, value: typeImmatriculation })
+        syslogLogger.info({ key: 'type_personne', tag: logLabel, value: typePersonne })
+
         const reportIdBuffer = buildReportId(
           { nom, prenoms, raisonSociale, siren, numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation },
           { typeImmatriculation, typePersonne }
