@@ -10,7 +10,8 @@ import Home from '@/components/Home'
 const Search = loadView('Search')
 const Report = loadView('Report')
 const Faq = loadView('infos/Faq')
-const Legal = loadView('infos/Legal')
+const LegalNotice = loadView('infos/LegalNotice')
+const InformationNotices = loadView('infos/InformationNotices')
 const Buyer = loadView('infos/Buyer')
 import Unavailable from '@/components/infos/Unavailable'
 import NotFound from '@/components/infos/NotFound'
@@ -36,7 +37,8 @@ if (isHistovecUnavailable) {
     {name: 'search', path: '/search', component: Search, meta: { title: 'HistoVec - Recherche' }},
     {name: 'report', path: '/report', component: Report, meta: { title: 'HistoVec - Rapport' }},
     {name: 'faq', path: '/faq', component: Faq, meta: { title: 'HistoVec - FAQ' }},
-    {name: 'legal', path: '/legal', component: Legal, meta: { title: 'HistoVec - Mentions Légales' }},
+    {name: 'legal-notice', path: '/legal-notice', component: LegalNotice, meta: { title: 'HistoVec - Mentions Légales' }},
+    {name: 'information-notices', path: '/information-notices', component: InformationNotices, meta: { title: 'HistoVec - Mentions d\'information' }},
     {name: 'buyer', path: '/buyer', component: Buyer, meta: { title: 'HistoVec - Acheteur' }},
     {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Service indisponible' }},
     {name: 'not-found', path: '/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
