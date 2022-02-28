@@ -187,7 +187,7 @@
               <div class="col-md-12">
                 <p class="text-center">
                   {{ appName }} version bêta {{ appVersion }} - copyright &copy; 2018
-                  <a href="legal">Mentions légales</a>
+                  <a href="legal-notice">Mentions légales</a> et <a href="information-notices">Mentions d'information</a>
                 </p>
               </div>
             </div>
