@@ -157,5 +157,7 @@ RUN cat .env
 RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-frontend.tar.gz  && \
      npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 \
      rm -rf ${app_name}-${app_ver}-frontend.tar.gz
+RUN  cp npm.log /tmp/npm.log
+RUN  cat npm.log
 
 CMD ["npm", "run", "build"]
