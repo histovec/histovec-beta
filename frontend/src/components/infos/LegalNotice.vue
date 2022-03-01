@@ -75,31 +75,83 @@
                 <p>
                   Malgré tout le soin apporté à la mise en ligne des informations, des erreurs typographiques ou des inexactitudes techniques ne peuvent être exclues. Le ministère de l’intérieur se réserve le droit de les corriger à tout moment dès qu’elles sont portées à sa connaissance.
                   <br>
-                  Les informations présentées contenues sur le site <a :href="HISTOVEC_BASE_URL" target="_blank">{{ HISTOVEC_BASE_URL }}</a> sont susceptibles de faire l’objet de mise à jour à tout moment.
+                  Les informations présentées contenues sur le site
+                  <a
+                    :href="HISTOVEC_BASE_URL"
+                    target="_blank"
+                  >
+                    {{ HISTOVEC_BASE_URL }}
+                  </a>
+                  sont susceptibles de faire l’objet de mise à jour à tout moment.
                 </p>
 
                 <h5>Crédits</h5>
                 <p>
-                  Le ministère de l'intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site <a :href="HISTOVEC_BASE_URL" target="_blank">{{ HISTOVEC_BASE_URL }}</a>.
+                  Le ministère de l'intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site
+                  <a
+                    :href="HISTOVEC_BASE_URL"
+                    target="_blank"
+                  >
+                    {{ HISTOVEC_BASE_URL }}
+                  </a>
+                  .
                   <br>
-                  Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction, <a :href="reproductionRequestEmail">contactez-nous</a>.
+                  Ces éléments sont couverts par des droits de propriété intellectuelle de tiers. En application du code de la propriété intellectuelle, toute reproduction ou représentation partielle ou totale pour quelque usage que ce soit est interdite sans l'accord préalable des titulaires de droits. Pour toute demande de reproduction,
+                  <a
+                    :href="reproductionRequestEmail"
+                  >
+                    contactez-nous
+                  </a>
+                  .
                   <br>
-                  Sauf mention contraire, les photographies sont issues du site <a href="http://picjumbo.com" target="_blank">picjumbo.com</a> et libres de droits.
+                  Sauf mention contraire, les photographies sont issues du site
+                  <a
+                    href="http://picjumbo.com"
+                    target="_blank"
+                  >
+                    picjumbo.com
+                  </a>
+                  et libres de droits.
                 </p>
 
                 <h5>Conception et réalisation</h5>
-                <p>Conception et réalisation direction du numérique du ministère de l'intérieur avec le bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (<a href="https://www.securite-routiere.gouv.fr/mieux-nous-connaitre/qui-sommes-nous-0/la-delegation-la-securite-routiere" target="_blank">DSR</a>).</p>
+                <p>
+                  Conception et réalisation direction du numérique du ministère de l'intérieur avec le bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (
+                  <a
+                    href="https://www.securite-routiere.gouv.fr/mieux-nous-connaitre/qui-sommes-nous-0/la-delegation-la-securite-routiere"
+                    target="_blank"
+                  >
+                    DSR
+                  </a>
+                  ).
+                </p>
 
                 <h5> Liens hypertextes entrants </h5>
                 <p>
                   Tout site public ou privé est autorisé à établir, sans autorisation préalable, un lien hypertexte vers le site Histovec.
-                  En revanche les pages du site <a :href="HISTOVEC_BASE_URL" target="_blank">{{ HISTOVEC_BASE_URL }}</a> ne doivent pas être imbriquées à l’intérieur des pages d’un autre site : rien ne doit méprendre le visiteur sur l’origine d’une page vue.
+                  En revanche les pages du site
+                  <a
+                    :href="HISTOVEC_BASE_URL"
+                    target="_blank"
+                  >
+                    {{ HISTOVEC_BASE_URL }}
+                  </a>
+                  ne doivent pas être imbriquées à l’intérieur des pages d’un autre site : rien ne doit méprendre le visiteur sur l’origine d’une page vue.
                   Le ministère de l'intérieur se réserve le droit de demander la suppression d'un lien qu'il estime non-conforme à l'objet du site, à ses missions ou plus généralement à l'éthique d'un portail public.
                   L’autorisation de mise en place d’un lien est valable pour tout support, à l’exception de ceux diffusant des informations à caractère polémique, pornographique, xénophobe ou pouvant, dans une plus large mesure, porter atteinte à la sensibilité du plus grand nombre.
                 </p>
 
                 <h5> Liens hypertextes sortants </h5>
-                <p>Le site indique en permanence l'identité des sites externes indiqués en lien, et ce sur toutes les pages. Néanmoins, ces pages web dont les adresses URL sont régulièrement vérifiées ne font pas partie du site et par conséquent n'engagent en rien la responsabilité du site <a :href="HISTOVEC_BASE_URL" target="_blank">{{ HISTOVEC_BASE_URL }}</a>.</p>
+                <p>
+                  Le site indique en permanence l'identité des sites externes indiqués en lien, et ce sur toutes les pages. Néanmoins, ces pages web dont les adresses URL sont régulièrement vérifiées ne font pas partie du site et par conséquent n'engagent en rien la responsabilité du site
+                  <a
+                    :href="HISTOVEC_BASE_URL"
+                    target="_blank"
+                  >
+                    {{ HISTOVEC_BASE_URL }}
+                  </a>
+                  .
+                </p>
 
                 <h5>Code applicatif open source</h5>
                 <p>
@@ -138,10 +190,42 @@
                 <h5>Limitations de responsabilité</h5>
                 <p>Le site Histovec fournit les informations issues du système d’immatriculation des véhicules (SIV). La responsabilité de l'éditeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’immatriculation des véhicules ou du traitement relatif à la gestion du contrôle technique des véhicules mis en œuvre par l’Organisme Technique Central, ou d’anomalies de traitement informatique.</p>
                 <p>Les modalités d’exercice des droits d’accès, de rectification, d’effacement et d’opposition sont décrits ci-dessous.</p>
-                <p>S’agissant des informations issues du système d’immatriculation des véhicules fournies par Histovec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (<a :href="readOrUpdateAntsPersonalDataEmail">{{ ANTS_PERSONAL_DATA_EMAIL }}</a>) ou par voie postale auprès de l’Agence Nationale des Titres Sécurisés - 18 rue Irénée Carré - BP 70474 - 08101 Charleville-Mézières.</p>
-                <p>S’agissant des informations issues de l’UTAC-OTC relatives au contrôle technique et au kilométrage des véhicules consultables sur Histovec, les droits d’accès et de rectification des données s’exercent en justifiant son identité, par voie électronique (<a :href="readOrUpdateUtacPersonalDataEmail">{{ UTAC_PERSONAL_DATA_EMAIL }}</a>) ou par voie postale auprès de l’UTAC-OTC : UTAC UdS -  Union Technique de l'Automobile, du Motocycle et du Cycle Union de Syndicats -  Autodrome de Linas-Montlhéry - BP 20212 -  91311 Montlhéry Cedex.</p>
-                <p>En ce qui concerne le droit à la limitation des données prévu à l’article 18 du RGPD, toute personne concernée peut en faire la demande auprès de la DSR par courriel adressé à l’adresse suivante : <a :href="sendLimitationPersonalDataEmail">{{ HISTOVEC_SUPPORT_EMAIL }}</a>. Chaque demande sera étudiée au cas par cas pour déterminer si elle est légitime.</p>
-                <p>Le droit d’opposition, prévu à l’article 21 du RGPD, s’exerce en justifiant son identité, par voie postale (place Beauvau – 75800 PARIS cedex 08) ou par voie électronique (<a :href="sendOppositionPersonalDataEmail">{{ OPPOSITION_PERSONAL_DATA_EMAIL }}</a>) auprès de la Délégation à la sécurité routière du ministère de l’intérieur.</p>
+                <p>
+                  S’agissant des informations issues du système d’immatriculation des véhicules fournies par Histovec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (
+                  <a
+                    :href="readOrUpdateAntsPersonalDataEmail"
+                  >
+                    {{ ANTS_PERSONAL_DATA_EMAIL }}
+                  </a>
+                  ) ou par voie postale auprès de l’Agence Nationale des Titres Sécurisés - 18 rue Irénée Carré - BP 70474 - 08101 Charleville-Mézières.
+                </p>
+                <p>
+                  S’agissant des informations issues de l’UTAC-OTC relatives au contrôle technique et au kilométrage des véhicules consultables sur Histovec, les droits d’accès et de rectification des données s’exercent en justifiant son identité, par voie électronique (
+                  <a
+                    :href="readOrUpdateUtacPersonalDataEmail"
+                  >
+                    {{ UTAC_PERSONAL_DATA_EMAIL }}
+                  </a>
+                  ) ou par voie postale auprès de l’UTAC-OTC : UTAC UdS -  Union Technique de l'Automobile, du Motocycle et du Cycle Union de Syndicats -  Autodrome de Linas-Montlhéry - BP 20212 -  91311 Montlhéry Cedex.
+                </p>
+                <p>
+                  En ce qui concerne le droit à la limitation des données prévu à l’article 18 du RGPD, toute personne concernée peut en faire la demande auprès de la DSR par courriel adressé à l’adresse suivante :
+                  <a
+                    :href="sendLimitationPersonalDataEmail"
+                  >
+                    {{ HISTOVEC_SUPPORT_EMAIL }}
+                  </a>
+                  . Chaque demande sera étudiée au cas par cas pour déterminer si elle est légitime.
+                </p>
+                <p>
+                  Le droit d’opposition, prévu à l’article 21 du RGPD, s’exerce en justifiant son identité, par voie postale (place Beauvau – 75800 PARIS cedex 08) ou par voie électronique (
+                  <a
+                    :href="sendOppositionPersonalDataEmail"
+                  >
+                    {{ OPPOSITION_PERSONAL_DATA_EMAIL }}
+                  </a>
+                  ) auprès de la Délégation à la sécurité routière du ministère de l’intérieur.
+                </p>
                 <p>Le droit à l’effacement, prévu à l’article 17 du RGPD, ne s’applique pas dans la mesure où le téléservice est nécessaire à l’exécution d’une mission d’intérêt public.</p>
 
                 <h5>Disponibilité</h5>
