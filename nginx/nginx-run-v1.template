@@ -91,11 +91,12 @@ server {
     proxy_pass http://backend;
     proxy_http_version 1.1;
     proxy_next_upstream off;
-    proxy_set_header  X-Forwarded-For $http_x_forwarded_for;
-    proxy_set_header  X-Forwarded-Host $http_x_forwarded_for;
+    proxy_set_header X-Forwarded-For $http_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $http_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
+    proxy_set_header Cache-Control "no-store";
   }
 
   location ~ "^/<APP>/api/v1/(contact)" {
@@ -118,6 +119,7 @@ server {
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
+    proxy_set_header Cache-Control "no-store";
   }
 
 }
