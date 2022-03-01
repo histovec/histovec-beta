@@ -90,7 +90,14 @@
                 </p>
 
                 <p>
-                  Elles sont destinées à la Délégation à la sécurité routière et à la Direction du Numérique (DNUM) du ministère de l’intérieur et aux titulaires de certificats d’immatriculation, utilisateurs de l’application web <a :href="HISTOVEC_BASE_URL" target="_blank">{{ HISTOVEC_BASE_URL }}</a>, qui peuvent les communiquer à des acheteurs potentiels. Elles sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
+                  Elles sont destinées à la Délégation à la sécurité routière et à la Direction du Numérique (DNUM) du ministère de l’intérieur et aux titulaires de certificats d’immatriculation, utilisateurs de l’application web
+                  <a
+                    :href="HISTOVEC_BASE_URL"
+                    target="_blank"
+                  >
+                    {{ HISTOVEC_BASE_URL }}
+                  </a>
+                  , qui peuvent les communiquer à des acheteurs potentiels. Elles sont communiquées conformément aux dispositions des articles L. 330-2 et suivants du code de la route.
                 </p>
 
                 <p>
@@ -110,10 +117,42 @@
                   </ul>
                 </p>
 
-                <p>S’agissant des informations issues du système d’immatriculation des véhicules fournies par Histovec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (<a :href="readOrUpdateAntsPersonalDataEmail">{{ ANTS_PERSONAL_DATA_EMAIL }}</a>) ou par voie postale auprès de l’Agence Nationale des Titres Sécurisés - 18 rue Irénée Carré - BP 70474 - 08101 Charleville-Mézières.</p>
-                <p>S’agissant des informations issues de l’UTAC-OTC relatives au contrôle technique et au kilométrage des véhicules consultables sur Histovec, les droits d’accès et de rectification des données s’exercent en justifiant son identité, par voie électronique (<a :href="readOrUpdateUtacPersonalDataEmail">{{ UTAC_PERSONAL_DATA_EMAIL }}</a>) ou par voie postale auprès de l’UTAC-OTC : UTAC UdS -  Union Technique de l'Automobile, du Motocycle et du Cycle Union de Syndicats -  Autodrome de Linas-Montlhéry - BP 20212 -  91311 Montlhéry Cedex.</p>
-                <p>En ce qui concerne le droit à la limitation des données prévu à l’article 18 du RGPD, toute personne concernée peut en faire la demande auprès de la DSR par courriel adressé à l’adresse suivante : <a :href="sendLimitationPersonalDataEmail">{{ HISTOVEC_SUPPORT_EMAIL }}</a>. Chaque demande sera étudiée au cas par cas pour déterminer si elle est légitime.</p>
-                <p>Le droit d’opposition, prévu à l’article 21 du RGPD, s’exerce en justifiant son identité, par voie postale (place Beauvau – 75800 PARIS cedex 08) ou par voie électronique (<a :href="sendOppositionPersonalDataEmail">{{ OPPOSITION_PERSONAL_DATA_EMAIL }}</a>) auprès de la Délégation à la sécurité routière du ministère de l’intérieur.</p>
+                <p>
+                  S’agissant des informations issues du système d’immatriculation des véhicules fournies par Histovec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (
+                  <a
+                    :href="readOrUpdateAntsPersonalDataEmail"
+                  >
+                    {{ ANTS_PERSONAL_DATA_EMAIL }}
+                  </a>
+                  ) ou par voie postale auprès de l’Agence Nationale des Titres Sécurisés - 18 rue Irénée Carré - BP 70474 - 08101 Charleville-Mézières.
+                </p>
+                <p>
+                  S’agissant des informations issues de l’UTAC-OTC relatives au contrôle technique et au kilométrage des véhicules consultables sur Histovec, les droits d’accès et de rectification des données s’exercent en justifiant son identité, par voie électronique (
+                  <a
+                    :href="readOrUpdateUtacPersonalDataEmail"
+                  >
+                    {{ UTAC_PERSONAL_DATA_EMAIL }}
+                  </a>
+                  ) ou par voie postale auprès de l’UTAC-OTC : UTAC UdS -  Union Technique de l'Automobile, du Motocycle et du Cycle Union de Syndicats -  Autodrome de Linas-Montlhéry - BP 20212 -  91311 Montlhéry Cedex.
+                </p>
+                <p>
+                  En ce qui concerne le droit à la limitation des données prévu à l’article 18 du RGPD, toute personne concernée peut en faire la demande auprès de la DSR par courriel adressé à l’adresse suivante :
+                  <a
+                    :href="sendLimitationPersonalDataEmail"
+                  >
+                    {{ HISTOVEC_SUPPORT_EMAIL }}
+                  </a>
+                  . Chaque demande sera étudiée au cas par cas pour déterminer si elle est légitime.
+                </p>
+                <p>
+                  Le droit d’opposition, prévu à l’article 21 du RGPD, s’exerce en justifiant son identité, par voie postale (place Beauvau – 75800 PARIS cedex 08) ou par voie électronique (
+                  <a
+                    :href="sendOppositionPersonalDataEmail"
+                  >
+                    {{ OPPOSITION_PERSONAL_DATA_EMAIL }}
+                  </a>
+                  ) auprès de la Délégation à la sécurité routière du ministère de l’intérieur.
+                </p>
                 <p>Le droit à l’effacement, prévu à l’article 17 du RGPD, ne s’applique pas dans la mesure où le téléservice est nécessaire à l’exécution d’une mission d’intérêt public.</p>
                 <p>Ce téléservice est contrôlé par le délégué ministériel à la protection des données du ministère de l’intérieur (Délégué ministériel à la protection des données – Ministère de l’intérieur – Place Beauvau – 75008 Paris Cedex 08). Vous pouvez aussi déposer une réclamation auprès de la Commission nationale de l’informatique et des libertés (CNIL – 3 place de Fontenoy – TSA 80715 – 75334 Paris Cedex 07).</p>
               </div>
