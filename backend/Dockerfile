@@ -92,12 +92,10 @@ ENV APP_VERSION ${app_ver}
 COPY ${file_app_version} .
 
 RUN  set -ex ; tar -zxvf ${file_app_version} && \
-     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 \
+     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1; cat npm.log; cp npm.log /tmp/npm.log; rm -rf npm.log \
      rm -rf ${file_app_version}
-RUN  cp npm.log /tmp/npm.log
-RUN  cat npm.log
 
-CMD ["npm","run",  "build"]
+CMD ["npm","run","build"]
 
 ###############################
 # Step 4: "production" target #
