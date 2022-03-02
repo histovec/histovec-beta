@@ -18,7 +18,8 @@
       </div>
       <!-- fin alerte verte -->
       <div class="col-md-12 p-h-10">
-        <p> <!-- @todo: change wording -->
+        <p>
+          <!-- @todo: change wording -->
           Vous pouvez transmettre le <b>code partage HistoVec</b> à nos partenaires afin qu'ils puissent utiliser les informations de votre véhicule pour vous fournir un service.
           <br />
           <br />
