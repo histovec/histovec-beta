@@ -155,7 +155,7 @@ RUN env | grep VUE_APP_ > .env
 RUN cat .env
 
 RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-frontend.tar.gz  && \
-     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1; cat npm.log; cp npm.log /tmp/npm.log; rm -rf npm.log \
+     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
      rm -rf ${app_name}-${app_ver}-frontend.tar.gz
 
 CMD ["npm", "run", "build"]
