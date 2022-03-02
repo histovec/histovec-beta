@@ -82,10 +82,8 @@ ENV APP_VERSION ${app_ver}
 COPY ${app_name}-${app_ver}-backend.tar.gz .
 
 RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-backend.tar.gz  && \
-     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 \
+     npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
      rm -rf ${app_name}-${app_ver}-backend.tar.gz
-RUN  cp npm.log /tmp/npm.log
-RUN  cat npm.log
 
 CMD ["npm","run",  "build"]
 
