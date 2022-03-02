@@ -395,7 +395,6 @@
                 >
                 </share-code-partage>
               </div>
-
             </div>
           </div>
           <!-- tabs end -->
