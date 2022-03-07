@@ -107,6 +107,7 @@
                   Sauf mention contraire, les photographies sont issues du site
                   <a
                     href="http://picjumbo.com"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     picjumbo.com
@@ -119,6 +120,7 @@
                   Conception et réalisation direction du numérique du ministère de l'intérieur avec le bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (
                   <a
                     href="https://www.securite-routiere.gouv.fr/mieux-nous-connaitre/qui-sommes-nous-0/la-delegation-la-securite-routiere"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     DSR
