@@ -10,6 +10,13 @@ server {
 
   set $maintenance <BACKEND_IS_HISTOVEC_UNAVAILABLE>;
 
+  #don't send the nginx version number in error pages and Server header
+  server_tokens off;
+
+  # enabling HSTS(HTTP Strict Transport Security)
+  # https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security
+  add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+
   location / {
     try_files $uri @rew;
   }
@@ -76,11 +83,12 @@ server {
     proxy_pass http://<BACKEND_HOST>;
     proxy_http_version 1.1;
     proxy_next_upstream off;
-    proxy_set_header  X-Forwarded-For $http_x_forwarded_for;
-    proxy_set_header  X-Forwarded-Host $http_x_forwarded_for;
+    proxy_set_header X-Forwarded-For $http_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $http_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
+    proxy_set_header Cache-Control "no-store";
   }
 
   location ~ "^/<APP>/api/v1/(contact)" {
@@ -99,6 +107,7 @@ server {
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
+    proxy_set_header Cache-Control "no-store";
   }
 
 }
