@@ -304,7 +304,7 @@ const computeTitulaireCount = (historique=[], isIncertain) => {
   return titulaireChangeOperations.length + (isIncertain ? 1 : 0)
 }
 
-const addPVEInfos = (historique=[], pves=[]) => {
+const addPVEInfos = (historique=[], pves=[], maskNumAgree=true) => {
   if (historique.length === 0) {
     return historique
   }
@@ -338,7 +338,7 @@ const addPVEInfos = (historique=[], pves=[]) => {
         break
     }
 
-    if (numAgree) {
+    if (!maskNumAgree && numAgree) {
       return {
         ...element,
         numAgree
