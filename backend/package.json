@@ -4,7 +4,7 @@
   "description": "Jouez la transparence en partageant l'historique du véhicule",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d dist",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider babel src -d dist",
     "dev-setup": "node dev-setup/index.js",
     "dev": "nodemon --inspect --watch src boot-dev.js",
     "format": "eslint src --fix",
