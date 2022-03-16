@@ -3,8 +3,6 @@ artifacts
 sample_data
 frontend/dist-build
 dist/
-infrastructure/heat-templates/CIT/param/*
-infrastructure/heat-templates/floating-ip/param/*
 .env
 .idea
 .lastcommit
