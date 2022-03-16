@@ -67,16 +67,13 @@ services:
       start_period: 40s
 
   redis:
-    image: ${APP}-cache:${APP_VERSION}
-    build:
-      context: ${REDIS}
-      target: cache
-      dockerfile: Dockerfile
+    image: redis:6-alpine
     container_name: ${APP}-cache
     ports:
       - 6379:6379
-    command: "redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}"
+    command: "redis-server --requirepass ${REDIS_PASSWORD}"
     volumes:
+      - ${REDIS}/redis.conf:/usr/local/etc/redis/redis.conf
       - ${REDIS_DATA}:/data
     sysctls:
       - net.core.somaxconn=100000
