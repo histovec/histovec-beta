@@ -1,5 +1,5 @@
 #### MINIMAL RESTANA SERVER NOT MEANT FOR PRODUCTION #####
-FROM node:16-slim as base
+FROM node:17-bullseye-slim as base
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
@@ -12,7 +12,7 @@ EXPOSE 9000
 
 # update debian w/proxy & mirror
 RUN echo "$http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
-   sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list
+   sed -i.orig -e "s|http://deb.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian11|g ; s|http://security.debian.org\([^[:space:]]*\)|$MIRROR_DEBIAN/debian11-security|g" /etc/apt/sources.list
 RUN apt-get update -q
 
 # use proxy & private npm registry
