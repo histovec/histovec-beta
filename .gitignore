@@ -20,4 +20,5 @@ artifacts_qualif
 swift_get_token.sh
 data/decrypted/.~lock*
 data/decrypted/*.csv
+backend/redis/data-dummy/dump.rdb
 
