@@ -6,6 +6,7 @@ import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } 
 import { utacResponseSchema } from '../../../services/utac/schemas/response.js'
 import { getRedisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
+import { VIN_REGEX } from '../../../constant/regex.js'
 
 import { appLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
@@ -130,8 +131,7 @@ export const getReport = async (request, h) => {
   const normalizedVin = vin.toUpperCase()
   appLogger.debug(`-- normalized vin ==> ${normalizedVin}`)
 
-  const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
-  const isValidVin = Boolean(validVinRegex.test(vin))
+  const isValidVin = Boolean(VIN_REGEX.test(vin))
 
   if (!isValidImmat) {
     appLogger.error({
