@@ -11,6 +11,8 @@ import config from '../config'
 import { appLogger } from '../util/logger'
 import { getAsync, setAsync } from '../connectors/redis'
 
+import { VIN_REGEX } from '../constant/regex.js'
+
 // /!\ boolean setting is passed as string /!\
 // @todo: we should use typed yaml to load settings
 const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
@@ -282,8 +284,7 @@ export const generateGetReport = (utacClient) =>
     const normalizedVin = vin.toUpperCase()
     appLogger.debug(`-- normalized vin ==> ${normalizedVin}`)
 
-    const validVinRegex = /^[A-HJ-NPR-Z\d]{11}\d{6}$/
-    const isValidVin = Boolean(validVinRegex.test(vin))
+    const isValidVin = Boolean(VIN_REGEX.test(vin))
 
     if (!isValidImmat) {
       appLogger.error({
