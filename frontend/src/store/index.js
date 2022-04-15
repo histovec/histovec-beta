@@ -39,18 +39,16 @@ export default new Vuex.Store({
     },
     config: {
       ignoreUtacCache: false,
-      newData: false,
       useCodePartageHistoVec: false,
     },
     configEnabler: {
       ignoreUtacCache: ['ctrl', 'alt', 'a'],
-      newData: ['ctrl', 'alt', 'b'],
       useCodePartageHistoVec: ['ctrl', 'alt', 'v'],
     },
     isContactModalVisible: false,
     isRatingModalVisible: false,
     contactModalSubject: '',
-    contact: {}
+    lastContactStatusCode: undefined,
   },
   mutations: {
     toggleConfig (state, key) {
@@ -71,22 +69,15 @@ export default new Vuex.Store({
     updateContactModalSubject (state, subject) {
       state.contactModalSubject = subject
     },
-    updateApiStatus (state, update) {
-      Object.keys(update).forEach( status => {
-        const apiName = Object.keys(update[status])[0]
-        Vue.set(state.api[status], apiName, update[status][apiName])
-      })
-    },
-    initApiStatus (state, apiName) {
-      ['http', 'json', 'hit', 'error'].forEach(key => Vue.set(state.api[key], apiName, undefined))
-      Vue.set(state.api.fetching, apiName, true)
-    },
     updateLogCounter (state) {
       state.logCounter++
     },
-    updateContact (state, contact) {
-      state.contact = contact
-    }
+    updateContactStatus (state, { status }) {
+      state.lastContactStatusCode = status
+    },
+    resetContactStatus (state) {
+      state.lastContactStatusCode = undefined
+    },
   },
   actions: {
     async log ({ commit }, path) {
@@ -108,12 +99,18 @@ export default new Vuex.Store({
       }
     },
     async sendContact ({ commit }, contact) {
-      await api.sendContact(contact)
-      commit('updateContact')
+      try {
+        const { status } = await api.sendContact(contact)
+        commit('updateContactStatus', { status })
+      } catch (error) {
+        commit('updateContactStatus', {
+          status: 500,
+        })
+      }
     },
-    initApiStatus ({ commit }, apiName) {
-      commit('initApiStatus', apiName)
-    }
+    async resetContactStatus ({ commit }) {
+      commit('resetContactStatus')
+    },
   },
   modules: {
     identity,

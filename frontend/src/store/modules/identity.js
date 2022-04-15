@@ -1,9 +1,10 @@
 import Vue from 'vue'
 
+
 export default {
   state: {
     formOptions: undefined,
-    typePersonne: 'particulier',
+    typePersonne: '',
     typeImmatriculation: '',
     nom: '',
     raisonSociale: '',
@@ -65,9 +66,29 @@ export default {
       state.formule = formule
     },
     updateTypePersonne (state, typePersonne) {
+      // reset identity state since some fields are shared between particulier form and pro form
+      // @todo : don't share field between both forms (particulier and pro)
+      state.nom = ''
+      state.raisonSociale = ''
+      state.prenom = ''
+      state.dateCertificat = ''
+      state.plaque = ''
+      state.siren = ''
+      state.formule = ''
+
       state.typePersonne = typePersonne
     },
     updateTypeImmatriculation (state, typeImmatriculation) {
+      // reset identity state since some fields are shared between SIV form and FNI form
+      // @todo : don't share field between both forms (SIV and FNI)
+      state.nom = ''
+      state.raisonSociale = ''
+      state.prenom = ''
+      state.dateCertificat = ''
+      state.plaque = ''
+      state.siren = ''
+      state.formule = ''
+
       state.typeImmatriculation = typeImmatriculation
     }
   }

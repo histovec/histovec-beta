@@ -208,7 +208,6 @@ import apiConf from '@/assets/json/backend.json'
 import localization from '@/assets/json/lang.json'
 import syntheseMapping from '@/assets/json/synthese.json'
 import statusMessages from '@/assets/json/status.json'
-import usagesMapping from '@/assets/json/usages.json'
 import contact from '@/assets/json/contact.json'
 
 import imageHistovecHeaderMobileSansMarianne from '@/assets/img/histovec_header_mobile_sans_marianne.png'
@@ -234,16 +233,15 @@ Vue.mixin({
   data () {
     return {
       appName: process.env.VUE_APP_TITLE,
-      usePreviousMonthForData: true,
+      usePreviousMonthForData: false,
       previousMonthShift: 1,
-      outdatedData: false,
-      showDataDate: false,
+      outdatedData: true,
+      showDataDate: true,
       appVersion: npmConf.version,
       apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
       localization,
       syntheseMapping,
       statusMessages,
-      usagesMapping,
       lang: localization.default,
 
       // images

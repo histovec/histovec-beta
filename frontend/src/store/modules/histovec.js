@@ -1,24 +1,21 @@
 import api from '@/api'
-import { labelizeTechnicalControls } from '../../utils/vehicle/technicalControlFormat'
+import { buildReportByDataPayload, buildReportByCodePayload } from '@/api/utils/index.js'
+import { vehiculeMapping, controlesTechniquesMapping } from '../../utils/mapping/index.js'
+import { getTomorrowTime, getTodayTime } from '../../utils/date.js'
+import { labelizeControlesTechniques } from '../../utils/vehicle/formatControlesTechniques.js'
+import { TYPE_PERSONNE } from '../../constants/type.js'
 
-const getTomorrowTime = () => {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  return new Date(tomorrow.toDateString()).getTime()
-}
-
-const getTodayTime = () => {
-  const today = new Date()
-  return new Date(today.toDateString()).getTime()
-}
 
 export default {
   state: {
     id: undefined,
     key: undefined,
-    code: undefined,
-    report: undefined,
+    report: {
+      vehicule : null,
+      controlesTechniques: null,
+    },
     reportExpiry: getTodayTime(), // expired by default
+    lastReportStatusCode: undefined,
   },
   getters: {
     reportWithExpiry: state => {
@@ -32,75 +29,150 @@ export default {
   },
   mutations: {
     updateReport(state, {
-      sivData,
-      utacData: { ct, ctUpdateDate, utacError },
+      report: {
+        vehicule,
+        controles_techniques,
+      } = {},
+      status,
     }) {
-      const ctError = (
-        utacError ?
-          'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.' :
-          ''
-      )
+      state.lastReportStatusCode = status
+
+      if (status !== 200 && status !== 404) {
+        // Don't cache report if api send an error
+        return
+      }
+
+      if (!vehicule) {
+        state.report = {
+          vehicule: null,
+          controlesTechniques: null,
+        }
+
+        state.reportExpiry = getTomorrowTime()
+        return
+      }
+
+      const mappedVehicule = vehiculeMapping(vehicule)
+      const mappedControlesTechniques = controlesTechniquesMapping(controles_techniques)
+      const labelizedControlesTechniques = labelizeControlesTechniques(mappedControlesTechniques)
 
       state.report = {
-        sivData,
-        utacData: (
-          utacError ?
-            {
-              ctError,
-            } :
-            {
-              ct: labelizeTechnicalControls(ct),
-              ctUpdateDate,
-            }
-        ),
+        vehicule: mappedVehicule,
+        controlesTechniques: labelizedControlesTechniques,
       }
 
       state.reportExpiry = getTomorrowTime()
     },
-    updateKey(state, key) {
-      if (key !== state.key) {
-        state.key = key
-        state.report = undefined
-        state.reportExpiry = getTodayTime() // expired by default
-      }
-    },
     updateId(state, id) {
       if (id !== state.id) {
         state.id = id
-        state.report = undefined
+        state.report = {
+          vehicule : null,
+          controlesTechniques: null,
+        }
+        state.lastReportStatusCode = null
+        state.reportExpiry = getTodayTime() // expired by default
+      }
+    },
+    updateKey(state, key) {
+      if (key !== state.key) {
+        state.key = key
+        state.report = {
+          vehicule : null,
+          controlesTechniques: null,
+        }
+        state.lastReportStatusCode = null
         state.reportExpiry = getTodayTime() // expired by default
       }
     },
     clearReport(state) {
       state.id = undefined
       state.key = undefined
-      state.report = undefined
+      state.report = {
+        vehicule : null,
+        controlesTechniques: null,
+      }
+      state.lastReportStatusCode = null
       state.reportExpiry = getTodayTime() // expired by default
     }
   },
   actions: {
-    async getReport({ commit, state, rootState }) {
-      if (rootState.api && rootState.api.fetching && rootState.api.fetching.report) {
-        return
-      }
-
+    async getHolderReport({ commit, rootState }) {
       const { ignoreUtacCache } = rootState.config
 
       const {
-        sivData,
-        utacData,
-        success,
-      } = await api.getReport(
-        state.id,
-        state.key,
-        localStorage.getItem('userId'),
-        { ignoreUtacCache },
+        nom = '',
+        prenom = '',
+        raisonSociale = '',
+        siren = '',
+        plaque = '',
+        formule = '',
+        dateCertificat = '',
+        typeImmatriculation = '',
+      } = rootState.identity
+
+      const data = {
+        nom,
+        prenoms: [prenom],
+        raisonSociale,
+        siren,
+        numeroImmatriculation: plaque,
+        numeroFormule: formule,
+        dateEmissionCertificatImmatriculation: dateCertificat,
+      }
+
+      const typePersonne = nom ? TYPE_PERSONNE.PARTICULIER : TYPE_PERSONNE.PRO
+      const payload = buildReportByDataPayload(
+        data,
+        { typeImmatriculation, typePersonne, ignoreUtacCache },
       )
 
-      if (success) {
+      try {
+        const { report, status } = await api.getHolderReport(
+          localStorage.getItem('userId'),
+          payload
+        )
+
         commit('updateReport', {
-          sivData,
-          utacData,
+          report,
+          status,
+        })
+      } catch (error) {
+        commit('updateReport', {
+          report: null,
+          status: 500,
+        })
+      }
+    },
+    async getBuyerReport({ commit, state, rootState }) {
+      const { ignoreUtacCache } = rootState.config
+
+      const {
+        id,
+        key,
+      } = state
+
+      const data = {
+        id,
+        key,
+      }
+
+      const payload = buildReportByCodePayload(data, { ignoreUtacCache })
+
+      try {
+        const { report, status } = await api.getBuyerReport(
+          localStorage.getItem('userId'),
+          payload
+        )
+
+        commit('updateReport', {
+          report,
+          status,
+        })
+      } catch (error) {
+        commit('updateReport', {
+          report: null,
+          status: 500,
         })
       }
     },

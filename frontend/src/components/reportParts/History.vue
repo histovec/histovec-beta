@@ -11,7 +11,7 @@
     <div class="separator"></div>
 
     <div
-      v-for="(entry, index) in processedSivData.historique"
+      v-for="(entry, index) in processedVehiculeData.historique"
       :key="index"
     >
       <div class="row">
@@ -38,10 +38,10 @@
       </div>
       <div class="separator pv-5"></div>
     </div>
-    <div v-if="processedSivData.certificat.isIncertain">
+    <div v-if="processedVehiculeData.certificat.isIncertain">
       <div class="row">
         <div class="col-sm-2">
-          <span class="txt-small-12">{{ processedSivData.certificat.fr }}</span>
+          <span class="txt-small-12">{{ processedVehiculeData.certificat.datePremiereImmatriculationEnFrance }}</span>
         </div>
         <div class="col-sm-10">
           <span class="info_red txt-small-12"> Première immatriculation (source incertaine)</span>
@@ -51,11 +51,11 @@
     </div>
     <!-- fin tableau operation historique FR -->
     <br />
-    <div v-if="processedSivData.certificat.etranger">
+    <div v-if="processedVehiculeData.certificat.isVehiculeImporteDepuisEtranger">
       Historique des opérations à l'étranger
     </div>
     <!-- debut tableau operation historique Etranger -->
-    <div v-if="processedSivData.certificat.etranger">
+    <div v-if="processedVehiculeData.certificat.isVehiculeImporteDepuisEtranger">
       <div class="row">
         <div class="col-sm-4">
           <span class="txt-small-12"><h6>Date</h6></span>
@@ -68,7 +68,7 @@
       <div>
         <div class="row">
           <div class="col-sm-2">
-            <span class="txt-small-12">{{ processedSivData.certificat.premier }}</span>
+            <span class="txt-small-12">{{ processedVehiculeData.certificat.datePremiereImmatriculation }}</span>
           </div>
           <div class="col-sm-10">
             <span class="info_red txt-small-12">Première immatriculation à l'étranger</span>
@@ -113,7 +113,7 @@ export default {
     ModalHelper
   },
   props: {
-    processedSivData: {
+    processedVehiculeData: {
       type: Object,
       default: () => {}
     }

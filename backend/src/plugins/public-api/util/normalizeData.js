@@ -38,6 +38,31 @@ const normalizeToISODate = (value) => {
   throw new Error(`${value} of type is not convertible to ISO8601 Date`)
 }
 
+const normalizeHistorique = (historique) => {
+  return historique.map((operation) => {
+    return {
+      ...operation,
+      opa_date: normalizeToISODate(operation?.opa_date),
+      ...(
+        operation.ope_date_annul ? {
+          ope_date_annul: normalizeToISODate(operation.ope_date_annul)
+          } : {}
+      ),
+    }
+  })
+}
+
+const normalizeElementsWithDate = (elements) => {
+  return elements.map((element) => {
+    return {
+      ...element,
+      date: normalizeToISODate(element?.date),
+    }
+  })
+}
+
+
+
 export const normalizeReport = (report) => {
   const {
     date_annulation_ci,
@@ -54,7 +79,6 @@ export const normalizeReport = (report) => {
     pers_locataire,
     perte_ci,
     vehicule_vole,
-    historique = [],
     date_derniere_resolution,
     date_dernier_sinistre,
     date_import_france,
@@ -76,34 +100,9 @@ export const normalizeReport = (report) => {
         otcis_pv = [],
       } = {},
     } = {},
-    pve = [],
   } = report
 
-  const normalizeHistorique = (historique) => {
-    return historique.map((operation) => {
-      return {
-        ...operation,
-        opa_date: normalizeToISODate(operation?.opa_date),
-        ...(
-          operation.ope_date_annul ? {
-            ope_date_annul: normalizeToISODate(operation.ope_date_annul)
-            } : {}
-        ),
-      }
-    })
-  }
-
-  const normalizedHistorique = normalizeHistorique(historique)
   const normalizedNewHistorique = normalizeHistorique(new_historique)
-
-  const normalizeElementsWithDate = (elements) => {
-    return elements.map((element) => {
-      return {
-        ...element,
-        date: normalizeToISODate(element?.date),
-      }
-    })
-  }
 
   const normalizedSitAdm = {
     suspensions: suspensions.map((suspension) => {
@@ -124,42 +123,7 @@ export const normalizeReport = (report) => {
     }
   }
 
-  const normalizedPve = pve.map((element) => {
-    return {
-      ...element,
-      en_cours: normalizeToBoolean(element?.en_cours),
-      ...(
-        element?.decl ? {
-          decl: {
-            ...element.decl,
-            date: normalizeToISODate(element?.decl.date),
-            dangereux: normalizeToBoolean(element?.decl.dangereux),
-            tech_reparable: normalizeToBoolean(element?.decl.tech_reparable),
-          }
-        } : {}
-      ),
-      ...(
-        element?.prem ? {
-          prem: {
-            ...element.prem,
-            date: normalizeToISODate(element?.prem.date),
-            dangereux: normalizeToBoolean(element?.prem.dangereux),
-            tech_reparable: normalizeToBoolean(element?.prem.tech_reparable),
-          }
-        } : {}
-      ),
-      ...(
-        element?.deux ? {
-          deux: {
-            ...element.deux,
-            date: normalizeToISODate(element?.deux.date),
-          }
-        } : {}
-      ),
-    }
-  })
-
-  return {
+  const normalizedReport = {
     ...report,
     ...(
       date_annulation_ci ? {
@@ -232,21 +196,11 @@ export const normalizeReport = (report) => {
       } : {}
     ),
     ...(
-      historique ? {
-        historique: normalizedHistorique
-      } : {}
-    ),
-    ...(
       new_historique ? {
         new_historique: normalizedNewHistorique
       } : {}
     ),
     sit_adm: normalizedSitAdm,
-    ...(
-      pve ? {
-        pve: normalizedPve
-      } : {}
-    ),
     ...(
       date_derniere_resolution ? {
         date_derniere_resolution: normalizeToISODate(date_derniere_resolution)
@@ -293,12 +247,15 @@ export const normalizeReport = (report) => {
       } : {}
     ),
   }
+
+  return normalizedReport
 }
 
 export const normalizeControlesTechniques = (controlesTechniques) => {
   const {
     ct = [],
     ctUpdateDate,
+    utacError,
   } = controlesTechniques
 
   const normalizedCt = ct.map((ctItem) => (
@@ -311,5 +268,6 @@ export const normalizeControlesTechniques = (controlesTechniques) => {
   return {
     ct: normalizedCt,
     ctUpdateDate: normalizeToISODate(ctUpdateDate),
+    utacError,
   }
 }

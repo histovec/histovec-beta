@@ -1,9 +1,31 @@
 import Joi from 'joi'
 import { NATURE, RESULTAT } from '../../constant/controlesTechniques.js'
 import { VIGNETTE } from '../../constant/critair.js'
+import { LOGO_GENRE } from '../../constant/logoGenre.js'
+
+import config from '../../config.js'
+
 
 const RESPONSE_PREFIX = 'resp-'
 
+const extraSection = (
+  config.isPublicApi ?
+  {} :
+  {
+    extra: Joi.object({
+      logo_genre: Joi.string().valid(...Object.values(LOGO_GENRE)).description('Genre du logo à afficher sur le rapport HistoVec.')
+        .meta({ swaggerHidden: true }),
+      date_premiere_immatriculation_incertaine: Joi.boolean().description('La date de première immatriculation du véhicule n\'est pas fiable.')
+        .meta({ swaggerHidden: true }),
+      date_annulation: Joi.date().description('Date de l\'annulation du certificat d\'immatriculation du véhicule.')
+        .meta({ swaggerHidden: true }),
+      vehicule_a_usage_agricole: Joi.boolean().description('Le véhicule est à usage agricole.')
+        .meta({ swaggerHidden: true }),
+      vehicule_a_usage_de_collection: Joi.boolean().description('Le véhicule est à usage de collection.')
+        .meta({ swaggerHidden: true }),
+    })
+  }
+)
 
 export const reportResponseSchema = Joi.object({
   vehicule: Joi.object({
@@ -43,7 +65,6 @@ export const reportResponseSchema = Joi.object({
         categorie_ue: Joi.string().description('Rubrique J : Catégorie du véhicule (UE).'),
         genre_national: Joi.string().description('Rubrique J.1 : Genre national.'),
         carrosserie_ue: Joi.string().description('Rubrique J.2 : Carrosserie (UE).'),
-        // @todo: carrosserie_fr ou carrosserie_nationale ?
         carrosserie_fr: Joi.string().description('Rubrique J.3 : Carrosserie (désignation nationale).'),
         numero_de_reception: Joi.string().description('Rubrique K : Numéro de réception par type (si disponible).'),
         cylindree: Joi.number().min(0).description('Rubrique P.1 : Cylindrée (en cm3).'),
@@ -63,6 +84,7 @@ export const reportResponseSchema = Joi.object({
           .label(`${RESPONSE_PREFIX}duplicata`),
         annule: Joi.boolean().description('Le certificat d\'immatriculation est annulé.')
           .label(`${RESPONSE_PREFIX}annule`),
+        // @todo: insert date_annulation here
         perdu: Joi.boolean().description('Le certificat d\'immatriculation a été perdu.')
           .label(`${RESPONSE_PREFIX}perdu`),
         vole: Joi.boolean().description('Le certificat d\'immatriculation a été volé.')
@@ -147,8 +169,12 @@ export const reportResponseSchema = Joi.object({
           .description('Liste des oppositions au transfert du certificat d\'immatriculation en cours dues à un PV non payé.'),
       }).label(`${RESPONSE_PREFIX}opposition`),
     }).description('Liste des anomalies en cours sur le véhicule.'),
+    ...extraSection,
   }).label(`${RESPONSE_PREFIX}vehicule`),
   controles_techniques: Joi.object({
+    date_mise_a_jour: Joi.date().description('Date de mise à jour de la donnée des contrôles techniques.'),
+    donnee_disponible: Joi.boolean().description('Les données des contrôles techniques ont pu être récupérées auprès de l\`UTAC'),
+    erreur: Joi.string().description('Erreur explicite lorsque la donnée des contrôles techniques n\'est momentanément pas disponible auprès de l\'UTAC.'),
     historique: Joi.array().items(
       Joi.object({
         date: Joi.date().description('Date du contrôle technique.'),
@@ -159,6 +185,5 @@ export const reportResponseSchema = Joi.object({
         km: Joi.number().integer().min(0).description('Relevé du kilométrage à la date du contrôle technique.'),
       }).label(`${RESPONSE_PREFIX}element_historique_controles_techniques`)
     ).label(`${RESPONSE_PREFIX}historique_controles_techniques`),
-    date_mise_a_jour: Joi.date().description('Date de mise à jour de la donnée des contrôles techniques.'),
   }).label(`${RESPONSE_PREFIX}controles_techniques`)
 }).label('ReportResponse')

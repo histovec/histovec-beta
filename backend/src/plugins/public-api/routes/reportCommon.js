@@ -7,6 +7,7 @@ import { normalizeReport, normalizeControlesTechniques } from '../util/normalize
 import { vehiculeMapping, controlesTechniquesMapping } from '../util/mapping.js'
 import { processControlesTechniques } from '../../../util/controlesTechniques.js'
 import { checkPayload } from '../util/check/reportByData.js'
+import { getReport } from '../handlers/report.js'
 import { reportResponseSchema } from '../../schemas/report.js'
 
 import { NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../constant/regex.js'
@@ -15,6 +16,7 @@ import { TITULAIRE_CHANGE_OPERATIONS } from '../../../constant/historique.js'
 
 import config from '../../../config.js'
 
+const DEFAULT_UUID = config.isPublicApi ? config.apiUuid : ''
 
 export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
   return {
@@ -31,6 +33,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
     },
     handler: async (request, h) => {
       const {
+        uuid = DEFAULT_UUID,
         vehicule: {
           // report by code payload
           code,
@@ -53,7 +56,8 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
           } = {},
         },
         options: {
-          controles_techniques: askTechnicalControls,
+          controles_techniques: askControlesTechniques,
+          ignore_utac_cache: ignoreUtacCache,
         } = {},
       } = request.payload
 
@@ -101,45 +105,42 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
           key: 'sub_payload',
           tag: logLabel,
           value: {
-            base64EncodedReportId: base64EncodedReportId,
+            base64EncodedReportId,
             base64EncodedReportKey: base64EncodedReportKeyBuffer.toString('base64'),
           }
         })
       }
 
-      const { privateApiReportUrl } = request.server.plugins.publicApi
-
-      const { statusCode, result } = await request.server.inject({
-        method: 'POST',
-        url: privateApiReportUrl,
-        payload: {
-          id: base64EncodedReportId,
-          uuid: config.apiUuid,
-          options: {
-            ignoreTechnicalControls: !askTechnicalControls,
-          },
+      const res = await getReport({
+        uuid,
+        id: base64EncodedReportId,
+        options: {
+          ignoreControlesTechniques: !askControlesTechniques,
+          ignoreUtacCache,
         },
-        allowInternals: true,
       })
 
-      const { sivData, utacData, utacDataKey, error, message } = result
-
-      if (statusCode !== 200) {
-        const errorResponse = { success: false, message }
-        switch (statusCode) {
-          case 404:
-            throw Boom.notFound(message, errorResponse)
-          case 502:
-            throw Boom.badGateway(message, errorResponse)
-          case 503:
-            throw Boom.serverUnavailable(message, errorResponse)
-          case 500:
-          default:
-            throw Boom.badImplementation(message, errorResponse)
+      syslogLogger.debug({
+        key: 'res',
+        tag: logLabel,
+        value: {
+          res,
         }
-      }
+      })
 
-      syslogLogger.debug({ key: 'encrypted_raw_report', tag: logLabel, value: { sivData, utacData, utacDataKey, base64EncodedReportKeyBuffer } })
+      const { sivData, utacData: rawControlesTechniques, error, message } = res
+      syslogLogger.debug({
+        key: 'sub-result',
+        tag: logLabel,
+        value: {
+          sivData,
+          rawControlesTechniques,
+          error,
+          message,
+        }
+      })
+
+      syslogLogger.debug({ key: 'encrypted_raw_report', tag: logLabel, value: { sivData, rawControlesTechniques, base64EncodedReportKeyBuffer } })
 
       const report = decryptJson(sivData, base64EncodedReportKeyBuffer)
       syslogLogger.debug({ key: 'decrypted_raw_report', tag: logLabel, value: { ...report } })
@@ -147,51 +148,12 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       const normalizedReport = normalizeReport(report)
       syslogLogger.debug({ key: 'normalized_report', tag: logLabel, value: { ...normalizedReport } })
 
-      const { new_historique = [] } = normalizedReport
-      const titulaireChangeOperations = new_historique.filter(event => TITULAIRE_CHANGE_OPERATIONS.includes(event.opa_type))
-      const lastTitulaireChangeOperation = titulaireChangeOperations.length && titulaireChangeOperations[0]
-      const derniereOperationChangementTitulaire = lastTitulaireChangeOperation.opa_type
-      const dateDerniereOperationChangementTitulaire = lastTitulaireChangeOperation.opa_date
+      syslogLogger.debug({ key: 'raw_controles_techniques', tag: logLabel, value: { ...rawControlesTechniques } })
 
-      const {
-        adr_code_postal_tit = '',
-        age_certificat,
-        couleur,
-        CTEC_RLIB_ENERGIE,
-        CTEC_RLIB_CATEGORIE,
-        CTEC_RLIB_GENRE,
-        date_premiere_immat,
-        is_apte_a_circuler,
-        is_fni,
-        marque,
-        nom_commercial,
-        nb_titulaires,
-        tvv,
-      } = report
-
-      const departement = adr_code_postal_tit ? getDepartement(adr_code_postal_tit) : undefined
-      const anonymizedReportId = urlSafeBase64Encode(hash(base64EncodedReportId))
-
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} age_certificat ${age_certificat}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} couleur ${couleur}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} CTEC_RLIB_ENERGIE ${CTEC_RLIB_ENERGIE}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} CTEC_RLIB_CATEGORIE ${CTEC_RLIB_CATEGORIE}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} CTEC_RLIB_GENRE ${CTEC_RLIB_GENRE}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} date_premiere_immat ${date_premiere_immat}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} departement ${departement}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} is_apte_a_circuler ${is_apte_a_circuler}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} is_fni ${is_fni}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} marque ${marque}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} nom_commercial ${nom_commercial}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} nb_titulaires ${nb_titulaires}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} tvv ${tvv}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} type_derniere_operation_changement_titulaire ${derniereOperationChangementTitulaire}`)
-      appLogger.info(`[VEHICLE] ${anonymizedReportId} date_derniere_operation_changement_titulaire ${dateDerniereOperationChangementTitulaire}`)
-
-      const mappedVehicule = vehiculeMapping(normalizedReport)
+      const mappedVehicule = vehiculeMapping(normalizedReport, config.isPublicApi)
       syslogLogger.debug({ key: 'mapped_report', tag: logLabel, value: { ...mappedVehicule } })
 
-      if (!askTechnicalControls) {
+      if (!askControlesTechniques) {
         const reportWithoutControlesTechniques = {
           vehicule: mappedVehicule,
         }
@@ -200,11 +162,6 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         return reportWithoutControlesTechniques
       }
 
-      // We ask private api (used by frontend) to get utacDataKey :
-      // => it already has been Base64Encoded as needed
-      const rawUtacDataKey = base64Decode(utacDataKey)
-      const rawControlesTechniques = decryptJson(utacData, rawUtacDataKey)
-      syslogLogger.debug({ key: 'raw_controles_techniques', tag: logLabel, value: { ...rawControlesTechniques } })
 
       const normalizedControlesTechniques = normalizeControlesTechniques(rawControlesTechniques)
       syslogLogger.debug({ key: 'normalized_controles_techniques', tag: logLabel, value: { ...normalizedControlesTechniques } })

@@ -2,7 +2,7 @@ import Boom from '@hapi/boom'
 
 import { getSIV } from '../../../services/siv.js'
 import { encryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
-import { computeUtacDataKey, normalizeImmatForUtac, validateTechnicalControls } from '../util'
+import { computeUtacDataKey, normalizeImmatForUtac, validateControlesTechniques } from '../util/utac.js'
 import { utacResponseSchema } from '../../../services/utac/schemas/response.js'
 import { getRedisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
@@ -15,10 +15,10 @@ import config from '../../../config.js'
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
 
-export const getReport = async (request, h) => {
-  const { id: base64EncodedId, uuid, options: { ignoreTechnicalControls, ignoreUtacCache } = {} } = request.payload
+export const getReport = async (payload) => {
+  const { uuid, id: base64EncodedId, options: { ignoreControlesTechniques, ignoreUtacCache } = {} } = payload
   appLogger.info(`-- [CONFIG] -- ignoreUtacCache => ${ignoreUtacCache}`)
-  appLogger.info(`-- [CONFIG] -- ignoreTechnicalControls => ${ignoreTechnicalControls}`)
+  appLogger.info(`-- [CONFIG] -- ignoreControlesTechniques => ${ignoreControlesTechniques}`)
   appLogger.info(`-- [CONFIG] -- isUtacMockForBpsaActivated => ${config.utac.isUtacMockForBpsaActivated}`)
 
   const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
@@ -39,14 +39,14 @@ export const getReport = async (request, h) => {
   if (sivStatus !== 200) {
     switch (sivStatus) {
       case 404:
-        throw Boom.notFound(sivMessage, {	success: false, message: sivMessage })
+        throw Boom.notFound(sivMessage, { message: sivMessage })
       case 502:
-        throw Boom.badGateway(sivMessage, {	success: false, message: sivMessage })
+        throw Boom.badGateway(sivMessage, { message: sivMessage })
       case 503:
-        throw Boom.serverUnavailable(sivMessage, {	success: false, message: sivMessage })
+        throw Boom.serverUnavailable(sivMessage, { message: sivMessage })
       case 500:
       default:
-        throw Boom.badImplementation(sivMessage, { success: false, message: sivMessage })
+        throw Boom.badImplementation(sivMessage, { message: sivMessage })
     }
   }
 
@@ -54,26 +54,23 @@ export const getReport = async (request, h) => {
   appLogger.debug(`-- [backend] immat ==> ${immat}`)
 
   // 2 - UTAC
-
-  // Utac data encryption is not really useful since UTAC api doesn't return crypted data.
-  // But we still encrypt to sent coherent format to the front: encrypted siv and utac data.
-  // Since HistoVec uses https, it is not a security issue.
-
   const utacDataKey = computeUtacDataKey(encryptedImmat)
 
-  const emptyUtacData = encryptJson({
+  const emptyUtacData = {
     ct: [],
     ctUpdateDate: null,
-  }, utacDataKey)
+  }
+
+  const encryptedEmptyUtacData = encryptJson(emptyUtacData, utacDataKey)
 
   // Only annulationCI vehicles don't have encryptedImmat
-  const isAnnulationCI = Boolean(!encryptedImmat)
-  if (!askCt || isAnnulationCI || !config.utac.isApiActivated) {
+  const isCIAnnule = Boolean(!encryptedImmat)
+  if (!askCt || isCIAnnule || !config.utac.isApiActivated) {
     if (!askCt) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call ask_ct_false`)
     }
 
-    if (isAnnulationCI) {
+    if (isCIAnnule) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call annulation_CI`)
     }
 
@@ -82,13 +79,8 @@ export const getReport = async (request, h) => {
     }
 
     return {
-      success: true,
       sivData,
-      utacData: encryptJson({
-        ct: [],
-        ctUpdateDate: null,
-      }, utacDataKey),
-      utacDataKey,
+      utacData: emptyUtacData,
     }
   }
 
@@ -98,15 +90,14 @@ export const getReport = async (request, h) => {
 
   if (!ignoreCache) {
     try {
-      const utacData = await redisClient.get(utacDataCacheId)
+      const encryptedUtacData = await redisClient.get(utacDataCacheId)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
-      if (utacData) {
+      if (encryptedUtacData) {
+        const utacData = decryptJson(encryptedUtacData, utacDataKey)
         return {
-          success: true,
           sivData,
           utacData,
-          utacDataKey,
         }
       } else {
         appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} cache_miss`)
@@ -142,7 +133,7 @@ export const getReport = async (request, h) => {
       // Cache unsupported vehicles
       await redisClient.set(
         utacDataCacheId,
-        emptyUtacData,
+        encryptedEmptyUtacData,
         'EX',
         config.redisPersit
       )
@@ -152,10 +143,8 @@ export const getReport = async (request, h) => {
     }
 
     return {
-      success: true,
       sivData,
       utacData: emptyUtacData,
-      utacDataKey,
     }
   }
 
@@ -193,7 +182,7 @@ export const getReport = async (request, h) => {
           // Cache unsupported vehicles
           await redisClient.set(
             utacDataCacheId,
-            emptyUtacData,
+            encryptedEmptyUtacData,
             'EX',
             config.redisPersit
           )
@@ -203,40 +192,38 @@ export const getReport = async (request, h) => {
         }
 
         return {
-          success: true,
           sivData,
           utacData: emptyUtacData,
-          utacDataKey,
         }
       }
 
       // Don't cache errors
       return {
-        success: true,
         sivData,
-        utacData: encryptJson({
-          ct: [],
-          ctUpdateDate: null,
+        utacData: {
+          ...emptyUtacData,
           utacError: utacMessage,
-        }, utacDataKey),
-        utacDataKey,
+        },
       }
     }
 
-    if (!isMocked && config.utac.isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+    if (!isMocked && config.utac.isVinSentToUtac && !validateControlesTechniques(vin, ct)) {
       throw new Error('Inconsistency for technical control')
     }
 
-    const freshUtacData = encryptJson({
+    const freshUtacData = {
       ct,
       ctUpdateDate,
-    }, utacDataKey)
+    }
+
+    // Encrypt utac data before storing it in redis cache
+    const encryptedFreshUtacData = encryptJson(freshUtacData, utacDataKey)
 
     try {
       // Cache supported vehicles
       await redisClient.set(
         utacDataCacheId,
-        freshUtacData,
+        encryptedFreshUtacData,
         'EX',
         config.redisPersit
       )
@@ -246,10 +233,8 @@ export const getReport = async (request, h) => {
     }
 
     return {
-      success: true,
       sivData,
       utacData: freshUtacData,
-      utacDataKey,
     }
   } catch ({ message: errorMessage }) {
     appLogger.error({
@@ -259,14 +244,11 @@ export const getReport = async (request, h) => {
 
     // Don't cache errors
     return {
-      success: true,
       sivData,
-      utacData: encryptJson({
-        ct: [],
-        ctUpdateDate: null,
-        utacError: errorMessage,
-      }, utacDataKey),
-      utacDataKey,
+      utacData: {
+        ...emptyUtacData,
+        utacError: utacMessage,
+      },
     }
   }
 }

@@ -177,18 +177,18 @@
                       <label> Données transmises pour l'assistance </label>
                       <div class="row txt-small-11">
                         <div class="col-sm-6 col-xs-6">
-                          <ul v-if="$store.state.identity.typePersonne === 'pro'">
+                          <ul v-if="$store.state.identity.typePersonne === TYPE_PERSONNE.PRO">
                             <li> Raison sociale: {{ $store.state.identity.raisonSociale }} </li>
                             <li> Numéro SIREN: {{ $store.state.identity.siren }} </li>
                           </ul>
                           <ul v-else>
-                            <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                            <li v-if="$store.state.identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
                               Nom de naissance: {{ $store.state.identity.nom }}
                             </li>
-                            <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                            <li v-if="$store.state.identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
                               Prénom(s): {{ $store.state.identity.prenom }}
                             </li>
-                            <li v-if="$store.state.identity.typeImmatriculation === 'fni'">
+                            <li v-if="$store.state.identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
                               Nom de naissance et prénom(s): {{ $store.state.identity.nom }}
                             </li>
                           </ul>
@@ -196,7 +196,7 @@
                         <div class="col-sm-6 col-xs-6">
                           <ul>
                             <li> Immatriculation: {{ $store.state.identity.plaque }} </li>
-                            <li v-if="$store.state.identity.typeImmatriculation === 'siv'">
+                            <li v-if="$store.state.identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
                               Numéro de formule: {{ $store.state.identity.formule }}
                             </li>
                             <li v-else>
@@ -266,6 +266,7 @@ import { detect } from 'detect-browser'
 import dayjs from 'dayjs'
 import contact from '@/assets/json/contact.json'
 import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '../../assets/js/format.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../constants/type.js'
 
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -286,6 +287,10 @@ export default {
         contact.subject.reportData
       ],
       contact,
+
+      // constants
+      TYPE_IMMATRICULATION,
+      TYPE_PERSONNE
     }
   },
   computed: {
@@ -300,12 +305,6 @@ export default {
         this.$store.commit('updateContactModalSubject', value)
       }
     },
-    apiName () {
-      return 'contact'
-    },
-    dispatchName () {
-      return 'sendContact'
-    },
     filteredMessage () {
       // eslint-disable-next-line no-misleading-character-class
       return (this.message.length > 0) ? this.normalize(this.message).replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ') : undefined
@@ -319,7 +318,7 @@ export default {
         ...(this.subject === contact.subject.default ? [contact.error.subject] : []),
         ...(this.email && !this.isEmailValid() ? [contact.error.invalidEmail] : []),
         ...(!this.email ? [contact.error.requiredEmail] : []),
-        ...(this.$store.state.api && this.$store.state.api.http[this.apiName] && this.$store.state.api.http[this.apiName] !== 201 ? [contact.error.api] : []),
+        ...(this.$store.state.lastContactStatusCode && this.$store.state.lastContactStatusCode !== 201 ? [contact.error.api] : []),
       ]
     },
     status () {
@@ -357,56 +356,57 @@ export default {
     },
     async send (e) {
       e.preventDefault()
-      if (this.apiName) {
-        this.$store.dispatch('initApiStatus', this.apiName)
-      }
       this.clicked = true
       if (this.errors.length > 0) {
           setTimeout(() => this.clicked = false, 3000)
           return
-      } else {
-        const isoDateCertificat = (
-          this.$store.state.identity.dateCertificat ?
-            dayjs(this.$store.state.identity.dateCertificat, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
-            ''
-        )
+      }
 
-        const data = {
-          'browser': detect(),
-          'date': new Date().toISOString(),
-          'email': (this.email === '') ? undefined : this.email,
-          'holder': (
-            this.who === 'holder' ?
-              true :
-              (this.who === 'buyer' ?
-                false :
-                ''
-              )
-          ),
-          'identity':{
-            dateCertificat: isoDateCertificat,
-            formule: this.$store.state.identity.formule,
-            nom: this.$store.state.identity.nom,
-            plaque: this.$store.state.identity.plaque,
-            prenoms: this.$store.state.identity.prenom,
-            raisonSociale: this.$store.state.identity.raisonSociale,
-            siren: this.$store.state.identity.siren,
-            typeImmatriculation: this.$store.state.identity.typeImmatriculation,
-            typePersonne: this.$store.state.identity.typePersonne
-          },
-          'message': this.filteredMessage,
-          'subject': this.subject,
-          'uuid': localStorage.getItem('userId')
-        }
+      const isoDateCertificat = (
+        this.$store.state.identity.dateCertificat ?
+          dayjs(this.$store.state.identity.dateCertificat, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
+          ''
+      )
 
-        await this.$store.dispatch(this.dispatchName, data)
-        if (this.$store.state.api.http[this.apiName] === 201) {
+      const data = {
+        'browser': detect(),
+        'date': new Date().toISOString(),
+        'email': (this.email === '') ? undefined : this.email,
+        'holder': (
+          this.who === 'holder' ?
+            true :
+            (this.who === 'buyer' ?
+              false :
+              ''
+            )
+        ),
+        'identity':{
+          dateCertificat: isoDateCertificat,
+          formule: this.$store.state.identity.formule,
+          nom: this.$store.state.identity.nom,
+          plaque: this.$store.state.identity.plaque,
+          prenoms: this.$store.state.identity.prenom,
+          raisonSociale: this.$store.state.identity.raisonSociale,
+          siren: this.$store.state.identity.siren,
+          typeImmatriculation: this.$store.state.identity.typeImmatriculation,
+          typePersonne: this.$store.state.identity.typePersonne
+        },
+        'message': this.filteredMessage,
+        'subject': this.subject,
+        'uuid': localStorage.getItem('userId')
+      }
+      try {
+        await this.$store.dispatch('sendContact', data)
+        if (this.$store.state.lastContactStatusCode === 201) {
           this.isMessageSent = true
           this.logMailDispatchOk()
         } else {
           this.clicked = true
           this.logMailDispatchKo()
         }
+        await this.$store.dispatch('resetContactStatus')
+      } catch(error) {
+        await this.$store.dispatch('resetContactStatus')
       }
     },
     isEmailValid () {

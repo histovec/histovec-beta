@@ -1,4 +1,5 @@
 import { writeFooter } from './footer'
+import { formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
 
 import {
 	COLUMN_WIDTH,
@@ -125,7 +126,7 @@ const writeVehicleIdentification = ({
 
 	const values = [
 		plaque.toUpperCase() || MISSING_VALUE,
-		premierCertificat || MISSING_VALUE,
+		formatIsoToFrDateOrDefault(premierCertificat),
 		vin || MISSING_VALUE,
 		marque || MISSING_VALUE
 	]
@@ -525,7 +526,7 @@ const writeFirstSituationColumn = ({
 	dvsCurrentStatusLines,
 	gagesCurrentStatusLines,
 	otcisCurrentStatusLines,
-	otcisPvCurrentStatusLines,
+	otcisPVCurrentStatusLines,
 	oveisCurrentStatusLines,
 	ovesCurrentStatusLines,
 	proceduresReparationControleeStatus,
@@ -554,7 +555,7 @@ const writeFirstSituationColumn = ({
 	const situationItems = [
 		{
 			key: `${SECTION_TITLE_BULLET} Opposition au transfert du certificat\n  d'immatriculation (OTCI)`,
-			values:	otcisPvCurrentStatusLines[0] === 'Aucune' ? otcisCurrentStatusLines : otcisPvCurrentStatusLines,
+			values:	otcisPVCurrentStatusLines[0] === 'Aucune' ? otcisCurrentStatusLines : otcisPVCurrentStatusLines,
 		},
 		...oveisCurrentStatus,
 		...ovesCurrentStatus,
@@ -578,10 +579,10 @@ const writeSecondSituationColumn = ({
 	x,
 	y,
 	annulationCurrentStatus,
-	volVehicule,
-	volTitre,
-	perteTitre,
 	duplicataTitre,
+	perteTitre,
+	volTitre,
+	volVehicule,
 	suspensionsCurrentStatusLines,
 	dryRun
 }) => {
@@ -599,25 +600,25 @@ const writeSecondSituationColumn = ({
 		{
 			key: `${SECTION_TITLE_BULLET} Véhicule volé`,
 			values: [
-				volVehicule === 'NON' ? 'Non' : 'Oui',
+				volVehicule,
 			]
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation volé`,
 			values: [
-				volTitre === 'NON' ? 'Non' : 'Oui',
+				volTitre,
 			]
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation perdu`,
 			values: [
-				perteTitre === 'NON' ? 'Non' : 'Oui',
+				perteTitre,
 			]
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation duplicata`,
 			values: [
-				duplicataTitre === 'NON' ? 'Non' : 'Oui',
+				duplicataTitre,
 			]
 		}
 	]
@@ -634,7 +635,7 @@ const writeSituation = ({
 	dvsCurrentStatusLines,
 	gagesCurrentStatusLines,
 	otcisCurrentStatusLines,
-	otcisPvCurrentStatusLines,
+	otcisPVCurrentStatusLines,
 	oveisCurrentStatusLines,
 	ovesCurrentStatusLines,
 	perteTitre,
@@ -663,7 +664,7 @@ const writeSituation = ({
 		dvsCurrentStatusLines,
 		gagesCurrentStatusLines,
 		otcisCurrentStatusLines,
-		otcisPvCurrentStatusLines,
+		otcisPVCurrentStatusLines,
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
 		proceduresReparationControleeStatus,
@@ -691,7 +692,7 @@ const writeAnnulation = ({
 	page,
 	embeddedFonts,
 	y,
-	dateAnnulation
+	dateAnnulationCI
 }) => {
 	const textY = writeText({
 		page,
@@ -708,7 +709,7 @@ const writeAnnulation = ({
 		embeddedFonts,
 		x: BORDER_LEFT_PAGE_X,
 		y: textY - FONT_SPACING.S,
-		text: `Immatriculation annulée le : ${dateAnnulation}.`,
+		text: `Immatriculation annulée le : ${formatIsoToFrDate(dateAnnulationCI)}.`,
 		size: FONT_SIZES.L,
 		style: FONT_STYLES.BOLD
 	})
@@ -722,9 +723,9 @@ export const writeContent = (
 		doc,
 		embeddedFonts,
 		embeddedLogos: { headerLogoPng, footerLogoPng },
-		isAnnulationCI,
+		isCIAnnule,
 		annulationCurrentStatus,
-		dateAnnulation,
+		dateAnnulationCI,
 		dateDonnees,
 		marque,
 		plaque,
@@ -741,7 +742,7 @@ export const writeContent = (
 		gagesCurrentStatusLines,
 		historyItems,
 		otcisCurrentStatusLines,
-		otcisPvCurrentStatusLines,
+		otcisPVCurrentStatusLines,
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
 		perteTitre,
@@ -782,9 +783,9 @@ export const writeContent = (
 		marque
 	})
 
-	if (isAnnulationCI) {
+	if (isCIAnnule) {
 		const annulationY = vehicleIdentificationBottomY
-		writeAnnulation({ page, embeddedFonts, y: annulationY, dateAnnulation })
+		writeAnnulation({ page, embeddedFonts, y: annulationY, dateAnnulationCI })
 		writePageNumber({ page, embeddedFonts, y: bottomFooterY, pageNumber: 1, totalPageNumber: 1 })
 
 		return
@@ -811,7 +812,7 @@ export const writeContent = (
 		dvsCurrentStatusLines,
 		gagesCurrentStatusLines,
 		otcisCurrentStatusLines,
-		otcisPvCurrentStatusLines,
+		otcisPVCurrentStatusLines,
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
 		perteTitre,
@@ -900,7 +901,7 @@ export const writeContent = (
 		dvsCurrentStatusLines,
 		gagesCurrentStatusLines,
 		otcisCurrentStatusLines,
-		otcisPvCurrentStatusLines,
+		otcisPVCurrentStatusLines,
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
 		perteTitre,

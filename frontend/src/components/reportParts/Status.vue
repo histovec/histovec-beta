@@ -4,7 +4,10 @@
     class="container"
   >
     <div class="row">
-      <div class="col-lg-12">
+      <div
+        v-if="status !== 'wait'"
+        class="col-lg-12"
+      >
         <div
           :class="alertClass"
           role="alert"
@@ -21,7 +24,7 @@
           <i :class="icon"></i>
           {{ subMessage }}
         </div>
-        <div v-if="typeImmatriculation === 'fni'">
+        <div v-if="typeImmatriculation === TYPE_IMMATRICULATION.FNI">
           <div
             v-for="(fniSubMessage, index) in fniSubMessages"
             :key="index"
@@ -51,11 +54,14 @@
           </router-link>
         </div>
       </div>
+      <!-- @todo: add spinner or transition -->
     </div>
   </div>
 </template>
 
 <script>
+import { TYPE_IMMATRICULATION } from '../../constants/type.js'
+
 export default {
   props: {
     status: {
@@ -65,6 +71,12 @@ export default {
     typeImmatriculation: {
       type: String,
       default: undefined
+    }
+  },
+  data () {
+    return {
+      // constants
+      TYPE_IMMATRICULATION
     }
   },
   computed: {

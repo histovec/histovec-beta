@@ -41,126 +41,13 @@
     </div>
 
     <div
-      v-if="holder"
+      v-if="isHolder"
       class="separator-2 separator-lg"
     >
     </div>
 
-    <div v-if="$store.state.config.newData">
-      <div
-        v-if="$store.state.config.newData"
-        class="row"
-      >
-        <div class="col-md-7">
-          <h6 class="title p-h-15">
-            Nouvelles données du V
-          </h6>
-        </div>
-      </div>
-      <div
-        v-for="(entry, fieldName) in processedSivData.dataToCompare"
-        :key="fieldName"
-      >
-        <div
-          class="row"
-        >
-          <div class="col-md-12 col-sm-12">
-            <span>
-              <span v-if="fieldName === 'new_historique'">
-                <span v-if="processedSivData.areHistoriquesEquals(entry.old, entry.new)">
-                  <i class="fa fa-check info_green fa-2x"></i>
-                </span>
-                <span v-else>
-                  <i class="fa fa-times-circle info_red fa-2x"></i>
-                </span>
-              </span>
-              <span v-else>
-                <span v-if="entry.old === entry.new">
-                  <i class="fa fa-check info_green fa-2x"></i>
-                </span>
-                <span v-else>
-                  <i class="fa fa-times-circle info_red fa-2x"></i>
-                </span>
-              </span>
-              &nbsp;
-              <span style="font-weight: bold">{{ fieldName }}</span>
-              &nbsp;
-              <span v-if="entry.intermediateField">
-                <i class="fa fa-eye-slash info_red fa-2x"></i>
-              </span>
-              <span v-else>
-                <i class="fa fa-eye info_green fa-2x"></i>
-              </span>
-            </span>
-          </div>
-          <div class="col-md-12 col-sm-12">
-            <span v-if="fieldName === 'new_historique'">
-              <div class="col-md-6 col-sm-6">
-                <div style="text-align: center">OLD</div>
-                <ul>
-                  <li
-                    v-for="oldItem in entry.old"
-                    :key="'old' + fieldName + oldItem.opa_type + oldItem.date"
-                  >
-                    <ul>
-                      <li>
-                        opa_date: {{ oldItem.date }}
-                      </li>
-                      <li>
-                        opa_type: {{ oldItem.opa_type }}
-                      </li>
-                      <li>
-                        nature: {{ oldItem.nature }}
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="col-md-6 col-sm-6">
-                <div style="text-align: center">NEW</div>
-                <ul>
-                  <li
-                    v-for="newItem in entry.new"
-                    :key="'new' + fieldName + newItem.opa_type + newItem.opa_date"
-                  >
-                    <ul>
-                      <li>
-                        opa_date: {{ newItem.opa_date }}
-                      </li>
-                      <li>
-                        opa_type: {{ newItem.opa_type }}
-                      </li>
-                      <li>
-                        nature: {{ newItem.nature }}
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-            </span>
-            <span v-else>
-              <div>old = {{ entry.old }}</div>
-              <div>new = {{ entry.new }}</div>
-            </span>
-          </div>
-          <div
-            class="separator-2 separator-lg"
-          >
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div
-      v-if="$store.state.config.newData"
-      class="separator-2 separator-lg"
-    >
-    </div>
-
-
-    <div
-      v-if="holder"
+      v-if="isHolder"
       class="row"
     >
       <div class="col-md-7">
@@ -170,7 +57,7 @@
       </div>
     </div>
     <div
-      v-if="holder"
+      v-if="isHolder"
       class="row"
     >
       <div class="col-md-1 col-sm-2">
@@ -207,18 +94,18 @@
     <div class="row">
       <!-- debut voiture  -->
       <div class="col-sm-1">
-        <i :class="'fa fa-' + processedSivData.logoVehicule + ' fa-2x'"></i>
+        <i :class="'fa fa-' + processedVehiculeData.logoVehicule + ' fa-2x'"></i>
       </div>
       <div class="col-sm-6">
-        <span class="info_red txt-small-13">{{ processedSivData.ctec.marque }} {{ processedSivData.ctec.modele }}</span>
+        <span class="info_red txt-small-13">{{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}</span>
         <br />
-        <div v-if="processedSivData.ctec.puissance.cv">
+        <div v-if="caracteristiquesTechniques.puissance.cv">
           <span class="txt-small-13">Puissance fiscale : </span>
-          <span class="info_red txt-small-13">{{ processedSivData.ctec.puissance.cv }} ch</span>
+          <span class="info_red txt-small-13">{{ caracteristiquesTechniques.puissance.cv }} ch</span>
         </div>
       </div>
       <div
-        v-if="!holder"
+        v-if="!isHolder"
         class="col-sm-5"
       >
         <span class="color-info_2 bold_4 txt-small-13">Calculez le montant de votre certificat d'immatriculation</span>
@@ -241,50 +128,82 @@
     </div>
     <!-- fin trait separation  -->
     <!-- debut trait separation  -->
-    <div v-if="processedSivData.usages.length">
-      <div
-        v-for="(usage, index) in processedSivData.usages"
-        :key="index"
-      >
-        <div
-          v-if="usagesMapping[usage]"
-          class="row"
-        >
-          <!-- debut voiture  -->
-          <div class="col-sm-1">
-            <i :class="'fa ' + usagesMapping[usage].icon + ' fa-2x'"></i>
-          </div>
-          <div class="col-sm-6">
-            <span class="txt-small-13">Usage:</span>
-            <span class="info_red txt-small-13"> {{ usagesMapping[usage].text }} </span>
-            <br />
-          </div>
-          <div
-            v-if="usagesMapping[usage].adv"
-            class="col-sm-5"
-          >
-            <span class="color-info_2 bold_4 txt-small-13">{{ usagesMapping[usage].adv }}</span>
-            <br />
-            <a
-              v-if="usagesMapping[usage].adv"
-              class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
-              :href="usagesMapping[usage].link"
-              rel="noopener noreferrer"
-              target="_blank"
-              :title="usagesMapping[usage].adv"
-            >
-              En savoir plus
-              <i class="fa fa-external-link pl-10"></i>
-            </a>
-          </div>
-          <!-- fin voiture  -->
-        </div>
-        <div
-          v-if="usagesMapping[usage]"
-          class="separator-2 separator-lg"
-        >
-        </div>
+    <!-- @todo: maintient-on cette section? -->
+    <div
+      v-if="processedVehiculeData.usage.vehiculeDeCollection"
+      class="row"
+    >
+      <!-- debut voiture  -->
+      <div class="col-sm-1">
+        <i :class="'fa ' + USAGE_COLLECTION.icon + ' fa-2x'"></i>
       </div>
+      <div class="col-sm-6">
+        <span class="txt-small-13">Usage:</span>
+        <span class="info_red txt-small-13"> {{ USAGE_COLLECTION.text }} </span>
+        <br />
+      </div>
+      <div
+        v-if="USAGE_COLLECTION.adv"
+        class="col-sm-5"
+      >
+        <span class="color-info_2 bold_4 txt-small-13">{{ USAGE_COLLECTION.adv }}</span>
+        <br />
+        <a
+          v-if="USAGE_COLLECTION.adv"
+          class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+          :href="USAGE_COLLECTION.link"
+          rel="noopener noreferrer"
+          target="_blank"
+          :title="USAGE_COLLECTION.adv"
+        >
+          En savoir plus
+          <i class="fa fa-external-link pl-10"></i>
+        </a>
+      </div>
+      <!-- fin voiture  -->
+    </div>
+    <div
+      v-if="processedVehiculeData.usage.vehiculeDeCollection"
+      class="separator-2 separator-lg"
+    >
+    </div>
+    <div
+      v-if="processedVehiculeData.usage.vehiculeAgricole"
+      class="row"
+    >
+      <!-- debut voiture  -->
+      <div class="col-sm-1">
+        <i :class="'fa ' + USAGE_AGRICOLE.icon + ' fa-2x'"></i>
+      </div>
+      <div class="col-sm-6">
+        <span class="txt-small-13">Usage:</span>
+        <span class="info_red txt-small-13"> {{ USAGE_AGRICOLE.text }} </span>
+        <br />
+      </div>
+      <div
+        v-if="USAGE_AGRICOLE.adv"
+        class="col-sm-5"
+      >
+        <span class="color-info_2 bold_4 txt-small-13">{{ USAGE_AGRICOLE.adv }}</span>
+        <br />
+        <a
+          v-if="USAGE_AGRICOLE.adv"
+          class="btn-sm-link pop color-info_3 bold_4 txt-small-12 no-padding"
+          :href="USAGE_AGRICOLE.link"
+          rel="noopener noreferrer"
+          target="_blank"
+          :title="USAGE_AGRICOLE.adv"
+        >
+          En savoir plus
+          <i class="fa fa-external-link pl-10"></i>
+        </a>
+      </div>
+      <!-- fin voiture  -->
+    </div>
+    <div
+      v-if="processedVehiculeData.usage.vehiculeAgricole"
+      class="separator-2 separator-lg"
+    >
     </div>
     <!-- fin trait separation  -->
     <div class="row">
@@ -293,24 +212,28 @@
         <i class="fa fa-address-card fa-2x pr-10"></i>
       </div>
       <div class="col-sm-6">
-        <span class="txt-small-13">Propriétaire actuel : </span><span class="info_red txt-small-13">{{ processedSivData.titulaire.identite }} depuis {{ processedSivData.certificat.depuis }} </span>
+        <span class="txt-small-13">Propriétaire actuel : </span>
+        <span class="info_red txt-small-13">{{ processedVehiculeData.titulaire.identite }} depuis
+          <span v-if="certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"> {{ certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }} </span>
+          <span v-if="!certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"> une durée inconnue </span>
+        </span>
       </div>
       <div class="col-sm-5">
-        <div v-if="!processedSivData.certificat.etranger">
-          <div v-if="holder">
+        <div v-if="!certificat.isVehiculeImporteDepuisEtranger">
+          <div v-if="isHolder">
             <span class="color-info_2 bold_4 txt-small-13">Vous êtes le </span>
-            <span class="info_red txt-small-13">{{ processedSivData.titulairesCount }}</span><sup class="info_red txt-small">{{ getExposant(processedSivData.titulairesCount) }}</sup>
+            <span class="info_red txt-small-13">{{ processedVehiculeData.titulairesCount }}</span><sup class="info_red txt-small">{{ getExposant(processedVehiculeData.titulairesCount) }}</sup>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire de ce véhicule</span>
           </div>
-          <div v-if="!holder">
+          <div v-if="!isHolder">
             <span class="color-info_2 bold_4 txt-small-13">Ce véhicule a déjà eu </span>
-            <span class="info_red txt-small-13">{{ processedSivData.titulairesCount }}</span>
+            <span class="info_red txt-small-13">{{ processedVehiculeData.titulairesCount }}</span>
             <span class="color-info_2 bold_4 txt-small-13"> titulaire(s), en l'achetant vous serez le </span>
-            <span class="info_red txt-small-13">{{ processedSivData.titulairesCount + 1 }}</span>
-            <sup class="info_red txt-small">{{ getExposant(processedSivData.titulairesCount + 1) }}</sup>
+            <span class="info_red txt-small-13">{{ processedVehiculeData.titulairesCount + 1 }}</span>
+            <sup class="info_red txt-small">{{ getExposant(processedVehiculeData.titulairesCount + 1) }}</sup>
           </div>
         </div>
-        <div v-if="processedSivData.certificat.etranger">
+        <div v-if="certificat.isVehiculeImporteDepuisEtranger">
           <span class="color-info_2 bold_4 txt-small-13">Le nombre exact de titulaires ne peut être calculé avec précision </span>
           <span class="color-info_2 bold_4 txt-small-12">(première immatriculation à l'étranger)</span>
         </div>
@@ -327,8 +250,14 @@
         <i class="fa fa-calendar fa-2x pr-10"></i>
       </div>
       <div class="col-sm-6">
-        <span class="txt-small-13">Première immatriculation le </span>
-        <span class="info_red txt-small-13">{{ processedSivData.certificat.premier }}</span>
+        <span v-if="datePremiereImmatriculationFR">
+          <span class="txt-small-13">Première immatriculation le </span>
+          <span class="info_red txt-small-13">{{ datePremiereImmatriculationFR }}</span>
+        </span>
+        <span v-if="!datePremiereImmatriculationFR">
+          <span class="txt-small-13">Date de première immatriculation </span>
+          <span class="info_red txt-small-13">inconnue</span>
+        </span>
         <br />
         <br />
       </div>
@@ -340,7 +269,7 @@
     </div>
     <!-- fin trait separation  -->
 
-    <div v-if="processedSivData.etranger.hasBeenImported">
+    <div v-if="certificat.isVehiculeImporteDepuisEtranger">
       <div class="row">
         <!-- debut immatriculer  -->
         <div class="col-sm-1">
@@ -351,7 +280,7 @@
         </div>
         <div class="col-sm-5">
           <span
-            v-if="!holder"
+            v-if="!isHolder"
             class="color-info_2 bold_4 txt-small-13"
           >
             Vérifier les options incluses qui peuvent être différentes
@@ -365,53 +294,53 @@
     </div>
 
 
-    <div v-if="processedSivData.hasSinistre || processedSivData.administratif.hasPve">
+    <div v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours">
       <div class="row">
         <!-- debut sinistre  -->
         <div class="col-sm-1">
           <i
-            :class="[{'fa fa-thumbs-up fa-2x pr-10' : processedSivData.isApte},
-                     {'fa fa-exclamation-triangle info_red fa-2x pr-10' : !processedSivData.isApte}]"
+            :class="[{'fa fa-thumbs-up fa-2x pr-10' : processedVehiculeData.isApte},
+                     {'fa fa-exclamation-triangle info_red fa-2x pr-10' : !processedVehiculeData.isApte}]"
           >
           </i>
         </div>
         <div class="col-sm-6">
           <!-- état - un seul sinistre !-->
-          <span v-if="processedSivData.sinistresCount === 1 || (processedSivData.sinistresCount === 0 && processedSivData.administratif.hasPve)">
+          <span v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">un sinistre déclaré</span>
             <span
-              v-if="processedSivData.sinistresCount === 1"
+              v-if="processedVehiculeData.sinistresCount === 1"
               class="txt-small-13"
             >
-              en {{ processedSivData.lastSinistreYear }}
+              en {{ processedVehiculeData.lastSinistreYear }}
             </span>
             <br />
-            <span v-if="processedSivData.isApte">
+            <span v-if="processedVehiculeData.isApte">
               <span class="txt-small-13">et</span>
               <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
-                v-if="!processedSivData.isApte"
+                v-if="!processedVehiculeData.isApte"
                 class="txt-small-13"
               >
-                en {{ processedSivData.lastResolutionYear }}
+                en {{ processedVehiculeData.lastResolutionYear }}
               </span>
             </span>
           </span>
           <!-- état - plusieurs sinistres !-->
-          <span v-if="processedSivData.sinistresCount > 1">
+          <span v-if="processedVehiculeData.sinistresCount > 1">
             <span class="txt-small-13">Ce véhicule a eu </span>
             <span class="info_red txt-small-13">plusieurs sinistres, </span>
-            <span class="txt-small-13">dont le dernier déclaré en {{ processedSivData.lastSinistreYear }}</span>
+            <span class="txt-small-13">dont le dernier déclaré en {{ processedVehiculeData.lastSinistreYear }}</span>
             <br />
-            <span v-if="processedSivData.isApte">
+            <span v-if="processedVehiculeData.isApte">
               <span class="txt-small-13">Le véhicule a été</span>
               <span class="info_red txt-small-13"> déclaré apte à circuler</span>
               <span
-                v-if="!processedSivData.isApte"
+                v-if="!processedVehiculeData.isApte"
                 class="txt-small-13"
               >
-                en {{ processedSivData.lastResolutionYear }}
+                en {{ processedVehiculeData.lastResolutionYear }}
               </span>
             </span>
           </span>
@@ -427,10 +356,10 @@
         <div class="col-sm-5">
           <!-- commentaire: un ou plusieurs sinistres !-->
           <span
-            v-if="processedSivData.isApte"
+            v-if="processedVehiculeData.isApte"
             class="color-info_2 bold_4 txt-small-13"
           >
-            {{ syntheseMapping[(holder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
+            {{ syntheseMapping[(isHolder ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
           </span>
           <span
             v-else
@@ -441,7 +370,7 @@
 
           <br />
           <span
-            v-if="processedSivData.hasSinistre && processedSivData.sinistres.length > 1"
+            v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
             class="color-info_2 bold_4 txt-small-13"
           >
             {{ syntheseMapping['multi_ove'].adv }}
@@ -453,7 +382,7 @@
       <div class="separator-2 separator-lg"></div>
       <!-- fin trait separation  -->
     </div>
-    <div v-if="synthese.length === 0 && !processedSivData.lastSinistreYear">
+    <div v-if="synthese.length === 0 && !processedVehiculeData.lastSinistreYear">
       <div class="row">
         <!-- debut ras  -->
         <div class="col-sm-1">
@@ -522,19 +451,36 @@
     </div>
     <div>
       <div
-        v-if="processedSivData.vignetteNumero"
+        v-if="vignetteCritair"
         class="row"
       >
         <!-- debut ras  -->
         <div class="col-sm-1">
           <img
+            v-if="vignetteCritair !== VIGNETTE.NON_CLASSE"
             class="img-responsive"
-            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + processedSivData.vignetteNumero + '.png'"
+            :src="'assets/images/vignettes_crit_air/35_petit/vignette_' + vignetteCritair.toLowerCase() + '.png'"
             alt="Vignette Critair"
           >
+          <i
+            v-if="vignetteCritair === VIGNETTE.NON_CLASSE"
+            class="fa fa-question-circle fa-2x"
+          >
+          </i>
         </div>
         <div class="col-sm-6">
-          <span class="txt-small-13"> {{ syntheseMapping['critair'].text }} {{ processedSivData.vignetteNumero }}</span>
+          <span
+            v-if="vignetteCritair !== VIGNETTE.NON_CLASSE"
+            class="txt-small-13"
+          >
+            {{ syntheseMapping['critair'].text }} {{ vignetteCritair }}
+          </span>
+          <span
+            v-if="vignetteCritair === VIGNETTE.NON_CLASSE"
+            class="txt-small-13"
+          >
+            {{ syntheseMapping['critair_non_classe'].text }}
+          </span>
         </div>
         <div class="col-sm-5 color-info_2 bold_4 txt-small-13">
           {{ syntheseMapping['critair'].adv }}
@@ -553,7 +499,7 @@
         <!-- fin ras  -->
       </div>
       <div
-        v-if="!processedSivData.vignetteNumero && !processedSivData.usages.includes('COL')"
+        v-if="!vignetteCritair && !processedVehiculeData.usage.vehiculeDeCollection"
         class="row"
       >
         <!-- debut pas de critair  -->
@@ -586,16 +532,22 @@
 <script>
 
 import { formatMixin } from '../../mixins/format.js'
+import { formatIsoToFrDate } from '../../assets/js/format.js'
+
+import { VIGNETTE } from '../../constants/vehicle/critair.js'
+import { USAGE_AGRICOLE, USAGE_COLLECTION } from '../../constants/usagesSynthese.js'
+
 import imageLogoSimplimmat from '@/assets/img/simplimmat.png'
+
 
 export default {
   mixins: [formatMixin],
   props: {
-    processedSivData: {
+    processedVehiculeData: {
       type: Object,
       default: () => {}
     },
-    holder: Boolean,
+    isHolder: Boolean,
     changeTab: {
       type: Function,
       default: () => {}
@@ -604,12 +556,31 @@ export default {
   data () {
     return {
       imageLogoSimplimmat,
+
+      VIGNETTE,
+      USAGE_AGRICOLE,
+      USAGE_COLLECTION,
     }
   },
   computed: {
+    caracteristiquesTechniques () {
+      return this.processedVehiculeData.caracteristiquesTechniques
+    },
+    certificat () {
+      return this.processedVehiculeData.certificat
+    },
+    datePremiereImmatriculationFR () {
+      return formatIsoToFrDate(this.certificat.datePremiereImmatriculation)
+    },
+    hasProcedureVEEnCours () {
+      return this.processedVehiculeData.administratif.hasProcedureVEEnCours
+    },
     synthese () {
-      return this.processedSivData.administratif.reportLabels.synthese
-    }
+      return this.processedVehiculeData.administratif.reportLabels.synthese
+    },
+    vignetteCritair () {
+      return this.processedVehiculeData.vignetteCritair
+    },
   },
 
   mounted () {

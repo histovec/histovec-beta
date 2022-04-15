@@ -50,7 +50,7 @@ const downloadBlob = (blob, filename) => {
 
 export default {
   props: {
-    processedSivData: {
+    processedVehiculeData: {
       type: Object,
       default: () => {}
     },
@@ -86,32 +86,48 @@ export default {
     async generatePdf () {
       this.$store.dispatch('log', `${this.$route.path}/csa/download`)
 
-      const isAnnulationCI = this.processedSivData.administratif.isAnnulationCI
-      const csaLabels = this.processedSivData.administratif.csaLabels
+      const {
+        dateMiseAJour,
+        administratif: {
+          isCIAnnule,
+          csaLabels,
+          dateAnnulationCI,
+        },
+        caracteristiquesTechniques: {
+          marque,
+          vin,
+        },
+        certificat: {
+          datePremiereImmatriculation,
+        },
+
+      } = this.processedVehiculeData
+
+      const { plaque } = this.$store.state.identity
 
       const csaPdfBytes = await generateCsa({
-        isAnnulationCI,
+        isCIAnnule,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
-        dateAnnulation: this.processedSivData.administratif.dateAnnulation,
-        dateDonnees: this.showDataDate ? this.processedSivData.dateUpdate : null,
+        dateAnnulationCI,
+        dateDonnees: this.showDataDate ? dateMiseAJour : null,
         histoVecLogoBytes: this.histoVecLogoBytes,
         marianneImageBytes: this.marianneImageBytes,
-        marque: this.processedSivData.ctec.marque,
-        plaque: this.$store.state.identity.plaque,
-        premierCertificat: this.processedSivData.certificat.premier,
+        marque,
+        plaque,
+        premierCertificat: datePremiereImmatriculation,
         qrCodeUrl: this.url,
         validityDate: this.validityDate,
-        vin: this.processedSivData.ctec.vin,
+        vin,
         webSiteUrl: this.baseUrl
       },
       (
-        !isAnnulationCI ? {
+        !isCIAnnule ? {
           duplicataTitre: csaLabels.titre.duplicata,
           dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
           gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
-          historyItems: this.processedSivData.historique.map((item) => `${item.date} ${item.nature}`),
+          historyItems: this.processedVehiculeData.historique.map((item) => `${item.date} ${item.nature}`),
           otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
-          otcisPvCurrentStatusLines: csaLabels.otcisPvCurrentStatusLines,
+          otcisPVCurrentStatusLines: csaLabels.otcisPVCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
           ovesCurrentStatusLines: csaLabels.ovesCurrentStatusLines,
           perteTitre: csaLabels.titre.perte,

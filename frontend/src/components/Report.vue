@@ -30,7 +30,7 @@
               <div class="row justify-content-lg-center">
                 <div class="col-lg-12">
                   <h2 class="text-center mt-4">
-                    <div v-if="holder">
+                    <div v-if="isHolder">
                       <span class="bold_6">Rassurez</span> vos acheteurs potentiels
                     </div>
                     <div v-else>
@@ -50,7 +50,7 @@
     </section>
 
     <div
-      v-if="processedSivData"
+      v-if="processedVehiculeData"
       class="container"
     >
       <div class="row">
@@ -89,20 +89,20 @@
             </div>
             <div class="col-sm-6">
               <div
-                v-if="!isAnnulationCI"
+                v-if="!isCIAnnule"
                 class="alert alert-icon alert-info"
                 role="alert"
               >
-                <i :class="'fa fa-' + processedSivData.logoVehicule"></i>
-                Numéro - Plaque d'immatriculation : {{ processedSivData.plaque }}
+                <i :class="'fa fa-' + processedVehiculeData.logoVehicule"></i>
+                Numéro - Plaque d'immatriculation : {{ processedVehiculeData.plaque }}
               </div>
               <div
-                v-if="isAnnulationCI"
+                v-if="isCIAnnule"
                 class="alert alert-icon alert-danger"
                 role="alert"
               >
                 <i class="fa fa-warning"></i>
-                Le certificat demandé a été annulé : {{ processedSivData.plaque }}
+                Le certificat demandé a été annulé : {{ processedVehiculeData.plaque }}
               </div>
             </div>
             <div class="col-sm-6">
@@ -119,7 +119,7 @@
                 </i>
                 <span v-if="!isDefaultDataDate">
                   Informations du ministère de l'Intérieur datant du
-                  <strong>{{ processedSivData.dateUpdate }}</strong>
+                  <strong>{{ dateMiseAJourFR }}</strong>
                 </span>
                 <span v-if="isDefaultDataDate">
                   Informations connues d'HistoVec non à jour
@@ -150,7 +150,7 @@
               role="tablist"
             >
               <li
-                v-if="!isAnnulationCI"
+                v-if="!isCIAnnule"
                 :class="[{'active' : tab === 'abstract'}]"
               >
                 <a
@@ -162,19 +162,19 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI"
+                v-if="!isCIAnnule"
                 :class="[{'active' : tab === 'vehicle'}]"
               >
                 <a
                   class="clickable"
                   @click="tab = 'vehicle'"
                 >
-                  <i :class="'fa fa-' + processedSivData.logoVehicule + ' pr-10'"></i>
+                  <i :class="'fa fa-' + processedVehiculeData.logoVehicule + ' pr-10'"></i>
                   Véhicule
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI"
+                v-if="!isCIAnnule"
                 :class="[{'active' : tab === 'holder'}]"
               >
                 <a
@@ -186,7 +186,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI"
+                v-if="!isCIAnnule"
                 :class="[{'active' : tab === 'situation'}]"
               >
                 <a
@@ -198,7 +198,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI"
+                v-if="!isCIAnnule"
                 :class="[{'active' : tab === 'history'}]"
               >
                 <a
@@ -210,7 +210,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI && (ct.length > 0 || ctError)"
+                v-if="!isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
                 :class="[{'active' : tab === 'utac'}]"
               >
                 <a
@@ -222,7 +222,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI && (ct.length > 0 || ctError)"
+                v-if="!isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
                 :class="[{'active' : tab === 'utacGraph'}]"
               >
                 <a
@@ -234,7 +234,7 @@
                 </a>
               </li>
               <li
-                v-if="holder"
+                v-if="isHolder"
                 :class="[{'active' : tab === 'csa'}]"
               >
                 <a
@@ -246,7 +246,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI && holder"
+                v-if="!isCIAnnule && isHolder"
                 :class="[{'active' : tab === 'share-report'}]"
               >
                 <a
@@ -258,7 +258,7 @@
                 </a>
               </li>
               <li
-                v-if="!isAnnulationCI && holder"
+                v-if="!isCIAnnule && isHolder && $store.state.config.useCodePartageHistoVec"
                 :class="[{'active' : tab === 'share-code-partage'}]"
               >
                 <a
@@ -278,9 +278,9 @@
                 :class="[{'in active' : tab === 'abstract'}]"
               >
                 <abstract
-                  v-if="tab === 'abstract' && !isAnnulationCI"
-                  :processed-siv-data="processedSivData"
-                  :holder="holder"
+                  v-if="tab === 'abstract' && !isCIAnnule"
+                  :processed-vehicule-data="processedVehiculeData"
+                  :is-holder="isHolder"
                   :change-tab="changeTab"
                 >
                 </abstract>
@@ -292,7 +292,7 @@
               >
                 <tech-chars
                   v-if="tab === 'vehicle'"
-                  :ctec="processedSivData.ctec"
+                  :caracteristiques-techniques="processedVehiculeData.caracteristiquesTechniques"
                 >
                 </tech-chars>
               </div>
@@ -303,8 +303,8 @@
               >
                 <license
                   v-if="tab === 'holder'"
-                  :certificat="processedSivData.certificat"
-                  :titulaire="processedSivData.titulaire"
+                  :certificat="processedVehiculeData.certificat"
+                  :titulaire="processedVehiculeData.titulaire"
                 >
                 </license>
               </div>
@@ -315,9 +315,9 @@
               >
                 <administrative
                   v-if="tab === 'situation'"
-                  :holder="holder"
-                  :opposition-section="processedSivData.administratif.opposition"
-                  :report-labels="processedSivData.administratif.reportLabels"
+                  :is-holder="isHolder"
+                  :opposition-section="processedVehiculeData.administratif.opposition"
+                  :report-labels="processedVehiculeData.administratif.reportLabels"
                 >
                 </administrative>
               </div>
@@ -328,7 +328,7 @@
               >
                 <history
                   v-if="tab === 'history'"
-                  :processed-siv-data="processedSivData"
+                  :processed-vehicule-data="processedVehiculeData"
                 >
                 </history>
               </div>
@@ -337,43 +337,43 @@
                 :class="[{'in active' : tab === 'utac'}]"
               >
                 <tech-control
-                  v-if="tab === 'utac' && !isAnnulationCI && (ct.length > 0 || ctError)"
-                  :ct="ct"
-                  :ct-error="ctError"
+                  v-if="tab === 'utac' && !isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
+                  :controlesTechniques="controlesTechniques"
+                  :erreur-controles-techniques="erreurControlesTechniques"
                 >
                 </tech-control>
               </div>
               <div
-                v-if="tab === 'utacGraph' && !isAnnulationCI"
+                v-if="tab === 'utacGraph' && !isCIAnnule"
                 class="tab-pane fade"
                 :class="[{'in active' : tab === 'utacGraph'}]"
               >
                 <tech-control-graph
-                  v-if="tab === 'utacGraph' && !ctError && ct.length > 0"
-                  :ct="ct"
+                  v-if="tab === 'utacGraph' && !erreurControlesTechniques && controlesTechniques.length > 0"
+                  :controlesTechniques="controlesTechniques"
                 >
                 </tech-control-graph>
                 <tech-control-graph-error
-                  v-if="tab === 'utacGraph' && ctError"
-                  :ct-error="ctError"
+                  v-if="tab === 'utacGraph' && erreurControlesTechniques"
+                  :erreur-controles-techniques="erreurControlesTechniques"
                 >
                 </tech-control-graph-error>
               </div>
               <div
-                v-if="holder"
+                v-if="isHolder"
                 class="tab-pane fade"
                 :class="[{'in active' : tab === 'csa'}]"
               >
                 <administrative-certificate
                   v-if="tab === 'csa'"
-                  :processed-siv-data="processedSivData"
+                  :processed-vehicule-data="processedVehiculeData"
                   :url="url"
                   :base-url="baseUrl"
                 >
                 </administrative-certificate>
               </div>
               <div
-                v-if="holder"
+                v-if="isHolder"
                 class="tab-pane fade"
                 :class="[{'in active' : tab === 'share-report'}]"
               >
@@ -384,14 +384,13 @@
                 </share-report>
               </div>
               <div
-                v-if="holder"
+                v-if="isHolder && $store.state.config.useCodePartageHistoVec"
                 class="tab-pane fade"
-                :class="[{'in active' : $store.state.config.useCodePartageHistoVec || tab === 'share-code-partage'}]"
+                :class="[{'in active' : tab === 'share-code-partage'}]"
               >
                 <share-code-partage
                   v-if="tab === 'share-code-partage'"
-                  :report-id="$store.state.histovec.id"
-                  :report-key="$store.state.histovec.key"
+                  :code-partage-histo-vec="codePartageHistoVec"
                 >
                 </share-code-partage>
               </div>
@@ -432,33 +431,15 @@ const Status = loadView('Status')
 
 import siv from '../assets/js/siv'
 import { DEFAULT_DATE_UPDATE } from '../constants/v'
+import { STATUS_FROM_CODE } from '../constants/error.js'
 import { getDepartement } from '../utils/codePostal'
 import { hash } from '../utils/crypto'
 import { urlSafeBase64Encode, base64Encode, urlSafeBase64Decode } from '../utils/encoding'
+import { formatIsoToFrDate } from '../assets/js/format.js'
 
 import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
 
 
-const statusFromCode = {
-  'holder': {
-    400: 'invalid',
-    403: 'forbidden',
-    404: 'notFound',
-    429: 'tooManyRequests',
-    502: 'unavailable',
-    503: 'unavailable',
-    504: 'unavailable',
-  },
-  'buyer': {
-    400: 'invalidBuyer',
-    403: 'forbidden',
-    404: 'notFoundBuyer',
-    429: 'tooManyRequests',
-    502: 'unavailable',
-    503: 'unavailable',
-    504: 'unavailable'
-  }
-}
 
 export default {
   components: {
@@ -491,71 +472,110 @@ export default {
     }
   },
   computed: {
-    isAnnulationCI () {
-      return (
-        this.processedSivData &&
-        this.processedSivData.administratif &&
-        this.processedSivData.administratif.isAnnulationCI
+    dateMiseAJourFR () {
+      return formatIsoToFrDate(this.processedVehiculeData.dateMiseAJour)
+    },
+    isCIAnnule () {
+      return Boolean(
+        this.processedVehiculeData &&
+        this.processedVehiculeData.administratif &&
+        this.processedVehiculeData.administratif.isCIAnnule
       )
     },
+    buyerId () {
+      return this.$route.query.id
+    },
+    buyerKey () {
+      return this.$route.query.key
+    },
+    holderId () {
+      return this.idFromSearchForm || this.idFromLastReportCache
+    },
+    holderKey () {
+      return this.keyFromSearchForm || this.keyFromLastReportCache
+    },
+    idFromSearchForm () {
+      return this.$route.params.id
+    },
+    keyFromSearchForm () {
+      return this.$route.params.key
+    },
+    idFromLastReportCache () {
+      return this.$store.state.histovec.id
+    },
+    keyFromLastReportCache () {
+      return this.$store.state.histovec.key
+    },
     id () {
-      return this.holder ? this.$route.params.id : this.$route.query.id
+      return this.isHolder ? this.holderId : this.buyerId
     },
     key () {
-      return this.$route.params.key ? this.$route.params.key : this.$route.query.key
+      return this.isHolder ? this.holderKey : this.buyerKey
+    },
+    codePartageHistoVec () {
+      return `${this.holderId}-${this.holderKey}`
+    },
+    report () {
+      const { report } = this.$store.state.histovec
+      return report.vehicule ? this.$store.state.histovec.report : null
     },
     status () {
-      if (this.$store.state.histovec.report) {
+      const { lastReportStatusCode } = this.$store.state.histovec
+
+      if (lastReportStatusCode === 404) {
+        return this.isHolder ? 'notFound' : 'notFoundBuyer'
+      } else if (this.report) {
         this.showRatingModal()
         return 'ok'
-      } else if (!this.holder && this.$route.query.key === undefined && this.$route.query.id !== undefined) {
+      } else if (!this.isHolder && (!this.buyerId || !this.buyerKey)) {
         return 'invalidBuyer'
-      } else if ((this.holder ? this.$route.params.id : this.$route.query.id) === undefined) {
+      } else if (!this.id) {
         return 'invalid'
-      } else if (this.$store.state.api.fetching.report ||
-                this.$store.state.api.http.report === undefined ||
-                this.$store.state.api.decrypted.report === undefined) {
-          return 'wait'
-      } else if (this.$store.state.api.http.report !== 200) {
-        return this.holder ? statusFromCode.holder[this.$store.state.api.http.report] :
-                             statusFromCode.buyer[this.$store.state.api.http.report]
-      } else if (!this.$store.state.api.decrypted.report) {
-        return this.holder ? 'decryptError' : 'decryptErrorBuyer'
-      } else if (!this.$store.state.api.hit.report) {
-        return this.holder ? 'notFound' : 'notFoundBuyer'
+      } else if (
+        lastReportStatusCode &&
+        lastReportStatusCode !== 200
+      ) {
+        return (
+          this.isHolder ?
+          STATUS_FROM_CODE.holder[lastReportStatusCode] :
+          STATUS_FROM_CODE.buyer[lastReportStatusCode]
+        )
       }
-      return 'error'
+
+      return 'wait'
     },
     typeImmatriculation () {
       return this.$route.params.typeImmatriculation
     },
-    processedSivData () {
-      const sivData = this.$store.state.histovec.report && this.$store.state.histovec.report.sivData
-      return siv.processSivData(sivData)
+    processedVehiculeData () {
+      const report = this.report || {}
+      const { vehicule: vehiculeData } = report
+
+      return siv.processVehiculeData(vehiculeData)
     },
     isDefaultDataDate () {
-      return this.processedSivData.dateUpdate && this.processedSivData.dateUpdate === DEFAULT_DATE_UPDATE
+      return this.processedVehiculeData.dateMiseAJour === DEFAULT_DATE_UPDATE
     },
-    holder () {
-      return (this.$route.query.id === undefined) && ((this.$route.params.id !== undefined) || (this.$store.state.histovec.id !== undefined))
+    isHolder () {
+      return Boolean(!this.buyerId && this.holderId)
     },
-    ct () {
-      return this.$store.state.histovec.report.utacData.ct || []
+    controlesTechniques () {
+      const { controlesTechniques: controlesTechniquesData } = this.report
+
+      return controlesTechniquesData.historique || []
     },
-    ctError () {
-      return this.$store.state.histovec.report.utacData.ctError
-    },
-    ctUpdateDate () {
-      return this.$store.state.histovec.report.utacData.ctUpdateDate
+    erreurControlesTechniques () {
+      const { controlesTechniques: controlesTechniquesData } = this.report
+
+      return controlesTechniquesData.erreur
     },
     baseUrl () {
-      // return 'https://histovec.interieur.gouv.fr'
+      // Equivalent to 'https://histovec.interieur.gouv.fr' for production
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-
-      const idParam = encodeURIComponent(this.$store.state.histovec.id || this.$route.params.id)
-      const keyParam = encodeURIComponent(this.$store.state.histovec.key || this.key)
+      const idParam = encodeURIComponent(this.holderId)
+      const keyParam = encodeURIComponent(this.holderKey)
       const queryString = `?id=${idParam}&key=${keyParam}`
 
       // Add 'urlUnsafe' queryParameter to make new buyer urls (urlUnsafeBase64 encoded parameters) recognizable for frontend and backend
@@ -564,23 +584,28 @@ export default {
     }
   },
   async created () {
+    const { id: buyerId, key: buyerKey, urlUnsafe } = this.$route.query
+
     if (this.id) {
-      // old share report link
-      if (!this.$route.query.urlUnsafe && this.$route.query.id) {
-        const id = base64Encode(urlSafeBase64Decode(this.id))
+      // old buyer report link
+      if (!urlUnsafe && buyerId) {
+        const id = base64Encode(urlSafeBase64Decode(buyerId))
         this.$store.commit('updateId', id)
       } else {
+        // new buyer report link or holder report link
         // @todo only keep this line while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
         this.$store.commit('updateId', this.id)
       }
     }
 
     if (this.key) {
-      // old share report link
-      if (!this.$route.query.urlUnsafe && this.$route.query.key) {
-        const key = base64Encode(urlSafeBase64Decode(this.key))
+      // new buyer report link or holder report link
+      if (!urlUnsafe && buyerKey) {
+        const key = base64Encode(urlSafeBase64Decode(buyerKey))
+
         this.$store.commit('updateKey', key)
       } else {
+        // new buyer report link or holder report link
         // @todo only keep this line while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
         this.$store.commit('updateKey', this.key)
       }
@@ -591,48 +616,53 @@ export default {
 
     await this.getReport()
 
-    const sivData = this.$store.state.histovec.report && this.$store.state.histovec.report.sivData
-    if (sivData) {
-      await this.logVehicleData(sivData)  // @todo: remove and move to backend while backend will access decrypted report
+    const vehiculeData = this.$store.state.histovec.report && this.$store.state.histovec.report.vehicule
+    if (vehiculeData) {
+      await this.logVehicleData(vehiculeData)  // @todo: remove and move to backend while backend will access decrypted report
     }
 
-    const isAnnulationCI = (
-      this.processedSivData &&
-      this.processedSivData.administratif &&
-      this.processedSivData.administratif.isAnnulationCI
+    const isCIAnnule = (
+      this.processedVehiculeData &&
+      this.processedVehiculeData.administratif &&
+      this.processedVehiculeData.administratif.isCIAnnule
     )
 
-    if (isAnnulationCI) {
+    if (isCIAnnule) {
       this.tab = 'csa'
     }
   },
   methods: {
     async getReport () {
-      const isReportCached = this.$store.getters.reportWithExpiry
+      const isReportCached = this.$store.getters.reportWithExpiry !== null
       if (isReportCached) {
         await this.$store.dispatch('log',
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/cached')
+          this.$route.path + '/' + (this.isHolder ? 'holder' : 'buyer') + '/cached')
 
         return
       }
 
-      const canGetReport = this.$store.state.histovec.id && this.$store.state.histovec.key
+      const canGetCachedReport = this.idFromLastReportCache && this.keyFromLastReportCache
       if (
-        !canGetReport && (
+        !canGetCachedReport && (
           // rapport vendeur via formulaire de recherche, avec un paramètre manquant
-          (this.holder && (!this.$route.params.key || !this.$route.params.id)) ||
+          (this.isHolder && (!this.holderId || !this.holderKey)) ||
           // rapport acheteur avec un paramètre manquant
-          (!this.holder && (!this.$route.query.key || !this.$route.query.id))
+          (!this.isHolder && (!this.buyerId|| !this.buyerKey))
         )
       ) {
         await this.$store.dispatch('log',
-          this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/invalid')
+          this.$route.path + '/' + (this.isHolder ? 'holder' : 'buyer') + '/invalid')
         return
       }
 
-      await this.$store.dispatch('getReport')
+      if (this.isHolder) {
+        await this.$store.dispatch('getHolderReport')
+      } else {
+        await this.$store.dispatch('getBuyerReport')
+      }
+
       await this.$store.dispatch('log',
-        this.$route.path + '/' + (this.holder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
+        this.$route.path + '/' + (this.isHolder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
       return
     },
     showRatingModal () {
@@ -653,36 +683,53 @@ export default {
       }
     },
     async logVehicleData ({
-      adr_code_postal_tit = '',
-      age_certificat,
-      couleur,
-      CTEC_RLIB_ENERGIE,
-      CTEC_RLIB_CATEGORIE,
-      CTEC_RLIB_GENRE,
-      date_premiere_immat,
-      is_apte_a_circuler,
-      is_fni,
-      marque,
-      nom_commercial,
-      nb_titulaires,
-      tvv,
+      certificatImmatriculation: {
+        datePremiereImmatriculation,
+        nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
+        titulaire: {
+          particulier: {
+            codePostalParticulier,
+          } = {},
+          personneMorale: {
+            codePostalPersonneMorale,
+          } = {},
+        },
+        caracteristiquesTechniques: {
+          marque,
+          tvv,
+          nomCommercial,
+          couleur,
+          categorieUE,
+          genreNational,
+          energie,
+        },
+      },
+      etat: {
+        nombreDeTitulaires,
+        proceduresVE: {
+          isNumeroImmatriculationAuFormatFNI,
+          isApteACirculer,
+        },
+      },
     }) {
-      const departement = adr_code_postal_tit ? getDepartement(adr_code_postal_tit) : undefined
+      const codePostal = codePostalParticulier || codePostalPersonneMorale
+      const departement = codePostal ? getDepartement(codePostal) : undefined
       const anonymizedReportId = urlSafeBase64Encode(await hash(this.id))
 
+      // @todo: keep this name for now
       const vehicleData = {
-        age_certificat,
+        age_certificat: nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
         couleur,
-        CTEC_RLIB_ENERGIE,
-        CTEC_RLIB_CATEGORIE,
-        CTEC_RLIB_GENRE,
-        date_premiere_immat,
+        CTEC_RLIB_ENERGIE: energie,
+        CTEC_RLIB_CATEGORIE: categorieUE,
+        CTEC_RLIB_GENRE: genreNational,
+        date_premiere_immat: datePremiereImmatriculation,
         departement,
-        is_apte_a_circuler,
-        is_fni,
+        is_apte_a_circuler: isApteACirculer,
+        is_fni: isNumeroImmatriculationAuFormatFNI,
         marque,
-        nom_commercial,
-        nb_titulaires,
+        nom_commercial: nomCommercial,
+        nb_titulaires: nombreDeTitulaires,
         tvv,
       }
       /* eslint-disable-next-line no-console */

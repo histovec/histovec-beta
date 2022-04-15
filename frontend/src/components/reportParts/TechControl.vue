@@ -1,15 +1,15 @@
 <template>
   <div>
     <div
-      v-if="ctError"
+      v-if="erreurControlesTechniques"
       class="alert alert-icon alert-danger"
       role="alert"
     >
       <i class="fa fa-warning">
       </i>
-      {{ ctError }}
+      {{ erreurControlesTechniques }}
     </div>
-    <div v-if="!ctError && ct.length > 0">
+    <div v-if="!erreurControlesTechniques && normalizedControlesTechniques.length > 0">
       <div class="row">
         <div class="col-sm-2">
           <span class="txt-small-12"><h6>Date</h6></span>
@@ -27,7 +27,7 @@
       <div class="separator"></div>
 
       <div
-        v-for="(entry, index) in controlesTechniques"
+        v-for="(entry, index) in normalizedControlesTechniques"
         :key="index"
       >
         <div class="row">
@@ -39,17 +39,17 @@
               :class="entry.natureIcon"
               :title="entry.nature"
               aria-hidden="true"
-            ></i> <span class="info_red txt-small-12">{{ entry.natureLabel }}</span>
+            ></i> <span class="info_red txt-small-12">{{ entry.natureLibelle }}</span>
           </div>
           <div class="col-sm-4">
             <i
               :class="entry.resultatIcon"
               :title="entry.resultat"
               aria-hidden="true"
-            ></i> <span class="info_red txt-small-12">{{ entry.resultatLabel }}</span>
+            ></i> <span class="info_red txt-small-12">{{ entry.resultatLibelle }}</span>
           </div>
           <div class="col-sm-2">
-            <span class="info_red txt-small-12">{{ entry.kmLabel }} km</span>
+            <span class="info_red txt-small-12">{{ entry.kmLibelle }} km</span>
           </div>
         </div>
         <div class="separator pv-5"></div>
@@ -63,25 +63,32 @@
 
 import orderBy from 'lodash.orderby'
 
+import { formatIsoToFrDate } from '@/assets/js/format.js'
 
 export default {
   props: {
-    ct: {
+    controlesTechniques: {
       type: Array,
       default: () => []
     },
-    ctError: {
+    erreurControlesTechniques: {
       type: String,
       default: ''
     }
   },
   computed: {
-    controlesTechniques () {
-      if (this.ct && this.ct.length > 0) {
-        return orderBy(this.ct, ['id'], ['desc'])
-      } else {
-        return []
+    normalizedControlesTechniques () {
+      if (this.controlesTechniques && this.controlesTechniques.length > 0) {
+        const orderedControlesTechniques = orderBy(this.controlesTechniques, ['date'], ['desc'])
+
+        return orderedControlesTechniques.map((controleTechnique) => {
+          return {
+            ...controleTechnique,
+            date: formatIsoToFrDate(controleTechnique.date),
+          }
+        })
       }
+      return []
     },
   },
   mounted () {

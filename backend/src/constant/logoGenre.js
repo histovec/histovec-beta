@@ -1,0 +1,7 @@
+export const LOGO_GENRE = {
+  AUTRE: 'AUTRE',
+  CAMION: 'CAMION',
+  MOTO: 'MOTO',
+  UTILITAIRE: 'UTILITAIRE',
+  VOITURE: 'VOITURE',
+}

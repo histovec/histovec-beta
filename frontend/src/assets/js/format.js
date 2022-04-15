@@ -1,11 +1,38 @@
 import { MISSING_VALUE } from './constants'
 
+import dayjs from 'dayjs'
+
+
 export const FR_DATE_FORMAT = 'DD/MM/YYYY'
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD'
 
-export const booleanLabel = (test, { upperCase }={ upperCase: true }) => {
-	const label = test ? 'Oui' : 'Non'
-	return upperCase ? label.toUpperCase() : label
+export const booleanLabel = (
+	test,
+	{ upperCase }={ upperCase: true },
+	{ unknownValue } = { unknownValue: MISSING_VALUE }
+) => {
+	if (test === undefined) {
+		return unknownValue
+	}
+
+	if (upperCase) {
+		return test ? 'OUI' : 'NON'
+	}
+
+	return test ? 'Oui' : 'Non'
+}
+
+export const formatIsoToHumanReadableFrDate = (isoDate) => {
+	if(!isoDate){
+		return ''
+	}
+
+	const humanReadableFrDate = dayjs(isoDate, ISO_DATE_FORMAT).toDate().toLocaleDateString(
+		'fr-FR',
+		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+	)
+
+	return humanReadableFrDate
 }
 
 export const formatIsoToFrDate = (isoDate) => {

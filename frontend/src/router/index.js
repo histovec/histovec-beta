@@ -16,6 +16,7 @@ const Buyer = loadView('infos/Buyer')
 import Unavailable from '@/components/infos/Unavailable'
 import NotFound from '@/components/infos/NotFound'
 
+
 Vue.use(Router)
 
 const isHistovecUnavailable = process.env.VUE_APP_IS_HISTOVEC_UNAVAILABLE

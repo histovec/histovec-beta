@@ -7,10 +7,7 @@ export const plugin = {
   name: 'publicApi',
   version: '1.0.0',
   register: (server, options) => {
-    const { apiPrefix, basePrivateUrl, privateApiReportPath } = options
-    const privateApiReportUrl = `${apiPrefix}${basePrivateUrl}${privateApiReportPath}`
-
-    server.expose('privateApiReportUrl', privateApiReportUrl)
+    const { apiPrefix } = options
 
     reportByData.path = options.apiPrefix + reportByData.path
     appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByData.path}`)  // @todo: remove after validation in development environment
