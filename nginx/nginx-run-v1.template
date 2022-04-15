@@ -66,7 +66,7 @@ server {
     return 200 '{"status":"ok"}';
   }
 
-  location ~ "^/<APP>/api/v1/(report)" {
+  location ~ "^/<APP>/api/v1/(report_by_data|report_by_code|contact)" {
     include tor-ip.conf;
     include aws-ip.conf;
     if ($maintenance = true) {
@@ -81,25 +81,6 @@ server {
     proxy_next_upstream off;
     proxy_set_header X-Forwarded-For $http_x_forwarded_for;
     proxy_set_header X-Forwarded-Host $http_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_set_header Cache-Control "no-store";
-  }
-
-  location ~ "^/<APP>/api/v1/(contact)" {
-    if ($maintenance = true) {
-      return 503;
-    }
-    if ($request_method != POST) {
-      return 405;
-    }
-
-    proxy_pass http://<BACKEND_HOST>;
-    proxy_http_version 1.1;
-    proxy_next_upstream off;
-    proxy_set_header  X-Forwarded-For $remote_addr;
-    proxy_set_header  X-Forwarded-Host $remote_addr;
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";

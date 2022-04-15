@@ -25,8 +25,8 @@ export const normalizeImmatForUtac = (immat) => {
   )
 }
 
-export const validateTechnicalControls = (sentVin, technicalControls) => {
-  const inconsistentVin = technicalControls.find(ct => ct.ct_vin !== sentVin)
+export const validateControlesTechniques = (sentVin, controlesTechniques) => {
+  const inconsistentVin = controlesTechniques.find(ct => ct.ct_vin !== sentVin)
 
   if (inconsistentVin) {
     appLogger.error({

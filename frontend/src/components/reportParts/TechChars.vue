@@ -15,7 +15,7 @@
         <span class="bold txt-small-12">D.1</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.marque }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.marque }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -27,7 +27,7 @@
         <span class="bold txt-small-12">D.2</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.tvv }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.tvv }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -39,7 +39,7 @@
         <span class="bold txt-small-12">D.2.1</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.cnit }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.cnit }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -51,7 +51,7 @@
         <span class="bold txt-small-12">D.3</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.modele }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.modele }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -63,7 +63,7 @@
         <span class="bold txt-small-12">&nbsp;</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.couleur }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.couleur }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -75,7 +75,7 @@
         <span class="bold txt-small-12">&nbsp;</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.reception.type }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.reception.type }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -96,7 +96,7 @@
         <span class="bold txt-small-12">E</span>
       </div>
       <div class="col-sm-4">
-        <span class="info_red txt-small-12">{{ ctec.vin }}</span>
+        <span class="info_red txt-small-12">{{ caracteristiquesTechniques.vin }}</span>
       </div>
     </div>
     <div class="separator"></div>
@@ -106,7 +106,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="ctec.PT.admissible">
+    <div v-if="caracteristiquesTechniques.PT.admissible">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PT technique admissible (kg)</span>
@@ -115,12 +115,12 @@
           <span class="bold txt-small-12">F.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.PT.admissible }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.PT.admissible }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.AC">
+    <div v-if="caracteristiquesTechniques.PT.AC">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PTAC (kg)</span>
@@ -129,12 +129,12 @@
           <span class="bold txt-small-12">F.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.PT.AC }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.PT.AC }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.RA">
+    <div v-if="caracteristiquesTechniques.PT.RA">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PTRA (kg)</span>
@@ -143,12 +143,12 @@
           <span class="bold txt-small-12">F.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.PT.RA }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.PT.RA }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.admissible || ctec.PT.AC || ctec.PT.RA">
+    <div v-if="caracteristiquesTechniques.PT.admissible || caracteristiquesTechniques.PT.AC || caracteristiquesTechniques.PT.RA">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -156,7 +156,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.service">
+    <div v-if="caracteristiquesTechniques.PT.service">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PT en service (kg)</span>
@@ -165,12 +165,12 @@
           <span class="bold txt-small-12">G</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.PT.service }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.PT.service }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.AV">
+    <div v-if="caracteristiquesTechniques.PT.AV">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">PTAV (kg)</span>
@@ -179,12 +179,12 @@
           <span class="bold txt-small-12">G.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.PT.AV }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.PT.AV }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.PT.service || ctec.PT.AV">
+    <div v-if="caracteristiquesTechniques.PT.service || caracteristiquesTechniques.PT.AV">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -192,7 +192,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.categorie">
+    <div v-if="caracteristiquesTechniques.categorie">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Catégorie (CE)</span>
@@ -201,12 +201,12 @@
           <span class="bold txt-small-12">J</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.categorie }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.categorie }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.genre">
+    <div v-if="caracteristiquesTechniques.genre">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Genre (National)</span>
@@ -215,12 +215,12 @@
           <span class="bold txt-small-12">J.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.genre }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.genre }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.carrosserie.ce">
+    <div v-if="caracteristiquesTechniques.carrosserie.ce">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Carrosserie (CE)</span>
@@ -229,12 +229,12 @@
           <span class="bold txt-small-12">J.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.carrosserie.ce }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.carrosserie.ce }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.carrosserie.national">
+    <div v-if="caracteristiquesTechniques.carrosserie.national">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Carrosserie (National)</span>
@@ -243,7 +243,7 @@
           <span class="bold txt-small-12">J.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.carrosserie.national }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.carrosserie.national }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -254,7 +254,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="ctec.reception.numero">
+    <div v-if="caracteristiquesTechniques.reception.numero">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Numéro de réception</span>
@@ -263,7 +263,7 @@
           <span class="bold txt-small-12">K</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.reception.numero }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.reception.numero }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -274,7 +274,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.puissance.cylindres">
+    <div v-if="caracteristiquesTechniques.puissance.cylindres">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Cylindrée (cm3)</span>
@@ -283,12 +283,12 @@
           <span class="bold txt-small-12">P.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.puissance.cylindres }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.puissance.cylindres }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.puissance.nette">
+    <div v-if="caracteristiquesTechniques.puissance.nette">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Puissance nette max (kW)</span>
@@ -297,12 +297,12 @@
           <span class="bold txt-small-12">P.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.puissance.nette }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.puissance.nette }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.energie">
+    <div v-if="caracteristiquesTechniques.energie">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Energie</span>
@@ -311,12 +311,12 @@
           <span class="bold txt-small-12">P.3</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.energie }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.energie }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.puissance.cv">
+    <div v-if="caracteristiquesTechniques.puissance.cv">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Puissance CV</span>
@@ -325,7 +325,7 @@
           <span class="bold txt-small-12">P.6</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.puissance.cv }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.puissance.cv }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -336,7 +336,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="ctec.puissance.norm">
+    <div v-if="caracteristiquesTechniques.puissance.norm">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Puissance / masse (kW/kg)</span>
@@ -345,7 +345,7 @@
           <span class="bold txt-small-12">Q</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.puissance.norm }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.puissance.norm }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -356,7 +356,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.places.assis">
+    <div v-if="caracteristiquesTechniques.places.assis">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Places assises</span>
@@ -365,7 +365,7 @@
           <span class="bold txt-small-12">S.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.places.assis }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.places.assis }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -380,10 +380,10 @@
         </div>
         <div class="col-sm-4">
           <span
-            v-if="ctec.places.debout"
+            v-if="caracteristiquesTechniques.places.debout"
             class="info_red txt-small-12"
           >
-            {{ ctec.places.debout }}
+            {{ caracteristiquesTechniques.places.debout }}
           </span>
         </div>
       </div>
@@ -395,7 +395,7 @@
       </td>
     </div>
     <div class="separator"></div>
-    <div v-if="ctec.db">
+    <div v-if="caracteristiquesTechniques.db">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Niveau sonore (db(A))</span>
@@ -404,12 +404,12 @@
           <span class="bold txt-small-12">U.1</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.db }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.db }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.moteur">
+    <div v-if="caracteristiquesTechniques.moteur">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Vitesse moteur (min-1)</span>
@@ -418,12 +418,12 @@
           <span class="bold txt-small-12">U.2</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.moteur }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.moteur }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.db || ctec.moteur">
+    <div v-if="caracteristiquesTechniques.db || caracteristiquesTechniques.moteur">
       <div class="row">
         <td colspan="3">
           &nbsp;
@@ -431,7 +431,7 @@
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.co2">
+    <div v-if="caracteristiquesTechniques.co2">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">CO2 (g/km)</span>
@@ -440,12 +440,12 @@
           <span class="bold txt-small-12">V.7</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.co2 }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.co2 }}</span>
         </div>
       </div>
       <div class="separator"></div>
     </div>
-    <div v-if="ctec.environnement">
+    <div v-if="caracteristiquesTechniques.environnement">
       <div class="row">
         <div class="col-sm-6">
           <span class="txt-small-12">Classe environnement (CE)</span>
@@ -454,7 +454,7 @@
           <span class="bold txt-small-12">V.9</span>
         </div>
         <div class="col-sm-4">
-          <span class="info_red txt-small-12">{{ ctec.environnement }}</span>
+          <span class="info_red txt-small-12">{{ caracteristiquesTechniques.environnement }}</span>
         </div>
       </div>
       <div class="separator"></div>
@@ -466,7 +466,7 @@
 
 export default {
   props: {
-    ctec: {
+    caracteristiquesTechniques: {
       type: Object,
       default: () => {}
     }

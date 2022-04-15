@@ -92,11 +92,11 @@
               id="plaque-siv"
               class="clickable"
               title="Immatriculation depuis 2009"
-              @click="typeImmatriculation = 'siv'"
+              @click="typeImmatriculation = TYPE_IMMATRICULATION.SIV"
             >
               <img
                 class="img-responsive center-block"
-                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'siv' }"
+                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
                 :src="imagePlaqueImmatriculationDepuis2009"
                 width="200"
                 height="44"
@@ -110,11 +110,11 @@
               id="plaque-fni"
               class="clickable"
               title="Immatriculation avant 2009"
-              @click="typeImmatriculation = 'fni'"
+              @click="typeImmatriculation = TYPE_IMMATRICULATION.FNI"
             >
               <img
                 class="img-responsive center-block"
-                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'fni' }"
+                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
                 :src="imagePlaqueImmatriculationAvant2009"
                 width="200"
                 height="44"
@@ -127,11 +127,11 @@
             <a
               class="clickable"
               title="Immatriculation avant 1995"
-              @click="typeImmatriculation = 'old'"
+              @click="typeImmatriculation = OLD_IMMATRICULATION_TYPE"
             >
               <img
                 class="img-responsive center-block"
-                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== 'old' }"
+                :class="{ 'opacity-plaque': typeImmatriculation && typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
                 :src="imagePlaqueImmatriculationAvant1995"
                 width="200"
                 height="44"
@@ -140,7 +140,7 @@
           </div>
         </div>
         <div
-          v-if="typeImmatriculation === 'old'"
+          v-if="typeImmatriculation === OLD_IMMATRICULATION_TYPE"
           class="row"
         >
           <div class="col-md-10 col-md-offset-1">
@@ -168,7 +168,7 @@
           </div>
         </div>
         <div
-          v-if="typeImmatriculation === 'siv' || typeImmatriculation === 'fni'"
+          v-if="Object.values(TYPE_IMMATRICULATION).includes(typeImmatriculation)"
           class="col-md-12 col-xs-12 p-h-25"
         >
           <!-- tabs start -->
@@ -178,20 +178,20 @@
             class="nav nav-tabs style-2 nav-justified"
             role="tablist"
           >
-            <li :class="[{'in active' : typePersonne === 'particulier'}]">
+            <li :class="[{'in active' : typePersonne === TYPE_PERSONNE.PARTICULIER}]">
               <a
                 class="clickable"
-                @click="typePersonne = 'particulier'"
+                @click="typePersonne = TYPE_PERSONNE.PARTICULIER"
               >
                 <i class="fa fa-user pr-10"></i>
                 Particulier
               </a>
             </li>
-            <li :class="[{'in active' : typePersonne === 'pro'}]">
+            <li :class="[{'in active' : typePersonne === TYPE_PERSONNE.PRO}]">
               <a
                 id="pro"
                 class="clickable"
-                @click="typePersonne = 'pro'"
+                @click="typePersonne = TYPE_PERSONNE.PRO"
               >
                 <i class="fa fa-building-o pr-10"></i>
                 Personne morale
@@ -218,13 +218,13 @@
                     </legend>
                     <form role="form">
                       <div
-                        v-if="typePersonne === 'particulier'"
+                        v-if="typePersonne === TYPE_PERSONNE.PARTICULIER"
                         class="row"
                       >
                         <div
                           :class="{
-                            'col-md-6': typeImmatriculation === 'siv',
-                            'col-md-12' : typeImmatriculation === 'fni'
+                            'col-md-6': typeImmatriculation === TYPE_IMMATRICULATION.SIV,
+                            'col-md-12' : typeImmatriculation === TYPE_IMMATRICULATION.FNI
                           }"
                         >
                           <div
@@ -232,7 +232,7 @@
                             :class="[{'has-error' : (nom === '' && status !== 'init')}]"
                           >
                             <label
-                              v-if="typeImmatriculation === 'siv'"
+                              v-if="typeImmatriculation === TYPE_IMMATRICULATION.SIV"
                               class="control-label"
                             >
                               Nom de naissance
@@ -244,7 +244,7 @@
                               </span>
                             </label>
                             <a
-                              v-if="typeImmatriculation === 'siv'"
+                              v-if="typeImmatriculation === TYPE_IMMATRICULATION.SIV"
                               class="clickable text-info btn-sm-link"
                               @click="nomsModal = true"
                             >
@@ -252,7 +252,7 @@
                               <i class="fa fa-info-circle fa-lg"></i>
                             </a>
                             <label
-                              v-if="typeImmatriculation === 'fni'"
+                              v-if="typeImmatriculation === TYPE_IMMATRICULATION.FNI"
                               class="control-label"
                             >
                               Nom(s) et Prénom(s)
@@ -264,7 +264,7 @@
                               </span>
                             </label>
                             <a
-                              v-if="typeImmatriculation === 'fni'"
+                              v-if="typeImmatriculation === TYPE_IMMATRICULATION.FNI"
                               class="clickable text-info btn-sm-link"
                               @click="nomsPrenomsModal = true"
                             >
@@ -289,7 +289,7 @@
                           </div>
                         </div>
                         <div
-                          v-if="typeImmatriculation === 'siv'"
+                          v-if="typeImmatriculation === TYPE_IMMATRICULATION.SIV"
                           class="col-md-6"
                         >
                           <div
@@ -325,7 +325,7 @@
                         </div>
                       </div>
                       <div
-                        v-if="typePersonne === 'pro'"
+                        v-if="typePersonne === TYPE_PERSONNE.PRO"
                         class="row"
                       >
                         <div class="col-md-7">
@@ -386,7 +386,7 @@
                             :option="typeImmatriculation"
                           >
                             <a
-                              v-if="typeImmatriculation === 'siv'"
+                              v-if="typeImmatriculation === TYPE_IMMATRICULATION.SIV"
                               slot="link"
                               class="clickable text-info btn-sm-link"
                               @click="plaqueImmatriculationSIVModal = true"
@@ -395,7 +395,7 @@
                               <i class="fa fa-info-circle fa-lg"></i>
                             </a>
                             <a
-                              v-if="typeImmatriculation === 'fni'"
+                              v-if="typeImmatriculation === TYPE_IMMATRICULATION.FNI"
                               slot="link"
                               class="clickable text-info btn-sm-link"
                               @click="plaqueImmatriculationFNIModal = true"
@@ -410,7 +410,7 @@
                             class="form-group has-feedback plan position_left"
                             :class="[{'has-error' : ((!checkFormule && !checkDateCertificat) && status !== 'init')}]"
                           >
-                            <div v-if="typeImmatriculation === 'siv'">
+                            <div v-if="typeImmatriculation === TYPE_IMMATRICULATION.SIV">
                               <label
                                 for="input"
                                 class="control-label"
@@ -442,7 +442,7 @@
                               >
                               <i class="fa fa-pencil-square-o form-control-feedback numero-formule"></i>
                             </div>
-                            <div v-if="typeImmatriculation === 'fni'">
+                            <div v-if="typeImmatriculation === TYPE_IMMATRICULATION.FNI">
                               <label
                                 for="input"
                                 class="control-label"
@@ -685,6 +685,10 @@ import { base64Encode, urlSafeBase64Encode, base64Decode } from '../utils/encodi
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../utils/dataPreparationFormat'
 import ModalHelper from './infos/ModalHelper.vue'
 import Field from './forms/Field.vue'
+
+import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../constants/type'
+import { DEFAULT_SIREN }  from '../constants/vehicle/siren.js'
+
 import imageDateImmatriculationFNI from '@/assets/img/aide_fni_date_immatriculation.jpg'
 import imageNomsPrenomsFNI from '@/assets/img/aide_fni_noms_prenoms.jpg'
 import imagePlaqueImmatriculationFNI from '@/assets/img/aide_fni_plaque_immatriculation.jpg'
@@ -706,7 +710,7 @@ const formInitialOptions = {
     type: 'text'
   },
   siren: {
-    siv: {
+    [TYPE_IMMATRICULATION.SIV]: {
       fieldNumberPro: 2,
       fieldNumberParticulier: 2,
       label: 'N° SIREN',
@@ -718,9 +722,9 @@ const formInitialOptions = {
       icon: 'fa fa-hashtag',
       tabindex: '2',
       required: false,
-      defaultValue: '000000000'
+      defaultValue: DEFAULT_SIREN,
     },
-    fni: {
+    [TYPE_IMMATRICULATION.FNI]: {
       fieldNumberPro: 2,
       fieldNumberParticulier: 2,
       label: 'N° SIREN',
@@ -732,11 +736,11 @@ const formInitialOptions = {
       icon: 'fa fa-hashtag',
       tabindex: '2',
       required: false,
-      defaultValue: '000000000'
+      defaultValue: DEFAULT_SIREN,
     }
   },
   plaque: {
-    siv: {
+    [TYPE_IMMATRICULATION.SIV]: {
       fieldNumberPro: 3,
       fieldNumberParticulier: 3,
       label: 'Plaque d\'immatriculation',
@@ -751,7 +755,7 @@ const formInitialOptions = {
       icon: 'fa fa-drivers-license-o',
       tabindex: '4'
     },
-    fni: {
+    [TYPE_IMMATRICULATION.FNI]: {
       fieldNumberPro: 3,
       fieldNumberParticulier: 2,
       label: 'Plaque d\'immatriculation',
@@ -809,6 +813,11 @@ export default {
       imagePlaqueImmatriculationAvant2009,
       imagePlaqueImmatriculationDepuis2009,
       imagePoigneeDeMain,
+
+      // constants
+      OLD_IMMATRICULATION_TYPE,
+      TYPE_IMMATRICULATION,
+      TYPE_PERSONNE,
 
       status: 'init',
     }
@@ -898,7 +907,7 @@ export default {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
     },
     checkPlaque () {
-      if (this.typeImmatriculation === 'fni') {
+      if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
         return this.plaque.match(/^\s*[0-9]{2,4}(-|\s+)?[a-zA-Z]{2,3}(-|\s+)?([0-9]{2,3}|2A|2B)\s*$/)
       } else {
         return this.plaque.match(/^[a-zA-Z]{1,2}(-|\s+)?[0-9]{2,3}(-|\s+)?[a-zA-Z]{1,2}$/)
@@ -911,7 +920,7 @@ export default {
       return !this.siren || this.siren.match(/^\d{9}$/)
     },
     checkFields () {
-      return ((this.nom && (this.prenom || this.typeImmatriculation === 'fni')) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
+      return ((this.nom && (this.prenom || this.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI)) || (this.raisonSociale && this.checkSiren)) && this.checkPlaque && (this.checkFormule || this.checkDateCertificat)
     },
     currentMonthNumber () {
       let date = dayjs().add(-7, 'day')
@@ -923,14 +932,14 @@ export default {
       return date.format('YYYYMM')
     },
     personneId () {
-      if (this.typePersonne === 'particulier') {
-        return this.nom + (this.typeImmatriculation === 'siv' ? this.prenom : '')
+      if (this.typePersonne === TYPE_PERSONNE.PARTICULIER) {
+        return this.nom + (this.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV ? this.prenom : '')
       } else {
         return this.raisonSociale + this.siren
       }
     },
     vehicleId () {
-      if (this.typeImmatriculation === 'siv') {
+      if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
         return this.plaque + this.formule
       } else {
         return this.plaque + this.dateCertificat
@@ -945,9 +954,6 @@ export default {
     }
   },
   created () {
-    if (this.typeImmatriculation === undefined) {
-      this.typeImmatriculation = 'siv'
-    }
     if (this.formOptions === undefined) {
       this.formOptions = formInitialOptions
     }
@@ -962,7 +968,7 @@ export default {
     if (!window.location.host.match(/(histovec.fr|.gouv.fr$)/)) {
       this.active = true
     }
-    this.typePersonne = this.$store.state.identity.typePersonne || this.$route.params.t || 'particulier'
+    this.typePersonne = this.$store.state.identity.typePersonne || TYPE_PERSONNE.PARTICULIER
   },
   mounted() {
     // reset 'MonAvis' evaluation for each new search (notShow option will override it)
@@ -974,8 +980,9 @@ export default {
   },
   methods: {
     defaultEmtpyFields () {
-      for (let [field, options] of Object.entries(this.formOptions)) {
-        ['siv', 'fni'].forEach((typeImmat) => {
+      for (let field of Object.keys(this.formOptions)) {
+        const options = this.formOptions[field]
+        Object.values(this.TYPE_IMMATRICULATION).forEach((typeImmat) => {
           if (field !== 'default' && this.typeImmatriculation === typeImmat) {
             const specificOptions = options[typeImmat]
             if (
@@ -991,7 +998,7 @@ export default {
     },
     cleanDefaultFields () {
       for (let [field, options] of Object.entries(this.formOptions)) {
-        ['siv', 'fni'].forEach((typeImmat) => {
+        Object.values(this.TYPE_IMMATRICULATION).forEach((typeImmat) => {
           if (field !== 'default' && this.typeImmatriculation === typeImmat) {
             const specificOptions = options[typeImmat]
             if (specificOptions.required === false || (specificOptions.required === undefined && this.formOptions.default === false)) {
@@ -1011,7 +1018,7 @@ export default {
 
       if (data.length > 1) {
         if (evt.target.name === 'nom') {
-          if (this.typeImmatriculation === 'siv') {
+          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
             // 1st element has already been pasted on current target name : 'nom'
             // It is equivalent to :
             // this.nom = data[0]
@@ -1019,7 +1026,7 @@ export default {
             this.plaque = data[2]
             this.formule = data[3]
           }
-          if (this.typeImmatriculation === 'fni') {
+          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
             // 1st element has already been pasted on current target name : 'nom'
             // It is equivalent to :
             // this.nom = data[0]
@@ -1033,10 +1040,10 @@ export default {
           // this.raisonSociale = data[0]
           this.siren = data[1]
           this.plaque = data[2]
-          if (this.typeImmatriculation === 'siv') {
+          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
             this.formule = data[3]
           }
-          if (this.typeImmatriculation === 'fni') {
+          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
             this.dateCertificat = data[3]
           }
         }

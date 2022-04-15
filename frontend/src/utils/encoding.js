@@ -1,12 +1,12 @@
 import { decode, encode } from 'base64-arraybuffer'
 
 
-export const urlSafeDecode = (text) => {
+const urlSafeDecode = (text) => {
   // Replace - by + and _ by / in a single pass
   return text.replace(/[-_]/g, char => char === '-' ? '+' : '/')
 }
 
-export const urlSafeEncode = (text) => {
+const urlSafeEncode = (text) => {
   // Replace + by - and / by _ in a single pass
   return text.replace(/[+/]/g, char => char === '+' ? '-' : '_')
 }

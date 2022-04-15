@@ -14,8 +14,6 @@ import config from './config.js'
 
 
 const PORT = Number(config.port) || 8000
-const BASE_PRIVATE_URL = '/private'
-const PRIVATE_API_REPORT_PATH = '/report'
 
 const prefixize = (route) => {
   return {
@@ -143,33 +141,16 @@ export const createServer = async () => {
   ]
 
   plugins.push({
-    plugin: await import('./plugins/private-api'),
+    plugin: await import('./plugins/public-api'),
     options: {
+      // hapi-swagger options
+      definitionPrefix: 'useLabel',
+      reuseDefinitions: false,
+
       // Custom options
       apiPrefix: config.apiPrefix,
-      basePrivateUrl: BASE_PRIVATE_URL,
-      private: config.isPublicApi,
     },
   })
-
-
-  if (config.isPublicApi) {
-    // @todo: s'assurer que le swagger ne soit pas accessible en PROD pour l'api backend classique
-
-    plugins.push({
-      plugin: await import('./plugins/public-api'),
-      options: {
-        // hapi-swagger options
-        definitionPrefix: 'useLabel',
-        reuseDefinitions: false,
-
-        // Custom options
-        apiPrefix: config.apiPrefix,
-        basePrivateUrl: BASE_PRIVATE_URL,
-        privateApiReportPath: PRIVATE_API_REPORT_PATH,
-      },
-    })
-  }
 
   await server.register(plugins)
 

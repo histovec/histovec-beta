@@ -25,7 +25,7 @@
               <!-- debut bouton vendeur -->
               <router-link
                 class="btn radius-30 btn-default btn-animated btn-lg"
-                :to="{ name: 'search', params: {t: 'particulier'}}"
+                :to="{ name: 'search' }"
               >
                 Propriétaire
                 <i class="fa fa-handshake-o"></i>

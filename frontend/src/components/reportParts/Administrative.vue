@@ -69,7 +69,7 @@
           >
             <span v-if="oppositionInfos.date">{{ oppositionInfos.date }} - </span>{{ oppositionInfos.label }}
             <span
-              v-if="oppositionSection.hasOtciPv && holder && oppositionInfos.label.includes('PV')"
+              v-if="oppositionSection.hasOtciPV && isHolder && oppositionInfos.label.includes('PV')"
               class="no-color txt-small-12"
             >
               ( Appelez le 08 21 08 00 31 )
@@ -162,7 +162,7 @@
 
 export default {
   props: {
-    holder: Boolean,
+    isHolder: Boolean,
     oppositionSection: {
       type: Object,
       default: () => {}

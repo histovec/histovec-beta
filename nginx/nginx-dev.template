@@ -55,7 +55,7 @@ server {
     return 200 '{"status":"ok"}';
   }
 
-  location ~ "^/<APP>/api/v1/(report|contact)" {
+  location ~ "^/<APP>/api/v1/(report_by_data|report_by_code|contact)" {
     if ($request_method != POST) {
        return 405;
     }

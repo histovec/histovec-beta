@@ -7,9 +7,9 @@ import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from './c
 export const generateCsa = async (
 	// Complete CSA and annulation
 	{
-		isAnnulationCI,
+		isCIAnnule,
 		annulationCurrentStatus,
-		dateAnnulation,
+		dateAnnulationCI,
 		dateDonnees,
 		histoVecLogoBytes,
 		marianneImageBytes,
@@ -28,7 +28,7 @@ export const generateCsa = async (
 		gagesCurrentStatusLines,
 		historyItems,
 		otcisCurrentStatusLines,
-		otcisPvCurrentStatusLines,
+		otcisPVCurrentStatusLines,
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
 		perteTitre,
@@ -63,9 +63,9 @@ export const generateCsa = async (
 			doc,
 			embeddedFonts,
 			embeddedLogos,
-			isAnnulationCI,
+			isCIAnnule,
 			annulationCurrentStatus,
-			dateAnnulation,
+			dateAnnulationCI,
 			dateDonnees,
 			marque,
 			plaque,
@@ -76,13 +76,13 @@ export const generateCsa = async (
 			webSiteUrl
 		},
 		(
-			!isAnnulationCI ? {
+			!isCIAnnule ? {
 				duplicataTitre,
 				dvsCurrentStatusLines,
 				gagesCurrentStatusLines,
 				historyItems,
 				otcisCurrentStatusLines,
-				otcisPvCurrentStatusLines,
+				otcisPVCurrentStatusLines,
 				oveisCurrentStatusLines,
 				ovesCurrentStatusLines,
 				perteTitre,

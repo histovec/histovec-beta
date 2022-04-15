@@ -1,5 +1,4 @@
 import Qr from 'qr.js'
-import dayjs from 'dayjs'
 
 import {
 	BORDER_LEFT_PAGE_X,
@@ -13,7 +12,7 @@ import {
 	TOP_FOOTER_MARGIN
 } from './constants'
 import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from './utils'
-import { FR_DATE_FORMAT, padString } from '../../assets/js/format'
+import { formatIsoToHumanReadableFrDate, padString } from '../../assets/js/format'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = ({
@@ -132,10 +131,7 @@ const writeValidityDate = ({
 		title: 'Certificat attestant la situation administrative au :'
 	})
 
-	const dateDonneesHumanReadableDateString = dayjs(dateDonnees, FR_DATE_FORMAT).toDate().toLocaleDateString(
-		'fr-FR',
-		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-	)
+	const dateDonneesHumanReadableDateString = formatIsoToHumanReadableFrDate(dateDonnees)
 
 	const datesText = (
 		dateDonnees ?

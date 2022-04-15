@@ -60,11 +60,7 @@ import { getShareCodePartageHistoVecEmail } from '../../utils/dynamicEmail'
 
 export default {
   props: {
-    reportId: {
-      type: String,
-      default: '',
-    },
-    reportKey: {
+    codePartageHistoVec: {
       type: String,
       default: '',
     },
@@ -74,11 +70,6 @@ export default {
       notifSuccess: false,
       timerNotifSuccess: 10000
     }
-  },
-  computed: {
-    codePartageHistoVec () {
-      return `${this.reportId}-${this.reportKey}`
-    },
   },
   created () {
     const SHARE_CODE_PARTAGE_HISTOVEC_EMAIL = getShareCodePartageHistoVecEmail({codePartageHistoVec: this.codePartageHistoVec})

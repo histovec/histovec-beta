@@ -1,12 +1,12 @@
 <template>
   <div
-    v-if="ctError"
+    v-if="erreurControlesTechniques"
     class="alert alert-icon alert-danger"
     role="alert"
   >
     <i class="fa fa-warning">
     </i>
-    {{ ctError }}
+    {{ erreurControlesTechniques }}
   </div>
 </template>
 
@@ -15,7 +15,7 @@
 
 export default {
   props: {
-    ctError: {
+    erreurControlesTechniques: {
       type: String,
       default: ''
     }

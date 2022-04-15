@@ -1,9 +1,9 @@
 export const VIGNETTE = {
-	UN: '1',
-	DEUX: '2',
-	TROIS: '3',
-	QUATRE: '4',
-	CINQ: '5',
+	1: '1',
+	2: '2',
+	3: '3',
+	4: '4',
+	5: '5',
 	ELECTRIQUE: 'ELECTRIQUE',
 	NON_CLASSE: 'NON_CLASSE',
 }

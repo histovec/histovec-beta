@@ -2,14 +2,13 @@
 
 import orderBy from 'lodash.orderby'
 import { Line } from 'vue-chartjs'
-import dayjs from 'dayjs'
 
-import { FR_DATE_FORMAT } from '../../assets/js/format.js'
+import { formatIsoToFrDate } from '../../assets/js/format.js'
 
 export default {
   extends: Line,
   props: {
-    ct: {
+    controlesTechniques: {
       type: Array,
       default: () => []
     }
@@ -49,11 +48,11 @@ export default {
         tooltips: {
           callbacks: {
             title: (tooltipItem) => {
-              const day = dayjs(tooltipItem[0].xLabel).format(FR_DATE_FORMAT)
+              const day = formatIsoToFrDate(tooltipItem[0].xLabel)
               const km = Math.round(tooltipItem[0].yLabel * 100) / 100
-              const formattedKm = new Intl.NumberFormat().format(km)
+              const kmLibelle = new Intl.NumberFormat().format(km)
 
-              return `Le ${day}: ${formattedKm} km`
+              return `Le ${day}: ${kmLibelle} km`
             },
             label: (tooltipItem) => {
               const nature = this.nature[tooltipItem.index]
@@ -66,19 +65,19 @@ export default {
       }
     },
     data () {
-      return orderBy(this.ct.map((controle) => this.controlToPoint(controle)), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => this.controlToPoint(controle)), ['x'], ['asc'])
     },
     pointColors () {
-      return orderBy(this.ct.map((controle) => this.colors[controle.resultat]), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => this.colors[controle.resultat]), ['x'], ['asc'])
     },
     nature () {
-      return orderBy(this.ct.map((controle) => controle.natureLabel), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => controle.natureLibelle), ['x'], ['asc'])
     },
     resultat () {
-      return orderBy(this.ct.map((controle) => controle.resultatLabel), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => controle.resultatLibelle), ['x'], ['asc'])
     },
     lineData () {
-      if (this.ct.length > 0) {
+      if (this.controlesTechniques.length > 0) {
         return {
           datasets: [
             {
@@ -106,7 +105,7 @@ export default {
   methods: {
     controlToPoint (controle) {
       const point = {
-        x: controle.isoFormatDate,
+        x: controle.date,
         y: controle.km,
       }
 
