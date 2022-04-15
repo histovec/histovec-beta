@@ -243,12 +243,19 @@ module.exports.UTACClient = class UTACClient {
       }
     }
 
+    if (config.utac.forceUtacHealthcheck) {
+      const response = await this.healthCheck()
+
+      appLogger.info(`[UTAC] forceUtacHealthchek ${response.status}`)
+    }
+
     const start = new Date()
     appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_start`)
 
     appLogger.debug({
       debug: 'UTACClient - readControlesTechniques',
       immat,
+      vin,
     })
 
     let response = null
