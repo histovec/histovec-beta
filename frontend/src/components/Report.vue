@@ -338,7 +338,7 @@
               >
                 <tech-control
                   v-if="tab === 'utac' && !isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
-                  :controlesTechniques="controlesTechniques"
+                  :controles-techniques="controlesTechniques"
                   :erreur-controles-techniques="erreurControlesTechniques"
                 >
                 </tech-control>
@@ -350,7 +350,7 @@
               >
                 <tech-control-graph
                   v-if="tab === 'utacGraph' && !erreurControlesTechniques && controlesTechniques.length > 0"
-                  :controlesTechniques="controlesTechniques"
+                  :controles-techniques="controlesTechniques"
                 >
                 </tech-control-graph>
                 <tech-control-graph-error

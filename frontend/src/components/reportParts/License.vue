@@ -93,9 +93,6 @@ export default {
       default: () => {}
     }
   },
-  mounted () {
-    this.$store.dispatch('log', `${this.$route.path}/holder`)
-  },
   computed: {
     datePremiereImmatriculationFR () {
       return formatIsoToFrDate(this.certificat.datePremiereImmatriculation)
@@ -106,7 +103,10 @@ export default {
     dateEmissionCIFR () {
       return formatIsoToFrDate(this.certificat.dateEmissionCI)
     },
-  }
+  },
+  mounted () {
+    this.$store.dispatch('log', `${this.$route.path}/holder`)
+  },
 }
 
 </script>
