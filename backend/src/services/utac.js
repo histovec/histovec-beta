@@ -246,7 +246,7 @@ module.exports.UTACClient = class UTACClient {
     if (config.utac.forceUtacHealthcheck) {
       const response = await this.healthCheck()
 
-      appLogger.info(`[UTAC] forceUtacHealthchek ${response.status}`)
+      appLogger.info(`[UTAC] forceUtacHealthcheck ${response.status}`)
     }
 
     const start = new Date()
