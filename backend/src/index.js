@@ -3,6 +3,7 @@ import http from 'http'
 import { createServer } from './server.js'
 import { getRedisClient } from './connectors/redis.js'
 import { getElasticsearchClient } from './connectors/elasticsearch.js'
+import { getUtacClient } from './connectors/utac.js'
 import { appLogger, techLogger } from './util/logger.js'
 import config from './config.js'
 
@@ -10,6 +11,7 @@ const API_NAME = config.apiName  // 'backend' or 'public-backend'
 
 const elasticsearchClient = getElasticsearchClient()
 const redisClient = getRedisClient()
+const utacClient = getUtacClient()
 
 
 const cleanUp = async (server, code, reason) => {
@@ -97,6 +99,28 @@ const initServer = async () => {
       techLogger.error(error)
       appLogger.info('[SERVER-START] redis_down unable_to_connect_at_start')
       appLogger.info('-- redis is down => cannot connect to redis')
+    }
+
+    try {
+      const response = await utacClient.healthCheck()
+
+      if (response.status === 200) {
+        techLogger.info(
+          `✅  UTAC API server is ok`
+        )
+        appLogger.info('[SERVER-START] utac_api ok')
+      } else {
+        techLogger.info(
+          `❌  UTAC API is not available… (status : ${response.status})`
+        )
+        appLogger.info(`[SERVER-START] utac_api ko ${status}`)
+      }
+    } catch (error) {
+      techLogger.error(
+        `❌  UTAC API is not available…`
+      )
+      techLogger.error(error)
+      appLogger.info(`[SERVER-START] utac_api ko`)
     }
   }
 
