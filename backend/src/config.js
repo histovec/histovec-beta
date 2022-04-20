@@ -36,7 +36,6 @@ const config = {
     isUtacMockForBpsaActivated: process.env.IS_UTAC_MOCK_FOR_BPSA_ACTIVATED === 'true',
     isFakedApi: false,  // /!\ value is passed as String
     apiUrl: process.env.UTAC_URL,
-    forceUtacHealthcheck: process.env.FORCE_UTAC_HEALTHCHECK === 'true',
     fakeApiUrl: process.env.FAKE_UTAC_URL,
     timeout: parseInt(process.env.UTAC_TIMEOUT, 10) || 30,
     username: process.env.UTAC_USERNAME,
