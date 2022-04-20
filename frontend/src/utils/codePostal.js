@@ -5,5 +5,5 @@ const CODE_POSTAL_REGEX = new RegExp(`${COMMON_CODE_POSTAL_REGEX.source}|${DOM_T
 
 export const getDepartement = (codePostal = '') => {
   const matches = codePostal.match(CODE_POSTAL_REGEX)
-  return matches[1] || matches[2]
+  return matches && (matches[1] || matches[2])
 }
