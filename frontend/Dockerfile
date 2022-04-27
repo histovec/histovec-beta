@@ -1,7 +1,7 @@
 #######################
 # Step 1: Base target #
 #######################
-FROM node:17-bullseye-slim as base
+FROM node:18.0.0-bullseye-slim as base
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
@@ -57,7 +57,8 @@ RUN if [ "${NPM_LATEST}" = "true" ]; then\
     echo "Don't install npm latest version"; \
   fi
 
-COPY package.json ./
+COPY package.json package-lock.json ./
+
 RUN npm --no-git-tag-version version ${APP_VERSION}
 
 RUN echo "NPM_VERBOSE = ${NPM_VERBOSE}"
@@ -91,17 +92,16 @@ ARG MIRROR_DEBIAN
 ARG app_path
 ARG app_name
 ARG app_ver
-ENV VUE_APP_PORT ${VUE_APP_PORT}
-ENV VUE_UI_PORT ${VUE_UI_PORT}
+ARG VITE_PORT
+ENV VITE_PORT ${VITE_PORT}
 
+VOLUME /$app_path/index.html
 VOLUME /$app_path/src
 VOLUME /$app_path/public
 
-EXPOSE ${VUE_APP_PORT}
+EXPOSE ${VITE_PORT}
 
-EXPOSE ${VUE_UI_PORT}
-
-CMD ["./run.sh", "dev-ui"]
+CMD ["./run.sh", "dev"]
 
 ################################
 # Step 3:   "build" target     #
@@ -121,9 +121,10 @@ ENV APP_VERSION ${app_ver}
 
 VOLUME /$app_path/dist
 
-COPY .babelrc .editorconfig .eslintignore .eslintrc.js vue.config.js ./
+COPY index.html vite.config.js ./
 COPY src src
 COPY public public
+
 
 CMD ["./run.sh", "build"]
 
@@ -141,23 +142,21 @@ ARG app_path
 ARG app_name
 ARG app_ver
 ARG AB_TESTING_PERCENTAGE
-ARG VUE_APP_SOURCE_MAP
+ARG VITE_SOURCE_MAP
 ENV APP ${app_name}
 ENV APP_VERSION ${app_ver}
-ENV VUE_APP_TITLE ${app_name}
-ENV VUE_APP_AB_TESTING_PERCENTAGE ${AB_TESTING_PERCENTAGE}
-ENV VUE_APP_SOURCE_MAP ${VUE_APP_SOURCE_MAP}
+ENV VITE_TITLE ${app_name}
+ENV VITE_AB_TESTING_PERCENTAGE ${AB_TESTING_PERCENTAGE}
+ENV VITE_SOURCE_MAP ${VITE_SOURCE_MAP}
 
 COPY ${app_name}-${app_ver}-frontend.tar.gz .
 
-RUN env | grep VUE_APP_ > .env
+RUN env | grep VITE_ > .env
 
 RUN cat .env
-
 
 RUN  set -ex ; tar -zxvf ${app_name}-${app_ver}-frontend.tar.gz  && \
      npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
      rm -rf ${app_name}-${app_ver}-frontend.tar.gz
-
 
 CMD ["npm", "run", "build"]

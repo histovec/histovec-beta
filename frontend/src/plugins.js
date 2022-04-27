@@ -3,7 +3,8 @@ import VueShortkey from 'vue-shortkey'
 import VueScrollTo from 'vue-scrollto'
 
 import dayjs from 'dayjs'
-const customParseFormat = require('dayjs/plugin/customParseFormat')
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
 dayjs.extend(customParseFormat)
 
 Vue.use(VueShortkey)

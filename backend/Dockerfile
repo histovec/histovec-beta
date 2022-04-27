@@ -1,7 +1,7 @@
 #######################
 # Step 1: Base target #
 #######################
-FROM node:17-bullseye-slim as base
+FROM node:18.0.0-bullseye-slim as base
 ARG http_proxy
 ARG https_proxy
 ARG no_proxy
@@ -45,7 +45,7 @@ RUN if [ "${NPM_LATEST}" = "true" ]; then\
     echo "Don't install npm latest version"; \
   fi
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm --no-git-tag-version version ${APP_VERSION}
 
 RUN echo "NPM_VERBOSE = ${NPM_VERBOSE}"
@@ -73,11 +73,8 @@ ENV APP_VERSION ${app_ver}
 ENV NPM_CONFIG_LOGLEVEL debug
 
 VOLUME /${app_path}/src
-VOLUME /${app_path}/dist
 
-COPY babel.config.js boot-dev.js ./
-
-CMD ["npm","run", "dev"]
+CMD ["npm", "run", "dev"]
 
 ##########################
 # Step 3: "build" target #
@@ -95,7 +92,7 @@ RUN  set -ex ; tar -zxvf ${file_app_version} && \
      npm run build 2>&1 | tee npm.log; egrep -E '(ERROR|error)' npm.log && exit 1 ; rm -rf npm.log \
      rm -rf ${file_app_version}
 
-CMD ["npm","run",  "build"]
+CMD ["echo", "build ended..."]
 
 ###############################
 # Step 4: "production" target #
@@ -122,7 +119,7 @@ RUN  [ -f ${file_dist_app_version} ] && \
      tar -zxvf ${file_dist_app_version} && \
      rm -rf ${file_dist_app_version}
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 
 # Install production dependencies and clean cache
 RUN npm --no-git-tag-version version ${APP_VERSION} && \
@@ -134,6 +131,6 @@ RUN npm --no-git-tag-version version ${APP_VERSION} && \
 # Install pm2
 RUN npm install pm2 -g
 # Copy the pm2 config
-COPY ecosystem.config.js .
+COPY ecosystem.config.cjs .
 
-CMD [ "pm2-runtime", "start", "ecosystem.config.js", "--env", "production" ]
+CMD [ "pm2-runtime", "start", "ecosystem.config.cjs", "--env", "production" ]

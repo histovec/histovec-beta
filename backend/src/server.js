@@ -12,22 +12,21 @@ import { appLogger } from './util/logger.js'
 
 import config from './config.js'
 
-
 const PORT = Number(config.port) || 8000
 
 const prefixize = (route) => {
   return {
     ...route,
-    path: config.apiPrefix + route.path
+    path: config.apiPrefix + route.path,
   }
 }
 
 const routes = [
   {
     method: 'GET',
-    path:'/version',
+    path: '/version',
     options: {
-      tags: ['api'],  // add to swagger documentation
+      tags: ['api'], // add to swagger documentation
 
       // hapi options
       response: {
@@ -35,7 +34,7 @@ const routes = [
           version: Joi.string().pattern(VERSION_REGEX)
             .description('Version du backend'),
         }).label('VersionReponse'),
-      }
+      },
     },
     handler: (request, h) => {
       // HistoVec backend and HistoVec public-backend will be merged soon, so version number is share between both
@@ -49,9 +48,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path:'/health',  // @todo: rename to 'healthcheck' and change code using it
+    path: '/health', // @todo: rename to 'healthcheck' and change code using it
     options: {
-      tags: ['api'],  // add to swagger documentation
+      tags: ['api'], // add to swagger documentation
     },
     handler: (request, h) => {
       /* @todo: change code using it
@@ -64,7 +63,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path:'/contact',
+    path: '/contact',
     options: {
       validate: {
         payload: Joi.object({
@@ -85,7 +84,7 @@ const routes = [
             dateCertificat: Joi.date().iso().allow('')
               .description('Date d\'émission du certificat d\'immatriculation du véhicule (pour les véhicules FNI : immatriculés avant 2009)'),
             formule: Joi.string().allow('').pattern(NUMERO_FORMULE_REGEX)
-              .description('Numéro de formule du certificat d\immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
+              .description('Numéro de formule du certificat d\'immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
             nom: Joi.string().allow('').trim()
               .description('Nom du propriétaire du véhicule'),
             plaque: Joi.string().allow('').pattern(NUMERO_IMMATRICULATION_REGEX)
@@ -107,15 +106,15 @@ const routes = [
             .description('Sujet de la demande envoyée par l\'usager'),
           uuid: Joi.string().guid({
             version: [
-              'uuidv4'
-            ]
+              'uuidv4',
+            ],
           }).required()
-            .description('Identifiant anonyme (pour réaliser des statistiques métier)')
+            .description('Identifiant anonyme (pour réaliser des statistiques métier)'),
         }).label('ContactPayload'),
       },
     },
     handler: sendContact,
-  }
+  },
 ]
 
 export const createServer = async () => {
@@ -135,13 +134,13 @@ export const createServer = async () => {
           title: config.isPublicApi ? 'Api grand publique HistoVec' : 'Api HistoVec',
           version: config.version,
         },
-        cors: true,  // Enable cors for api.gouv.fr (and all origins because hapi-swagger dont let us choose specific origins)
-      }
-    }
+        cors: true, // Enable cors for api.gouv.fr (and all origins because hapi-swagger dont let us choose specific origins)
+      },
+    },
   ]
 
   plugins.push({
-    plugin: await import('./plugins/public-api'),
+    plugin: await import('./plugins/public-api/index.js'),
     options: {
       // hapi-swagger options
       definitionPrefix: 'useLabel',

@@ -1,9 +1,9 @@
-import api from '@/api'
+import api from '@/api/index.js'
 import { buildReportByDataPayload, buildReportByCodePayload } from '@/api/utils/index.js'
-import { vehiculeMapping, controlesTechniquesMapping } from '../../utils/mapping/index.js'
-import { getTomorrowTime, getTodayTime } from '../../utils/date.js'
-import { labelizeControlesTechniques } from '../../utils/vehicle/formatControlesTechniques.js'
-import { TYPE_PERSONNE } from '../../constants/type.js'
+import { vehiculeMapping, controlesTechniquesMapping } from '@/utils/mapping/index.js'
+import { getTomorrowTime, getTodayTime } from '@/utils/date.js'
+import { labelizeControlesTechniques } from '@/utils/vehicle/formatControlesTechniques.js'
+import { TYPE_PERSONNE } from '@/constants/type.js'
 
 
 export default {
@@ -32,7 +32,10 @@ export default {
       report: {
         vehicule,
         controles_techniques,
-      } = {},
+      } = {
+        vehicule: null,
+        controles_techniques: null,
+      },
       status,
     }) {
       state.lastReportStatusCode = status

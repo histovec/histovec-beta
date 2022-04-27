@@ -3,7 +3,7 @@ import slugify from '@/assets/js/slugify.js'
 
 import aideSIV from '@/assets/img/aide_siv.jpg'
 import aideFNI from '@/assets/img/aide_fni.jpg'
-import store from '@/store'
+import store from '@/store/index.js'
 import contact from '@/assets/json/contact.json'
 
 

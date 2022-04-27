@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import identity from './modules/identity.js'
-import histovec from './modules/histovec.js'
 import VuexPersistence from 'vuex-persist'
 import objectPath from 'object-path'
 import { v4 as uuidv4 } from 'uuid'
 
+import identity from './modules/identity.js'
+import histovec from './modules/histovec.js'
 
-import api from '@/api'
+import api from '@/api/index.js'
 
 import contact from '@/assets/json/contact.json'
 
@@ -24,7 +24,7 @@ if (localStorage.getItem('userId') === null) {
 }
 
 export default new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production',
+  strict: import.meta.env.NODE_ENV !== 'production',
   state: {
     logCounter: 0,
     api: {

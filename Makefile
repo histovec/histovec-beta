@@ -58,7 +58,7 @@ export APP=histovec
 export API=histovec-api
 # common configuration
 export PORT=80
-export PORT_DEV=81
+export API_PORT=8010
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_USER := $(shell whoami)
@@ -120,7 +120,6 @@ export DC_RUN_NGINX_FRONTEND = ${DC_PREFIX}-run-frontend.yml
 export FRONTEND=${APP_PATH}/frontend
 export FRONTEND_DEV_HOST=frontend-dev
 export FRONTEND_DEV_PORT=8080
-export FRONTEND_CONF_PORT=8000
 export FRONTEND_SOURCE_MAP=true
 # packaging html/js/css & docker targets
 export DC_BUILD_FRONTEND = ${DC_PREFIX}-build-frontend.yml
@@ -378,7 +377,7 @@ up-v1: network wait-elasticsearch backend-start frontend-v1
 
 down: down-${API_VERSION}
 
-down-v1: frontend-stop elasticsearch-stop backend-stop network-stop
+down-v1: frontend-stop backend-stop elasticsearch-stop network-stop
 	@echo all services stopped
 
 up-all: up
@@ -386,9 +385,9 @@ up-all: up
 down-all: down
 
 # production mode with fake
-up-fake: network utac-fake-start smtp-fake up
+up-fake: network smtp-fake up
 
-down-fake: smtp-fake-stop utac-fake-stop down  # @todo: missing network-stop?
+down-fake: smtp-fake-stop  down  # @todo: missing network-stop?
 
 # package for production mode
 build: frontend-build backend-build
@@ -474,9 +473,9 @@ clean-archive:
 clean-image: frontend-clean-image nginx-clean-image elasticsearch-clean-image backend-clean-image
 
 # development mode
-dev: network wait-elasticsearch utac-fake-start smtp-fake backend-dev frontend-dev public-backend-dev public-backend-nginx-dev
+dev: network wait-elasticsearch smtp-fake backend-dev public-backend-dev public-backend-nginx-dev frontend-dev
 
-dev-stop: elasticsearch-stop frontend-dev-stop backend-dev-stop public-backend-nginx-dev-stop public-backend-dev-stop utac-fake-stop smtp-fake-stop network-stop
+dev-stop: elasticsearch-stop backend-dev-stop public-backend-nginx-dev-stop public-backend-dev-stop smtp-fake-stop network-stop
 
 dev-log:
 	${DC} -f ${DC_PREFIX}-dev-frontend.yml logs
@@ -660,11 +659,8 @@ frontend-build-all: network frontend-build-dist frontend-build-dist-archive
 frontend-prepare-build:
 	if [ -f "${FRONTEND}/$(FILE_FRONTEND_APP_VERSION)" ] ; then rm -rf ${FRONTEND}/$(FILE_FRONTEND_APP_VERSION) ; fi
 	( cd ${FRONTEND} && tar -zcvf $(FILE_FRONTEND_APP_VERSION) --exclude ${APP}.tar.gz \
-         .babelrc \
-         .editorconfig \
-         .eslintignore \
-         .eslintrc.js \
-				 vue.config.js \
+         index.html \
+				 vite.config.js \
          src \
          public )
 
@@ -738,14 +734,10 @@ nginx-download-image:
 nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 	docker image load -i $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 
-
 # development mode
-frontend-dev: network tor aws
-	@echo docker-compose up frontend for dev ${VERSION}
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml up --build -d --force-recreate 2>&1 | grep -v orphan
+frontend-dev:
+	cd ${FRONTEND} && VITE_TITLE=${APP} VITE_PORT=${FRONTEND_DEV_PORT} VITE_AB_TESTING_PERCENTAGE=${AB_TESTING_PERCENTAGE} npm run dev
 
-frontend-dev-stop:
-	@export EXEC_ENV=development; ${DC} -f ${DC_PREFIX}-dev-frontend.yml down
 
 ##############################################
 #               elasticsearch                #
@@ -957,10 +949,8 @@ backend-build-unlock:
 backend-prepare-build:
 	if [ -f "${BACKEND}/$(FILE_BACKEND_APP_VERSION)" ] ; then rm -rf ${BACKEND}/$(FILE_BACKEND_APP_VERSION) ; fi
 	( cd ${BACKEND} && tar -zcvf $(FILE_BACKEND_APP_VERSION) --exclude ${APP}.tar.gz \
-         babel.config.js \
-         boot-dev.js \
          src \
-         ecosystem.config.js )
+         ecosystem.config.cjs )
 
 # download image and load it in docker
 
@@ -1009,7 +999,7 @@ backend-build-dist: backend-prepare-build backend-check-build
 	export EXEC_ENV=build BACKEND_NAME=backend; ${DC} -f $(DC_BUILD_BACKEND) build $(DC_BUILD_ARGS) backend
 
 backend-build-dist-archive:
-	export EXEC_ENV=build BACKEND_NAME=backend; ${DC} -f $(DC_BUILD_BACKEND) run -T --no-deps --rm backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
+	export EXEC_ENV=build BACKEND_NAME=backend; ${DC} -f $(DC_BUILD_BACKEND) run -T --no-deps --rm backend tar zCcf $$(dirname /$(APP)/src) - $$(basename /$(APP)/src)  > $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_BACKEND_DIST_LATEST_VERSION) ; fi
@@ -1097,10 +1087,8 @@ public-backend-build-all: network public-backend-build-dist public-backend-build
 public-backend-prepare-build:
 	if [ -f "${BACKEND}/$(FILE_PUBLIC_BACKEND_APP_VERSION)" ] ; then rm -rf ${BACKEND}/$(FILE_PUBLIC_BACKEND_APP_VERSION) ; fi
 	( cd ${BACKEND} && tar -zcvf $(FILE_PUBLIC_BACKEND_APP_VERSION) \
-         babel.config.js \
-         boot-dev.js \
          src \
-         ecosystem.config.js )
+         ecosystem.config.cjs )
 
 public-backend-check-build:
 	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) config -q
@@ -1110,7 +1098,7 @@ public-backend-build-dist: public-backend-prepare-build public-backend-check-bui
 	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) build $(DC_BUILD_ARGS) public-backend
 
 public-backend-build-dist-archive:
-	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public-backend tar zCcf $$(dirname /$(APP)/dist) - $$(basename /$(APP)/dist)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
+	export EXEC_ENV=build BACKEND_NAME=public-backend; ${DC} -f $(DC_BUILD_PUBLIC_BACKEND) run -T --no-deps --rm public-backend tar zCcf $$(dirname /$(APP)/src) - $$(basename /$(APP)/src)  > $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION)
 	  cp $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION)
 	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_APP_VERSION) ; fi
 	if [ -f $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ]; then ls -alsrt  $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) && sha1sum $(BUILD_DIR)/$(FILE_PUBLIC_BACKEND_DIST_LATEST_VERSION) ; fi
@@ -1214,13 +1202,6 @@ public-backend-nginx-dev-stop:
 ##############################################
 #              fake services                 #
 ##############################################
-utac-fake-start:
-	@echo docker-compose up utac simulator for dev ${VERSION}
-	@${DC} -f ${DC_PREFIX}-utac.yml up --build -d --force-recreate 2>&1 | grep -v orphan
-
-utac-fake-stop:
-	@${DC} -f ${DC_PREFIX}-utac.yml down
-
 smtp-fake:
 	@echo docker-compose up smtp fake mal simulator for dev ${VERSION}
 	@${DC} -f ${DC_PREFIX}-smtp.yml up -d 2>&1 | grep -v orphan

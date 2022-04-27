@@ -16,7 +16,7 @@ import {
 	FONT_SPACING,
 	FONT_STYLES,
 	FOOTER_LOGO_X
-} from './constants'
+} from './constants.js'
 
 
 export const getEmbeddedFont = ({ style, embeddedFonts }) => {

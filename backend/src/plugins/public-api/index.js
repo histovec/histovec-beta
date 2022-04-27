@@ -9,11 +9,11 @@ export const plugin = {
   register: (server, options) => {
     const { apiPrefix } = options
 
-    reportByData.path = options.apiPrefix + reportByData.path
-    appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByData.path}`)  // @todo: remove after validation in development environment
+    reportByData.path = apiPrefix + reportByData.path
+    appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByData.path}`) // @todo: remove after validation in development environment
 
-    reportByCode.path = options.apiPrefix + reportByCode.path
-    appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByCode.path}`)  // @todo: remove after validation in development environment
+    reportByCode.path = apiPrefix + reportByCode.path
+    appLogger.info(`-- [PUBLIC] -- API ROUTE => ${reportByCode.path}`) // @todo: remove after validation in development environment
 
     const routes = [reportByData, reportByCode]
 
