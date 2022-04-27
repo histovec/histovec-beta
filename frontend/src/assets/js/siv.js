@@ -1,11 +1,11 @@
 
-import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '../js/format'
+import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '../js/format.js'
 
 import orderBy from 'lodash.orderby'
 
 import operationsMapping from '../json/operations.json'
 import suspensionsMapping from '../json/suspensions.json'
-import { MISSING_VALUE } from './constants'
+import { MISSING_VALUE } from './constants.js'
 
 
 // We will develop other categories later using data pipeline.

@@ -1,6 +1,6 @@
-import { USAGE } from '../../../constant/usage.js'
-import config from '../../../config.js'
+/* eslint-disable */
 
+import { USAGE } from '../../../constant/usage.js'
 
 export const vehiculeMapping = (report, isPublicApi) => {
   const {
@@ -10,9 +10,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
     pers_siren_tit,
     adr_code_postal_tit,
     logo_genre,
-    date_premiere_immat_siv,
     is_incertain,
-    date_annulation,
     date_update,
     date_premiere_immat,
     age_certificat,
@@ -107,14 +105,18 @@ export const vehiculeMapping = (report, isPublicApi) => {
         date: opa_date,
         type: opa_type,
         ...(
-          ope_date_annul ? {
-            date_annulation: ope_date_annul,
-          } : {}
+          ope_date_annul
+            ? {
+                date_annulation: ope_date_annul,
+              }
+            : {}
         ),
         ...(
-          num_agree ? {
-            numero_agrement_expert: num_agree,
-          } : {}
+          num_agree
+            ? {
+                numero_agrement_expert: num_agree,
+              }
+            : {}
         ),
       }
     ))
@@ -156,21 +158,21 @@ export const vehiculeMapping = (report, isPublicApi) => {
 
   // @todo
   const extraSection = (
-    isPublicApi ?
-    {} :
-    {
-      extra: {
-        logo_genre,
-        date_premiere_immatriculation_incertaine: is_incertain,
-        ...(
-          date_annulation_ci ?
-          { date_annulation: date_annulation_ci } :
-          { }
-        ),
-        vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
-        vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
-      }
-    }
+    isPublicApi
+      ? {}
+      : {
+          extra: {
+            logo_genre,
+            date_premiere_immatriculation_incertaine: is_incertain,
+            ...(
+              date_annulation_ci
+                ? { date_annulation: date_annulation_ci }
+                : { }
+            ),
+            vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
+            vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
+          },
+        }
   )
 
   return {
@@ -178,9 +180,9 @@ export const vehiculeMapping = (report, isPublicApi) => {
     certificat_immatriculation: {
       date_premiere_immatriculation: date_premiere_immat,
       ...(
-        age_certificat === 'KO' ?
-        {} :
-        { nombre_de_mois_depuis_date_emission_certificat_immatriculation: age_certificat }
+        age_certificat === 'KO'
+          ? {}
+          : { nombre_de_mois_depuis_date_emission_certificat_immatriculation: age_certificat }
       ),
       numero_immatriculation_anonymisee: plaq_immat,
       titulaire: mappedTitulaire,
@@ -215,7 +217,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
         emission_co2: CTEC_CO2,
         classe_environnementale_ue: CTEC_RLIB_POLLUTION,
       },
-      etat:  {
+      etat: {
         duplicata,
         annule: annulation_ci,
         perdu: perte_ci,
@@ -234,7 +236,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
         apte_a_circuler: is_apte_a_circuler,
         nombre_de_procedures_ve: nb_sinistres,
         procedure_ve_en_cours: has_pve,
-      }
+      },
     },
     historique: mappedNewHistorique,
     import_en_france: {
@@ -245,7 +247,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
     situation_administrative: {
       declarations_valant_saisie: mappedDeclarationsValantSaisie,
       gages: mappedGages,
-      opposition : {
+      opposition: {
         oves: oppositionsMapping(reportOves),
         oveis: oppositionsMapping(reportOveis),
         otcis: oppositionsMapping(reportOtcis),

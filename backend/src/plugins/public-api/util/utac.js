@@ -1,7 +1,6 @@
 import { hash } from '../../../util/crypto.js'
 import { appLogger } from '../../../util/logger.js'
 
-
 // Use a default value to compute utacDataKey for annulationCI vehicles
 export const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
   const hashedEncryptedImmat = hash(encryptedImmat)

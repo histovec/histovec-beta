@@ -4,7 +4,6 @@ import { generateReportRoute } from './reportCommon.js'
 import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, SIREN_REGEX } from '../../../constant/regex.js'
 import { DEFAULT_SIREN } from '../../../constant/siren.js'
 
-
 const reportByDataPayloadSchema = Joi.object({
   uuid: Joi.string().guid({
     version: ['uuidv4'],
@@ -32,12 +31,12 @@ const reportByDataPayloadSchema = Joi.object({
         .description('Numéro de formule tel que renseigné sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format SIV.'),
       date_emission_certificat_immatriculation: Joi.date()
         .description('Date d\'émission du certificat d\'immatriculation telle que renseignée sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format FNI.'),
-    })
+    }),
   }).label('vehicule_by_data'),
   options: Joi.object({
     controles_techniques: Joi.boolean()
       .description('Récupérer les contrôles techniques du véhicule dans le rapport HistoVec. Désactivé par défaut.'),
-    ignore_utac_cache: Joi.boolean().meta({ swaggerHidden: true })
+    ignore_utac_cache: Joi.boolean().meta({ swaggerHidden: true }),
   }).label('controles_techniques_option_by_data'),
 }).label('Report_by_data_payload')
 

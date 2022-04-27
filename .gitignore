@@ -14,6 +14,7 @@ data/encrypted
 backend/.build-lock
 backend/src/utac/
 frontend/.build-lock
+frontend/.nvmrc
 artifacts_dev
 artifacts_prod
 artifacts_qualif

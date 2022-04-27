@@ -1,6 +1,5 @@
 import crypto from 'crypto'
 
-
 export const base64Encode = (text) => {
   return Buffer.from(text, 'binary').toString('base64')
 }
@@ -16,7 +15,7 @@ export const urlSafeEncode = (text) => {
 
 export const urlSafeDecode = (text) => {
   // Equivalent to replace(/\-/g, '+').replace(/_/g, '/') but faster
-  return text.replace(/[\-_]/g, char => char === '-' ? '+' : '/')
+  return text.replace(/[-_]/g, char => char === '-' ? '+' : '/')
 }
 
 export const urlSafeBase64Encode = (text) => {
@@ -36,7 +35,7 @@ export const hash = (text) => crypto.createHash('sha256').update(text).digest()
 // weak encryption (used for encryptedImmat)
 export const decryptXOR = (encrypted, key) => String.fromCharCode(
   ...Buffer.from(encrypted, 'base64')
-    .map((char, index) => char ^ key.charCodeAt(index % key.length))
+    .map((char, index) => char ^ key.charCodeAt(index % key.length)),
 )
 
 /*

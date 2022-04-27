@@ -8,7 +8,6 @@ import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
 import { FR_DATE_FORMAT } from '../../../constant/date/format.js'
 import config from '../../../config.js'
 
-
 export const buildIdAndKey = (code) => {
   if (!code) {
     return { isInvalidCode: false }
@@ -28,7 +27,7 @@ export const buildIdAndKey = (code) => {
 
   return {
     id,
-    key
+    key,
   }
 }
 
@@ -39,7 +38,7 @@ export const buildReportId = (
   },
   {
     typeImmatriculation, typePersonne,
-  }
+  },
 ) => {
   const personneId = (
     typePersonne === TYPE_PERSONNE.PARTICULIER
@@ -81,7 +80,7 @@ export const buildReportKey = (
   },
   {
     typeImmatriculation,
-  }
+  },
 ) => {
   const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? dayjs(dateEmissionCertificatImmatriculation).format(FR_DATE_FORMAT) : null
 

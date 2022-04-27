@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom'
-import { appLogger, syslogLogger } from '../../../util/logger.js'
-import { base64Decode, decryptJson, hash, base64Encode, urlSafeBase64Encode } from '../../../util/crypto.js'
-import { getDepartement } from '../../../util/codePostal.js'
+
+import { syslogLogger } from '../../../util/logger.js'
+import { decryptJson, base64Encode } from '../../../util/crypto.js'
 import { buildReportId, buildReportKey, buildIdAndKey } from '../util/report.js'
 import { normalizeReport, normalizeControlesTechniques } from '../util/normalizeData.js'
 import { vehiculeMapping, controlesTechniquesMapping } from '../util/mapping.js'
@@ -12,7 +12,6 @@ import { reportResponseSchema } from '../../schemas/report.js'
 
 import { NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
-import { TITULAIRE_CHANGE_OPERATIONS } from '../../../constant/historique.js'
 
 import config from '../../../config.js'
 
@@ -29,7 +28,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       },
       response: {
         schema: reportResponseSchema,
-      }
+      },
     },
     handler: async (request, h) => {
       const {
@@ -92,13 +91,13 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
 
         const reportIdBuffer = buildReportId(
           { nom, prenoms, raisonSociale, siren, numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation },
-          { typeImmatriculation, typePersonne }
+          { typeImmatriculation, typePersonne },
         )
         base64EncodedReportId = base64Encode(reportIdBuffer)
 
         base64EncodedReportKeyBuffer = buildReportKey(
           { numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation },
-          { typeImmatriculation }
+          { typeImmatriculation },
         )
 
         syslogLogger.debug({
@@ -107,7 +106,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
           value: {
             base64EncodedReportId,
             base64EncodedReportKey: base64EncodedReportKeyBuffer.toString('base64'),
-          }
+          },
         })
       }
 
@@ -125,7 +124,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         tag: logLabel,
         value: {
           res,
-        }
+        },
       })
 
       const { sivData, utacData: rawControlesTechniques, error, message } = res
@@ -137,7 +136,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
           rawControlesTechniques,
           error,
           message,
-        }
+        },
       })
 
       syslogLogger.debug({ key: 'encrypted_raw_report', tag: logLabel, value: { sivData, rawControlesTechniques, base64EncodedReportKeyBuffer } })
@@ -161,7 +160,6 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
 
         return reportWithoutControlesTechniques
       }
-
 
       const normalizedControlesTechniques = normalizeControlesTechniques(rawControlesTechniques)
       syslogLogger.debug({ key: 'normalized_controles_techniques', tag: logLabel, value: { ...normalizedControlesTechniques } })

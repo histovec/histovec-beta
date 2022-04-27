@@ -10,9 +10,9 @@ import {
 	HORIZONTAL_TABULATION,
 	QR_CODE_PIXEL_SIZE,
 	TOP_FOOTER_MARGIN
-} from './constants'
-import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from './utils'
-import { formatIsoToHumanReadableFrDate, padString } from '../../assets/js/format'
+} from './constants.js'
+import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from './utils.js'
+import { formatIsoToHumanReadableFrDate, padString } from '@/assets/js/format.js'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = ({

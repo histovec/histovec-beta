@@ -204,7 +204,6 @@
 import Vue from 'vue'
 
 import npmConf from '../package.json'
-import apiConf from '@/assets/json/backend.json'
 import localization from '@/assets/json/lang.json'
 import syntheseMapping from '@/assets/json/synthese.json'
 import statusMessages from '@/assets/json/status.json'
@@ -219,6 +218,7 @@ import VueClipboard from 'vue-clipboard2'
 import ContactModal from './components/forms/ContactModal.vue'
 import RatingModal from './components/forms/RatingModal.vue'
 
+import { apiUrl } from './config.js'
 
 Vue.use(VueTheMask)
 Vue.use(VueClipboard)
@@ -232,13 +232,13 @@ window.bus = new Vue()
 Vue.mixin({
   data () {
     return {
-      appName: process.env.VUE_APP_TITLE,
+      appName: import.meta.env.VITE_TITLE,
       usePreviousMonthForData: false,
       previousMonthShift: 1,
       outdatedData: true,
       showDataDate: true,
       appVersion: npmConf.version,
-      apiUrl: apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, ''),
+      apiUrl,
       localization,
       syntheseMapping,
       statusMessages,
@@ -273,4 +273,21 @@ export default {
 }
 </script>
 
-<style lang="scss" src="./assets/scss/style.scss"></style>
+<style scoped>
+.btn-mon-avis {
+  color: #2c3079;
+  font-size: 15px;
+  background-color: white;
+  border-radius: 20px;
+  font-weight: bold;
+  margin-top: 0;
+}
+.btn-mon-avis > a {
+  color: #2c3079;
+  text-decoration: none;
+}
+.btn-mon-avis > a:hover {
+  color: #333;
+  text-decoration: none;
+}
+</style>

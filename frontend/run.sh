@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/usr/bin/env | egrep '^VUE_APP_' > .env
+/usr/bin/env | egrep '^VITE_' > .env
 
 npm run $1
 

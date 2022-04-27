@@ -1,7 +1,7 @@
 #######################
 # Step 1: Base target #
 #######################
-FROM nginx:1 as base
+FROM nginx:1.21.6 as base
 ARG app_name
 ARG app_ver
 

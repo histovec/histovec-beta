@@ -1,4 +1,4 @@
-import { writeFooter } from './footer'
+import { writeFooter } from './footer.js'
 import { formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
 
 import {
@@ -15,7 +15,7 @@ import {
 	MISSING_VALUE,
 	TO_BE_CONTINUED_SYMBOL,
 	TOP_PAGE_MARGIN
-} from './constants'
+} from './constants.js'
 
 import {
 	getEmbeddedFont,
@@ -24,7 +24,7 @@ import {
 	writeText,
 	writeTitle,
 	writeWithSpacing
-} from './utils'
+} from './utils.js'
 
 
 const SECTION_TITLE_BULLET = '-'

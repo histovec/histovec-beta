@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from 'winston'
-import config from '../config.js'
 import { inspect } from 'util'
+import config from '../config.js'
 
 const { combine, timestamp, label, printf } = format
 
@@ -43,7 +43,7 @@ export const techLogger = createLogger({
   format: combine(
     label({ label: TECH_LABEL }),
     timestamp(),
-    isTest ? logFormat : logJsonFormat
+    isTest ? logFormat : logJsonFormat,
   ),
   transports: [new transports.Console(consoleOptions)],
   exitOnError: false,
@@ -53,7 +53,7 @@ export const appLogger = createLogger({
   format: combine(
     label({ label: APP_LABEL }),
     timestamp(),
-    isTest ? logFormat : logJsonFormat
+    isTest ? logFormat : logJsonFormat,
   ),
   transports: [new transports.Console(consoleOptions)],
   exitOnError: false,
@@ -66,7 +66,7 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
   if (!key) {
     return inspect(
       'INVALID LOGGER USAGE: 1st argument of logger should be an object with a required "key" key and some optionnal keys: "value", "tag".',
-      inspectOptions
+      inspectOptions,
     )
   }
 
@@ -79,7 +79,7 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
   // Syslog format sans tag: <timestamp> <application_name> <log_level>: <key> <value>
   return inspect(
     `${timestamp} ${config.apiName}${completeTag} ${level}: ${key} ${completeValue}`,
-    inspectOptions
+    inspectOptions,
   )
 })
 
@@ -87,13 +87,13 @@ export const syslogLogger = createLogger({
   level,
   format: format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    format.metadata({ fillExcept: ['timestamp', 'level', 'message'] })
+    format.metadata({ fillExcept: ['timestamp', 'level', 'message'] }),
   ),
   transports: [
     new transports.Console({
       format: format.combine(
-        syslogFormat
-      )
+        syslogFormat,
+      ),
     }),
   ],
   exitOnError: false,

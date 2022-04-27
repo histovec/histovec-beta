@@ -3,21 +3,15 @@
   "version": "1.0.0",
   "description": "Jouez la transparence en partageant l'historique du véhicule",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build": "NODE_OPTIONS=--openssl-legacy-provider babel src -d dist",
-    "dev-setup": "node dev-setup/index.js",
-    "dev": "nodemon --inspect --watch src boot-dev.js",
-    "format": "eslint src --fix",
-    "prelint": "npm run format",
-    "lint": "eslint src",
-    "prestart": "npm run build",
-    "start": "node dist/index.js",
-    "start:prod": "node dist/index.js",
-    "test:watch": "cross-env NODE_ENV=test jest --watch",
-    "test:only": "cross-env NODE_ENV=test jest",
+    "dev": "nodemon --experimental-json-modules --inspect --watch src src/index.js",
+    "lint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-path .gitignore",
+    "format": "eslint . --fix --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-path .gitignore",
+    "start": "node --experimental-json-modules src/index.js",
     "pretest": "npm run lint",
-    "test:all": "run-s test",
-    "test": "cross-env NODE_ENV=test jest --passWithNoTests --detectOpenHandles --forceExit"
+    "test": "cross-env NODE_ENV=test vitest",
+    "test:watch": "cross-env NODE_ENV=test vitest --watch"
   },
   "keywords": [
     "vehicule",
@@ -28,42 +22,40 @@
   "author": "Ministère de l'intérieur",
   "license": "GPLv3",
   "dependencies": {
-    "@hapi/hapi": "^20.2.1",
+    "@hapi/hapi": "^20.2.2",
     "@hapi/inert": "^6.0.5",
     "@hapi/vision": "^6.1.0",
-    "axios": "^0.25.0",
+    "axios": "^0.27.2",
     "cross-env": "^7.0.3",
-    "dayjs": "^1.10.7",
-    "elasticsearch": "^16.7.2",
-    "hapi-swagger": "^14.2.4",
+    "dayjs": "^1.11.1",
+    "elasticsearch": "^16.7.3",
+    "hapi-swagger": "^14.3.0",
     "ioredis": "^4.28.5",
     "joi": "^17.6.0",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.7.2",
-    "winston": "^3.5.1"
+    "nodemailer": "^6.7.3",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.17.2",
+    "@babel/core": "^7.17.9",
     "@babel/eslint-parser": "^7.17.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-syntax-import-assertions": "^7.16.7",
     "@babel/preset-env": "^7.16.11",
-    "@babel/register": "^7.17.0",
-    "babel-jest": "^27.5.1",
-    "babel-plugin-dynamic-import-node": "^2.3.3",
-    "eslint": "^7.25.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^8.14.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "html-loader": "^3.1.0",
+    "eslint-plugin-promise": "^6.0.0",
     "husky": "^7.0.4",
-    "jest": "^27.5.1",
-    "lint-staged": "^12.3.3",
+    "lint-staged": "^12.4.1",
     "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
-    "regenerator-runtime": "^0.13.9",
-    "supertest": "^6.2.2"
+    "supertest": "^6.2.3"
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=8"
   },
   "husky": {
     "hooks": {
@@ -96,41 +88,5 @@
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
     ]
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "env": {
-      "jest": true,
-      "node": true
-    },
-    "extends": [
-      "plugin:import/errors",
-      "plugin:import/warnings",
-      "standard"
-    ],
-    "plugins": [
-      "import"
-    ],
-    "rules": {
-      "import/no-unresolved": [
-        2,
-        {
-          "commonjs": true,
-          "amd": true
-        }
-      ],
-      "import/named": 2,
-      "import/namespace": 2,
-      "import/default": 2,
-      "import/export": 2,
-      "jsx-quotes": [
-        2,
-        "prefer-double"
-      ],
-      "comma-dangle": [
-        2,
-        "always-multiline"
-      ]
-    }
   }
 }

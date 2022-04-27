@@ -2,24 +2,19 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 
-function loadView(view) {
-  return () => import(/* webpackChunkName: "component-[request]" */ `@/components/${view}.vue`)
-}
-
-import Home from '@/components/Home'
-const Search = loadView('Search')
-const Report = loadView('Report')
-const Faq = loadView('infos/Faq')
-const LegalNotice = loadView('infos/LegalNotice')
-const InformationNotices = loadView('infos/InformationNotices')
-const Buyer = loadView('infos/Buyer')
-import Unavailable from '@/components/infos/Unavailable'
-import NotFound from '@/components/infos/NotFound'
-
+import Home from '@/components/HomePage.vue'
+const Search = () => import('../components/SearchPage.vue')
+const Report = () => import('../components/ReportPage.vue')
+const Faq = () => import('../components/infos/FaqPage.vue')
+const LegalNotice = () => import('../components/infos/LegalNoticePage.vue')
+const InformationNotices = () => import('../components/infos/InformationNoticesPage.vue')
+const Buyer = () => import('../components/infos/BuyerPage.vue')
+import Unavailable from '@/components/infos/UnavailablePage.vue'
+import NotFound from '@/components/infos/NotFoundPage.vue'
 
 Vue.use(Router)
 
-const isHistovecUnavailable = process.env.VUE_APP_IS_HISTOVEC_UNAVAILABLE
+const isHistovecUnavailable = import.meta.env.VITE_IS_HISTOVEC_UNAVAILABLE === 'true'
 // eslint-disable-next-line no-console
 console.log(`isHistovecUnavailable = ${isHistovecUnavailable}`)
 
@@ -48,7 +43,7 @@ if (isHistovecUnavailable) {
 
 export default new Router({
   mode: 'history',
-  base: '/' + process.env.VUE_APP_TITLE,
+  base: `/${import.meta.env.VITE_TITLE}`,
   routes,
   // Scroll top for every route navigation
   scrollBehavior () {

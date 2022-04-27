@@ -1,7 +1,5 @@
 import 'whatwg-fetch'
-import apiConf from '@/assets/json/backend.json'
-
-const BASE_API_URL = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '').replace(/\/$/, '')
+import { apiUrl } from '../config.js'
 
 
 export default {
@@ -19,7 +17,7 @@ export default {
     }
 
     try {
-      const response = await fetch(`${BASE_API_URL}/report_by_data`, options)
+      const response = await fetch(`${apiUrl}/report_by_data`, options)
       const report = await response.json()
 
       return {
@@ -47,7 +45,7 @@ export default {
     }
 
     try {
-      const response = await fetch(`${BASE_API_URL}/report_by_code`, options)
+      const response = await fetch(`${apiUrl}/report_by_code`, options)
       const report = await response.json()
 
 
@@ -69,7 +67,7 @@ export default {
       method: 'PUT',
     }
 
-    const response = await fetch(`${BASE_API_URL}/log/${uid}/${normalizedPath}`, options)
+    const response = await fetch(`${apiUrl}/log/${uid}/${normalizedPath}`, options)
 
     return response
   },
@@ -84,7 +82,7 @@ export default {
     }
 
     try {
-      const response = await fetch(`${BASE_API_URL}/contact`, options)
+      const response = await fetch(`${apiUrl}/contact`, options)
 
       return {
         status: response.status
