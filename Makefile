@@ -58,7 +58,7 @@ export APP=histovec
 export API=histovec-api
 # common configuration
 export PORT=80
-export API_PORT=8010
+export API_PORT=8030
 export COMPOSE_PROJECT_NAME=${APP}
 export APP_PATH := $(shell pwd)
 export APP_USER := $(shell whoami)

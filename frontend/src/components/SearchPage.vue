@@ -707,7 +707,7 @@ const formInitialOptions = {
     requiredTitle: 'Ce champ est requis.',
     maskTitle: 'désactiver le contrôle',
     maskTitleAlt: 'ré-activer le contrôle',
-    type: 'text'
+    type: 'text',
   },
   siren: {
     [TYPE_IMMATRICULATION.SIV]: {
@@ -737,7 +737,7 @@ const formInitialOptions = {
       tabindex: '2',
       required: false,
       defaultValue: DEFAULT_SIREN,
-    }
+    },
   },
   plaque: {
     [TYPE_IMMATRICULATION.SIV]: {
@@ -753,7 +753,7 @@ const formInitialOptions = {
       placeholder: 'AA-123-AA',
       placeholderAlt: 'AA123AA ou A123A ou AA123A',
       icon: 'fa fa-drivers-license-o',
-      tabindex: '4'
+      tabindex: '4',
     },
     [TYPE_IMMATRICULATION.FNI]: {
       fieldNumberPro: 3,
@@ -768,22 +768,22 @@ const formInitialOptions = {
       placeholder: '123 ABC 45',
       placeholderAlt: '1234ABC45 ou 123ABC45 ou 12ABC45 ou 12AB45',
       icon: 'fa fa-drivers-license-o',
-      tabindex: '4'
-    }
-  }
+      tabindex: '4',
+    },
+  },
 }
 
 export default {
   components: {
     ModalHelper,
-    InputField
+    InputField,
   },
   directives: {
     focus: {
       inserted: (el) => {
         el.focus()
-      }
-    }
+      },
+    },
   },
   data () {
     return {
@@ -829,7 +829,7 @@ export default {
       },
       set (value) {
         this.$store.commit('initFormOptions', value)
-      }
+      },
     },
     nom: {
       get () {
@@ -837,7 +837,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateNom', value)
-      }
+      },
     },
     prenom: {
       get () {
@@ -845,7 +845,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updatePrenom', value)
-      }
+      },
     },
     raisonSociale: {
       get () {
@@ -853,7 +853,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateRaisonSociale', value)
-      }
+      },
     },
     siren: {
       get () {
@@ -861,7 +861,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateSiren', value)
-      }
+      },
     },
     plaque: {
       get () {
@@ -869,7 +869,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updatePlaque', value)
-      }
+      },
     },
     formule: {
       get () {
@@ -877,7 +877,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateFormule', value)
-      }
+      },
     },
     typePersonne: {
       get () {
@@ -885,7 +885,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateTypePersonne', value)
-      }
+      },
     },
     typeImmatriculation: {
       get () {
@@ -893,7 +893,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateTypeImmatriculation', value)
-      }
+      },
     },
     dateCertificat: {
       get () {
@@ -901,7 +901,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateDateCertificat', value)
-      }
+      },
     },
     checkDateCertificat () {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
@@ -951,7 +951,7 @@ export default {
     },
     key () {
       return normalizeKeyAsDataPreparation(this.vehicleId)
-    }
+    },
   },
   created () {
     if (this.formOptions === undefined) {
@@ -961,7 +961,7 @@ export default {
     this.$store.dispatch('log', this.$route.path)
     let myShakeEvent = new Shake({
       threshold: 15,
-      timeout: 1000
+      timeout: 1000,
     })
     myShakeEvent.start()
     window.addEventListener('shake', () => { this.active = true }, false)
@@ -1096,13 +1096,13 @@ export default {
           params: {
             id: encodedHashedId,
             key: encodedHashedKey,
-            typeImmatriculation: this.typeImmatriculation
-          }
+            typeImmatriculation: this.typeImmatriculation,
+          },
         })
       } else {
         this.status = 'failed'
       }
-    }
-  }
+    },
+  },
 }
 </script>

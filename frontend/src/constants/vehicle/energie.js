@@ -40,7 +40,7 @@ export const ENERGIE = {
 	PE: 'PE',
 	PH: 'PH',
 	PL: 'PL',
-	XX: 'XX'
+	XX: 'XX',
 }
 
 export const DIESEL = [
@@ -51,7 +51,7 @@ export const DIESEL = [
 	ENERGIE.GH,
 	ENERGIE.GO,
 	ENERGIE.GQ,
-	ENERGIE.PL
+	ENERGIE.PL,
 ]
 
 export const ELECT_HYDRO = [
@@ -59,7 +59,7 @@ export const ELECT_HYDRO = [
 	ENERGIE.EL,
 	ENERGIE.H2,
 	ENERGIE.HE,
-	ENERGIE.HH
+	ENERGIE.HH,
 ]
 
 export const ESSENCE = [
@@ -67,7 +67,7 @@ export const ESSENCE = [
 	ENERGIE.ES,
 	ENERGIE.ET,
 	ENERGIE.FE,
-	ENERGIE.FH
+	ENERGIE.FH,
 ]
 
 
@@ -83,7 +83,7 @@ export const GAZ = [
 	ENERGIE.GP,
 	ENERGIE.GZ,
 	ENERGIE.NH,
-	ENERGIE.PH
+	ENERGIE.PH,
 ]
 
 export const HYBRID_RECH = [
@@ -94,5 +94,5 @@ export const HYBRID_RECH = [
 	ENERGIE.GL,
 	ENERGIE.GM,
 	ENERGIE.NE,
-	ENERGIE.PE
+	ENERGIE.PE,
 ]

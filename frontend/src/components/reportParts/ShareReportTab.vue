@@ -79,7 +79,7 @@ import { getShareReportEmail } from '@/utils/dynamicEmail.js'
 
 export default {
   components: {
-    QrcodeVue
+    QrcodeVue,
   },
   props: {
     url: {
@@ -111,8 +111,8 @@ export default {
       setTimeout(() => {
         this.notifSuccess = false
       }, this.timerNotifSuccess)
-    }
-  }
+    },
+  },
 }
 
 </script>

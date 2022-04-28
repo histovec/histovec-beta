@@ -1,35 +1,45 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
+// import { createApp } from 'vue'
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'font-awesome/css/font-awesome.css'
 
-import './assets/css/style.css'
-import './assets/css/styles.css'
-import './assets/css/bleu_vert.css'
+// import '@gouvminint/vue-dsfr/styles'
+// import VueDsfr from '@gouvminint/vue-dsfr'
+
+import * as icons from './icons.js'
+
+// import App from './App.vue'
+
+// import router from './router/index.js'
+
+// // import store from './store/index.js'
+// import { apiUrl } from './config.js'
+// // import './plugins.js'
+
+
+// window.addEventListener('beforeunload', function () {
+//   navigator.sendBeacon(apiUrl + 'log/exit')
+// }, false)
+
+// router.beforeEach((to, from, next) => {
+//   document.title = to.meta.title
+//   next()
+// })
+
+// createApp(App)
+//   // .use(store)
+//   .use(VueDsfr) // , { icons: Object.values(icons) } )
+//   .use(router)
+//   .mount('#app')
+
+import { createApp } from 'vue'
+
+
+import '@gouvminint/vue-dsfr/styles'
+import VueDsfr from '@gouvminint/vue-dsfr'
 
 import App from './App.vue'
 import router from './router/index.js'
-import store from './store/index.js'
-import { apiUrl } from './config.js'
-import './plugins.js'
 
-Vue.config.productionTip = false
-
-window.addEventListener('beforeunload', function () {
-  navigator.sendBeacon(apiUrl + 'log/exit')
-}, false)
-
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title
-  next()
-})
-
-/* eslint-disable no-new */
-new Vue({
-  store,
-  router,
-  components: { App },
-  render: h => h(App),
-}).$mount('#root')
+createApp(App)
+  .use(VueDsfr, { icons: Object.values(icons) } )
+  .use(router)
+  .mount('#app')

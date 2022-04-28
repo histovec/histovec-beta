@@ -1,0 +1,3 @@
+backend/src/assets/img/*
+backend/node_modules/*
+frontend/node_modules/*

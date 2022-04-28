@@ -95,17 +95,17 @@ export default {
   props: {
     status: {
       type: String,
-      default: 'unknown'
+      default: 'unknown',
     },
     typeImmatriculation: {
       type: String,
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   data () {
     return {
       // constants
-      TYPE_IMMATRICULATION
+      TYPE_IMMATRICULATION,
     }
   },
   computed: {
@@ -141,7 +141,7 @@ export default {
     },
     refIcon () {
       return this.statusMessages[this.status] ? (this.statusMessages[this.status].ref ? this.statusMessages[this.status].ref.icon : this.statusMessages.default.ref.icon) : this.statusMessages.default.ref.icon
-    }
-  }
+    },
+  },
 }
 </script>

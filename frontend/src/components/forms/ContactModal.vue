@@ -284,13 +284,13 @@ export default {
         contact.subject.registrationCardLoss,
         contact.subject.resolvePV,
         contact.subject.personalData,
-        contact.subject.reportData
+        contact.subject.reportData,
       ],
       contact,
 
       // constants
       TYPE_IMMATRICULATION,
-      TYPE_PERSONNE
+      TYPE_PERSONNE,
     }
   },
   computed: {
@@ -303,7 +303,7 @@ export default {
       },
       set (value) {
         this.$store.commit('updateContactModalSubject', value)
-      }
+      },
     },
     filteredMessage () {
       // eslint-disable-next-line no-misleading-character-class
@@ -339,7 +339,7 @@ export default {
     },
     isDefaultSubject () {
       return this.subject === contact.subject.default
-    }
+    },
   },
   methods: {
     normalize (string) {
@@ -389,11 +389,11 @@ export default {
           raisonSociale: this.$store.state.identity.raisonSociale,
           siren: this.$store.state.identity.siren,
           typeImmatriculation: this.$store.state.identity.typeImmatriculation,
-          typePersonne: this.$store.state.identity.typePersonne
+          typePersonne: this.$store.state.identity.typePersonne,
         },
         'message': this.filteredMessage,
         'subject': this.subject,
-        'uuid': localStorage.getItem('userId')
+        'uuid': localStorage.getItem('userId'),
       }
       try {
         await this.$store.dispatch('sendContact', data)
@@ -418,8 +418,8 @@ export default {
     },
     logMailDispatchKo () {
       this.$store.dispatch('log', `${this.$route.path}/mail/ko`)
-    }
-  }
+    },
+  },
 }
 
 </script>

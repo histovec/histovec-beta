@@ -5,7 +5,7 @@ import { apiUrl } from '../config.js'
 export default {
   getHolderReport: async (
     uuid,
-    payload
+    payload,
   ) => {
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
@@ -22,18 +22,18 @@ export default {
 
       return {
         report,
-        status: response.status
+        status: response.status,
       }
     } catch (error) {
       return {
         report: null,
-        status: 500
+        status: 500,
       }
     }
   },
   getBuyerReport: async (
     uuid,
-    payload
+    payload,
   ) => {
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
@@ -41,7 +41,7 @@ export default {
     const options = {
       method: 'POST',
       headers,
-      body: JSON.stringify({ uuid, ...payload })
+      body: JSON.stringify({ uuid, ...payload }),
     }
 
     try {
@@ -51,12 +51,12 @@ export default {
 
       return {
         report,
-        status: response.status
+        status: response.status,
       }
     } catch (error) {
       return {
         report: null,
-        status: 500
+        status: 500,
       }
     }
   },
@@ -78,19 +78,19 @@ export default {
     const options = {
       method: 'POST',
       headers,
-      body: JSON.stringify(contact)
+      body: JSON.stringify(contact),
     }
 
     try {
       const response = await fetch(`${apiUrl}/contact`, options)
 
       return {
-        status: response.status
+        status: response.status,
       }
     } catch (error) {
       return {
-        status: 500
+        status: 500,
       }
     }
-  }
+  },
 }

@@ -116,8 +116,8 @@ export default {
     },
     setEvaluation () {
       localStorage.setItem('evaluation', true)
-    }
-  }
+    },
+  },
 }
 
 </script>

@@ -9,7 +9,7 @@ export const ISO_DATE_FORMAT = 'YYYY-MM-DD'
 export const booleanLabel = (
 	test,
 	{ upperCase }={ upperCase: true },
-	{ unknownValue } = { unknownValue: MISSING_VALUE }
+	{ unknownValue } = { unknownValue: MISSING_VALUE },
 ) => {
 	if (test === undefined) {
 		return unknownValue
@@ -29,7 +29,7 @@ export const formatIsoToHumanReadableFrDate = (isoDate) => {
 
 	const humanReadableFrDate = dayjs(isoDate, ISO_DATE_FORMAT).toDate().toLocaleDateString(
 		'fr-FR',
-		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
 	)
 
 	return humanReadableFrDate

@@ -110,13 +110,13 @@ import ModalHelper from '../infos/ModalHelper.vue'
 
 export default {
   components: {
-    ModalHelper
+    ModalHelper,
   },
   props: {
     processedVehiculeData: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data () {
     return {
@@ -125,7 +125,7 @@ export default {
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/history`)
-  }
+  },
 }
 
 </script>

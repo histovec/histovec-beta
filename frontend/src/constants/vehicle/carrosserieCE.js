@@ -50,5 +50,5 @@ export const CARROSSERIE_CE = {
 	SK: 'SK',
 	SL: 'SL',
 	SM: 'SM',
-	XX: 'XX'
+	XX: 'XX',
 }

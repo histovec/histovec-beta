@@ -17,8 +17,8 @@ export default {
   props: {
     erreurControlesTechniques: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/kilometers-error`)

@@ -9,7 +9,7 @@ export const getShareReportEmail = (context) => {
   return {
     recipients: [],
     subject: 'Rapport HistoVec',
-    body: renderShareReportEmailBody(context)
+    body: renderShareReportEmailBody(context),
   }
 }
 
@@ -24,6 +24,6 @@ export const getShareCodePartageHistoVecEmail = (context) => {
   return {
     recipients: [],
     subject: 'Code partage HistoVec',
-    body: renderShareCodePartageHistoVecEmailBody(context)
+    body: renderShareCodePartageHistoVecEmailBody(context),
   }
 }

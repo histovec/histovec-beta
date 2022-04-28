@@ -1,0 +1,823 @@
+{
+  "template": {
+    "scope": "vue",
+    "prefix": "template",
+    "body": [
+        "<template>",
+        "  $1",
+        "</template>"
+    ],
+    "description": "Create <template> block"
+  },
+  "script": {
+    "scope": "vue",
+    "prefix": "script",
+    "body": [
+        "<script>",
+        "import { defineComponent } from 'vue';",
+        "",
+        "export default defineComponent({",
+        "  $2",
+        "});",
+        "</script>"
+    ],
+    "description": "Create <script> block"
+  },
+  "script setup": {
+    "scope": "vue",
+    "prefix": "script setup",
+    "body": [
+        "<script setup>",
+        "defineProps({",
+        "  $1",
+        "});",
+        "</script>"
+    ],
+    "description": "Create <script setup> + <script> blocks"
+  },
+  "style": {
+    "scope": "vue",
+    "prefix": "scoped-style",
+    "body": [
+        "<style scoped>",
+        "$1",
+        "</style>"
+    ],
+    "description": "Create <style> block"
+  },
+  "v-for": {
+    "scope": "html",
+    "prefix": "v-for",
+    "body": [
+        "<template v-for=\"$1 in $2\">",
+        "  $3",
+        "</template>"
+    ],
+    "description": "Create html tag with v-for"
+  },
+  "v-if": {
+    "scope": "html",
+    "prefix": "v-if",
+    "body": [
+        "<template v-if=\"$1\">",
+        "  $2",
+        "</template>"
+    ],
+    "description": "Create html tag with v-if"
+  },
+  "v-else-if": {
+    "scope": "html",
+    "prefix": "v-else-if",
+    "body": [
+        "<template v-else-if=\"$1\">",
+        "  $2",
+        "</template>"
+    ],
+    "description": "Create html tag with v-else-if"
+  },
+  "v-else": {
+    "scope": "html",
+    "prefix": "v-else",
+    "body": [
+        "<template v-else>",
+        "  $1",
+        "</template>"
+    ],
+    "description": "Create html tag with v-else"
+  },
+  "DsfrAccordion": {
+    "scope": "html",
+    "prefix": "DsfrAccordion",
+    "body": [
+        "<DsfrAccordion",
+        "  :expanded-id=\"${1:expandedId}\"",
+        "  :title=\"${2:accordionTitle}\"",
+        ">",
+        "  $3",
+        "</DsfrAccordion>",
+    ],
+    "description": "Create DsfrAccordion boilerplate"
+  },
+  "DsfrAccordionsGroup": {
+    "scope": "html",
+    "prefix": "DsfrAccordionsGroup",
+    "body": [
+        "<DsfrAccordionsGroup>",
+        "  <li>",
+        "    <DsfrAccordion",
+        "      :expanded-id=\"${1:expandedId}\"",
+        "      :title=\"${2:accordionTitle}\"",
+        "      @expand=\"expandedId = $event\"",
+        "    >",
+        "  </li>",
+        "</DsfrAccordionsGroup>",
+    ],
+    "description": "Create DsfrAccordionsGroup boilerplate"
+  },
+  "DsfrAlert": {
+    "scope": "html",
+    "prefix": "DsfrAlert",
+    "body": [
+        "<DsfrAlert",
+        "  :title=\"${1:alertTitle}\"",
+        "  :description=\"${2:alertDescription}\"",
+        "  :type=\"${3:alertType}\"",
+        "  :closed=\"${4:!openAlert}\"",
+        "  ${5:closeable}",
+        "  @close=\"${6:closeAlert()}\"",
+        "/>",
+    ],
+    "description": "Create DsfrAlert boilerplate"
+  },
+  "DsfrBadge": {
+    "scope": "html",
+    "prefix": "DsfrBadge",
+    "body": [
+        "<DsfrBadge",
+        "  :label=\"${1}\"",
+        "  :type=\"${2:success}\"",
+        "/>",
+    ],
+    "description": "Create DsfrBadge boilerplate"
+  },
+  "DsfrBreadcrumb": {
+    "scope": "html",
+    "prefix": "DsfrBreadcrumb",
+    "body": [
+        "<DsfrBreadcrumb",
+        "  :links=\"${1:links}\"",
+        "/>",
+    ],
+    "description": "Create DsfrBreadcrumb boilerplate"
+  },
+  "DsfrButton": {
+    "scope": "html",
+    "prefix": "DsfrButton",
+    "body": [
+      "<DsfrButton",
+      "  type=\"${1:buttonType}\"",
+      "  :label=\"${2:buttonLabel}\"",
+      "  ${3:secondary}",
+      "  @click=\"${4:onClick()}\"",
+      "/>",
+    ],
+    "description": "Create DsfrButton boilerplate"
+  },
+  "DsfrButtonGroup": {
+    "scope": "html",
+    "prefix": "DsfrButtonGroup",
+    "body": [
+      "<DsfrButtonGroup",
+      "  :buttons=\"${1:buttons}\"",
+      "  :label=\"${2:buttonLabel}\"",
+      "  ${3:secondary}",
+      "  @click=\"${4:onClick()}\"",
+      "/>",
+    ],
+    "description": "Create DsfrButtonGroup boilerplate"
+  },
+  "DsfrCallout": {
+    "scope": "html",
+    "prefix": "DsfrCallout",
+    "body": [
+      "<DsfrCallout",
+      "  :title=\"${1:title}\"",
+      "  :content=\"${2:content}\"",
+      "  :button=\"${3:button}\"",
+      "  :icon=\"${4:icon}\"",
+      "/>",
+    ],
+    "description": "Create DsfrCallout boilerplate"
+  },
+  "DsfrCard": {
+    "scope": "html",
+    "prefix": "DsfrCard",
+    "body": [
+      "<DsfrCard",
+      "  :title=\"${1:title}\"",
+      "  :description=\"${2:description}\"",
+      "  :detail=\"${3:detail}\"",
+      "  :link=\"${4:link}\"",
+      "  :alt-img=\"${5:altImg}\"",
+      "  :img-src=\"${6:imgSrc}\"",
+      "/>",
+    ],
+    "description": "Create DsfrCard boilerplate"
+  },
+  "DsfrCheckbox": {
+    "scope": "html",
+    "prefix": "DsfrCheckbox",
+    "body": [
+      "<DsfrCheckbox",
+      "  :label=\"${1:label}\"",
+      "  :hint=\"${2:hint}\"",
+      "  :name=\"${3:name}\"",
+      "  :modelValue=\"${4:checked}\"",
+      "  @update:model-value=\"updateChecked($event)\"",
+      "/>",
+    ],
+    "description": "Create DsfrCheckbox boilerplate"
+  },
+  "DsfrCheckboxSet": {
+    "scope": "html",
+    "prefix": "DsfrCheckboxSet",
+    "body": [
+      "<DsfrCheckboxSet",
+      "  v-model=\"${1:selectedCheckbox}\"",
+      "  :legend=\"${2:legend}\"",
+      "  :options=\"${3:options}\"",
+      "/>",
+    ],
+    "description": "Create DsfrCheckboxSet boilerplate"
+  },
+  "DsfrConsent": {
+    "scope": "html",
+    "prefix": "DsfrConsent",
+    "body": [
+      "<DsfrConsent",
+      "  :url=\"${1:url}\"",
+      "  @accept-all=\"${2:onAcceptAll()}\"",
+      "  @refuse-all=\"${3:onRefuseAll()}\"",
+      "  @customize=\"${3:onCustomize()}\"",
+      "/>",
+    ],
+    "description": "Create DsfrConsent boilerplate"
+  },
+  "DsfrFieldset": {
+    "scope": "html",
+    "prefix": "DsfrFieldset",
+    "body": [
+      "<DsfrFieldset",
+      "  :legend=\"${1:legend}\"",
+      "  :hint=\"${2:hint}\"",
+      "  :legend-class=\"${1:legendClass}\"",
+      "  :hint-class=\"${1:hintClass}\"",
+      "  :legend-id=\"${1:legendId}\"",
+      "/>",
+    ],
+    "description": "Create DsfrFieldset boilerplate"
+  },
+  "DsfrFileUpload": {
+    "scope": "html",
+    "prefix": "DsfrFileUpload",
+    "body": [
+      "<DsfrFileUpload",
+      "  :label=\"${1:label}\"",
+      "  :hint=\"${2:hint}\"",
+      "/>",
+    ],
+    "description": "Create DsfrFileUpload boilerplate"
+  },
+  "DsfrFollow": {
+    "scope": "html",
+    "prefix": "DsfrFollow",
+    "body": [
+      "<DsfrFollow",
+      "  :networks=\"${1:networks}\"",
+      "  :newsletter-data=\"${2:newsletterData}\"",
+      "/>",
+    ],
+    "description": "Create DsfrFollow boilerplate"
+  },
+  "DsfrFranceConnect": {
+    "scope": "html",
+    "prefix": "DsfrFranceConnect",
+    "body": [
+      "<DsfrFranceConnect ${1:secure} />",
+    ],
+    "description": "Create DsfrFranceConnect boilerplate"
+  },
+  "DsfrNewsLetter": {
+    "scope": "html",
+    "prefix": "DsfrNewsLetter",
+    "body": [
+      "<DsfrNewsLetter",
+      "  v-model:email=\"${1:email}\"",
+      "  :title=\"${2:title}\"",
+      "  :description=\"${3:description}\"",
+      "  :labelEmail=\"${4:labelEmail}\"",
+      "  :inputTitle=\"${5:inputTitle}\"",
+      "  :placeholder=\"${6:placeholder}\"",
+      "  :hintText=\"${7:hintText}\"",
+      "  :buttonText=\"${8:buttonText}\"",
+      "/>",
+    ],
+    "description": "Create DsfrNewsLetter boilerplate"
+  },
+  "DsfrSocialNetworks": {
+    "scope": "html",
+    "prefix": "DsfrSocialNetworks",
+    "body": [
+      "<DsfrSocialNetworks",
+      "  :networks=\"${1:networks}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSocialNetworks boilerplate"
+  },
+  "DsfrFooter": {
+    "scope": "html",
+    "prefix": "DsfrFooter",
+    "body": [
+      "<DsfrFooter",
+      "  :a11y-compliance=\"${1:a11yCompliance}\"",
+      "  :logo-text=\"${2:logoText}\"",
+      "  :legal-link=\"${3:legalLink}\"",
+      "  :personal-data-link=\"${4:personalDataLink}\"",
+      "  :cookies-link=\"${5:cookiesLink}\"",
+      "  :a11y-compliance-link=\"${6:a11yComplianceLink}\"",
+      "  :desc-text=\"${7:descText}\"",
+      "  :home-link=\"${8:homeLink}\"",
+      "  :partners=\"${9:partners}\"",
+      "  :ecosystem-links=\"${10:ecosystemLinks}\"",
+      "/>",
+    ],
+    "description": "Create DsfrFooter boilerplate"
+  },
+  "DsfrHeader": {
+    "scope": "html",
+    "prefix": "DsfrHeader",
+    "body": [
+      "<DsfrHeader",
+      "  :service-title=\"${1:serviceTitle}\"",
+      "  :service-description=\"${2:serviceDescription}\"",
+      "  :logo-text=\"${3:logoText}\"",
+      "  :quick-links=\"${4:quickLinks}\"",
+      "  ${5:show-search}",
+      "/>",
+    ],
+    "description": "Create DsfrHeader boilerplate"
+  },
+  "DsfrHighlight": {
+    "scope": "html",
+    "prefix": "DsfrHighlight",
+    "body": [
+      "<DsfrHighlight",
+      "  :text=\"${1:text}\"",
+      "/>",
+    ],
+    "description": "Create DsfrHighlight boilerplate"
+  },
+  "DsfrInput": {
+    "scope": "html",
+    "prefix": "DsfrInput",
+    "body": [
+      "<DsfrInput",
+      "  v-model=\"${1:inputValue}\"",
+      "  type=\"${2:inputType}\"",
+      "  :label=\"${3:inputLabel}\"",
+      "  ${4:label-visible}",
+      "  :placeholder=\"${5:inputPlaceholder}\"",
+      "/>",
+    ],
+    "description": "Create DsfrInput boilerplate"
+  },
+  "DsfrLogo": {
+    "scope": "html",
+    "prefix": "DsfrLogo",
+    "body": [
+      "<DsfrLogo",
+      "  logo-text=\"$1\"",
+      "/>",
+    ],
+    "description": "Create DsfrLogo boilerplate"
+  },
+  "DsfrPicture": {
+    "scope": "html",
+    "prefix": "DsfrPicture",
+    "body": [
+      "<DsfrPicture",
+      "  :src=\"${1:src}\"",
+      "  :alt=\"${2:alt}\"",
+      "  :title=\"${3:title}\"",
+      "  :legend=\"${4:legend}\"",
+      "/>",
+    ],
+    "description": "Create DsfrPicture boilerplate"
+  },
+  "DsfrVideo": {
+    "scope": "html",
+    "prefix": "DsfrVideo",
+    "body": [
+      "<DsfrVideo",
+      "  :src=\"${1:src}\"",
+      "  :legend=\"${2:legend}\"",
+      "/>",
+    ],
+    "description": "Create DsfrVideo boilerplate"
+  },
+  "DsfrModal": {
+    "scope": "html",
+    "prefix": "DsfrModal",
+    "body": [
+      "<DsfrButton",
+      "  label=\"${1:Ouvre la modale}\"",
+      "  ref=\"modalOrigin\"",
+      "  @click=\"${2:open()}\"",
+      "/>",
+      "<DsfrModal",
+      "  :opened=\"${3:opened}\"",
+      "  :title=\"${4:title}\"",
+      "  :origin=\"$refs.modalOrigin\"",
+      ">",
+      "  $5",
+      "</DsfrModal>",
+    ],
+    "description": "Create DsfrModal boilerplate"
+  },
+  "DsfrNavigation": {
+    "scope": "html",
+    "prefix": "DsfrNavigation",
+    "body": [
+      "<DsfrNavigation",
+      "  :nav-items=\"${1:navItems}\"",
+      "/>",
+    ],
+    "description": "Create DsfrNavigation boilerplate"
+  },
+  "DsfrNavigationItem": {
+    "scope": "html",
+    "prefix": "DsfrNavigationItem",
+    "body": [
+      "<DsfrNavigationItem :active=\"${1:active}\">",
+      "  $2",
+      "</DsfrNavigationItem>",
+    ],
+    "description": "Create DsfrNavigationItem boilerplate"
+  },
+  "DsfrNavigationMegaMenu": {
+    "scope": "html",
+    "prefix": "DsfrNavigationMegaMenu",
+    "body": [
+      "<DsfrNavigationMegaMenu",
+      "  :title=\"${1:title}\"",
+      "  :description=\"${2:description}\"",
+      "  :link=\"${3:link}\"",
+      "  :menus=\"${4:menus}\"",
+      "  :expanded-id=\"${5:expandedId}\"",
+      "  :@click=\"${6:toggle($event)}\"",
+      ">",
+      "  $7",
+      "</DsfrNavigationMegaMenu>",
+    ],
+    "description": "Create DsfrNavigationMegaMenu boilerplate"
+  },
+  "DsfrNavigationMegaMenuCategory": {
+    "scope": "html",
+    "prefix": "DsfrNavigationMegaMenuCategory",
+    "body": [
+      "<DsfrNavigationMegaMenuCategory",
+      "  :title=\"${1:title}\"",
+      "  :links=\"${2:links}\"",
+      "/>",
+    ],
+    "description": "Create DsfrNavigationMegaMenuCategory boilerplate"
+  },
+  "DsfrNavigationMenu": {
+    "scope": "html",
+    "prefix": "DsfrNavigationMenu",
+    "body": [
+      "<DsfrNavigationMenu",
+      "  :title=\"${1:title}\"",
+      "  :links=\"${2:links}\"",
+      "  :expanded-id=\"${3:expandedId}\"",
+      "  :@click=\"${4:toggle($event)}\"",
+      "/>",
+    ],
+    "description": "Create DsfrNavigationMenu boilerplate"
+  },
+  "DsfrNavigationMenuItem": {
+    "scope": "html",
+    "prefix": "DsfrNavigationMenuItem",
+    "body": [
+      "<DsfrNavigationMenuItem",
+      "  :active=\"${1:active}\"",
+      ">",
+      "</DsfrNavigationMenuItem>",
+    ],
+    "description": "Create DsfrNavigationMenuItem boilerplate"
+  },
+  "DsfrNavigationMenuLink": {
+    "scope": "html",
+    "prefix": "DsfrNavigationMenuLink",
+    "body": [
+      "<DsfrNavigationMenuLink",
+      "  :to=\"${1:to}\"",
+      "  :text=\"${2:text}\"",
+      "/>",
+    ],
+    "description": "Create DsfrNavigationMenuLink boilerplate"
+  },
+  "DsfrPagination": {
+    "scope": "html",
+    "prefix": "DsfrPagination",
+    "body": [
+      "<DsfrPagination",
+      "  :pages=\"${1:pages}\"",
+      "  v-model:current-page=\"${2:currentPage}\"",
+      "/>",
+    ],
+    "description": "Create DsfrPagination boilerplate"
+  },
+  "DsfrQuote": {
+    "scope": "html",
+    "prefix": "DsfrQuote",
+    "body": [
+      "<DsfrQuote",
+      "  :quote=\"${1:quote}\"",
+      "  :author=\"${2:author}\"",
+      "  :details=\"${3:details}\"",
+      "  :illustration=\"${4:illustration}\"",
+      "  :source=\"${5:source}\"",
+      "  :sourceUrl=\"${6:sourceUrl}\"",
+      "  :quoteImage=\"${7:quoteImage}\"",
+      "/>",
+    ],
+    "description": "Create DsfrQuote boilerplate"
+  },
+  "DsfrRadioButton": {
+    "scope": "html",
+    "prefix": "DsfrRadioButton",
+    "body": [
+      "<DsfrRadioButton",
+      "  :label=\"${1:label}\"",
+      "  :hint=\"${2:hint}\"",
+      "  :name=\"${3:name}\"",
+      "  :value=\"${4:value}\"",
+      "  :model-value=\"${5:modelValue}\"",
+      "  @update:model-value=\"${6:updateCheckedValue($event)}\"",
+      "/>",
+    ],
+    "description": "Create DsfrRadioButton boilerplate"
+  },
+  "DsfrRadioButtonSet": {
+    "scope": "html",
+    "prefix": "DsfrRadioButtonSet",
+    "body": [
+      "<DsfrRadioButtonSet",
+      "  v-model=\"${1:modelValue}\"",
+      "  :legend=\"${2:legend}\"",
+      "  name=\"${2:radio-set}\"",
+      "  :options=\"${4:options}\"",
+      "  @update:model-value=\"${6:updateCheckedValue($event)}\"",
+      "/>",
+    ],
+    "description": "Create DsfrRadioButtonSet boilerplate"
+  },
+  "DsfrSearchBar": {
+    "scope": "html",
+    "prefix": "DsfrSearchBar",
+    "body": [
+      "<DsfrSearchBar",
+      "  v-model=\"${1:modelValue}\"",
+      "  :label=\"${2:label}\"",
+      "  :placeholder=\"${3:placeholder}\"",
+      "  ${4:label-visible}",
+      "  :button-text=\"${5:buttonText}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSearchBar boilerplate"
+  },
+  "DsfrSelect": {
+    "scope": "html",
+    "prefix": "DsfrSelect",
+    "body": [
+      "<DsfrSelect",
+      "  v-model=\"${1:modelValue}\"",
+      "  :label=\"${2:label}\"",
+      "  :options=\"${3:options}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSelect boilerplate"
+  },
+  "DsfrShare": {
+    "scope": "html",
+    "prefix": "DsfrShare",
+    "body": [
+      "<DsfrShare",
+      "  :title=\"${1:title}\"",
+      "  :networks=\"${2:networks}\"",
+      "  :mail=\"${3:mail}\"",
+      "  :copy-label=\"${4:copyLabel}\"",
+      "/>",
+    ],
+    "description": "Create DsfrShare boilerplate"
+  },
+  "DsfrSideMenu": {
+    "scope": "html",
+    "prefix": "DsfrSideMenu",
+    "body": [
+      "<DsfrSideMenu",
+      "  :heading-title=\"${1:headingTitle}\"",
+      "  :button-label=\"${2:buttonLabel}\"",
+      "  :menu-items=\"${3:menuItems}\"",
+      "  @toggle-expand=\"${4:toggleExpand($event)}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSideMenu boilerplate"
+  },
+  "DsfrSideMenuButton": {
+    "scope": "html",
+    "prefix": "DsfrSideMenuButton",
+    "body": [
+      "<DsfrSideMenuButton",
+      "  :expanded=\"${1:expanded}\"",
+      "  :button-label=\"${2:buttonLabel}\"",
+      "  :control-id=\"${3:controlId}\"",
+      "  @toggle-expand=\"${4:toggleExpand($event)}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSideMenuButton boilerplate"
+  },
+  "DsfrSideMenuLink": {
+    "scope": "html",
+    "prefix": "DsfrSideMenuLink",
+    "body": [
+      "<DsfrSideMenuLink",
+      "  :active=\"${1:active}\"",
+      "  :to=\"${2:to}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSideMenuLink boilerplate"
+  },
+  "DsfrSideMenuList": {
+    "scope": "html",
+    "prefix": "DsfrSideMenuList",
+    "body": [
+      "<DsfrSideMenuList",
+      "  :menu-items=\"${1:menuItems}\"",
+      "  @toggle-expand=\"${2:toggleExpand}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSideMenuList boilerplate"
+  },
+  "DsfrSideMenuListItem": {
+    "scope": "html",
+    "prefix": "DsfrSideMenuListItem",
+    "body": [
+      "<DsfrSideMenuListItem",
+      "  :active=\"${1:active}\"",
+      ">",
+      "  $2",
+      "</DsfrSideMenuListItem>",
+    ],
+    "description": "Create DsfrSideMenuListItem boilerplate"
+  },
+  "DsfrSkipLinks": {
+    "scope": "html",
+    "prefix": "DsfrSkipLinks",
+    "body": [
+      "<DsfrSkipLinks",
+      "  :links=\"${1:links}\"",
+      "/>",
+    ],
+    "description": "Create DsfrSkipLinks boilerplate"
+  },
+  "DsfrTable": {
+    "scope": "html",
+    "prefix": "DsfrTable",
+    "body": [
+      "<DsfrTable",
+      "  :title=\"${1:title}\"",
+      "  :headers=\"${2:headers}\"",
+      "  :rows=\"${3:rows}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTable boilerplate"
+  },
+  "DsfrTableCell": {
+    "scope": "html",
+    "prefix": "DsfrTableCell",
+    "body": [
+      "<DsfrTableCell",
+      "  :field=\"${1:field}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTableCell boilerplate"
+  },
+  "DsfrTableHeader": {
+    "scope": "html",
+    "prefix": "DsfrTableHeader",
+    "body": [
+      "<DsfrTableHeader",
+      "  :header=\"${1:header}\"",
+      "  :header-attrs=\"${2:headerAttrs}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTableHeader boilerplate"
+  },
+  "DsfrTableHeaders": {
+    "scope": "html",
+    "prefix": "DsfrTableHeaders",
+    "body": [
+      "<DsfrTableHeaders",
+      "  :headers=\"${1:headers}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTableHeaders boilerplate"
+  },
+  "DsfrTableRow": {
+    "scope": "html",
+    "prefix": "DsfrTableRow",
+    "body": [
+      "<DsfrTableRow",
+      "  :row-data=\"${1:rowData}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTableRow boilerplate"
+  },
+  "DsfrTabContent": {
+    "scope": "html",
+    "prefix": "DsfrTabContent",
+    "body": [
+      "<DsfrTabContent",
+      "  :panel-id=\"${1:panelId}\"",
+      "  :tab-id=\"${2:tabId}\"",
+      "  :selected=\"${3:selected}\"",
+      "  :asc=\"${4:asc}\"",
+      ">",
+      "  $5",
+      "</DsfrTabContent>",
+    ],
+    "description": "Create DsfrTabContent boilerplate"
+  },
+  "DsfrTabItem": {
+    "scope": "html",
+    "prefix": "DsfrTabItem",
+    "body": [
+      "<DsfrTabItem",
+      "  :tab-id=\"${2:tabId}\"",
+      "  :panel-id=\"${1:panelId}\"",
+      "  :selected=\"${3:selected}\"",
+      "  :icon=\"${4:icon}\"",
+      ">",
+      "  $5",
+      "</DsfrTabItem>",
+    ],
+    "description": "Create DsfrTabItem boilerplate"
+  },
+  "DsfrTabs": {
+    "scope": "html",
+    "prefix": "DsfrTabs",
+    "body": [
+      "<DsfrTabs",
+      "  :tab-list-name=\"${1:tabListName}\"",
+      "  :tab-titles=\"${2:tabTitles}\"",
+      "  :tab-contents=\"${3:tabContents}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTabs boilerplate"
+  },
+  "DsfrTag": {
+    "scope": "html",
+    "prefix": "DsfrTag",
+    "body": [
+      "<DsfrTag",
+      "  :label=\"${1:label}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTag boilerplate"
+  },
+  "DsfrTags": {
+    "scope": "html",
+    "prefix": "DsfrTags",
+    "body": [
+      "<DsfrTags",
+      "  :tags=\"${1:tags}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTags boilerplate"
+  },
+  "DsfrTile": {
+    "scope": "html",
+    "prefix": "DsfrTile",
+    "body": [
+      "<DsfrTile",
+      "  :title=\"${1:title}\"",
+      "  :description=\"${2:description}\"",
+      "  :to=\"${3:to}\"",
+      "  :rows=\"${4:rows}\"",
+      "/>",
+    ],
+    "description": "Create DsfrTile boilerplate"
+  },
+  "DsfrTiles": {
+    "scope": "html",
+    "prefix": "DsfrTiles",
+    "body": [
+      "<DsfrTiles :tiles=\"${1:tiles}\" />",
+    ],
+    "description": "Create DsfrTiles boilerplate"
+  },
+  "DsfrToggleSwitch": {
+    "scope": "html",
+    "prefix": "DsfrToggleSwitch",
+    "body": [
+      "<DsfrToggleSwitch",
+      "  v-model=\"${1:modelValue}\"",
+      "  :label=\"${2:label}\"",
+      "  :hint=\"${2:hint}\"",
+      "/>",
+    ],
+    "description": "Create DsfrToggleSwitch boilerplate"
+  },
+}

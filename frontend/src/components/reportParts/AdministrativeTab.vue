@@ -165,16 +165,16 @@ export default {
     isHolder: Boolean,
     oppositionSection: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     reportLabels: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/administrative-status`)
-  }
+  },
 }
 
 </script>

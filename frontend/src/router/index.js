@@ -1,52 +1,68 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+
+import AccueilPage from '@/views/AccueilPage.vue'
+
+const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
+const AcheteurPage = () => import('@/views/AcheteurPage.vue')
+const ContactPage = () => import('@/views/ContactPage.vue')
+const DonneesPersonnellesPage = () => import('@/views/DonneesPersonnellesPage.vue')
+const FAQPage = () => import('@/views/FAQPage.vue')
+const MentionsLegalesPage = () => import('@/views/MentionsLegalesPage.vue')
+const PlanDuSitePage = () => import('@/views/PlanDuSitePage.vue')
+const ProprietairePage = () => import('@/views/ProprietairePage.vue')
+const RapportAcheteurPage = () => import('@/views/RapportAcheteurPage.vue')
+const RapportVendeurPage = () => import('@/views/RapportVendeurPage.vue')
+
+const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
+const ServiceUnavailablePage = () => import('@/views/error/ServiceUnavailablePage.vue')
 
 
-import Home from '@/components/HomePage.vue'
-const Search = () => import('../components/SearchPage.vue')
-const Report = () => import('../components/ReportPage.vue')
-const Faq = () => import('../components/infos/FaqPage.vue')
-const LegalNotice = () => import('../components/infos/LegalNoticePage.vue')
-const InformationNotices = () => import('../components/infos/InformationNoticesPage.vue')
-const Buyer = () => import('../components/infos/BuyerPage.vue')
-import Unavailable from '@/components/infos/UnavailablePage.vue'
-import NotFound from '@/components/infos/NotFoundPage.vue'
+const routes = (
+  import.meta.env.VITE_IS_HISTOVEC_UNAVAILABLE === 'true' ?
+  [
+    { path: '/', name: 'root', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
+    { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },
+    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
+  ] :
+  [
+    { path: '/', name: 'root', redirect: { name: 'accueil' }, meta: { title: 'HistoVec - Accueil' } },
+    { path: '/accueil', name: 'accueil', component: AccueilPage, meta: { title: 'HistoVec - Accueil' } },
+    { path: '/proprietaire', name: 'proprietaire', component: ProprietairePage, meta: { title: 'HistoVec - Propriétaire' } },
+    { path: '/acheteur', name: 'acheteur', component: AcheteurPage, meta: { title: 'HistoVec - Acheteur' } },
+    { path: '/rapport-acheteur', name: 'rapportAcheteur', component: RapportAcheteurPage, meta: { title: 'HistoVec - Rapport acheteur' } },
+    { path: '/rapport-vendeur', name: 'rapportVendeur', component: RapportVendeurPage, meta: { title: 'HistoVec - Rapport vendeur' } },
+    { path: '/faq', name: 'faq', component: FAQPage, meta: { title: 'HistoVec - FAQ & Liens utiles' } },
+    { path: '/contact', name: 'contact', component: ContactPage, meta: { title: 'HistoVec - Contact' } },
+    { path: '/plan-du-site', name: 'planDuSite', component: PlanDuSitePage, meta: { title: 'HistoVec - Plan du site' } },
+    { path: '/accessibilite', name: 'accessibilite', component: AccessibilitePage, meta: { title: 'HistoVec - Accessibilité' } },
+    { path: '/mentions-legales', name: 'mentionsLegales', component: MentionsLegalesPage, meta: { title: 'HistoVec - Mentions légales' } },
+    { path: '/donnees-personnelles', name: 'donneesPersonnelles', component: DonneesPersonnellesPage, meta: { title: 'HistoVec - Données personnelles' } },
 
-Vue.use(Router)
-
-const isHistovecUnavailable = import.meta.env.VITE_IS_HISTOVEC_UNAVAILABLE === 'true'
-// eslint-disable-next-line no-console
-console.log(`isHistovecUnavailable = ${isHistovecUnavailable}`)
-
-let routes = []
-
-if (isHistovecUnavailable) {
-  routes = [
-    {name: 'root', path: '/', redirect: { name: 'unavailable' }, meta: { title: 'HistoVec - Service indisponible' }},
-    {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Service indisponible' }},
-    {name: 'notfound', path: '/*', redirect: { name: 'unavailable' }, meta: { title: 'HistoVec - Service indisponible' }}
+    // Errors pages
+    { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },
+    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage, meta: { title: 'HistoVec - Page non trouvée' } },
   ]
-} else {
-  routes = [
-    {name: 'root', path: '/', redirect: { name: 'home' }, meta: { title: 'HistoVec - Accueil' }},
-    {name: 'home', path: '/home', component: Home, meta: { title: 'HistoVec - Accueil' }},
-    {name: 'search', path: '/search', component: Search, meta: { title: 'HistoVec - Recherche' }},
-    {name: 'report', path: '/report', component: Report, meta: { title: 'HistoVec - Rapport' }},
-    {name: 'faq', path: '/faq', component: Faq, meta: { title: 'HistoVec - FAQ' }},
-    {name: 'legal-notice', path: '/legal-notice', component: LegalNotice, meta: { title: 'HistoVec - Mentions Légales' }},
-    {name: 'information-notices', path: '/information-notices', component: InformationNotices, meta: { title: 'HistoVec - Mentions d\'information' }},
-    {name: 'buyer', path: '/buyer', component: Buyer, meta: { title: 'HistoVec - Acheteur' }},
-    {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Service indisponible' }},
-    {name: 'not-found', path: '/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
-  ]
-}
+)
 
-export default new Router({
-  mode: 'history',
-  base: `/${import.meta.env.VITE_TITLE}`,
+export default createRouter({
+  history: createWebHistory(`/${import.meta.env.VITE_TITLE}`),
   routes,
-  // Scroll top for every route navigation
-  scrollBehavior () {
-    return { x: 0, y: 0 }
-  }
+  scrollBehavior (to) {
+    if (to.hash) {
+      console.log('--hash-- ', to, to.hash)
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    }
+
+    console.log('--top--')
+
+    // Scroll top for every route navigation
+    return {
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    }
+  },
 })

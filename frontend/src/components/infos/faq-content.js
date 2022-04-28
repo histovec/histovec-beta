@@ -14,7 +14,7 @@ const contactHook = (id, subject = contact.subject.default) => {
       e.onclick = async () => {
         await store.dispatch('toggleContactModal', { subject })
       }
-    }
+    },
   }
 }
 
@@ -106,7 +106,7 @@ export default function () {
             </p>
           </dd>
         </dl>
-      `
+      `,
     },
     {
       title: 'D’où proviennent les informations d’HistoVec ?',
@@ -116,7 +116,7 @@ export default function () {
           d’immatriculation des véhicules (SIV) du ministère de
           l’Intérieur.
         </p>
-      `
+      `,
     },
     {
       title: 'Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?',
@@ -130,7 +130,7 @@ export default function () {
           Les locataires longue durée (LDD) doivent être mandatés par
           le propriétaire du véhicule.
         </p>
-      `
+      `,
     },
     {
       title: 'Quelles sont les garanties d’HistoVec ?',
@@ -162,7 +162,7 @@ export default function () {
             </p>
           </dd>
         </dl>
-      `
+      `,
     },
     {
       title: 'Est-ce que les informations sont complètes ?',
@@ -174,7 +174,7 @@ export default function () {
           enregistré une procédure VRC (Véhicule à Réparation
           Contrôlée).
         </p>
-      `
+      `,
     },
     {
       title: 'Comment corriger une information manquante ou inexacte sur mes données personnelles?',
@@ -269,7 +269,7 @@ export default function () {
           Le numéro de formule est situé en bas à gauche de la carte
           grise. (p. ex. : 2015XX012345)
         </p>
-      `
+      `,
     },
     {
       title: 'Que signifient les termes des opérations historiques ?',
@@ -346,7 +346,7 @@ export default function () {
           est apte à circuler dans des conditions normales de
           sécurité.
         </p>
-      `
+      `,
     },
     {
       title: 'Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?',
@@ -372,7 +372,7 @@ export default function () {
           "achat/reprise par un professionnel ") du changement de
           titulaire.
         </p>
-      `
+      `,
     },
     {
       title: 'Quelle est notre politique de protection des données personnelles ?',
@@ -381,7 +381,7 @@ export default function () {
           Vous pouvez les consulter dans les
           <a href="legal">mentions légales.</a>
         </p>
-      `
+      `,
     },
     {
       title: 'Que dois-je faire pour vendre mon véhicule ?',
@@ -399,7 +399,7 @@ export default function () {
         <li>Transmettre l'historique administratif du véhicule à l'acheteur (en cliquant sur Transmettre le rapport) ;</li>
         <li>Télécharger le certificat de situation administrative détaillé (CSA ; téléchargeable en cliquant sur Transmettre le rapport).</li>
       </ul>
-      `
+      `,
     },
     {
       title: 'Que faire si le lien du rapport HistoVec que l\'on m\'a envoyé ne fonctionne pas?',
@@ -452,12 +452,12 @@ export default function () {
       Cette liste étant régulièrement mise à jour, il est toutefois possible que vous ne trouviez plus l'expert qui a rédigé le rapport,
       notamment si celui-ci a été radié (sanction, cessation d'activité, retraite, etc.).
       </p>
-      `
+      `,
     },
   ]
 
   return faqContent.map(content => ({
     ...content,
-    id: slugify(content.title)
+    id: slugify(content.title),
   }))
 }

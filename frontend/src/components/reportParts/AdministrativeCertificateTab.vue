@@ -52,21 +52,21 @@ export default {
   props: {
     processedVehiculeData: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     url: {
       type: String,
-      default: ''
+      default: '',
     },
     baseUrl: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   computed: {
     validityDate () {
       return dayjs().add(1, 'month').date(8).format(FR_DATE_FORMAT)
-    }
+    },
   },
   async mounted () {
     this.$store.dispatch('log', `${this.$route.path}/csa`)
@@ -79,7 +79,7 @@ export default {
       this.marianneImageBytes = await fetch(marianneImage).then((res) => res.arrayBuffer())
     }
   },
-  beforeDestroy () {
+  beforeUnmount () {
     URL.revokeObjectURL(this.csaObjectURL)
   },
   methods: {
@@ -118,7 +118,7 @@ export default {
         qrCodeUrl: this.url,
         validityDate: this.validityDate,
         vin,
-        webSiteUrl: this.baseUrl
+        webSiteUrl: this.baseUrl,
       },
       (
         !isCIAnnule ? {
@@ -134,16 +134,16 @@ export default {
           proceduresReparationControleeStatus: csaLabels.proceduresReparationControleeStatus,
           suspensionsCurrentStatusLines: csaLabels.suspensionsCurrentStatusLines,
           volTitre: csaLabels.titre.vol,
-          volVehicule: csaLabels.vol
+          volVehicule: csaLabels.vol,
         } : {}
       ))
 
       this.csaObjectURL = downloadBlob(
         new Blob([csaPdfBytes], { type: 'application/pdf' }),
-        `${RAPPORT_FILENAME}.pdf`
+        `${RAPPORT_FILENAME}.pdf`,
       )
-    }
-  }
+    },
+  },
 }
 
 </script>

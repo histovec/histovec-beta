@@ -1,11 +1,14 @@
 import { fileURLToPath, URL } from 'url'
 
 import { defineConfig } from 'vite'
-import { createVuePlugin } from 'vite-plugin-vue2'
+import dotenv from 'dotenv'
+import vue from '@vitejs/plugin-vue'
+import svgLoader from 'vite-svg-loader'
+
+dotenv.config()
 
 // Seules les variables VITE_* seront exposées (via un .env)
 // Accessibles via import.meta.env.VITE_*
-
 export default defineConfig({
   base: `/${process.env.VITE_TITLE}/`,
   server: {
@@ -14,7 +17,7 @@ export default defineConfig({
     proxy: {
       [`^/${process.env.VITE_TITLE}/api/v1/`]: {
         target: `http://localhost:${process.env.API_PORT}`,
-        changeOrigin: true
+        changeOrigin: true,
       },
     },
   },
@@ -22,11 +25,16 @@ export default defineConfig({
     sourcemap: process.env.VITE_SOURCE_MAP === 'true' ? true : 'hidden',
   },
   plugins: [
-    createVuePlugin(),
+    vue(),
+    svgLoader(
+    {
+      defaultImport: 'component',
+      multipass: true,
+    }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
 })

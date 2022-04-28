@@ -29,7 +29,7 @@ export default {
     initialActive: {
       type: String,
       default: '',
-    }
+    },
   },
 
   data() {
@@ -40,8 +40,8 @@ export default {
     activate(id) {
       this.$emit('click', id)
       this.active = id
-    }
-  }
+    },
+  },
 }
 </script>
 

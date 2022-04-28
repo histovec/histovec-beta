@@ -99,6 +99,6 @@ export default {
   },
   created () {
     this.$store.dispatch('log', 'unavailable' )
-  }
+  },
 }
 </script>

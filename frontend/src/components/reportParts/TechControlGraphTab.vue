@@ -10,8 +10,8 @@ export default {
   props: {
     controlesTechniques: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data () {
     return {
@@ -22,8 +22,8 @@ export default {
         SP: 'DarkOrange',
         R: 'OrangeRed',
         RP: 'OrangeRed',
-        X: 'DarkGrey'
-      }
+        X: 'DarkGrey',
+      },
     }
   },
   computed: {
@@ -35,15 +35,15 @@ export default {
           xAxes: [{
             type: 'time',
             time: {
-              unit: 'year'
-            }
+              unit: 'year',
+            },
           }],
           yAxes: [{
             display: true,
             ticks: {
-              beginAtZero: true
-            }
-          }]
+              beginAtZero: true,
+            },
+          }],
         },
         tooltips: {
           callbacks: {
@@ -59,9 +59,9 @@ export default {
               const resultat = this.resultat[tooltipItem.index]
 
               return `${nature}: ${resultat}`
-            }
-          }
-        }
+            },
+          },
+        },
       }
     },
     data () {
@@ -89,8 +89,8 @@ export default {
               pointHoverBorderColor: this.pointColors,
               pointRadius: 5,
               pointHoverRadius: 10,
-            }
-          ]
+            },
+          ],
         }
       } else {
         return []
@@ -110,8 +110,8 @@ export default {
       }
 
       return point
-    }
-  }
+    },
+  },
 }
 
 </script>

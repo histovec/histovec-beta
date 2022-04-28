@@ -90,6 +90,6 @@ export default {
       state.formule = ''
 
       state.typeImmatriculation = typeImmatriculation
-    }
-  }
+    },
+  },
 }

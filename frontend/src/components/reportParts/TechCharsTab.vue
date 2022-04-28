@@ -468,12 +468,12 @@ export default {
   props: {
     caracteristiquesTechniques: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   mounted () {
     this.$store.dispatch('log', `${this.$route.path}/vehicle`)
-  }
+  },
 }
 
 </script>

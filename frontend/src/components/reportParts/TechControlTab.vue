@@ -69,12 +69,12 @@ export default {
   props: {
     controlesTechniques: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     erreurControlesTechniques: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   computed: {
     normalizedControlesTechniques () {

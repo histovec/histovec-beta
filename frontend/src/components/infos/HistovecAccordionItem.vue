@@ -46,12 +46,12 @@ export default {
     callbacks: {
       type: Object,
       default: function () {return {}},
-      required: false
+      required: false,
     },
     react: {
       type: Object,
       default: function () { return {}},
-      required: false
+      required: false,
     },
     icon: {
       type: String,
@@ -67,20 +67,20 @@ export default {
   data () {
     return {
       iconClass: `fa-${this.icon || 'file-text-o'}`,
-      id: slugify(this.title)
+      id: slugify(this.title),
     }
   },
 
   computed: {
     reactVal () {
       return this.react.object && this.react.object[this.react.key]
-    }
+    },
   },
 
   watch: {
     reactVal (val) {
       this.applyCallbacks(`${val}`)
-    }
+    },
   },
 
   mounted () {
@@ -95,8 +95,8 @@ export default {
           this.callbacks[id](element)
         }
       })
-    }
-  }
+    },
+  },
 
 }
 </script>

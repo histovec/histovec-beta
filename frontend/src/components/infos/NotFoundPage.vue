@@ -86,6 +86,6 @@ export default {
   },
   created () {
     this.$store.dispatch('log', 'notFound' )
-  }
+  },
 }
 </script>

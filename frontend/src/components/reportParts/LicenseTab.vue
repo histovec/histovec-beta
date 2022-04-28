@@ -85,12 +85,12 @@ export default {
   props: {
     certificat: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     titulaire: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   computed: {
     datePremiereImmatriculationFR () {

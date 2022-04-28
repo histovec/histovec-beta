@@ -12,7 +12,7 @@ const historiqueVehiculeMapping = (historique) => {
         type,
         numeroAgrementExpert,
       }
-    )
+    ),
   )
 }
 
@@ -30,7 +30,7 @@ const suspensionsMapping = (suspensions) => {
         remiseDuTitre,
         retraitDuTitre,
       }
-    )
+    ),
   )
 }
 
@@ -44,7 +44,7 @@ const declarationsValantSaisieMapping = (declarationsValantSaisie) => {
         date,
         nomPersonneMorale,
       }
-    )
+    ),
   )
 }
 
@@ -58,7 +58,7 @@ const gagesMapping = (gages) => {
         date,
         nomCreancier,
       }
-    )
+    ),
   )
 }
 
@@ -279,7 +279,7 @@ const historiqueControlesTechniquesMapping = (historique) => {
         resultatLibelle,
         km,
       }
-    )
+    ),
   )
 }
 
