@@ -18,7 +18,7 @@ import NotFound from '@/components/infos/NotFound'
 
 Vue.use(Router)
 
-const isHistovecUnavailable = false
+const isHistovecUnavailable = true
 // eslint-disable-next-line no-console
 console.log(`isHistovecUnavailable = ${isHistovecUnavailable}`)
 
