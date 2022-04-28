@@ -8,7 +8,7 @@ import { getRedisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 import { VIN_REGEX } from '../../../constant/regex.js'
 
-import { appLogger } from '../../../util/logger.js'
+import { appLogger, syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
 
 
@@ -50,6 +50,9 @@ export const getReport = async (payload) => {
     }
   }
 
+
+  syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
+
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
   appLogger.debug(`-- [backend] immat ==> ${immat}`)
 
@@ -90,6 +93,8 @@ export const getReport = async (payload) => {
 
   if (!ignoreCache) {
     try {
+      syslogLogger.info({ key: 'before_cache', tag: 'getReport' })
+
       const encryptedUtacData = await redisClient.get(utacDataCacheId)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
@@ -215,6 +220,8 @@ export const getReport = async (payload) => {
       ct,
       ctUpdateDate,
     }
+
+    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: freshUtacData })
 
     // Encrypt utac data before storing it in redis cache
     const encryptedFreshUtacData = encryptJson(freshUtacData, utacDataKey)
