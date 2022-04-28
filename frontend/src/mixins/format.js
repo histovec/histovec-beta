@@ -8,6 +8,6 @@ export const formatMixin = {
         return 'nd'
       }
       return 'e'
-    }
-  }
+    },
+  },
 }

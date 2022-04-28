@@ -15,6 +15,6 @@ export const STATUS_FROM_CODE = {
     429: 'tooManyRequests',
     502: 'unavailable',
     503: 'unavailable',
-    504: 'unavailable'
-  }
+    504: 'unavailable',
+  },
 }

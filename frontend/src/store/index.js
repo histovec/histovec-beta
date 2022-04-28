@@ -12,7 +12,7 @@ import api from '@/api/index.js'
 import contact from '@/assets/json/contact.json'
 
 const vuexLocal = new VuexPersistence({
-  storage: window.sessionStorage
+  storage: window.sessionStorage,
 })
 
 Vue.use(Vuex)
@@ -35,7 +35,7 @@ export default new Vuex.Store({
       decrypted: {},
       hits: {},
       noHits: {},
-      error: {}
+      error: {},
     },
     config: {
       ignoreUtacCache: false,
@@ -116,5 +116,5 @@ export default new Vuex.Store({
     identity,
     histovec,
   },
-  plugins: [vuexLocal.plugin]
+  plugins: [vuexLocal.plugin],
 })

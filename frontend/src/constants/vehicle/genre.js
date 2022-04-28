@@ -24,5 +24,5 @@ export const GENRE = {
 	TRR: 'TRR',
 	VASP: 'VASP',
 	VP: 'VP',
-	XX: 'XX'
+	XX: 'XX',
 }

@@ -15,7 +15,7 @@ import {
 	FONT_SIZES,
 	FONT_SPACING,
 	FONT_STYLES,
-	FOOTER_LOGO_X
+	FOOTER_LOGO_X,
 } from './constants.js'
 
 
@@ -36,7 +36,7 @@ export const drawFilledRectangle = ({
 	y,
 	height,
 	width,
-	color
+	color,
 }) => {
 	page.pushOperators(
 		pushGraphicsState(),
@@ -60,7 +60,7 @@ export const writeMainTitle = ({ page, embeddedFonts, x, y, title }) => {
 		text: title,
 		center: true,
 		size: FONT_SIZES.XL,
-		style: FONT_STYLES.BOLD
+		style: FONT_STYLES.BOLD,
 	})
 
 	const nextY = mainTitleY - FONT_SPACING.S
@@ -72,14 +72,14 @@ export const writePageNumber = ({
 	embeddedFonts,
 	y,
 	pageNumber,
-	totalPageNumber
+	totalPageNumber,
 }) => {
 	return writeText({
 		page,
 		embeddedFonts,
 		x: FOOTER_LOGO_X,
 		y,
-		text: `Page ${pageNumber} / ${totalPageNumber}`
+		text: `Page ${pageNumber} / ${totalPageNumber}`,
 	})
 }
 
@@ -114,8 +114,8 @@ export const writeText = (
 		rotationAngle = null,
 		size = FONT_SIZES.M,
 		style = FONT_STYLES.NORMAL,
-		dryRun = false
-	} = {}
+		dryRun = false,
+	} = {},
 ) => {
 	const embeddedFont = getEmbeddedFont({ style, embeddedFonts })
 	const textHeight = embeddedFont.heightAtSize(size)
@@ -137,7 +137,7 @@ export const writeText = (
 			y: textY,
 			...(lineHeight ? { lineHeight } : {}),
 			...(maxWidth ? { maxWidth } : {}),
-			...(rotationAngle ? { rotate: degrees(rotationAngle) } : {})
+			...(rotationAngle ? { rotate: degrees(rotationAngle) } : {}),
 		})
 	}
 
@@ -168,8 +168,8 @@ export const writeTitle = (
 		title,
 		center = false,
 		style = FONT_STYLES.BOLD,
-		dryRun = false
-  } = {}
+		dryRun = false,
+  } = {},
 ) => {
 	const textY = writeText({
 		page,
@@ -180,7 +180,7 @@ export const writeTitle = (
 		center,
 		size: FONT_SIZES.L,
 		style,
-		dryRun
+		dryRun,
 	})
 
 	return textY - FONT_SPACING.L
@@ -197,8 +197,8 @@ export const writeWithSpacing = (
 		maxWidth,
 		size = FONT_SIZES.M,
 		style = FONT_STYLES.NORMAL,
-		dryRun = false
-	} = {}
+		dryRun = false,
+	} = {},
 ) => {
 	if (!textLines.length) {
 		return y
@@ -216,7 +216,7 @@ export const writeWithSpacing = (
 		multiLines: true,
 		size,
 		style,
-		dryRun
+		dryRun,
 	})
 
 	return nextY

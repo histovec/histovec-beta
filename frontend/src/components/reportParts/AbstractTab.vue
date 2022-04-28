@@ -545,12 +545,12 @@ export default {
   props: {
     processedVehiculeData: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     isHolder: Boolean,
     changeTab: {
       type: Function,
-      default: () => {}
+      default: () => {},
     },
   },
   data () {
@@ -593,8 +593,8 @@ export default {
     },
     logSimplimmatLink () {
       this.$store.dispatch('log', `${this.$route.path}/simplimmat/link`)
-    }
-  }
+    },
+  },
 }
 
 </script>

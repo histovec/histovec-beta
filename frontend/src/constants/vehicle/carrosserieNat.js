@@ -89,5 +89,5 @@ export const CARROSSERIE_NAT = {
 	VOIRIE: 'VOIRIE',
 	VTST: 'VTST',
 	VTTE: 'VTTE',
-	XX: 'XX'
+	XX: 'XX',
 }

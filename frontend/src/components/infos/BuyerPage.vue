@@ -106,6 +106,6 @@ export default {
   created () {
     this.$store.dispatch('log', this.$route.path)
     this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
-  }
+  },
 }
 </script>

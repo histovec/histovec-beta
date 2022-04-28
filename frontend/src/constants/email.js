@@ -26,7 +26,7 @@ Cordialement,
 export const ASK_REPORT_EMAIL = {
   recipients: [],
   subject: 'Demande de rapport HistoVec',
-  body: ASK_REPORT_EMAIL_BODY
+  body: ASK_REPORT_EMAIL_BODY,
 }
 
 
@@ -35,30 +35,37 @@ export const ASK_REPORT_EMAIL = {
 export const REPRODUCTION_REQUEST_EMAIL = {
   recipients: [HISTOVEC_SUPPORT_EMAIL],
   subject: 'Demande de reproduction',
-  body: ''
+  body: '',
 }
 
 
 export const READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL = {
   recipients: [ANTS_PERSONAL_DATA_EMAIL],
-  subject: '',
-  body: ''
+  subject: 'Droits d’accès et de rectification des données de l\'ANTS',
+  body: '',
 }
 
 export const READ_OR_UPDATE_UTAC_PERSONAL_DATA_EMAIL = {
   recipients: [UTAC_PERSONAL_DATA_EMAIL],
-  subject: '',
-  body: ''
+  subject: 'Droits d’accès et de rectification des données de l\'UTAC-OTC',
+  body: '',
 }
 
 export const SEND_LIMITATION_PERSONAL_DATA_EMAIL = {
   recipients: [HISTOVEC_SUPPORT_EMAIL],
-  subject: '',
-  body: ''
+  subject: 'Droit à la limitation des données personnelles',
+  body: '',
 }
 
 export const SEND_OPPOSITION_PERSONAL_DATA_EMAIL = {
   recipients: [OPPOSITION_PERSONAL_DATA_EMAIL],
-  subject: '',
-  body: ''
+  subject: 'Droit d\'opposition aux données personnelles',
+  body: '',
+}
+
+
+export const REPORT_ACCESSIBILITY_ERROR_EMAIL = {
+  recipients: [HISTOVEC_SUPPORT_EMAIL],
+  subject: 'Signaler un dysfonctionnement dans l\'accessibilité du site HistoVec',
+  body: '',
 }

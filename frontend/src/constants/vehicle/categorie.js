@@ -117,5 +117,5 @@ export const CATEGORIE = {
 	'T4.3a': 'T4.3a',
 	'T4.3b': 'T4.3b',
 	T5: 'T5',
-	XX: 'XX'
+	XX: 'XX',
 }

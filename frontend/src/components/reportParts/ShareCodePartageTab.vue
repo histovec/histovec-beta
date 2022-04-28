@@ -68,7 +68,7 @@ export default {
   data () {
     return {
       notifSuccess: false,
-      timerNotifSuccess: 10000
+      timerNotifSuccess: 10000,
     }
   },
   created () {
@@ -89,8 +89,8 @@ export default {
       setTimeout(() => {
         this.notifSuccess = false
       }, this.timerNotifSuccess)
-    }
-  }
+    },
+  },
 }
 
 </script>

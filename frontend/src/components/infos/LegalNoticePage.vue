@@ -426,7 +426,7 @@ export default {
       } else {
         this.choice = id
       }
-    }
-  }
+    },
+  },
 }
 </script>

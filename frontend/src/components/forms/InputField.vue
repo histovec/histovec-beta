@@ -109,7 +109,7 @@ export default {
         const modelName = this.options.model
         const camelizedModelName = modelName.charAt(0).toUpperCase() + modelName.slice(1)
         this.$store.commit(`update${camelizedModelName}`, value)
-      }
+      },
     },
     label () {
       return this.options.label || this.defaultOptions.label
@@ -131,7 +131,7 @@ export default {
     },
     checkForm () {
       return this.model.match(this.options.check)
-    }
+    },
   },
   methods: {
     toggleMask () {
@@ -142,7 +142,7 @@ export default {
       if (!evt.isTrusted) return
       const target = evt.currentTarget
       this.model = this.mask(target.value)
-    }
-  }
+    },
+  },
 }
 </script>

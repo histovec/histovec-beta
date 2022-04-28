@@ -30,7 +30,7 @@ export const FONT_SIZES = {
 	S: 8,
 	M: 10,
 	L: 12,
-	XL: 20
+	XL: 20,
 }
 
 export const FONT_SPACING = {
@@ -41,20 +41,20 @@ export const FONT_SPACING = {
 	L: 8,
 	XL: 12,
 	XXL: 18,
-	XXXL: 22
+	XXXL: 22,
 }
 
 export const FONT_STYLES = {
 	BOLD: 'BOLD',
 	ITALIC: 'ITALIC',
-	NORMAL: 'NORMAL'
+	NORMAL: 'NORMAL',
 }
 
 export const DEFAULT_FONT_STYLE = FONT_STYLES.NORMAL
 
 export const HORIZONTAL_TABULATION = {
 	XS: 15,
-	S: 30
+	S: 30,
 }
 
 export const QR_CODE_PIXEL_SIZE = 1.099

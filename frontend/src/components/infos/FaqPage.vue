@@ -127,7 +127,7 @@ export default {
         this.$scrollTo(hash)
         this.$router.push({ name: 'faq', hash })
       }, 10)
-    }
+    },
   },
 
 }

@@ -475,7 +475,7 @@ export default {
       return Boolean(
         this.processedVehiculeData &&
         this.processedVehiculeData.administratif &&
-        this.processedVehiculeData.administratif.isCIAnnule
+        this.processedVehiculeData.administratif.isCIAnnule,
       )
     },
     buyerId () {
@@ -577,7 +577,7 @@ export default {
       // Add 'urlUnsafe' queryParameter to make new buyer urls (urlUnsafeBase64 encoded parameters) recognizable for frontend and backend
       // @todo remove 'urlUnsafe' queryParam while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
       return `${this.baseUrl}/histovec/report${queryString}&urlUnsafe=true`
-    }
+    },
   },
   async created () {
     const { id: buyerId, key: buyerKey, urlUnsafe } = this.$route.query
@@ -735,7 +735,7 @@ export default {
       const urlSafeBase64EncodedVehicleData = urlSafeBase64Encode(bufferedStringifiedVehicleData)
 
       await this.$store.dispatch('log', `${this.$route.path}/vehicle/${anonymizedReportId}/${urlSafeBase64EncodedVehicleData}`)
-    }
-  }
+    },
+  },
 }
 </script>

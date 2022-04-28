@@ -25,7 +25,7 @@ export default {
         return null
       }
       return state.report
-    }
+    },
   },
   mutations: {
     updateReport(state, {
@@ -97,7 +97,7 @@ export default {
       }
       state.lastReportStatusCode = null
       state.reportExpiry = getTodayTime() // expired by default
-    }
+    },
   },
   actions: {
     async getHolderReport({ commit, rootState }) {
@@ -133,7 +133,7 @@ export default {
       try {
         const { report, status } = await api.getHolderReport(
           localStorage.getItem('userId'),
-          payload
+          payload,
         )
 
         commit('updateReport', {
@@ -165,7 +165,7 @@ export default {
       try {
         const { report, status } = await api.getBuyerReport(
           localStorage.getItem('userId'),
-          payload
+          payload,
         )
 
         commit('updateReport', {
@@ -179,5 +179,5 @@ export default {
         })
       }
     },
-  }
+  },
 }

@@ -415,6 +415,6 @@ export default {
   },
   created () {
     this.$store.dispatch('log', this.$route.path)
-  }
+  },
 }
 </script>

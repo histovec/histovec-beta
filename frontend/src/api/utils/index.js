@@ -33,7 +33,7 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     } else {  // typePersonne === TYPE_PERSONNE.PRO
       return {
@@ -52,7 +52,7 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     }
   } else if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
@@ -74,7 +74,7 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     } else {  // typePersonne === TYPE_PERSONNE.PRO
       return {
@@ -93,7 +93,7 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     }
   }
@@ -117,6 +117,6 @@ export const buildReportByCodePayload = (
     options: {
       controles_techniques: true,
       ignore_utac_cache: ignoreUtacCache,
-    }
+    },
   }
 }

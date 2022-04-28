@@ -24,7 +24,7 @@ const normalizeForFrontendDisplay = (elements, format) => {
   return orderBy(
     formattedElements,
     ['date'],
-    ['desc']
+    ['desc'],
   )
 }
 
@@ -249,7 +249,7 @@ const syntheseVehiculeMapping = (etatCI, etatVehicule, syntheseSituationAdminist
   if (oppositionTemporaireAnomaly) {
     return [
       ...filteredAnomalies,
-      oppositionTemporaireAnomaly
+      oppositionTemporaireAnomaly,
     ]
   } else {
     return filteredAnomalies
@@ -292,7 +292,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       isCIAnnule,
       csaLabels: {
         annulationCurrentStatus,
-      }
+      },
     }
   }
 
@@ -309,37 +309,37 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
   // CSA display
   const pvDates = otcisPV.map((otciPV) => {
     return [
-      `- Date du PV :  ${formatIsoToFrDateOrDefault(otciPV.date)}`
+      `- Date du PV :  ${formatIsoToFrDateOrDefault(otciPV.date)}`,
     ]
   }).flat()
 
   const otcisPVCurrentStatusLines = [
     otcisPV.length > 0 ? 'PV(s) en attente' : 'Aucune',
-    ...pvDates
+    ...pvDates,
   ]
 
   const otcisCurrentStatusLines = otcis.map((otci) => {
     return [
-      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(otci.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(otci.date)}`,
     ]
   }).flat()
 
   const ovesCurrentStatusLines = oves.map((ove) => {
     return [
-      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ove.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ove.date)}`,
     ]
   }).flat()
 
   const oveisCurrentStatusLines = oveis.map((ovei) => {
     return [
-      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ovei.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ovei.date)}`,
     ]
   }).flat()
 
   const suspensionsCurrentStatusLines = suspensions.map((suspension) => {
     return [
       `- Motif :  ${suspensionsMapping[suspension.motif]}`,
-      `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`
+      `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`,
       // @todo: Faire le point avec Patrick et DSR (missing functional rules from SIV/DSR to build these data on JSON)
       // `  Remise titre :  ${suspension.remiseDuTitre}`,
       // `  Retrait titre :  ${suspension.retraitDuTitre}`
@@ -349,7 +349,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
   const gagesCurrentStatusLines = gages.map((gage) => {
     return [
       `- Nom du créancier :  ${gage.nomCreancier}`,
-      `  Date du gage :  ${formatIsoToFrDateOrDefault(gage.date)}`
+      `  Date du gage :  ${formatIsoToFrDateOrDefault(gage.date)}`,
     ]
   }).flat()
 
@@ -357,7 +357,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     return [
       '- Nom de l\'autorité à l\'origine de l\'inscription :',
       `    ${nomPersonneMorale}`,
-      `  Date de la déclaration valant saisie :  ${formatIsoToFrDateOrDefault(date)}`
+      `  Date de la déclaration valant saisie :  ${formatIsoToFrDateOrDefault(date)}`,
     ]
   }).flat()
 
@@ -383,8 +383,8 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       ...(hasOve ? [{ date: formatIsoToFrDate(oves[0].date), label: 'Procédure de réparation contrôlée' }] : []),
       // On pourrait identifier les différents motifs d'OTCI (trésor, véhicule bloqué, etc.) mais il a été décidé de laisser "Opposition temporaire" pour le moment.
       ...(hasOtci ? [{ date: formatIsoToFrDate(otcis[0].date), label: 'Opposition temporaire'}] : []),
-      ...(hasOtciPV ? [{ date: formatIsoToFrDate(otcisPV[0].date), label: 'PV en attente' }] : [])
-    ]
+      ...(hasOtciPV ? [{ date: formatIsoToFrDate(otcisPV[0].date), label: 'PV en attente' }] : []),
+    ],
   )
 
   const suspensionsInfos = normalizeForFrontendDisplay(
@@ -392,7 +392,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     (element) => ({
       date: formatIsoToFrDate(element.date),
       label: suspensionsMapping[element.motif],
-    })
+    }),
   )
 
   const gagesInfos = normalizeForFrontendDisplay(
@@ -400,7 +400,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     (element) => ({
       date: formatIsoToFrDate(element.date),
       label: element.nomCreancier,
-    })
+    }),
   )
 
   const dvsInfos = normalizeForFrontendDisplay(
@@ -408,7 +408,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     (element) => ({
       date: formatIsoToFrDate(element.date),
       label: element.nomPersonneMorale,
-    })
+    }),
   )
 
   const processedVehicleData = {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueShortkey from 'vue-shortkey'
+import VueShortkey from 'vue3-shortkey'
 import VueScrollTo from 'vue-scrollto'
 
 import dayjs from 'dayjs'
