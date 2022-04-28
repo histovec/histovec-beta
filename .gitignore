@@ -13,6 +13,7 @@ node_modules/
 data/encrypted
 backend/.build-lock
 backend/src/utac/
+frontend/.nvmrc
 frontend/.build-lock
 artifacts_dev
 artifacts_prod
