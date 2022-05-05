@@ -99,7 +99,8 @@ server {
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
-    proxy_set_header Cache-Control "no-store";
+    proxy_set_header Cache-Control "no-store no-cache, no-store, must-revalidate";
+    proxy_set_header Pragma "no-cache";
   }
 
   location ~ "^/<APP>/api/v1/(contact)" {
@@ -122,7 +123,8 @@ server {
     proxy_set_header Host $http_host;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
-    proxy_set_header Cache-Control "no-store";
+    proxy_set_header Cache-Control "no-cache, no-store, must-revalidate";
+    proxy_set_header Pragma "no-cache";
   }
 
 }
