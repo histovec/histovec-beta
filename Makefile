@@ -280,7 +280,7 @@ export DC_RUN_NGINX_PUBLIC_BACKEND_NGINX = ${DC_PREFIX}-run-public-backend-nginx
 
 # Arbitrary uuid to let public-backend call backend api (uuid is needed) with a common UUID
 export PUBLIC_BACKEND_API_UUID
-export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
+export PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=true
 export PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
 export PUBLIC_BACKEND_HOST=public-backend
