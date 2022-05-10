@@ -2,6 +2,17 @@ import npmVersion from '../package.json'
 
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development'
+const isPublicApi = process.env.PUBLIC_BACKEND === 'true'
+
+const usePreviousMonthForData = (
+  isPublicApi ?
+  process.env.PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA === 'true' :
+  process.env.BACKEND_USE_PREVIOUS_MONTH_FOR_DATA === 'true'
+)
+const previousMonthShift = parseInt(
+  (isPublicApi ? process.env.PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT : process.env.BACKEND_PREVIOUS_MONTH_SHIFT),
+  10
+) || 1
 
 const config = {
   port: process.env.BACKEND_PORT,
@@ -13,7 +24,7 @@ const config = {
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
   isDevelopmentMode,
-  isPublicApi: process.env.PUBLIC_BACKEND === 'true',
+  isPublicApi,
   isHistovecUnavailable: process.env.PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE === 'true',
   isUtacCacheIgnorable: isDevelopmentMode || process.env.IS_UTAC_CACHE_IGNORABLE === 'true',
   env: process.env.NODE_ENV,
@@ -26,8 +37,8 @@ const config = {
   esSIVIndex: process.env.ES_INDEX,
   mailTo: process.env.MAIL_TO,
   apiPrefix: `/${process.env.APP}/api/v1`,
-  usePreviousMonthForData: process.env.PUBLIC_BACKEND_USE_PREVIOUS_MONTH_FOR_DATA === 'true',
-  previousMonthShift: parseInt(process.env.PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT, 10) || 1,
+  usePreviousMonthForData,
+  previousMonthShift,
 
   // UTAC api
   utac: {

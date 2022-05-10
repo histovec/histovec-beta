@@ -241,6 +241,8 @@ export UTAC_PEM
 
 export BACKEND_PORT?=8010
 export BACKEND_IS_HISTOVEC_UNAVAILABLE?=false
+export BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=true
+export BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
 # packaging
 export DC_DEV_BACKEND = ${DC_PREFIX}-dev-backend.yml
