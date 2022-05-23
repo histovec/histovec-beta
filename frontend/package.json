@@ -5,12 +5,12 @@
   "description": "Jouez la transparence en partageant l'historique du véhicule",
   "author": "Ministère de l'Intérieur",
   "scripts": {
-    "build": "NODE_OPTIONS=--openssl-legacy-provider vite build",
+    "build": "vite build",
     "dev": "vite",
     "lint": "run-p lint:*",
     "format": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path '..'",
     "lint:js": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path '..'",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider vite",
+    "start": "vite",
     "test": "echo 'Tests à écrire'"
   },
   "dependencies": {
