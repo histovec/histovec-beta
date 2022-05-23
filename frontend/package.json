@@ -11,7 +11,9 @@
     "format": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path '..'",
     "lint:js": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path '..'",
     "start": "vite",
-    "test": "echo 'Tests à écrire'"
+    "test": "echo 'Tests à écrire'",
+    "preview": "run-s build serve",
+    "serve": "vite preview"
   },
   "dependencies": {
     "@gouvfr/dsfr": "~1.4.1",
