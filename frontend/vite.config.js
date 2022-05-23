@@ -6,11 +6,12 @@ import vue from '@vitejs/plugin-vue'
 import svgLoader from 'vite-svg-loader'
 
 dotenv.config()
+const base = process.env.BASE_URL || `/${process.env.VITE_TITLE}/`
 
 // Seules les variables VITE_* seront exposées (via un .env)
 // Accessibles via import.meta.env.VITE_*
 export default defineConfig({
-  base: `/${process.env.VITE_TITLE}/`,
+  base,
   server: {
     port: process.env.VITE_PORT,
     host: '0.0.0.0', // Très important si vite tourne dans un docker
