@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 
-import logoHistoVec from '@/assets/img/_logo_histovec_simple.svg?url'
+import logoHistoVec from '@/assets/img/logo_histovec_simple.svg?url'
 
 const RI_ICON_ATTRS = {
   scale: 0.9,

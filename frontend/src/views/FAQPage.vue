@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
-import FaqSvg from '@/assets/img/_faq.svg'
+import FaqSvg from '@/assets/img/faq.svg'
 import aideSivImg from '@/assets/img/aide_siv.jpg'
 import aideFniImg from '@/assets/img/aide_fni.jpg'
 
@@ -45,7 +45,7 @@ export default defineComponent({
 
 <template>
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div class="fr-col-offset-1 fr-col-11">
+    <div class="fr-col-12">
       <DsfrBreadcrumb
         class="fr-mb-0"
         :links="[
@@ -60,14 +60,14 @@ export default defineComponent({
       />
     </div>
 
-    <div class="fr-col-5">
+    <div class="fr-col-lg-4 fr-col-xl-4">
       <DsfrPicture src="">
         <FaqSvg
           title="Illustration de la page de la FAQ"
         />
       </DsfrPicture>
     </div>
-    <div class="fr-col-7 fr-mt-10v">
+    <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
       <h1>Besoin d'aide ?</h1>
       <h2>Consultez la FAQ et les liens utiles</h2>
       <p class="fr-text--xl">
@@ -235,7 +235,7 @@ export default defineComponent({
               Pour ce faire,
               <router-link
                 class="fr-link"
-                to="#contactBtn"
+                to="/contact"
               >
                 contactez-nous
               </router-link>.
@@ -252,7 +252,7 @@ export default defineComponent({
               Pour ce faire,
               <router-link
                 class="fr-link"
-                to="#contactBtn"
+                to="/contact"
               >
                 contactez-nous
               </router-link>.
@@ -305,7 +305,7 @@ export default defineComponent({
               Si votre véhicule est toujours introuvable,
               <router-link
                 class="fr-link"
-                to="#contactBtn"
+                to="/contact"
               >
                 contactez-nous
               </router-link>.
@@ -453,11 +453,12 @@ export default defineComponent({
             <b>Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur</b>
             <p>
               Si jamais le problème persiste avec votre vendeur :
-              <HistoVecButtonLink
-                label="Contactez-nous"
-                to="#contactBtn"
-                secondary
-              />
+              <router-link
+                class="fr-link"
+                to="/contact"
+              >
+                contactez-nous
+              </router-link>.
             </p>
           </DsfrAccordion>
         </li>
@@ -491,7 +492,6 @@ export default defineComponent({
         id="contactBtn"
         label="Contactez-nous"
         to="/contact"
-        secondary
       />
     </div>
   </div>

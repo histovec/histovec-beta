@@ -3,11 +3,11 @@ import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
-import AccueilSvg from '@/assets/img/_accueil.svg'
-import confidentielSvg from '@/assets/img/__confidentiel.svg?url'
-import gratuitSvg from '@/assets/img/__gratuit.svg?url'
-import officielSvg from '@/assets/img/__officiel.svg?url'
-import simpleSvg from '@/assets/img/__simple.svg?url'
+import AccueilSvg from '@/assets/img/accueil.svg'
+import confidentielSvg from '@/assets/img/confidentiel.svg?url'
+import gratuitSvg from '@/assets/img/gratuit.svg?url'
+import officielSvg from '@/assets/img/officiel.svg?url'
+import simpleSvg from '@/assets/img/simple.svg?url'
 
 
 export default defineComponent({
@@ -45,21 +45,21 @@ export default defineComponent({
 <template>
   <!--  fr-mt-10v -->
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div class="fr-col-offset-1 fr-col-11">
+    <div class="fr-col-12">
       <DsfrBreadcrumb
         class="fr-mb-0"
         :links="[]"
       />
     </div>
 
-    <div class="fr-col-5">
+    <div class="fr-col-lg-4 fr-col-xl-4">
       <DsfrPicture src="">
         <AccueilSvg
           title="Illustration de la page d'accueil"
         />
       </DsfrPicture>
     </div>
-    <div class="fr-col-7 fr-mt-10v">
+    <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
       <h1>Partagez l'historique de votre véhicule</h1>
       <h2>Jouez la transparence</h2>
       <p class="fr-text--xl">
@@ -144,7 +144,7 @@ export default defineComponent({
     >
       <h2>Propriétaire ou Acheteur ?</h2>
       <p class="fr-text--xl">
-        Propriétaire, générez le rapport
+        Propriétaire, générez le rapport.
       </p>
       <p class="fr-text--xl">
         Acheteur, demandez-le au vendeur.
