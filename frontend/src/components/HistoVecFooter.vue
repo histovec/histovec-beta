@@ -3,8 +3,8 @@ import { defineComponent } from 'vue'
 
 import npmConf from '../../package.json'
 
-import logoHistoVecSvg from '@/assets/img/_logo_histovec_simple.svg?url'
-import logoSecuriteRoutiereMb90Svg from '@/assets/img/_securite_routiere_mb90.svg?url'
+import logoHistoVecSvg from '@/assets/img/logo_histovec_simple.svg?url'
+import logoSecuriteRoutiereMb90Svg from '@/assets/img/securite_routiere_mb90.svg?url'
 
 
 export default defineComponent({

@@ -47,17 +47,7 @@ const routes = (
 export default createRouter({
   history: createWebHistory(`/${import.meta.env.VITE_TITLE}`),
   routes,
-  scrollBehavior (to) {
-    if (to.hash) {
-      console.log('--hash-- ', to, to.hash)
-      return {
-        el: to.hash,
-        behavior: 'smooth',
-      }
-    }
-
-    console.log('--top--')
-
+  scrollBehavior () {
     // Scroll top for every route navigation
     return {
       top: 0,
