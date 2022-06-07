@@ -4,13 +4,11 @@ const historiqueVehiculeMapping = (historique) => {
       date,
       date_annulation: dateAnnulation,
       type,
-      numero_agrement_expert: numeroAgrementExpert,
     }) => (
       {
         date,
         dateAnnulation,
         type,
-        numeroAgrementExpert,
       }
     ),
   )

@@ -100,7 +100,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
   }
 
   const historiqueMapping = (historique) => {
-    return historique.map(({ opa_date, opa_type, ope_date_annul, num_agree }) => (
+    return historique.map(({ opa_date, opa_type, ope_date_annul }) => (
       {
         date: opa_date,
         type: opa_type,
@@ -108,13 +108,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
           ope_date_annul
             ? {
                 date_annulation: ope_date_annul,
-              }
-            : {}
-        ),
-        ...(
-          num_agree
-            ? {
-                numero_agrement_expert: num_agree,
               }
             : {}
         ),
