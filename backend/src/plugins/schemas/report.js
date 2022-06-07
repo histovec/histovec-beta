@@ -108,7 +108,6 @@ export const reportResponseSchema = Joi.object({
         date: Joi.date().description('Date de l\'opération.'),
         date_annulation: Joi.date().description('Présent lors d\'une opération annulant une précédente opération de l\'historique. Date de l\'annulation de l\'opération précédente.'),
         type: Joi.string().description('Type de l\'opération.'),
-        numero_agrement_expert: Joi.string().description('Numéro d\'agrément de l\'expert (si l\'opération a nécessité la venue d\'un expert).'),
       }).label(`${RESPONSE_PREFIX}element_historique_vehicule`),
     ).label(`${RESPONSE_PREFIX}historique_vehicule`)
       .description('Historique des opérations du véhicule.'),
