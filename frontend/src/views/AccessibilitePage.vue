@@ -28,10 +28,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-top: 5rem"
-  >
+  <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-col-12">
+      <DsfrBreadcrumb
+        class="fr-mb-0"
+        :links="[
+          {
+            to: '/accueil',
+            text: 'Accueil',
+          },
+          {
+            text: 'Accessibilité',
+          },
+        ]"
+      />
+    </div>
+
     <div class="fr-col-12">
       <h1>Accessibilité</h1>
 

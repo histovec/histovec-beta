@@ -39,19 +39,32 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-top: 5rem"
-  >
+  <div class="fr-grid-row  fr-grid-row--gutters">
+    <div class="fr-col-12">
+      <DsfrBreadcrumb
+        class="fr-mb-0"
+        :links="[
+          {
+            to: '/accueil',
+            text: 'Accueil',
+          },
+          {
+            text: 'Données personnelles & Gestion des cookies',
+          },
+        ]"
+      />
+    </div>
+
     <div class="fr-col-12">
       <h1>Données personnelles & Gestion des cookies</h1>
 
-      <!-- <h5 class="fr-blue-title">
+      <!-- @todo: à supprimer selon la DSR -->
+      <h5 class="fr-blue-title">
         Introduction
-      </h5> -->
+      </h5>
       <p>
         Conformément à la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés modifiée et au règlement général sur la protection des données (RGPD), la déléguée interministérielle à la sécurité routière (Place Beauvau 75800 Paris CEDEX 08), met en œuvre le service HistoVec (Historique des Véhicules) dont les finalités sont les suivantes :
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>Permettre aux propriétaires de véhicules de générer et de consulter l'historique et les informations techniques et administratives du véhicule ;</li>
           <li>Permettre de communiquer ce rapport à un acheteur potentiel ;</li>
           <li>Editer le certificat de situation administrative prévu à l’article R. 322-4 du code de la route.</li>
@@ -64,7 +77,7 @@ export default defineComponent({
       <p>
         Ce téléservice a pour fondement juridique l’article 6 .1.e) du RGPD : « l'exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
         Il collecte les catégories de données suivantes :
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° SIREN et/ou n° SIRET) ;</li>
           <li>Les données d’identification du véhicule (numéro d’immatriculation, numéro VIN, numéro de formule du certificat d’immatriculation ou date du certificat d'immatriculation) ;</li>
           <li>Les données d’historique du véhicule (notamment date de mise en circulation, date de première immatriculation, marque, modèle, couleur, puissance CV, date de sinistre, état de vol, état de perte, gages, oppositions, procédures, résultats des contrôles techniques, kilométrages) ;</li>
@@ -99,6 +112,10 @@ export default defineComponent({
       <p>
         Les durées de conservation des données sont les suivantes :
       </p>
+    </div>
+  </div>
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
+    <div class="fr-col-8">
       <DsfrTable
         :title="title"
         :headers="['Type de données', 'Durée de conservation']"
@@ -125,7 +142,10 @@ export default defineComponent({
           ],
         ]"
       />
-
+    </div>
+  </div>
+  <div class="fr-grid-row  fr-grid-row--gutters">
+    <div class="fr-col-12">
       <h5 class="fr-blue-title">
         Droit d'accès et de modification
       </h5>
@@ -176,6 +196,8 @@ export default defineComponent({
 </template>
 
 <style scoped>
+/* @todo centralize these rules in common CSS as a .histovec-fr-blue-title class */
+
 .fr-blue-title {
   color: #000091;
   /* @todo: how to import DSFR CSS variable --blue-france-sun-113-625 ? */

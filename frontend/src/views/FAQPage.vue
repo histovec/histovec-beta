@@ -44,7 +44,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters">
+  <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
       <DsfrBreadcrumb
         class="fr-mb-0"
@@ -60,14 +60,14 @@ export default defineComponent({
       />
     </div>
 
-    <div class="fr-col-lg-4 fr-col-xl-4">
+    <div class="fr-col-lg-4  fr-col-xl-4">
       <DsfrPicture src="">
         <FaqSvg
           title="Illustration de la page de la FAQ"
         />
       </DsfrPicture>
     </div>
-    <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
+    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Besoin d'aide ?</h1>
       <h2>Consultez la FAQ et les liens utiles</h2>
       <p class="fr-text--xl">
@@ -76,15 +76,15 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row fr-grid-row--gutters">
+  <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
       <h2>Liens utiles</h2>
     </div>
     <div
-      class="fr-grid-row fr-grid-row--gutters"
+      class="fr-grid-row  fr-grid-row--gutters"
       style="margin-bottom: 2rem"
     >
-      <div class="fr-col-offset-1 fr-col-5">
+      <div class="fr-col-offset-1  fr-col-5">
         <DsfrTiles
           :tiles="tilesVendeursLinks"
           :horizontal="true"
@@ -100,7 +100,7 @@ export default defineComponent({
   </div>
 
   <div
-    class="fr-grid-row fr-grid-row--gutters"
+    class="fr-grid-row  fr-grid-row--gutters"
     style="margin-bottom: 2rem"
   >
     <div class="fr-col-12">
@@ -481,8 +481,7 @@ export default defineComponent({
   </div>
 
   <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-bottom: 4rem"
+    class="fr-grid-row  fr-grid-row--gutters  fr-mb12w"
   >
     <div
       class="fr-col-12"

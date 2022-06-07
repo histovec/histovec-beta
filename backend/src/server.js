@@ -6,7 +6,7 @@ import HapiSwagger from 'hapi-swagger'
 import Joi from 'joi'
 
 import { sendContact } from './handlers/feedback.js'
-import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
+import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, NUMERO_SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from './constant/type.js'
 import { appLogger } from './util/logger.js'
 
@@ -93,7 +93,7 @@ const routes = [
               .description('Prénoms du propriétaire du véhicule'),
             raisonSociale: Joi.string().allow('').trim()
               .description('Raison sociale de la société propriétaire du véhicule'),
-            siren: Joi.string().allow('').pattern(SIREN_REGEX)
+            siren: Joi.string().allow('').pattern(NUMERO_SIREN_REGEX)
               .description('Numéro de SIREN de la société propriétaire du véhicule'),
             typeImmatriculation: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_IMMATRICULATION))
               .description('Type d\'immatriculation du véhicule (FNI pour les véhicules immatriculés avant 2009, SIV pour les autres)'),

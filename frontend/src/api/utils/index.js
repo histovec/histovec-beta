@@ -1,5 +1,5 @@
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../constants/type.js'
-import { DEFAULT_SIREN }  from '../../constants/vehicle/siren.js'
+import { DEFAULT_SIREN }  from '../../constants/vehicle/numeroSiren.js'
 
 
 export const buildReportByDataPayload = (
