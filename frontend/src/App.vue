@@ -233,7 +233,7 @@ Vue.mixin({
   data () {
     return {
       appName: process.env.VUE_APP_TITLE,
-      usePreviousMonthForData: true,
+      usePreviousMonthForData: false,
       previousMonthShift: 1,
       outdatedData: true,
       showDataDate: true,
