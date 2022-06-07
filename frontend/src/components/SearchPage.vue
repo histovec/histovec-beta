@@ -687,7 +687,7 @@ import ModalHelper from './infos/ModalHelper.vue'
 import InputField from './forms/InputField.vue'
 
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../constants/type.js'
-import { DEFAULT_SIREN }  from '../constants/vehicle/siren.js'
+import { DEFAULT_NUMERO_SIREN }  from '../constants/vehicle/numeroSiren.js'
 
 import imageDateImmatriculationFNI from '@/assets/img/aide_fni_date_immatriculation.jpg'
 import imageNomsPrenomsFNI from '@/assets/img/aide_fni_noms_prenoms.jpg'
@@ -823,86 +823,7 @@ export default {
     }
   },
   computed: {
-    formOptions: {
-      get () {
-        return this.$store.state.identity.formOptions
-      },
-      set (value) {
-        this.$store.commit('initFormOptions', value)
-      },
-    },
-    nom: {
-      get () {
-        return this.$store.state.identity.nom
-      },
-      set (value) {
-        this.$store.commit('updateNom', value)
-      },
-    },
-    prenom: {
-      get () {
-        return this.$store.state.identity.prenom
-      },
-      set (value) {
-        this.$store.commit('updatePrenom', value)
-      },
-    },
-    raisonSociale: {
-      get () {
-        return this.$store.state.identity.raisonSociale
-      },
-      set (value) {
-        this.$store.commit('updateRaisonSociale', value)
-      },
-    },
-    siren: {
-      get () {
-        return this.$store.state.identity.siren
-      },
-      set (value) {
-        this.$store.commit('updateSiren', value)
-      },
-    },
-    plaque: {
-      get () {
-        return this.$store.state.identity.plaque
-      },
-      set (value) {
-        this.$store.commit('updatePlaque', value)
-      },
-    },
-    formule: {
-      get () {
-        return this.$store.state.identity.formule
-      },
-      set (value) {
-        this.$store.commit('updateFormule', value)
-      },
-    },
-    typePersonne: {
-      get () {
-        return this.$store.state.identity.typePersonne
-      },
-      set (value) {
-        this.$store.commit('updateTypePersonne', value)
-      },
-    },
-    typeImmatriculation: {
-      get () {
-        return this.$store.state.identity.typeImmatriculation
-      },
-      set (value) {
-        this.$store.commit('updateTypeImmatriculation', value)
-      },
-    },
-    dateCertificat: {
-      get () {
-        return this.$store.state.identity.dateCertificat
-      },
-      set (value) {
-        this.$store.commit('updateDateCertificat', value)
-      },
-    },
+
     checkDateCertificat () {
       return this.dateCertificat.match(/^[0-3][0-9](\/|-|\s+)?[0-1][0-9](\/|-|\s+)?[1-2][0-9]{3}$/)
     },
@@ -970,92 +891,8 @@ export default {
     }
     this.typePersonne = this.$store.state.identity.typePersonne || TYPE_PERSONNE.PARTICULIER
   },
-  mounted() {
-    // reset 'MonAvis' evaluation for each new search (notShow option will override it)
-    localStorage.setItem('evaluation', false)
-    this.cleanDefaultFields()
-  },
-  updated () {
-    this.cleanDefaultFields()
-  },
-  methods: {
-    defaultEmtpyFields () {
-      for (let field of Object.keys(this.formOptions)) {
-        const options = this.formOptions[field]
-        Object.values(this.TYPE_IMMATRICULATION).forEach((typeImmat) => {
-          if (field !== 'default' && this.typeImmatriculation === typeImmat) {
-            const specificOptions = options[typeImmat]
-            if (
-              (specificOptions.required === false ||
-                (specificOptions.required === undefined && this.formOptions.default === false)
-              ) && this[field] === ''
-            ) {
-              this[field] = specificOptions.defaultValue
-            }
-          }
-        })
-      }
-    },
-    cleanDefaultFields () {
-      for (let [field, options] of Object.entries(this.formOptions)) {
-        Object.values(this.TYPE_IMMATRICULATION).forEach((typeImmat) => {
-          if (field !== 'default' && this.typeImmatriculation === typeImmat) {
-            const specificOptions = options[typeImmat]
-            if (specificOptions.required === false || (specificOptions.required === undefined && this.formOptions.default === false)) {
-              if (this[field] === specificOptions.defaultValue) {
-                // @note: <Field> is to complexe and should be rewrited
-                // All fields are text field, so we use empty string as clean value
-                // instead of adding complexity to <Field>
-                this[field] = ''
-              }
-            }
-          }
-        })
-      }
-    },
-    onPaste (evt) {
-      const data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
 
-      if (data.length > 1) {
-        if (evt.target.name === 'nom') {
-          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-            // 1st element has already been pasted on current target name : 'nom'
-            // It is equivalent to :
-            // this.nom = data[0]
-            this.prenom = data[1]
-            this.plaque = data[2]
-            this.formule = data[3]
-          }
-          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-            // 1st element has already been pasted on current target name : 'nom'
-            // It is equivalent to :
-            // this.nom = data[0]
-            this.plaque = data[1]
-            this.dateCertificat = data[2]
-          }
-        }
-        if (evt.target.name === 'raisonSociale') {
-          // 1st element has already been pasted on current target name : 'raisonSociale'
-          // It is equivalent to :
-          // this.raisonSociale = data[0]
-          this.siren = data[1]
-          this.plaque = data[2]
-          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-            this.formule = data[3]
-          }
-          if (this.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-            this.dateCertificat = data[3]
-          }
-        }
-      }
-    },
-    async clearReport () {
-      await this.$store.commit('clearReport')
-    },
-    async clearAll () {
-      await this.$store.commit('clearIdentity')
-      this.clearReport()
-    },
+  methods: {
     async onSubmit () {
       this.status = 'posting'
       this.defaultEmtpyFields()

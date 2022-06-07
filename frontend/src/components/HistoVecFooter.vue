@@ -67,26 +67,33 @@ export default defineComponent({
 </script>
 
 <template>
-  <!-- @todo: implement no-cookie in DsfrFooter : merge /donnees-personnelles and /cookies links and label -->
+  <!-- @todo: implement 'no-cookie' props in DsfrFooter to merge /donnees-personnelles and /cookies links and label like this :
+    to: '/donnees-personnelles-et-cookies'
+    label: 'Données personnelles & Gestion des cookies'
+    and mask "Gestion des cookies" link
+  -->
   <DsfrFooter
     a11y-compliance="non conforme"
     :before-mandatory-links="beforeMandatoryLinks"
     :logo-text="['Ministère', 'de l’intérieur']"
-    home-link="/"
+    home-link="/accueil"
     a11y-compliance-link="/accessibilite"
     legal-link="/mentions-legales"
-    personal-data-link="/donnees-personnelles"
+    personal-data-link="/donnees-personnelles-et-cookies"
     no-cookie
     :partners="partners"
     :ecosystem-links="ecosystemLinks"
     operator-link-text="Logo HistoVec"
-    operator-to="/"
+    operator-to="/accueil"
     :operator-img-src="images.logoHistoVecSvg"
     operator-img-alt="Logo HistoVec"
     :licence-text="licenceText"
     licence-to=""
     licence-name="copyright © 2018"
   >
+    <!--
+      @todo: quel licence utiliser ? Copyright non approprié d'après Simon
+    -->
     <template #description>
       <div>
         <p>

@@ -5,7 +5,7 @@ import AccueilPage from '@/views/AccueilPage.vue'
 const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
 const AcheteurPage = () => import('@/views/AcheteurPage.vue')
 const ContactPage = () => import('@/views/ContactPage.vue')
-const DonneesPersonnellesPage = () => import('@/views/DonneesPersonnellesPage.vue')
+const DonneesPersonnellesEtCookiesPage = () => import('@/views/DonneesPersonnellesEtCookiesPage.vue')
 const FAQPage = () => import('@/views/FAQPage.vue')
 const MentionsLegalesPage = () => import('@/views/MentionsLegalesPage.vue')
 const PlanDuSitePage = () => import('@/views/PlanDuSitePage.vue')
@@ -30,13 +30,13 @@ const routes = (
     { path: '/proprietaire', name: 'proprietaire', component: ProprietairePage, meta: { title: 'HistoVec - Propriétaire' } },
     { path: '/acheteur', name: 'acheteur', component: AcheteurPage, meta: { title: 'HistoVec - Acheteur' } },
     { path: '/rapport-acheteur', name: 'rapportAcheteur', component: RapportAcheteurPage, meta: { title: 'HistoVec - Rapport acheteur' } },
-    { path: '/rapport-vendeur', name: 'rapportVendeur', component: RapportVendeurPage, meta: { title: 'HistoVec - Rapport vendeur' } },
+    { path: '/rapport-vendeur', name: 'rapportVendeur', component: RapportVendeurPage, props: true, meta: { title: 'HistoVec - Rapport vendeur' } },
     { path: '/faq', name: 'faq', component: FAQPage, meta: { title: 'HistoVec - FAQ & Liens utiles' } },
     { path: '/contact', name: 'contact', component: ContactPage, meta: { title: 'HistoVec - Contact' } },
     { path: '/plan-du-site', name: 'planDuSite', component: PlanDuSitePage, meta: { title: 'HistoVec - Plan du site' } },
     { path: '/accessibilite', name: 'accessibilite', component: AccessibilitePage, meta: { title: 'HistoVec - Accessibilité' } },
     { path: '/mentions-legales', name: 'mentionsLegales', component: MentionsLegalesPage, meta: { title: 'HistoVec - Mentions légales' } },
-    { path: '/donnees-personnelles', name: 'donneesPersonnelles', component: DonneesPersonnellesPage, meta: { title: 'HistoVec - Données personnelles' } },
+    { path: '/donnees-personnelles-et-cookies', name: 'donneesPersonnelles', component: DonneesPersonnellesEtCookiesPage, meta: { title: 'HistoVec - Données personnelles & Gestion des cookies' } },
 
     // Errors pages
     { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },
@@ -56,3 +56,5 @@ export default createRouter({
     }
   },
 })
+
+// @todo: implement log for all routes

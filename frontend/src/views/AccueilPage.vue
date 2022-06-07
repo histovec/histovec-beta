@@ -48,7 +48,11 @@ export default defineComponent({
     <div class="fr-col-12">
       <DsfrBreadcrumb
         class="fr-mb-0"
-        :links="[]"
+        :links="[
+          {
+            text: 'Accueil',
+          },
+        ]"
       />
     </div>
 

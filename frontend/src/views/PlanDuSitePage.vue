@@ -10,10 +10,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-top: 5rem"
-  >
+  <div class="fr-grid-row  fr-grid-row--gutters">
+    <div class="fr-col-12">
+      <DsfrBreadcrumb
+        class="fr-mb-0"
+        :links="[
+          {
+            to: '/accueil',
+            text: 'Accueil',
+          },
+          {
+            text: 'Plan du site',
+          },
+        ]"
+      />
+    </div>
+
     <div class="fr-col-12">
       <h1>Plan du site</h1>
 
@@ -25,7 +37,7 @@ export default defineComponent({
         </router-link>
       </h3>
 
-      <h4 class="fr-title-link fr-ml-3w">
+      <h4 class="fr-title-link  fr-ml-3w">
         <router-link
           to="/proprietaire"
         >
@@ -33,11 +45,11 @@ export default defineComponent({
         </router-link>
       </h4>
 
-      <h5 class="fr-ml-6w">
+      <h5 class="fr-ml-5w">
         Rapport propriétaire
       </h5>
 
-      <h4 class="fr-title-link fr-ml-3w">
+      <h4 class="fr-title-link  fr-ml-3w">
         <router-link
           to="/acheteur"
         >
@@ -45,11 +57,11 @@ export default defineComponent({
         </router-link>
       </h4>
 
-      <h5 class="fr-ml-6w">
+      <h5 class="fr-ml-5w">
         Rapport acheteur
       </h5>
 
-      <h4 class="fr-title-link fr-ml-3w">
+      <h4 class="fr-title-link  fr-ml-3w">
         <router-link
           to="/faq"
         >
@@ -57,7 +69,7 @@ export default defineComponent({
         </router-link>
       </h4>
 
-      <h4 class="fr-title-link fr-ml-3w">
+      <h4 class="fr-title-link  fr-ml-3w">
         <router-link
           to="/contact"
         >
@@ -91,9 +103,10 @@ export default defineComponent({
 
       <h3 class="fr-title-link">
         <router-link
-          to="/donnees-personnelles"
+          to="/donnees-personnelles-et-cookies"
         >
-          Données personnelles
+          <!-- @todo: changer l'url en '/donnees-personnelles-et-cookies' quand ce sera supporté dans le DsfrFooter -->
+          Données personnelles & Gestion des cookies
         </router-link>
       </h3>
     </div>
@@ -101,7 +114,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
+/* @todo centralize these rules in common CSS as a .histovec-fr-title-link class */
 [href] {
   background-image: none;
 }
