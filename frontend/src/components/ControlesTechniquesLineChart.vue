@@ -1,12 +1,24 @@
+<template>
+  <LineChart
+    :chart-data="lineData"
+    :chart-options="chartOptions"
+  />
+</template>
+
 <script>
 
 import orderBy from 'lodash.orderby'
-import { Line } from 'vue-chartjs'
+import { formatIsoToFrDate } from '@/assets/js/format.js'
 
-import { formatIsoToFrDate } from '../../assets/js/format.js'
+import { Line as LineChart } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale } from 'chart.js'
+ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale)
+import 'chartjs-adapter-date-fns'
+
 
 export default {
-  extends: Line,
+  name: 'ControlesTechniquesLineChart',
+  components: { LineChart },
   props: {
     controlesTechniques: {
       type: Array,
@@ -27,38 +39,42 @@ export default {
     }
   },
   computed: {
-    options () {
+    chartOptions () {
       return {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          xAxes: [{
+          x: {
+            axis: 'x',
             type: 'time',
             time: {
               unit: 'year',
             },
-          }],
-          yAxes: [{
+          },
+          y: {
+            axis: 'y',
             display: true,
             ticks: {
               beginAtZero: true,
             },
-          }],
+          },
         },
-        tooltips: {
-          callbacks: {
-            title: (tooltipItem) => {
-              const day = formatIsoToFrDate(tooltipItem[0].xLabel)
-              const km = Math.round(tooltipItem[0].yLabel * 100) / 100
-              const kmLibelle = new Intl.NumberFormat().format(km)
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (tooltipItem) => {
+                const day = formatIsoToFrDate(tooltipItem[0].raw.x)
+                const km = Math.round(tooltipItem[0].raw.y * 100) / 100
+                const kmLibelle = new Intl.NumberFormat().format(km)
 
-              return `Le ${day}: ${kmLibelle} km`
-            },
-            label: (tooltipItem) => {
-              const nature = this.nature[tooltipItem.index]
-              const resultat = this.resultat[tooltipItem.index]
+                return `Le ${day}: ${kmLibelle} km`
+              },
+              label: (tooltipItem) => {
+                const nature = this.nature[tooltipItem.dataIndex]
+                const resultat = this.resultat[tooltipItem.dataIndex]
 
-              return `${nature}: ${resultat}`
+                return `${nature}: ${resultat}`
+              },
             },
           },
         },
@@ -81,7 +97,7 @@ export default {
         return {
           datasets: [
             {
-              label: 'kilomètres',
+              label: 'Kilométrage',
               data: this.data,
               pointBackgroundColor: this.pointColors,
               pointBorderColor: this.pointColors,
@@ -96,11 +112,6 @@ export default {
         return []
       }
     },
-  },
-  mounted () {
-    this.$store.dispatch('log', `${this.$route.path}/kilometers`)
-
-    this.renderChart(this.lineData, this.options)
   },
   methods: {
     controlToPoint (controle) {

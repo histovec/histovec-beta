@@ -1,5 +1,5 @@
 <template>
   <div>
-    NotFounePage
+    NotFoundPage
   </div>
 </template>

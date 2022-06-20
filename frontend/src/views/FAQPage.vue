@@ -4,6 +4,10 @@ import { RouterLink } from 'vue-router'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
+import {
+  FAQ_CATEGORIES,
+} from '@/constants/faq.js'
+
 import FaqSvg from '@/assets/img/faq.svg'
 import aideSivImg from '@/assets/img/aide_siv.jpg'
 import aideFniImg from '@/assets/img/aide_fni.jpg'
@@ -34,6 +38,9 @@ export default defineComponent({
           imgSrc: '',
         },
       ],
+
+      categoriesOptions: FAQ_CATEGORIES,
+
       images: {
         aideSivImg,
         aideFniImg,
@@ -108,6 +115,18 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-12">
+      Veuillez choisir un thême :
+
+      <div class="fr-col-8">
+        <DsfrSelect
+          v-model="selectedSubject"
+          required
+          label="Thême"
+          :options="categoriesOptions()"
+          description="Sélectionnez un thême parmi les suivants."
+        />
+      </div>
+
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
@@ -483,10 +502,7 @@ export default defineComponent({
   <div
     class="fr-grid-row  fr-grid-row--gutters  fr-mb12w"
   >
-    <div
-      class="fr-col-12"
-      style="text-align: center"
-    >
+    <div class="fr-col-12  text-center">
       <HistoVecButtonLink
         id="contactBtn"
         label="Contactez-nous"
@@ -495,3 +511,11 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style scoped>
+
+.text-center {
+  text-align: center;
+}
+</style>
+

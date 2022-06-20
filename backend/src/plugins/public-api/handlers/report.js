@@ -48,7 +48,6 @@ export const getReport = async (payload) => {
     }
   }
 
-
   syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)

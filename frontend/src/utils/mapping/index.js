@@ -4,11 +4,13 @@ const historiqueVehiculeMapping = (historique) => {
       date,
       date_annulation: dateAnnulation,
       type,
+      // numAgree,  @todo @numAgree2
     }) => (
       {
         date,
         dateAnnulation,
         type,
+        // numAgree,  @todo @numAgree2
       }
     ),
   )
@@ -286,7 +288,7 @@ export const controlesTechniquesMapping = ({
   date_mise_a_jour: dateMiseAJour,
   donnee_disponible: isDonneeDisponible,
   erreur,
-  historique,
+  historique = [],
 }) => {
   const mappedHistorique = historiqueControlesTechniquesMapping(historique)
 

@@ -2,15 +2,21 @@
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import {
-  CONTACT_SUBJECT, REGISTRATION_CARD_CHANGE, REGISTRATION_CARD_LOSS,
-  RESOLVE_PV, PERSONAL_DATA, VEHICLE_DATA,
-  HOLDER_NOT_FOUND, BUYER_NOT_FOUND, TRANSFER_SUBJECT,
-  RESPONSE_NOT_FOUND_SUBJECT,
-  DEFAULT_SUBJECTS, SUBJECTS,
-} from '@/constants/faq.js'
+import { detect } from 'detect-browser'
+import dayjs from 'dayjs'
 
-const normalize = (text) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+import api from '@/api/index.js'
+
+import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '@/assets/js/format.js'
+import {
+  CONTACT_TAG_TYPES,
+  CONTACT_THEME,
+  READONLY_CONTACT_THEME_VALUES,
+  DEFAULT_CONTACT_THEMES_OPTIONS, CONTACT_THEMES_OPTIONS,
+} from '@/constants/contact.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
+import { EMAIL_REGEX } from '@/constants/regex.js'
+
 
 export default defineComponent({
   name: 'ContactPage',
@@ -19,89 +25,294 @@ export default defineComponent({
 
   data () {
     const tags = [
-      { label: 'Certificat d\'immatriculation / carte grise', tagName: 'button' },
-      { label: 'Titulaire / Propriétaire', tagName: 'button' },
-      { label: 'Rapport HistoVec', tagName: 'button' },
-      { label: 'Véhicule', tagName: 'button' },
-      { label: 'Certificat de Situation Administrative / Certificat de non gage', tagName: 'button' },
-      { label: 'Autre', tagName: 'button' },
+      { label: 'Certificat d\'immatriculation / Carte grise', tagName: 'button', type: CONTACT_TAG_TYPES.CERTIFICAT_IMMATRICULATION },  // Anciennement appelé "carte grise"
+      { label: 'Titulaire / Propriétaire', tagName: 'button', type: CONTACT_TAG_TYPES.PROPRIETAIRE_OU_TITULAIRE },
+      { label: 'Rapport HistoVec', tagName: 'button', type: CONTACT_TAG_TYPES.RAPPORT_HISTOVEC },
+      { label: 'Véhicule', tagName: 'button', type: CONTACT_TAG_TYPES.VEHICULE },
+      // { label: 'CSA (Certificat de Situation Administrative)', tagName: 'button', type: CONTACT_TAG_TYPES.CSA },  // Anciennement appelé "Certificat de non gage"
+      { label: 'Autre', tagName: 'button', type: CONTACT_TAG_TYPES.AUTRE },
     ]
 
     return {
-      // themesOptions: THEMES,
-      defaultSubjectsOptions: DEFAULT_SUBJECTS,
-      subjectsOptions: SUBJECTS,
+      // Constants
+      CONTACT_THEME,
+      READONLY_CONTACT_THEME_VALUES,
+      TYPE_PERSONNE,
+      TYPE_IMMATRICULATION,
 
-      // Subjects
-      TRANSFER_SUBJECT,
-      REGISTRATION_CARD_CHANGE,
-      REGISTRATION_CARD_LOSS,
-      RESOLVE_PV,
-      PERSONAL_DATA,
-      VEHICLE_DATA,
-      HOLDER_NOT_FOUND,
-      BUYER_NOT_FOUND,
-
-      // components model values
-      rawKeyWords: undefined,
+      // Components model values
       selectedTheme: undefined,
-      selectedSubject: undefined,
-      messageSubject: undefined,
-      messageEmail: undefined,
-      message: undefined,
+      messageTheme: null,
+      messageEmail: null,
+      message: null,
+
+      identity: {},
 
       tags: tags.map((tag, idx) => ({
         ...tag,
         onClick: () => {
-          const clickedTag = this.tags.find((tag, i) => i === idx)
+          const clickedTag = this.tags.find((_, i) => i === idx)
           clickedTag.selected = !clickedTag.selected
         },
       })),
+
+      // Contact email alerts
+      isSuccessAlertVisible: false,
+      isErrorAlertVisible: false,
     }
   },
-
   computed: {
+    // Contact form
     isFormMasked () {
-      return ![CONTACT_SUBJECT, RESPONSE_NOT_FOUND_SUBJECT].includes(this.selectedSubject)
+      return !this.selectedTheme || this.isReadonlyTheme
     },
     isFormFilled () {
-      return this.messageSubject && this.messageEmail && this.message
+      return this.messageEmail && this.message
     },
-    keyWords () {
-      if (!this.rawKeyWords) {
-        return []
+    isMessageEmailValid () {
+      return this.messageEmail && this.messageEmail.match(EMAIL_REGEX)
+    },
+    messageEmailErrorMessage () {
+      return (
+        this.messageEmail !== null && !this.isMessageEmailValid ?
+        'L\'email est obligatoire. Veuillez le renseigner.' :
+        ''
+      )
+    },
+    isMessageValid () {
+      return this.message && this.message.length > 0
+    },
+    messageErrorMessage () {
+      return (
+        this.message !== null && !this.isMessageValid ?
+        'Le message est obligatoire. Veuillez le renseigner.' :
+        ''
+      )
+    },
+    isReadonlyTheme () {
+      return this.READONLY_CONTACT_THEME_VALUES.includes(this.selectedTheme)
+    },
+    selectedThemeText () {
+      return (
+        this.selectedTheme && CONTACT_THEMES_OPTIONS.find(({value}) => value === this.selectedTheme).text
+      ) || ''
+    },
+    selectedTags () {
+      return this.tags.filter((tag) => tag.selected)
+    },
+    selectedTagsTypes () {
+      return this.selectedTags.map(({ type }) => type)
+    },
+    filteredThemesOptions () {
+      if (this.selectedTags.length === 0) {
+        return CONTACT_THEMES_OPTIONS.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
       }
-      return normalize(this.rawKeyWords).split(' ')
+
+      const filteredThemes = CONTACT_THEMES_OPTIONS.filter(({ types }) => {
+        const intersection = this.selectedTagsTypes.filter(type => types.includes(type))
+        return intersection.length !== 0
+      })
+
+      const themes = filteredThemes.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
+
+      return themes
     },
+    normalizedMessage () {
+      if (!this.message) {
+        return ''
+      }
+
+      const { message } = this
+      try {
+        message.normalize('NFD')
+      } catch (e) {
+        message.replace(/[\u0300-\u036f]*/g, '')
+      }
+
+      // eslint-disable-next-line no-misleading-character-class
+      return message.replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ')
+    },
+    themeLabel () {
+      const themeCount = this.filteredThemesOptions.length
+      return `Thèmes (${themeCount} choix possibles)`
+    },
+  },
+  watch: {
+    filteredThemessOptions(newOptions) {  // A chaque changement de filtre de thème
+      // Réinitialiser le thème lorsque qu'il ne fait plus partie des choix possibles
+      if (!newOptions.includes(this.selectedTheme)) {
+        this.selectedTheme = undefined
+      }
+    },
+    selectedTheme() {  // A chaque changement de thème
+      // Pré-remplir automatiquement le thème
+      this.messageTheme = this.selectedThemeText
+
+      // Supprimer la notification d'erreur ou de succès de l'envoi du message
+      this.resetAlertStates()
+    },
+  },
+
+  beforeMount() {
+    this.identity = this.buildIdentity()
   },
 
   methods: {
-    filteredSubjectsOptions: function () {
-      if (this.keyWords.length === 0) {
-        return this.subjectsOptions.concat(this.defaultSubjectsOptions)
+    resetAlertStates () {
+      this.isSuccessAlertVisible = false
+      this.isErrorAlertVisible = false
+    },
+    buildIdentity () {
+      const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
+      const formData = (
+        cachedFormData ||
+        {
+          typeImmatriculation: null,
+          typePersonne: TYPE_PERSONNE.PARTICULIER,
+          siv: {
+            titulaire: {
+              particulier: {
+                nom: '',
+                prenoms: '',
+              },
+              personneMorale : {
+                raisonSociale: '',
+                numeroSiren: '',
+              },
+            },
+            numeroImmatriculation: '',
+            numeroFormule: '',
+          },
+          fni: {
+            titulaire: {
+              particulier: {
+                nomEtPrenoms: '',
+              },
+              personneMorale: {
+                raisonSociale: '',
+                numeroSiren: '',
+              },
+            },
+            numeroImmatriculation: '',
+            dateEmissionCertificatImmatriculation: '',
+          },
+        }
+      )
+
+      const { siv: sivData, fni: fniData, typeImmatriculation, typePersonne } = formData
+
+      if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
+        return this.buildSivIdentity(typePersonne, sivData)
+      } else if (formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
+        return this.buildFniIdentity(typePersonne, fniData)
       }
 
-      const filteredSubjects = this.subjectsOptions.filter(({ text }) => {
-        const normalizedTexts = normalize(text).split(' ')
-        const filteredTexts = normalizedTexts.filter(x => this.keyWords.includes(x))
-        return filteredTexts.length !== 0
-      })
+      return {
+        dateCertificat: null,
+        formule: null,
+        nom: null,
+        plaque: null,
+        prenoms: null,
+        raisonSociale: null,
+        siren: null,
+        typeImmatriculation: null,
+        typePersonne: null,
+      }
+    },
+    buildSivIdentity (typePersonne, sivData) {
+      const {
+        titulaire: {
+          particulier: {
+            nom = '',
+            prenoms = '',
+          },
+          personneMorale : {
+            raisonSociale = '',
+            numeroSiren = '',
+          },
+        },
+        numeroImmatriculation = '',
+        numeroFormule = '',
+      } = sivData
 
-      const subjects = filteredSubjects.concat(this.defaultSubjectsOptions)
+      return {
+        formule: numeroFormule,
+        nom,
+        plaque: numeroImmatriculation,
+        prenoms,
+        raisonSociale,
+        siren: numeroSiren,
+        typeImmatriculation: TYPE_IMMATRICULATION.SIV,
+        typePersonne,
+      }
+    },
+    buildFniIdentity (typePersonne, fniData) {
+      const {
+        titulaire: {
+          particulier: {
+            nomEtPrenoms = '',
+          },
+          personneMorale: {
+            raisonSociale = '',
+            numeroSiren = '',
+          },
+        },
+        numeroImmatriculation = '',
+        dateEmissionCertificatImmatriculation = '',
+      } = fniData
 
-      // if (!subjects.includes(this.selectedSubject)) {
-      //   // this.selectedSubject = undefined
-      // }
+      const isoDateCertificat = (
+        dateEmissionCertificatImmatriculation ?
+          dayjs(dateEmissionCertificatImmatriculation, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
+          ''
+      )
 
-      return subjects
+      return {
+        dateCertificat: isoDateCertificat,
+        nom: nomEtPrenoms,
+        plaque: numeroImmatriculation,
+        raisonSociale,
+        siren: numeroSiren,
+        typeImmatriculation: TYPE_IMMATRICULATION.FNI,
+        typePersonne,
+      }
+    },
+    async sendContactEmail (event) {
+      event.preventDefault()
+
+      this.resetAlertStates()
+
+      const data = {
+        browser: detect(),
+        date: new Date().toISOString(),
+        email: this.messageEmail || undefined,
+        holder: !!this.identity.plaque,
+        identity: this.identity,
+        message: this.normalizedMessage,
+        subject: this.selectedThemeText,
+        uuid: localStorage.getItem('userId'),
+      }
+      try {
+        const { status } = await api.sendContactEmail(data)
+
+        if (status === 201) {
+          this.isSuccessAlertVisible = true
+          await api.log(`${this.$route.path}/mail/ok`)
+        } else {
+          this.isErrorAlertVisible = true
+          await api.log(`${this.$route.path}/mail/ko`)
+        }
+      } catch(error) {
+        this.isErrorAlertVisible = true
+        await api.log(`${this.$route.path}/mail/ko`)
+      }
     },
   },
-
 })
 </script>
 
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-2w">
     <div class="fr-col-12">
       <DsfrBreadcrumb
         :links="[
@@ -133,118 +344,225 @@ export default defineComponent({
     </div>
   </div>
 
-  <div
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center"
-    style="margin-bottom: 2rem"
-  >
-    <div class="fr-col-7">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0">
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <h6>Veuillez choisir un ou plusieurs thèmes :</h6>
       <DsfrTags
         :tags="tags"
       />
     </div>
-    <div class="fr-col-5 fr-mt-7w">
-      <DsfrSearchBar
-        v-model="rawKeyWords"
-        label="Rechercher"
-        placeholder="Tapez votre question ici..."
-        label-visible
-      />
-    </div>
-    <!-- <div class="fr-col-12">
+
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <DsfrSelect
         v-model="selectedTheme"
         required
-        label="Thème"
-        :options="themesOptions"
+        :label="themeLabel"
+        :options="filteredThemesOptions"
         description="Sélectionnez un thème parmi les suivants."
       />
-    </div> -->
-    <div class="fr-col-8">
-      <DsfrSelect
-        v-model="selectedSubject"
-        required
-        label="Sujet"
-        :options="filteredSubjectsOptions()"
-        description="Sélectionnez un sujet parmi les suivants ou renseignez le vôtre en choisissant 'Autre'."
-      />
-    </div>
-    <div
-      v-if="!isFormMasked"
-      class="fr-col-8"
-    >
-      <DsfrInput
-        v-model="messageSubject"
-        required
-        type="text"
-        label="Objet"
-        label-visible
-      />
-    </div>
-    <div
-      v-if="!isFormMasked"
-      class="fr-col-8"
-    >
-      <DsfrInput
-        v-model="messageEmail"
-        required
-        type="email"
-        label="Email"
-        label-visible
-        :disabled="isFormDisabled"
-      />
-    </div>
-    <div
-      v-if="!isFormMasked"
-      class="fr-col-8"
-    >
-      <DsfrInput
-        v-model="message"
-        required
-        type="text"
-        label="Message"
-        label-visible
-        :disabled="isFormDisabled"
-        is-textarea
-      />
-    </div>
-  </div>
-  <div
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center"
-    style="margin-bottom: 2rem"
-  >
-    <div
-      v-if="selectedSubject === TRANSFER_SUBJECT"
-      class="fr-col-10"
-    >
-      Il convient d'effectuer les
-      <a
-        class="fr-link"
-        href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        démarches de déclaration de cession du véhicule
-        <i class="fa fa-external-link"></i>
-      </a>
-      auprès de l'ANTS (Agence Nationale des Titres Sécurisés).
     </div>
   </div>
 
+  <template v-if="isReadonlyTheme">
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-4w">
+      <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-0">
+        <h5>Marche à suivre</h5>
+      </div>
+    </div>
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w  fr-mt-0">
+      <div class="fr-col-12  fr-col-offset-md-1  fr-col-md-11  fr-col-offset-lg-1  fr-col-lg-11  fr-col-offset-xl-1  fr-col-xl-11">
+        <p v-if="selectedTheme === CONTACT_THEME.TRANSFER">
+          Il convient d'effectuer les
+          <a
+            class="fr-link"
+            href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            démarches de déclaration de cession du véhicule
+          </a>
+          auprès de l'ANTS (Agence Nationale des Titres Sécurisés).
+        </p>
+
+        <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_CHANGE">
+          Il convient d'effectuer les
+          <a
+            class="fr-link"
+            href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            démarches de changement de titulaire du certificat d'immatriculation
+          </a>
+          auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+        </p>
+
+        <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_LOSS">
+          Il convient d'effectuer les
+          <a
+            class="fr-link"
+            href="https://immatriculation.ants.gouv.fr/Vos-demarches/Obtenir-un-duplicata-en-cas-de-perte-vol-deterioration"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            démarches de déclaration de perte ou de vol du certificat d'immatriculation
+          </a>
+          auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+        </p>
+
+        <p v-if="selectedTheme === CONTACT_THEME.RESOLVE_PV">
+          Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou
+          <a
+            class="fr-link"
+            href="https://www.antai.gouv.fr"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            l'Agence nationale de traitement automatisé des infractions (ANTAI)
+          </a>.
+        </p>
+
+        <p v-if="selectedTheme === CONTACT_THEME.PERSONAL_DATA || selectedTheme === CONTACT_THEME.REPORT_DATA">
+          HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d'Immatriculation des Véhicules).
+          <br />
+          <br />
+          Pour toute modification de vos données, rendez-vous sur
+          <a
+            class="fr-link"
+            href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            les démarches
+          </a>
+          proposées par l'ANTS (Agence Nationale des Titres Sécurisés)
+        </p>
+      </div>
+    </div>
+  </template>
+
   <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-bottom: 4rem"
+    v-if="!isFormMasked"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-0"
   >
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+      <DsfrInputGroup
+        :is-valid="isMessageEmailValid"
+        :error-message="messageEmailErrorMessage"
+      >
+        <DsfrInput
+          v-model="messageEmail"
+          label="Email"
+          label-visible
+          hint="Votre email"
+          type="email"
+          required
+        >
+          <template #required-tip>
+            <em class="required-label"> *</em>
+          </template>
+        </DsfrInput>
+      </DsfrInputGroup>
+    </div>
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+      <DsfrInputGroup
+        :is-valid="isMessageValid"
+        :error-message="messageErrorMessage"
+      >
+        <DsfrInput
+          v-model="message"
+          label="Message"
+          label-visible
+          hint="Votre message"
+          is-textarea
+          required
+        >
+          <template #required-tip>
+            <em class="required-label"> *</em>
+          </template>
+        </DsfrInput>
+      </DsfrInputGroup>
+    </div>
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+      <h6> Données transmises pour l'assistance </h6>
+      <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
+        <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
+          <ul
+            v-if="identity.typePersonne === TYPE_PERSONNE.PRO"
+            class="fr-ml-4w  fr-pl-0"
+          >
+            <li> Raison sociale: {{ identity.raisonSociale }} </li>
+            <li> Numéro SIREN: {{ identity.siren }} </li>
+          </ul>
+          <ul
+            v-else
+            class="fr-ml-4w  fr-pl-0"
+          >
+            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+              Nom de naissance: {{ identity.nom }}
+            </li>
+            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+              Prénom(s): {{ identity.prenoms }}
+            </li>
+            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
+              Nom de naissance et prénom(s): {{ identity.nom }}
+            </li>
+          </ul>
+        </div>
+        <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
+          <ul class="fr-ml-4w  fr-pl-0">
+            <li> Immatriculation: {{ identity.plaque }} </li>
+            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+              Numéro de formule: {{ identity.formule }}
+            </li>
+            <li v-else>
+              Date du certificat : {{ identity.dateCertificat }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+      <DsfrAlert
+        v-show="isSuccessAlertVisible"
+        type="success"
+        title="Envoi du message effectué avec succès"
+        description="
+          Votre message a bien été transmis à nos équipes.
+          Nous vous répondrons dès que possible.
+        "
+      />
+      <DsfrAlert
+        v-show="isErrorAlertVisible"
+        type="error"
+        title="Echec de l'envoi du message"
+        description="
+          Une erreur est survenue lors de l'envoi de votre message.
+          Veuillez réessayer plus tard.
+        "
+      />
+    </div>
+  </div>
+
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
     <div
       v-if="!isFormMasked"
-      class="fr-col-12"
-      style="text-align: center"
+      class="fr-col-12  text-center"
     >
       <DsfrButton
         :disabled="!isFormFilled"
         label="Envoyer"
-        on-click="@todo"
+        @click="sendContactEmail"
       />
     </div>
   </div>
 </template>
+
+<style scoped>
+  .text-center {
+    text-align: center;
+  }
+</style>

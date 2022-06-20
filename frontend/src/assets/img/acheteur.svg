@@ -379,24 +379,6 @@
 	c14.048-0.681,12.638-13.273,12.06-16.868L138.125,426.712z"/>
 <path fill="#BF635F" d="M128.392,410.774l0.922,8.292c0,0-13.372,1.144-17.652-12.622c-4.281-13.766,16.729,4.328,16.729,4.328
 	V410.774z"/>
-<g>
-	<defs>
-		<polygon id="SVGID_1_" points="103.007,364.757 103.048,364.757 103.007,364.798 		"/>
-	</defs>
-	<defs>
-		<polygon id="SVGID_2_" points="102.925,364.675 102.884,364.675 102.925,364.633 		"/>
-	</defs>
-	<clipPath id="SVGID_3_">
-		<use xlink:href="#SVGID_1_"  overflow="visible"/>
-	</clipPath>
-	<clipPath id="SVGID_4_" clip-path="url(#SVGID_3_)">
-		<use xlink:href="#SVGID_2_"  overflow="visible"/>
-	</clipPath>
-	<g transform="matrix(0 0 0 0 102.9658 364.7156)" clip-path="url(#SVGID_4_)" enable-background="new    ">
-		<image overflow="visible" width="858" height="1194" xlink:href="94B7CF5.png"  transform="matrix(0 0 0 0 102.9658 364.7156)">
-		</image>
-	</g>
-</g>
 <path fill="#3C251D" d="M130.53,391.028c-0.065-1.708,0.435-3.113,1.118-3.141c0.684-0.027,1.291,1.335,1.356,3.042
 	c0.065,1.708-0.436,3.113-1.118,3.141C131.202,394.097,130.595,392.735,130.53,391.028z"/>
 <path fill="#3C251D" d="M115.137,391.49c-0.065-1.707,0.436-3.112,1.118-3.14c0.684-0.028,1.291,1.335,1.356,3.042

@@ -153,7 +153,7 @@ class UTACClient {
       })
 
       const customError = new Error(message)
-      error.status = status === 'default' ? 500 : status
+      customError.status = status === 'default' ? 500 : status
       return Promise.reject(customError)
     }
 

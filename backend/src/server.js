@@ -5,7 +5,7 @@ import Vision from '@hapi/vision'
 import HapiSwagger from 'hapi-swagger'
 import Joi from 'joi'
 
-import { sendContact } from './handlers/feedback.js'
+import { sendContactEmail } from './handlers/feedback.js'
 import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, NUMERO_SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from './constant/type.js'
 import { appLogger } from './util/logger.js'
@@ -61,61 +61,66 @@ const routes = [
       return { status: 'ok' }
     },
   },
-  {
-    method: 'POST',
-    path: '/contact',
-    options: {
-      validate: {
-        payload: Joi.object({
-          browser: Joi.object({
-            name: Joi.string().required(),
-            os: Joi.string().required(),
-            type: Joi.string().required(),
-            version: Joi.string().required(),
-          }).required()
-            .description('Données techniques qualifiant le navigateur web utilisé par l\'usager'),
-          date: Joi.date().iso().required()
-            .description('Date d\'envoi du message'),
-          email: Joi.string().email().required()
-            .description('Adresse email de l\'usager'),
-          holder: Joi.boolean().allow('').required()
-            .description('L\'usager est-il propriétaire du véhicule ?'),
-          identity: Joi.object({
-            dateCertificat: Joi.date().iso().allow('')
-              .description('Date d\'émission du certificat d\'immatriculation du véhicule (pour les véhicules FNI : immatriculés avant 2009)'),
-            formule: Joi.string().allow('').pattern(NUMERO_FORMULE_REGEX)
-              .description('Numéro de formule du certificat d\'immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
-            nom: Joi.string().allow('').trim()
-              .description('Nom du propriétaire du véhicule'),
-            plaque: Joi.string().allow('').pattern(NUMERO_IMMATRICULATION_REGEX)
-              .description('Numéro d\'immatriculation du véhicule'),
-            prenoms: Joi.string().allow('').trim()
-              .description('Prénoms du propriétaire du véhicule'),
-            raisonSociale: Joi.string().allow('').trim()
-              .description('Raison sociale de la société propriétaire du véhicule'),
-            siren: Joi.string().allow('').pattern(NUMERO_SIREN_REGEX)
-              .description('Numéro de SIREN de la société propriétaire du véhicule'),
-            typeImmatriculation: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_IMMATRICULATION))
-              .description('Type d\'immatriculation du véhicule (FNI pour les véhicules immatriculés avant 2009, SIV pour les autres)'),
-            typePersonne: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_PERSONNE))
-              .description('Type de propriétaire du véhicule'),
-          }),
-          message: Joi.string().allow('').trim()
-            .description('Message envoyé par l\'usager'),
-          subject: Joi.string().required()
-            .description('Sujet de la demande envoyée par l\'usager'),
-          uuid: Joi.string().guid({
-            version: [
-              'uuidv4',
-            ],
-          }).required()
-            .description('Identifiant anonyme (pour réaliser des statistiques métier)'),
-        }).label('ContactPayload'),
-      },
-    },
-    handler: sendContact,
-  },
 ]
+
+if (!config.isPublicApi) {
+  routes.push(
+    {
+      method: 'POST',
+      path: '/contact',
+      options: {
+        validate: {
+          payload: Joi.object({
+            browser: Joi.object({
+              name: Joi.string().required(),
+              os: Joi.string().required(),
+              type: Joi.string().required(),
+              version: Joi.string().required(),
+            }).required()
+              .description('Données techniques qualifiant le navigateur web utilisé par l\'usager'),
+            date: Joi.date().iso().required()
+              .description('Date d\'envoi du message'),
+            email: Joi.string().email().required()
+              .description('Adresse email de l\'usager'),
+            holder: Joi.boolean().allow('').required()
+              .description('L\'usager est-il propriétaire du véhicule ?'),
+            identity: Joi.object({
+              dateCertificat: Joi.date().iso().allow('')
+                .description('Date d\'émission du certificat d\'immatriculation du véhicule (pour les véhicules FNI : immatriculés avant 2009)'),
+              formule: Joi.string().allow('').pattern(NUMERO_FORMULE_REGEX)
+                .description('Numéro de formule du certificat d\'immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
+              nom: Joi.string().allow('').trim()
+                .description('Nom du propriétaire du véhicule'),
+              plaque: Joi.string().allow('').pattern(NUMERO_IMMATRICULATION_REGEX)
+                .description('Numéro d\'immatriculation du véhicule'),
+              prenoms: Joi.string().allow('').trim()
+                .description('Prénoms du propriétaire du véhicule'),
+              raisonSociale: Joi.string().allow('').trim()
+                .description('Raison sociale de la société propriétaire du véhicule'),
+              siren: Joi.string().allow('').pattern(NUMERO_SIREN_REGEX)
+                .description('Numéro de SIREN de la société propriétaire du véhicule'),
+              typeImmatriculation: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_IMMATRICULATION))
+                .description('Type d\'immatriculation du véhicule (FNI pour les véhicules immatriculés avant 2009, SIV pour les autres)'),
+              typePersonne: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_PERSONNE))
+                .description('Type de propriétaire du véhicule'),
+            }),
+            message: Joi.string().allow('').trim()
+              .description('Message envoyé par l\'usager'),
+            subject: Joi.string().required()
+              .description('Sujet de la demande envoyée par l\'usager'),
+            uuid: Joi.string().guid({
+              version: [
+                'uuidv4',
+              ],
+            }).required()
+              .description('Identifiant anonyme (pour réaliser des statistiques métier)'),
+          }).label('ContactPayload'),
+        },
+      },
+      handler: sendContactEmail,
+    },
+  )
+}
 
 export const createServer = async () => {
   const server = new Hapi.Server({

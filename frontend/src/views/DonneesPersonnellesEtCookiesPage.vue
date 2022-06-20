@@ -115,7 +115,7 @@ export default defineComponent({
     </div>
   </div>
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
-    <div class="fr-col-8">
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <DsfrTable
         :title="title"
         :headers="['Type de données', 'Durée de conservation']"
@@ -196,10 +196,9 @@ export default defineComponent({
 </template>
 
 <style scoped>
-/* @todo centralize these rules in common CSS as a .histovec-fr-blue-title class */
+/* @todo centralize these rules in common CSS file as a .histovec-fr-title class */
 
 .fr-blue-title {
-  color: #000091;
-  /* @todo: how to import DSFR CSS variable --blue-france-sun-113-625 ? */
+  color: var(--blue-france-sun-113-625);
 }
 </style>

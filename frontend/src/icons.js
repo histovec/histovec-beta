@@ -1,5 +1,6 @@
 
 export {
+  RiArrowRightFill,
   RiErrorWarningFill,
   RiInformationLine,
   RiMailLine,

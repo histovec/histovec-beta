@@ -9,3 +9,8 @@ export const TYPE_PERSONNE = {
   PARTICULIER: 'PARTICULIER',
   PRO: 'PRO',
 }
+
+export const TYPE_RAPPORT = {
+  ACHETEUR: 'ACHETEUR',
+  VENDEUR: 'VENDEUR',
+}

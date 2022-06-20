@@ -722,7 +722,7 @@ const formInitialOptions = {
       icon: 'fa fa-hashtag',
       tabindex: '2',
       required: false,
-      defaultValue: DEFAULT_SIREN,
+      defaultValue: DEFAULT_NUMERO_SIREN,
     },
     [TYPE_IMMATRICULATION.FNI]: {
       fieldNumberPro: 2,
@@ -736,7 +736,7 @@ const formInitialOptions = {
       icon: 'fa fa-hashtag',
       tabindex: '2',
       required: false,
-      defaultValue: DEFAULT_SIREN,
+      defaultValue: DEFAULT_NUMERO_SIREN,
     },
   },
   plaque: {

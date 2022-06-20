@@ -257,24 +257,6 @@
 <path fill="#BF635F" d="M162.805,433.02c0,0-0.335,7.618,6.431,6.094l-0.317-2.703L162.805,433.02z"/>
 <path fill="#E38367" d="M172.375,426.599c0,0,0.973-0.995,1.635-0.46c0.699,0.566,0.802,2.735-1.263,3.206
 	C172.747,429.345,172.206,428.274,172.375,426.599z"/>
-<g>
-	<defs>
-		<polygon id="SVGID_1_" points="157.785,417.998 157.833,417.998 157.785,418.046 		"/>
-	</defs>
-	<defs>
-		<polygon id="SVGID_2_" points="157.69,417.903 157.643,417.903 157.69,417.855 		"/>
-	</defs>
-	<clipPath id="SVGID_3_">
-		<use xlink:href="#SVGID_1_"  overflow="visible"/>
-	</clipPath>
-	<clipPath id="SVGID_4_" clip-path="url(#SVGID_3_)">
-		<use xlink:href="#SVGID_2_"  overflow="visible"/>
-	</clipPath>
-	<g transform="matrix(0 0 0 0 157.7373 417.9509)" clip-path="url(#SVGID_4_)" enable-background="new    ">
-		<image overflow="visible" width="324" height="412" xlink:href="7D1D29C2.png"  transform="matrix(0 0 0 0 157.7373 417.9509)">
-		</image>
-	</g>
-</g>
 <path fill="#3C251D" d="M164.434,428.931c-0.154-0.636-0.073-1.202,0.183-1.264c0.255-0.062,0.586,0.404,0.739,1.04
 	c0.152,0.636,0.073,1.203-0.183,1.265C164.919,430.034,164.586,429.568,164.434,428.931z"/>
 <path fill="#3C251D" d="M170.002,427.824c-0.145-0.638-0.055-1.203,0.2-1.263c0.256-0.058,0.581,0.412,0.725,1.051
@@ -742,24 +724,6 @@
 	c-6.104,0-5.756-5.489-5.58-7.06L471.468,440.636z"/>
 <path fill="#BF635F" d="M475.355,433.521l-0.227,3.615c0,0,5.82,0.214,7.389-5.843C484.082,425.238,475.355,433.521,475.355,433.521
 	L475.355,433.521z"/>
-<g>
-	<defs>
-		<polygon id="SVGID_9_" points="470.458,413.385 470.505,413.385 470.458,413.432 		"/>
-	</defs>
-	<defs>
-		<polygon id="SVGID_10_" points="470.363,413.29 470.316,413.29 470.363,413.242 		"/>
-	</defs>
-	<clipPath id="SVGID_11_">
-		<use xlink:href="#SVGID_9_"  overflow="visible"/>
-	</clipPath>
-	<clipPath id="SVGID_12_" clip-path="url(#SVGID_11_)">
-		<use xlink:href="#SVGID_10_"  overflow="visible"/>
-	</clipPath>
-	<g transform="matrix(0 0 0 0 470.4097 413.3367)" clip-path="url(#SVGID_12_)" enable-background="new    ">
-		<image overflow="visible" width="324" height="451" xlink:href="7D1D29C6.png"  transform="matrix(0 0 0 0 470.4097 413.3367)">
-		</image>
-	</g>
-</g>
 <path fill="#3C251D" d="M474.013,425.006c-0.008-0.741-0.254-1.34-0.551-1.338c-0.297,0.003-0.531,0.607-0.523,1.348
 	c0.008,0.741,0.254,1.34,0.551,1.338S474.021,425.747,474.013,425.006z"/>
 <path fill="#3C251D" d="M480.695,424.885c-0.008-0.74-0.254-1.339-0.551-1.337s-0.531,0.606-0.523,1.348s0.254,1.339,0.551,1.337

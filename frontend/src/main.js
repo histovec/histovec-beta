@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import Maska from 'maska'
 
 import '@gouvminint/vue-dsfr/styles'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import * as icons from './icons.js'
+
+import VueClipboard from 'vue3-clipboard'
 
 import App from './App.vue'
 import router from './router/index.js'
@@ -23,7 +23,12 @@ router.beforeEach((to, from, next) => {
 
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
+  // @todo @copyLink1: On paramètre vue3-clipboard pour sélectionner
+  // automatiquement le contexte de l'élément du DOM dans lequel sera effectuée la copie
+  // (Notamment dans la DsfrModale)
+  .use(VueClipboard, {
+    autoSetContainer: true,
+    appendToBody: true,
+  })
   .use(router)
-  .use(createPinia())
-  .use(Maska)
   .mount('#app')

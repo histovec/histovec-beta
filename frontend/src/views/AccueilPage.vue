@@ -75,77 +75,60 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div
-      class="fr-col-12"
-      style="text-align: center"
-    >
+    <div class="fr-col-12  text-center">
       <h2>Nos garanties</h2>
     </div>
   </div>
 
-  <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-bottom: 2rem"
-  >
-    <div class="fr-col-offset-1 fr-col-10">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-3">
-          <!-- @todo: image is broken -->
-          <DsfrCard
-            title="Simple"
-            description="En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!"
-            detail=""
-            alt-img=""
-            link=""
-            :img-src="images.simpleSvg"
-            no-arrow
-          />
-        </div>
-        <div class="fr-col-3">
-          <!-- @todo: image is broken -->
-          <DsfrCard
-            title="Officiel"
-            description="Données issues du Système d'immatriculation des véhicules."
-            detail=""
-            alt-img=""
-            link=""
-            :img-src="images.officielSvg"
-            no-arrow
-          />
-        </div>
-        <div class="fr-col-3">
-          <!-- @todo: image is broken -->
-          <DsfrCard
-            title="Confidentiel"
-            description="Seul le propriétaire peut partager ses informations."
-            detail=""
-            alt-img=""
-            link=""
-            :img-src="images.confidentielSvg"
-            no-arrow
-          />
-        </div>
-        <div class="fr-col-3">
-          <!-- @todo: image is broken -->
-          <DsfrCard
-            title="Gratuit"
-            description="Un service gratuit pour les propriétaires et les acheteurs."
-            detail=""
-            alt-img=""
-            link=""
-            :img-src="images.gratuitSvg"
-            no-arrow
-          />
-        </div>
-      </div>
+  <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
+      <DsfrCard
+        title="Simple"
+        description="En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!"
+        detail=""
+        alt-img=""
+        link=""
+        :img-src="images.simpleSvg"
+        no-arrow
+      />
+    </div>
+    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
+      <DsfrCard
+        title="Officiel"
+        description="Données issues du Système d'immatriculation des véhicules."
+        detail=""
+        alt-img=""
+        link=""
+        :img-src="images.officielSvg"
+        no-arrow
+      />
+    </div>
+    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
+      <DsfrCard
+        title="Confidentiel"
+        description="Seul le propriétaire peut partager ses informations."
+        detail=""
+        alt-img=""
+        link=""
+        :img-src="images.confidentielSvg"
+        no-arrow
+      />
+    </div>
+    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
+      <DsfrCard
+        title="Gratuit"
+        description="Un service gratuit pour les propriétaires et les acheteurs."
+        detail=""
+        alt-img=""
+        link=""
+        :img-src="images.gratuitSvg"
+        no-arrow
+      />
     </div>
   </div>
 
-  <div class="fr-grid-row fr-grid-row--gutters">
-    <div
-      class="fr-col-12"
-      style="text-align: center"
-    >
+  <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center">
+    <div class="fr-col-12  text-center">
       <h2>Propriétaire ou Acheteur ?</h2>
       <p class="fr-text--xl">
         Propriétaire, générez le rapport.
@@ -156,17 +139,14 @@ export default defineComponent({
     </div>
   </div>
 
-  <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-bottom: 2rem"
-  >
-    <div class="fr-col-offset-1 fr-col-5">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+    <div class="fr-col-12  fr-col-md-5  fr-col-lg-5  fr-col-xl-5">
       <DsfrTile
         v-bind="tilesProprietaire"
         :horizontal="true"
       />
     </div>
-    <div class="fr-col-5">
+    <div class="fr-col-12  fr-col-md-5  fr-col-lg-5  fr-col-xl-5">
       <DsfrTile
         v-bind="tilesAcheteur"
         :horizontal="true"
@@ -174,20 +154,14 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row fr-grid-row--gutters">
-    <div
-      class="fr-col-offset-1 fr-col-5"
-      style="text-align: right"
-    >
+  <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center">
+    <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6  text-center">
       <HistoVecButtonLink
         label="Besoin d'aide ?"
         to="/faq"
       />
     </div>
-    <div
-      class="fr-col-5"
-      style="text-align: left"
-    >
+    <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6  text-center">
       <HistoVecButtonLink
         label="Contactez-nous"
         to="/contact"
@@ -196,3 +170,10 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style scoped>
+
+.text-center {
+  text-align: center;
+}
+</style>

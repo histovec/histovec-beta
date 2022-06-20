@@ -3,7 +3,7 @@ import Boom from '@hapi/boom'
 import { appLogger } from '../util/logger.js'
 import { sendMailToSupport } from '../mail/send-mail-to-support.js'
 
-export const sendContact = async (request, h) => {
+export const sendContactEmail = async (request, h) => {
   try {
     const { payload } = request
     const message = await sendMailToSupport(

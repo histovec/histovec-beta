@@ -1,17 +1,13 @@
 <script>
 import { defineComponent } from 'vue'
-import dayjs from 'dayjs'
-// import { mask } from 'maska'
 
-import { hash } from '@/utils/crypto.js'
-import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@/utils/dataPreparationFormat.js'
+import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+
 import { mailTo } from '@/utils/email.js'
-import { base64Encode, urlSafeBase64Encode, base64Decode } from '@/utils/encoding.js'
 
 import { ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
-import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
 
 import plaqueNonSupporteeSvg from '@/assets/img/plaque_non_supportee.svg?url'
 import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
@@ -22,11 +18,13 @@ import ProprietaireSvg from '@/assets/img/proprietaire.svg'
 export default defineComponent({
   name: 'ProprietairePage',
 
-  components: { ProprietaireSvg },
+  components: { ProprietaireSvg, HistoVecButtonLink },
 
   data () {
-    return {
-      formData : {
+    const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
+    const formData = (
+      cachedFormData ||
+      {
         typeImmatriculation: null,
         typePersonne: TYPE_PERSONNE.PARTICULIER,
         siv: {
@@ -56,7 +54,11 @@ export default defineComponent({
           numeroImmatriculation: '',
           dateEmissionCertificatImmatriculation: '',
         },
-      },
+      }
+    )
+
+    return {
+      formData,
 
       tabs: {
         siv: {
@@ -88,7 +90,7 @@ export default defineComponent({
     // @todo: implement focus on form with : focus-trap-vue
 
 
-    // @todo: reimplement copycat shortcut
+    // @todo @csvCopy: Réimplementer le copier coller des data du CSV dans le formulaire
     // onPaste (evt) {
     //   const data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
 
@@ -129,13 +131,13 @@ export default defineComponent({
     // ----- Validation -----
 
     isNomSivValid () {
-      return this.formData.siv.titulaire.particulier.nom
+      return this.formData.siv.titulaire.particulier.nom.length > 0
     },
     isPrenomsSivValid () {
-      return this.formData.siv.titulaire.particulier.prenoms
+      return this.formData.siv.titulaire.particulier.prenoms.length > 0
     },
     isRaisonSocialeSivValid () {
-      return this.formData.siv.titulaire.personneMorale.raisonSociale
+      return this.formData.siv.titulaire.personneMorale.raisonSociale.length > 0
     },
     isNumeroSirenSivValid () {
       return (
@@ -151,10 +153,10 @@ export default defineComponent({
     },
 
     isNomEtPrenomsFniValid () {
-      return this.formData.fni.titulaire.particulier.nomEtPrenoms
+      return this.formData.fni.titulaire.particulier.nomEtPrenoms.length > 0
     },
     isRaisonSocialeFniValid () {
-      return this.formData.fni.titulaire.personneMorale.raisonSociale
+      return this.formData.fni.titulaire.personneMorale.raisonSociale.length > 0
     },
     isNumeroSirenFniValid () {
       return (
@@ -227,22 +229,22 @@ export default defineComponent({
 
     nomSivErrorMessage () {
       return (
-        !this.isNomSivValid ?
+        this.formData.siv.titulaire.particulier.nom && !this.isNomSivValid ?
         'Le nom doit être renseigné tel qu\'indiqué sur le certificat d\'immatriculation.' :
         ''
       )
     },
     prenomsSivErrorMessage () {
       return (
-        !this.isPrenomsSivValid ?
+        this.formData.siv.titulaire.particulier.prenoms && !this.isPrenomsSivValid ?
         'Le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
         ''
       )
     },
     raisonSocialeSivErrorMessage () {
       return (
-        !this.isRaisonSocialeSivValid ?
-        'La raison sociale doit être renseignée telle qu\'indiqué sur le kbis.' :
+        this.formData.siv.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeSivValid ?
+        'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
         ''
       )
     },
@@ -255,14 +257,14 @@ export default defineComponent({
     },
     numeroImmatriculationSivErrorMessage () {
       return (
-        !this.isNumeroImmatriculationSivValid ?
+        this.formData.siv.numeroImmatriculation && !this.isNumeroImmatriculationSivValid ?
         'Le numéro d\'immatriculation doit respecter le format "AA-123-AA" ou "AA 123 AA" ou "AA123AA".' :
         ''
       )
     },
     numeroFormuleSivErrorMessage () {
       return (
-        !this.isNumeroFormuleSivValid ?
+        this.formData.siv.numeroFormule && !this.isNumeroFormuleSivValid ?
         'Le numéro de formule doit respecter le format "2013BZ80335".' :
         ''
       )
@@ -270,15 +272,15 @@ export default defineComponent({
 
     nomEtPrenomsFniErrorMessage () {
       return (
-        !this.isNomEtPrenomsFniValid ?
+        this.formData.fni.titulaire.particulier.nomEtPrenoms && !this.isNomEtPrenomsFniValid ?
         'Le nom et le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
         ''
       )
     },
     raisonSocialeFniErrorMessage () {
       return (
-        !this.isRaisonSocialeFniValid ?
-        'La raison sociale doit être renseignée telle qu\'indiqué sur le kbis.' :
+        this.formData.fni.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeFniValid ?
+        'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
         ''
       )
     },
@@ -291,75 +293,17 @@ export default defineComponent({
     },
     numeroImmatriculationFniErrorMessage () {
       return (
-        !this.isNumeroImmatriculationFniValid ?
+        this.formData.fni.numeroImmatriculation && !this.isNumeroImmatriculationFniValid ?
         'Le numéro d\'immatriculation doit respecter le format "123-ABC-45" ou "123 ABC 45" ou "123ABC45".' :
         ''
       )
     },
     dateEmissionCertificatImmatriculationFniErrorMessage () {
       return (
-        !this.isDateEmissionCertificatImmatriculationFniValid ?
+        this.formData.fni.dateEmissionCertificatImmatriculation && !this.isDateEmissionCertificatImmatriculationFniValid ?
         'La date d\'émission du certificat d\'immatriculation doit respecter le format "31/12/2020".' :
         ''
       )
-    },
-
-    // ----- Sent form data -----
-
-    currentMonthNumber () {
-      let date = dayjs().add(-7, 'day')
-
-      // @todo: branch flag du 8 parameter
-      // if (this.usePreviousMonthForData) {
-      //   date = date.add(-this.previousMonthShift, 'month')
-      // }
-
-      return date.format('YYYYMM')
-    },
-    titulaireId () {
-      if (this.formData.typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-          return this.formData.siv.titulaire.particulier.nom + this.formData.siv.titulaire.particulier.prenoms
-        }
-
-        if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-          return this.formData.fni.titulaire.particulier.nomEtPrenoms
-        }
-
-        return ''
-      }
-
-      if (this.formData.typePersonne === TYPE_PERSONNE.PRO) {
-        if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-          const numeroSiren = this.formData.siv.titulaire.personneMorale.numeroSiren || DEFAULT_NUMERO_SIREN
-          return this.formData.siv.titulaire.personneMorale.raisonSociale + numeroSiren
-        }
-
-        if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-          const numeroSiren = this.formData.fni.titulaire.personneMorale.numeroSiren || DEFAULT_NUMERO_SIREN
-          return this.formData.fni.titulaire.personneMorale.raisonSociale + numeroSiren
-        }
-      }
-
-      return ''
-    },
-    vehicleId () {
-      if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-        return this.formData.siv.numeroImmatriculation + this.formData.siv.numeroFormule
-      }
-
-      if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-        return this.formData.fni.numeroImmatriculation + this.formData.fni.dateEmissionCertificatImmatriculation
-      }
-
-      return ''
-    },
-    id () {
-      const id = `${this.titulaireId}${this.vehicleId}${this.currentMonthNumber}`
-      return normalizeIdvAsDataPreparation(id)
-    },
-    key () {
-      return normalizeKeyAsDataPreparation(this.vehicleId)
     },
   },
 
@@ -390,41 +334,53 @@ export default defineComponent({
       this.tabs.fni.selectedTabIndex = idx
     },
 
+    persistFormData () {
+      // Mise en cache pour :
+      // - pouvoir rafraîchir la page du rapport vendeur sans repasser par le formulaire
+      // - pré-remplir les entrées utilisateur sur le formulaire avec la précédente recherche validée
+      // - pouvoir envoyer les entrées utilisateur lors de l'envoi d'un message via la rubrique "Contact"
+      sessionStorage.setItem('formData', JSON.stringify(this.formData))
+    },
+
     // Form
     async onSubmit () {
-      const hashedIdBuffer = await hash(this.id)
-      const encodedHashedId = base64Encode(hashedIdBuffer)
-      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
-      // eslint-disable-next-line no-console
-      console.log(`[NEW] id base64Encoded = ${encodedHashedId}`)
+      this.persistFormData()
 
-      const urlSafeBase64EncodedId = urlSafeBase64Encode(base64Decode(encodedHashedId))
-      // eslint-disable-next-line no-console
-      console.log(`[OLD] id urlSafeBase64Encoded = ${urlSafeBase64EncodedId}`)
+        // siv: {
+        //   titulaire: {
+        //     particulier: {
+        //       nom: '',
+        //       prenoms: '',
+        //     },
+        //     personneMorale : {
+        //       raisonSociale: '',
+        //       numeroSiren: '',
+        //     },
+        //   },
+        //   numeroImmatriculation: '',
+        //   numeroFormule: '',
+        // },
+        // fni: {
+        //   titulaire: {
+        //     particulier: {
+        //       nomEtPrenoms: '',
+        //     },
+        //     personneMorale: {
+        //       raisonSociale: '',
+        //       numeroSiren: '',
+        //     },
+        //   },
+        //   numeroImmatriculation: '',
+        //   dateEmissionCertificatImmatriculation: '',
+        // }
 
-      // eslint-disable-next-line no-console
-      console.log(`[ID] are they different ? ${encodedHashedId !== urlSafeBase64EncodedId}`)
 
-      const hashedKeyBuffer = await hash(this.key)
-      const encodedHashedKey = base64Encode(hashedKeyBuffer)
-      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
-      // eslint-disable-next-line no-console
-      console.log(`[NEW] key base64Encoded = ${encodedHashedKey}`)
-
-      const urlSafeBase64EncodedKey = urlSafeBase64Encode(base64Decode(encodedHashedKey))
-      // eslint-disable-next-line no-console
-      console.log(`[OLD] key urlSafeBase64Encoded = ${urlSafeBase64EncodedKey}`)
-
-      // eslint-disable-next-line no-console
-      console.log(`[KEY] are they different ? ${encodedHashedKey !== urlSafeBase64EncodedKey}`)
+      // @todo: cache form information in sessionStorage
 
       this.$router.push({
         name: 'rapportVendeur',
         params: {
-          reportId: encodedHashedId,
-          reportKey: encodedHashedKey,
-          typeImmatriculation: this.formData.typeImmatriculation,
-          typePersonne: this.formData.typePersonne,
+          formData: JSON.stringify(this.formData),
         },
       })
     },
@@ -520,13 +476,13 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
-    <div class="fr-col-8">
+    <div class="fr-col-11  fr-col-lg-8  fr-col-xl-8  text-center">
       <h6>Veuillez sélectionner le format d'immatriculation de votre véhicule</h6>
     </div>
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-3  text-center">
+    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
       <img
         class="histovec-numero-immatriculation"
         :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
@@ -538,7 +494,7 @@ export default defineComponent({
       </p>
     </div>
 
-    <div class="fr-col-3  text-center">
+    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
       <img
         class="histovec-numero-immatriculation"
         :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
@@ -550,7 +506,7 @@ export default defineComponent({
       </p>
     </div>
 
-    <div class="fr-col-3  text-center">
+    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
       <img
         class="histovec-numero-immatriculation"
         :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
@@ -563,10 +519,12 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
-    <div class="fr-col-12">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-2w">
+    <div
+      v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
+      class="fr-col-12"
+    >
       <DsfrTabs
-        v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
         tab-list-name="Liste d'onglets pour un véhicule avec une plaque d'immatriculation au format SIV"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectSivTab"
@@ -580,10 +538,8 @@ export default defineComponent({
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
-          <div
-            class="fr-grid-row  fr-grid-row--gutters"
-          >
-            <div class="fr-col-6">
+          <div class="fr-grid-row  fr-grid-row--gutters">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNomSivValid"
                 :error-message="nomSivErrorMessage"
@@ -601,7 +557,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isPrenomsSivValid"
                 :error-message="prenomsSivErrorMessage"
@@ -620,13 +576,12 @@ export default defineComponent({
               </DsfrInputGroup>
             </div>
           </div>
-          <!-- @todo: Valider le remplacement de "Carte grise" par "Certificat d'immatriculation" -->
           <p class="fr-text--md  histovec-input-group-title  fr-mt-4w">
             Certificat d'immatriculation
           </p>
 
           <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationSivValid"
                 :error-message="numeroImmatriculationSivErrorMessage"
@@ -644,7 +599,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroFormuleSivValid"
                 :error-message="numeroFormuleSivErrorMessage"
@@ -677,7 +632,7 @@ export default defineComponent({
           <div
             class="fr-grid-row  fr-grid-row--gutters"
           >
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeSivValid"
                 :error-message="raisonSocialeSivErrorMessage"
@@ -695,7 +650,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenSivValid"
                 :error-message="numeroSirenSivErrorMessage"
@@ -715,7 +670,7 @@ export default defineComponent({
           </p>
 
           <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationSivValid"
                 :error-message="numeroImmatriculationSivErrorMessage"
@@ -733,7 +688,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroFormuleSivValid"
                 :error-message="numeroFormuleSivErrorMessage"
@@ -754,9 +709,12 @@ export default defineComponent({
           </div>
         </DsfrTabContent>
       </DsfrTabs>
-
+    </div>
+    <div
+      v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
+      class="fr-col-12"
+    >
       <DsfrTabs
-        v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
         tab-list-name="Liste d'onglets pour un véhicule avec une plaque d'immatriculation au format FNI"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectFniTab"
@@ -798,9 +756,8 @@ export default defineComponent({
           </p>
 
           <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
-                :is-valid="isNumeroImmatriculationFniValid"
                 :error-message="numeroImmatriculationFniErrorMessage"
               >
                 <DsfrInput
@@ -816,7 +773,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isDateEmissionCertificatImmatriculationFniValid"
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
@@ -849,7 +806,7 @@ export default defineComponent({
           <div
             class="fr-grid-row  fr-grid-row--gutters"
           >
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeFniValid"
                 :error-message="raisonSocialeFniErrorMessage"
@@ -867,7 +824,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenFniValid"
                 :error-message="numeroSirenFniErrorMessage"
@@ -887,7 +844,7 @@ export default defineComponent({
           </p>
 
           <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationFniValid"
                 :error-message="numeroImmatriculationFniErrorMessage"
@@ -905,7 +862,7 @@ export default defineComponent({
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isDateEmissionCertificatImmatriculationFniValid"
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
@@ -928,10 +885,39 @@ export default defineComponent({
       </DsfrTabs>
     </div>
   </div>
+  <div
+    v-if="formData.typeImmatriculation === OLD_IMMATRICULATION_TYPE"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
+    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
+      <DsfrAlert
+        type="info"
+        title="Historique indisponible à ce jour"
+        description="
+          L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
+          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (CSA) sur le site de l'ANTS.
+        "
+      />
+    </div>
+  </div>
+  <div
+    v-if="formData.typeImmatriculation === OLD_IMMATRICULATION_TYPE"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
+    <div class="fr-col-12  fr-col-lg-3  fr-col-xl-3  text-center">
+      <HistoVecButtonLink
+        label="Obtenir le CSA via l'ANTS"
+        to="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+      />
+    </div>
+  </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+  <div
+    v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI || formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
     <div
-      class="fr-col-2"
+      class="fr-col-6  fr-col-lg-3  fr-col-xl-3"
       style="text-align: right"
     >
       <DsfrButton
@@ -942,7 +928,7 @@ export default defineComponent({
       />
     </div>
     <div
-      class="fr-col-3"
+      class="fr-col-6  fr-col-lg-3  fr-col-xl-3"
       style="text-align: left"
     >
       <DsfrButton

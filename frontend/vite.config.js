@@ -16,7 +16,7 @@ export default defineConfig({
     host: '0.0.0.0', // Très important si vite tourne dans un docker
     proxy: {
       [`^/${process.env.VITE_TITLE}/api/v1/`]: {
-        target: `http://localhost:${process.env.API_PORT}`,
+        target: `http://localhost:${process.env.BACKEND_PORT}`,
         changeOrigin: true,
       },
     },

@@ -71,6 +71,9 @@ export default defineComponent({
     to: '/donnees-personnelles-et-cookies'
     label: 'Données personnelles & Gestion des cookies'
     and mask "Gestion des cookies" link
+    (Comportement attendu par l'équipe RG2A du BPSA)
+
+    For now, both routes redirect to /donnees-personnelles-et-cookies page
   -->
   <DsfrFooter
     a11y-compliance="non conforme"
@@ -80,6 +83,7 @@ export default defineComponent({
     a11y-compliance-link="/accessibilite"
     legal-link="/mentions-legales"
     personal-data-link="/donnees-personnelles-et-cookies"
+    cookies-link="/donnees-personnelles-et-cookies"
     no-cookie
     :partners="partners"
     :ecosystem-links="ecosystemLinks"
@@ -92,7 +96,7 @@ export default defineComponent({
     licence-name="copyright © 2018"
   >
     <!--
-      @todo: quel licence utiliser ? Copyright non approprié d'après Simon
+      @todo: quel licence utiliser ? Copyright non approprié d'après la Simon DSR
     -->
     <template #description>
       <div>

@@ -1,81 +1,45 @@
-
-export const TRANSFER_SUBJECT = 'transfer'
-export const REGISTRATION_CARD_CHANGE = 'registrationCardChange'
-export const REGISTRATION_CARD_LOSS = 'registrationCardLoss'
-export const RESOLVE_PV = 'resolvePV'
-export const PERSONAL_DATA = 'personalData'
-export const VEHICLE_DATA = 'vehicleData'
-export const HOLDER_NOT_FOUND = 'holderNotFound'
-export const BUYER_NOT_FOUND ='buyerNotFound'
-export const CONTACT_SUBJECT = 'contact'
-export const RESPONSE_NOT_FOUND_SUBJECT = 'responseNotFound'
-
-export const SUBJECTS = [
-  {
-    'text': 'Je ne parviens pas à faire la déclaration de cession de mon véhicule',
-    'value': TRANSFER_SUBJECT,
-  },
-  {
-    'text': 'Je souhaite effectuer un changement de titulaire de la carte grise',
-    'value': REGISTRATION_CARD_CHANGE,
-  },
-  {
-    'text': 'Je ne dispose plus de la carte grise de mon véhicule',
-    'value': REGISTRATION_CARD_LOSS,
-  },
-  {
-    'text': 'Je souhaite faire lever une opposition pour PV en attente',
-    'value': RESOLVE_PV,
-  },
-  {
-    'text': 'Je constate un problème avec mes données personnelles',
-    'value': PERSONAL_DATA,
-  },
-  {
-    'text': 'Je constate un problème avec les données de mon véhicule',
-    'value': VEHICLE_DATA,
-  },
-  {
-    'text': 'Je ne trouve pas mon véhicule',
-    'value': HOLDER_NOT_FOUND,
-  },
-  {
-    'text': 'Je signale une erreur de lien invalide',
-    'value': BUYER_NOT_FOUND,
-  },
-  {
-    'text': 'Je signale un autre problème',
-    'value': CONTACT_SUBJECT,
-  },
-]
-
-export const DEFAULT_SUBJECTS = [
-  {
-    'text': 'Je ne trouve pas la réponse à ma question',
-    'value': RESPONSE_NOT_FOUND_SUBJECT,
-  },
-]
-
-
-// export const SUBJECTS = {
-//   [TRANSFER_SUBJECT]: 'Je ne parviens pas à faire la déclaration de cession de mon véhicule',
-//   [REGISTRATION_CARD_CHANGE]: 'Je souhaite effectuer un changement de titulaire de la carte grise',
-//   [REGISTRATION_CARD_LOSS]: 'Je ne dispose plus de la carte grise de mon véhicule',
-//   [RESOLVE_PV]: 'Je souhaite faire lever une opposition pour PV en attente',
-//   [PERSONAL_DATA]: 'Je constate un problème avec mes données personnelles',
-//   [VEHICLE_DATA]: 'Je constate un problème avec les données de mon véhicule',
-//   [HOLDER_NOT_FOUND]: 'Je ne trouve pas mon véhicule',
-//   [BUYER_NOT_FOUND]: 'Je signale une erreur de lien invalide',
-//   [CONTACT_SUBJECT]: 'Je signale un autre problème',
-// }
-
-
-export const THEMES = {
-  'vehicle': 'Véhicule',
-  'vehicleRegistrationCertificate': 'Certificat d\'immatriculation (anciennement appelé "Carte grise"',
-  'vehicleOwner': 'Titulaire',
-  'histovecReport': 'Rapport HistoVec',
-  'csa': 'CSA (Certificat de Situation Administrative anciennement appelé "Certificat de non gage")',
-  'buyVehicle': 'Achat d\'un véhicule',
-  'sellVehicle': 'Vente d\'un véhicule',
+export const FAQ_CATEGORIES_VALUES = {
+  TRANSFER: 'transfer',
+  // REGISTRATION_CARD_CHANGE: 'registrationCardChange',
+  // REGISTRATION_CARD_LOSS: 'registrationCardLoss',
+  // RESOLVE_PV: 'resolvePV',
+  // PERSONAL_DATA: 'personalData',
+  // VEHICLE_DATA: 'vehicleData',
+  // HOLDER_NOT_FOUND: 'holderNotFound',
+  // BUYER_NOT_FOUND:'buyerNotFound',
+  CONTACT: 'contact',
+  RESPONSE_NOT_FOUND: 'responseNotFound',
 }
+
+export const WHY_HISTOVEC_CATEGORY = 'WHY_HISTOVEC_CATEGORY'
+export const HOW_HISTOVEC_CATEGORY = 'HOW_HISTOVEC_CATEGORY'
+export const VEHICLE_NOT_FOUND_CATEGORY = 'VEHICLE_NOT_FOUND_CATEGORY'
+// export const HOW_HISTOVEC_CATEGORY = 'HOW_HISTOVEC_CATEGORY'
+
+
+export const FAQ_CATEGORIES = [
+  // {
+  //   'text': 'Pourquoi utiliser HistoVec ?',
+  //   'value': TRANSFER_SUBJECT,
+  // },
+  // {
+  //   'text': 'Comment utiliser HistoVec ?',
+  //   'value': TRANSFER_SUBJECT,
+  // },
+  // {
+  //   'text': 'Véhicules non trouvés',
+  //   'value': TRANSFER_SUBJECT,
+  // },
+  // {
+  //   'text': 'Informations disponibles sur HistoVec',
+  //   'value': TRANSFER_SUBJECT,
+  // },
+  // {
+  //   'text': 'Erreur dans les informations affichées par HistoVec',
+  //   'value': TRANSFER_SUBJECT,
+  // },
+  // {
+  //   'text': 'Kilométrage et contrôle technique',
+  //   'value': TRANSFER_SUBJECT,
+  // },
+]

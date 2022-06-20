@@ -100,16 +100,22 @@ export const vehiculeMapping = (report, isPublicApi) => {
   }
 
   const historiqueMapping = (historique) => {
+    // return historique.map(({ opa_date, opa_type, ope_date_annul, num_agree }) => (  // @numAgree1
     return historique.map(({ opa_date, opa_type, ope_date_annul }) => (
       {
         date: opa_date,
         type: opa_type,
+        /* @todo @numAgree1
+          ...(
+            num_agree ?
+            { numAgree: num_agree } :
+            {}
+          ),
+        */
         ...(
-          ope_date_annul
-            ? {
-                date_annulation: ope_date_annul,
-              }
-            : {}
+          ope_date_annul ?
+          { date_annulation: ope_date_annul } :
+          {}
         ),
       }
     ))

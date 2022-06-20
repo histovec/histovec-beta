@@ -1,14 +1,4 @@
 {
-  "critair": {
-    "text": "Eligible vignette Crit'Air",
-    "adv": "Consultez le site des vignettes Crit'Air",
-    "link": "https://www.certificat-air.gouv.fr"
-  },
-  "critair_non_classe": {
-    "text": "Véhicule non classé par une vignette Crit'Air",
-    "adv": "Consultez le site des vignettes Crit'Air",
-    "link": "https://www.certificat-air.gouv.fr"
-  },
   "fin_ove_acheteur": {
     "icon": "fa-exclamation-triangle",
     "text": "Ce véhicule a eu un sinistre déclaré, et déclaré apte à circuler",

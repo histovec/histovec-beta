@@ -1,54 +1,5 @@
 <template>
   <section id="result">
-    <div class="breadcrumb-container">
-      <div class="container">
-        <ol class="breadcrumb">
-          <li>
-            <i class="fa fa-home pr-10"></i>
-            <router-link
-              :to="{ name: 'home' }"
-            >
-              Accueil
-            </router-link>
-          </li>
-          <li class="active">
-            Résultats
-          </li>
-        </ol>
-      </div>
-    </div>
-
-    <section class="main-container">
-      <div class="container">
-        <div class="row">
-          <!-- section start -->
-          <section
-            class="dark-translucent-bg"
-            :style="{ backgroundImage: `url('${imagePoigneeDeMain}')`, backgroundPosition: '50% 50%' }"
-          >
-            <div class="container">
-              <div class="row justify-content-lg-center">
-                <div class="col-lg-12">
-                  <h2 class="text-center mt-4">
-                    <div v-if="isHolder">
-                      <span class="bold_6">Rassurez</span> vos acheteurs potentiels
-                    </div>
-                    <div v-else>
-                      <span class="bold_6">Achetez</span> en confiance un <span class="bold_6">véhicule d'occasion</span>
-                    </div>
-                  </h2>
-                  <div class="separator with-icon">
-                    <i class="fa fa-car bordered"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <!-- section end -->
-        </div>
-      </div>
-    </section>
-
     <div
       v-if="processedVehiculeData"
       class="container"
@@ -60,354 +11,279 @@
             <div
               class="col-sm-12"
             >
-              <div
-                v-if="outdatedData"
-                class="alert alert-danger alert-icon text-center"
-                role="alert"
+            </div>
+            <!-- fin vignette -->
+            <!-- debut trait séparation -->
+            <div class="separator-2"></div>
+            <!-- fin trait séparation -->
+            <!-- debut nouvelle info -->
+            <!-- Tabs start -->
+            <div class="vertical">
+              <!-- Nav tabs -->
+              <ul
+                class="nav nav-tabs"
+                role="tablist"
               >
-                <i class="fa fa-exclamation-triangle"></i>
-                HistoVec rencontre actuellement des difficultés techniques dans la mise à jour des données relatives aux véhicules qu'il vous permet de consulter.
-                <br>
-                Seul le certificat de situation administrative disponible sur le site de l'ANTS fait foi.
-                <br>
-                Veuillez nous excuser pour la gêne occasionnée.
-                <br>
-                <br>
-                <div class="col-xs-8 col-xs-offset-2 col-sm-4 col-sm-offset-4">
+                <li
+                  v-if="!isCIAnnule"
+                  :class="[{'active' : tab === 'abstract'}]"
+                >
                   <a
-                    class="btn btn-default btn-m center-block m-h-05"
-                    href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
-                    rel="noopener noreferrer"
-                    target="_blank"
+                    class="clickable"
+                    @click="tab = 'abstract'"
                   >
-                    Obtenir le CSA à jour via l'ANTS
+                    <i class="fa fa-refresh pr-10"></i>
+                    Synthèse
                   </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule"
+                  :class="[{'active' : tab === 'vehicle'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'vehicle'"
+                  >
+                    <i :class="'fa fa-' + processedVehiculeData.logoVehicule + ' pr-10'"></i>
+                    Véhicule
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule"
+                  :class="[{'active' : tab === 'holder'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'holder'"
+                  >
+                    <i class="fa fa-address-card pr-10"></i>
+                    Titulaire &amp; Titre
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule"
+                  :class="[{'active' : tab === 'situation'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'situation'"
+                  >
+                    <i class="fa fa-clipboard pr-10"></i>
+                    Situation administrative
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule"
+                  :class="[{'active' : tab === 'history'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'history'"
+                  >
+                    <i class="fa fa-calculator pr-10"></i>
+                    Historique des opérations
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
+                  :class="[{'active' : tab === 'utac'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'utac'"
+                  >
+                    <i class="fa fa-cogs pr-10"></i>
+                    Contrôles techniques
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
+                  :class="[{'active' : tab === 'utacGraph'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'utacGraph'"
+                  >
+                    <i class="fa fa-line-chart pr-10"></i>
+                    Kilométrage
+                  </a>
+                </li>
+                <li
+                  v-if="isHolder"
+                  :class="[{'active' : tab === 'csa'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'csa'"
+                  >
+                    <i class="fa fa-file-pdf-o pr-10"></i>
+                    Certificat de situation administrative
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule && isHolder"
+                  :class="[{'active' : tab === 'share-report'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'share-report'"
+                  >
+                    <i class="fa fa-send pr-10"></i>
+                    Transmettre le rapport
+                  </a>
+                </li>
+                <li
+                  v-if="!isCIAnnule && isHolder && $store.state.config.useCodePartageHistoVec"
+                  :class="[{'active' : tab === 'share-code-partage'}]"
+                >
+                  <a
+                    class="clickable"
+                    @click="tab = 'share-code-partage'"
+                  >
+                    <i class="fa fa-share pr-10"></i>
+                    Transmettre le code partage
+                  </a>
+                </li>
+              </ul>
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <!-- /* ----------------- synthese ----------------- */ -->
+                <div
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'abstract'}]"
+                >
+                  <abstract-tab
+                    v-if="tab === 'abstract' && !isCIAnnule"
+                    :processed-vehicule-data="processedVehiculeData"
+                    :is-holder="isHolder"
+                    :change-tab="changeTab"
+                  >
+                  </abstract-tab>
                 </div>
-                <br>
-                <br>
+                <!-- /* ----------------- vehicule ----------------- */ -->
+                <div
+                  class="tab-pane fade pr-20"
+                  :class="[{'in active' : tab === 'vehicle'}]"
+                >
+                  <tech-chars-tab
+                    v-if="tab === 'vehicle'"
+                    :caracteristiques-techniques="processedVehiculeData.caracteristiquesTechniques"
+                  >
+                  </tech-chars-tab>
+                </div>
+                <!-- /* ----------------- titre ----------------- */ -->
+                <div
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'holder'}]"
+                >
+                  <license-tab
+                    v-if="tab === 'holder'"
+                    :certificat="processedVehiculeData.certificat"
+                    :titulaire="processedVehiculeData.titulaire"
+                  >
+                  </license-tab>
+                </div>
+                <!-- situation administrative -->
+                <div
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'situation'}]"
+                >
+                  <administrative-tab
+                    v-if="tab === 'situation'"
+                    :is-holder="isHolder"
+                    :opposition-section="processedVehiculeData.administratif.opposition"
+                    :report-labels="processedVehiculeData.administratif.reportLabels"
+                  >
+                  </administrative-tab>
+                </div>
+                <!-- historique des opérations -->
+                <div
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'history'}]"
+                >
+                  <history-tab
+                    v-if="tab === 'history'"
+                    :processed-vehicule-data="processedVehiculeData"
+                  >
+                  </history-tab>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'utac'}]"
+                >
+                  <tech-control-tab
+                    v-if="tab === 'utac' && !isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
+                    :controles-techniques="controlesTechniques"
+                    :erreur-controles-techniques="erreurControlesTechniques"
+                  >
+                  </tech-control-tab>
+                </div>
+                <div
+                  v-if="tab === 'utacGraph' && !isCIAnnule"
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'utacGraph'}]"
+                >
+                  <tech-control-graph-tab
+                    v-if="tab === 'utacGraph' && !erreurControlesTechniques && controlesTechniques.length > 0"
+                    :controles-techniques="controlesTechniques"
+                  >
+                  </tech-control-graph-tab>
+                  <tech-control-graph-error-tab
+                    v-if="tab === 'utacGraph' && erreurControlesTechniques"
+                    :erreur-controles-techniques="erreurControlesTechniques"
+                  >
+                  </tech-control-graph-error-tab>
+                </div>
+                <div
+                  v-if="isHolder"
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'csa'}]"
+                >
+                  <administrative-certificate-tab
+                    v-if="tab === 'csa'"
+                    :processed-vehicule-data="processedVehiculeData"
+                    :url="url"
+                    :base-url="baseUrl"
+                  >
+                  </administrative-certificate-tab>
+                </div>
+                <div
+                  v-if="isHolder"
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'share-report'}]"
+                >
+                  <share-report-tab
+                    v-if="tab === 'share-report'"
+                    :url="url"
+                  >
+                  </share-report-tab>
+                </div>
+                <div
+                  v-if="isHolder && $store.state.config.useCodePartageHistoVec"
+                  class="tab-pane fade"
+                  :class="[{'in active' : tab === 'share-code-partage'}]"
+                >
+                  <share-code-partage-tab
+                    v-if="tab === 'share-code-partage'"
+                    :code-partage-histo-vec="codePartageHistoVec"
+                  >
+                  </share-code-partage-tab>
+                </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div
-                v-if="!isCIAnnule"
-                class="alert alert-icon alert-info"
-                role="alert"
-              >
-                <i :class="'fa fa-' + processedVehiculeData.logoVehicule"></i>
-                Numéro - Plaque d'immatriculation : {{ processedVehiculeData.plaque }}
-              </div>
-              <div
-                v-if="isCIAnnule"
-                class="alert alert-icon alert-danger"
-                role="alert"
-              >
-                <i class="fa fa-warning"></i>
-                Le certificat demandé a été annulé : {{ processedVehiculeData.plaque }}
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div
-                v-if="showDataDate"
-                :class="'alert-' + (isDefaultDataDate ? 'danger' : 'warning')"
-                class="alert alert-icon"
-                role="alert"
-              >
-                <i
-                  :class="'fa-calendar-' + (isDefaultDataDate ? 'times-o' : 'check-o')"
-                  class="fa"
-                >
-                </i>
-                <span v-if="!isDefaultDataDate">
-                  Informations du ministère de l'Intérieur datant du
-                  <strong>{{ dateMiseAJourFR }}</strong>
-                </span>
-                <span v-if="isDefaultDataDate">
-                  Informations connues d'HistoVec non à jour
-                </span>
-              </div>
-              <div
-                v-else
-                class="alert alert-icon alert-warning"
-                role="alert"
-              >
-                <i class="fa fa-calendar-check-o"></i>
-                <span>
-                  Informations connues d'HistoVec à ce jour
-                </span>
-              </div>
-            </div>
-          </div>
-          <!-- fin vignette -->
-          <!-- debut trait séparation -->
-          <div class="separator-2"></div>
-          <!-- fin trait séparation -->
-          <!-- debut nouvelle info -->
-          <!-- Tabs start -->
-          <div class="vertical">
-            <!-- Nav tabs -->
-            <ul
-              class="nav nav-tabs"
-              role="tablist"
-            >
-              <li
-                v-if="!isCIAnnule"
-                :class="[{'active' : tab === 'abstract'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'abstract'"
-                >
-                  <i class="fa fa-refresh pr-10"></i>
-                  Synthèse
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule"
-                :class="[{'active' : tab === 'vehicle'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'vehicle'"
-                >
-                  <i :class="'fa fa-' + processedVehiculeData.logoVehicule + ' pr-10'"></i>
-                  Véhicule
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule"
-                :class="[{'active' : tab === 'holder'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'holder'"
-                >
-                  <i class="fa fa-address-card pr-10"></i>
-                  Titulaire &amp; Titre
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule"
-                :class="[{'active' : tab === 'situation'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'situation'"
-                >
-                  <i class="fa fa-clipboard pr-10"></i>
-                  Situation administrative
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule"
-                :class="[{'active' : tab === 'history'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'history'"
-                >
-                  <i class="fa fa-calculator pr-10"></i>
-                  Historique des opérations
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
-                :class="[{'active' : tab === 'utac'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'utac'"
-                >
-                  <i class="fa fa-cogs pr-10"></i>
-                  Contrôles techniques
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
-                :class="[{'active' : tab === 'utacGraph'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'utacGraph'"
-                >
-                  <i class="fa fa-line-chart pr-10"></i>
-                  Kilométrage
-                </a>
-              </li>
-              <li
-                v-if="isHolder"
-                :class="[{'active' : tab === 'csa'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'csa'"
-                >
-                  <i class="fa fa-file-pdf-o pr-10"></i>
-                  Certificat de situation administrative
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule && isHolder"
-                :class="[{'active' : tab === 'share-report'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'share-report'"
-                >
-                  <i class="fa fa-send pr-10"></i>
-                  Transmettre le rapport
-                </a>
-              </li>
-              <li
-                v-if="!isCIAnnule && isHolder && $store.state.config.useCodePartageHistoVec"
-                :class="[{'active' : tab === 'share-code-partage'}]"
-              >
-                <a
-                  class="clickable"
-                  @click="tab = 'share-code-partage'"
-                >
-                  <i class="fa fa-share pr-10"></i>
-                  Transmettre le code partage
-                </a>
-              </li>
-            </ul>
-            <!-- Tab panes -->
-            <div class="tab-content">
-              <!-- /* ----------------- synthese ----------------- */ -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'abstract'}]"
-              >
-                <abstract-tab
-                  v-if="tab === 'abstract' && !isCIAnnule"
-                  :processed-vehicule-data="processedVehiculeData"
-                  :is-holder="isHolder"
-                  :change-tab="changeTab"
-                >
-                </abstract-tab>
-              </div>
-              <!-- /* ----------------- vehicule ----------------- */ -->
-              <div
-                class="tab-pane fade pr-20"
-                :class="[{'in active' : tab === 'vehicle'}]"
-              >
-                <tech-chars-tab
-                  v-if="tab === 'vehicle'"
-                  :caracteristiques-techniques="processedVehiculeData.caracteristiquesTechniques"
-                >
-                </tech-chars-tab>
-              </div>
-              <!-- /* ----------------- titre ----------------- */ -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'holder'}]"
-              >
-                <license-tab
-                  v-if="tab === 'holder'"
-                  :certificat="processedVehiculeData.certificat"
-                  :titulaire="processedVehiculeData.titulaire"
-                >
-                </license-tab>
-              </div>
-              <!-- situation administrative -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'situation'}]"
-              >
-                <administrative-tab
-                  v-if="tab === 'situation'"
-                  :is-holder="isHolder"
-                  :opposition-section="processedVehiculeData.administratif.opposition"
-                  :report-labels="processedVehiculeData.administratif.reportLabels"
-                >
-                </administrative-tab>
-              </div>
-              <!-- historique des opérations -->
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'history'}]"
-              >
-                <history-tab
-                  v-if="tab === 'history'"
-                  :processed-vehicule-data="processedVehiculeData"
-                >
-                </history-tab>
-              </div>
-              <div
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'utac'}]"
-              >
-                <tech-control-tab
-                  v-if="tab === 'utac' && !isCIAnnule && (controlesTechniques.length > 0 || erreurControlesTechniques)"
-                  :controles-techniques="controlesTechniques"
-                  :erreur-controles-techniques="erreurControlesTechniques"
-                >
-                </tech-control-tab>
-              </div>
-              <div
-                v-if="tab === 'utacGraph' && !isCIAnnule"
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'utacGraph'}]"
-              >
-                <tech-control-graph-tab
-                  v-if="tab === 'utacGraph' && !erreurControlesTechniques && controlesTechniques.length > 0"
-                  :controles-techniques="controlesTechniques"
-                >
-                </tech-control-graph-tab>
-                <tech-control-graph-error-tab
-                  v-if="tab === 'utacGraph' && erreurControlesTechniques"
-                  :erreur-controles-techniques="erreurControlesTechniques"
-                >
-                </tech-control-graph-error-tab>
-              </div>
-              <div
-                v-if="isHolder"
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'csa'}]"
-              >
-                <administrative-certificate-tab
-                  v-if="tab === 'csa'"
-                  :processed-vehicule-data="processedVehiculeData"
-                  :url="url"
-                  :base-url="baseUrl"
-                >
-                </administrative-certificate-tab>
-              </div>
-              <div
-                v-if="isHolder"
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'share-report'}]"
-              >
-                <share-report-tab
-                  v-if="tab === 'share-report'"
-                  :url="url"
-                >
-                </share-report-tab>
-              </div>
-              <div
-                v-if="isHolder && $store.state.config.useCodePartageHistoVec"
-                class="tab-pane fade"
-                :class="[{'in active' : tab === 'share-code-partage'}]"
-              >
-                <share-code-partage-tab
-                  v-if="tab === 'share-code-partage'"
-                  :code-partage-histo-vec="codePartageHistoVec"
-                >
-                </share-code-partage-tab>
-              </div>
-            </div>
-          </div>
-          <!-- tabs end -->
-          <!-- debut trait de séparation -->
-          <hr class="style1">
+            <!-- tabs end -->
+            <!-- debut trait de séparation -->
+            <hr class="style1">
           <!-- fin trait de séparation -->
+          </div>
         </div>
-      </div>
       <!-- row -->
+      </div>
+      <status-page
+        :status="status"
+        :type-immatriculation="typeImmatriculation"
+      ></status-page>
     </div>
-    <status-page
-      :status="status"
-      :type-immatriculation="typeImmatriculation"
-    ></status-page>
   </section>
 </template>
 
@@ -434,7 +310,6 @@ import { urlSafeBase64Encode, base64Encode, urlSafeBase64Decode } from '@/utils/
 import { formatIsoToFrDate } from '@/assets/js/format.js'
 
 import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
-
 
 
 export default {
@@ -660,23 +535,6 @@ export default {
       await this.$store.dispatch('log',
         this.$route.path + '/' + (this.isHolder ? 'holder' : 'buyer') + '/' + this.status.replace(/Buyer$/, ''))
       return
-    },
-    showRatingModal () {
-      const notShow = localStorage.getItem('notShow') === 'true'
-      const evaluation = localStorage.getItem('evaluation') === 'true'
-
-      if (!notShow && !evaluation) {
-        setTimeout(() => {
-          if (!this.$store.state.isRatingModalVisible && this.$route.path.match(/report/)) {
-            this.$store.dispatch('toggleRatingModal')
-          }
-        }, this.ratingModalTimer)
-      }
-    },
-    changeTab (tab) {
-      if (['abstract', 'vehicle', 'holder', 'situation', 'history', 'utac', 'utacGraph', 'csa', 'share-report', 'share-code-partage'].includes(tab)) {
-        this.tab = tab
-      }
     },
     async logVehicleData ({
       certificatImmatriculation: {
