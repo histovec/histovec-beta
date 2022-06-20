@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
-const propsForButtonOnly = ['label']
+const propsForButtonOnly = ['disabled', 'label', 'secondary', 'tertiary', 'icon', 'iconRight', 'iconOnly']
 
 export default defineComponent({
   name: 'HistoVecButtonLink',
@@ -12,10 +12,20 @@ export default defineComponent({
 
   props: {
     ...RouterLink.props,
+    // ...DsfrButton.props // @todo: import DsfrButton type
+    disabled: Boolean,
     label: {
       type: String,
-      default: 'lien',
+      default: undefined,
     },
+    secondary: Boolean,
+    tertiary: Boolean,
+    icon: {
+      type: String,
+      default: undefined,
+    },
+    iconRight: Boolean,
+    iconOnly: Boolean,
   },
 
   computed: {
@@ -31,6 +41,16 @@ export default defineComponent({
         ...Object.fromEntries(Object.entries(this.$props).filter(([prop]) => propsForButtonOnly.includes(prop))),
       }
     },
+    buttonStylingClass () {
+      return {
+        'fr-btn': true,
+        'fr-btn--secondary': this.buttonProps.secondary && !this.buttonProps.tertiary,
+        'fr-btn--tertiary': this.buttonProps.tertiary && !this.buttonProps.secondary,
+        'inline-flex': true,
+        'reverse': this.buttonProps.iconRight,
+        'justify-center': this.buttonProps.iconOnly,
+      }
+    },
   },
 })
 </script>
@@ -38,6 +58,7 @@ export default defineComponent({
 <template>
   <a
     v-if="isExternalLink"
+    :class="buttonStylingClass"
     :href="to"
     target="_blank"
     rel="noopener noreferrer"
@@ -51,7 +72,6 @@ export default defineComponent({
     custom
   >
     <DsfrButton
-      :label="label"
       v-bind="buttonProps"
       @click="navigate"
     />

@@ -3,10 +3,7 @@ import { apiUrl } from '../config.js'
 
 
 export default {
-  getHolderReport: async (
-    uuid,
-    payload,
-  ) => {
+  getHolderReport: async ({ uuid, payload }) => {
     const headers = new Headers()
     headers.append('Content-Type', 'application/json')
 
@@ -60,14 +57,15 @@ export default {
       }
     }
   },
-  log: async (path, uid) => {
+  log: async (path) => {
+    const uuid = localStorage.get('userId')
     const normalizedPath = path.replace(/^\/\w+\//, '')
 
     const options = {
       method: 'PUT',
     }
 
-    const response = await fetch(`${apiUrl}/log/${uid}/${normalizedPath}`, options)
+    const response = await fetch(`${apiUrl}/log/${uuid}/${normalizedPath}`, options)
 
     return response
   },

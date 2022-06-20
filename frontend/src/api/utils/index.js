@@ -1,5 +1,5 @@
-import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../constants/type.js'
-import { DEFAULT_SIREN }  from '../../constants/vehicle/numeroSiren.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
+import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
 
 
 export const buildReportByDataPayload = (
@@ -42,7 +42,7 @@ export const buildReportByDataPayload = (
             titulaire: {
               personne_morale: {
                 raison_sociale: raisonSociale,
-                siren: siren || DEFAULT_SIREN,
+                siren: siren || DEFAULT_NUMERO_SIREN,
               },
             },
             numero_immatriculation: numeroImmatriculation,
@@ -83,7 +83,7 @@ export const buildReportByDataPayload = (
             titulaire: {
               personne_morale: {
                 raison_sociale: raisonSociale,
-                siren: siren || DEFAULT_SIREN,
+                siren: siren || DEFAULT_NUMERO_SIREN,
               },
             },
             numero_immatriculation: numeroImmatriculation,

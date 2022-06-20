@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import Maska from 'maska'
 
 import '@gouvminint/vue-dsfr/styles'
@@ -24,6 +23,5 @@ router.beforeEach((to, from, next) => {
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
   .use(router)
-  .use(createPinia())
   .use(Maska)
   .mount('#app')

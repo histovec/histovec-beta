@@ -1,17 +1,13 @@
 <script>
 import { defineComponent } from 'vue'
-import dayjs from 'dayjs'
-// import { mask } from 'maska'
 
-import { hash } from '@/utils/crypto.js'
-import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@/utils/dataPreparationFormat.js'
+import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+
 import { mailTo } from '@/utils/email.js'
-import { base64Encode, urlSafeBase64Encode, base64Decode } from '@/utils/encoding.js'
 
 import { ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
-import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
 
 import plaqueNonSupporteeSvg from '@/assets/img/plaque_non_supportee.svg?url'
 import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
@@ -22,11 +18,13 @@ import ProprietaireSvg from '@/assets/img/proprietaire.svg'
 export default defineComponent({
   name: 'ProprietairePage',
 
-  components: { ProprietaireSvg },
+  components: { ProprietaireSvg, HistoVecButtonLink },
 
   data () {
-    return {
-      formData : {
+    const cachedFormData = sessionStorage.getItem('formData')
+    const formData = (
+      cachedFormData ||
+      {
         typeImmatriculation: null,
         typePersonne: TYPE_PERSONNE.PARTICULIER,
         siv: {
@@ -56,7 +54,11 @@ export default defineComponent({
           numeroImmatriculation: '',
           dateEmissionCertificatImmatriculation: '',
         },
-      },
+      }
+    )
+
+    return {
+      formData,
 
       tabs: {
         siv: {
@@ -88,7 +90,7 @@ export default defineComponent({
     // @todo: implement focus on form with : focus-trap-vue
 
 
-    // @todo: reimplement copycat shortcut
+    // @todo: Réimplementer le copier coller des data du CSV dans le formulaire
     // onPaste (evt) {
     //   const data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
 
@@ -242,7 +244,7 @@ export default defineComponent({
     raisonSocialeSivErrorMessage () {
       return (
         !this.isRaisonSocialeSivValid ?
-        'La raison sociale doit être renseignée telle qu\'indiqué sur le kbis.' :
+        'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
         ''
       )
     },
@@ -278,7 +280,7 @@ export default defineComponent({
     raisonSocialeFniErrorMessage () {
       return (
         !this.isRaisonSocialeFniValid ?
-        'La raison sociale doit être renseignée telle qu\'indiqué sur le kbis.' :
+        'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
         ''
       )
     },
@@ -302,64 +304,6 @@ export default defineComponent({
         'La date d\'émission du certificat d\'immatriculation doit respecter le format "31/12/2020".' :
         ''
       )
-    },
-
-    // ----- Sent form data -----
-
-    currentMonthNumber () {
-      let date = dayjs().add(-7, 'day')
-
-      // @todo: branch flag du 8 parameter
-      // if (this.usePreviousMonthForData) {
-      //   date = date.add(-this.previousMonthShift, 'month')
-      // }
-
-      return date.format('YYYYMM')
-    },
-    titulaireId () {
-      if (this.formData.typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-          return this.formData.siv.titulaire.particulier.nom + this.formData.siv.titulaire.particulier.prenoms
-        }
-
-        if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-          return this.formData.fni.titulaire.particulier.nomEtPrenoms
-        }
-
-        return ''
-      }
-
-      if (this.formData.typePersonne === TYPE_PERSONNE.PRO) {
-        if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-          const numeroSiren = this.formData.siv.titulaire.personneMorale.numeroSiren || DEFAULT_NUMERO_SIREN
-          return this.formData.siv.titulaire.personneMorale.raisonSociale + numeroSiren
-        }
-
-        if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-          const numeroSiren = this.formData.fni.titulaire.personneMorale.numeroSiren || DEFAULT_NUMERO_SIREN
-          return this.formData.fni.titulaire.personneMorale.raisonSociale + numeroSiren
-        }
-      }
-
-      return ''
-    },
-    vehicleId () {
-      if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-        return this.formData.siv.numeroImmatriculation + this.formData.siv.numeroFormule
-      }
-
-      if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-        return this.formData.fni.numeroImmatriculation + this.formData.fni.dateEmissionCertificatImmatriculation
-      }
-
-      return ''
-    },
-    id () {
-      const id = `${this.titulaireId}${this.vehicleId}${this.currentMonthNumber}`
-      return normalizeIdvAsDataPreparation(id)
-    },
-    key () {
-      return normalizeKeyAsDataPreparation(this.vehicleId)
     },
   },
 
@@ -390,41 +334,22 @@ export default defineComponent({
       this.tabs.fni.selectedTabIndex = idx
     },
 
+    persistFormData () {
+      // Mise en cache pour :
+      // - pouvoir rafraîchir la page du rapport vendeur sans repasser par le formulaire
+      // - pré-remplir les entrées utilisateur sur le formulaire avec la précédente recherche validée
+      // - pouvoir envoyer les entrées utilisateur lors de l'envoi d'un message via la rubrique "Contact"
+      sessionStorage.setItem('formData', JSON.stringify(this.formData))
+    },
+
     // Form
     async onSubmit () {
-      const hashedIdBuffer = await hash(this.id)
-      const encodedHashedId = base64Encode(hashedIdBuffer)
-      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
-      // eslint-disable-next-line no-console
-      console.log(`[NEW] id base64Encoded = ${encodedHashedId}`)
-
-      const urlSafeBase64EncodedId = urlSafeBase64Encode(base64Decode(encodedHashedId))
-      // eslint-disable-next-line no-console
-      console.log(`[OLD] id urlSafeBase64Encoded = ${urlSafeBase64EncodedId}`)
-
-      // eslint-disable-next-line no-console
-      console.log(`[ID] are they different ? ${encodedHashedId !== urlSafeBase64EncodedId}`)
-
-      const hashedKeyBuffer = await hash(this.key)
-      const encodedHashedKey = base64Encode(hashedKeyBuffer)
-      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
-      // eslint-disable-next-line no-console
-      console.log(`[NEW] key base64Encoded = ${encodedHashedKey}`)
-
-      const urlSafeBase64EncodedKey = urlSafeBase64Encode(base64Decode(encodedHashedKey))
-      // eslint-disable-next-line no-console
-      console.log(`[OLD] key urlSafeBase64Encoded = ${urlSafeBase64EncodedKey}`)
-
-      // eslint-disable-next-line no-console
-      console.log(`[KEY] are they different ? ${encodedHashedKey !== urlSafeBase64EncodedKey}`)
+      this.persistFormData()
 
       this.$router.push({
         name: 'rapportVendeur',
         params: {
-          reportId: encodedHashedId,
-          reportKey: encodedHashedKey,
-          typeImmatriculation: this.formData.typeImmatriculation,
-          typePersonne: this.formData.typePersonne,
+          formData: this.formData,
         },
       })
     },
@@ -563,10 +488,12 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
-    <div class="fr-col-12">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+    <div
+      v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
+      class="fr-col-12"
+    >
       <DsfrTabs
-        v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
         tab-list-name="Liste d'onglets pour un véhicule avec une plaque d'immatriculation au format SIV"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectSivTab"
@@ -580,9 +507,7 @@ export default defineComponent({
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
-          <div
-            class="fr-grid-row  fr-grid-row--gutters"
-          >
+          <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-6">
               <DsfrInputGroup
                 :is-valid="isNomSivValid"
@@ -754,9 +679,12 @@ export default defineComponent({
           </div>
         </DsfrTabContent>
       </DsfrTabs>
-
+    </div>
+    <div
+      v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
+      class="fr-col-12"
+    >
       <DsfrTabs
-        v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
         tab-list-name="Liste d'onglets pour un véhicule avec une plaque d'immatriculation au format FNI"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectFniTab"
@@ -928,10 +856,41 @@ export default defineComponent({
       </DsfrTabs>
     </div>
   </div>
-
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+  <div
+    v-if="formData.typeImmatriculation === OLD_IMMATRICULATION_TYPE"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
     <div
-      class="fr-col-2"
+      class="fr-col-8"
+    >
+      <DsfrAlert
+        type="info"
+        title="Historique indisponible à ce jour"
+        description="
+          L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
+          Nous vous invitons à télécharge le Certificat de Situation Administrative détaille (CSA) sur le site de l'ANTS.
+        "
+      />
+    </div>
+  </div>
+  <div
+    v-if="formData.typeImmatriculation === OLD_IMMATRICULATION_TYPE"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
+    <div class="fr-col-3  text-center">
+      <HistoVecButtonLink
+        label="Obtenir le CSA via l'ANTS"
+        to="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+      />
+    </div>
+  </div>
+
+  <div
+    v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI || formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
+    <div
+      class="fr-col-3"
       style="text-align: right"
     >
       <DsfrButton

@@ -64,10 +64,7 @@ export default defineComponent({
     </div>
   </div>
 
-  <div
-    class="fr-grid-row fr-grid-row--gutters"
-    style="margin-bottom: 4rem"
-  >
+  <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
     <div
       class="fr-col-offset-1 fr-col-5"
       style="text-align: right"

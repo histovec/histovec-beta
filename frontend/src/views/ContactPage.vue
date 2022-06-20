@@ -237,8 +237,7 @@ export default defineComponent({
   >
     <div
       v-if="!isFormMasked"
-      class="fr-col-12"
-      style="text-align: center"
+      class="fr-col-12  text-center"
     >
       <DsfrButton
         :disabled="!isFormFilled"
@@ -247,4 +246,9 @@ export default defineComponent({
       />
     </div>
   </div>
-</template>
+</template><style scoped>
+
+.text-center {
+  text-align: center;
+}
+</style>

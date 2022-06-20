@@ -13,6 +13,7 @@ const ProprietairePage = () => import('@/views/ProprietairePage.vue')
 const RapportAcheteurPage = () => import('@/views/RapportAcheteurPage.vue')
 const RapportVendeurPage = () => import('@/views/RapportVendeurPage.vue')
 
+
 const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
 const ServiceUnavailablePage = () => import('@/views/error/ServiceUnavailablePage.vue')
 
@@ -30,13 +31,27 @@ const routes = (
     { path: '/proprietaire', name: 'proprietaire', component: ProprietairePage, meta: { title: 'HistoVec - Propriétaire' } },
     { path: '/acheteur', name: 'acheteur', component: AcheteurPage, meta: { title: 'HistoVec - Acheteur' } },
     { path: '/rapport-acheteur', name: 'rapportAcheteur', component: RapportAcheteurPage, meta: { title: 'HistoVec - Rapport acheteur' } },
-    { path: '/rapport-vendeur', name: 'rapportVendeur', component: RapportVendeurPage, props: true, meta: { title: 'HistoVec - Rapport vendeur' } },
+    { path: '/rapport-vendeur', name: 'rapportVendeur', component: RapportVendeurPage, meta: { title: 'HistoVec - Rapport vendeur' } },
     { path: '/faq', name: 'faq', component: FAQPage, meta: { title: 'HistoVec - FAQ & Liens utiles' } },
     { path: '/contact', name: 'contact', component: ContactPage, meta: { title: 'HistoVec - Contact' } },
     { path: '/plan-du-site', name: 'planDuSite', component: PlanDuSitePage, meta: { title: 'HistoVec - Plan du site' } },
     { path: '/accessibilite', name: 'accessibilite', component: AccessibilitePage, meta: { title: 'HistoVec - Accessibilité' } },
     { path: '/mentions-legales', name: 'mentionsLegales', component: MentionsLegalesPage, meta: { title: 'HistoVec - Mentions légales' } },
     { path: '/donnees-personnelles-et-cookies', name: 'donneesPersonnelles', component: DonneesPersonnellesEtCookiesPage, meta: { title: 'HistoVec - Données personnelles & Gestion des cookies' } },
+    {
+      path: '/rapport',
+      name: 'ancienRapport',
+      redirect: to => {
+        const { id, key } = to.query
+        if (id && key) {
+          // Rétrocompatibilité de l'ancien rapport acheteur
+          return { path: '/rapport-acheteur', query: { id: to.query.id, key: to.query.key } }
+        }
+        // Ancien rapport vendeur non fonctionnel => forcer une nouvelle recherche
+        return { path: '/proprietaire' }
+      },
+      meta: { title: 'HistoVec - Ancien rapport' },
+    },
 
     // Errors pages
     { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },

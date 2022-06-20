@@ -75,10 +75,7 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div
-      class="fr-col-12"
-      style="text-align: center"
-    >
+    <div class="fr-col-12  text-center">
       <h2>Nos garanties</h2>
     </div>
   </div>
@@ -90,7 +87,6 @@ export default defineComponent({
     <div class="fr-col-offset-1 fr-col-10">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-3">
-          <!-- @todo: image is broken -->
           <DsfrCard
             title="Simple"
             description="En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!"
@@ -102,7 +98,6 @@ export default defineComponent({
           />
         </div>
         <div class="fr-col-3">
-          <!-- @todo: image is broken -->
           <DsfrCard
             title="Officiel"
             description="Données issues du Système d'immatriculation des véhicules."
@@ -114,7 +109,6 @@ export default defineComponent({
           />
         </div>
         <div class="fr-col-3">
-          <!-- @todo: image is broken -->
           <DsfrCard
             title="Confidentiel"
             description="Seul le propriétaire peut partager ses informations."
@@ -126,7 +120,6 @@ export default defineComponent({
           />
         </div>
         <div class="fr-col-3">
-          <!-- @todo: image is broken -->
           <DsfrCard
             title="Gratuit"
             description="Un service gratuit pour les propriétaires et les acheteurs."
@@ -142,10 +135,7 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div
-      class="fr-col-12"
-      style="text-align: center"
-    >
+    <div class="fr-col-12  text-center">
       <h2>Propriétaire ou Acheteur ?</h2>
       <p class="fr-text--xl">
         Propriétaire, générez le rapport.
@@ -196,3 +186,10 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style scoped>
+
+.text-center {
+  text-align: center;
+}
+</style>

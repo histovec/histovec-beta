@@ -483,10 +483,7 @@ export default defineComponent({
   <div
     class="fr-grid-row  fr-grid-row--gutters  fr-mb12w"
   >
-    <div
-      class="fr-col-12"
-      style="text-align: center"
-    >
+    <div class="fr-col-12  text-center">
       <HistoVecButtonLink
         id="contactBtn"
         label="Contactez-nous"
@@ -495,3 +492,11 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style scoped>
+
+.text-center {
+  text-align: center;
+}
+</style>
+
