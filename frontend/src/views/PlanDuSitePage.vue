@@ -114,14 +114,13 @@ export default defineComponent({
 </template>
 
 <style scoped>
-/* @todo centralize these rules in common CSS as a .histovec-fr-title-link class */
+/* @todo centralize these rules in common CSS file as a .histovec-fr-title-link class */
 [href] {
   background-image: none;
 }
 
 .fr-title-link {
   text-decoration: none;
-  color: #000091;
-  /* @todo: how to import DSFR CSS variable --blue-france-sun-113-625 ? */
+  color: var(--blue-france-sun-113-625);
 }
 </style>

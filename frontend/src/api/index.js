@@ -58,14 +58,14 @@ export default {
     }
   },
   log: async (path) => {
-    const uuid = localStorage.get('userId')
+    const uuid = localStorage.getItem('userId')
     const normalizedPath = path.replace(/^\/\w+\//, '')
 
     const options = {
       method: 'PUT',
     }
 
-    const response = await fetch(`${apiUrl}/log/${uuid}/${normalizedPath}`, options)
+    const response = await fetch(`${apiUrl}/log/${uuid}${normalizedPath}`, options)
 
     return response
   },

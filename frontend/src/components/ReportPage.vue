@@ -312,7 +312,6 @@ import { formatIsoToFrDate } from '@/assets/js/format.js'
 import imagePoigneeDeMain from '@/assets/img/poignee_de_main.jpg'
 
 
-
 export default {
   components: {
     AbstractTab,

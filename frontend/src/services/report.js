@@ -28,7 +28,11 @@ const reportWithExpiry = (reportId) => {
   if (now >= reportCache.reportExpiry) {
     return null
   }
-  return reportCache.report
+
+  return {
+    report: reportCache.report,
+    status: reportCache.lastReportStatusCode,
+  }
 }
 
 const updateReport = (

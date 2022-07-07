@@ -196,10 +196,9 @@ export default defineComponent({
 </template>
 
 <style scoped>
-/* @todo centralize these rules in common CSS as a .histovec-fr-blue-title class */
+/* @todo centralize these rules in common CSS file as a .histovec-fr-title class */
 
 .fr-blue-title {
-  color: #000091;
-  /* @todo: how to import DSFR CSS variable --blue-france-sun-113-625 ? */
+  color: var(--blue-france-sun-113-625);
 }
 </style>

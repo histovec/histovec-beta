@@ -21,7 +21,7 @@ export default defineComponent({
   components: { ProprietaireSvg, HistoVecButtonLink },
 
   data () {
-    const cachedFormData = sessionStorage.getItem('formData')
+    const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
     const formData = (
       cachedFormData ||
       {
@@ -346,10 +346,41 @@ export default defineComponent({
     async onSubmit () {
       this.persistFormData()
 
+        // siv: {
+        //   titulaire: {
+        //     particulier: {
+        //       nom: '',
+        //       prenoms: '',
+        //     },
+        //     personneMorale : {
+        //       raisonSociale: '',
+        //       numeroSiren: '',
+        //     },
+        //   },
+        //   numeroImmatriculation: '',
+        //   numeroFormule: '',
+        // },
+        // fni: {
+        //   titulaire: {
+        //     particulier: {
+        //       nomEtPrenoms: '',
+        //     },
+        //     personneMorale: {
+        //       raisonSociale: '',
+        //       numeroSiren: '',
+        //     },
+        //   },
+        //   numeroImmatriculation: '',
+        //   dateEmissionCertificatImmatriculation: '',
+        // }
+
+
+      // @todo: cache form information in sessionStorage
+
       this.$router.push({
         name: 'rapportVendeur',
         params: {
-          formData: this.formData,
+          formData: JSON.stringify(this.formData),
         },
       })
     },
