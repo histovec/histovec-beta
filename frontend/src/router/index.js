@@ -44,7 +44,7 @@ const routes = (
           // Rétrocompatibilité de l'ancien rapport acheteur
           return { path: '/rapport-acheteur', query: { id: to.query.id, key: to.query.key } }
         }
-        // Ancien rapport vendeur non fonctionnel => forcer une nouvelle recherche
+        // Ancien rapport vendeur non fonctionnel (le format du cache du rapport vendeur a changé) => on invalide l'ancien cache en forçant une nouvelle recherche via le formulaira de la page Propriétaire
         return { path: '/proprietaire' }
       },
       meta: { title: 'HistoVec - Ancien rapport' },

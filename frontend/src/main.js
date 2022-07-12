@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import Maska from 'maska'
 
 import '@gouvminint/vue-dsfr/styles'
 import VueDsfr from '@gouvminint/vue-dsfr'
@@ -23,5 +22,4 @@ router.beforeEach((to, from, next) => {
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
   .use(router)
-  .use(Maska)
   .mount('#app')

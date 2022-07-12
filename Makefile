@@ -736,7 +736,7 @@ nginx-load-image: $(BUILD_DIR)/$(FILE_IMAGE_NGINX_APP_VERSION)
 
 # development mode
 frontend-dev:
-	cd ${FRONTEND} && VITE_TITLE=${APP} VITE_PORT=${FRONTEND_DEV_PORT} VITE_AB_TESTING_PERCENTAGE=${AB_TESTING_PERCENTAGE} npm run dev
+	cd ${FRONTEND} && VITE_TITLE=${APP} VITE_PORT=${FRONTEND_DEV_PORT} VITE_AB_TESTING_PERCENTAGE=${AB_TESTING_PERCENTAGE} VITE_DISABLE_API_LOG=true npm run dev
 
 
 ##############################################

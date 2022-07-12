@@ -1,8 +1,14 @@
 <script>
 import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
+import QrcodeVue from 'qrcode.vue'
+
+import orderBy from 'lodash.orderby'
+import { toClipboard } from '@soerenmartius/vue3-clipboard'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
+
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -11,6 +17,8 @@ import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@/
 import { base64Encode, urlSafeBase64Encode, base64Decode, urlSafeBase64Decode } from '@/utils/encoding.js'
 import { downloadBlob } from '@/utils/file.js'
 import { getExposant } from '@/utils/format.js'
+import { mailTo } from '@/utils/email.js'
+import { getShareReportEmail } from '@/utils/dynamicEmail.js'
 
 import api from '@/api/index.js'
 
@@ -18,8 +26,10 @@ import reportService from '@/services/report.js'
 
 import { formatIsoToFrDate } from '@/assets/js/format.js'
 import siv from '@/assets/js/siv.js'
+import operationsMapping from '@/assets/json/operations.json'
 import syntheseMapping from '@/assets/json/synthese.json'
 
+import { RESULTAT } from '@/constants/controlesTechniques.js'
 import { REPORT_TABS } from '@/constants/reportTabs.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@/constants/type.js'
 import { DEFAULT_DATE_UPDATE } from '@/constants/v.js'
@@ -131,7 +141,11 @@ import logoMI from '@/assets/img/deprecated/logo_ministere_interieur.png'
 export default defineComponent({
   name: 'RapportVendeurPage',
 
-  components: { RapportAcheteurSvg, RapportVendeurSvg, HistoVecButtonLink },
+  components: {
+    ControlesTechniquesLineChart,
+    RapportAcheteurSvg, RapportVendeurSvg,
+    HistoVecButtonLink, QrcodeVue,
+  },
 
   props: {
     typeRapport: {
@@ -142,7 +156,7 @@ export default defineComponent({
 
   data () {
     return  {
-      // Initialized onCreated
+      // Initialized beforeMount
       holderId: null,
       holderKey: null,
       processedVehiculeData: {
@@ -165,7 +179,14 @@ export default defineComponent({
         etranger: {},
         usage: {},
       },
+      controlesTechniques: {
+
+      },
       // formData: null,
+
+      modalPartagerRapport: {
+        opened: false,
+      },
 
       tabs: {
         selectedTabIndex: 0,
@@ -201,13 +222,16 @@ export default defineComponent({
 
       assets: {
         syntheseMapping,
+        operationsMapping,
       },
 
       utils: {
+        api,
         getExposant,
+        toClipboard,
       },
 
-      // @todo: FLAGs à centraliser au niveau de l'application et à externalisé via un des variables d'environnement
+      // @todo: FLAGs à centraliser au niveau de la création de l'application Vue et à configurer via des variables d'environnement
       flags: {
         // Gestion de la fraîcheur des données
         outdatedData: true,
@@ -255,6 +279,18 @@ export default defineComponent({
           description,
           to: '',
           imgSrc: '',
+        },
+      ]
+    },
+
+    breadcrumbLinks () {
+      return [
+        {
+          to: '/accueil',
+          text: 'Accueil',
+        },
+        {
+          text: `Rapport ${this.isRapportAcheteur ? 'acheteur' : 'vendeur'}`,
         },
       ]
     },
@@ -370,10 +406,8 @@ export default defineComponent({
     certificat () {
       return this.processedVehiculeData.certificat
     },
-    controlesTechniques () {
-      const { controlesTechniques: controlesTechniquesData } = this.report
-
-      return controlesTechniquesData.historique || []
+    controlesTechniquesHistorique () {
+      return this.controlesTechniques.historique || []
     },
     dateEmissionCIFR () {
       return formatIsoToFrDate(this.certificat.dateEmissionCI)
@@ -388,9 +422,8 @@ export default defineComponent({
       return formatIsoToFrDate(this.certificat.datePremiereImmatriculationEnFrance)
     },
     erreurControlesTechniques () {
-      const { controlesTechniques: controlesTechniquesData } = this.report
-
-      return controlesTechniquesData.erreur
+      return this.controlesTechniques.erreur
+      // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
     },
     hasProcedureVEEnCours () {
       return this.processedVehiculeData.administratif.hasProcedureVEEnCours
@@ -413,6 +446,20 @@ export default defineComponent({
     },
     isValidBuyer () {
       return Boolean(this.buyerId && this.buyerKey)
+    },
+    normalizedControlesTechniquesHistorique () {
+      if (this.controlesTechniquesHistorique && this.controlesTechniquesHistorique.length > 0) {
+        const orderedControlesTechniques = orderBy(this.controlesTechniquesHistorique, ['date'], ['desc'])
+
+        return orderedControlesTechniques.map((controleTechnique) => {
+          return {
+            ...controleTechnique,
+            date: formatIsoToFrDate(controleTechnique.date),
+          }
+        })
+      }
+
+      return []
     },
     oppositionSection () {
       return this.processedVehiculeData.administratif.opposition
@@ -590,32 +637,47 @@ export default defineComponent({
     }
     console.log('-- Before - Process report --', report)
 
-    const { vehicule: vehiculeData } = report
+    const { vehicule: vehiculeData, controlesTechniques } = report
 
     this.processedVehiculeData = siv.processVehiculeData(vehiculeData)
+    this.controlesTechniques = controlesTechniques
+
+    const SHARE_REPORT_EMAIL = getShareReportEmail({reportUrl: this.url})
+    this.shareReportEmail = mailTo(SHARE_REPORT_EMAIL)
   },
 
   methods: {
+    // ModalPartagerRapport
+    onCloseModalPartagerRapport () {
+      this.modalPartagerRapport.opened = false
+    },
+    onOpenModalPartagerRapport () {
+      this.modalPartagerRapport.opened = true
+    },
+
     // Tabs
     async onTabSelected () {
       switch (this.currentTab) {
         case (this.constants.REPORT_TABS.SYNTHESE):
-          await api.log(`${this.$route.path}/synthese`)
+          await api.log(`${this.$route.path}/synthesis`)
+          break;
+        case (this.constants.REPORT_TABS.VEHICULE):
+          await api.log(`${this.$route.path}/vehicle`)
           break;
         case (this.constants.REPORT_TABS.TITULAIRE_ET_TITRE):
-          await api.log(`${this.$route.path}/csa/download`)
+          await api.log(`${this.$route.path}/holder`)
           break
         case (this.constants.REPORT_TABS.SITUATION_ADMINISTRATIVE):
-          await api.log(`${this.$route.path}/csa/download`)
+          await api.log(`${this.$route.path}/administrative-status`)
           break
         case (this.constants.REPORT_TABS.HISTORIQUE):
-          await api.log(`${this.$route.path}/csa/download`)
+          await api.log(`${this.$route.path}/history`)
           break
         case (this.constants.REPORT_TABS.CONTROLES_TECHNIQUES):
-          await api.log(`${this.$route.path}/csa/download`)
+          await api.log(`${this.$route.path}/technical-control`)
           break
         case (this.constants.REPORT_TABS.KILOMETRAGE):
-          await api.log(`${this.$route.path}/csa/download`)
+          await api.log(`${this.$route.path}/kilometers`)
           break
         default:
           break
@@ -763,12 +825,46 @@ export default defineComponent({
       )
     },
 
-    /** logs **/
-    logSimplimmatImage () {
-      api.log(`${this.$route.path}/simplimmat/image`)
+    /** DsfrBadge **/
+    getDsfrBadgeType (resultatControleTechnique) {
+      if (resultatControleTechnique === RESULTAT.A || resultatControleTechnique === RESULTAT.AP) {
+        return 'success'
+      }
+      if (resultatControleTechnique === RESULTAT.S || resultatControleTechnique === RESULTAT.SP) {
+        return 'warning'
+      }
+      if (resultatControleTechnique === RESULTAT.R || resultatControleTechnique === RESULTAT.RP) {
+        return 'error'
+      }
+      // RESULTAT.X or undefined => undefined
     },
-    logSimplimmatLink () {
-      api.log(`${this.$route.path}/simplimmat/link`)
+
+    /** logs **/
+    async logSimplimmatImage () {
+      await api.log(`${this.$route.path}/simplimmat/image`)
+    },
+    async logSimplimmatLink () {
+      await api.log(`${this.$route.path}/simplimmat/link`)
+    },
+    async logCopieLienPartage () {
+      await api.log(`${this.$route.path}/share/copy`)
+    },
+    async logMailLienPartage () {
+      await api.log(`${this.$route.path}/share/mail`)
+    },
+
+    async onClickCopyLienPartage () {
+      console.log('-- onClickCopyLienPartage --')
+      this.utils.toClipboard(this.url)
+      await this.logCopieLienPartage()
+      this.onCloseModalPartagerRapport()
+    },
+
+    async onClickMailLienPartage () {
+      console.log('-- onClickMailLienPartage --')
+      this.utils.toClipboard(this.url)
+      await this.logMailLienPartage()
+      this.onCloseModalPartagerRapport()
     },
   },
 })
@@ -779,19 +875,7 @@ export default defineComponent({
     <div class="fr-col-12">
       <DsfrBreadcrumb
         class="fr-mb-0"
-        :links="[
-          {
-            to: '/accueil',
-            text: 'Accueil',
-          },
-          {
-            text: (
-              isRapportAcheteur ?
-                'Rapport acheteur' :
-                'Rapport vendeur'
-            ),
-          },
-        ]"
+        :links="breadcrumbLinks"
       />
     </div>
 
@@ -1493,12 +1577,47 @@ export default defineComponent({
           <div
             class="fr-grid-row  fr-grid-row--gutters"
           >
-            <div class="fr-col-6  fr-pb-2w">
+            <template v-if="datePremiereImmatriculationFR">
+              <!-- v-if="certificat.isVehiculeImporteDepuisEtranger"> -->
+              <div class="fr-col-12  fr-pb-3w">
+                <h5 class="fr-mb-0">
+                  Historique des opérations à l'étranger
+                </h5>
+              </div>
+              <div class="fr-col-2  fr-pb-2w  fr-pt-0">
+                <h6 class="fr-mb-0">
+                  Date
+                </h6>
+              </div>
+              <div class="fr-col-10  fr-pb-2w  fr-pt-0">
+                <h6 class="fr-mb-0">
+                  Opération
+                </h6>
+              </div>
+              <div class="fr-col-2  fr-pb-4w  fr-pt-0 fr-blue-text">
+                {{ datePremiereImmatriculationFR }}
+              </div>
+              <div class="fr-col-10  fr-pb-4w  fr-pt-0 fr-blue-text">
+                <!-- @todo:
+                  Il serait plus sûr de créer un enum HISTORIQUE_OPERATION_TYPE pour l'utiliser ici
+                  et dans le fichier assets/js/operations.json afin de tokenizer les opérations et réduire les erreurs liées à une typo
+                  Pas urgent : en pratique, on ne se sert que très peu de ces HISTORIQUE_OPERATION_TYPE (appelé opa_type dans le SIV)
+                -->
+                {{ assets.operationsMapping['IMMAT_NORMALE_PREM_ETRANGER'] }}
+              </div>
+            </template>
+
+            <div class="fr-col-12  fr-pb-3w">
+              <h5 class="fr-mb-0">
+                Historique des opérations en France
+              </h5>
+            </div>
+            <div class="fr-col-2  fr-pb-2w  fr-pt-0">
               <h6 class="fr-mb-0">
                 Date
               </h6>
             </div>
-            <div class="fr-col-6  fr-pb-2w">
+            <div class="fr-col-10  fr-pb-2w  fr-pt-0">
               <h6 class="fr-mb-0">
                 Opération
               </h6>
@@ -1508,10 +1627,10 @@ export default defineComponent({
               v-for="(entry, index) in processedVehiculeData.historique"
               :key="index"
             >
-              <div class="col-sm-2  fr-pb-2w">
+              <div class="fr-col-2  fr-pb-0  fr-pt-0 fr-blue-text">
                 <span class="txt-small-12">{{ entry.date }}</span>
               </div>
-              <div class="col-sm-10  fr-pb-2w">
+              <div class="fr-col-10  fr-pb-0  fr-pt-0 fr-blue-text">
                 <span class="info_red txt-small-12">
                   {{ entry.nature }}
                   <!-- @numAgree3
@@ -1531,7 +1650,7 @@ export default defineComponent({
           </div>
         </DsfrTabContent>
 
-        <!-- <DsfrTabContent
+        <DsfrTabContent
           panel-id="report-tab-content-5"
           tab-id="report-tab-5"
           :selected="tabs.selectedTabIndex === 5"
@@ -1540,10 +1659,74 @@ export default defineComponent({
           <div
             class="fr-grid-row  fr-grid-row--gutters"
           >
-            <div class="fr-col-6">
+            <div
+              v-if="erreurControlesTechniques"
+              class="fr-col-12"
+            >
+              <DsfrAlert
+                type="error"
+                title="Erreur lors de la récupération des contrôles techniques"
+                :description="erreurControlesTechniques"
+              />
             </div>
-            <div class="fr-col-6">
-            </div>
+            <template
+              v-if="!erreurControlesTechniques"
+            >
+              <template
+                v-if="
+                  normalizedControlesTechniquesHistorique.length
+                    >
+                    0"
+              >
+                <div class="fr-col-2  fr-pb-3w">
+                  <h6 class="fr-mb-0">
+                    Date
+                  </h6>
+                </div>
+                <div class="fr-col-4  fr-pb-3w">
+                  <h6 class="fr-mb-0">
+                    Nature
+                  </h6>
+                </div>
+                <div class="fr-col-2  fr-pb-3w">
+                  <h6 class="fr-mb-0">
+                    Résultat
+                  </h6>
+                </div>
+                <div class="fr-col-4  fr-pb-3w">
+                  <h6 class="fr-mb-0">
+                    Kilométrage
+                  </h6>
+                </div>
+                <template
+                  v-for="(entry, index) in normalizedControlesTechniquesHistorique"
+                  :key="index"
+                >
+                  <div class="fr-col-2  fr-pb-2w  fr-blue-text">
+                    {{ entry.date }}
+                  </div>
+                  <div class="fr-col-4  fr-pb-2w  fr-blue-text">
+                    {{ entry.natureLibelle }}
+                  </div>
+                  <div class="fr-col-2  fr-pb-2w  fr-blue-text">
+                    <DsfrBadge
+                      :label="entry.resultatLibelle"
+                      :type="getDsfrBadgeType(entry.resultat)"
+                      :no-icon="true"
+                    />
+                  </div>
+                  <div class="fr-col-4  fr-pb-2w  fr-blue-text">
+                    {{ entry.kmLibelle }} km
+                  </div>
+                </template>
+              </template>
+              <div
+                v-if="normalizedControlesTechniquesHistorique === 0"
+                class="fr-col-12"
+              >
+                Ce véhicule ne possède actuellement aucun contrôle technique.
+              </div>
+            </template>
           </div>
         </DsfrTabContent>
 
@@ -1556,35 +1739,101 @@ export default defineComponent({
           <div
             class="fr-grid-row  fr-grid-row--gutters"
           >
-            <div class="fr-col-6">
+            <div
+              v-if="erreurControlesTechniques"
+              class="fr-col-12"
+            >
+              <DsfrAlert
+                type="error"
+                title="Erreur lors de la récupération des contrôles techniques"
+                :description="erreurControlesTechniques"
+              />
             </div>
-            <div class="fr-col-6">
-            </div>
+            <template
+              v-if="!erreurControlesTechniques"
+            >
+              <controles-techniques-line-chart
+                v-if="controlesTechniquesHistorique.length > 0"
+                class="fr-col-12"
+                :controles-techniques="controlesTechniquesHistorique"
+              />
+              <div
+                v-if="controlesTechniquesHistorique === 0"
+                class="fr-col-12"
+              >
+                Ce véhicule ne possède actuellement aucun contrôle technique.
+              </div>
+            </template>
           </div>
-        </DsfrTabContent> -->
+        </DsfrTabContent>
       </DsfrTabs>
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+  <div
+    v-if="isRapportVendeur"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+  >
     <div
       class="fr-col-6"
       style="text-align: right"
     >
       <DsfrButton
         label="Imprimer le CSA"
-        @click="generatePdf"
+        :href="shareReportEmail"
       />
     </div>
     <div
+      v-if="!isCIAnnule"
       class="fr-col-6"
       style="text-align: left"
     >
       <DsfrButton
+        ref="modalPartagerRapport"
         label="Envoyer le rapport"
         secondary
-        @click="console.log('POP UP lien acheteur')"
+        @click="open()"
       />
+      <DsfrModal
+        ref="modal"
+        :opened="modalPartagerRapport.opened"
+        :actions="[
+          {
+            label: 'Copier le lien',
+            onClick: onClickCopyLienPartage,
+          },
+          {
+            label: 'Envoyer le lien par mail',
+            href: shareReportEmail,
+            onClick: onClickMailLienPartage,
+          },
+        ]"
+        title="Envoyer le rapport"
+        :origin="$refs.modalPartagerRapport"
+        @open="onOpenModalPartagerRapport()"
+        @close="onCloseModalPartagerRapport()"
+      >
+        <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+          <div class="fr-col-12">
+            <p>
+              Vous pouvez transmettre le lien du rapport à votre acheteur potentiel.
+              Ce lien est valide jusqu'au 8 du mois suivant.
+              Ex: un lien transmis le 18/01/2022 sera accessible jusqu'au 08/02/2022.
+            </p>
+          </div>
+
+          <div
+            class="fr-col-12"
+            style="float: none; margin: 0 auto;"
+          >
+            <qrcode-vue
+              :value="url"
+              :size="150"
+              level="L"
+            />
+          </div>
+        </div>
+      </DsfrModal>
     </div>
   </div>
 
@@ -1660,6 +1909,22 @@ export default defineComponent({
       </DsfrModal>
     -->
   </div>
+  <!-- @todo: branch logs
+    OPEN MODAL =>  await api.log(`${this.$route.path}/share`)
+
+    SEND MAIL lien acheteur =>  await api.log(`${this.$route.path}/share/mail`)
+
+    COPY LINK lien acheteur =>  await api.log(`${this.$route.path}/share/copy`)
+
+    SEND MAIL code partage HistoVec =>  await api.log(`${this.$route.path}/share-code-partage/mail`)
+
+    COPY LINK code partage HistoVec =>  await api.log(`${this.$route.path}/share-code-partage/copy`)
+
+
+    API UTAC ERROR => await api.log(`${this.$route.path}/share/kilometers-error`)
+
+
+  -->
 </template>
 
 <style scoped>

@@ -1,6 +1,9 @@
 import 'whatwg-fetch'
 import { apiUrl } from '../config.js'
 
+const VITE_DISABLE_API_LOG = import.meta.env.VITE_DISABLE_API_LOG
+const IS_API_LOG_DISABLED = VITE_DISABLE_API_LOG === 'true'
+
 
 export default {
   getHolderReport: async ({ uuid, payload }) => {
@@ -45,7 +48,6 @@ export default {
       const response = await fetch(`${apiUrl}/report_by_code`, options)
       const report = await response.json()
 
-
       return {
         report,
         status: response.status,
@@ -58,6 +60,10 @@ export default {
     }
   },
   log: async (path) => {
+    if (IS_API_LOG_DISABLED) {
+      return new Promise(resolve => resolve())
+    }
+
     const uuid = localStorage.getItem('userId')
     const normalizedPath = path.replace(/^\/\w+\//, '')
 

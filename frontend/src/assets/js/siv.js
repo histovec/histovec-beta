@@ -1,11 +1,10 @@
 
-import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '../js/format.js'
-
 import orderBy from 'lodash.orderby'
 
-import operationsMapping from '../json/operations.json'
-import suspensionsMapping from '../json/suspensions.json'
-import { MISSING_VALUE } from './constants.js'
+import { MISSING_VALUE } from '@/assets/js/constants.js'
+import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
+import operationsMapping from '@/assets/json/operations.json'
+import suspensionsMapping from '@/assets/json/suspensions.json'
 
 
 // We will develop other categories later using data pipeline.
@@ -418,7 +417,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       hasOtciPV,
     },
 
-    // @TODO: mutualize this part with backend to generate CSA
+    // @TODO: mutualize this part with backend to generate CSA as an API
     // @TODO: mutualize needed images too
     csaLabels: {
       annulationCurrentStatus,
