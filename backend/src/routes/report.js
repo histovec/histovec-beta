@@ -13,10 +13,6 @@ import { getAsync, setAsync } from '../connectors/redis.js'
 
 import { VIN_REGEX } from '../constant/regex.js'
 
-// /!\ boolean setting is passed as string /!\
-// @todo: we should use typed yaml to load settings
-const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
-
 const normalizeImmatForUtac = (immat) => {
   if (!immat || typeof immat !== 'string') {
     return undefined
@@ -308,7 +304,7 @@ export const generateGetReport = (utacClient) =>
       return
     }
 
-    if (isVinSentToUtac && !isValidVin) {
+    if (!isValidVin) {
       appLogger.warn({
         error: 'Malformed VIN',
       })
@@ -367,7 +363,7 @@ export const generateGetReport = (utacClient) =>
         return
       }
 
-      if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+      if (!validateTechnicalControls(vin, ct)) {
         throw new Error('Inconsistency for technical control')
       }
 

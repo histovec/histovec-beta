@@ -258,13 +258,11 @@ class UTACClient {
       const anonymizedUtacVin = anonymize(vin)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      if (config.utac.isVinSentToUtac) {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
-      }
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
 
       response = await this.axios.post('/immat/search', {
         immat,
-        ...(config.utac.isVinSentToUtac ? { vin } : {}),
+        vin,
       })
       const { data } = response
 

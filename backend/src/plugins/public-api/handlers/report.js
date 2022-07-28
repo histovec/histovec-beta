@@ -150,7 +150,7 @@ export const getReport = async (payload) => {
     }
   }
 
-  if (config.utac.isVinSentToUtac && !isValidVin) {
+  if (!isValidVin) {
     appLogger.warn({
       error: 'Malformed VIN',
     })
@@ -209,7 +209,7 @@ export const getReport = async (payload) => {
       }
     }
 
-    if (!isMocked && config.utac.isVinSentToUtac && !validateControlesTechniques(vin, ct)) {
+    if (!isMocked && !validateControlesTechniques(vin, ct)) {
       throw new Error('Inconsistency for technical control')
     }
 

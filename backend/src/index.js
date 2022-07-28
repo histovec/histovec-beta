@@ -59,7 +59,6 @@ const initServer = async () => {
   techLogger.debug(
     `🔧  ${JSON.stringify(config)}`,
   )
-  appLogger.info(`[CONFIG] isVinSentToUtac ${config.utac.isVinSentToUtac}`)
   appLogger.info(`[CONFIG] usePreviousMonthForData ${config.usePreviousMonthForData}`)
   appLogger.info(`[CONFIG] previousMonthShift ${config.previousMonthShift}`)
   appLogger.info(`[CONFIG] version ${config.version}`)
