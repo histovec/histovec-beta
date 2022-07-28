@@ -173,6 +173,13 @@ class UTACClient {
     return { status }
   }
 
+  async _reauthenticate () {
+    // Invalidate our JWT token
+    this.axios.defaults.headers.common.Authorization = ''
+
+    return await this._authenticate()
+  }
+
   async _authenticate () {
     try {
       const response = await this.axios.get('/auth', {
@@ -271,27 +278,52 @@ class UTACClient {
       const executionTime = end - start
 
       const { error } = utacResponseSchema.validate(data)
+
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
+
       if (error) {
         return {
           status: 500,
           message: ERROR_MESSAGES.malformedResponse,
         }
       }
-
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
     } catch (error) {
-      // That should never happen
-      const end = new Date()
-      const executionTime = end - start
-      appLogger.info(`Error while reading technical controls (${uuid}): ${error}`)
+      if (error.status === 403) {
+        await this._reauthenticate()
 
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
+        // Replay request
+        response = await this.axios.post('/immat/search', {
+          immat,
+          vin,
+        })
 
-      return {
-        status: 500,
-        message: ERROR_MESSAGES[500],
+        const end = new Date()
+        const executionTime = end - start
+        const { error } = utacResponseSchema.validate(response.data)
+
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
+
+        if (error) {
+          return {
+            status: 500,
+            message: ERROR_MESSAGES.malformedResponse,
+          }
+        }
+      } else {
+        // That should never happen
+        const end = new Date()
+        const executionTime = end - start
+        appLogger.info(`Error while reading technical controls (${uuid}): ${error}`)
+
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
+        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
+
+        return {
+          status: 500,
+          message: ERROR_MESSAGES[500],
+        }
       }
     }
 
