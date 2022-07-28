@@ -177,7 +177,12 @@ class UTACClient {
     // Invalidate our JWT token
     this.axios.defaults.headers.common.Authorization = ''
 
-    return await this._authenticate()
+    const _authorizationHeader = await this._authenticate()
+
+    const authorizationHeader = _authorizationHeader.slice(0, -1)
+    this.axios.defaults.headers.common.Authorization = authorizationHeader
+
+    return authorizationHeader
   }
 
   async _authenticate () {
@@ -196,7 +201,7 @@ class UTACClient {
           token,
         })
 
-        const authorizationHeader = `bearer ${token}`
+        const authorizationHeader = `bearer ${token}s`
         this.axios.defaults.headers.common.Authorization = authorizationHeader
 
         return authorizationHeader
