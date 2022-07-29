@@ -1,9 +1,20 @@
 
 export {
   RiArrowRightFill,
+  RiCheckLine,
+  RiClipboardLine,
+  RiCloseLine,
+  RiEarthLine,
   RiErrorWarningFill,
+  RiFileCopy2Line,
+  RiIndeterminateCircleFill,
   RiInformationLine,
   RiMailLine,
+  RiMedalLine,
+  RiPrinterLine,
   RiQuestionLine,
   RiSearchLine,
+  RiSendPlaneFill,
+  RiSettings5Fill,
+  RiThumbUpLine,
 } from 'oh-vue-icons/icons/ri/index.js'

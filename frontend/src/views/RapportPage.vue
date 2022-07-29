@@ -10,7 +10,6 @@ import orderBy from 'lodash.orderby'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
 
-
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
 import { RAPPORT_FILENAME } from '@/utils/csaAsPdf/constants.js'
@@ -41,6 +40,16 @@ import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@/constants/usagesSynthese.js'
 import RapportAcheteurSvg from '@/assets/img/acheteur.svg'
 import RapportVendeurSvg from '@/assets/img/rapport.svg'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
+
+// @todo @ladyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
+import logoVignetteCritair1 from '@/assets/img/critair/vignette_1.png'
+import logoVignetteCritair2 from '@/assets/img/critair/vignette_2.png'
+import logoVignetteCritair3 from '@/assets/img/critair/vignette_3.png'
+import logoVignetteCritair4 from '@/assets/img/critair/vignette_4.png'
+import logoVignetteCritair5 from '@/assets/img/critair/vignette_5.png'
+import logoVignetteCritairElectrique from '@/assets/img/critair/vignette_electrique.png'
+
+// CSA
 import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
 import logoMI from '@/assets/img/deprecated/logo_ministere_interieur.png'
 
@@ -67,10 +76,12 @@ export default defineComponent({
       holderId: null,
       holderKey: null,
       processedVehiculeData: {
+        vignetteCritair: null,
         administratif: {
           opposition: {},
           csaLabels: {},
           reportLabels: {
+            synthese: [],
             titre: {},
           },
         },
@@ -91,6 +102,7 @@ export default defineComponent({
       },
       formData: null,
       tabTitles: [],
+      modaleActions: [],
 
       modalPartagerRapport: {
         opened: false,
@@ -114,6 +126,15 @@ export default defineComponent({
         logoHistoVec,
         logoSimplimmat,
         logoMI,
+
+        critair: {
+          logoVignetteCritair1,
+          logoVignetteCritair2,
+          logoVignetteCritair3,
+          logoVignetteCritair4,
+          logoVignetteCritair5,
+          logoVignetteCritairElectrique,
+        },
 
         csa: {
           logoHistoVecBytes: '',
@@ -139,11 +160,14 @@ export default defineComponent({
         copyText,
       },
 
-      // @todo: @featureFlags FLAGs à centraliser au niveau de la création de l'application Vue et à configurer via des variables d'environnement
+      // @todo: @featureFlags
+      // feature flags à centraliser au niveau de la création de l'application Vue et à configurer via des variables d'environnement
+      // Actuellement possible en local via les env_var VITE_xxx mais pas pour la construction des builds de production
       flags: {
         // Gestion de la fraîcheur des données
-        outdatedData: true,
-        showDataDate: true,
+        outdatedData: false,  // @info: A activer quand la DSR juge que la donnée n'est pas assez fraîche
+        showDataDate: true,  // @info: Permet d'afficher la vraie date des données dans le CSA et le rapport HTML HistoVec - Devrait toujours rester à true
+        codePartage: false,  // @todo: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
         // Flag du 8
         usePreviousMonthForData: false,
@@ -204,11 +228,17 @@ export default defineComponent({
     },
 
     isRapportAcheteur () {
-      return this.typeRapport === TYPE_RAPPORT.ACHETEUR
+      return (
+        this.typeRapport === TYPE_RAPPORT.ACHETEUR ||
+        (this.typeRapport !== TYPE_RAPPORT.VENDEUR && this.isBuyer)
+      )
     },
 
     isRapportVendeur () {
-      return this.typeRapport === TYPE_RAPPORT.VENDEUR
+      return (
+        this.typeRapport === TYPE_RAPPORT.VENDEUR ||
+        (this.typeRapport !== TYPE_RAPPORT.ACHETEUR && this.isHolder)
+      )
     },
 
     currentTab () {
@@ -221,7 +251,7 @@ export default defineComponent({
       let date = dayjs().add(-7, 'day')
 
       if (this.flags.usePreviousMonthForData) {
-        date = date.add(-this.previousMonthShift, 'month')
+        date = date.add(-this.flags.previousMonthShift, 'month')
       }
 
       return date.format('YYYYMM')
@@ -306,7 +336,7 @@ export default defineComponent({
     },
     // -----------------------------------------------------------
 
-    // ----- Accès rapide au données du rapport -----
+    // ----- Accès rapide aux données du rapport -----
 
     caracteristiquesTechniques () {
       return this.processedVehiculeData.caracteristiquesTechniques
@@ -389,17 +419,14 @@ export default defineComponent({
     // ------------------ email ---------------------
 
     shareReportEmail () {
-      const SHARE_REPORT_EMAIL = getShareReportEmail({reportUrl: this.url})
+      const SHARE_REPORT_EMAIL = getShareReportEmail({ reportUrl: this.url })
       return mailTo(SHARE_REPORT_EMAIL)
     },
     // ----------------------------------------------
   },
 
   beforeMount: async function () {
-    console.log('-- beforeMount --')
-
     const formDataParams = this.$route.params.formData && JSON.parse(this.$route.params.formData)
-    console.log('-- formDataParams --', formDataParams)
 
     if (formDataParams) {
       // 1er accès au rapport vendeur (suite au remplissage du formulaire de recherche)
@@ -407,8 +434,6 @@ export default defineComponent({
     } else {
       // accès suivant via l'url /rapport-vendeur (rafraîchissement de la page du rapport)
       const cachedFormData = sessionStorage.getItem('formData') && JSON.parse(sessionStorage.getItem('formData'))
-      console.log('-- cachedFormData --', cachedFormData)
-
       this.formData = cachedFormData
     }
 
@@ -428,7 +453,7 @@ export default defineComponent({
     // Récupération de la donnée du rapport HistoVec
     let report = {}
 
-    if (this.isBuyer) {
+    if (this.isRapportAcheteur) {
       if (this.isValidBuyer) {
         const buyerReportResponse = await this.getBuyerReport()
 
@@ -437,19 +462,17 @@ export default defineComponent({
 
           this.$router.push({
             name: 'erreur',
-            params: {
+            query: {
+              title: 'Ce véhicule est inconnu d\'HistoVec',
               errorMessages: [
-                'Ce véhicule est inconnu d\'HistoVec.',
                 'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
                 'Recopiez exactement les données de votre carte grise. La carte grise que vous utilisez n\'est peut-être pas la dernière en cours de validité (perte, vol, ...).',
               ],
-              actions: [
-                // @todo : pass this data to a HistoVecButtonLink in ErreurPage
-                {
-                  label: 'Revenir au formulaire de recherche',
-                  to: '/proprietaire',
-                },
-              ],
+              primaryAction: JSON.stringify({
+                label: 'Revenir au formulaire de recherche',
+                icon: 'ri-arrow-right-fill',
+                to: '/proprietaire',
+              }),
             },
           })
           return
@@ -470,23 +493,21 @@ export default defineComponent({
 
         this.$router.push({
           name: 'erreur',
-          params: {
+          query: {
+            title: 'Lien de partage HistoVec invalide',
             errorMessages: [
-              'Ce lien de partage HistoVec est invalide.',
-              'Veuillez demander un lien au vendeur.',
+              'Veuillez demander un nouveau lien au vendeur.',
             ],
-            actions: [
-              // @todo : pass this data to a HistoVecButtonLink in ErreurPage
-              {
-                label: 'Demander le rapport à un vendeur',
-                to: '/acheteur',
-              },
-            ],
+            primaryAction: JSON.stringify({
+              label: 'Demander le rapport à un vendeur',
+              icon: 'ri-arrow-right-fill',
+              to: '/acheteur',
+            }),
           },
         })
         return
       }
-    } else if (this.isHolder) {
+    } else if (this.isRapportVendeur) {
       if (this.formData) {
         const holderReportResponse = await this.getHolderReport()
 
@@ -496,19 +517,17 @@ export default defineComponent({
 
           this.$router.push({
             name: 'erreur',
-            params: {
+            query: {
+              title: 'Ce véhicule est inconnu d\'HistoVec',
               errorMessages: [
-                'Ce véhicule est inconnu d\'HistoVec.',
                 'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
                 'Recopiez exactement les données de votre carte grise. La carte grise que vous utilisez n\'est peut-être pas la dernière en cours de validité (perte, vol, ...).',
               ],
-              actions: [
-                // @todo : pass this data to a HistoVecButtonLink in ErreurPage
-                {
-                  label: 'Revenir au formulaire de recherche',
-                  to: '/proprietaire',
-                },
-              ],
+              primaryAction: JSON.stringify({
+                label: 'Revenir au formulaire de recherche',
+                icon: 'ri-arrow-right-fill',
+                to: '/proprietaire',
+              }),
             },
           })
           return
@@ -568,12 +587,67 @@ export default defineComponent({
         defaultTabTitles
     )
 
+    // @todo: Implémenter un mécanisme de notification dans la DsfrModal
+    // pour confirmer visuellement la prise en compte des actions
+    this.modaleActions = [
+      {
+        label: 'Envoyer le lien par mail',
+        icon: 'ri-send-plane-fill',
+        secondary: true,
+        onClick: this.onClickMailLienPartage,
+      },
+      {
+        label: 'Copier le lien',
+        icon: 'ri-clipboard-line',
+        onClick: this.onClickCopyLienPartage,
+      },
+    ]
+
+    if (this.flags.codePartage) {
+      this.modaleActions.push({
+        label: 'Copier le \'Code partage HistoVec\'',
+        icon: 'ri-clipboard-line',
+        secondary: true,
+        onClick: this.onClickCopyCodePartage,
+      })
+    }
+
     if (!areControlesTechinquesDisponibles) {
       await this.logKilometersError()
     }
   },
 
   methods: {
+    getVignetteCritairImage(vignetteCritair) {
+      // @todo @ladyLoadCritairImage2 lazy loader les images dynamiquement
+
+      if (vignetteCritair === VIGNETTE[1]) {
+        return this.images.critair.logoVignetteCritair1
+      }
+
+      if (vignetteCritair === VIGNETTE[2]) {
+        return this.images.critair.logoVignetteCritair2
+      }
+
+      if (vignetteCritair === VIGNETTE[3]) {
+        return this.images.critair.logoVignetteCritair3
+      }
+
+      if (vignetteCritair === VIGNETTE[4]) {
+        return this.images.critair.logoVignetteCritair4
+      }
+
+      if (vignetteCritair === VIGNETTE[5]) {
+        return this.images.critair.logoVignetteCritair5
+      }
+
+      if (vignetteCritair === VIGNETTE['ELECTRIQUE']) {
+        return this.images.critair.logoVignetteCritairElectrique
+      }
+
+      return
+    },
+
     // ModalPartagerRapport
     onCloseModalPartagerRapport () {
       this.modalPartagerRapport.opened = false
@@ -714,7 +788,7 @@ export default defineComponent({
         isCIAnnule,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
         dateAnnulationCI,
-        dateDonnees: this.showDataDate ? dateMiseAJour : null,
+        dateDonnees: this.flags.showDataDate ? dateMiseAJour : null,
         histoVecLogoBytes: this.images.csa.logoHistoVecBytes,
         marianneImageBytes: this.images.csa.logoMIBytes,
         marque,
@@ -776,6 +850,9 @@ export default defineComponent({
     async logCopieLienPartage () {
       await api.log(`${this.$route.path}/share/copy`)
     },
+    async logCopieCodePartage () {
+      await api.log(`${this.$route.path}/share/code-partage`)
+    },
     async logMailLienPartage () {
       await api.log(`${this.$route.path}/share/mail`)
     },
@@ -791,8 +868,20 @@ export default defineComponent({
       // malgré la configuration de VueClipboard dans le main.js
       // On force donc la copie de l'url à l'ouverture de la modale pour dépanner.
       // PS: la lib '@soerenmartius/vue3-clipboard' a été testée sans succès
-      this.utils.copyText(this.url)
+
+      // this.utils.copyText(this.url)
       await this.logCopieLienPartage()
+      this.onCloseModalPartagerRapport()
+    },
+
+    async onClickCopyCodePartage () {
+      // @todo @copyLink4: la copie ne s'effectue pas dans le cadre de la modale,
+      // malgré la configuration de VueClipboard dans le main.js
+      // On ne peut pas forcer 2 copies en même temps à l'ouverture de la modale
+      // /!\ Cette feature ne pourra fonctionner qu'après correction du bug copy clipboard dans la DsfrModale /!\
+
+      // this.utils.copyText(this.codePartageHistoVec)
+      await this.logCopieCodePartage()
       this.onCloseModalPartagerRapport()
     },
 
@@ -932,6 +1021,7 @@ export default defineComponent({
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
     <div class="fr-col-12  fr-col-lg-11  fr-col-xl-11">
+      <!-- @todo: pour la vue mobile sm et xs : utiliser un accordeon ? -->
       <DsfrTabs
         tab-list-name="Liste d'onglets du rapport du véhicule"
         :tab-titles="tabTitles"
@@ -944,7 +1034,397 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-6">
+            <div class="fr-col-12  fr-pb-3w">
+              <h5 class="fr-mb-0">
+                Résumé
+              </h5>
+            </div>
+
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
+              <div class="fr-pb-3w  fr-pt-0">
+                <h6 class="fr-mb-0  fr-pb-2w">
+                  Modèle
+                </h6>
+
+                <p class="fr-text--md  fr-blue-text  fr-mb-1v">
+                  {{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}
+                </p>
+
+                <p
+                  v-if="caracteristiquesTechniques.puissance.cv"
+                  class="fr-text--md  fr-mb-1v"
+                >
+                  Puissance fiscale : <span class="fr-blue-text">{{ caracteristiquesTechniques.puissance.cv }} ch</span>
+                </p>
+
+                <p
+                  v-if="isRapportAcheteur"
+                  class="fr-text--md  fr-mb-1v"
+                >
+                  Calculez le montant de votre certificat d'immatriculation
+                  <br />
+                  <a
+                    class="fr-link"
+                    href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    title="Simulateur"
+                  >
+                    Accédez au simulateur de calcul
+                  </a>
+                </p>
+              </div>
+
+              <div
+                v-if="processedVehiculeData.usage.vehiculeDeCollection"
+                class="fr-pb-3w  fr-pt-0"
+              >
+                <h6 class="fr-mb-0  fr-pb-2w">
+                  Usage
+                </h6>
+
+                <p class="fr-text--md  fr-mb-2w">
+                  <span class="fr-blue-text">
+                    <VIcon
+                      :name="constants.USAGE_COLLECTION.icon"
+                    />
+                  </span>
+                  {{ constants.USAGE_COLLECTION.text }}
+                  <br />
+                  <span
+                    v-if="constants.USAGE_COLLECTION.adv"
+                    class="fr-text--md  fr-mb-1w"
+                  >
+                    <a
+                      class="fr-link"
+                      :href="constants.USAGE_COLLECTION.link"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      :title="constants.USAGE_COLLECTION.adv"
+                    >
+                      {{ constants.USAGE_COLLECTION.adv }}
+                    </a>
+                  </span>
+                </p>
+
+                <p class="fr-text--md  fr-mb-0">
+                  <span class="fr-blue-text">
+                    <VIcon
+                      :name="constants.USAGE_AGRICOLE.icon"
+                    />
+                  </span>
+                  {{ constants.USAGE_AGRICOLE.text }}
+                  <br />
+                  <!--
+                    @todo @agricoleLink: demander à la DSR un nouveau lien pour USAGE_AGRICOLE.link
+                    Celui-ci n'existe plus
+                  -->
+                  <!-- <span
+                    v-if="constants.USAGE_AGRICOLE.adv"
+                    class="fr-text--md  fr-mb-1w"
+                  >
+                    <a
+                      class="fr-link"
+                      :href="constants.USAGE_AGRICOLE.link"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      :title="constants.USAGE_AGRICOLE.adv"
+                    >
+                      {{ constants.USAGE_AGRICOLE.adv }}
+                    </a>
+                  </span> -->
+                </p>
+              </div>
+
+              <div class="fr-pb-0  fr-pt-0">
+                <h6 class="fr-mb-0  fr-pb-0">
+                  Propriétaire actuel
+                </h6>
+
+                <p class="fr-text--md  fr-mb-0">
+                  <span class="fr-blue-text">{{ processedVehiculeData.titulaire.identite }}</span>
+                  depuis
+                  <span
+                    v-if="certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
+                    class="fr-blue-text"
+                  >
+                    {{ certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }}
+                  </span>
+                  <span
+                    v-if="!certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
+                    class="fr-blue-text"
+                  >
+                    une durée inconnue
+                  </span>
+                  <br />
+                  <template v-if="!certificat.isVehiculeImporteDepuisEtranger">
+                    <template v-if="isRapportVendeur">
+                      Vous êtes le
+                      <span class="fr-blue-text">{{ processedVehiculeData.titulairesCount }}</span>
+                      <sup class="fr-blue-text">{{ utils.getExposant(processedVehiculeData.titulairesCount) }}</sup>
+                      titulaire de ce véhicule
+                    </template>
+                    <template v-if="isRapportAcheteur">
+                      Ce véhicule a déjà eu
+                      <span class="fr-blue-text">{{ processedVehiculeData.titulairesCount }}</span>
+                      titulaire(s), en l'achetant vous serez le
+                      <span class="fr-blue-text">{{ processedVehiculeData.titulairesCount + 1 }}</span>
+                      <sup class="fr-blue-text">{{ utils.getExposant(processedVehiculeData.titulairesCount + 1) }}</sup>
+                    </template>
+                  </template>
+                  <br />
+                  <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+                    Le nombre exact de titulaires ne peut être calculé avec précision
+                    <br />
+                    (première immatriculation à l'étranger)
+                  </template>
+                </p>
+              </div>
+            </div>
+
+            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
+              <div class="fr-pb-3w  fr-pt-0">
+                <h6 class="fr-mb-0  fr-pb-2w">
+                  Immatriculation
+                </h6>
+
+                <p class="fr-text--md  fr-mb-1v">
+                  <template v-if="datePremiereImmatriculationFR">
+                    Première immatriculation le
+                    <span class="fr-blue-text">{{ datePremiereImmatriculationFR }}</span>
+                  </template>
+
+                  <template v-if="!datePremiereImmatriculationFR">
+                    Date de première immatriculation <span class="fr-blue-text">inconnue</span>
+                  </template>
+                </p>
+
+                <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+                  <p class="fr-text--md  fr-blue-text  fr-mb-1v">
+                    <span class="fr-blue-text">
+                      <VIcon
+                        name="ri-earth-line"
+                      />
+                    </span>
+                    Ce véhicule a été <span class="fr-blue-text">importé</span>
+                    <span
+                      v-if="isRapportAcheteur"
+                      class="fr-blue-text"
+                    >
+                      Vérifier les options incluses qui peuvent être différentes
+                    </span>
+                  </p>
+                </template>
+              </div>
+
+              <div class="fr-pb-3w  fr-pt-0">
+                <h6 class="fr-mb-0  fr-pb-2w">
+                  Situation administrative
+                </h6>
+
+                <p
+                  v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours"
+                  class="fr-text--md  fr-mb-1v"
+                >
+                  <span class="fr-blue-text">
+                    <VIcon
+                      :name="processedVehiculeData.isApte ? 'ri-thumb-up-line' : 'ri-error-warning-fill'"
+                    />
+                  </span>
+                  <!-- état - un seul sinistre !-->
+                  <template v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
+                    Ce véhicule a eu <span class="fr-blue-text">un sinistre déclaré</span>
+                    <span
+                      v-if="processedVehiculeData.sinistresCount === 1"
+                      class="fr-blue-text"
+                    >
+                      en {{ processedVehiculeData.lastSinistreYear }}
+                    </span>
+                    <br />
+                    <template v-if="processedVehiculeData.isApte">
+                      et
+                      <span class="fr-blue-text"> déclaré apte à circuler</span>
+                      <span
+                        v-if="!processedVehiculeData.isApte"
+                        class="fr-blue-text"
+                      >
+                        en {{ processedVehiculeData.lastResolutionYear }}
+                      </span>
+                    </template>
+                  </template>
+                  <!-- état - plusieurs sinistres !-->
+                  <template v-if="processedVehiculeData.sinistresCount > 1">
+                    Ce véhicule a eu
+                    <span class="fr-blue-text">plusieurs sinistres</span>
+                    , dont le dernier déclaré en <span class="fr-blue-text">{{ processedVehiculeData.lastSinistreYear }}</span>
+                    <br />
+                    <template v-if="processedVehiculeData.isApte">
+                      Le véhicule a été
+                      <span class="fr-blue-text"> déclaré apte à circuler</span>
+                      <span
+                        v-if="!processedVehiculeData.isApte"
+                        class="fr-blue-text"
+                      >
+                        en {{ processedVehiculeData.lastResolutionYear }}
+                      </span>
+                    </template>
+                  </template>
+                  <!-- Select "Historique" tab -->
+                  <a
+                    class="fr-link"
+                    @click="selectTab(4)"
+                  >
+                    Détails
+                  </a>
+
+                  <!-- Commentaire: un ou plusieurs sinistres -->
+                  <span
+                    v-if="processedVehiculeData.isApte"
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
+                  </span>
+                  <span
+                    v-else
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping['ove'].adv }}
+                  </span>
+
+                  <br />
+                  <span
+                    v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping['multi_ove'].adv }}
+                  </span>
+                </p>
+
+                <p
+                  v-if="synthese.length === 0 && !processedVehiculeData.lastSinistreYear"
+                  class="fr-text--md  fr-mb-1v"
+                >
+                  <span class="fr-blue-text">
+                    <VIcon
+                      name="ri-check-line"
+                    />
+                  </span>
+                  <span class="fr-blue-text">Rien à signaler </span>
+                  <br />
+                  (gages, opposition, vol,...)
+                </p>
+
+                <p
+                  v-for="(entry, index) in synthese"
+                  :key="index"
+                >
+                  <span class="fr-blue-text">
+                    <VIcon
+                      :name="assets.syntheseMapping[entry].icon"
+                    />
+                  </span>
+                  {{ assets.syntheseMapping[entry].text }}
+                  <br />
+                  <!-- Select "Situation administrative" tab -->
+                  <a
+                    class="fr-link"
+                    @click="selectTab(3)"
+                  >
+                    Détails
+                  </a>
+
+                  {{ assets.syntheseMapping[entry].adv }}
+                  <br />
+                  <a
+                    v-if="assets.syntheseMapping[entry].link"
+                    class="fr-link"
+                    :href="assets.syntheseMapping[entry].link"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    En savoir plus
+                  </a>
+                </p>
+              </div>
+
+              <div class="fr-pb-3w  fr-pt-0">
+                <h6 class="fr-mb-0  fr-pb-2w">
+                  Crit'Air
+                  <img
+                    v-if="vignetteCritair !== constants.VIGNETTE.NON_CLASSE"
+                    class="fr-img-responsive"
+                    style="height: 1.5rem;"
+                    :src="getVignetteCritairImage(vignetteCritair)"
+                    alt="Vignette Critair"
+                    title="Vignette Critair"
+                  >
+                </h6>
+                <p
+                  v-if="vignetteCritair"
+                  class="fr-text--md  fr-mb-1v"
+                >
+                  <span
+                    v-if="vignetteCritair === constants.VIGNETTE.NON_CLASSE"
+                    class="fr-blue-text"
+                  >
+                    <VIcon
+                      name="ri-question-line"
+                    />
+                  </span>
+
+                  <span
+                    v-if="vignetteCritair !== constants.VIGNETTE.NON_CLASSE"
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping['critair'].text }} {{ vignetteCritair }}
+                  </span>
+                  <span
+                    v-if="vignetteCritair === constants.VIGNETTE.NON_CLASSE"
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping['critair_non_classe'].text }}
+                  </span>
+                  <br />
+
+                  {{ assets.syntheseMapping['critair'].adv }}
+                  <br />
+                  <a
+                    v-if="assets.syntheseMapping['critair'].link"
+                    class="fr-link"
+                    :href="assets.syntheseMapping['critair'].link"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    En savoir plus
+                  </a>
+                </p>
+
+                <p
+                  v-if="!vignetteCritair && !processedVehiculeData.usage.vehiculeDeCollection"
+                  class="fr-text--md  fr-mb-1v"
+                >
+                  <span
+                    class="fr-blue-text"
+                  >
+                    <VIcon
+                      name="ri-indeterminate-circle-fill"
+                    />
+                  </span>
+                  Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les informations dont nous disposons sont insuffisantes
+
+                  {{ assets.syntheseMapping['critair'].adv }}
+                  <br />
+                  <a
+                    v-if="assets.syntheseMapping['critair'].link"
+                    class="fr-link"
+                    :href="assets.syntheseMapping['critair'].link"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    En savoir plus
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </DsfrTabContent>
@@ -1412,7 +1892,7 @@ export default defineComponent({
                     >
                       <span v-if="oppositionInfos.date">{{ oppositionInfos.date }} - </span>{{ oppositionInfos.label }}
                       <span
-                        v-if="isHolder && oppositionInfos.label.includes('PV') && oppositionSection.hasOtciPV"
+                        v-if="isRapportVendeur && oppositionInfos.label.includes('PV') && oppositionSection.hasOtciPV"
                       >
                         ( Appelez le 08 21 08 00 31 )
                       </span>
@@ -1507,8 +1987,7 @@ export default defineComponent({
           <div
             class="fr-grid-row  fr-grid-row--gutters"
           >
-            <template v-if="datePremiereImmatriculationFR">
-              <!-- v-if="certificat.isVehiculeImporteDepuisEtranger"> -->
+            <template v-if="certificat.isVehiculeImporteDepuisEtranger">
               <div class="fr-col-12  fr-pb-3w">
                 <h5 class="fr-mb-0">
                   Historique des opérations à l'étranger
@@ -1693,23 +2172,23 @@ export default defineComponent({
 
   <div
     v-if="isRapportVendeur"
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+    class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w"
   >
-    <div
-      class="fr-col-8  fr-col-md-3  fr-col-lg-2  fr-col-xl-2  text-center"
-    >
+    <div class="fr-col-6  fr-col-offset-md-2  fr-col-md-4  fr-col-offset-lg-3  fr-col-lg-3  fr-col-offset-lg-3  fr-col-xl-3">
       <DsfrButton
         label="Imprimer le CSA"
+        icon="ri-printer-line"
         @click="generatePdf"
       />
     </div>
     <div
       v-if="!isCIAnnule"
-      class="fr-col-8  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center"
+      class="fr-col-6  fr-col-md-4  fr-col-lg-3  fr-col-xl-3"
     >
       <DsfrButton
         ref="modalPartagerRapport"
         label="Envoyer le rapport"
+        icon="ri-send-plane-fill"
         secondary
         @click="onOpenModalPartagerRapport()"
       />
@@ -1717,25 +2196,7 @@ export default defineComponent({
       <DsfrModal
         ref="modal"
         :opened="modalPartagerRapport.opened"
-        :actions="[
-          {
-            class: 'fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6  text-center',
-            label: 'Envoyer le lien par mail',
-            secondary: true,
-            onClick: onClickMailLienPartage,
-          },
-          {
-            class: 'fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6  text-center',
-            label: 'Copier le lien',
-            onClick: onClickCopyLienPartage,
-          },
-
-          {
-            class: 'fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6  text-center',
-            label: 'Copier le lien',
-            onClick: onClickCopyLienPartage,
-          },
-        ]"
+        :actions="modaleActions"
         title="Envoyer le rapport"
         :origin="$refs.modalPartagerRapport"
         @close="onCloseModalPartagerRapport()"
@@ -1772,8 +2233,9 @@ export default defineComponent({
         @click="logSimplimmatImage"
       >
         <img
-          :src="images.logoSimplimmat"
           class="fr-responsive-img"
+          style="hieght: 5rem;"
+          :src="images.logoSimplimmat"
           alt="Lien vers l'application Simplimmat"
           title="Logo de l'application Simplimmat"
         >

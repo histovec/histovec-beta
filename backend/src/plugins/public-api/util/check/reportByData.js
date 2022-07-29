@@ -21,30 +21,6 @@ export const checkPayload = ({ nom, prenoms, raisonSociale, siren, numeroImmatri
     throw Boom.badRequest()
   }
 
-  const vehiculeProReminder = (
-    `Si vous souhaitez interroger un véhicule de société, fournissez les 2 champs '${RAISON_SOCIALE}' et '${SIREN}' SANS fournir les champs '${NOM}' et '${PRENOMS}'.`
-  )
-
-  if (hasPrenoms && !nom) {
-    appLogger.info(
-      `Vous avez fourni le champ '${PRENOMS}', vous souhaitez donc interroger un véhicule particulier.
-      Les 2 champs '${NOM}' et '${PRENOMS}' doivent être renseignés pour interroger un véhicule particulier.
-      ${vehiculeProReminder}`,
-    )
-
-    throw Boom.badRequest()
-  }
-
-  if (nom && !hasPrenoms) {
-    appLogger.info(
-      `Vous avez fourni le champ '${NOM}', vous souhaitez donc interroger un véhicule particulier.
-      Les 2 champs '${NOM}' et '${PRENOMS}' doivent être renseignés pour interroger un véhicule particulier.
-      ${vehiculeProReminder}`,
-    )
-
-    throw Boom.badRequest()
-  }
-
   const vehiculeParticulierReminder = (
     `Si vous souhaitez interroger un véhicule particulier, fournissez les 2 champs '${NOM}' et '${PRENOMS}' SANS fournir les champs '${RAISON_SOCIALE}' et '${SIREN}'.`
   )

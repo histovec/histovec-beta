@@ -133,7 +133,8 @@ export default {
       } = formData
 
       data = {
-        prenoms: [nomEtPrenoms],
+        nom: nomEtPrenoms,
+        prenoms: [''],
         raisonSociale,
         siren: numeroSiren,
         numeroImmatriculation,

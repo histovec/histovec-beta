@@ -117,7 +117,7 @@ export default defineComponent({
         Technologies utilisées pour la réalisation de ce site
       </h5>
       <p>
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>HTML</li>
           <li>CSS</li>
           <li>JavaScript</li>
@@ -132,7 +132,7 @@ export default defineComponent({
         Les tests des pages web ont été effectuées avec les combinaisons de navigateurs web et lecteurs d'écran suivants :
       </p>
       <p>
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>XXX et XXX</li>
           <li>XXX et XXX</li>
           <li>XXX et XXX</li>
@@ -146,7 +146,7 @@ export default defineComponent({
         Pages du site ayant fait l'objet de la vérification de conformité
       </h5>
       <p>
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>Accueil</li>
           <li>Propriétaire</li>
           <li>Rapport propriétaire</li>
@@ -184,7 +184,7 @@ export default defineComponent({
       </p>
       <p>Plusieurs moyens sont à votre disposition :</p>
       <p>
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>
             <!-- @todo: quelle url ? -->
             <a

@@ -18,13 +18,16 @@ import 'chartjs-adapter-date-fns'
 
 export default {
   name: 'ControlesTechniquesLineChart',
+
   components: { LineChart },
+
   props: {
     controlesTechniques: {
       type: Array,
       default: () => [],
     },
   },
+
   data () {
     return {
       colors: {
@@ -38,6 +41,7 @@ export default {
       },
     }
   },
+
   computed: {
     chartOptions () {
       return {
@@ -113,6 +117,7 @@ export default {
       }
     },
   },
+
   methods: {
     controlToPoint (controle) {
       const point = {

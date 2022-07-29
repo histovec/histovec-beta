@@ -81,7 +81,7 @@ export default defineComponent({
           <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° SIREN et/ou n° SIRET) ;</li>
           <li>Les données d’identification du véhicule (numéro d’immatriculation, numéro VIN, numéro de formule du certificat d’immatriculation ou date du certificat d'immatriculation) ;</li>
           <li>Les données d’historique du véhicule (notamment date de mise en circulation, date de première immatriculation, marque, modèle, couleur, puissance CV, date de sinistre, état de vol, état de perte, gages, oppositions, procédures, résultats des contrôles techniques, kilométrages) ;</li>
-          <li>Traces fonctionnelles : deux traceurs utilisés par l'observatoire de la qualité des démarches numériques. Ces traceurs sont activés par les utilisateurs qui donnent leurs avis sur le site Histovec, à destination de l'observatoire de la qualité des démarches numériques. Ils portent sur l’identifiant de session, et la langue et la mesure d'audience.</li>
+          <li>Traces fonctionnelles : deux traceurs utilisés par l'observatoire de la qualité des démarches numériques. Ces traceurs sont activés par les utilisateurs qui donnent leurs avis sur le site HistoVec, à destination de l'observatoire de la qualité des démarches numériques. Ils portent sur l’identifiant de session, et la langue et la mesure d'audience.</li>
           <li>Statistiques.</li>
         </ul>
       </p>
@@ -103,7 +103,7 @@ export default defineComponent({
         Les données proviennent du SIV et sont disponibles pour la publication sur le site chaque jour.
       </p>
       <p>
-        Les données relatives aux résultats des contrôles techniques et au kilométrage des véhicules proviennent de l’UTAC –OTC. Histovec interroge la base de données de l’UTAC-OTC lors de chaque consultation.
+        Les données relatives aux résultats des contrôles techniques et au kilométrage des véhicules proviennent de l’UTAC –OTC. HistoVec interroge la base de données de l’UTAC-OTC lors de chaque consultation.
       </p>
 
       <h5 class="fr-blue-title">
@@ -150,7 +150,7 @@ export default defineComponent({
         Droit d'accès et de modification
       </h5>
       <p>
-        S’agissant des informations issues du système d’immatriculation des véhicules fournies par Histovec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (
+        S’agissant des informations issues du système d’immatriculation des véhicules fournies par HistoVec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (
         <a
           class="fr-link"
           :href="readOrUpdateAntsPersonalDataEmail"
@@ -160,7 +160,7 @@ export default defineComponent({
         ) ou par voie postale auprès de l’Agence Nationale des Titres Sécurisés - 18 rue Irénée Carré - BP 70474 - 08101 Charleville-Mézières.
       </p>
       <p>
-        S’agissant des informations issues de l’UTAC-OTC relatives au contrôle technique et au kilométrage des véhicules consultables sur Histovec, les droits d’accès et de rectification des données s’exercent en justifiant son identité, par voie électronique (
+        S’agissant des informations issues de l’UTAC-OTC relatives au contrôle technique et au kilométrage des véhicules consultables sur HistoVec, les droits d’accès et de rectification des données s’exercent en justifiant son identité, par voie électronique (
         <a
           class="fr-link"
           :href="readOrUpdateUtacPersonalDataEmail"

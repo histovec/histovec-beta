@@ -7,7 +7,6 @@ const propsForButtonOnly = ['disabled', 'label', 'secondary', 'tertiary', 'icon'
 export default defineComponent({
   name: 'HistoVecButtonLink',
 
-
   inheritAttrs: false,
 
   props: {

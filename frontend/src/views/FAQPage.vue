@@ -1,23 +1,25 @@
 <script>
 import { defineComponent } from 'vue'
-import { RouterLink } from 'vue-router'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
 import {
-  FAQ_CATEGORIES,
+  FAQ_THEMES,
+  FAQ_THEMES_OPTIONS,
 } from '@/constants/faq.js'
 
 import FaqSvg from '@/assets/img/faq.svg'
 import aideSivImg from '@/assets/img/aide_siv.jpg'
 import aideFniImg from '@/assets/img/aide_fni.jpg'
 
+import { mailTo } from '@/utils/email.js'
+import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
 
 
 export default defineComponent({
   name: 'FAQPage',
 
-  components: { FaqSvg, HistoVecButtonLink, RouterLink },
+  components: { FaqSvg, HistoVecButtonLink },
 
   data () {
     return {
@@ -39,13 +41,24 @@ export default defineComponent({
         },
       ],
 
-      categoriesOptions: FAQ_CATEGORIES,
+      selectedTheme: undefined,
+
+      // email
+      CAS_TOULOUSE_EMAIL,
+
+      // constants
+      FAQ_THEMES,
+      FAQ_THEMES_OPTIONS,
 
       images: {
         aideSivImg,
         aideFniImg,
       },
     }
+  },
+
+  created () {
+    this.aboutUnpaidPvEmail = mailTo(ABOUT_UNPAID_PV_EMAIL)
   },
 })
 </script>
@@ -87,17 +100,15 @@ export default defineComponent({
     <div class="fr-col-12">
       <h2>Liens utiles</h2>
     </div>
-    <div
-      class="fr-grid-row  fr-grid-row--gutters"
-      style="margin-bottom: 2rem"
-    >
-      <div class="fr-col-offset-1  fr-col-5">
+
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  fr-col-md-6  fr-col-lg-5  fr-col-xl-5">
         <DsfrTiles
           :tiles="tilesVendeursLinks"
           :horizontal="true"
         />
       </div>
-      <div class="fr-col-5">
+      <div class="fr-col-12  fr-col-md-6  fr-col-lg-5  fr-col-xl-5">
         <DsfrTiles
           :tiles="tilesAcheteursLinks"
           :horizontal="true"
@@ -106,105 +117,120 @@ export default defineComponent({
     </div>
   </div>
 
-  <div
-    class="fr-grid-row  fr-grid-row--gutters"
-    style="margin-bottom: 2rem"
-  >
-    <div class="fr-col-12">
-      <h2>Foire aux Questions</h2>
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+    <div class="fr-col-12  fr-pb-0">
+      <h2>
+        Foire aux Questions
+      </h2>
     </div>
 
-    <div class="fr-col-12">
-      Veuillez choisir un thême :
+    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pt-0">
+      <DsfrSelect
+        v-model="selectedTheme"
+        required
+        label="Thème"
+        :options="FAQ_THEMES_OPTIONS"
+        description="Sélectionnez un thème parmi les suivants."
+      />
+    </div>
 
-      <div class="fr-col-8">
-        <DsfrSelect
-          v-model="selectedSubject"
-          required
-          label="Thême"
-          :options="categoriesOptions()"
-          description="Sélectionnez un thême parmi les suivants."
-        />
-      </div>
-
+    <div
+      v-if="selectedTheme === FAQ_THEMES.WHY_HISTOVEC"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+    >
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="Comment utiliser HistoVec ?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <h6>Vous êtes vendeur :</h6>
-            <p>
-              Sur la page vendeur, remplissez le formulaire pour vous identifier avec les informations demandées, et validez.
-              Note : s’il s’agit d’un véhicule d’entreprise, cliquez sur l’onglet “Entreprise”.
-            </p>
-            <p>
-              Le rapport du véhicule est affiché. Vous pouvez consulter les différentes sections sur le menu de gauche.
-              Vous pouvez transmettre le lien vers le rapport à un tiers en cliquant sur le menu “Transmettre le rapport”.
-            </p>
-
-            <h6>Vous êtes acheteur :</h6>
-            <p>Demandez au vendeur de vous transmettre le lien vers le rapport en le générant sur le site HistoVec.</p>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Comment retrouver mon rapport HistoVec ultérieurement ?"
+            title="Je vends mon véhicule d’occasion"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
             <p>
-              Le rapport généré est consultable le mois en cours et le mois suivant sa génération, grâce au lien qui a été fourni par le vendeur.
+              HistoVec vous permet de valoriser votre offre en fournissant gratuitement un rapport d’historique officiel qui rassurera vos acheteurs potentiels.
+              Le certificat de situation administrative détaillée y est également téléchargeable.
             </p>
           </DsfrAccordion>
         </li>
         <li>
           <DsfrAccordion
-            title="A qui s'adresse HistoVec ?"
+            title="J’achète un véhicule d’occasion"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <h6>Je vends mon véhicule d’occasion :</h6>
-            <p>
-              HistoVec vous permet de valoriser votre offre en fournissant gratuitement un rapport d’historique officiel qui rassurera vos acheteurs potentiels. Le certificat de situation administrative détaillée y est également téléchargeable.
-            </p>
-
-            <h6>J’achète un véhicule d’occasion :</h6>
             <p>
               HistoVec vous permet de vous informer, de faire un choix éclairé sur les véhicules sélectionnés et d’éviter les mauvaises surprises.
             </p>
-
-            <h6>Je suis un professionnel négociant automobile :</h6>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Je suis un professionnel négociant automobile"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
             <p>
               Fiabilisez et valorisez votre stock de véhicules d’occasion en permettant à votre entreprise et vos clients de vérifier l’historique des véhicules acquis.
             </p>
-
-            <h6>Je loue ma voiture à des particuliers :</h6>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Je loue ma voiture à des particuliers"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
             <p>
               Je peux rassurer mes clients potentiels en fournissant gratuitement un historique officiel du véhicule.
             </p>
           </DsfrAccordion>
         </li>
+      </DsfrAccordionsGroup>
+    </div>
+
+    <div
+      v-if="selectedTheme === FAQ_THEMES.HOW_HISTOVEC"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+    >
+      <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="D'où proviennent les informations d'HistoVec ?"
+            title="Qui peut consulter HistoVec ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <p>
-              Les informations du rapport sont issues du système d’immatriculation des véhicules (SIV) du ministère de l’Intérieur.
-            </p>
+            <h6>Vous êtes vendeur :</h6>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                Sur la page Propriétaire, remplissez le formulaire avec les informations figurant sur la carte grise en cours de validité.
+                Si le véhicule appartient à une entreprise, une collectivité, ou une association, cliquez sur « Personne morale » et renseignez, le cas échéant, le numéro de SIREN.
+              </li>
+              <li>
+                Le rapport du véhicule est affiché. Vous pouvez consulter les différentes sections sur le menu de gauche.
+              </li>
+              <li>
+                Vous pouvez transmettre le lien vers le rapport à un tiers en cliquant sur le menu “Transmettre le rapport”.
+              </li>
+            </ul>
+
+            <h6>Vous êtes acheteur :</h6>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                Demandez au vendeur de vous transmettre le lien vers le rapport en le générant sur le site HistoVec.
+              </li>
+            </ul>
           </DsfrAccordion>
         </li>
         <li>
           <DsfrAccordion
-            title="Comment consulter le rapport d'un véhicule qui ne m'appartient pas ?"
+            title="Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
             <p>
-              Seul le titulaire du certificat d'immatriculation peut générer le rapport HistoVec de son véhicule, qu'il choisit de transmettre à des tiers.
+              Seul le titulaire du certificat d'immatriculation en cours de validité peut générer le rapport HistoVec de son véhicule, qu'il choisit de transmettre à des tiers.
+            </p>
+            <p>
+              Si vous n’êtes pas le titulaire de la carte grise en cours de validité, vous ne pouvez pas consulter directement les données HistoVec pour ce véhicule. Il vous est possible de demander au propriétaire actuel la transmission par mél du rapport HistoVec en sélectionnant le profil acheteur sur la page d'accueil du site HistoVec.
             </p>
             <p>
               Les locataires longue durée (LDD) doivent être mandatés par le propriétaire du véhicule.
@@ -212,30 +238,377 @@ export default defineComponent({
           </DsfrAccordion>
         </li>
         <li>
+          <!-- @todo @doublonFaq3 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="A qui s'adresse HistoVec ?"
+            title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <h6>Officiel :</h6>
             <p>
-              HistoVec est un site produit par le ministère de l’Intérieur et fournit les données du système d’immatriculation des véhicules (SIV).
+              Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas. Les cas suivants peuvent être rencontrés :
             </p>
-
-            <h6>Confidentiel :</h6>
+            <ol class="fr-ml-4w  fr-pl-0">
+              <li>
+                Le lien a été probablement mal copié ou transmis - HistoVec vous signale alors une erreur:
+                <ul class="fr-ml-4w  fr-pl-0">
+                  <li>
+                    Le lien transmis est incomplet
+                  </li>
+                  <li>
+                    Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide
+                  </li>
+                </ul>
+                Pensez à l'alternative de l'envoi par QR-Code si les mails n'ont pas permis d'aboutir.
+              </li>
+              <li>
+                Le rapport n'existe pas, ou n'est plus disponible pour des raisons de sécurité - HistoVec vous signale alors une erreur.
+              </li>
+              <li>
+                Le rapport ne semble pas ou plus disponible.
+                <br />
+                Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur.
+                <br />
+                Si le problème persiste avec votre vendeur : contactez-nous.
+              </li>
+            </ol>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <!-- @todo @doublonFaq4 Voir avec la DSR lequel on souhaite garder -->
+          <DsfrAccordion
+            title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes :</p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>Propriétaire: il s'agit du propriétaire du véhicule et qui peut donc le vendre.</li>
+              <li>Titulaire: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</li>
+            </ul>
             <p>
-              Seul le titulaire du certificat d'immatriculation peut générer le rapport HistoVec de son véhicule, qu'il choisit de transmettre à des tiers.
-            </p>
-
-            <h6>Gratuit :</h6>
-            <p>
-              HistoVec est entièrement gratuit pour les vendeurs et les acheteurs. Il s’agit d’un service public pour contribuer à la sécurisation des transactions de véhicules d’occasion.
+              Le propriétaire du véhicule et titulaire du certificat d'immatriculation sont le plus souvent la même personne, mais peuvent être différents. C'est pourquoi, HistoVec distingue les opérations qui correspondent à la vente du véhicule ("cession/vente par un particulier" et "achat/reprise par un professionnel ") du changement de titulaire.
             </p>
           </DsfrAccordion>
         </li>
         <li>
           <DsfrAccordion
-            title="Est-ce que les informations sont complètes ?"
+            title="Que faire si le message « accès non autorisé » s’affiche lors de ma recherche ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Il convient de renouveler votre recherche sur un autre navigateur ainsi qu'un autre appareil, de préférence un ordinateur.
+              <br />
+              Pour un usage optimal, nous conseillons l'utilisation de la dernière version de Firefox.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Quelles sont les informations à indiquer pour effectuer ma recherche ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Il convient d’indiquer le nom de naissance du titulaire du certificat d’immatriculation en cours de validité et son ou ses prénoms. Assurez-vous de reprendre bien l’orthographe telle qu’elle figure sur la carte grise et vérifiez le nombre de prénoms.
+            </p>
+            <p>
+              Pour les véhicules avec un ancien numéro d'immatriculation, reprenez les nom et prénom exactement comme ils sont indiqués sur la carte grise, sans préciser "M et Mme" par exemple.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <!-- @todo @doublonFaq1 Voir avec la DSR lequel on souhaite garder -->
+          <DsfrAccordion
+            title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Pour les locataires de véhicules en LDD ou LOA, dûment mandatés par le propriétaire du véhicule, il convient de renseigner les informations du propriétaire.
+            </p>
+            <p>
+              Par exemple, pour une société de location, cliquez sur l'onglet Personne morale et remplissez le formulaire de recherche en indiquant, le cas échéant, le n° SIREN de la société qui vous loue le véhicule.
+            </p>
+            <p>
+              Il convient de procéder de même si le véhicule est en leasing, à partir des informations correspondant à l’établissement financier auprès duquel vous avez souscrit le contrat de location.
+            </p>
+            <p>
+              Nous vous rappelons que vous ne pouvez vendre un véhicule en tant que locataire. Si vous souhaitez acquérir le véhicule, il convient de contacter l'organisme propriétaire afin qu'il puisse vous assister dans vos démarches. Pour plus d'informations, nous vous invitons à consulter le site Service Public en suivant
+              <a
+                class="fr-link"
+                href="https://www.service-public.fr/particuliers/vosdroits/F2437"
+                rel="noopener noreferrer"
+                target="_blank"
+              >ce lien</a>.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Comment consulter HistoVec si je n’ai pas la carte grise en cours de validité ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              La consultation d'HistoVec n'est possible que par le titulaire de ce certificat d'immatriculation, c'est pourquoi il est notamment nécessaire d'indiquer le n° de formule figurant sur ce document.
+            </p>
+            <p>
+              Si vous ne disposez plus de la carte grise en cours de validité, nous vous invitons à contacter l'Agence nationale des titres sécurisés qui délivre ce document et les duplicatas :
+            </p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                <a
+                  class="fr-link"
+                  href="https://ants.gouv.fr/monespace/s-inscrire"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >https://ants.gouv.fr/monespace/s-inscrire</a>
+              </li>
+              <li>
+                ou par téléphone au 3400.
+              </li>
+            </ul>
+          </DsfrAccordion>
+        </li>
+      </DsfrAccordionsGroup>
+    </div>
+
+    <div
+      v-if="selectedTheme === FAQ_THEMES.VEHICLE_NOT_FOUND"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+    >
+      <DsfrAccordionsGroup>
+        <li>
+          <DsfrAccordion
+            title="Que faire si je ne parviens pas à lancer la recherche de mon véhicule ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Nous vous invitons à essayer sur un autre navigateur ainsi qu'un autre appareil. Pour un usage optimal, nous conseillons l'utilisation de Firefox (version supérieure à v60) ou de Chrome.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Que faire si la recherche de mon véhicule n’aboutit pas ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Vérifiez les informations que vous avez saisies :
+            </p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                Les nom et prénom du titulaire actuel de la carte grise (nom de naissance, orthographe, nombre de prénoms…) ;
+              </li>
+              <li>
+                Si le véhicule appartient à une entreprise, assurez-vous de renseigner le formulaire sous l’onglet « Personne morale » et, s’il s’agit d’une entreprise, d’indiquer le n° SIREN ou SIRET correspondant à votre société ;
+              </li>
+              <li>
+                Le n° de formule doit être celui de la carte grise en cours de validité :
+                <ul class="fr-ml-4w  fr-pl-0">
+                  <li>
+                    Si la carte grise a précédemment été déclarée perdue ou volée, un duplicata vous a été adressé. Il convient d'indiquer sur HistoVec le n° de formule de ce dernier certificat d'immatriculation.
+                  </li>
+                  <li>
+                    Si le véhicule n’est plus immatriculé à votre nom, vous ne pouvez plus avoir accès à ces informations sur HistoVec.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Si votre véhicule est immatriculé sous un ancien n° d’immatriculation, assurez-vous d'indiquer la date de la carte grise, et non la date de 1ère immatriculation du véhicule.
+              </li>
+            </ul>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Je viens de recevoir mon certificat d’immatriculation mais je ne trouve pas mon véhicule sur HistoVec"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              La mise à jour des informations sur HistoVec prend quelques jours, c’est pourquoi votre véhicule peut ne pas figurer immédiatement sur HistoVec.
+            </p>
+            <p>
+              Nous vous invitons à consulter de nouveau le site après quelques jours.
+            </p>
+            <p>
+              Dans l’attente, si vous avez besoin de vendre votre véhicule, vous pouvez également vous procurer le certificat de situation administrative sur le
+              <a
+                class="fr-link"
+                href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+                rel="noopener noreferrer"
+                target="_blank"
+              >site de l'ANTS</a>.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <!-- @todo @doublonFaq1 Voir avec la DSR lequel on souhaite garder -->
+          <DsfrAccordion
+            title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Pour les locataires de véhicules en LDD ou LOA, dûment mandatés par le propriétaire du véhicule, il convient de renseigner les informations du propriétaire.
+            </p>
+            <p>
+              Par exemple, pour une société de location, cliquez sur l'onglet Personne morale et remplissez le formulaire de recherche en indiquant, le cas échéant, le n° SIREN de la société qui vous loue le véhicule.
+            </p>
+            <p>
+              Il convient de procéder de même si le véhicule est en leasing, à partir des informations correspondant à l’établissement financier auprès duquel vous avez souscrit le contrat de location.
+            </p>
+            <p>
+              Nous vous rappelons que vous ne pouvez vendre un véhicule en tant que locataire. Si vous souhaitez acquérir le véhicule, il convient de contacter l'organisme propriétaire afin qu'il puisse vous assister dans vos démarches. Pour plus d'informations, nous vous invitons à consulter le site Service Public en suivant
+              <a
+                class="fr-link"
+                href="https://www.service-public.fr/particuliers/vosdroits/F2437"
+                rel="noopener noreferrer"
+                target="_blank"
+              >ce lien</a>.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Tous les véhicules figurent-ils sur HistoVec ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Les véhicules avec une immatriculation provisoire ne sont pas consultables sur HistoVec.
+            </p>
+            <p>
+              Si vous souhaitez disposer du certificat de situation administrative, nous vous invitons à le télécharger auprès de l’ANTS (Agence Nationale des Titres Sécurisés) en suivant
+              <a
+                class="fr-link"
+                href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+                rel="noopener noreferrer"
+                target="_blank"
+              >ce lien</a>.
+            </p>
+            <p>
+              <!-- @todo @doublonFaq2 Voir avec la DSR lequel on souhaite garder -->
+              Pour toute information, vous pouvez contacter l'ANTS par téléphone au 3400.
+            </p>
+            <p>
+              Pour des raisons de sécurité, les véhicules diplomatiques et les véhicules des administrations de l’Etat ne figurent pas non plus dans HistoVec.
+            </p>
+            <p>
+              Pour les véhicules diplomatiques, vous pouvez prendre l'attache du service des immatriculations des véhicules diplomatiques à la Préfecture de Police de Paris pour obtenir des informations plus détaillées sur votre véhicule.
+            </p>
+            <p>
+              Pour les véhicules des administrations civiles de l’Etat, nous vous invitons à télécharger le certificat de situation administrative détaillé auprès de l’ANTS (Agence Nationale des Titres Sécurisés) en suivant
+              <a
+                class="fr-link"
+                href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+                rel="noopener noreferrer"
+                target="_blank"
+              >ce lien</a>.
+            </p>
+            <p>
+              <!-- @todo @doublonFaq2 Voir avec la DSR lequel on souhaite garder -->
+              Pour toute information, vous pouvez contacter l'ANTS par téléphone au 3400.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <!-- @todo @doublonFaq3 Voir avec la DSR lequel on souhaite garder -->
+          <DsfrAccordion
+            title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas. Les cas suivants peuvent être rencontrés :
+            </p>
+            <ol class="fr-ml-4w  fr-pl-0">
+              <li>
+                Le lien a été probablement mal copié ou transmis - HistoVec vous signale alors une erreur:
+                <ul class="fr-ml-4w  fr-pl-0">
+                  <li>
+                    Le lien transmis est incomplet
+                  </li>
+                  <li>
+                    Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide
+                  </li>
+                </ul>
+                Pensez à l'alternative de l'envoi par QR-Code si les mails n'ont pas permis d'aboutir.
+              </li>
+              <li>
+                Le rapport n'existe pas, ou n'est plus disponible pour des raisons de sécurité - HistoVec vous signale alors une erreur.
+              </li>
+              <li>
+                Le rapport ne semble pas ou plus disponible.
+                <br />
+                Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur.
+                <br />
+                Si le problème persiste avec votre vendeur : contactez-nous.
+              </li>
+            </ol>
+          </DsfrAccordion>
+        </li>
+      </DsfrAccordionsGroup>
+    </div>
+
+    <div
+      v-if="selectedTheme === FAQ_THEMES.AVAILABLE_INFORMATIONS"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+    >
+      <DsfrAccordionsGroup>
+        <li>
+          <DsfrAccordion
+            title="Que signifient les termes des opérations figurant dans l’historique ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                Première immatriculation d'un véhicule neuf, opération d'immatriculation d'un véhicule qui n'a jamais été immatriculé.
+              </li>
+              <li>
+                Première immatriculation à l'étranger, le véhicule a été immatriculé en tant que véhicule neuf à l'étranger.
+              </li>
+              <li>
+                Première immatriculation d'un véhicule importé, véhicule déjà immatriculé à l'étranger qui se fait immatriculer en France pour la première fois.
+              </li>
+              <li>
+                Première immatriculation (source incertaine), opération fournie à titre indicatif lorsque aucune opération telle que « Première immatriculation d'un véhicule neuf » ou « Première immatriculation à l'étranger » n'est associée à la date présente dans le fichier. Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militaires qui disposaient d'une immatriculation spéciale) ou à l'absence de la donnée dans les anciens fichiers d'immatriculation (p. ex. certains véhicules anciens).
+              </li>
+              <li>
+                Conversion au nouveau format d'immatriculation, changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD.
+              </li>
+              <li>
+                Cession (vente du véhicule), véhicule vendu par un particulier ou par un professionnel.
+              </li>
+              <li>
+                Changement de titulaire, opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.
+              </li>
+              <li>
+                Achat ou reprise par un professionnel, opération correspondant au moment où un professionnel devient acquéreur du véhicule.
+              </li>
+              <li>
+                Opposition au transfert de la carte grise, état bloquant tout changement de titulaire.
+              </li>
+              <li>
+                Procédure de réparation contrôlée, procédure pendant laquelle les réparations sont contrôlées par un expert en automobile.
+              </li>
+              <li>
+                Premier rapport d'expert, rapport de l'expert en automobile qui détermine la dangerosité du véhicule, établit la liste des réparations et en évalue le montant.
+              </li>
+              <li>
+                Second rapport d'expert, rapport de l'expert en automobile qui indique notamment que le véhicule est apte à circuler dans des conditions normales de sécurité.
+              </li>
+            </ul>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Quels sinistres figurent sur HistoVec ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -245,165 +618,17 @@ export default defineComponent({
           </DsfrAccordion>
         </li>
         <li>
+          <!-- @todo @doublonFaq4 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Comment corriger une information manquante ou inexacte sur mes données personnelles ?"
+            title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <p>
-              Pour ce faire,
-              <router-link
-                class="fr-link"
-                to="/contact"
-              >
-                contactez-nous
-              </router-link>.
-            </p>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Comment corriger une information manquante ou inexacte sur les données de mon véhicule ?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <p>
-              Pour ce faire,
-              <router-link
-                class="fr-link"
-                to="/contact"
-              >
-                contactez-nous
-              </router-link>.
-            </p>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Comment retrouver mon véhicule ?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <p>
-              Vérifiez que <b>vous avez saisi très précisément dans les champs du formulaire</b>, les <b>informations telles qu'elles figurent sur la carte grise</b> (nom et prénom(s), immatriculation, numéro de formule ou date du certificat d'immatriculation).
-            </p>
-            <p>
-              <VIcon
-                name="ri-error-warning-fill"
-              />
-              <b>Vos données sont susceptibles d'avoir fait l'objet d'erreurs lors de la saisie de votre dossier</b>
-            </p>
-            <p>
-              Pour les anciens numéros d'immatriculation, veillez à bien saisir vos nom et prénom(s) dans le même ordre que celui qui apparaît sur la carte grise.
-            </p>
-            <p>
-              Immatriculation au format SIV (AA-123-AA): où trouver les informations sur votre carte grise.
-            </p>
-
-            <DsfrPicture
-              :src="images.aideSivImg"
-              alt="Description de l'emplacement des données sur le certificat d'immatriculation à partir de 2009 (format SIV)"
-              title="Description de l'emplacement des données sur le certificat d'immatriculation à partir de 2009 (format SIV)"
-            />
-
-            <p>
-              Immatriculation au format FNI (123 ABC 45): où trouver les informations sur votre carte grise (plusieurs modèles).
-            </p>
-
-            <DsfrPicture
-              :src="images.aideFniImg"
-              alt="Description de l'emplacement des données sur le certificat d'immatriculation avant 2009 (format FNI)"
-              title="Description de l'emplacement des données sur le certificat d'immatriculation avant 2009 (format FNI)"
-            />
-
-            <p>
-              Pour les locataires longue durée (LDD), dûment mandatés par le propriétaire du véhicule, il convient de renseigner les informations du propriétaire. Par exemple, pour une société de location, cliquez sur l'onglet Entreprise et remplissez le formulaire de recherche.
-            </p>
-
-            <p>
-              Si votre véhicule est toujours introuvable,
-              <router-link
-                class="fr-link"
-                to="/contact"
-              >
-                contactez-nous
-              </router-link>.
-            </p>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Où se trouve le numéro de formule ?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <p>
-              Le numéro de formule est situé en bas à gauche de la carte grise. (p. ex. : 2015XX012345)
-            </p>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Que signifient les termes des opérations historiques ?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <p>
-              - <b>Première immatriculation d'un véhicule neuf</b>, opération d'immatriculation d'un véhicule qui n'a jamais été immatriculé.
-            </p>
-            <p>
-              - <b>Première immatriculation à l'étranger</b>, le véhicule a été immatriculé en tant que véhicule neuf à l'étranger.
-            </p>
-            <p>
-              - <b>Première immatriculation d'un véhicule importé</b>, véhicule déjà immatriculé à l'étranger qui se fait immatriculer en France pour la première fois.
-            </p>
-            <p>
-              - <b>Première immatriculation (source incertaine)</b>, opération fournie à titre indicatif lorsque aucune opération telle que « Première immatriculation d'un véhicule neuf » ou « Première immatriculation à l'étranger » n'est associée à la date présente dans le fichier. Cela peut être dû à l'origine du véhicule (p. ex. anciens véhicules militaires qui disposaient d'une immatriculation spéciale) ou à l'absence de la donnée dans les anciens fichiers d'immatriculation (p. ex. certains véhicules anciens).
-            </p>
-            <p>
-              - <b>Conversion au nouveau format d'immatriculation</b>, changement d'immatriculation d'un véhicule passant du format 1234 ABC 56 au format AB-123-CD.
-            </p>
-            <p>
-              - <b>Cession (vente du véhicule)</b>, véhicule vendu par un particulier ou par un professionnel.
-            </p>
-            <p>
-              - <b>Changement de titulaire</b>, opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.
-            </p>
-            <p>
-              - <b>Achat ou reprise par un professionnel</b>, opération correspondant au moment où un professionnel devient acquéreur du véhicule.
-            </p>
-            <p>
-              - <b>Fin d'usage démonstration pour vente du véhicule</b>, véhicule de garage ayant servi de véhicule de démonstration.
-            </p>
-            <p>
-              - <b>Opposition au transfert de la carte grise</b>, état bloquant tout changement de titulaire.
-            </p>
-            <p>
-              - <b>Procédure de réparation contrôlée</b>, procédure pendant laquelle les réparations sont contrôlées par un expert en automobile.
-            </p>
-            <p>
-              - <b>Premier rapport d'expert</b>, rapport de l'expert en automobile qui détermine la dangerosité du véhicule, établit la liste des réparations et en évalue le montant.
-            </p>
-            <p>
-              - <b>Second rapport d'expert</b>, rapport de l'expert en automobile qui indique notamment que le véhicule est apte à circuler dans des conditions normales de sécurité.
-            </p>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Quelle différence y-a-t-il entre la notion de propriétaire et titulaire ?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <p>
-              Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes :
-            </p>
-            <p>
-              <b>Propriétaire</b>: il s'agit du propriétaire du bien qu'est le véhicule et qui peut donc le vendre.
-            </p>
-            <p>
-              <b>Titulaire</b>: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.
-            </p>
+            <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes :</p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>Propriétaire: il s'agit du propriétaire du véhicule et qui peut donc le vendre.</li>
+              <li>Titulaire: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</li>
+            </ul>
             <p>
               Le propriétaire du véhicule et titulaire du certificat d'immatriculation sont le plus souvent la même personne, mais peuvent être différents. C'est pourquoi, HistoVec distingue les opérations qui correspondent à la vente du véhicule ("cession/vente par un particulier" et "achat/reprise par un professionnel ") du changement de titulaire.
             </p>
@@ -411,87 +636,229 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Quelle est notre politique de protection des données personnelles ?"
+            title="Comment puis-récupérer le rapport d’un expert en automobile ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
             <p>
-              Vous pouvez les consulter dans les mentions légales.
+              HistoVec ne peut afficher les détails des rapports (p. ex. éléments à réparer), car ceux-ci ne sont pas transmis en tant que tels dans le système d'immatriculation des véhicules (SIV). Dès lors, si vous achetez le véhicule, n'hésitez pas à demander au vendeur s'il est en possession du rapport d'expertise.
             </p>
           </DsfrAccordion>
         </li>
         <li>
           <DsfrAccordion
-            title="Que dois-je faire pour vendre mon véhicule ?"
+            title="Pourquoi HistoVec affiche-t-il une opposition au transfert du certificat d’immatriculation ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
             <p>
-              Vendre un véhicule vous impose de remettre certains documents au nouveau propriétaire et d'avertir l'administration via un téléservice. Afin de connaitre les conditions préalables à la vente ainsi que les démarches à entreprendre, nous vous invitons à consulter le site du Service Public
+              Si HistoVec affiche une opposition au transfert du certificat d’immatriculation, cela peut être dû à une amende impayée.
             </p>
             <p>
-              Ce que vous pouvez faire grâce à HistoVec:
-            </p>
-            <ul style="margin-left: 2rem; padding-left: 0">
-              <li>
-                Transmettre l'historique administratif du véhicule à l'acheteur (en cliquant sur Transmettre le rapport) ;
-              </li>
-              <li>
-                Télécharger le certificat de situation administrative détaillé (CSA ; téléchargeable en cliquant sur Transmettre le rapport).
-              </li>
-            </ul>
-          </DsfrAccordion>
-        </li>
-        <li>
-          <DsfrAccordion
-            title="Que faire si lien du rapport HistoVec que l'on m'a envoyé ne fonctionne pas?"
-            :expanded-id="expandedId"
-            @expand="expandedId = $event"
-          >
-            <p>Le titulaire du véhicule vous a transmis un lien, celui-ci ne fonctionne pas. Les cas suivants peuvent être rencontrés :</p>
-
-            <p>1. Le lien a été probablement mal copié ou transmis - HistoVec vous signale alors une erreur:</p>
-
-            <ul style="margin-left: 2rem; padding-left: 0">
-              <li>
-                Le lien transmis est incomplet
-              </li>
-              <li>
-                Le rapport a été trouvé, mais la clé pour l'ouvrir est invalide
-              </li>
-            </ul>
-            <p>Pensez à l'alternative de l'envoi par QR-Code si les mails n'ont pas permis d'aboutir.</p>
-            <p>
-              2. Le rapport n'existe pas, ou n'est plus disponible pour des raisons de sécurité - HistoVec vous signale alors une erreur:
-            </p>
-            <ul style="margin-left: 2rem; padding-left: 0">
-              <li>
-                Le rapport ne semble pas ou plus disponible
-              </li>
-            </ul>
-            <b>Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur</b>
-            <p>
-              Si jamais le problème persiste avec votre vendeur :
-              <router-link
+              Pour les questions relatives au paiement des amendes, nous vous invitons à contacter le Centre Amendes Service au 05 40 13 08 80 ou par mail à
+              <a
                 class="fr-link"
-                to="/contact"
+                :href="aboutUnpaidPvEmail"
               >
-                contactez-nous
-              </router-link>.
+                {{ CAS_TOULOUSE_EMAIL }}
+              </a>
+              , ou
+              <a
+                class="fr-link"
+                href="http://www.antai.gouv.fr"
+                rel="noopener noreferrer"
+                target="_blank"
+              >l'ANTAI</a> :
+            </p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                Tél : 0 806 60 96 25 (infractions concernant le Procès-verbal électronique)
+              </li>
+              <li>
+                Tél : 0811 10 10 10 (paiement)
+              </li>
+              <li>
+                Tél : 0 806 60 66 06
+              </li>
+            </ul>
+            <p>
+              Informations complémentaires : Un centre d'appel téléphonique est mis à disposition des usagers pour toutes les questions relatives aux avis de contravention. Horaires d'ouverture : Lundi au Vendredi : 8h30-18h30 ; Samedi : 8h30-12h30. Pour les infractions concernant les radars automatiques, contactez le 0806 60 66 06 (numéro non surtaxé) ; pour le procès-verbal électronique (PVe), le 0806 60 96 25 (numéro non surtaxé) ; pour les amendes forfaitaires délictuelles, le 0806 60 53 81 (numéro non surtaxé).
             </p>
           </DsfrAccordion>
         </li>
         <li>
           <DsfrAccordion
-            title="Comment puis-je récupérer le rapport d'un expert en automobile ?"
+            title="Que faire si mon véhicule est gagé ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
             <p>
-              Lorsqu'un véhicule a fait l'objet d'une procédure à réparations contrôlées, HistoVec affiche le numéro d'agrément de l'expert en automobile ayant enclenché la procédure et rédigé un premier ou un second rapport d'expertise.
+              Si votre véhicule est gagé, nous vous invitons à vous rapprocher du créancier qui peut seul lever le gage.
             </p>
             <p>
-              En revanche, HistoVec ne peut afficher les détails des rapports (p. ex. éléments à réparer), car ceux-ci ne sont pas transmis en tant que tels dans le système d'immatriculation des véhicules (SIV). Dès lors, si vous achetez le véhicule, n'hésitez pas à demander au vendeur s'il est en possession du rapport d'expertise. Autrement, vous pouvez consulter les coordonnées de l'expert concerné sur la liste nationale mise à jour par le ministère chargé des transports. Cette liste étant régulièrement mise à jour, il est toutefois possible que vous ne trouviez plus l'expert qui a rédigé le rapport, notamment si celui-ci a été radié (sanction, cessation d'activité, retraite, etc.).
+              Si vous ne connaissez pas l’identité du créancier, il convient de télécharger le certificat de situation administrative sur le site de l'Agence nationale des titres sécurisés (https://ants.gouv.fr) en suivant
+              <a
+                class="fr-link"
+                href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
+                rel="noopener noreferrer"
+                target="_blank"
+              >ce lien</a>.
+            </p>
+            <p>
+              Pour toute information, vous pouvez contacter l'ANTS par téléphone au 3400.
+            </p>
+            <p>
+              Si le créancier a demandé récemment la levée du gage, il convient d’attendre quelques jours la mise à jours des informations dans HistoVec.
+            </p>
+            <p>
+              Dans l’attente, nous vous invitons à télécharger le certificat de situation administrative auprès de l’ANTS en suivant ce lien précité.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Que faire en cas de déclaration valant saisie ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Pour obtenir des précisions sur une déclaration valant saisie, nous vous invitions à contacter l'ANTS :
+            </p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                <a
+                  class="fr-link"
+                  href="https://immatriculation.ants.gouv.fr/demarches-en-ligne"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >https://immatriculation.ants.gouv.fr/demarches-en-ligne</a>
+              </li>
+              <li>ou par téléphone au 3400.</li>
+            </ul>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Que faire si je reçois des amendes concernant un véhicule dont je ne suis plus propriétaire ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Pour ne plus recevoir les amendes d'un véhicule dont vous n'êtes plus propriétaire, il convient de déclarer la cession du véhicule auprès de l'Agence nationale des titres sécurisés :
+            </p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                via leur téléservice en suivant la procédure indiquée sur
+                <a
+                  class="fr-link"
+                  href="https://immatriculation.ants.gouv.fr/demarches-en-ligne"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >cette page</a>
+              </li>
+              <li>ou par téléphone au 3400.</li>
+            </ul>
+          </DsfrAccordion>
+        </li>
+      </DsfrAccordionsGroup>
+    </div>
+
+    <div
+      v-if="selectedTheme === FAQ_THEMES.ERROR_IN_DISPLAYED_INFORMATIONS"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+    >
+      <DsfrAccordionsGroup>
+        <li>
+          <DsfrAccordion
+            title="Comment corriger une information manquante ou inexacte sur les données de mon véhicule ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              Pour signaler une erreur sur votre certificat d’immatriculation ou sur le dossier administratif de votre véhicule, nous vous invitons à contacter
+              <a
+                class="fr-link"
+                href="https://ants.gouv.fr"
+                rel="noopener noreferrer"
+                target="_blank"
+              >l'Agence nationale des titres sécurisés (https://ants.gouv.fr)</a> :
+            </p>
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                via leur téléservice en suivant la procédure indiquée sur
+                <a
+                  class="fr-link"
+                  href="https://immatriculation.ants.gouv.fr/demarches-en-ligne"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >cette page</a>
+              </li>
+              <li>ou par téléphone au 3400.</li>
+            </ul>
+          </DsfrAccordion>
+        </li>
+      </DsfrAccordionsGroup>
+    </div>
+
+    <div
+      v-if="selectedTheme === FAQ_THEMES.KILOMETERS_AND_TECHNICAL_CONTROLS"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+    >
+      <DsfrAccordionsGroup>
+        <li>
+          <DsfrAccordion
+            title="Que faire si le kilométrage ou le contrôle technique de mon véhicule ne figurent pas sur HistoVec ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              HistoVec met à votre disposition certaines données enregistrées lors des différents contrôles techniques réglementaires, mais ne peut les modifier.
+            </p>
+            <p>
+              En cas d’absence de contrôle technique ou de relevé de kilométrage, nous vous invitons à consulter <a
+                class="fr-link"
+                href="https://www.utac-otc.com/infos-pratiques/acc%C3%A8s-par-besoin"
+                rel="noopener noreferrer"
+                target="_blank"
+              >le site de l'UTAC</a>.
+            </p>
+          </DsfrAccordion>
+        </li>
+        <li>
+          <DsfrAccordion
+            title="Que faire si le kilométrage de mon véhicule présente une incohérence ?"
+            :expanded-id="expandedId"
+            @expand="expandedId = $event"
+          >
+            <p>
+              HistoVec met à votre disposition certaines données enregistrées lors des différents contrôles techniques réglementaires, mais ne peut les modifier.
+            </p>
+            <p>
+              HistoVec affiche par conséquent les résultats de l’ensemble des contrôles techniques et des kilométrages relevés lors de ces contrôles.
+            </p>
+            <p>
+              Si les données relatives aux contrôles techniques ou aux kilométrages de ce véhicule vous semblent incorrectes, nous vous invitons à vous adresser :
+            </p>
+
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                si vous ne possédiez pas alors le véhicule, à la personne qui en était propriétaire lors de la réalisation de ces contrôles ;
+              </li>
+              <li>
+                si vous étiez déjà propriétaire du véhicule à la date de ces contrôles, au centre de contrôle technique qui les a réalisés.
+              </li>
+              <li>
+                Si une erreur a été commise par ce centre, celui-ci pourra éventuellement vous remettre, s’il le souhaite, un document vous permettant en ce sens.
+              </li>
+            </ul>
+
+            <p>
+              Pour plus d'informations, vous pouvez consulter <a
+                class="fr-link"
+                href="https://www.utac-otc.com/infos-pratiques/acc%C3%A8s-par-besoin"
+                rel="noopener noreferrer"
+                target="_blank"
+              >le site de l'UTAC</a>.
             </p>
           </DsfrAccordion>
         </li>
@@ -500,11 +867,12 @@ export default defineComponent({
   </div>
 
   <div
+    v-if="selectedTheme"
     class="fr-grid-row  fr-grid-row--gutters  fr-mb12w"
   >
     <div class="fr-col-12  text-center">
       <HistoVecButtonLink
-        id="contactBtn"
+        icon="ri-mail-line"
         label="Contactez-nous"
         to="/contact"
       />

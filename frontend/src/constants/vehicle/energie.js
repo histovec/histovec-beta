@@ -1,3 +1,6 @@
+// @unused: Enum qui n'est plus utilisé désormais
+// Cela peut être une bonne idée de le garder car il permet de documenter les différents types d'énergies
+
 export const ENERGIE = {
 	'1A': '1A',
 	AC: 'AC',

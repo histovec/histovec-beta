@@ -14,6 +14,7 @@ const ProprietairePage = () => import('@/views/ProprietairePage.vue')
 const RapportPage = () => import('@/views/RapportPage.vue')
 const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
 const ServiceUnavailablePage = () => import('@/views/error/ServiceUnavailablePage.vue')
+const ErreurPage = () => import('@/views/error/ErreurPage.vue')
 
 const routes = (
   import.meta.env.VITE_IS_HISTOVEC_UNAVAILABLE === 'true' ?
@@ -45,15 +46,22 @@ const routes = (
           return { path: '/rapport-acheteur', query: { id: to.query.id, key: to.query.key } }
         }
         // Ancien rapport vendeur non fonctionnel (le format du cache du rapport vendeur a changé) => on invalide l'ancien cache en forçant une nouvelle recherche via le formulaira de la page Propriétaire
+        // On force aussi à utiliser la nouvelle url /rapport-vendeur
         return { path: '/proprietaire' }
       },
       meta: { title: 'HistoVec - Ancien rapport' },
     },
 
     // Errors pages
-    // @todo: implémenter ErreurPage qui prend une props "messages" et qui affiche les différents message et respecte le design DSFR de la page d'erreur : https://gouvfr.atlassian.net/wiki/spaces/DB/pages/993165327/Mod+les+de+pages+d+erreurs
-    // { path: '/erreur', name: 'erreur', component: ErreurPage, meta: { title: 'HistoVec - Erreur' } },
-
+    { path: '/erreur', name: 'erreur', component: ErreurPage,
+      props: route => ({
+        title: route.query.title,
+        errorMessages: route.query.errorMessages,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : null,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : null,
+      }),
+      meta: { title: 'HistoVec - Erreur' },
+    },
     { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },
     { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage, meta: { title: 'HistoVec - Page non trouvée' } },
   ]

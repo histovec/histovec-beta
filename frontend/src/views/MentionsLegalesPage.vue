@@ -271,7 +271,7 @@ export default defineComponent({
       </h5>
       <p>
         L'utilisateur s'engage, sous peine de voir sa responsabilité civile et/ou pénale engagée, à ne pas utiliser le site HistoVec pour :
-        <ul class="fr-ml-4w fr-pl-0">
+        <ul class="fr-ml-4w  fr-pl-0">
           <li>Transmettre par quelque procédé que ce soit (e-mail ou autres), tout contenu incluant des programmes, des codes, des virus, etc. destinés à détruire ou limiter les fonctionnalités du site Internet de l’éditeur ;</li>
           <li>Transmettre par quelque procédé que ce soit dans les services interactifs proposés sur le site Internet de l’éditeur, tout contenu illicite ou nuisible, et notamment des photos ou messages à caractère injurieux, insultant, diffamant, dénigrant, dégradant, raciste, xénophobe, sexiste, pornographique, menaçant ou qui pourrait inciter à la haine ou au harcèlement et allant à l'encontre du droit au respect de la vie privée ou sans rapport avec les thèmes proposés ;</li>
           <li>Transmettre par quelque procédé que ce soit, tout contenu et notamment des photos violant les droits de la propriété intellectuelle, industrielle, les droits de la personne, etc.</li>

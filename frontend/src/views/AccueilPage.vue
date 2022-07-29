@@ -154,16 +154,18 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center">
-    <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6  text-center">
+  <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center  fr-grid-row--center">
+    <div class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center">
       <HistoVecButtonLink
-        label="Besoin d'aide ?"
+        label="Besoin d'aide"
+        icon="ri-question-line"
         to="/faq"
       />
     </div>
-    <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6  text-center">
+    <div class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center">
       <HistoVecButtonLink
         label="Contactez-nous"
+        icon="ri-mail-line"
         to="/contact"
         secondary
       />

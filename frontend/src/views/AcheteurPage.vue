@@ -2,6 +2,10 @@
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
+import api from '@/api/index.js'
+import { mailTo } from '@/utils/email.js'
+import { ASK_REPORT_EMAIL } from '@/constants/email.js'
+
 import AcheteurSvg from '@/assets/img/acheteur.svg'
 
 
@@ -9,6 +13,18 @@ export default defineComponent({
   name: 'AcheteurPage',
 
   components: { AcheteurSvg, HistoVecButtonLink },
+
+  created () {
+    this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
+  },
+
+  methods: {
+    async onClickMailDemandeRapport () {
+      window.location = this.askReportEmail
+
+      await api.log(`${this.$route.path}`)
+    },
+  },
 })
 </script>
 
@@ -65,15 +81,17 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6  text-center">
+    <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4  text-center">
       <DsfrButton
         label="Demander le rapport au vendeur"
-        on-click="@todo"
+        icon="ri-send-plane-fill"
+        @click="onClickMailDemandeRapport"
       />
     </div>
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6  text-center">
+    <div class="fr-col-12  fr-col-md-4  fr-col-lg-2  fr-col-xl-2  text-center">
       <HistoVecButtonLink
-        label="Besoin d'aide ?"
+        label="Besoin d'aide"
+        icon="ri-question-line"
         to="/contact"
         secondary
       />

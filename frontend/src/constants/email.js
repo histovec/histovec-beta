@@ -1,3 +1,5 @@
+export const CAS_TOULOUSE_EMAIL = 'cas.toulouse@finances.gouv.fr'
+
 export const HISTOVEC_BASE_URL = `${window.location.protocol}//${window.location.host}`
 const HISTOVEC_WEBSITE_MAIN_URL = `${HISTOVEC_BASE_URL}/histovec/`
 export const HISTOVEC_SUPPORT_EMAIL = 'histovec@interieur.gouv.fr'
@@ -67,5 +69,11 @@ export const SEND_OPPOSITION_PERSONAL_DATA_EMAIL = {
 export const REPORT_ACCESSIBILITY_ERROR_EMAIL = {
   recipients: [HISTOVEC_SUPPORT_EMAIL],
   subject: 'Signaler un dysfonctionnement dans l\'accessibilité du site HistoVec',
+  body: '',
+}
+
+export const ABOUT_UNPAID_PV_EMAIL = {
+  recipients: [CAS_TOULOUSE_EMAIL],
+  subject: 'A propos du paiement des amendes',
   body: '',
 }

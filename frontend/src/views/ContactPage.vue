@@ -12,7 +12,7 @@ import {
   CONTACT_TAG_TYPES,
   CONTACT_THEME,
   READONLY_CONTACT_THEME_VALUES,
-  DEFAULT_CONTACT_THEMES_OPTIONS, CONTACT_THEMES_OPTIONS,
+  ALL_CONTACT_THEMES_OPTIONS, DEFAULT_CONTACT_THEMES_OPTIONS, CONTACT_THEMES_OPTIONS,
 } from '@/constants/contact.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
 import { EMAIL_REGEX } from '@/constants/regex.js'
@@ -66,9 +66,6 @@ export default defineComponent({
     isFormMasked () {
       return !this.selectedTheme || this.isReadonlyTheme
     },
-    isFormFilled () {
-      return this.messageEmail && this.message
-    },
     isMessageEmailValid () {
       return this.messageEmail && this.messageEmail.match(EMAIL_REGEX)
     },
@@ -89,12 +86,18 @@ export default defineComponent({
         ''
       )
     },
+    isFormValid () {
+      return this.isMessageEmailValid && this.isMessageValid
+    },
+    isAlertVisible () {
+      return this.isSuccessAlertVisible || this.isErrorAlertVisible
+    },
     isReadonlyTheme () {
       return this.READONLY_CONTACT_THEME_VALUES.includes(this.selectedTheme)
     },
     selectedThemeText () {
       return (
-        this.selectedTheme && CONTACT_THEMES_OPTIONS.find(({value}) => value === this.selectedTheme).text
+        this.selectedTheme && ALL_CONTACT_THEMES_OPTIONS.find(({value}) => value === this.selectedTheme).text
       ) || ''
     },
     selectedTags () {
@@ -105,7 +108,7 @@ export default defineComponent({
     },
     filteredThemesOptions () {
       if (this.selectedTags.length === 0) {
-        return CONTACT_THEMES_OPTIONS.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
+        return ALL_CONTACT_THEMES_OPTIONS
       }
 
       const filteredThemes = CONTACT_THEMES_OPTIONS.filter(({ types }) => {
@@ -113,9 +116,7 @@ export default defineComponent({
         return intersection.length !== 0
       })
 
-      const themes = filteredThemes.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
-
-      return themes
+      return filteredThemes.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
     },
     normalizedMessage () {
       if (!this.message) {
@@ -138,16 +139,25 @@ export default defineComponent({
     },
   },
   watch: {
-    filteredThemessOptions(newOptions) {  // A chaque changement de filtre de thème
+    filteredThemesOptions(newOptions) {  // A chaque changement de tag (filtre de thème)
       // Réinitialiser le thème lorsque qu'il ne fait plus partie des choix possibles
-      if (!newOptions.includes(this.selectedTheme)) {
+      if (this.selectedTheme &&!newOptions.includes(this.selectedTheme)) {
+        console.log('reset selectedThemme')
         this.selectedTheme = undefined
       }
     },
     selectedTheme() {  // A chaque changement de thème
-      // Pré-remplir automatiquement le thème
+      // Pré-remplir automatiquement le thème avec le text qui sert d'affichage
       this.messageTheme = this.selectedThemeText
 
+      // Supprimer la notification d'erreur ou de succès de l'envoi du message
+      this.resetAlertStates()
+    },
+    messageEmail() {  // A chaque édition de l'email
+      // Supprimer la notification d'erreur ou de succès de l'envoi du message
+      this.resetAlertStates()
+    },
+    message() {  // A chaque édition du message
       // Supprimer la notification d'erreur ou de succès de l'envoi du message
       this.resetAlertStates()
     },
@@ -168,7 +178,7 @@ export default defineComponent({
         cachedFormData ||
         {
           typeImmatriculation: null,
-          typePersonne: TYPE_PERSONNE.PARTICULIER,
+          typePersonne: null,
           siv: {
             titulaire: {
               particulier: {
@@ -483,40 +493,47 @@ export default defineComponent({
         </DsfrInput>
       </DsfrInputGroup>
     </div>
-    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
-      <h6> Données transmises pour l'assistance </h6>
+    <div
+      v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV || identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-mt-3w"
+    >
+      <h6 class="fr-mb-1w">
+        Données transmises pour l'assistance
+      </h6>
       <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
         <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
           <ul
             v-if="identity.typePersonne === TYPE_PERSONNE.PRO"
             class="fr-ml-4w  fr-pl-0"
           >
-            <li> Raison sociale: {{ identity.raisonSociale }} </li>
-            <li> Numéro SIREN: {{ identity.siren }} </li>
+            <li> Raison sociale: <span class="fr-blue-text">{{ identity.raisonSociale || 'non renseigné' }}</span> </li>
+            <li> Numéro SIREN: <span class="fr-blue-text">{{ identity.siren || 'non renseigné' }}</span> </li>
           </ul>
           <ul
             v-else
             class="fr-ml-4w  fr-pl-0"
           >
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Nom de naissance: {{ identity.nom }}
+              Nom de naissance: <span class="fr-blue-text">{{ identity.nom || 'non renseigné' }}</span>
             </li>
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Prénom(s): {{ identity.prenoms }}
+              Prénom(s): <span class="fr-blue-text">{{ identity.prenoms || 'non renseigné' }}</span>
             </li>
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
-              Nom de naissance et prénom(s): {{ identity.nom }}
+              Nom de naissance et prénom(s): <span class="fr-blue-text">{{ identity.nom || 'non renseigné' }}</span>
             </li>
           </ul>
         </div>
         <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
           <ul class="fr-ml-4w  fr-pl-0">
-            <li> Immatriculation: {{ identity.plaque }} </li>
-            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Numéro de formule: {{ identity.formule }}
+            <li>
+              Immatriculation: <span class="fr-blue-text">{{ identity.plaque || 'non renseigné' }}</span>
             </li>
-            <li v-else>
-              Date du certificat : {{ identity.dateCertificat }}
+            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+              Numéro de formule: <span class="fr-blue-text">{{ identity.formule || 'non renseigné' }}</span>
+            </li>
+            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
+              Date du certificat : <span class="fr-blue-text">{{ identity.dateCertificat || 'non renseigné' }}</span>
             </li>
           </ul>
         </div>
@@ -553,7 +570,7 @@ export default defineComponent({
       class="fr-col-12  text-center"
     >
       <DsfrButton
-        :disabled="!isFormFilled"
+        :disabled="!isFormValid || isAlertVisible"
         label="Envoyer"
         @click="sendContactEmail"
       />
@@ -562,6 +579,10 @@ export default defineComponent({
 </template>
 
 <style scoped>
+  .fr-blue-text {
+    color: var(--blue-france-sun-113-625);
+  }
+
   .text-center {
     text-align: center;
   }

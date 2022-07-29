@@ -14,6 +14,15 @@ import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
 import plaqueSivSvg from '@/assets/img/plaque_siv.svg?url'
 import ProprietaireSvg from '@/assets/img/proprietaire.svg'
 
+import imageNomEtPrenomsFNI from '@/assets/img/aide/fni_nom_et_prenoms.jpg'
+import imagePlaqueImmatriculationFNI from '@/assets/img/aide/fni_plaque_immatriculation.jpg'
+import imageDateEmissionCertificatImmatriculationFNI from '@/assets/img/aide/fni_date_emission_certificat_immatriculation.jpg'
+
+import imageNomSIV from '@/assets/img/aide/siv_nom.jpg'
+import imagePrenomsSIV from '@/assets/img/aide/siv_prenoms.jpg'
+import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatriculation.jpg'
+import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
+
 
 export default defineComponent({
   name: 'ProprietairePage',
@@ -60,6 +69,39 @@ export default defineComponent({
     return {
       formData,
 
+      modals: {
+        common: {
+          numeroSiren: {
+            opened: false,
+          },
+        },
+        siv: {
+          nom: {
+            opened: false,
+          },
+          prenoms: {
+            opened: false,
+          },
+          numeroImmatriculation: {
+            opened: false,
+          },
+          numeroFormule: {
+            opened: false,
+          },
+        },
+        fni: {
+          nomEtPrenoms: {
+            opened: false,
+          },
+          numeroImmatriculation: {
+            opened: false,
+          },
+          dateEmissionCertificatImmatriculation: {
+            opened: false,
+          },
+        },
+      },
+
       tabs: {
         siv: {
           selectedTabIndex: 0,
@@ -82,6 +124,17 @@ export default defineComponent({
         plaqueNonSupporteeSvg,
         plaqueFniSvg,
         plaqueSivSvg,
+
+        aide: {
+          imageNomEtPrenomsFNI,
+          imagePlaqueImmatriculationFNI,
+          imageDateEmissionCertificatImmatriculationFNI,
+
+          imageNomSIV,
+          imagePrenomsSIV,
+          imagePlaqueImmatriculationSIV,
+          imageNumeroFormuleSIV,
+        },
       },
     }
   },
@@ -90,7 +143,7 @@ export default defineComponent({
     // @todo: implement focus on form with : focus-trap-vue
 
 
-    // @todo @csvCopy: Réimplementer le copier coller des data du CSV dans le formulaire
+    // @todo @csvCopy: Réimplementer le copier coller des data du CSV dans le formulaire en utilisant vue3-shortkey
     // onPaste (evt) {
     //   const data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
 
@@ -312,6 +365,77 @@ export default defineComponent({
   },
 
   methods: {
+    selectTypeImmatriculation (typeImmatriculation) {
+      this.formData.typeImmatriculation = typeImmatriculation
+      if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
+        this.selectSivTab(0)
+        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+      }
+      if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
+        this.selectFniTab(0)
+        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+      }
+    },
+
+    // Modales communes (SIV et FNI)
+    onOpenModalNumeroSiren () {
+      this.modals.common.numeroSiren.opened = true
+    },
+    onCloseModalNumeroSiren () {
+      this.modals.common.numeroSiren.opened = false
+    },
+
+    // Modales SIV
+    onOpenModalSivNom () {
+      this.modals.siv.nom.opened = true
+    },
+    onCloseModalSivNom () {
+      this.modals.siv.nom.opened = false
+    },
+
+    onOpenModalSivPrenoms () {
+      this.modals.siv.prenoms.opened = true
+    },
+    onCloseModalSivPrenoms () {
+      this.modals.siv.prenoms.opened = false
+    },
+
+    onOpenModalSivNumeroImmatriculation () {
+      this.modals.siv.numeroImmatriculation.opened = true
+    },
+    onCloseModalSivNumeroImmatriculation () {
+      this.modals.siv.numeroImmatriculation.opened = false
+    },
+
+    onOpenModalSivNumeroFormule () {
+      this.modals.siv.numeroFormule.opened = true
+    },
+    onCloseModalSivNumeroFormule () {
+      this.modals.siv.numeroFormule.opened = false
+    },
+
+    // Modales FNI
+    onOpenModalFniNomEtPrenoms () {
+      this.modals.fni.nomEtPrenoms.opened = true
+    },
+    onCloseModalFniNomEtPrenoms () {
+      this.modals.fni.nomEtPrenoms.opened = false
+    },
+
+    onOpenModalFniNumeroImmatriculation () {
+      this.modals.fni.numeroImmatriculation.opened = true
+    },
+    onCloseModalFniNumeroImmatriculation () {
+      this.modals.fni.numeroImmatriculation.opened = false
+    },
+
+    onOpenModalFniDateEmissionCertificatImmatriculation () {
+      this.modals.fni.dateEmissionCertificatImmatriculation.opened = true
+    },
+    onCloseModalFniDateEmissionCertificatImmatriculation () {
+      this.modals.fni.dateEmissionCertificatImmatriculation.opened = false
+    },
+
     // Tabs
     onSelectTab (idx) {
       if (idx === 0) {
@@ -334,6 +458,7 @@ export default defineComponent({
       this.tabs.fni.selectedTabIndex = idx
     },
 
+    // Form
     persistFormData () {
       // Mise en cache pour :
       // - pouvoir rafraîchir la page du rapport vendeur sans repasser par le formulaire
@@ -342,7 +467,6 @@ export default defineComponent({
       sessionStorage.setItem('formData', JSON.stringify(this.formData))
     },
 
-    // Form
     async onSubmit () {
       this.persistFormData()
 
@@ -487,7 +611,7 @@ export default defineComponent({
         class="histovec-numero-immatriculation"
         :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
         :src="images.plaqueSivSvg"
-        @click="formData.typeImmatriculation = TYPE_IMMATRICULATION.SIV"
+        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.SIV)"
       />
       <p class="fr-text--xs">
         Immatriculation depuis 2009
@@ -499,7 +623,7 @@ export default defineComponent({
         class="histovec-numero-immatriculation"
         :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
         :src="images.plaqueFniSvg"
-        @click="formData.typeImmatriculation = TYPE_IMMATRICULATION.FNI"
+        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.FNI)"
       />
       <p class="fr-text--xs">
         Immatriculation avant 2009
@@ -511,13 +635,187 @@ export default defineComponent({
         class="histovec-numero-immatriculation"
         :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
         :src="images.plaqueNonSupporteeSvg"
-        @click="formData.typeImmatriculation = OLD_IMMATRICULATION_TYPE"
+        @click="() => selectTypeImmatriculation(OLD_IMMATRICULATION_TYPE)"
       />
       <p class="fr-text--xs">
         Immatriculation avant 1995
       </p>
     </div>
   </div>
+
+  <!-- Modals -->
+  <DsfrModal
+    ref="modalNumeroSiren"
+    :opened="modals.common.numeroSiren.opened"
+    title="Où trouver le numéro de SIREN ?"
+    :origin="$refs.buttonNumeroSiren"
+    @close="onCloseModalNumeroSiren()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
+      <div class="fr-col-12">
+        <p class="fr-text--md">
+          Le <span class="fr-blue-text">numéro SIREN</span> correspond au <span class="fr-blue-text">9 premiers caractères du numéro SIRET</span> de votre société.
+        </p>
+        <p class="fr-text--md">
+          Il figure sur le <span class="fr-blue-text">KBIS</span> de votre société.
+        </p>
+        <p class="fr-text--md">
+          Vous pouvez aussi l'obtenir sur ce
+          <a
+            class="fr-link"
+            href="https://www.societe.com/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            site
+          </a>
+          en effectuant une <span class="fr-blue-text">recherche avec le nom de votre société</span>.
+        </p>
+        <p class="fr-text--md">
+          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-blue-text">pas de numéro de SIREN</span>.
+        </p>
+        <p class="fr-text--md">
+          Dans ce cas, <span class="fr-blue-text">laissez le champs SIREN vide</span>.
+        </p>
+      </div>
+    </div>
+  </DsfrModal>
+
+  <DsfrModal
+    ref="modalSivNom"
+    :opened="modals.siv.nom.opened"
+    title="Où trouver le nom ?"
+    :origin="$refs.buttonSivNom"
+    @close="onCloseModalSivNom()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation nom : au dessus du prénom"
+          :src="images.aide.imageNomSIV"
+          class="fr-img-responsive"
+          style="height: 220px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+  <DsfrModal
+    ref="modalSivPrenoms"
+    :opened="modals.siv.prenoms.opened"
+    title="Où trouver le(s) prénom(s) ?"
+    :origin="$refs.buttonSivPrenoms"
+    @close="onCloseModalSivPrenoms()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation prenom(s) : en dessous du nom"
+          :src="images.aide.imagePrenomsSIV"
+          class="fr-img-responsive"
+          style="height: 220px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+  <DsfrModal
+    ref="modalSivNumeroImmatriculation"
+    :opened="modals.siv.numeroImmatriculation.opened"
+    title="Où trouver le numéro d'immatriculation ?"
+    :origin="$refs.buttonSivNumeroImmatriculation"
+    @close="onCloseModalSivNumeroImmatriculation()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation numero d'immatriculation : au dessus du numéro de formule"
+          :src="images.aide.imagePlaqueImmatriculationSIV"
+          class="fr-img-responsive"
+          style="height: 220px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+  <DsfrModal
+    ref="modalSivNumeroFormule"
+    :opened="modals.siv.numeroFormule.opened"
+    title="Où trouver le numéro de formule ?"
+    :origin="$refs.buttonSivNumeroImmatriculation"
+    @close="onCloseModalSivNumeroFormule()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page du certificat d'immatriculation"
+          :src="images.aide.imageNumeroFormuleSIV"
+          class="fr-img-responsive"
+          style="height: 189px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+
+  <DsfrModal
+    ref="modalFniNomEtPrenoms"
+    :opened="modals.fni.nomEtPrenoms.opened"
+    title="Où trouver le nom et le(s) prénom(s) ?"
+    :origin="$refs.buttonFniNomEtPrenoms"
+    @close="onCloseModalFniNomEtPrenoms()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation nom et prénom(s) : sous le numéro d'immatriculation"
+          :src="images.aide.imageNomEtPrenomsFNI"
+          class="fr-img-responsive"
+          style="height: 215px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+  <DsfrModal
+    ref="modalFniNumeroImmatriculation"
+    :opened="modals.fni.numeroImmatriculation.opened"
+    title="Où trouver le numéro d'immatriculation ?"
+    :origin="$refs.buttonFniNumeroImmatriculation"
+    @close="onCloseModalFniNumeroImmatriculation()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation plaque d'immatriculation : au dessus du nom et prénom"
+          :src="images.aide.imagePlaqueImmatriculationFNI"
+          class="fr-img-responsive"
+          style="height: 215px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+  <DsfrModal
+    ref="modalFniDateEmissionCertificatImmatriculation"
+    :opened="modals.fni.dateEmissionCertificatImmatriculation.opened"
+    title="Où trouver la date d'émission du certificat d'immatriculation ?"
+    :origin="$refs.buttonFniDateEmissionCertificatImmatriculation"
+    @close="onCloseModalFniDateEmissionCertificatImmatriculation()"
+  >
+    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
+      <div class="fr-col-12  text-center">
+        <img
+          alt="Indication localisation date du certificat d'immatriculation : à droite du numéro d'immatriculation"
+          :src="images.aide.imageDateEmissionCertificatImmatriculationFNI"
+          class="fr-img-responsive"
+          style="height: 215px"
+        />
+      </div>
+    </div>
+  </DsfrModal>
+
+  <!-- ----------------- -->
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-2w">
     <div
@@ -553,6 +851,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonSivNom"
+                      class="fr-link  help-link"
+                      title="Où trouver le nom sur le certificat d'immatriculation au format SIV"
+                      @click="onOpenModalSivNom()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -571,6 +881,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonSivPrenoms"
+                      class="fr-link  help-link"
+                      title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format SIV"
+                      @click="onOpenModalSivPrenoms()"
+                    >
+                      Où le(s) trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -595,6 +917,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonSivNumeroImmatriculation"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format SIV"
+                      @click="onOpenModalSivNumeroImmatriculation()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -613,6 +947,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonSivNumeroFormule"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format SIV"
+                      @click="onOpenModalSivNumeroFormule()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -660,7 +1006,22 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
-                />
+                >
+                  <template #required-tip>
+                    <span
+                      ref="buttonNumeroSiren"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro de SIREN de votre société ?"
+                      @click="onOpenModalNumeroSiren()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
+                  </template>
+                </DsfrInput>
               </DsfrInputGroup>
             </div>
           </div>
@@ -684,6 +1045,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonSivNumeroImmatriculation"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format SIV"
+                      @click="onOpenModalSivNumeroImmatriculation()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -702,6 +1075,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonSivNumeroFormule"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format SIV"
+                      @click="onOpenModalSivNumeroFormule()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -745,12 +1130,24 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonFniNomEtPrenoms"
+                      class="fr-link  help-link"
+                      title="Où trouver le nom et le(s) prénom(s) sur le certificat d'immatriculation au format FNI"
+                      @click="onOpenModalFniNomEtPrenoms()"
+                    >
+                      Où les trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
             </div>
           </div>
-          <!-- @todo: Valider le remplacement de "Carte grise" par "Certificat d'immatriculation" -->
+
           <p class="fr-text--md  histovec-input-group-title  fr-mt-4w">
             Certificat d'immatriculation
           </p>
@@ -769,6 +1166,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonFniNumeroImmatriculation"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
+                      @click="onOpenModalFniNumeroImmatriculation()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -787,6 +1196,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonFniDateEmissionCertificatImmatriculation"
+                      class="fr-link  help-link"
+                      title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
+                      @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                    >
+                      Où la trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -834,11 +1255,26 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
-                />
+                >
+                  <template #required-tip>
+                    <span
+                      ref="buttonNumeroSiren"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro de SIREN de votre société ?"
+                      @click="onOpenModalNumeroSiren()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
+                  </template>
+                </DsfrInput>
               </DsfrInputGroup>
             </div>
           </div>
-          <!-- @todo: Valider le remplacement de "Carte grise" par "Certificat d'immatriculation" -->
+
           <p class="fr-text--md  histovec-input-group-title  fr-mt-4w">
             Certificat d'immatriculation
           </p>
@@ -858,6 +1294,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonFniNumeroImmatriculation"
+                      class="fr-link  help-link"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
+                      @click="onOpenModalFniNumeroImmatriculation()"
+                    >
+                      Où le trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -876,6 +1324,18 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
+                    <span
+                      ref="buttonFniDateEmissionCertificatImmatriculation"
+                      class="fr-link  help-link"
+                      title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
+                      @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                    >
+                      Où la trouver
+                      <VIcon
+                        class="help-icon"
+                        name="ri-information-line"
+                      />
+                    </span>
                   </template>
                 </DsfrInput>
               </dsfrinputgroup>
@@ -933,6 +1393,7 @@ export default defineComponent({
     >
       <DsfrButton
         label="Effacer"
+        icon="ri-close-line"
         secondary
         @click="onClear"
       />
@@ -960,4 +1421,17 @@ export default defineComponent({
 .text-center {
   text-align: center;
 }
+
+.fr-blue-text {
+  color: var(--blue-france-sun-113-625);
+}
+
+.help-link {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.help-icon {
+  margin-left: 0.2rem;
+}
+
 </style>
