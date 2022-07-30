@@ -194,15 +194,15 @@ export default defineComponent({
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="Qui peut consulter HistoVec ?"
+            title="Qui peut consulter HistoVec ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <h6>Vous êtes vendeur :</h6>
+            <h6>Vous êtes vendeur :</h6>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
                 Sur la page Propriétaire, remplissez le formulaire avec les informations figurant sur la carte grise en cours de validité.
-                Si le véhicule appartient à une entreprise, une collectivité, ou une association, cliquez sur « Personne morale » et renseignez, le cas échéant, le numéro de SIREN.
+                Si le véhicule appartient à une entreprise, une collectivité, ou une association, cliquez sur « Personne morale » et renseignez, le cas échéant, le numéro de SIREN.
               </li>
               <li>
                 Le rapport du véhicule est affiché. Vous pouvez consulter les différentes sections sur le menu de gauche.
@@ -212,7 +212,7 @@ export default defineComponent({
               </li>
             </ul>
 
-            <h6>Vous êtes acheteur :</h6>
+            <h6>Vous êtes acheteur :</h6>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
                 Demandez au vendeur de vous transmettre le lien vers le rapport en le générant sur le site HistoVec.
@@ -222,7 +222,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?"
+            title="Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -240,7 +240,7 @@ export default defineComponent({
         <li>
           <!-- @todo @doublonFaq3 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
+            title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -276,11 +276,11 @@ export default defineComponent({
         <li>
           <!-- @todo @doublonFaq4 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
+            title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes :</p>
+            <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux noti ons différentes :</p>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>Propriétaire: il s'agit du propriétaire du véhicule et qui peut donc le vendre.</li>
               <li>Titulaire: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</li>
@@ -292,7 +292,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Que faire si le message « accès non autorisé » s’affiche lors de ma recherche ?"
+            title="Que faire si le message « accès non autorisé » s’affiche lors de ma recherche ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -320,7 +320,7 @@ export default defineComponent({
         <li>
           <!-- @todo @doublonFaq1 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
+            title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -346,7 +346,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Comment consulter HistoVec si je n’ai pas la carte grise en cours de validité ?"
+            title="Comment consulter HistoVec si je n’ai pas la carte grise en cours de validité ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -381,7 +381,7 @@ export default defineComponent({
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="Que faire si je ne parviens pas à lancer la recherche de mon véhicule ?"
+            title="Que faire si je ne parviens pas à lancer la recherche de mon véhicule ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -392,22 +392,22 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Que faire si la recherche de mon véhicule n’aboutit pas ?"
+            title="Que faire si la recherche de mon véhicule n’aboutit pas ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
             <p>
-              Vérifiez les informations que vous avez saisies :
+              Vérifiez les informations que vous avez saisies :
             </p>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
-                Les nom et prénom du titulaire actuel de la carte grise (nom de naissance, orthographe, nombre de prénoms…) ;
+                Les nom et prénom du titulaire actuel de la carte grise (nom de naissance, orthographe, nombre de prénoms…) ;
               </li>
               <li>
-                Si le véhicule appartient à une entreprise, assurez-vous de renseigner le formulaire sous l’onglet « Personne morale » et, s’il s’agit d’une entreprise, d’indiquer le n° SIREN ou SIRET correspondant à votre société ;
+                Si le véhicule appartient à une entreprise, assurez-vous de renseigner le formulaire sous l’onglet « Personne morale » et, s’il s’agit d’une entreprise, d’indiquer le n° SIREN ou SIRET correspondant à votre société ;
               </li>
               <li>
-                Le n° de formule doit être celui de la carte grise en cours de validité :
+                Le n° de formule doit être celui de la carte grise en cours de validité :
                 <ul class="fr-ml-4w  fr-pl-0">
                   <li>
                     Si la carte grise a précédemment été déclarée perdue ou volée, un duplicata vous a été adressé. Il convient d'indiquer sur HistoVec le n° de formule de ce dernier certificat d'immatriculation.
@@ -449,7 +449,7 @@ export default defineComponent({
         <li>
           <!-- @todo @doublonFaq1 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
+            title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -475,7 +475,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Tous les véhicules figurent-ils sur HistoVec ?"
+            title="Tous les véhicules figurent-ils sur HistoVec ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -519,7 +519,7 @@ export default defineComponent({
         <li>
           <!-- @todo @doublonFaq3 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
+            title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -562,7 +562,7 @@ export default defineComponent({
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="Que signifient les termes des opérations figurant dans l’historique ?"
+            title="Que signifient les termes des opérations figurant dans l’historique ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -608,7 +608,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Quels sinistres figurent sur HistoVec ?"
+            title="Quels sinistres figurent sur HistoVec ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -620,7 +620,7 @@ export default defineComponent({
         <li>
           <!-- @todo @doublonFaq4 Voir avec la DSR lequel on souhaite garder -->
           <DsfrAccordion
-            title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
+            title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -636,7 +636,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Comment puis-récupérer le rapport d’un expert en automobile ?"
+            title="Comment puis-récupérer le rapport d’un expert en automobile ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -647,7 +647,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Pourquoi HistoVec affiche-t-il une opposition au transfert du certificat d’immatriculation ?"
+            title="Pourquoi HistoVec affiche-t-il une opposition au transfert du certificat d’immatriculation ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -688,7 +688,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Que faire si mon véhicule est gagé ?"
+            title="Que faire si mon véhicule est gagé ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -717,7 +717,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Que faire en cas de déclaration valant saisie ?"
+            title="Que faire en cas de déclaration valant saisie ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -739,7 +739,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Que faire si je reçois des amendes concernant un véhicule dont je ne suis plus propriétaire ?"
+            title="Que faire si je reçois des amendes concernant un véhicule dont je ne suis plus propriétaire ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -770,7 +770,7 @@ export default defineComponent({
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="Comment corriger une information manquante ou inexacte sur les données de mon véhicule ?"
+            title="Comment corriger une information manquante ou inexacte sur les données de mon véhicule ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -807,7 +807,7 @@ export default defineComponent({
       <DsfrAccordionsGroup>
         <li>
           <DsfrAccordion
-            title="Que faire si le kilométrage ou le contrôle technique de mon véhicule ne figurent pas sur HistoVec ?"
+            title="Que faire si le kilométrage ou le contrôle technique de mon véhicule ne figurent pas sur HistoVec ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -826,7 +826,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Que faire si le kilométrage de mon véhicule présente une incohérence ?"
+            title="Que faire si le kilométrage de mon véhicule présente une incohérence ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -842,7 +842,7 @@ export default defineComponent({
 
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
-                si vous ne possédiez pas alors le véhicule, à la personne qui en était propriétaire lors de la réalisation de ces contrôles ;
+                si vous ne possédiez pas alors le véhicule, à la personne qui en était propriétaire lors de la réalisation de ces contrôles ;
               </li>
               <li>
                 si vous étiez déjà propriétaire du véhicule à la date de ces contrôles, au centre de contrôle technique qui les a réalisés.

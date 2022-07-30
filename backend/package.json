@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --experimental-json-modules --inspect --watch src src/index.js",
-    "lint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-path '..'",
-    "format": "eslint . --fix --ext .js,.cjs,.mjs,.ts,.cts,.mts --ignore-path '..'",
+    "lint": "eslint src --ext .js,.cjs,.mjs,.ts,.cts,.mts",
+    "format": "eslint src --fix --ext .js,.cjs,.mjs,.ts,.cts,.mts",
     "start": "node --experimental-json-modules src/index.js",
     "pretest": "npm run lint",
     "test": "echo 'Tests à écrire'",

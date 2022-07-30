@@ -8,8 +8,8 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider vite build",
     "dev": "vite",
     "lint": "run-p lint:*",
-    "format": "eslint . --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path '..'",
-    "lint:js": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path '..'",
+    "format": "eslint src --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
+    "lint:js": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "start": "NODE_OPTIONS=--openssl-legacy-provider vite",
     "test": "echo 'Tests à écrire'"
   },
