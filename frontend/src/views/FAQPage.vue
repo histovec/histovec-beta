@@ -9,8 +9,6 @@ import {
 } from '@/constants/faq.js'
 
 import FaqSvg from '@/assets/img/faq.svg'
-import aideSivImg from '@/assets/img/aide_siv.jpg'
-import aideFniImg from '@/assets/img/aide_fni.jpg'
 
 import { mailTo } from '@/utils/email.js'
 import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
@@ -49,11 +47,6 @@ export default defineComponent({
       // constants
       FAQ_THEMES,
       FAQ_THEMES_OPTIONS,
-
-      images: {
-        aideSivImg,
-        aideFniImg,
-      },
     }
   },
 
