@@ -1001,14 +1001,14 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-6w">
-    <div class="fr-col-12  fr-col-md-6  fr-col-offset-lg-2  fr-col-lg-4  fr-col-offset-xl-2  fr-col-xl-4">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-6w">
+    <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <DsfrTiles
         :tiles="tilesVehiculeLinks"
         :horizontal="true"
       />
     </div>
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-4  fr-col-xl-4">
+    <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <DsfrTiles
         :tiles="tilesDateDonneesVehiculeLinks"
         :horizontal="true"
@@ -1076,7 +1076,7 @@ export default defineComponent({
               </div>
 
               <div
-                v-if="processedVehiculeData.usage.vehiculeDeCollection"
+                v-if="processedVehiculeData.usage.vehiculeDeCollection || processedVehiculeData.usage.vehiculeAgricole"
                 class="fr-pb-3w  fr-pt-0"
               >
                 <h6 class="fr-mb-0  fr-pb-2w">
@@ -2172,9 +2172,9 @@ export default defineComponent({
 
   <div
     v-if="isRapportVendeur"
-    class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w"
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
-    <div class="fr-col-6  fr-col-offset-md-2  fr-col-md-4  fr-col-offset-lg-3  fr-col-lg-3  fr-col-offset-lg-3  fr-col-xl-3">
+    <div class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center">
       <DsfrButton
         label="Imprimer le CSA"
         icon="ri-printer-line"
@@ -2183,7 +2183,7 @@ export default defineComponent({
     </div>
     <div
       v-if="!isCIAnnule"
-      class="fr-col-6  fr-col-md-4  fr-col-lg-3  fr-col-xl-3"
+      class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center"
     >
       <DsfrButton
         ref="modalPartagerRapport"
@@ -2223,7 +2223,7 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-md-2  fr-col-sm-12">
+    <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  text-center">
       <a
         id="simplimmatImage"
         class="fr-link"
@@ -2241,7 +2241,7 @@ export default defineComponent({
         >
       </a>
     </div>
-    <div class="fr-col-md-8  fr-col-sm-12">
+    <div class="fr-col-12  fr-col-md-8  fr-col-lg-8  fr-col-xl-8  text-center">
       <div class="fr-ml-4w">
         Utilisez maintenant l’application officielle
         <a
