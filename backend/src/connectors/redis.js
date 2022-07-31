@@ -4,9 +4,6 @@ import config from '../config.js'
 
 class RedisClient {
   constructor () {
-    // Enable await/async usage with all Redis client methods
-    Redis.Promise = global.Promise
-
     this.redisClient = new Redis({
       host: config.redisHost,
       port: config.redisPort,
