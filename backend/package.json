@@ -23,8 +23,8 @@
   "license": "GPLv3",
   "dependencies": {
     "@hapi/hapi": "^20.2.2",
-    "@hapi/inert": "^6.0.5",
-    "@hapi/vision": "^6.1.0",
+    "@hapi/inert": "^7.0.0",
+    "@hapi/vision": "^7.0.0",
     "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.4",
