@@ -25,7 +25,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
     ptra_f3,
     pt_service_g,
     ptav_g1,
-    date_emission_CI, // @todo: remonter d'un cran
+    date_emission_CI,
     CTEC_RLIB_CATEGORIE,
     CTEC_RLIB_GENRE,
     CTEC_RLIB_CARROSSERIE_CE,
@@ -161,6 +161,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
     date_mise_a_jour: date_update,
     certificat_immatriculation: {
       date_premiere_immatriculation: date_premiere_immat,
+      date_emission: date_emission_CI,
       ...(
         age_certificat === 'KO'
           ? {}
@@ -182,7 +183,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
         ptra: ptra_f3,
         ptes: pt_service_g,
         ptav: ptav_g1,
-        date_emission: date_emission_CI, // @todo: remonter d'un cran
         categorie_ue: CTEC_RLIB_CATEGORIE,
         genre_national: CTEC_RLIB_GENRE,
         carrosserie_ue: CTEC_RLIB_CARROSSERIE_CE,

@@ -20,6 +20,7 @@ export const reportResponseSchema = Joi.object({
     date_mise_a_jour: Joi.date().description('Date de mise à jour de la donnée du rapport HistoVec.'),
     certificat_immatriculation: Joi.object({
       date_premiere_immatriculation: Joi.date().description('Rubrique B : Date de la première immatriculation du véhicule.'),
+      date_emission: Joi.date().description('Rubrique I : Date de l’immatriculation à laquelle se réfère le présent certificat.'),
       nombre_de_mois_depuis_date_emission_certificat_immatriculation: Joi.number().integer().min(0).description('Nombre de mois depuis la date d\'émission du certificat d\'immatriculation en cours de validité.'),
       numero_immatriculation_anonymisee: Joi.string().description('Rubrique A : Numéro d\'immatriculation (anonymisé).'),
       titulaire: Joi.object({
@@ -47,7 +48,6 @@ export const reportResponseSchema = Joi.object({
         ptra: Joi.number().integer().min(0).description('Rubrique F.3 : Masse en charge maximale admissible de l’ensemble en service dans l’Etat membre d’immatriculation (en kg), plus communément appelé PTRA pour Poids Total Roulant Autorisé.'),
         ptes: Joi.number().integer().min(0).description('Rubrique G : Masse du véhicule en service avec carrosserie et dispositif d’attelage en cas de véhicule tracteur de catégorie autre que M1, plus communément appelé PT service pour Poids Total en Service.'),
         ptav: Joi.number().integer().min(0).description('Rubrique G.1 : Poids à vide national, plus communément appelé PTAV pour Poids Total A Vide.'),
-        date_emission: Joi.date().description('Rubrique I : Date de l’immatriculation à laquelle se réfère le présent certificat.'),
         categorie_ue: Joi.string().description('Rubrique J : Catégorie du véhicule (UE).'),
         genre_national: Joi.string().description('Rubrique J.1 : Genre national.'),
         carrosserie_ue: Joi.string().description('Rubrique J.2 : Carrosserie (UE).'),

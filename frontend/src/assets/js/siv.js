@@ -49,10 +49,8 @@ const labelizeCertifDepuis = (nbMonths) => {
 const certificatMapping = (certificatImmatriculation, importEnFrance, isCIAnnule) => {
   const {
     datePremiereImmatriculation,
+    dateEmissionCI,
     nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
-    caracteristiquesTechniques: {
-      dateEmissionCI,
-    },
   } = certificatImmatriculation
 
   const {
