@@ -1269,14 +1269,8 @@ export default defineComponent({
                       </span>
                     </template>
                   </template>
-                  <!-- Select "Historique" tab -->
-                  <a
-                    class="fr-link"
-                    @click="selectTab(4)"
-                  >
-                    Détails
-                  </a>
-
+                  <!-- @todo: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Historique" ? -->
+                  <br />
                   <!-- Commentaire: un ou plusieurs sinistres -->
                   <span
                     v-if="processedVehiculeData.isApte"
@@ -1324,15 +1318,8 @@ export default defineComponent({
                     />
                   </span>
                   {{ assets.syntheseMapping[entry].text }}
+                  <!-- @todo: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Situation administrative" ? -->
                   <br />
-                  <!-- Select "Situation administrative" tab -->
-                  <a
-                    class="fr-link"
-                    @click="selectTab(3)"
-                  >
-                    Détails
-                  </a>
-
                   {{ assets.syntheseMapping[entry].adv }}
                   <br />
                   <a
@@ -1862,9 +1849,9 @@ export default defineComponent({
                     <span
                       v-for="(gageInfos, index) in reportLabels.gagesInfos"
                       :key="index"
-                      class="fr-blue-text"
                     >
-                      <span v-if="gageInfos.date">{{ gageInfos.date }} - </span>{{ gageInfos.label }}
+                      <span v-if="gageInfos.date">{{ gageInfos.date }} - </span>
+                      <span class="fr-blue-text">{{ gageInfos.label }}</span>
                     </span>
                   </p>
                 </div>
@@ -1888,9 +1875,9 @@ export default defineComponent({
                     <span
                       v-for="(oppositionInfos, index) in reportLabels.oppositionsInfos"
                       :key="index"
-                      class="fr-blue-text"
                     >
-                      <span v-if="oppositionInfos.date">{{ oppositionInfos.date }} - </span>{{ oppositionInfos.label }}
+                      <span v-if="oppositionInfos.date">{{ oppositionInfos.date }} - </span>
+                      <span class="fr-blue-text">{{ oppositionInfos.label }}</span>
                       <span
                         v-if="isRapportVendeur && oppositionInfos.label.includes('PV') && oppositionSection.hasOtciPV"
                       >
@@ -1926,9 +1913,9 @@ export default defineComponent({
                     <span
                       v-for="(dvs, index) in reportLabels.dvsInfos"
                       :key="index"
-                      class="fr-blue-text"
                     >
-                      <span v-if="dvs.date">{{ dvs.date }} - </span>{{ dvs.label }}
+                      <span v-if="dvs.date">{{ dvs.date }} - </span>
+                      <span class="fr-blue-text">{{ dvs.label }}</span>
                     </span>
                   </p>
                 </div>
@@ -1943,9 +1930,9 @@ export default defineComponent({
                     <span
                       v-for="(suspensionInfos, index) in reportLabels.suspensionsInfos"
                       :key="index"
-                      class="fr-blue-text"
                     >
-                      <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>{{ suspensionInfos.label }}
+                      <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>
+                      <span class="fr-blue-text">{{ suspensionInfos.label }}</span>
                     </span>
                   </p>
                 </div>
