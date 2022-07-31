@@ -8,6 +8,7 @@ import { labelizeControlesTechniques } from '@/utils/vehicle/formatControlesTech
 import { TYPE_IMMATRICULATION } from '../constants/type'
 
 
+// @todo @frontendCacheImplementation : Utiliser le session storage au lieu d'un objet global dans le service
 const reportCache = {
   report: {
     vehicule : null,
@@ -80,6 +81,12 @@ const updateReport = (
 
 export default {
   getHolderReport: async ({ id, formData }, { ignoreUtacCache }) => {
+    const cachedReport = reportWithExpiry(id)
+
+    if (cachedReport) {
+      return cachedReport
+    }
+
     const {
       typeImmatriculation,
       typePersonne,
