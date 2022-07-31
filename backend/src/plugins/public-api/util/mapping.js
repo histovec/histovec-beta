@@ -165,8 +165,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
       ...(
         age_certificat === 'KO'
           ? {}
-          : { nombre_de_mois_depuis_date_emission_certificat_immatriculation: age_certificat }
-          // @todo RENOMMER nombre_de_mois_depuis_date_emission_certificat_immatriculation => age_en_mois_du_certificat_immatriculation_courant
+          : { age_en_mois_du_certificat_immatriculation_courant: age_certificat }
       ),
       numero_immatriculation_anonymisee: plaq_immat,
       titulaire: mappedTitulaire,

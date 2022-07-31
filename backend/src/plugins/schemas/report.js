@@ -21,7 +21,7 @@ export const reportResponseSchema = Joi.object({
     certificat_immatriculation: Joi.object({
       date_premiere_immatriculation: Joi.date().description('Rubrique B : Date de la première immatriculation du véhicule.'),
       date_emission: Joi.date().description('Rubrique I : Date de l’immatriculation à laquelle se réfère le présent certificat.'),
-      nombre_de_mois_depuis_date_emission_certificat_immatriculation: Joi.number().integer().min(0).description('Nombre de mois depuis la date d\'émission du certificat d\'immatriculation en cours de validité.'),
+      age_en_mois_du_certificat_immatriculation_courant: Joi.number().integer().min(0).description('Nombre de mois depuis la date d\'émission du certificat d\'immatriculation en cours de validité.'),
       numero_immatriculation_anonymisee: Joi.string().description('Rubrique A : Numéro d\'immatriculation (anonymisé).'),
       titulaire: Joi.object({
         particulier: Joi.object({

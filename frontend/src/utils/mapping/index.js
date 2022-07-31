@@ -66,7 +66,7 @@ export const vehiculeMapping = ({
     certificat_immatriculation: {
       date_premiere_immatriculation: datePremiereImmatriculation,
       date_emission: dateEmissionCI,
-      nombre_de_mois_depuis_date_emission_certificat_immatriculation: nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
+      age_en_mois_du_certificat_immatriculation_courant: ageEnMoisDuCertificatImmatriculationCourant,
       numero_immatriculation_anonymisee: numeroImmatriculationAnonymisee,
       titulaire: {
         particulier: {
@@ -164,7 +164,7 @@ export const vehiculeMapping = ({
     certificatImmatriculation: {
       datePremiereImmatriculation,
       dateEmissionCI,
-      nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
+      ageEnMoisDuCertificatImmatriculationCourant,
       numeroImmatriculationAnonymisee,
       titulaire: {
         particulier: {
