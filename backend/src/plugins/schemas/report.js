@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import { NATURE, RESULTAT } from '../../constant/controlesTechniques.js'
 import { VIGNETTE } from '../../constant/critair.js'
-import { LOGO_GENRE } from '../../constant/logoGenre.js'
 
 import config from '../../config.js'
 
@@ -12,16 +11,7 @@ const extraSection = (
     ? {}
     : {
         extra: Joi.object({
-          logo_genre: Joi.string().valid(...Object.values(LOGO_GENRE)).description('Genre du logo à afficher sur le rapport HistoVec.')
-            .meta({ swaggerHidden: true }),
-          date_premiere_immatriculation_incertaine: Joi.boolean().description('La date de première immatriculation du véhicule n\'est pas fiable.')
-            .meta({ swaggerHidden: true }),
-          date_annulation: Joi.date().description('Date de l\'annulation du certificat d\'immatriculation du véhicule.')
-            .meta({ swaggerHidden: true }),
-          vehicule_a_usage_agricole: Joi.boolean().description('Le véhicule est à usage agricole.')
-            .meta({ swaggerHidden: true }),
-          vehicule_a_usage_de_collection: Joi.boolean().description('Le véhicule est à usage de collection.')
-            .meta({ swaggerHidden: true }),
+          // @info @extraFieldForFront
         }),
       }
 )
@@ -83,7 +73,8 @@ export const reportResponseSchema = Joi.object({
           .label(`${RESPONSE_PREFIX}duplicata`),
         annule: Joi.boolean().description('Le certificat d\'immatriculation est annulé.')
           .label(`${RESPONSE_PREFIX}annule`),
-        // @todo: insert date_annulation here
+        date_annulation: Joi.date().description('Date de l\'annulation du certificat d\'immatriculation du véhicule.')
+          .label(`${RESPONSE_PREFIX}date_annulation`),
         perdu: Joi.boolean().description('Le certificat d\'immatriculation a été perdu.')
           .label(`${RESPONSE_PREFIX}perdu`),
         vole: Joi.boolean().description('Le certificat d\'immatriculation a été volé.')
@@ -102,6 +93,8 @@ export const reportResponseSchema = Joi.object({
         nombre_de_procedures_ve: Joi.number().integer().min(0).description('Nombre de procédure(s) VE en cours.'), // @todo compter IMMO_VE ?
         procedure_ve_en_cours: Joi.boolean().description('Le véhicule a au moins une Procédure VE en cours.'),
       }).label(`${RESPONSE_PREFIX}procedures_ve`),
+      vehicule_a_usage_agricole: Joi.boolean().description('Le véhicule est à usage agricole.'),
+      vehicule_a_usage_de_collection: Joi.boolean().description('Le véhicule est à usage de collection.'),
     }).label(`${RESPONSE_PREFIX}etat`),
     historique: Joi.array().items(
       Joi.object({

@@ -9,8 +9,8 @@ export const vehiculeMapping = (report, isPublicApi) => {
     pers_raison_soc_tit,
     pers_siren_tit,
     adr_code_postal_tit,
-    logo_genre,
-    is_incertain,
+    // logo_genre,  // @todo: à supprimer côté Data et dans le V (plus utile ni côté data, ni côté front et back)
+    // is_incertain,  // @todo: continuer de l'exploiter côté Data,mais ne plus le remonter dans le V
     date_update,
     date_premiere_immat,
     age_certificat,
@@ -82,7 +82,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
         particulier: {
           nom_anonymise: pers_nom_naissance_tit,
           prenoms_anonymises: pers_prenom_tit,
-          // @todo question: use departement instead of code_postal ?
           code_postal: adr_code_postal_tit,
         },
       } : {}
@@ -92,7 +91,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
         personne_morale: {
           raison_sociale_anonymisee: pers_raison_soc_tit,
           siren_anonymise: pers_siren_tit,
-          // @todo question: use departement instead of code_postal ?
           code_postal: adr_code_postal_tit,
         },
       } : {}
@@ -155,21 +153,13 @@ export const vehiculeMapping = (report, isPublicApi) => {
     }
   ))
 
-  // @todo
   const extraSection = (
     isPublicApi
       ? {}
       : {
           extra: {
-            logo_genre,
-            date_premiere_immatriculation_incertaine: is_incertain,
-            ...(
-              date_annulation_ci
-                ? { date_annulation: date_annulation_ci }
-                : { }
-            ),
-            vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
-            vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
+            // @info @extraFieldForFront: C'est ici qu'on peut passer des champs uniquement au frontend, sans impacter le format de sortie de l'api grand public
+            // Ces champs ne doivent pas apparaître dans la documentation swagger (utiliser .meta({ swaggerHidden: true }) sur le validateur Joi)
           },
         }
   )
@@ -220,6 +210,11 @@ export const vehiculeMapping = (report, isPublicApi) => {
       etat: {
         duplicata,
         annule: annulation_ci,
+        ...(
+          date_annulation_ci
+            ? { date_annulation: date_annulation_ci }
+            : { }
+        ),
         perdu: perte_ci,
         vole: ci_vole,
       },
@@ -237,6 +232,8 @@ export const vehiculeMapping = (report, isPublicApi) => {
         nombre_de_procedures_ve: nb_sinistres,
         procedure_ve_en_cours: has_pve,
       },
+      vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
+      vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
     },
     historique: mappedNewHistorique,
     import_en_france: {

@@ -7,16 +7,6 @@ import operationsMapping from '@/assets/json/operations.json'
 import suspensionsMapping from '@/assets/json/suspensions.json'
 
 
-// We will develop other categories later using data pipeline.
-// For now, we'll class other categories as AUTRE we'll use VOITURE logo by default (as it was already implemented)
-const LOGO_VEHICULE_BY_LOGO_GENRE = {
-  'AUTRE': 'car',
-  'CAMION': 'truck',
-  'MOTO': 'motorcycle',
-  'UTILITAIRE': 'bus',
-  'VOITURE': 'car',
-}
-
 const normalizeForFrontendDisplay = (elements, format) => {
   const formattedElements = format ? elements.map(format) : elements
 
@@ -55,7 +45,6 @@ const labelizeCertifDepuis = (nbMonths) => {
 const certificatMapping = (certificatImmatriculation, importEnFrance, isCIAnnule) => {
   const {
     datePremiereImmatriculation,
-    datePremiereImmatriculationIncertaine,
     nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
     caracteristiquesTechniques: {
       dateEmissionCI,
@@ -69,18 +58,16 @@ const certificatMapping = (certificatImmatriculation, importEnFrance, isCIAnnule
 
   if (isCIAnnule) {
     return {
-      datePremiereImmatriculation,  // || MISSING_VALUE
+      datePremiereImmatriculation,
     }
   }
 
-
   return {
-    dateEmissionCI,  // || MISSING_VALUE
+    dateEmissionCI,
     nombreDeMoisDepuisDateEmissionCertificatImmatriculation: labelizeCertifDepuis(nombreDeMoisDepuisDateEmissionCertificatImmatriculation),
     isVehiculeImporteDepuisEtranger,
-    datePremiereImmatriculationEnFrance,  // || MISSING_VALUE
-    isIncertain: Boolean(datePremiereImmatriculationIncertaine),
-    datePremiereImmatriculation,  // || MISSING_VALUE
+    datePremiereImmatriculationEnFrance,
+    datePremiereImmatriculation,
   }
 }
 
@@ -467,9 +454,6 @@ const processVehiculeData = (vehiculeData) => {
     historique,
     situationAdministrative,
     importEnFrance,
-    designSiteWeb: {
-      logoGenre,
-    },
     usage,
   } = vehiculeData
 
@@ -524,8 +508,6 @@ const processVehiculeData = (vehiculeData) => {
   const lastSinistreYear = new Date(dateDerniereProcedureVE).getFullYear()
   const lastResolutionYear = new Date(dateFinDerniereProcedureVE).getFullYear()
 
-  const logoVehicule = LOGO_VEHICULE_BY_LOGO_GENRE[logoGenre]
-
   const labelizedHistorique = historique.map(elt => (
     {
       ...elt,
@@ -539,7 +521,6 @@ const processVehiculeData = (vehiculeData) => {
     etranger: { hasBeenImported: isVehiculeImporteDepuisEtranger },
     historique: labelizedHistorique,
     isApte: isApteACirculer,
-    logoVehicule,
     titulairesCount: nombreDeTitulaires,
     hasSinistre: hasProcedureVEEnCours,
     lastSinistreYear,
