@@ -77,7 +77,7 @@ const encrypt = (input, key) => {
 }
 
 const decrypt = (urlSafeBase64EncodedIvAndEncrypted, key) => {
-  const bufferedKey = Buffer.from(key, 'binary')
+  const bufferedKey = Buffer.from(key, 'base64')
   const ivAndEncrypted = urlSafeBase64Decode(urlSafeBase64EncodedIvAndEncrypted)
   const iv = Buffer.from(ivAndEncrypted.slice(0, AES_BLOCK_SIZE), 'binary')
   const encrypted = Buffer.from(ivAndEncrypted.slice(AES_BLOCK_SIZE), 'binary')
