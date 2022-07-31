@@ -58,7 +58,6 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Données personnelles & Gestion des cookies</h1>
 
-      <!-- @todo: à supprimer selon la DSR -->
       <h5 class="fr-blue-title">
         Introduction
       </h5>

@@ -169,7 +169,6 @@ export default defineComponent({
       </h5>
       <p>
         Conformément à la
-        <!-- @todo: valider lien avec DSR -->
         <a
           class="fr-link"
           href="https://www.legifrance.gouv.fr/dossierlegislatif/JORFDOLE000031589829/"
@@ -282,7 +281,6 @@ export default defineComponent({
         Autre
       </h5>
       <div class="fr-col-12">
-        <!-- @todo: revoir comment intégrer les liens -->
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
@@ -290,10 +288,8 @@ export default defineComponent({
               :expanded-id="expandedId"
               @expand="expandedId = $event"
             >
-              <!-- @todo: quelles classes pour texte SM et texte MD ? -->
               <p class="fr-text--xl">
                 Code de la consommation :
-                <!-- @todo: valider lien avec DSR -->
                 <a
                   class="fr-link"
                   href="https://www.legifrance.gouv.fr/codes/id/LEGISCTA000032227144/"
@@ -309,7 +305,6 @@ export default defineComponent({
 
               <p class="fr-text--xl">
                 Code de la consommation :
-                <!-- @todo: valider lien avec DSR -->
                 <a
                   class="fr-link"
                   href="https://www.legifrance.gouv.fr/codes/id/LEGISCTA000032807114/"
@@ -325,7 +320,6 @@ export default defineComponent({
 
               <p class="fr-text--xl">
                 Loi n°2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique :
-                <!-- @todo: valider lien avec DSR -->
                 <a
                   class="fr-link"
                   href="https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000032236011/"
@@ -335,7 +329,6 @@ export default defineComponent({
                   article 19
                 </a>
                 et
-                <!-- @todo: valider lien avec DSR -->
                 <a
                   class="fr-link"
                   href="https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000018048180/2022-05-11"
@@ -349,7 +342,6 @@ export default defineComponent({
               <p class="fr-text--xl">
                 Loi n°2004-575 du 21 juin 2004 pour la confiance dans
                 l'économie numérique :
-                <!-- @todo: valider lien avec DSR -->
                 <a
                   class="fr-link"
                   href="https://www.legifrance.gouv.fr/loda/article_lc/LEGIARTI000045292730/"

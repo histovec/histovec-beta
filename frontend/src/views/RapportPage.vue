@@ -308,7 +308,7 @@ export default defineComponent({
       const queryString = `?id=${idParam}&key=${keyParam}`
 
       // Add 'urlUnsafe' queryParameter to make new buyer urls (urlUnsafeBase64 encoded parameters) recognizable for frontend and backend
-      // @todo remove 'urlUnsafe' queryParam while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // @todo @urlUnsafe remove 'urlUnsafe' queryParam while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
       return `${this.baseUrl}/histovec/report${queryString}&urlUnsafe=true`
     },
 
@@ -317,7 +317,7 @@ export default defineComponent({
     buyerId () {
       const { id: buyerId, urlUnsafe } = this.$route.query
 
-      // @todo: Supprimer ce bloc de code une fois la transition vers le nouveau backend effectuée (le 8 du mois suivant la mise en prod)
+      // @todo @urlUnsafe : Supprimer ce bloc de code une fois la transition vers le nouveau backend effectuée (le 8 du mois suivant la mise en prod)
       if (!urlUnsafe && buyerId) {  // old buyer report link
         return base64Encode(urlSafeBase64Decode(buyerId))
       }
@@ -327,7 +327,7 @@ export default defineComponent({
     buyerKey () {
       const { key: buyerKey, urlUnsafe } = this.$route.query
 
-      // @todo: Supprimer ce bloc de code une fois la transition vers le nouveau backend effectuée (le 8 du mois suivant la mise en prod)
+      // @todo @urlUnsafe : Supprimer ce bloc de code une fois la transition vers le nouveau backend effectuée (le 8 du mois suivant la mise en prod)
       if (!urlUnsafe && buyerKey) {  // old buyer report link
         return base64Encode(urlSafeBase64Decode(buyerKey))
       }
@@ -706,7 +706,7 @@ export default defineComponent({
 
       const hashedIdBuffer = await hash(normalizedId)
       const holderId = base64Encode(hashedIdBuffer)
-      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // @todo @urlUnsafe : remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
       // eslint-disable-next-line no-console
       console.log(`[NEW] id base64Encoded = ${this.holderId}`)
 
@@ -728,7 +728,7 @@ export default defineComponent({
       const normalizedKey = normalizeKeyAsDataPreparation(this.vehicleId)
       const hashedKeyBuffer = await hash(normalizedKey)
       const holderKey = base64Encode(hashedKeyBuffer)
-      // @todo: remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // @todo @urlUnsafe : remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
       // eslint-disable-next-line no-console
       console.log(`[NEW] key base64Encoded = ${holderKey}`)
 

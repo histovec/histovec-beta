@@ -45,11 +45,13 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-12">
+      <!-- @todo @rgaa : Voir avec l'équipe de l'audit RGAA du BPSA, quel contenu mettre en attendant l'audit RGAA -->
       <h1>Accessibilité</h1>
 
       <h5 class="fr-blue-title">
         Introduction
       </h5>
+
       <p>
         Cette page vise à vous guider dans l'utilisation du site.
       </p>

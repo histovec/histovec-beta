@@ -21,7 +21,7 @@ export default defineComponent({
 
 
 <template>
-  <!-- @todo reimplement shortcut config
+  <!-- @todo @shortCutConfig reimplement shortcut config
     <div
       v-for="(entry, index) in $store.state.configEnabler"
       :key="index"

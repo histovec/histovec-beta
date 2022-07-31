@@ -79,5 +79,3 @@ export default createRouter({
     }
   },
 })
-
-// @todo: implement log for all routes

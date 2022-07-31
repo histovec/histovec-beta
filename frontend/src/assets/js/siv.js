@@ -326,7 +326,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     return [
       `- Motif :  ${suspensionsMapping[suspension.motif]}`,
       `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`,
-      // @todo: Faire le point avec Patrick et DSR (missing functional rules from SIV/DSR to build these data on JSON)
+      // @todo: Faire le point avec l'ingé Data et la DSR (missing functional rules from SIV/DSR to build these data on JSON)
       // `  Remise titre :  ${suspension.remiseDuTitre}`,
       // `  Retrait titre :  ${suspension.retraitDuTitre}`
     ]

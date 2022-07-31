@@ -468,38 +468,18 @@ export default defineComponent({
     },
 
     async onSubmit () {
+      // @todo @frontendCache: ne pas interroger le backend quand on interroge 2 fois de suite le même véhicule
+      // if (this.isSameFormDataAsPreviousSearch() && report) {
+      //   this.$router.push({
+      //     name: 'rapportVendeur',
+      //     params: {
+      //       cached: true,
+      //     },
+      //   })
+      //   return
+      // }
+
       this.persistFormData()
-
-        // siv: {
-        //   titulaire: {
-        //     particulier: {
-        //       nom: '',
-        //       prenoms: '',
-        //     },
-        //     personneMorale : {
-        //       raisonSociale: '',
-        //       numeroSiren: '',
-        //     },
-        //   },
-        //   numeroImmatriculation: '',
-        //   numeroFormule: '',
-        // },
-        // fni: {
-        //   titulaire: {
-        //     particulier: {
-        //       nomEtPrenoms: '',
-        //     },
-        //     personneMorale: {
-        //       raisonSociale: '',
-        //       numeroSiren: '',
-        //     },
-        //   },
-        //   numeroImmatriculation: '',
-        //   dateEmissionCertificatImmatriculation: '',
-        // }
-
-
-      // @todo: cache form information in sessionStorage
 
       this.$router.push({
         name: 'rapportVendeur',

@@ -96,7 +96,7 @@ export default defineComponent({
     licence-name="copyright © 2018"
   >
     <!--
-      @todo: quel licence utiliser ? Copyright non approprié d'après la Simon DSR
+      @todo @license: Quelle licence utiliser ? Copyright non approprié ? CECILL ?
     -->
     <template #description>
       <div>
