@@ -16,6 +16,14 @@ export default defineComponent({
       type: String,
       default: 'Erreur',
     },
+    subTitle: {
+      type: String,
+      default: '',
+    },
+    errorTitle: {
+      type: String,
+      default: '',
+    },
     errorMessages: {
       type: Array,
       default: () => [],
@@ -43,11 +51,18 @@ export default defineComponent({
 
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>{{ title }}</h1>
+      <p class="fr-error-subtitle fr-text--xs">
+        {{ subTitle }}
+      </p>
+
+      <p class="fr-text--xl">
+        {{ errorTitle }}
+      </p>
 
       <p
         v-for="(errorMessage, index) in errorMessages"
         :key="index"
-        class="fr-text--md"
+        class="fr-text--md  fr-mb-0"
       >
         {{ errorMessage }}
       </p>
@@ -67,18 +82,18 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-4  fr-col-xl-4">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w  fr-mt-4w">
+    <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4">
+      <HistoVecButtonLink
+        v-if="primaryAction"
+        v-bind="primaryAction"
+      />
+    </div>
+    <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4">
       <HistoVecButtonLink
         v-if="secondaryAction"
         v-bind="secondaryAction"
         secondary
-      />
-    </div>
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-4  fr-col-xl-4">
-      <HistoVecButtonLink
-        v-if="primaryAction"
-        v-bind="primaryAction"
       />
     </div>
   </div>
@@ -87,5 +102,9 @@ export default defineComponent({
 <style scoped>
 .text-center {
   text-align: center;
+}
+
+.fr-error-subtitle {
+  color: var(--text-mention-grey);
 }
 </style>

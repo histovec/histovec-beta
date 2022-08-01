@@ -475,13 +475,13 @@ export default defineComponent({
         if (buyerReportResponse.status === 404) {
           // Cas: véhicule non trouvé
           this.$router.push({
-            name: 'erreur',
+            name: 'pageNonTrouvee',
             query: {
-              title: 'Ce véhicule est inconnu d\'HistoVec',
-              errorMessages: [
+              errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
+              errorMessages: JSON.stringify([
                 'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
-                'Recopiez exactement les données de votre carte grise. La carte grise que vous utilisez n\'est peut-être pas la dernière en cours de validité (perte, vol, ...).',
-              ],
+                'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
+              ]),
               primaryAction: JSON.stringify({
                 label: 'Revenir au formulaire de recherche',
                 icon: 'ri-arrow-right-fill',
@@ -504,12 +504,12 @@ export default defineComponent({
       } else {
         // Cas: lien acheteur invalide
         this.$router.push({
-          name: 'erreur',
+          name: 'erreurInattendue',
           query: {
-            title: 'Lien de partage HistoVec invalide',
-            errorMessages: [
+            errorTitle: 'Lien de partage HistoVec invalide',
+            errorMessages: JSON.stringify([
               'Veuillez demander un nouveau lien au vendeur.',
-            ],
+            ]),
             primaryAction: JSON.stringify({
               label: 'Demander le rapport à un vendeur',
               icon: 'ri-arrow-right-fill',
@@ -526,13 +526,13 @@ export default defineComponent({
         if (holderReportResponse.status === 404) {
           // Cas: véhicule non trouvé
           this.$router.push({
-            name: 'erreur',
+            name: 'pageNonTrouvee',
             query: {
-              title: 'Ce véhicule est inconnu d\'HistoVec',
-              errorMessages: [
+              errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
+              errorMessages: JSON.stringify([
                 'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
-                'Recopiez exactement les données de votre carte grise. La carte grise que vous utilisez n\'est peut-être pas la dernière en cours de validité (perte, vol, ...).',
-              ],
+                'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
+              ]),
               primaryAction: JSON.stringify({
                 label: 'Revenir au formulaire de recherche',
                 icon: 'ri-arrow-right-fill',

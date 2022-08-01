@@ -13,14 +13,15 @@ const PlanDuSitePage = () => import('@/views/PlanDuSitePage.vue')
 const ProprietairePage = () => import('@/views/ProprietairePage.vue')
 const RapportPage = () => import('@/views/RapportPage.vue')
 const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
-const ServiceUnavailablePage = () => import('@/views/error/ServiceUnavailablePage.vue')
-const ErreurPage = () => import('@/views/error/ErreurPage.vue')
+const UnavailableServicePage = () => import('@/views/error/UnavailableServicePage.vue')
+const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue')
+
 
 const routes = (
   import.meta.env.VITE_IS_HISTOVEC_UNAVAILABLE === 'true' ?
   [
     { path: '/', name: 'root', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
-    { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },
+    { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage, meta: { title: 'HistoVec - Service indisponible' } },
     { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
   ] :
   [
@@ -53,17 +54,36 @@ const routes = (
     },
 
     // Errors pages
-    { path: '/erreur', name: 'erreur', component: ErreurPage,
+    { path: '/erreur-inattendue', name: 'erreurInattendue', component: UnintendedErrorPage,
       props: route => ({
         title: route.query.title,
-        errorMessages: route.query.errorMessages,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : null,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : null,
+        errorTitle: route.query.errorTitle,
+        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
       }),
-      meta: { title: 'HistoVec - Erreur' },
+      meta: { title: 'HistoVec - Erreur inattendue' },
     },
-    { path: '/service-indisponible', name: 'serviceIndisponible', component: ServiceUnavailablePage, meta: { title: 'HistoVec - Service indisponible' } },
-    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage, meta: { title: 'HistoVec - Page non trouvée' } },
+    { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage,
+      props: route => ({
+        title: route.query.title,
+        errorTitle: route.query.errorTitle,
+        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
+      }),
+      meta: { title: 'HistoVec - Service indisponible' },
+    },
+    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage,
+      props: route => ({
+        title: route.query.title,
+        errorTitle: route.query.errorTitle,
+        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
+      }),
+      meta: { title: 'HistoVec - Page non trouvée' },
+    },
   ]
 )
 
