@@ -83,12 +83,12 @@
   },
   "perte_ci": {
     "icon": "ri-information-line",
-    "text": "La carte grise a fait l'objet d'une déclaration de perte",
-    "adv": "La carte grise doit porter la mention \"Duplicata\" et la date"
+    "text": "Le certificat d'immatriculation a fait l'objet d'une déclaration de perte",
+    "adv": "Le certificat d'immatriculation doit porter la mention \"Duplicata\" et la date"
   },
   "annulation_ci": {
     "icon": "ri-indeterminate-circle-fill",
-    "text": "La carte grise a été annulée",
+    "text": "Le certificat d'immatriculation a été annulé",
     "adv": "Ce véhicule ne peut pas être vendu en l'état"
   },
   "vehicule_vole": {
@@ -98,7 +98,7 @@
   },
   "ci_vole": {
     "icon": "ri-information-line",
-    "text": "La carte grise a fait l'objet d'une déclaration de vol",
+    "text": "Le certificat d'immatriculation a fait l'objet d'une déclaration de vol",
     "adv": "Demandez la déclaration de vol"
   },
   "saisie": {
@@ -113,7 +113,7 @@
   },
   "duplicata": {
     "icon": "ri-file-copy-2-line",
-    "text": "La carte grise est un duplicata",
-    "adv": "La carte grise doit porter la mention \"Duplicata\" et la date"
+    "text": "Le certificat d'immatriculation est un duplicata",
+    "adv": "Le certificat d'immatriculation doit porter la mention \"Duplicata\" et la date"
   }
 }

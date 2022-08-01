@@ -15,7 +15,7 @@ const ASK_REPORT_EMAIL_BODY = `Bonjour,
 Vous vendez un véhicule que je souhaiterais acquérir.
 Serait-il possible de me communiquer son historique?
 Vous pourrez obtenir cet historique en vous connectant sur le service HistoVec du Ministère de l'Intérieur.
-Après avoir renseigné quelques informations de votre carte grise, vous obtiendrez un lien que vous pourrez me transmettre.
+Après avoir renseigné quelques informations de votre certificat d'immatriculation, vous obtiendrez un lien que vous pourrez me transmettre.
 Ceci me permettra de faire mon choix en tout transparence.
 
 Ce service est disponible en cliquant sur le lien suivant : ${HISTOVEC_WEBSITE_MAIN_URL}
