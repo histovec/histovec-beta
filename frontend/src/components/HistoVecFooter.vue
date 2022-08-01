@@ -67,13 +67,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <!-- @todo: implement 'no-cookie' props in DsfrFooter to merge /donnees-personnelles and /cookies links and label like this :
-    to: '/donnees-personnelles-et-cookies'
-    label: 'Données personnelles & Gestion des cookies'
-    and mask "Gestion des cookies" link
-    (Comportement attendu par l'équipe RG2A du BPSA)
+  <!-- @todo @mutualizeCookieEtDonneesPersonnelles:
+  Implémenter une props 'no-cookie' sur le DsfrFooter pour fusionner les links /donnees-personnelles et /cookies en un unique link  and label like this /donnees-personnelles-et-cookies
+  dans le cas où il n'y aurait pas de cookie utilisé sur le site web (comportement attendu par l'équipe RG2A du BPSA) :
+  Cette props 'no-cookie' à true aurait pour effet :
+    1 - d'ignorer les props personalDataLink et cookiesLink
+    2 - de masquer le HTML associé à ces 2 props
+    3 - d'utiliser la props personalDataAndCookiesLink (à implémenter) avec comme valeur par défaut '/donnees-personnelles-et-cookies' et comme label (dans les mandatoryLinks) 'Données personnelles & Gestion des cookies'
+  Implémenter la props 'personalDataAndCookiesLink' pour ajouter un élément à la fin des mandatoryLinks (cf -3)
 
-    For now, both routes redirect to /donnees-personnelles-et-cookies page
+  Pour le moment, les 2 routes (personalDataLink et cookiesLink)redirigent vers la page /donnees-personnelles-et-cookies
   -->
   <DsfrFooter
     a11y-compliance="non conforme"

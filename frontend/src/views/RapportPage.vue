@@ -41,7 +41,7 @@ import RapportAcheteurSvg from '@/assets/img/acheteur.svg'
 import RapportVendeurSvg from '@/assets/img/rapport.svg'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
-// @todo @ladyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
+// @todo @lazyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
 import logoVignetteCritair1 from '@/assets/img/critair/vignette_1.png'
 import logoVignetteCritair2 from '@/assets/img/critair/vignette_2.png'
 import logoVignetteCritair3 from '@/assets/img/critair/vignette_3.png'
@@ -161,18 +161,23 @@ export default defineComponent({
       },
 
       // @todo: @featureFlags
-      // feature flags à centraliser au niveau de la création de l'application Vue et à configurer via des variables d'environnement
-      // Actuellement possible en local via les env_var VITE_xxx mais pas pour la construction des builds de production
+      // Feature flags à centraliser au niveau de la création de l'application Vue et à configurer via des variables d'environnement
+      // Actuellement la construction des builds de PROD ne permet pas d'injecter de variable d'environnement, pour que cela fonctionne en PROD, il faudrait revoir le mode de build du front.
+      // Pour pouvoir changer les feature flags en PROD, il est actuellement nécessaire de faire un commit en modifiant les flags ci-dessous, et donc un nouveau build.
+      // En local, il suffit de modifier les flags ci-dessous et sauvergarder: le hot module reload (HMR) de Vite actualisera le code en temps réel dans la navigateur web.
+
+      // @shortCutConfig1: brancher ces features flags sur un raccourci clavier si besoin
       flags: {
         // Gestion de la fraîcheur des données
-        outdatedData: false,  // @info: A activer quand la DSR juge que la donnée n'est pas assez fraîche
-        showDataDate: true,  // @info: Permet d'afficher la vraie date des données dans le CSA et le rapport HTML HistoVec - Devrait toujours rester à true
-        codePartage: false,  // @todo: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
+        outdatedData: false,  // @flag @outdatedData : A activer quand la DSR juge que la donnée n'est pas assez fraîche
+        showDataDate: true,  // @feature @showDataDate : Permet d'afficher la vraie date des données dans le CSA et le rapport HTML HistoVec - Devrait toujours rester à true
+        codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
         // Flag du 8
-        usePreviousMonthForData: false,
-        previousMonthShift: 1,
+        usePreviousMonthForData: false, // @flag @usePreviousMonthForData
+        previousMonthShift: 1, // @flag @previousMonthShift
 
+        // @flag @ignoreUtacCache
         // Outil de debug (doublé par côté backend pour empêcher son usage en PROD)
         ignoreUtacCache: false,
       },
@@ -307,30 +312,40 @@ export default defineComponent({
       const keyParam = encodeURIComponent(this.holderKey)
       const queryString = `?id=${idParam}&key=${keyParam}`
 
-      // Add 'urlUnsafe' queryParameter to make new buyer urls (urlUnsafeBase64 encoded parameters) recognizable for frontend and backend
-      // @todo @urlUnsafe remove 'urlUnsafe' queryParam while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // Ajout du queryParam 'urlUnsafe' afin que le front puisse distinguer les nouveaux liens acheteurs (au format urlUnsafeBase64Encoded) des anciens (au format urlSafeBase64Encoded)
+      // L'usage de ce nouveau format (urlUnsafeBase64Encoded) est nécessaire au bon fonctionnement du codePartageHistoVec et l'API associée: /report_by_code
+      // @todo @urlUnsafe1 : Supprimer cette ligne
       return `${this.baseUrl}/histovec/report${queryString}&urlUnsafe=true`
-    },
+
+      // Après la 8 du mois suivant la mise en PROD Vue3 + DSFR, supprimer le queryParam 'urlUnsafe'.
+      // En effet, les anciens liens acheteur (au format urlSafeBase64Encoded) auront tous périmé
+      // et tous les liens acheteurs générés à partir du 1er du mois auront le nouveau format (urlUnsafeBase64Encoded).
+      // Plus besoin de mécanisme pour les distinguer.
+      // @todo @urlUnsafe2 : Décommenter cette ligne
+      // return `${this.baseUrl}/histovec/report${queryString}`
+},
 
     // ----- Interrogation de l'api pour le rapport acheteur -----
 
     buyerId () {
       const { id: buyerId, urlUnsafe } = this.$route.query
 
-      // @todo @urlUnsafe : Supprimer ce bloc de code une fois la transition vers le nouveau backend effectuée (le 8 du mois suivant la mise en prod)
+      /* ----- @todo @urlUnsafe3 : Supprimer ce bloc de code  ------- */
       if (!urlUnsafe && buyerId) {  // old buyer report link
         return base64Encode(urlSafeBase64Decode(buyerId))
       }
+      /* -------------------------------------------------------- */
 
       return buyerId
     },
     buyerKey () {
       const { key: buyerKey, urlUnsafe } = this.$route.query
 
-      // @todo @urlUnsafe : Supprimer ce bloc de code une fois la transition vers le nouveau backend effectuée (le 8 du mois suivant la mise en prod)
+      /* ----- @todo @urlUnsafe4 : Supprimer ce bloc de code  ------- */
       if (!urlUnsafe && buyerKey) {  // old buyer report link
         return base64Encode(urlSafeBase64Decode(buyerKey))
       }
+      /* -------------------------------------------------------- */
 
       return buyerKey
     },
@@ -459,7 +474,6 @@ export default defineComponent({
 
         if (buyerReportResponse.status === 404) {
           // Cas: véhicule non trouvé
-
           this.$router.push({
             name: 'erreur',
             query: {
@@ -480,7 +494,6 @@ export default defineComponent({
 
         if (buyerReportResponse.status !== 200) {
           // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-
           this.$router.push({
             name: 'serviceIndisponible',
           })
@@ -490,7 +503,6 @@ export default defineComponent({
         report = buyerReportResponse.report
       } else {
         // Cas: lien acheteur invalide
-
         this.$router.push({
           name: 'erreur',
           query: {
@@ -513,8 +525,6 @@ export default defineComponent({
 
         if (holderReportResponse.status === 404) {
           // Cas: véhicule non trouvé
-          console.log('-- véhicule non trouvé --')
-
           this.$router.push({
             name: 'erreur',
             query: {
@@ -535,8 +545,6 @@ export default defineComponent({
 
         if (holderReportResponse.status !== 200) {
           // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-          console.log('-- erreur lors de la récupération du rapport (hors contrôles techniques) --')
-
           this.$router.push({
             name: 'serviceIndisponible',
           })
@@ -546,8 +554,6 @@ export default defineComponent({
         report = holderReportResponse.report
       } else {
         // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
-        console.log('-- holder - Accès à l\'url du rapport vendeur sans avoir rempli le formulaire au moins une fois --')
-
         this.$router.push({
           name: 'proprietaire',
         })
@@ -555,8 +561,6 @@ export default defineComponent({
       }
     } else {
       // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
-      console.log('-- Accès à l\'url du rapport vendeur sans avoir rempli le formulaire au moins une fois --')
-
       this.$router.push({
         name: 'proprietaire',
       })
@@ -619,7 +623,7 @@ export default defineComponent({
 
   methods: {
     getVignetteCritairImage(vignetteCritair) {
-      // @todo @ladyLoadCritairImage2 lazy loader les images dynamiquement
+      // @todo @lazyLoadCritairImage2 lazy loader les images dynamiquement
 
       if (vignetteCritair === VIGNETTE[1]) {
         return this.images.critair.logoVignetteCritair1
@@ -706,7 +710,12 @@ export default defineComponent({
 
       const hashedIdBuffer = await hash(normalizedId)
       const holderId = base64Encode(hashedIdBuffer)
-      // @todo @urlUnsafe : remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+
+      /* ------------------ @todo @urlUnsafe6: Supprimer bloc de code ------------------ */
+      // Ces logs sont utiles pour debugger un éventuel souci sur la migration
+      // de l'ancien format des liens acheteur (urlSafeBase64Encoded)
+      // vers le nouveau format des liens acheteurs (urlUnsafeBase64Encoded)
+
       // eslint-disable-next-line no-console
       console.log(`[NEW] id base64Encoded = ${this.holderId}`)
 
@@ -716,6 +725,7 @@ export default defineComponent({
 
       // eslint-disable-next-line no-console
       console.log(`[ID] are they different ? ${holderId !== urlSafeBase64EncodedId}`)
+      /* ------------------------------------------------------------------------------------------ */
 
       return holderId
     },
@@ -728,7 +738,7 @@ export default defineComponent({
       const normalizedKey = normalizeKeyAsDataPreparation(this.vehicleId)
       const hashedKeyBuffer = await hash(normalizedKey)
       const holderKey = base64Encode(hashedKeyBuffer)
-      // @todo @urlUnsafe : remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
+      // @todo @urlUnsafe5 : remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
       // eslint-disable-next-line no-console
       console.log(`[NEW] key base64Encoded = ${holderKey}`)
 
@@ -792,6 +802,9 @@ export default defineComponent({
         histoVecLogoBytes: this.images.csa.logoHistoVecBytes,
         marianneImageBytes: this.images.csa.logoMIBytes,
         marque,
+        // @todo: @renamePlaque
+        // Renommer PARTOUT DANS LE CODE le mot "plaque"/"plaque d'immatriculation" en "numero d'immatriculation"
+        // que ce soit en nom de variable ou en texte descriptif
         plaque: numeroImmatriculation,
         premierCertificat: datePremiereImmatriculation,
         qrCodeUrl: this.url,
@@ -875,7 +888,8 @@ export default defineComponent({
     },
 
     async onClickCopyCodePartage () {
-      // @todo @copyLink4: la copie ne s'effectue pas dans le cadre de la modale,
+      // @todo @codePartage2: pré-requis @copyLink
+      // la copie ne s'effectue pas dans le cadre de la modale,
       // malgré la configuration de VueClipboard dans le main.js
       // On ne peut pas forcer 2 copies en même temps à l'ouverture de la modale
       // /!\ Cette feature ne pourra fonctionner qu'après correction du bug copy clipboard dans la DsfrModale /!\
@@ -1021,7 +1035,7 @@ export default defineComponent({
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
     <div class="fr-col-12  fr-col-lg-11  fr-col-xl-11">
-      <!-- @todo: pour la vue mobile sm et xs : utiliser un accordeon ? -->
+      <!-- @todo @reportAccordeon : pour la vue mobile sm et xs : utiliser un accordeon ? -->
       <DsfrTabs
         tab-list-name="Liste d'onglets du rapport du véhicule"
         :tab-titles="tabTitles"
@@ -1115,10 +1129,7 @@ export default defineComponent({
                   </span>
                   {{ constants.USAGE_AGRICOLE.text }}
                   <br />
-                  <!--
-                    @todo @agricoleLink: demander à la DSR un nouveau lien pour USAGE_AGRICOLE.link
-                    Celui-ci n'existe plus
-                  -->
+                  <!-- @todo @agricoleLink2: décommenter cette section -->
                   <!-- <span
                     v-if="constants.USAGE_AGRICOLE.adv"
                     class="fr-text--md  fr-mb-1w"
@@ -1269,7 +1280,7 @@ export default defineComponent({
                       </span>
                     </template>
                   </template>
-                  <!-- @todo: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Historique" ? -->
+                  <!-- @todo @redirectTab: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Historique" ? -->
                   <br />
                   <!-- Commentaire: un ou plusieurs sinistres -->
                   <span
@@ -1499,7 +1510,7 @@ export default defineComponent({
 
             <template v-if="caracteristiquesTechniques.PT.admissible">
               <div class="fr-col-6  fr-pt-0  fr-pb-1w">
-                PT technique admissible (kg)
+                PT techniquement admissible (kg)
               </div>
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 F.1
@@ -2276,19 +2287,6 @@ export default defineComponent({
     </div>
   </div>
 </template>
-
-<!-- @todo @codePartageHistoVec
-  1 - @codePartageHistoVec1
-  Gérer le flag permettant d'afficher ou non le bouton de copie du code partage HistoVec
-
-  2 - @codePartageHistoVec2
-  Afficher le bouton de copie du code partage HistoVec si le flag est activé
-  /!\ nécessite d'avoir résolu le bug de copie dans la DsfrModale /!\
-
-  3 - @codePartageHistoVec3
-  Logger la copie du code partage HistoVec
-  COPY LINK code partage HistoVec =>  await api.log(`${this.$route.path}/share-code-partage/copy`)
--->
 
 <style scoped>
 /* @todo centralize these rules in common CSS file as a .histovec-fr-blue-title class */

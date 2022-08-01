@@ -127,6 +127,13 @@ export default defineComponent({
       />
     </div>
 
+    <!--
+      @todo @renameCarteGrise :
+
+      Voir avec la DSR pour renommer toute les occurence de "Carte grise" en "Certificat d'immatriculation" dans la FAQ
+      Ce renommage avait déjà été validé ailleurs sur l'application web HistoVec
+    -->
+
     <div
       v-if="selectedTheme === FAQ_THEMES.WHY_HISTOVEC"
       class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"

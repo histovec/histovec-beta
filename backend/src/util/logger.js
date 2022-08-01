@@ -59,7 +59,6 @@ export const appLogger = createLogger({
   exitOnError: false,
 })
 
-// @todo: after test by data logs engineers, use this logger to replace all existing backend logs
 const syslogFormat = printf(({ level, message, timestamp }) => {
   const { key, value, tag } = message
 
@@ -72,6 +71,9 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
 
   const completeValue = typeof value === 'object' ? JSON.stringify(value) : value
   const completeTag = tag ? ` [${tag}]` : ''
+
+  // @todo @syslog1:
+  // Utiliser ce format pour remplacer tous les logs de l'application via l'utilitaire syslogLogger
 
   // /!\ DON'T TOUCH without working with data logs engineer) /!\
   // This format has been defined with data logs engineer for production exploitation.

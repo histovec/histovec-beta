@@ -101,6 +101,7 @@ export LOCAL_IP=$(shell hostname -I | awk '{print $$1}')
 export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
 export NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
+# @rateLimitFront parameters
 export BACKEND_API_USER_LIMIT_RATE=1r/m
 export BACKEND_API_USER_BURST=3 nodelay
 export BACKEND_API_USER_SCOPE=http_x_forwarded_for
@@ -262,6 +263,7 @@ export FILE_IMAGE_REDIS_LATEST_VERSION = $(APP)-redis-latest-image.tar
 export PUBLIC_BACKEND_NGINX=${APP_PATH}/public-backend-nginx
 export PUBLIC_BACKEND_NGINX_LOGS=${LOGS}/public-backend-nginx
 export PUBLIC_BACKEND_NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
+# @rateLimitAPI parameters
 export PUBLIC_BACKEND_API_USER_LIMIT_RATE=1r/m
 export PUBLIC_BACKEND_API_USER_BURST=3 nodelay
 export PUBLIC_BACKEND_API_USER_SCOPE=http_x_forwarded_for

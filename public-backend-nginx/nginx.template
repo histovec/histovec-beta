@@ -16,6 +16,7 @@ http {
 
     server_tokens off;
 
+    # @rateLimitAPI parameters
     limit_req_zone $<PUBLIC_BACKEND_API_USER_SCOPE> zone=app:10m rate=30r/s;
     limit_req_zone $<PUBLIC_BACKEND_API_USER_SCOPE> zone=css:10m rate=10r/s;
     limit_req_zone $<PUBLIC_BACKEND_API_USER_SCOPE> zone=log:1m rate=5r/s;

@@ -43,11 +43,9 @@ export const reportResponseSchema = Joi.object({
         couleur: Joi.string().description('Couleur du véhicule.'),
         type_de_reception: Joi.string().description('Type de réception (en général UE).'),
         vin_anonymise: Joi.string().description('Rubrique E : Numéro d’identification du véhicule (VIN : Vehicle Identification Number) anonymisé.'),
-        // @todo: Pt techniquement Admissible => A changer HistoVec
         ptta: Joi.number().integer().min(0).description('Rubrique F.1 : Masse en charge maximale techniquement admissible (en kg), sauf pour les motocycles, plus communément appelé PT techniquement admissible pour Poids Total Techniquement Admissible.'),
         ptac: Joi.number().min(0).description('Rubrique F.2 : Masse en charge maximale admissible du véhicule en service dans l’Etat membre d’immatriculation (en kg), anciennement appelé PTAC pour Poids Total Autorisé en Charge.'),
         ptra: Joi.number().integer().min(0).description('Rubrique F.3 : Masse en charge maximale admissible de l’ensemble en service dans l’Etat membre d’immatriculation (en kg), plus communément appelé PTRA pour Poids Total Roulant Autorisé.'),
-        // @todo: PT service pour Poids Total en Service (ou ptes)
         ptes: Joi.number().integer().min(0).description('Rubrique G : Masse du véhicule en service avec carrosserie et dispositif d’attelage en cas de véhicule tracteur de catégorie autre que M1, plus communément appelé PT service pour Poids Total en Service.'),
         ptav: Joi.number().integer().min(0).description('Rubrique G.1 : Poids à vide national, plus communément appelé PTAV pour Poids Total A Vide.'),
         date_emission: Joi.date().description('Rubrique I : Date de l’immatriculation à laquelle se réfère le présent certificat.'),

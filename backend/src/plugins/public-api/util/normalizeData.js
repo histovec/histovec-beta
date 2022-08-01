@@ -1,8 +1,11 @@
 /* eslint-disable */
-// @todo: Update all "OUI"/"NON" to boolean from data source and remove all utils in this file (and their usage)
 
 import { FR_DATE_EXTRACT_REGEX, ISO_8601_DATE_EXTRACT_REGEX } from '../../../constant/date/regex.js'
 
+// @todo @booleanNormalization:
+// Supprimer la normalisation des booléens lorsque la DATA utilisera des booléens dans tous les champs du V
+// et qu'il n'y aura plus aucun "OUI"/"NON" ou "0"/"1"
+// /!\ Chantier sujet à régression côté DATA /!\
 const normalizeToBoolean = (value) => {
   if (!value && value !== false) { // falsy but not false
     return
@@ -24,6 +27,10 @@ const normalizeToBoolean = (value) => {
   }
 }
 
+// @todo @isoDateNormalization:
+// Supprimer la normalisation des dates lorsque la DATA utilisera des dates au format ISO8601 dans tous les champs du V
+// et qu'il n'y aura plus aucune date au format FR (DD/MM/YYYY)
+// /!\ Chantier sujet à régression côté DATA /!\
 const normalizeToISODate = (value) => {
   if (!value) {
     return
@@ -87,10 +94,12 @@ export const normalizeReport = (report) => {
     date_import_france,
     date_premiere_immat_etranger,
     has_pve,
-    new_historique = [],
+    // @renameHistorique1
+    // historique = [],
+    new_historique = [],  // Supprimer
     is_apte_a_circuler,
     is_fni,
-    is_fni_converti,
+    // is_fni_converti,  // @todo @isFniConverti : ne plus exposer côté DATA
     is_incertain,
     sit_adm: {
       suspensions = [],
@@ -105,7 +114,9 @@ export const normalizeReport = (report) => {
     } = {},
   } = report
 
-  const normalizedNewHistorique = normalizeHistorique(new_historique)
+  // @renameHistorique2
+  // const normalizedHistorique = normalizeHistorique(historique)
+  const normalizedNewHistorique = normalizeHistorique(new_historique)  // Supprimer
 
   const normalizedSitAdm = {
     suspensions: suspensions.map((suspension) => {
@@ -219,7 +230,15 @@ export const normalizeReport = (report) => {
           }
         : {}
     ),
-    ...(
+    // @renameHistorique3
+    // ...(
+    //   historique
+    //     ? {
+    //       historique: normalizedHistorique,
+    //       }
+    //     : {}
+    // ),
+    ...(  // Supprimer ce bloc
       new_historique
         ? {
             new_historique: normalizedNewHistorique,
@@ -273,13 +292,6 @@ export const normalizeReport = (report) => {
       is_fni
         ? {
             is_fni: normalizeToBoolean(is_fni),
-          }
-        : {}
-    ),
-    ...(
-      is_fni_converti
-        ? {
-            is_fni_converti: normalizeToBoolean(is_fni_converti),
           }
         : {}
     ),

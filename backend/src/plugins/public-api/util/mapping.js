@@ -9,8 +9,8 @@ export const vehiculeMapping = (report, isPublicApi) => {
     pers_raison_soc_tit,
     pers_siren_tit,
     adr_code_postal_tit,
-    // logo_genre,  // @todo: à supprimer côté Data et dans le V (plus utile ni côté data, ni côté front et back)
-    // is_incertain,  // @todo: continuer de l'exploiter côté Data,mais ne plus le remonter dans le V
+    // logo_genre,  // @todo @logoGenre: ne plus exposer le champ calculé "logo_genre" côté DATA, et on peut le supprimer complètement côté DATA
+    // is_incertain,  // @todo @isIncertain: ne plus exposer le champ calculé "is_incertain" côté DATA
     date_update,
     date_premiere_immat,
     age_certificat,
@@ -61,7 +61,9 @@ export const vehiculeMapping = (report, isPublicApi) => {
     import: import_en_france,
     date_import_france,
     date_premiere_immat_etranger,
-    new_historique: reportNewHistorique = [],
+    // @renameHistorique4
+    // historique: reportHistorique = [],
+    new_historique: reportNewHistorique = [],  // Supprimer
     sit_adm: {
       dvs: reportDeclarationsValantSaisie = [],
       gages: reportGages = [],
@@ -119,7 +121,9 @@ export const vehiculeMapping = (report, isPublicApi) => {
     ))
   }
 
-  const mappedNewHistorique = historiqueMapping(reportNewHistorique)
+  // @renameHistorique5
+  // const mappedHistorique = historiqueMapping(reportHistorique)
+  const mappedNewHistorique = historiqueMapping(reportNewHistorique)  // Supprimer
 
   const mappedDeclarationsValantSaisie = reportDeclarationsValantSaisie.map(({ date, dvs_autorite }) => (
     {
@@ -224,7 +228,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
       vignette_critair: critair,
       vole: vehicule_vole,
       procedures_ve: {
-        numero_immatriculation_au_format_fni: is_fni,
+        numero_immatriculation_au_format_fni: is_fni,  // @todo @isFni: Continuer d'exposer le champs "is_fni" côté DATA. Finalement on s'en sert.
         date_derniere_procedure_ve: date_dernier_sinistre,
         // @todo: transformer date_derniere_resolution en date_fin_derniere_procedure_ve en intégrant cette logique côté data
         date_fin_derniere_procedure_ve: date_dernier_sinistre < date_derniere_resolution ? date_derniere_resolution : undefined,
@@ -235,7 +239,9 @@ export const vehiculeMapping = (report, isPublicApi) => {
       vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
       vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
     },
-    historique: mappedNewHistorique,
+    // @renameHistorique6
+    // historique: mappedHistorique,
+    historique: mappedNewHistorique,  // Supprimer
     import_en_france: {
       vehicule_importe_depuis_etranger: import_en_france,
       date_import: date_import_france,

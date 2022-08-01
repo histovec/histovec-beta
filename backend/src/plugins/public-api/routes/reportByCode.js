@@ -9,7 +9,6 @@ const reportByCodePayloadSchema = Joi.object({
     separator: '-',
   }).meta({ swaggerHidden: true }),
   vehicule: Joi.object({
-    // @todo: Clean base64 encoding (EVERYWHERE) while merging private and public APIs
     code: Joi.string().pattern(ID_REGEX).required()
       .description('Code HistoVec du rapport HistoVec demandé.')
       .label('code_partage_histovec'),

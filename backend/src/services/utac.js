@@ -6,7 +6,8 @@ import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 
-// @todo: remove after BPSA test
+// @todo: A supprimer si on ne souhaite plus avoir de mock API UTAC
+// @todo: Ou à migrer vers un serveur de mock API UTAC
 const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
   ct: [
     {

@@ -9,5 +9,8 @@ export const USAGE_AGRICOLE = {
   'icon': 'ri-settings-5-fill',
   'text': 'Véhicule agricole',
   'adv': 'Consultez le texte relatif aux véhicules agricoles',
-  'link': 'https://www.service-public.fr/professionnels-entreprises/vosdroits/F10522',
+  // @todo @agricoleLink1: demander à la DSR un nouveau lien vers une page web expliquant le statut de véhicule à usage agricole
+  // Le lien actuellement renseigné n'est plus référencé cf: https://www.service-public.fr/professionnels-entreprises/vosdroits/F10522
+  // Ajouter le nouveau lien ici :
+  'link': '',
 }

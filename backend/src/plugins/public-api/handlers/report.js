@@ -48,6 +48,8 @@ export const getReport = async (payload) => {
     }
   }
 
+  // @todo @syslog2
+  // Exemple d'utilisation du syslogLogger
   syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)

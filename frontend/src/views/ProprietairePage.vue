@@ -140,8 +140,9 @@ export default defineComponent({
   },
 
   computed: {
-    // @todo: implement focus on form with : focus-trap-vue
-
+    // @todo @focusTrap:
+    // Implémenter un focus automatique sur le 1er élément du formulaire (en haut à gauche) lors de la sélection d’un format de plaque (SIV ou FNI) pour que l’usager n’ait pas à scroller sur le formulaire suite à la sélection.
+    // (probablement via la dépendance 'focus-trap-vue')
 
     // @todo @csvCopy: Réimplementer le copier coller des data du CSV dans le formulaire en utilisant vue3-shortkey
     // onPaste (evt) {
@@ -994,7 +995,6 @@ export default defineComponent({
               </DsfrInputGroup>
             </div>
           </div>
-          <!-- @todo: Valider le remplacement de "Carte grise" par "Certificat d'immatriculation" -->
           <p class="fr-text--md  histovec-input-group-title  fr-mt-4w">
             Certificat d'immatriculation
           </p>

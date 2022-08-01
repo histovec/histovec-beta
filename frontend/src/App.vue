@@ -21,7 +21,11 @@ export default defineComponent({
 
 
 <template>
-  <!-- @todo @shortCutConfig reimplement shortcut config
+  <!--
+    @todo @shortCutConfig2:
+    Réimplémenter le mécanisme de raccourci clavier pour activer/désactiver des feature flags
+    Voici l'ancienne implémentation avec Vuex :
+    (Utiliser le SessionStorage serait probablement plus sage que d'utiliser Pinia, le successeur de Vuex)
     <div
       v-for="(entry, index) in $store.state.configEnabler"
       :key="index"

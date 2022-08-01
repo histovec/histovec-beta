@@ -105,7 +105,6 @@ export default defineComponent({
         <router-link
           to="/donnees-personnelles-et-cookies"
         >
-          <!-- @todo: changer l'url en '/donnees-personnelles-et-cookies' quand ce sera supporté dans le DsfrFooter -->
           Données personnelles & Gestion des cookies
         </router-link>
       </h3>

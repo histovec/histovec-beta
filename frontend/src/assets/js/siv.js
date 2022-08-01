@@ -326,9 +326,9 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     return [
       `- Motif :  ${suspensionsMapping[suspension.motif]}`,
       `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`,
-      // @todo: Faire le point avec l'ingé Data et la DSR (missing functional rules from SIV/DSR to build these data on JSON)
+      // @todo @remiseRetraitTitre: Faire le point avec l'ingé Data et la DSR (missing functional rules from SIV/DSR to build these data on JSON)
       // `  Remise titre :  ${suspension.remiseDuTitre}`,
-      // `  Retrait titre :  ${suspension.retraitDuTitre}`
+      // `  Retrait titre :  ${suspension.retraitDuTitre}`,
     ]
   }).flat()
 
@@ -404,8 +404,9 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       hasOtciPV,
     },
 
-    // @TODO: mutualize this part with backend to generate CSA as an API
-    // @TODO: mutualize needed images too
+    // @TODO @apiCsa1 : Mutualiser cette logique entre le front et le back (probablement via un paquet NPM qui sera en dépendance du front et du back)
+    // pour pouvoir la réutiliser lors de la création de l'API de génération de CSA
+    // @TODO @apiCsa2 : mutualiser les 2 images aussi
     csaLabels: {
       annulationCurrentStatus,
       dvsCurrentStatusLines: hasDeclarationsValantSaisie ? dvsCurrentStatusLines : ['Aucune'],

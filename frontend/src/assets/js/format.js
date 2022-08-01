@@ -27,7 +27,7 @@ export const formatIsoToHumanReadableFrDate = (isoDate) => {
 		return ''
 	}
 
-  // @todo: supprimer les usages de dayjs et les remplacer par du natif ou du date-fns
+  // @todo @replaceDayjs : supprimer les usages de dayjs et les remplacer par du natif ou du date-fns
   // chart-js a besoin d'un bridge vers un outil de date pour faire fonctionner notre graphique
   // il n'existe aucun bridge pour dayjs.
   // j'ai choisi date-fns pour le bridge chart.js.

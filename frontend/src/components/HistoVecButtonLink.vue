@@ -11,7 +11,6 @@ export default defineComponent({
 
   props: {
     ...RouterLink.props,
-    // ...DsfrButton.props // @todo: import DsfrButton Typescript type
     disabled: Boolean,
     label: {
       type: String,
