@@ -187,7 +187,7 @@ export default {
       {
         sivDataPath: 'sivData',
         utacDataPath: 'utacData',
-        sivDataKey: key,
+        sivDataKey: '82nW8tXSxc2ouzZ/QyBu/FHVBydOle+AR5sB8xZbiM4=', // key,
       }
     )
 
