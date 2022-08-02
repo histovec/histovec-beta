@@ -4,10 +4,11 @@ import icons from '@/assets/json/techControlIcons.json'
 import { LABELS_SINCE_20_05_2018, LABELS_BEFORE_20_05_2018 } from '../../constants/vehicle/technicalControl'
 import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '../../assets/js/format.js'
 
+const UKNOWN_ICON = 'fa fa-question-circle'
 
 const labelize = (controle) => {
-	const iconNature = icons.nature[controle.ct_nature]
-	const iconResultat = icons.resultat[controle.ct_resultat]
+	const iconNature = controle.ct_nature ? icons.nature[controle.ct_nature] : UKNOWN_ICON
+	const iconResultat = controle.ct_resultat ? icons.resultat[controle.ct_resultat] : UKNOWN_ICON
 	const controleDate = dayjs(controle.ct_date, FR_DATE_FORMAT)
 
 	const CHANGE_LABEL_DATE = dayjs('2018-05-20')
