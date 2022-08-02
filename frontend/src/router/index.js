@@ -17,8 +17,11 @@ const UnavailableServicePage = () => import('@/views/error/UnavailableServicePag
 const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue')
 
 
+// @flag @makeSiteUnavailable
+const isHistoVecUnavailable = false
+
 const routes = (
-  import.meta.env.VITE_IS_HISTOVEC_UNAVAILABLE === 'true' ?
+  isHistoVecUnavailable ?
   [
     { path: '/', name: 'root', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
     { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage, meta: { title: 'HistoVec - Service indisponible' } },
