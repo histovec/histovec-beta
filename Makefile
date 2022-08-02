@@ -239,7 +239,7 @@ export UTAC_PEM
 ##############################################
 
 export BACKEND_PORT?=8010
-export BACKEND_IS_HISTOVEC_UNAVAILABLE?=false
+export BACKEND_IS_HISTOVEC_UNAVAILABLE?=true
 export BACKEND_USE_PREVIOUS_MONTH_FOR_DATA?=false
 export BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
@@ -287,7 +287,7 @@ export PUBLIC_BACKEND_PREVIOUS_MONTH_SHIFT?=1
 
 export PUBLIC_BACKEND_HOST=public-backend
 export PUBLIC_BACKEND_PORT?=8020
-export PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE?=false
+export PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE?=true
 
 # packaging
 export DC_DEV_PUBLIC_BACKEND = ${DC_PREFIX}-dev-public-backend.yml
