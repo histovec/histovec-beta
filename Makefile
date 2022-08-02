@@ -192,7 +192,7 @@ export openstack_token := $(shell [ -n "$$openstack_token" ] && echo $$openstack
 ##############################################
 
 # Flag du 8
-export USE_PREVIOUS_MONTH_FOR_DATA?=false
+export USE_PREVIOUS_MONTH_FOR_DATA?=true
 export PREVIOUS_MONTH_SHIFT?=1
 
 export BACKEND=${APP_PATH}/backend
