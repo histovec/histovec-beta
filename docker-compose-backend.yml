@@ -29,7 +29,8 @@ services:
       - NODE_ENV=${EXEC_ENV}
       - BACKEND_NAME=${BACKEND_NAME}
       - BACKEND_PORT=${BACKEND_PORT}
-      - BACKEND_USE_PREVIOUS_MONTH_FOR_DATA=${BACKEND_USE_PREVIOUS_MONTH_FOR_DATA}
+      - USE_PREVIOUS_MONTH_FOR_DATA=${USE_PREVIOUS_MONTH_FOR_DATA}
+      - PREVIOUS_MONTH_SHIFT=${PREVIOUS_MONTH_SHIFT}
       - APP=${APP}
       - APP_VERSION=${APP_VERSION}
       - REDIS_HOST=${REDIS_HOST}
@@ -40,7 +41,6 @@ services:
       - ES_INDEX=${ES_INDEX}
       - IS_UTAC_API_ACTIVATED=${IS_UTAC_API_ACTIVATED}
       - IS_UTAC_MOCK_FOR_BPSA_ACTIVATED=${IS_UTAC_MOCK_FOR_BPSA_ACTIVATED}
-      - IS_VIN_SENT_TO_UTAC=${IS_VIN_SENT_TO_UTAC}
       - FAKE_UTAC_URL=${FAKE_UTAC_SCHEME}://${FAKE_UTAC_HOST}:${FAKE_UTAC_PORT}/${FAKE_UTAC_API}
       - UTAC_ID_KEY=${UTAC_ID_KEY}
       - UTAC_URL=${UTAC_URL}
@@ -68,7 +68,7 @@ services:
       start_period: 40s
 
   redis:
-    image: redis:6-alpine
+    image: redis:7-alpine
     container_name: ${APP}-cache
     ports:
       - 6379:6379

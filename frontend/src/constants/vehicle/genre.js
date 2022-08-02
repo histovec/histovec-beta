@@ -1,3 +1,6 @@
+// @unused: Enum qui n'est plus utilisé désormais
+// Cela peut être une bonne idée de le garder car il permet de documenter les différents types de genre de véhicule
+
 export const GENRE = {
 	CAM: 'CAM',
 	CL: 'CL',
@@ -24,5 +27,5 @@ export const GENRE = {
 	TRR: 'TRR',
 	VASP: 'VASP',
 	VP: 'VP',
-	XX: 'XX'
+	XX: 'XX',
 }

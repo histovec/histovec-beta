@@ -1,57 +1,104 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+
+import AccueilPage from '@/views/AccueilPage.vue'
+import { TYPE_RAPPORT } from '../constants/type'
+
+const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
+const AcheteurPage = () => import('@/views/AcheteurPage.vue')
+const ContactPage = () => import('@/views/ContactPage.vue')
+const DonneesPersonnellesEtCookiesPage = () => import('@/views/DonneesPersonnellesEtCookiesPage.vue')
+const FAQPage = () => import('@/views/FAQPage.vue')
+const MentionsLegalesPage = () => import('@/views/MentionsLegalesPage.vue')
+const PlanDuSitePage = () => import('@/views/PlanDuSitePage.vue')
+const ProprietairePage = () => import('@/views/ProprietairePage.vue')
+const RapportPage = () => import('@/views/RapportPage.vue')
+const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
+const UnavailableServicePage = () => import('@/views/error/UnavailableServicePage.vue')
+const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue')
 
 
-function loadView(view) {
-  return () => import(/* webpackChunkName: "component-[request]" */ `@/components/${view}.vue`)
-}
+// @flag @makeSiteUnavailable
+const isHistoVecUnavailable = false
 
-import Home from '@/components/Home'
-const Search = loadView('Search')
-const Report = loadView('Report')
-const Faq = loadView('infos/Faq')
-const LegalNotice = loadView('infos/LegalNotice')
-const InformationNotices = loadView('infos/InformationNotices')
-const Buyer = loadView('infos/Buyer')
-import Unavailable from '@/components/infos/Unavailable'
-import NotFound from '@/components/infos/NotFound'
+const routes = (
+  isHistoVecUnavailable ?
+  [
+    { path: '/', name: 'root', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
+    { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage, meta: { title: 'HistoVec - Service indisponible' } },
+    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
+  ] :
+  [
+    { path: '/', name: 'root', redirect: { name: 'accueil' }, meta: { title: 'HistoVec - Accueil' } },
+    { path: '/accueil', name: 'accueil', component: AccueilPage, meta: { title: 'HistoVec - Accueil' } },
+    { path: '/proprietaire', name: 'proprietaire', component: ProprietairePage, meta: { title: 'HistoVec - Propriétaire' } },
+    { path: '/acheteur', name: 'acheteur', component: AcheteurPage, meta: { title: 'HistoVec - Acheteur' } },
+    { path: '/rapport-acheteur', name: 'rapportAcheteur', component: RapportPage, props: () => ({ typeRapport: TYPE_RAPPORT.ACHETEUR }), meta: { title: 'HistoVec - Rapport acheteur' } },
+    { path: '/rapport-vendeur', name: 'rapportVendeur', component: RapportPage, props: () => ({ typeRapport: TYPE_RAPPORT.VENDEUR }), meta: { title: 'HistoVec - Rapport vendeur' } },
+    { path: '/faq', name: 'faq', component: FAQPage, meta: { title: 'HistoVec - FAQ & Liens utiles' } },
+    { path: '/contact', name: 'contact', component: ContactPage, meta: { title: 'HistoVec - Contact' } },
+    { path: '/plan-du-site', name: 'planDuSite', component: PlanDuSitePage, meta: { title: 'HistoVec - Plan du site' } },
+    { path: '/accessibilite', name: 'accessibilite', component: AccessibilitePage, meta: { title: 'HistoVec - Accessibilité' } },
+    { path: '/mentions-legales', name: 'mentionsLegales', component: MentionsLegalesPage, meta: { title: 'HistoVec - Mentions légales' } },
+    { path: '/donnees-personnelles-et-cookies', name: 'donneesPersonnelles', component: DonneesPersonnellesEtCookiesPage, meta: { title: 'HistoVec - Données personnelles & Gestion des cookies' } },
+    {
+      path: '/report',
+      name: 'ancienRapport',
+      redirect: to => {
+        const { id, key } = to.query
+        if (id && key) {
+          // Rétrocompatibilité de l'ancien rapport acheteur
+          return { path: '/rapport-acheteur', query: { id: to.query.id, key: to.query.key } }
+        }
+        // Ancien rapport vendeur non fonctionnel (le format du cache du rapport vendeur a changé) => on invalide l'ancien cache en forçant une nouvelle recherche via le formulaira de la page Propriétaire
+        // On force aussi à utiliser la nouvelle url /rapport-vendeur
+        return { path: '/proprietaire' }
+      },
+      meta: { title: 'HistoVec - Ancien rapport' },
+    },
 
-
-Vue.use(Router)
-
-const isHistovecUnavailable = process.env.VUE_APP_IS_HISTOVEC_UNAVAILABLE
-// eslint-disable-next-line no-console
-console.log(`isHistovecUnavailable = ${isHistovecUnavailable}`)
-
-let routes = []
-
-if (isHistovecUnavailable) {
-  routes = [
-    {name: 'root', path: '/', redirect: { name: 'unavailable' }, meta: { title: 'HistoVec - Service indisponible' }},
-    {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Service indisponible' }},
-    {name: 'notfound', path: '/*', redirect: { name: 'unavailable' }, meta: { title: 'HistoVec - Service indisponible' }}
+    // Errors pages
+    { path: '/erreur-inattendue', name: 'erreurInattendue', component: UnintendedErrorPage,
+      props: route => ({
+        title: route.query.title,
+        errorTitle: route.query.errorTitle,
+        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
+      }),
+      meta: { title: 'HistoVec - Erreur inattendue' },
+    },
+    { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage,
+      props: route => ({
+        title: route.query.title,
+        errorTitle: route.query.errorTitle,
+        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
+      }),
+      meta: { title: 'HistoVec - Service indisponible' },
+    },
+    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage,
+      props: route => ({
+        title: route.query.title,
+        errorTitle: route.query.errorTitle,
+        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
+        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
+        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
+      }),
+      meta: { title: 'HistoVec - Page non trouvée' },
+    },
   ]
-} else {
-  routes = [
-    {name: 'root', path: '/', redirect: { name: 'home' }, meta: { title: 'HistoVec - Accueil' }},
-    {name: 'home', path: '/home', component: Home, meta: { title: 'HistoVec - Accueil' }},
-    {name: 'search', path: '/search', component: Search, meta: { title: 'HistoVec - Recherche' }},
-    {name: 'report', path: '/report', component: Report, meta: { title: 'HistoVec - Rapport' }},
-    {name: 'faq', path: '/faq', component: Faq, meta: { title: 'HistoVec - FAQ' }},
-    {name: 'legal-notice', path: '/legal-notice', component: LegalNotice, meta: { title: 'HistoVec - Mentions Légales' }},
-    {name: 'information-notices', path: '/information-notices', component: InformationNotices, meta: { title: 'HistoVec - Mentions d\'information' }},
-    {name: 'buyer', path: '/buyer', component: Buyer, meta: { title: 'HistoVec - Acheteur' }},
-    {name: 'unavailable', path: '/unavailable', component: Unavailable, meta: { title: 'HistoVec - Service indisponible' }},
-    {name: 'not-found', path: '/*', component: NotFound, meta: { title: 'HistoVec - Page non trouvée' }}
-  ]
-}
+)
 
-export default new Router({
-  mode: 'history',
-  base: '/' + process.env.VUE_APP_TITLE,
+export default createRouter({
+  history: createWebHistory(`/${import.meta.env.VITE_TITLE}`),
   routes,
-  // Scroll top for every route navigation
   scrollBehavior () {
-    return { x: 0, y: 0 }
-  }
+    // Scroll top for every route navigation
+    return {
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    }
+  },
 })

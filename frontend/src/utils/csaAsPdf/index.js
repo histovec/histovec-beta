@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib'
 
-import { writeContent } from './content'
-import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from './constants'
+import { writeContent } from './content.js'
+import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from './constants.js'
 
 
 export const generateCsa = async (
@@ -36,7 +36,7 @@ export const generateCsa = async (
 		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
-	} = {}
+	} = {},
 ) => {
 	const doc = await PDFDocument.create()
 
@@ -47,7 +47,7 @@ export const generateCsa = async (
 	const embeddedFonts = {
 		[FONT_STYLES.NORMAL]: font,
 		[FONT_STYLES.ITALIC]: fontItalic,
-		[FONT_STYLES.BOLD]: fontBold
+		[FONT_STYLES.BOLD]: fontBold,
 	}
 
 	const headerLogoPng = await doc.embedPng(marianneImageBytes)
@@ -55,7 +55,7 @@ export const generateCsa = async (
 
 	const embeddedLogos = {
 		headerLogoPng,
-		footerLogoPng
+		footerLogoPng,
 	}
 
 	writeContent(
@@ -73,7 +73,7 @@ export const generateCsa = async (
 			qrCodeUrl,
 			validityDate,
 			vin,
-			webSiteUrl
+			webSiteUrl,
 		},
 		(
 			!isCIAnnule ? {
@@ -91,7 +91,7 @@ export const generateCsa = async (
 				volTitre,
 				volVehicule,
 			} : {}
-		)
+		),
 	)
 
 	// Returns pdf bytes that can be:

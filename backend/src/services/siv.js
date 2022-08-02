@@ -2,7 +2,6 @@ import { getElasticsearchClient } from '../connectors/elasticsearch.js'
 import { appLogger } from '../util/logger.js'
 import config from '../config.js'
 
-
 const elasticsearchClient = getElasticsearchClient()
 
 export const getSIV = async (id, uuid) => {
@@ -81,7 +80,7 @@ export const getSIV = async (id, uuid) => {
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
       const message = 'Unreachable database'
-			appLogger.error({
+      appLogger.error({
         error: message,
         id,
         uuid,
@@ -98,7 +97,7 @@ export const getSIV = async (id, uuid) => {
       }
     }
 
-		const message = 'Couldn\'t process Elasticsearch response'
+    const message = 'Couldn\'t process Elasticsearch response'
 
     appLogger.error({
       error: message,

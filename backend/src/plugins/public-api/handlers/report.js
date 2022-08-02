@@ -1,16 +1,14 @@
 import Boom from '@hapi/boom'
 
 import { getSIV } from '../../../services/siv.js'
-import { encryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
+import { encryptJson, decryptJson, decryptXOR, urlSafeBase64Encode, urlSafeEncode, hash } from '../../../util/crypto.js'
 import { computeUtacDataKey, normalizeImmatForUtac, validateControlesTechniques } from '../util/utac.js'
-import { utacResponseSchema } from '../../../services/utac/schemas/response.js'
 import { getRedisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 import { VIN_REGEX } from '../../../constant/regex.js'
 
 import { appLogger, syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
-
 
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
@@ -50,7 +48,8 @@ export const getReport = async (payload) => {
     }
   }
 
-
+  // @todo @syslog2
+  // Exemple d'utilisation du syslogLogger
   syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
@@ -131,7 +130,7 @@ export const getReport = async (payload) => {
 
   if (!isValidImmat) {
     appLogger.error({
-      error: `Invalid immatriculation for UTAC api`,
+      error: 'Invalid immatriculation for UTAC api',
     })
 
     try {
@@ -140,7 +139,7 @@ export const getReport = async (payload) => {
         utacDataCacheId,
         encryptedEmptyUtacData,
         'EX',
-        config.redisPersit
+        config.redisPersit,
       )
     } catch (e) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_utac_invalid_immat_vehicle`)
@@ -153,9 +152,9 @@ export const getReport = async (payload) => {
     }
   }
 
-  if (config.utac.isVinSentToUtac && !isValidVin) {
+  if (!isValidVin) {
     appLogger.warn({
-      error: `Malformed VIN`,
+      error: 'Malformed VIN',
     })
   }
 
@@ -172,7 +171,7 @@ export const getReport = async (payload) => {
       vin: normalizedVin,
     },
     {
-      uuid, encryptedImmat, encryptedVin, isMocked
+      uuid, encryptedImmat, encryptedVin, isMocked,
     })
 
     if (utacStatus !== 200) {
@@ -189,7 +188,7 @@ export const getReport = async (payload) => {
             utacDataCacheId,
             encryptedEmptyUtacData,
             'EX',
-            config.redisPersit
+            config.redisPersit,
           )
         } catch (e) {
           appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_utac_not_found_vehicle`)
@@ -212,7 +211,7 @@ export const getReport = async (payload) => {
       }
     }
 
-    if (!isMocked && config.utac.isVinSentToUtac && !validateControlesTechniques(vin, ct)) {
+    if (!isMocked && !validateControlesTechniques(vin, ct)) {
       throw new Error('Inconsistency for technical control')
     }
 
@@ -232,7 +231,7 @@ export const getReport = async (payload) => {
         utacDataCacheId,
         encryptedFreshUtacData,
         'EX',
-        config.redisPersit
+        config.redisPersit,
       )
     } catch (e) {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_vehicle`)
@@ -254,7 +253,7 @@ export const getReport = async (payload) => {
       sivData,
       utacData: {
         ...emptyUtacData,
-        utacError: utacMessage,
+        utacError: errorMessage,
       },
     }
   }

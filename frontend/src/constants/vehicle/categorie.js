@@ -1,3 +1,6 @@
+// @unused: Enum qui n'est plus utilisé désormais
+// Cela peut être une bonne idée de le garder car il permet de documenter les différents types de Catégorie de véhicule
+
 export const CATEGORIE = {
 	C1: 'C1',
 	C1a: 'C1a',
@@ -117,5 +120,5 @@ export const CATEGORIE = {
 	'T4.3a': 'T4.3a',
 	'T4.3b': 'T4.3b',
 	T5: 'T5',
-	XX: 'XX'
+	XX: 'XX',
 }

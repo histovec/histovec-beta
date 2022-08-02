@@ -7,15 +7,11 @@ import {
   hash,
   urlSafeBase64Encode,
 } from '../util/crypto'
-import config from '../config'
-import { appLogger } from '../util/logger'
-import { getAsync, setAsync } from '../connectors/redis'
+import config from '../config.js'
+import { appLogger } from '../util/logger.js'
+import { getAsync, setAsync } from '../connectors/redis.js'
 
 import { VIN_REGEX } from '../constant/regex.js'
-
-// /!\ boolean setting is passed as string /!\
-// @todo: we should use typed yaml to load settings
-const isVinSentToUtac = config.utac.isVinSentToUtac === true || config.utac.isVinSentToUtac === 'true'
 
 const normalizeImmatForUtac = (immat) => {
   if (!immat || typeof immat !== 'string') {
@@ -166,8 +162,8 @@ export const generateGetReport = (utacClient) =>
     if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({
         error: 'Bad request - invalid uuid or id',
-        id: id,
-        uuid: uuid,
+        id,
+        uuid,
       })
 
       res.status(400).json({
@@ -264,7 +260,7 @@ export const generateGetReport = (utacClient) =>
         return
       } catch (error) {
         appLogger.error({
-          error: "Couldn't decrypt cached UTAC response",
+          error: 'Couldn\'t decrypt cached UTAC response',
           remote_error: error.message,
         })
 
@@ -288,7 +284,7 @@ export const generateGetReport = (utacClient) =>
 
     if (!isValidImmat) {
       appLogger.error({
-        error: `Invalid immatriculation for UTAC api`,
+        error: 'Invalid immatriculation for UTAC api',
       })
 
       // Cache unsupported vehicles
@@ -296,7 +292,7 @@ export const generateGetReport = (utacClient) =>
         utacDataCacheId,
         emptyUtacData,
         'EX',
-        config.redisPersit
+        config.redisPersit,
       )
 
       res.status(200).json({
@@ -308,9 +304,9 @@ export const generateGetReport = (utacClient) =>
       return
     }
 
-    if (isVinSentToUtac && !isValidVin) {
+    if (!isValidVin) {
       appLogger.warn({
-        error: `Malformed VIN`,
+        error: 'Malformed VIN',
       })
     }
 
@@ -341,7 +337,7 @@ export const generateGetReport = (utacClient) =>
             utacDataCacheId,
             emptyUtacData,
             'EX',
-            config.redisPersit
+            config.redisPersit,
           )
 
           res.status(200).json({
@@ -367,7 +363,7 @@ export const generateGetReport = (utacClient) =>
         return
       }
 
-      if (isVinSentToUtac && !validateTechnicalControls(vin, ct)) {
+      if (!validateTechnicalControls(vin, ct)) {
         throw new Error('Inconsistency for technical control')
       }
 
@@ -381,7 +377,7 @@ export const generateGetReport = (utacClient) =>
         utacDataCacheId,
         freshUtacData,
         'EX',
-        config.redisPersit
+        config.redisPersit,
       )
 
       res.status(200).json({

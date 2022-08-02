@@ -1,3 +1,6 @@
+// @unused: Enum qui n'est plus utilisé désormais
+// Cela peut être une bonne idée de le garder car il permet de documenter les différents types de Carrosserie Nationale
+
 export const CARROSSERIE_NAT = {
 	AGRICOLE: 'AGRICOLE',
 	AMBULANC: 'AMBULANC',
@@ -89,5 +92,5 @@ export const CARROSSERIE_NAT = {
 	VOIRIE: 'VOIRIE',
 	VTST: 'VTST',
 	VTTE: 'VTTE',
-	XX: 'XX'
+	XX: 'XX',
 }

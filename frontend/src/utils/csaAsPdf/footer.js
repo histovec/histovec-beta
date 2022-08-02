@@ -9,10 +9,10 @@ import {
 	FOOTER_LOGO_X,
 	HORIZONTAL_TABULATION,
 	QR_CODE_PIXEL_SIZE,
-	TOP_FOOTER_MARGIN
-} from './constants'
-import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from './utils'
-import { formatIsoToHumanReadableFrDate, padString } from '../../assets/js/format'
+	TOP_FOOTER_MARGIN,
+} from './constants.js'
+import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from './utils.js'
+import { formatIsoToHumanReadableFrDate, padString } from '@/assets/js/format.js'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = ({
@@ -40,7 +40,7 @@ const drawQrCode = ({
 					y: y - i * QR_CODE_PIXEL_SIZE,
 					width: QR_CODE_PIXEL_SIZE,
 					height: QR_CODE_PIXEL_SIZE,
-					color: DEFAULT_RGB_COLOR
+					color: DEFAULT_RGB_COLOR,
 				})
 			}
 		})
@@ -54,7 +54,7 @@ const writeVerticalUrl = ({
 	embeddedFonts,
 	x,
 	y,
-	qrCodeUrl
+	qrCodeUrl,
 }) => {
 	const truncatedQrCodeUrl = `${qrCodeUrl.substring(0, 30)}...`
 	writeText({
@@ -64,7 +64,7 @@ const writeVerticalUrl = ({
 		y,
 		text: truncatedQrCodeUrl,
 		size: FONT_SIZES.XS,
-		rotationAngle: 90
+		rotationAngle: 90,
 	})
 }
 
@@ -72,7 +72,7 @@ const writeQrCodeLogoPng = ({
 	page,
 	x,
 	y,
-	footerLogoPng
+	footerLogoPng,
 }) => {
 	const pngDims = footerLogoPng.scale(0.26)
 	const pngY = y - pngDims.height
@@ -114,12 +114,12 @@ const writeValidityDate = ({
 	embeddedFonts,
 	x,
 	y,
-	dateDonnees
+	dateDonnees,
 }) => {
 	const now = new Date()
 	const nowHumanReadableDateString = now.toLocaleDateString(
 		'fr-FR',
-		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
 	)
 	const nowHumanReadableHourString = `${padString(now.getHours(), 2)}h${padString(now.getMinutes(), 2)}`
 
@@ -128,7 +128,7 @@ const writeValidityDate = ({
 		embeddedFonts,
 		x: BORDER_LEFT_PAGE_X,
 		y,
-		title: 'Certificat attestant la situation administrative au :'
+		title: 'Certificat attestant la situation administrative au :',
 	})
 
 	const dateDonneesHumanReadableDateString = formatIsoToHumanReadableFrDate(dateDonnees)
@@ -146,7 +146,7 @@ const writeValidityDate = ({
 		y: validityDateTextY,
 		text: datesText,
 		size: FONT_SIZES.M,
-		style: FONT_STYLES.BOLD
+		style: FONT_STYLES.BOLD,
 	})
 
 	const nextY = validityDateEndY - FONT_SPACING.XXXL
@@ -162,13 +162,13 @@ const writeLegalNotice = ({
 	x,
 	y,
 	validityDate,
-	webSiteUrl
+	webSiteUrl,
 }) => {
 	const textLines = [
 		'La valeur du certificat de situation administrative détaillé ne saurait excéder 15 jours, les données étant susceptibles',
 		'd\'évoluer. Le QR code ci-contre renvoie au site ' + webSiteUrl + ' - il permet de vous assurer de la',
 		'conformité des informations retranscrites et de leurs mises à jour. Ce code sera disponible jusqu\'au changement de',
-		'titulaire et au plus tard jusqu\'au ' + validityDate + '. Au-delà, un nouveau rapport devra être généré.'
+		'titulaire et au plus tard jusqu\'au ' + validityDate + '. Au-delà, un nouveau rapport devra être généré.',
 	]
 
 	writeWithSpacing({
@@ -179,7 +179,7 @@ const writeLegalNotice = ({
 		textLines,
 		increaseLineHeightOf: 6,
 		size: FONT_SIZES.S,
-		style: FONT_STYLES.ITALIC
+		style: FONT_STYLES.ITALIC,
 	})
 }
 
@@ -192,7 +192,7 @@ export const writeFooter = ({
 	footerLogoPng,
 	qrCodeUrl,
 	validityDate,
-	webSiteUrl
+	webSiteUrl,
 }) => {
 	const { height } = page.getSize()
 	const topFooterY = height - TOP_FOOTER_MARGIN

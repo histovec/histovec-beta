@@ -1,6 +1,6 @@
-import { USAGE } from '../../../constant/usage.js'
-import config from '../../../config.js'
+/* eslint-disable */
 
+import { USAGE } from '../../../constant/usage.js'
 
 export const vehiculeMapping = (report, isPublicApi) => {
   const {
@@ -9,10 +9,8 @@ export const vehiculeMapping = (report, isPublicApi) => {
     pers_raison_soc_tit,
     pers_siren_tit,
     adr_code_postal_tit,
-    logo_genre,
-    date_premiere_immat_siv,
-    is_incertain,
-    date_annulation,
+    // logo_genre,  // @todo @logoGenre: ne plus exposer le champ calculé "logo_genre" côté DATA, et on peut le supprimer complètement côté DATA
+    // is_incertain,  // @todo @isIncertain: ne plus exposer le champ calculé "is_incertain" côté DATA
     date_update,
     date_premiere_immat,
     age_certificat,
@@ -63,7 +61,9 @@ export const vehiculeMapping = (report, isPublicApi) => {
     import: import_en_france,
     date_import_france,
     date_premiere_immat_etranger,
-    new_historique: reportNewHistorique = [],
+    // @renameHistorique4
+    // historique: reportHistorique = [],
+    new_historique: reportNewHistorique = [],  // Supprimer
     sit_adm: {
       dvs: reportDeclarationsValantSaisie = [],
       gages: reportGages = [],
@@ -84,7 +84,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
         particulier: {
           nom_anonymise: pers_nom_naissance_tit,
           prenoms_anonymises: pers_prenom_tit,
-          // @todo question: use departement instead of code_postal ?
           code_postal: adr_code_postal_tit,
         },
       } : {}
@@ -94,7 +93,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
         personne_morale: {
           raison_sociale_anonymisee: pers_raison_soc_tit,
           siren_anonymise: pers_siren_tit,
-          // @todo question: use departement instead of code_postal ?
           code_postal: adr_code_postal_tit,
         },
       } : {}
@@ -102,25 +100,30 @@ export const vehiculeMapping = (report, isPublicApi) => {
   }
 
   const historiqueMapping = (historique) => {
-    return historique.map(({ opa_date, opa_type, ope_date_annul, num_agree }) => (
+    // return historique.map(({ opa_date, opa_type, ope_date_annul, num_agree }) => (  // @numAgree1
+    return historique.map(({ opa_date, opa_type, ope_date_annul }) => (
       {
         date: opa_date,
         type: opa_type,
+        /* @todo @numAgree1
+          ...(
+            num_agree ?
+            { numAgree: num_agree } :
+            {}
+          ),
+        */
         ...(
-          ope_date_annul ? {
-            date_annulation: ope_date_annul,
-          } : {}
-        ),
-        ...(
-          num_agree ? {
-            numero_agrement_expert: num_agree,
-          } : {}
+          ope_date_annul ?
+          { date_annulation: ope_date_annul } :
+          {}
         ),
       }
     ))
   }
 
-  const mappedNewHistorique = historiqueMapping(reportNewHistorique)
+  // @renameHistorique5
+  // const mappedHistorique = historiqueMapping(reportHistorique)
+  const mappedNewHistorique = historiqueMapping(reportNewHistorique)  // Supprimer
 
   const mappedDeclarationsValantSaisie = reportDeclarationsValantSaisie.map(({ date, dvs_autorite }) => (
     {
@@ -154,23 +157,15 @@ export const vehiculeMapping = (report, isPublicApi) => {
     }
   ))
 
-  // @todo
   const extraSection = (
-    isPublicApi ?
-    {} :
-    {
-      extra: {
-        logo_genre,
-        date_premiere_immatriculation_incertaine: is_incertain,
-        ...(
-          date_annulation_ci ?
-          { date_annulation: date_annulation_ci } :
-          { }
-        ),
-        vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
-        vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
-      }
-    }
+    isPublicApi
+      ? {}
+      : {
+          extra: {
+            // @info @extraFieldForFront: C'est ici qu'on peut passer des champs uniquement au frontend, sans impacter le format de sortie de l'api grand public
+            // Ces champs ne doivent pas apparaître dans la documentation swagger (utiliser .meta({ swaggerHidden: true }) sur le validateur Joi)
+          },
+        }
   )
 
   return {
@@ -178,9 +173,10 @@ export const vehiculeMapping = (report, isPublicApi) => {
     certificat_immatriculation: {
       date_premiere_immatriculation: date_premiere_immat,
       ...(
-        age_certificat === 'KO' ?
-        {} :
-        { nombre_de_mois_depuis_date_emission_certificat_immatriculation: age_certificat }
+        age_certificat === 'KO'
+          ? {}
+          : { nombre_de_mois_depuis_date_emission_certificat_immatriculation: age_certificat }
+          // @todo RENOMMER nombre_de_mois_depuis_date_emission_certificat_immatriculation => age_en_mois_du_certificat_immatriculation_courant
       ),
       numero_immatriculation_anonymisee: plaq_immat,
       titulaire: mappedTitulaire,
@@ -215,9 +211,14 @@ export const vehiculeMapping = (report, isPublicApi) => {
         emission_co2: CTEC_CO2,
         classe_environnementale_ue: CTEC_RLIB_POLLUTION,
       },
-      etat:  {
+      etat: {
         duplicata,
         annule: annulation_ci,
+        ...(
+          date_annulation_ci
+            ? { date_annulation: date_annulation_ci }
+            : { }
+        ),
         perdu: perte_ci,
         vole: ci_vole,
       },
@@ -227,16 +228,20 @@ export const vehiculeMapping = (report, isPublicApi) => {
       vignette_critair: critair,
       vole: vehicule_vole,
       procedures_ve: {
-        numero_immatriculation_au_format_fni: is_fni,
+        numero_immatriculation_au_format_fni: is_fni,  // @todo @isFni: Continuer d'exposer le champs "is_fni" côté DATA. Finalement on s'en sert.
         date_derniere_procedure_ve: date_dernier_sinistre,
         // @todo: transformer date_derniere_resolution en date_fin_derniere_procedure_ve en intégrant cette logique côté data
         date_fin_derniere_procedure_ve: date_dernier_sinistre < date_derniere_resolution ? date_derniere_resolution : undefined,
         apte_a_circuler: is_apte_a_circuler,
         nombre_de_procedures_ve: nb_sinistres,
         procedure_ve_en_cours: has_pve,
-      }
+      },
+      vehicule_a_usage_agricole: Boolean(usages.includes(USAGE.AGR)),
+      vehicule_a_usage_de_collection: Boolean(usages.includes(USAGE.COL)),
     },
-    historique: mappedNewHistorique,
+    // @renameHistorique6
+    // historique: mappedHistorique,
+    historique: mappedNewHistorique,  // Supprimer
     import_en_france: {
       vehicule_importe_depuis_etranger: import_en_france,
       date_import: date_import_france,
@@ -245,7 +250,7 @@ export const vehiculeMapping = (report, isPublicApi) => {
     situation_administrative: {
       declarations_valant_saisie: mappedDeclarationsValantSaisie,
       gages: mappedGages,
-      opposition : {
+      opposition: {
         oves: oppositionsMapping(reportOves),
         oveis: oppositionsMapping(reportOveis),
         otcis: oppositionsMapping(reportOtcis),

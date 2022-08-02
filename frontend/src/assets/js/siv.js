@@ -1,22 +1,11 @@
 
-import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '../js/format'
-
 import orderBy from 'lodash.orderby'
 
-import operationsMapping from '../json/operations.json'
-import suspensionsMapping from '../json/suspensions.json'
-import { MISSING_VALUE } from './constants'
+import { MISSING_VALUE } from '@/assets/js/constants.js'
+import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
+import operationsMapping from '@/assets/json/operations.json'
+import suspensionsMapping from '@/assets/json/suspensions.json'
 
-
-// We will develop other categories later using data pipeline.
-// For now, we'll class other categories as AUTRE we'll use VOITURE logo by default (as it was already implemented)
-const LOGO_VEHICULE_BY_LOGO_GENRE = {
-  'AUTRE': 'car',
-  'CAMION': 'truck',
-  'MOTO': 'motorcycle',
-  'UTILITAIRE': 'bus',
-  'VOITURE': 'car',
-}
 
 const normalizeForFrontendDisplay = (elements, format) => {
   const formattedElements = format ? elements.map(format) : elements
@@ -24,7 +13,7 @@ const normalizeForFrontendDisplay = (elements, format) => {
   return orderBy(
     formattedElements,
     ['date'],
-    ['desc']
+    ['desc'],
   )
 }
 
@@ -56,7 +45,6 @@ const labelizeCertifDepuis = (nbMonths) => {
 const certificatMapping = (certificatImmatriculation, importEnFrance, isCIAnnule) => {
   const {
     datePremiereImmatriculation,
-    datePremiereImmatriculationIncertaine,
     nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
     caracteristiquesTechniques: {
       dateEmissionCI,
@@ -70,18 +58,16 @@ const certificatMapping = (certificatImmatriculation, importEnFrance, isCIAnnule
 
   if (isCIAnnule) {
     return {
-      datePremiereImmatriculation,  // || MISSING_VALUE
+      datePremiereImmatriculation,
     }
   }
 
-
   return {
-    dateEmissionCI,  // || MISSING_VALUE
+    dateEmissionCI,
     nombreDeMoisDepuisDateEmissionCertificatImmatriculation: labelizeCertifDepuis(nombreDeMoisDepuisDateEmissionCertificatImmatriculation),
     isVehiculeImporteDepuisEtranger,
-    datePremiereImmatriculationEnFrance,  // || MISSING_VALUE
-    isIncertain: Boolean(datePremiereImmatriculationIncertaine),
-    datePremiereImmatriculation,  // || MISSING_VALUE
+    datePremiereImmatriculationEnFrance,
+    datePremiereImmatriculation,
   }
 }
 
@@ -249,7 +235,7 @@ const syntheseVehiculeMapping = (etatCI, etatVehicule, syntheseSituationAdminist
   if (oppositionTemporaireAnomaly) {
     return [
       ...filteredAnomalies,
-      oppositionTemporaireAnomaly
+      oppositionTemporaireAnomaly,
     ]
   } else {
     return filteredAnomalies
@@ -292,7 +278,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       isCIAnnule,
       csaLabels: {
         annulationCurrentStatus,
-      }
+      },
     }
   }
 
@@ -309,47 +295,47 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
   // CSA display
   const pvDates = otcisPV.map((otciPV) => {
     return [
-      `- Date du PV :  ${formatIsoToFrDateOrDefault(otciPV.date)}`
+      `- Date du PV :  ${formatIsoToFrDateOrDefault(otciPV.date)}`,
     ]
   }).flat()
 
   const otcisPVCurrentStatusLines = [
     otcisPV.length > 0 ? 'PV(s) en attente' : 'Aucune',
-    ...pvDates
+    ...pvDates,
   ]
 
   const otcisCurrentStatusLines = otcis.map((otci) => {
     return [
-      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(otci.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(otci.date)}`,
     ]
   }).flat()
 
   const ovesCurrentStatusLines = oves.map((ove) => {
     return [
-      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ove.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ove.date)}`,
     ]
   }).flat()
 
   const oveisCurrentStatusLines = oveis.map((ovei) => {
     return [
-      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ovei.date)}`
+      `- Date de l'opposition :  ${formatIsoToFrDateOrDefault(ovei.date)}`,
     ]
   }).flat()
 
   const suspensionsCurrentStatusLines = suspensions.map((suspension) => {
     return [
       `- Motif :  ${suspensionsMapping[suspension.motif]}`,
-      `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`
-      // @todo: Faire le point avec Patrick et DSR (missing functional rules from SIV/DSR to build these data on JSON)
+      `  Date de la suspension :  ${formatIsoToFrDateOrDefault(suspension.date)}`,
+      // @todo @remiseRetraitTitre: Faire le point avec l'ingé Data et la DSR (missing functional rules from SIV/DSR to build these data on JSON)
       // `  Remise titre :  ${suspension.remiseDuTitre}`,
-      // `  Retrait titre :  ${suspension.retraitDuTitre}`
+      // `  Retrait titre :  ${suspension.retraitDuTitre}`,
     ]
   }).flat()
 
   const gagesCurrentStatusLines = gages.map((gage) => {
     return [
       `- Nom du créancier :  ${gage.nomCreancier}`,
-      `  Date du gage :  ${formatIsoToFrDateOrDefault(gage.date)}`
+      `  Date du gage :  ${formatIsoToFrDateOrDefault(gage.date)}`,
     ]
   }).flat()
 
@@ -357,7 +343,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     return [
       '- Nom de l\'autorité à l\'origine de l\'inscription :',
       `    ${nomPersonneMorale}`,
-      `  Date de la déclaration valant saisie :  ${formatIsoToFrDateOrDefault(date)}`
+      `  Date de la déclaration valant saisie :  ${formatIsoToFrDateOrDefault(date)}`,
     ]
   }).flat()
 
@@ -383,8 +369,8 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       ...(hasOve ? [{ date: formatIsoToFrDate(oves[0].date), label: 'Procédure de réparation contrôlée' }] : []),
       // On pourrait identifier les différents motifs d'OTCI (trésor, véhicule bloqué, etc.) mais il a été décidé de laisser "Opposition temporaire" pour le moment.
       ...(hasOtci ? [{ date: formatIsoToFrDate(otcis[0].date), label: 'Opposition temporaire'}] : []),
-      ...(hasOtciPV ? [{ date: formatIsoToFrDate(otcisPV[0].date), label: 'PV en attente' }] : [])
-    ]
+      ...(hasOtciPV ? [{ date: formatIsoToFrDate(otcisPV[0].date), label: 'PV en attente' }] : []),
+    ],
   )
 
   const suspensionsInfos = normalizeForFrontendDisplay(
@@ -392,7 +378,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     (element) => ({
       date: formatIsoToFrDate(element.date),
       label: suspensionsMapping[element.motif],
-    })
+    }),
   )
 
   const gagesInfos = normalizeForFrontendDisplay(
@@ -400,7 +386,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     (element) => ({
       date: formatIsoToFrDate(element.date),
       label: element.nomCreancier,
-    })
+    }),
   )
 
   const dvsInfos = normalizeForFrontendDisplay(
@@ -408,7 +394,7 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
     (element) => ({
       date: formatIsoToFrDate(element.date),
       label: element.nomPersonneMorale,
-    })
+    }),
   )
 
   const processedVehicleData = {
@@ -418,8 +404,9 @@ const administratifVehiculeMapping = (etatCI, etatVehicule, situationAdministrat
       hasOtciPV,
     },
 
-    // @TODO: mutualize this part with backend to generate CSA
-    // @TODO: mutualize needed images too
+    // @TODO @apiCsa1 : Mutualiser cette logique entre le front et le back (probablement via un paquet NPM qui sera en dépendance du front et du back)
+    // pour pouvoir la réutiliser lors de la création de l'API de génération de CSA
+    // @TODO @apiCsa2 : mutualiser les 2 images aussi
     csaLabels: {
       annulationCurrentStatus,
       dvsCurrentStatusLines: hasDeclarationsValantSaisie ? dvsCurrentStatusLines : ['Aucune'],
@@ -468,9 +455,6 @@ const processVehiculeData = (vehiculeData) => {
     historique,
     situationAdministrative,
     importEnFrance,
-    designSiteWeb: {
-      logoGenre,
-    },
     usage,
   } = vehiculeData
 
@@ -525,8 +509,6 @@ const processVehiculeData = (vehiculeData) => {
   const lastSinistreYear = new Date(dateDerniereProcedureVE).getFullYear()
   const lastResolutionYear = new Date(dateFinDerniereProcedureVE).getFullYear()
 
-  const logoVehicule = LOGO_VEHICULE_BY_LOGO_GENRE[logoGenre]
-
   const labelizedHistorique = historique.map(elt => (
     {
       ...elt,
@@ -540,7 +522,6 @@ const processVehiculeData = (vehiculeData) => {
     etranger: { hasBeenImported: isVehiculeImporteDepuisEtranger },
     historique: labelizedHistorique,
     isApte: isApteACirculer,
-    logoVehicule,
     titulairesCount: nombreDeTitulaires,
     hasSinistre: hasProcedureVEEnCours,
     lastSinistreYear,

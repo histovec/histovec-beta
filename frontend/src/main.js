@@ -1,34 +1,40 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
+import { createApp } from 'vue'
 
-import 'es6-promise/auto'
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store'
-import './plugins'
+import '@gouvminint/vue-dsfr/styles'
+import VueDsfr from '@gouvminint/vue-dsfr'
+import * as icons from './icons.js'
 
-import apiConf from './assets/json/backend.json'
+import VueClipboard from 'vue3-clipboard'
 
-Vue.config.productionTip = false
+import App from './App.vue'
+import router from './router/index.js'
+
+import { apiUrl } from './config.js'
+
+
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
+dayjs.extend(customParseFormat)
+
 
 window.addEventListener('beforeunload', function () {
-  var apiUrl = apiConf.api.url.replace('<APP>', process.env.VUE_APP_TITLE).replace(/"/g, '')
   navigator.sendBeacon(apiUrl + 'log/exit')
 }, false)
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#root',
-  store,
-  router,
-  components: { App },
-  template: '<App/>'
-})
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
   next()
 })
+
+createApp(App)
+  .use(VueDsfr, { icons: Object.values(icons) } )
+  // @todo @copyLink1: On paramètre vue3-clipboard pour sélectionner
+  // automatiquement le contexte de l'élément du DOM dans lequel sera effectuée la copie
+  // (Notamment dans la DsfrModale)
+  .use(VueClipboard, {
+    autoSetContainer: true,
+    appendToBody: true,
+  })
+  .use(router)
+  .mount('#app')

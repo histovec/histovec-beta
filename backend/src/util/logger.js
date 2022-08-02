@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from 'winston'
-import config from '../config.js'
 import { inspect } from 'util'
+import config from '../config.js'
 
 const { combine, timestamp, label, printf } = format
 
@@ -43,7 +43,7 @@ export const techLogger = createLogger({
   format: combine(
     label({ label: TECH_LABEL }),
     timestamp(),
-    isTest ? logFormat : logJsonFormat
+    isTest ? logFormat : logJsonFormat,
   ),
   transports: [new transports.Console(consoleOptions)],
   exitOnError: false,
@@ -53,25 +53,27 @@ export const appLogger = createLogger({
   format: combine(
     label({ label: APP_LABEL }),
     timestamp(),
-    isTest ? logFormat : logJsonFormat
+    isTest ? logFormat : logJsonFormat,
   ),
   transports: [new transports.Console(consoleOptions)],
   exitOnError: false,
 })
 
-// @todo: after test by data logs engineers, use this logger to replace all existing backend logs
 const syslogFormat = printf(({ level, message, timestamp }) => {
   const { key, value, tag } = message
 
   if (!key) {
     return inspect(
       'INVALID LOGGER USAGE: 1st argument of logger should be an object with a required "key" key and some optionnal keys: "value", "tag".',
-      inspectOptions
+      inspectOptions,
     )
   }
 
   const completeValue = typeof value === 'object' ? JSON.stringify(value) : value
   const completeTag = tag ? ` [${tag}]` : ''
+
+  // @todo @syslog1:
+  // Utiliser ce format pour remplacer tous les logs de l'application via l'utilitaire syslogLogger
 
   // /!\ DON'T TOUCH without working with data logs engineer) /!\
   // This format has been defined with data logs engineer for production exploitation.
@@ -79,7 +81,7 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
   // Syslog format sans tag: <timestamp> <application_name> <log_level>: <key> <value>
   return inspect(
     `${timestamp} ${config.apiName}${completeTag} ${level}: ${key} ${completeValue}`,
-    inspectOptions
+    inspectOptions,
   )
 })
 
@@ -87,13 +89,13 @@ export const syslogLogger = createLogger({
   level,
   format: format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    format.metadata({ fillExcept: ['timestamp', 'level', 'message'] })
+    format.metadata({ fillExcept: ['timestamp', 'level', 'message'] }),
   ),
   transports: [
     new transports.Console({
       format: format.combine(
-        syslogFormat
-      )
+        syslogFormat,
+      ),
     }),
   ],
   exitOnError: false,

@@ -1,3 +1,6 @@
+// @unused: Enum qui n'est plus utilisé désormais
+// Cela peut être une bonne idée de le garder car il permet de documenter les différents types de Carrosserie CE
+
 export const CARROSSERIE_CE = {
 	AA: 'AA',
 	AB: 'AB',
@@ -50,5 +53,5 @@ export const CARROSSERIE_CE = {
 	SK: 'SK',
 	SL: 'SL',
 	SM: 'SM',
-	XX: 'XX'
+	XX: 'XX',
 }

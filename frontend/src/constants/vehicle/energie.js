@@ -1,3 +1,6 @@
+// @unused: Enum qui n'est plus utilisé désormais
+// Cela peut être une bonne idée de le garder car il permet de documenter les différents types d'énergies
+
 export const ENERGIE = {
 	'1A': '1A',
 	AC: 'AC',
@@ -40,7 +43,7 @@ export const ENERGIE = {
 	PE: 'PE',
 	PH: 'PH',
 	PL: 'PL',
-	XX: 'XX'
+	XX: 'XX',
 }
 
 export const DIESEL = [
@@ -51,7 +54,7 @@ export const DIESEL = [
 	ENERGIE.GH,
 	ENERGIE.GO,
 	ENERGIE.GQ,
-	ENERGIE.PL
+	ENERGIE.PL,
 ]
 
 export const ELECT_HYDRO = [
@@ -59,7 +62,7 @@ export const ELECT_HYDRO = [
 	ENERGIE.EL,
 	ENERGIE.H2,
 	ENERGIE.HE,
-	ENERGIE.HH
+	ENERGIE.HH,
 ]
 
 export const ESSENCE = [
@@ -67,7 +70,7 @@ export const ESSENCE = [
 	ENERGIE.ES,
 	ENERGIE.ET,
 	ENERGIE.FE,
-	ENERGIE.FH
+	ENERGIE.FH,
 ]
 
 
@@ -83,7 +86,7 @@ export const GAZ = [
 	ENERGIE.GP,
 	ENERGIE.GZ,
 	ENERGIE.NH,
-	ENERGIE.PH
+	ENERGIE.PH,
 ]
 
 export const HYBRID_RECH = [
@@ -94,5 +97,5 @@ export const HYBRID_RECH = [
 	ENERGIE.GL,
 	ENERGIE.GM,
 	ENERGIE.NE,
-	ENERGIE.PE
+	ENERGIE.PE,
 ]

@@ -1,8 +1,9 @@
-import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../constants/type.js'
-import { DEFAULT_SIREN }  from '../../constants/vehicle/siren.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
+import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
 
 
 export const buildReportByDataPayload = (
+  uuid,
   {
     nom, prenoms, raisonSociale, siren,
     numeroImmatriculation, numeroFormule, dateEmissionCertificatImmatriculation,
@@ -18,6 +19,7 @@ export const buildReportByDataPayload = (
   if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
       return {
+        uuid,
         vehicule: {
           certificat_immatriculation: {
             titulaire: {
@@ -33,16 +35,17 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     } else {  // typePersonne === TYPE_PERSONNE.PRO
       return {
+        uuid,
         vehicule: {
           certificat_immatriculation: {
             titulaire: {
               personne_morale: {
                 raison_sociale: raisonSociale,
-                siren: siren || DEFAULT_SIREN,
+                siren: siren || DEFAULT_NUMERO_SIREN,
               },
             },
             numero_immatriculation: numeroImmatriculation,
@@ -52,13 +55,14 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     }
   } else if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
     const isoDateEmissionCertificatImmatriculation = dateEmissionCertificatImmatriculation && dateEmissionCertificatImmatriculation.split('/').reverse().join('-')
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
       return {
+        uuid,
         vehicule: {
           certificat_immatriculation: {
             titulaire: {
@@ -74,16 +78,17 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     } else {  // typePersonne === TYPE_PERSONNE.PRO
       return {
+        uuid,
         vehicule: {
           certificat_immatriculation: {
             titulaire: {
               personne_morale: {
                 raison_sociale: raisonSociale,
-                siren: siren || DEFAULT_SIREN,
+                siren: siren || DEFAULT_NUMERO_SIREN,
               },
             },
             numero_immatriculation: numeroImmatriculation,
@@ -93,13 +98,14 @@ export const buildReportByDataPayload = (
         options: {
           controles_techniques: true,
           ignore_utac_cache: ignoreUtacCache,
-        }
+        },
       }
     }
   }
 }
 
 export const buildReportByCodePayload = (
+  uuid,
   {
     id,
     key,
@@ -111,12 +117,13 @@ export const buildReportByCodePayload = (
   const codePartage = `${id}-${key}`
 
   return {
+    uuid,
     vehicule: {
       code: codePartage,
     },
     options: {
       controles_techniques: true,
       ignore_utac_cache: ignoreUtacCache,
-    }
+    },
   }
 }

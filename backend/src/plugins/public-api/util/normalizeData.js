@@ -1,10 +1,13 @@
-// @todo: Update all "OUI"/"NON" to boolean from data source and remove all utils in this file (and their usage)
+/* eslint-disable */
 
 import { FR_DATE_EXTRACT_REGEX, ISO_8601_DATE_EXTRACT_REGEX } from '../../../constant/date/regex.js'
 
-
+// @todo @booleanNormalization:
+// Supprimer la normalisation des booléens lorsque la DATA utilisera des booléens dans tous les champs du V
+// et qu'il n'y aura plus aucun "OUI"/"NON" ou "0"/"1"
+// /!\ Chantier sujet à régression côté DATA /!\
 const normalizeToBoolean = (value) => {
-  if (!value && value !== false) {  // falsy but not false
+  if (!value && value !== false) { // falsy but not false
     return
   }
 
@@ -20,10 +23,14 @@ const normalizeToBoolean = (value) => {
     case 'NON':
       return false
     default:
-      throw new Error(`${value} of type ${typeof(value)} is not convertible to boolean`)
+      throw new Error(`${value} of type ${typeof (value)} is not convertible to boolean`)
   }
 }
 
+// @todo @isoDateNormalization:
+// Supprimer la normalisation des dates lorsque la DATA utilisera des dates au format ISO8601 dans tous les champs du V
+// et qu'il n'y aura plus aucune date au format FR (DD/MM/YYYY)
+// /!\ Chantier sujet à régression côté DATA /!\
 const normalizeToISODate = (value) => {
   if (!value) {
     return
@@ -48,9 +55,11 @@ const normalizeHistorique = (historique) => {
       ...operation,
       opa_date: normalizeToISODate(operation?.opa_date),
       ...(
-        operation.ope_date_annul ? {
-          ope_date_annul: normalizeToISODate(operation.ope_date_annul)
-          } : {}
+        operation.ope_date_annul
+          ? {
+              ope_date_annul: normalizeToISODate(operation.ope_date_annul),
+            }
+          : {}
       ),
     }
   })
@@ -65,14 +74,11 @@ const normalizeElementsWithDate = (elements) => {
   })
 }
 
-
-
 export const normalizeReport = (report) => {
   const {
     date_annulation_ci,
     date_emission_CI,
     date_premiere_immat,
-    date_premiere_immat_siv,
     date_update,
     dos_date_conversion_siv,
     dos_date_derniere_modif,
@@ -88,10 +94,12 @@ export const normalizeReport = (report) => {
     date_import_france,
     date_premiere_immat_etranger,
     has_pve,
-    new_historique = [],
+    // @renameHistorique1
+    // historique = [],
+    new_historique = [],  // Supprimer
     is_apte_a_circuler,
     is_fni,
-    is_fni_converti,
+    // is_fni_converti,  // @todo @isFniConverti : ne plus exposer côté DATA
     is_incertain,
     sit_adm: {
       suspensions = [],
@@ -106,7 +114,9 @@ export const normalizeReport = (report) => {
     } = {},
   } = report
 
-  const normalizedNewHistorique = normalizeHistorique(new_historique)
+  // @renameHistorique2
+  // const normalizedHistorique = normalizeHistorique(historique)
+  const normalizedNewHistorique = normalizeHistorique(new_historique)  // Supprimer
 
   const normalizedSitAdm = {
     suspensions: suspensions.map((suspension) => {
@@ -124,131 +134,173 @@ export const normalizeReport = (report) => {
       oveis: normalizeElementsWithDate(oveis),
       otcis: normalizeElementsWithDate(otcis),
       otcis_pv: normalizeElementsWithDate(otcis_pv),
-    }
+    },
   }
 
   const normalizedReport = {
     ...report,
     ...(
-      date_annulation_ci ? {
-        date_annulation_ci: normalizeToISODate(date_annulation_ci)
-      } : {}
+      date_annulation_ci
+        ? {
+            date_annulation_ci: normalizeToISODate(date_annulation_ci),
+          }
+        : {}
     ),
     ...(
-      date_emission_CI ? {
-        date_emission_CI: normalizeToISODate(date_emission_CI)
-      } : {}
+      date_emission_CI
+        ? {
+            date_emission_CI: normalizeToISODate(date_emission_CI),
+          }
+        : {}
     ),
     ...(
-      date_premiere_immat ? {
-        date_premiere_immat: normalizeToISODate(date_premiere_immat)
-      } : {}
+      date_premiere_immat
+        ? {
+            date_premiere_immat: normalizeToISODate(date_premiere_immat),
+          }
+        : {}
     ),
     ...(
-      date_premiere_immat_siv ? {
-        date_premiere_immat_siv: normalizeToISODate(date_premiere_immat_siv)
-      } : {}
+      date_update
+        ? {
+            date_update: normalizeToISODate(date_update),
+          }
+        : {}
     ),
     ...(
-      date_update ? {
-        date_update: normalizeToISODate(date_update)
-      } : {}
+      dos_date_conversion_siv
+        ? {
+            dos_date_conversion_siv: normalizeToISODate(dos_date_conversion_siv),
+          }
+        : {}
     ),
     ...(
-      dos_date_conversion_siv ? {
-        dos_date_conversion_siv: normalizeToISODate(dos_date_conversion_siv)
-      } : {}
+      dos_date_derniere_modif
+        ? {
+            dos_date_derniere_modif: normalizeToISODate(dos_date_derniere_modif),
+          }
+        : {}
     ),
     ...(
-      dos_date_derniere_modif ? {
-        dos_date_derniere_modif: normalizeToISODate(dos_date_derniere_modif)
-      } : {}
+      annulation_ci
+        ? {
+            annulation_ci: normalizeToBoolean(annulation_ci),
+          }
+        : {}
     ),
     ...(
-      annulation_ci ? {
-        annulation_ci: normalizeToBoolean(annulation_ci)
-      } : {}
+      ci_vole
+        ? {
+            ci_vole: normalizeToBoolean(ci_vole),
+          }
+        : {}
     ),
     ...(
-      ci_vole ? {
-        ci_vole: normalizeToBoolean(ci_vole)
-      } : {}
+      duplicata
+        ? {
+            duplicata: normalizeToBoolean(duplicata),
+          }
+        : {}
     ),
     ...(
-      duplicata ? {
-        duplicata: normalizeToBoolean(duplicata)
-      } : {}
+      is_imported
+        ? {
+            import: normalizeToBoolean(is_imported),
+          }
+        : {}
     ),
     ...(
-      is_imported ? {
-        import: normalizeToBoolean(is_imported)
-      } : {}
+      pers_locataire
+        ? {
+            pers_locataire: normalizeToBoolean(pers_locataire),
+          }
+        : {}
     ),
     ...(
-      pers_locataire ? {
-        pers_locataire: normalizeToBoolean(pers_locataire)
-      } : {}
+      perte_ci
+        ? {
+            perte_ci: normalizeToBoolean(perte_ci),
+          }
+        : {}
     ),
     ...(
-      perte_ci ? {
-        perte_ci: normalizeToBoolean(perte_ci)
-      } : {}
+      vehicule_vole
+        ? {
+            vehicule_vole: normalizeToBoolean(vehicule_vole),
+          }
+        : {}
     ),
-    ...(
-      vehicule_vole ? {
-        vehicule_vole: normalizeToBoolean(vehicule_vole)
-      } : {}
-    ),
-    ...(
-      new_historique ? {
-        new_historique: normalizedNewHistorique
-      } : {}
+    // @renameHistorique3
+    // ...(
+    //   historique
+    //     ? {
+    //       historique: normalizedHistorique,
+    //       }
+    //     : {}
+    // ),
+    ...(  // Supprimer ce bloc
+      new_historique
+        ? {
+            new_historique: normalizedNewHistorique,
+          }
+        : {}
     ),
     sit_adm: normalizedSitAdm,
     ...(
-      date_derniere_resolution ? {
-        date_derniere_resolution: normalizeToISODate(date_derniere_resolution)
-      } : {}
+      date_derniere_resolution
+        ? {
+            date_derniere_resolution: normalizeToISODate(date_derniere_resolution),
+          }
+        : {}
     ),
     ...(
-      date_dernier_sinistre ? {
-        date_dernier_sinistre: normalizeToISODate(date_dernier_sinistre)
-      } : {}
+      date_dernier_sinistre
+        ? {
+            date_dernier_sinistre: normalizeToISODate(date_dernier_sinistre),
+          }
+        : {}
     ),
     ...(
-      date_import_france ? {
-        date_import_france: normalizeToISODate(date_import_france)
-      } : {}
+      date_import_france
+        ? {
+            date_import_france: normalizeToISODate(date_import_france),
+          }
+        : {}
     ),
     ...(
-      date_premiere_immat_etranger ? {
-        date_premiere_immat_etranger: normalizeToISODate(date_premiere_immat_etranger)
-      } : {}
+      date_premiere_immat_etranger
+        ? {
+            date_premiere_immat_etranger: normalizeToISODate(date_premiere_immat_etranger),
+          }
+        : {}
     ),
     ...(
-      has_pve ? {
-        has_pve: normalizeToBoolean(has_pve)
-      } : {}
+      has_pve
+        ? {
+            has_pve: normalizeToBoolean(has_pve),
+          }
+        : {}
     ),
     ...(
-      is_apte_a_circuler ? {
-        is_apte_a_circuler: normalizeToBoolean(is_apte_a_circuler)
-      } : {}
+      is_apte_a_circuler
+        ? {
+            is_apte_a_circuler: normalizeToBoolean(is_apte_a_circuler),
+          }
+        : {}
     ),
     ...(
-      is_fni ? {
-        is_fni: normalizeToBoolean(is_fni)
-      } : {}
+      is_fni
+        ? {
+            is_fni: normalizeToBoolean(is_fni),
+          }
+        : {}
     ),
     ...(
-      is_fni_converti ? {
-        is_fni_converti: normalizeToBoolean(is_fni_converti)
-      } : {}
-    ),
-    ...(
-      is_incertain ? {
-        is_incertain: normalizeToBoolean(is_incertain)
-      } : {}
+      is_incertain
+        ? {
+            is_incertain: normalizeToBoolean(is_incertain),
+          }
+        : {}
     ),
   }
 

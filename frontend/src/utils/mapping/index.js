@@ -4,15 +4,15 @@ const historiqueVehiculeMapping = (historique) => {
       date,
       date_annulation: dateAnnulation,
       type,
-      numero_agrement_expert: numeroAgrementExpert,
+      // numAgree,  @todo @numAgree2
     }) => (
       {
         date,
         dateAnnulation,
         type,
-        numeroAgrementExpert,
+        // numAgree,  @todo @numAgree2
       }
-    )
+    ),
   )
 }
 
@@ -30,7 +30,7 @@ const suspensionsMapping = (suspensions) => {
         remiseDuTitre,
         retraitDuTitre,
       }
-    )
+    ),
   )
 }
 
@@ -44,7 +44,7 @@ const declarationsValantSaisieMapping = (declarationsValantSaisie) => {
         date,
         nomPersonneMorale,
       }
-    )
+    ),
   )
 }
 
@@ -58,7 +58,7 @@ const gagesMapping = (gages) => {
         date,
         nomCreancier,
       }
-    )
+    ),
   )
 }
 
@@ -115,6 +115,7 @@ export const vehiculeMapping = ({
       etat: {
         duplicata: doesCIHasDuplicata,
         annule: isCIAnnule,
+        date_annulation: dateAnnulationCI,
         perdu: isCIPerdu,
         vole: isCIVole,
       } = {},
@@ -131,6 +132,8 @@ export const vehiculeMapping = ({
         nombre_de_procedures_ve: nombreDeProceduresVE,
         procedure_ve_en_cours: hasProcedureVEEnCours,
       } = {},
+      vehicule_a_usage_agricole: vehiculeAgricole,
+      vehicule_a_usage_de_collection: vehiculeDeCollection,
     } = {},
     historique = [],
     import_en_france: {
@@ -149,14 +152,10 @@ export const vehiculeMapping = ({
         otcis_pv: otcisPV = [],
       } = {},
     },
-    // @valerie
-    extra: {
-      logo_genre: logoGenre,
-      date_premiere_immatriculation_incertaine: datePremiereImmatriculationIncertaine,
-      date_annulation: dateAnnulationCI,
-      vehicule_a_usage_agricole: vehiculeAgricole,
-      vehicule_a_usage_de_collection: vehiculeDeCollection,
-    } = {},
+    // extra: {
+    //   // @info @extraFieldForFront
+    //   // C'est ici qu'on extrait les champs extra pour les consommer dans le front
+    // } = {},
 }) => {
   const mappedHistorique = historiqueVehiculeMapping(historique)
   const mappedSuspensions = suspensionsMapping(suspensions)
@@ -167,7 +166,6 @@ export const vehiculeMapping = ({
     dateMiseAJour,
     certificatImmatriculation: {
       datePremiereImmatriculation,
-      datePremiereImmatriculationIncertaine,  // @todo
       nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
       numeroImmatriculationAnonymisee,
       titulaire: {
@@ -214,7 +212,7 @@ export const vehiculeMapping = ({
         classeEnvironnementaleUE,
       },
       etat: {
-        dateAnnulationCI,  // @todo
+        dateAnnulationCI,
         doesCIHasDuplicata,
         isCIAnnule,
         isCIPerdu,
@@ -251,12 +249,9 @@ export const vehiculeMapping = ({
         otcisPV,
       },
     },
-    usage: {  // @todo
+    usage: {
       vehiculeAgricole,
       vehiculeDeCollection,
-    },
-    designSiteWeb: {  // @todo
-      logoGenre,
     },
   }
 }
@@ -279,7 +274,7 @@ const historiqueControlesTechniquesMapping = (historique) => {
         resultatLibelle,
         km,
       }
-    )
+    ),
   )
 }
 
@@ -288,7 +283,7 @@ export const controlesTechniquesMapping = ({
   date_mise_a_jour: dateMiseAJour,
   donnee_disponible: isDonneeDisponible,
   erreur,
-  historique,
+  historique = [],
 }) => {
   const mappedHistorique = historiqueControlesTechniquesMapping(historique)
 

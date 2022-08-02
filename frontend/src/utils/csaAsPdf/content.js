@@ -1,4 +1,4 @@
-import { writeFooter } from './footer'
+import { writeFooter } from './footer.js'
 import { formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
 
 import {
@@ -14,8 +14,8 @@ import {
 	HORIZONTAL_TABULATION,
 	MISSING_VALUE,
 	TO_BE_CONTINUED_SYMBOL,
-	TOP_PAGE_MARGIN
-} from './constants'
+	TOP_PAGE_MARGIN,
+} from './constants.js'
 
 import {
 	getEmbeddedFont,
@@ -23,8 +23,8 @@ import {
 	writePageNumber,
 	writeText,
 	writeTitle,
-	writeWithSpacing
-} from './utils'
+	writeWithSpacing,
+} from './utils.js'
 
 
 const SECTION_TITLE_BULLET = '-'
@@ -33,7 +33,7 @@ const writeNextPageSymbol = ({
   page,
   embeddedFonts,
 	y,
-	dryRun
+	dryRun,
 }) => {
   return writeText({
 		page,
@@ -43,14 +43,14 @@ const writeNextPageSymbol = ({
 		text: TO_BE_CONTINUED_SYMBOL,
 		size: FONT_SIZES.M,
 		style: FONT_STYLES.BOLD,
-		dryRun
+		dryRun,
   })
 }
 
 const writeHeaderLogoPng = ({
 	page,
 	y,
-	headerLogoPng
+	headerLogoPng,
 }) => {
 	const pngDims = headerLogoPng.scale(0.45)
 	const pngY = y - pngDims.height
@@ -68,14 +68,14 @@ const writeHeaderLogoPng = ({
 const writeCSAMainTitle = ({
 	page,
 	embeddedFonts,
-	y
+	y,
 }) => {
 	const subTitleY = writeMainTitle({
 		page,
 		embeddedFonts,
 		x: MIDDLE_PAGE_X,
 		y,
-		title: 'Certificat de situation administrative détaillé'
+		title: 'Certificat de situation administrative détaillé',
 	})
 
 	const titleY = writeTitle({
@@ -85,7 +85,7 @@ const writeCSAMainTitle = ({
 		y: subTitleY,
 		title: '(Articles L.322-2 et R.322-4 du code de la route)',
 		center: true,
-		style: FONT_STYLES.NORMAL
+		style: FONT_STYLES.NORMAL,
 	})
 
 	const nextY = titleY - FONT_SPACING.XXL
@@ -99,21 +99,21 @@ const writeVehicleIdentification = ({
 	plaque,
 	premierCertificat,
 	vin,
-	marque
+	marque,
 }) => {
 	const vehicleIdentificationInfosY = writeTitle({
 		page,
 		embeddedFonts,
 		x: BORDER_LEFT_PAGE_X,
 		y,
-		title: 'Identification du véhicule'
+		title: 'Identification du véhicule',
 	})
 
 	const labels = [
 		'Numéro d\'immatriculation du véhicule :',
 		'Date de première immatriculation du véhicule :',
 		'Numéro VIN du véhicule (ou numéro de série) :',
-		'Marque :'
+		'Marque :',
 	]
 	const leftPartY = writeWithSpacing({
 		page,
@@ -121,14 +121,14 @@ const writeVehicleIdentification = ({
 		x: BORDER_LEFT_PAGE_X + HORIZONTAL_TABULATION.XS,
 		y: vehicleIdentificationInfosY,
 		textLines: labels,
-		increaseLineHeightOf: MULTILINES_MARGIN
+		increaseLineHeightOf: MULTILINES_MARGIN,
 	})
 
 	const values = [
 		plaque.toUpperCase() || MISSING_VALUE,
 		formatIsoToFrDateOrDefault(premierCertificat),
 		vin || MISSING_VALUE,
-		marque || MISSING_VALUE
+		marque || MISSING_VALUE,
 	]
 	const rightPartY = writeWithSpacing({
 		page,
@@ -136,7 +136,7 @@ const writeVehicleIdentification = ({
 		x: MIDDLE_PAGE_X + HORIZONTAL_TABULATION.XS,
 		y: vehicleIdentificationInfosY,
 		textLines: values,
-		increaseLineHeightOf: MULTILINES_MARGIN
+		increaseLineHeightOf: MULTILINES_MARGIN,
 	})
 
 	const nextY = Math.min(leftPartY, rightPartY) - FONT_SPACING.XXL
@@ -150,7 +150,7 @@ const addPage = ({
 	embeddedFonts,
 	writeHeaderCallback,
 	writeFooterCallback,
-	title = ''
+	title = '',
 }) => {
 	const page = doc.addPage()
   page.setFont(embeddedFonts[FONT_STYLES.NORMAL])
@@ -172,7 +172,7 @@ const getWeightedLines = (lines, embeddedFont, size, maxColumnWidth) => {
 
 		return {
 			line,
-			weight
+			weight,
 		}
 	})
 
@@ -201,7 +201,7 @@ const getNextColumns = (weightedLines, maxColumnLinesForPage, isFirstPage) => {
 			return {
 				firstColumnItems: getLinesAndTotalWeigth(weightedLines),
 				secondColumnItems: { lines: [], totalWeight: 0 },
-				remainingItems: { lines: [], totalWeight: 0 }
+				remainingItems: { lines: [], totalWeight: 0 },
 			}
 		}
 
@@ -214,7 +214,7 @@ const getNextColumns = (weightedLines, maxColumnLinesForPage, isFirstPage) => {
 		return {
 			firstColumnItems,
 			secondColumnItems,
-			remainingItems: { lines: [], totalWeight: 0 }
+			remainingItems: { lines: [], totalWeight: 0 },
 		}
 	}
 
@@ -230,7 +230,7 @@ const getNextColumns = (weightedLines, maxColumnLinesForPage, isFirstPage) => {
 		return {
 			firstColumnItems,
 			secondColumnItems,
-			remainingItems: { lines: [], totalWeight: 0 }
+			remainingItems: { lines: [], totalWeight: 0 },
 		}
 	}
 
@@ -245,7 +245,7 @@ const getNextColumns = (weightedLines, maxColumnLinesForPage, isFirstPage) => {
 	return {
 		firstColumnItems,
 		secondColumnItems,
-		remainingItems: getLinesAndTotalWeigth(remainingWeightedLines)
+		remainingItems: getLinesAndTotalWeigth(remainingWeightedLines),
 	}
 }
 
@@ -254,7 +254,7 @@ const getLinesAndTotalWeigth = (weightedLines, i) => {
 
 	return {
 		lines: slicedWeightedLines.map((weightedLine) => weightedLine.line),
-		totalWeight: slicedWeightedLines[slicedWeightedLines.length-1].totalWeight
+		totalWeight: slicedWeightedLines[slicedWeightedLines.length-1].totalWeight,
 	}
 }
 
@@ -271,7 +271,7 @@ const writeHistory = ({
 	writeHeaderCallback,
 	dryRun,
 	forceTwoColumns,
-	nextPageSymbol
+	nextPageSymbol,
 }) => {
 	const topY = writeTitle({
 		page,
@@ -279,7 +279,7 @@ const writeHistory = ({
 		x: BORDER_LEFT_PAGE_X,
 		y,
 		title: 'Historique du véhicule',
-		dryRun
+		dryRun,
 	})
 
 	const style = FONT_STYLES.NORMAL
@@ -310,7 +310,7 @@ const writeHistory = ({
 			increaseLineHeightOf: MULTILINES_MARGIN,
 			maxWidth: LARGE_COLUMN_WIDTH,
 			size: historyItemSize,
-			dryRun
+			dryRun,
 		})
 
 		return {
@@ -327,7 +327,7 @@ const writeHistory = ({
 	let {
 		firstColumnItems: { lines: firstColumnLines, totalWeight: firstColumnTotalWeight },
 		secondColumnItems: { lines: secondColumnLines, totalWeight: secondColumnTotalWeight },
-		remainingItems: { lines: remainingItems }
+		remainingItems: { lines: remainingItems },
 	} = getNextColumns(weightedLines, maxColumnLinesForPage, true)
 
 	let remainingWeightedLines = getWeightedLines(remainingItems, embeddedFont, historyItemSize, COLUMN_WIDTH)
@@ -344,7 +344,7 @@ const writeHistory = ({
 			increaseLineHeightOf: MULTILINES_MARGIN,
 			maxWidth: COLUMN_WIDTH,
 			size: historyItemSize,
-			dryRun
+			dryRun,
 		})
 	}
 
@@ -358,7 +358,7 @@ const writeHistory = ({
 			increaseLineHeightOf: MULTILINES_MARGIN,
 			maxWidth: COLUMN_WIDTH,
 			size: historyItemSize,
-			dryRun
+			dryRun,
 		})
 	}
 
@@ -371,7 +371,7 @@ const writeHistory = ({
 				page: currentPage,
 				embeddedFonts,
 				y: lastY + FONT_SPACING.S,
-				dryRun
+				dryRun,
 			})
 			doesLastPageHasSymbol = !remainingWeightedLines.length
 		}
@@ -384,7 +384,7 @@ const writeHistory = ({
 		x: BORDER_LEFT_PAGE_X,
 		y: bottomHeaderY,
 		repeatedHistoryTitle,
-		dryRun: true
+		dryRun: true,
 	})
 
 	// Always display 2 columns for next pages since first page has 2 columns
@@ -395,7 +395,7 @@ const writeHistory = ({
 				embeddedFonts,
 				writeHeaderCallback,
 				writeFooterCallback,
-				title: repeatedHistoryTitle
+				title: repeatedHistoryTitle,
 				}))
 		}
 
@@ -405,7 +405,7 @@ const writeHistory = ({
 		({
 			firstColumnItems: { lines: firstColumnLines, totalWeight: firstColumnTotalWeight },
 			secondColumnItems: { lines: secondColumnLines, totalWeight: secondColumnTotalWeight },
-			remainingItems: { lines: remainingItems }
+			remainingItems: { lines: remainingItems },
 		} = getNextColumns(remainingWeightedLines, maxColumnLinesForPage))
 
 		if (firstColumnLines.length) {
@@ -418,7 +418,7 @@ const writeHistory = ({
 				increaseLineHeightOf: MULTILINES_MARGIN,
 				maxWidth: COLUMN_WIDTH,
 				size: historyItemSize,
-				dryRun
+				dryRun,
 			})
 		}
 
@@ -432,7 +432,7 @@ const writeHistory = ({
 				increaseLineHeightOf: MULTILINES_MARGIN,
 				maxWidth: COLUMN_WIDTH,
 				size: historyItemSize,
-				dryRun
+				dryRun,
 			})
 		}
 
@@ -447,7 +447,7 @@ const writeHistory = ({
 					page: currentPage,
 					embeddedFonts,
 					y: lastY + FONT_SPACING.S,
-					dryRun
+					dryRun,
 				})
 				doesLastPageHasSymbol = true
 			}
@@ -476,7 +476,7 @@ const writeSituationColumn = ({
 	x,
 	y,
 	situationItems,
-	dryRun
+	dryRun,
 }) => {
 	const sectionTitleX = x + HORIZONTAL_TABULATION.XS
 	const valueX = x + HORIZONTAL_TABULATION.S
@@ -493,7 +493,7 @@ const writeSituationColumn = ({
 			maxWidth: COLUMN_WIDTH,
 			size: FONT_SIZES.M,
 			style: FONT_STYLES.BOLD,
-			dryRun
+			dryRun,
 		})
 
 		nextY = sectionTitleBottomY - FONT_SPACING.XXS
@@ -506,7 +506,7 @@ const writeSituationColumn = ({
 				y: nextY,
 				textLines: [value],
 				maxWidth: COLUMN_WIDTH,
-				dryRun
+				dryRun,
 			})
 			const isLastLine = (i === sectionValues.length-1)
 			const spacing = isLastLine ? FONT_SPACING.M : FONT_SPACING.S
@@ -530,26 +530,26 @@ const writeFirstSituationColumn = ({
 	oveisCurrentStatusLines,
 	ovesCurrentStatusLines,
 	proceduresReparationControleeStatus,
-	dryRun
+	dryRun,
 }) => {
 	const	proceduresReparationControlee = proceduresReparationControleeStatus ?
 		[{
 			key: `${SECTION_TITLE_BULLET} Procédure de réparation contrôlée`,
 			values: [
 				proceduresReparationControleeStatus,
-			]
+			],
 		}] : []
 
 	const	oveisCurrentStatus = oveisCurrentStatusLines ?
 		[{
 			key: `${SECTION_TITLE_BULLET} Opposition véhicule économiquement irréparable`,
-			values: oveisCurrentStatusLines
+			values: oveisCurrentStatusLines,
 		}] : []
 
 	const	ovesCurrentStatus = (ovesCurrentStatusLines || !oveisCurrentStatusLines) ?
 		[{
 			key: `${SECTION_TITLE_BULLET} Opposition véhicule endommagé`,
-			values: ovesCurrentStatusLines || ['Aucune']
+			values: ovesCurrentStatusLines || ['Aucune'],
 		}] : []
 
 	const situationItems = [
@@ -566,8 +566,8 @@ const writeFirstSituationColumn = ({
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Gage`,
-			values:	gagesCurrentStatusLines
-		}
+			values:	gagesCurrentStatusLines,
+		},
 	]
 
 	return writeSituationColumn({ page, embeddedFonts, x, y, situationItems, dryRun })
@@ -584,43 +584,43 @@ const writeSecondSituationColumn = ({
 	volTitre,
 	volVehicule,
 	suspensionsCurrentStatusLines,
-	dryRun
+	dryRun,
 }) => {
 	const situationItems = [
 		{
 			key: `${SECTION_TITLE_BULLET} Immatriculation suspendue`,
-			values: suspensionsCurrentStatusLines
+			values: suspensionsCurrentStatusLines,
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Immatriculation annulée`,
 			values: [
 				annulationCurrentStatus,
-			]
+			],
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Véhicule volé`,
 			values: [
 				volVehicule,
-			]
+			],
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation volé`,
 			values: [
 				volTitre,
-			]
+			],
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation perdu`,
 			values: [
 				perteTitre,
-			]
+			],
 		},
 		{
 			key: `${SECTION_TITLE_BULLET} Certificat d'immatriculation duplicata`,
 			values: [
 				duplicataTitre,
-			]
-		}
+			],
+		},
 	]
 
 	return writeSituationColumn({ page, embeddedFonts, x, y, situationItems, dryRun })
@@ -644,7 +644,7 @@ const writeSituation = ({
 	suspensionsCurrentStatusLines,
 	volTitre,
 	volVehicule,
-	dryRun
+	dryRun,
 }) => {
 	const title = plaque ? `Situation administrative du véhicule - ${plaque}` : 'Situation administrative du véhicule'
 	const situationY = writeTitle({
@@ -653,7 +653,7 @@ const writeSituation = ({
 		x: BORDER_LEFT_PAGE_X,
 		y,
 		title,
-		dryRun
+		dryRun,
 	})
 
 	const firstSituationColumnBottomY = writeFirstSituationColumn({
@@ -668,7 +668,7 @@ const writeSituation = ({
 		oveisCurrentStatusLines,
 		ovesCurrentStatusLines,
 		proceduresReparationControleeStatus,
-		dryRun
+		dryRun,
 	})
 
 	const secondSituationColumnBottomY = writeSecondSituationColumn({
@@ -682,7 +682,7 @@ const writeSituation = ({
 		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
-		dryRun
+		dryRun,
 	})
 
 	return Math.min(firstSituationColumnBottomY, secondSituationColumnBottomY)
@@ -692,7 +692,7 @@ const writeAnnulation = ({
 	page,
 	embeddedFonts,
 	y,
-	dateAnnulationCI
+	dateAnnulationCI,
 }) => {
 	const textY = writeText({
 		page,
@@ -701,7 +701,7 @@ const writeAnnulation = ({
 		y,
 		text: 'Le certificat demandé a été annulé.',
 		size: FONT_SIZES.L,
-		style: FONT_STYLES.BOLD
+		style: FONT_STYLES.BOLD,
 	})
 
 	return writeText({
@@ -711,7 +711,7 @@ const writeAnnulation = ({
 		y: textY - FONT_SPACING.S,
 		text: `Immatriculation annulée le : ${formatIsoToFrDate(dateAnnulationCI)}.`,
 		size: FONT_SIZES.L,
-		style: FONT_STYLES.BOLD
+		style: FONT_STYLES.BOLD,
 	})
 }
 /* ************************************************************ */
@@ -750,7 +750,7 @@ export const writeContent = (
 		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
-	} = {}
+	} = {},
 ) => {
 	const writeHeaderCallback = ({ page, embeddedFonts }) => {
 		const { height } = page.getSize()
@@ -770,7 +770,7 @@ export const writeContent = (
 		page,
 		nextY: bottomHeaderY,
 		topFooterY,
-		bottomFooterY
+		bottomFooterY,
 	} = addPage({ doc, embeddedFonts, writeHeaderCallback, writeFooterCallback })
 
 	const vehicleIdentificationBottomY = writeVehicleIdentification({
@@ -780,7 +780,7 @@ export const writeContent = (
 		plaque,
 		premierCertificat,
 		vin,
-		marque
+		marque,
 	})
 
 	if (isCIAnnule) {
@@ -821,7 +821,7 @@ export const writeContent = (
 		suspensionsCurrentStatusLines,
 		volTitre,
 		volVehicule,
-		dryRun: true
+		dryRun: true,
 	})
 
 	// Simulate writeHistory call (using dryRun option and simulatedSituationBottomY) to :
@@ -840,7 +840,7 @@ export const writeContent = (
 		plaque,
 		writeFooterCallback,
 		writeHeaderCallback,
-		dryRun: true
+		dryRun: true,
 	})
 
 	const situationHeight = vehicleIdentificationBottomY - simulatedSituationBottomY + FONT_SPACING.L
@@ -858,7 +858,7 @@ export const writeContent = (
 		y: historyWithMarginBottomY,
 		currentPage: lastHistoryPage,
 		currentPageNumber,
-		doesLastPageHasSymbol
+		doesLastPageHasSymbol,
 	} = writeHistory({
 		doc,
 		page,
@@ -871,7 +871,7 @@ export const writeContent = (
 		writeFooterCallback,
 		writeHeaderCallback,
 		forceTwoColumns,
-		nextPageSymbol: isSituationSectionOnNewPage
+		nextPageSymbol: isSituationSectionOnNewPage,
 	})
 
 	currentPage = lastHistoryPage
@@ -887,7 +887,7 @@ export const writeContent = (
 			doc,
 			embeddedFonts,
 			writeHeaderCallback,
-			writeFooterCallback
+			writeFooterCallback,
 		}))
 	}
 
@@ -909,7 +909,7 @@ export const writeContent = (
 		proceduresReparationControleeStatus,
 		suspensionsCurrentStatusLines,
 		volTitre,
-		volVehicule
+		volVehicule,
 	})
 
 	// Write all page number
@@ -922,7 +922,7 @@ export const writeContent = (
 			embeddedFonts,
 			y: bottomFooterY,
 			pageNumber: i+1,
-			totalPageNumber
+			totalPageNumber,
 		})
 	}
 }

@@ -6,8 +6,8 @@ import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 
-
-// @todo: remove after BPSA test
+// @todo: A supprimer si on ne souhaite plus avoir de mock API UTAC
+// @todo: Ou à migrer vers un serveur de mock API UTAC
 const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
   ct: [
     {
@@ -21,7 +21,7 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_resultat: 'A',
       ct_km: 98429,
       ct_immat: 'AW-753-TD',
-      ct_vin: 'VF7JM8HZC97374672'
+      ct_vin: 'VF7JM8HZC97374672',
     },
     {
       ct_id: 2,
@@ -34,7 +34,7 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_resultat: 'A',
       ct_km: 132874,
       ct_immat: 'DN-134-AG',
-      ct_vin: 'VF7JM8HZC97374672'
+      ct_vin: 'VF7JM8HZC97374672',
     },
     {
       ct_id: 3,
@@ -47,15 +47,15 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
       ct_resultat: 'A',
       ct_km: 160532,
       ct_immat: 'DN-134-AG',
-      ct_vin: 'VF7JM8HZC97374672'
-    }
+      ct_vin: 'VF7JM8HZC97374672',
+    },
   ],
   update_date: '01/08/2021',
-  status: 200
+  status: 200,
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-const anonymize = (text, nbVisibleCharAtPrefixAndSuffix=2) => {
+const anonymize = (text, nbVisibleCharAtPrefixAndSuffix = 2) => {
   const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
   return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
 }
@@ -72,7 +72,7 @@ const ERROR_MESSAGES = {
   default: 'Unexpected error from UTAC api',
 }
 
-module.exports.UTACClient = class UTACClient {
+class UTACClient {
   constructor () {
     // /!\ boolean setting is passed as string /!\
     // @todo: we should use typed yaml to load settings
@@ -88,7 +88,8 @@ module.exports.UTACClient = class UTACClient {
           ca: readFileSync(config.utac.utacPem),
           pfx: readFileSync(config.utac.histovecPfx),
           passphrase: config.utac.histovecPfxPassphrase,
-        }) : undefined,
+        })
+        : undefined,
       baseURL,
       timeout: config.utac.timeout,
       headers: {
@@ -105,7 +106,7 @@ module.exports.UTACClient = class UTACClient {
         return false
       }
 
-      const authorizationHeader = this.axios.defaults.headers.common['Authorization']
+      const authorizationHeader = this.axios.defaults.headers.common.Authorization
 
       if (!authorizationHeader) {
         return true
@@ -152,10 +153,9 @@ module.exports.UTACClient = class UTACClient {
         message,
       })
 
-      return Promise.reject({
-        status: status === 'default' ? 500 : status,
-        message,
-      })
+      const customError = new Error(message)
+      customError.status = status === 'default' ? 500 : status
+      return Promise.reject(customError)
     }
 
     // @todo: use 'runWhen' when it will be released
@@ -186,7 +186,7 @@ module.exports.UTACClient = class UTACClient {
       if (token) {
         appLogger.debug({
           debug: 'UTAC authentication succeed',
-          token: token,
+          token,
         })
 
         const authorizationHeader = `bearer ${token}`
@@ -209,7 +209,7 @@ module.exports.UTACClient = class UTACClient {
   async readControlesTechniques ({ immat, vin }, { uuid, encryptedImmat, encryptedVin, isMocked }) {
     if (isMocked) {
       // Wait same times as production UTAC api response time
-      const utacResponseTimeEstimationInMs = Math.trunc(248 + (100*Math.random() - 100/2))
+      const utacResponseTimeEstimationInMs = Math.trunc(248 + (100 * Math.random() - 100 / 2))
       appLogger.debug(`-- utacResponseTimeEstimationInMs begin ==> ${utacResponseTimeEstimationInMs}`)
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_time_to_wait ${utacResponseTimeEstimationInMs}`)
 
@@ -259,13 +259,11 @@ module.exports.UTACClient = class UTACClient {
       const anonymizedUtacVin = anonymize(vin)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      if (config.utac.isVinSentToUtac) {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
-      }
+      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
 
       response = await this.axios.post('/immat/search', {
         immat,
-        ...(config.utac.isVinSentToUtac ? { vin } : {}),
+        vin,
       })
       const { data } = response
 
@@ -311,3 +309,5 @@ module.exports.UTACClient = class UTACClient {
     }
   }
 }
+
+export { UTACClient }

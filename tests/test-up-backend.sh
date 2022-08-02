@@ -15,7 +15,6 @@ echo "[ENV VAR] APP_VERSION = ${APP_VERSION} -- (required)"
 echo "[ENV VAR] BACKEND_PORT = ${BACKEND_PORT} -- (default is 8010)"
 echo "[ENV VAR] ES_HOST = ${ES_HOST} -- (default to local IP)"
 echo "[ENV VAR] IS_UTAC_CACHE_IGNORABLE = ${IS_UTAC_CACHE_IGNORABLE} -- (default to false)"
-echo "[ENV VAR] IS_VIN_SENT_TO_UTAC = ${IS_VIN_SENT_TO_UTAC} -- (default to true)"
 echo "[ENV VAR] REDIS_HOST = ${REDIS_HOST} -- (default to local IP)"
 echo "[ENV VAR] REDIS_PASSWORD = ${REDIS_PASSWORD} -- (required)"
 

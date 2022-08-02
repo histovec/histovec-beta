@@ -1,9 +1,8 @@
 import Joi from 'joi'
 
 import { generateReportRoute } from './reportCommon.js'
-import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, SIREN_REGEX } from '../../../constant/regex.js'
-import { DEFAULT_SIREN } from '../../../constant/siren.js'
-
+import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, NUMERO_SIREN_REGEX } from '../../../constant/regex.js'
+import { DEFAULT_NUMERO_SIREN } from '../../../constant/numeroSiren.js'
 
 const reportByDataPayloadSchema = Joi.object({
   uuid: Joi.string().guid({
@@ -22,7 +21,7 @@ const reportByDataPayloadSchema = Joi.object({
         personne_morale: Joi.object({
           raison_sociale: Joi.string().trim()
             .description('Raison sociale telle que renseignée sur le certificat d\'immatriculation.'),
-          siren: Joi.string().pattern(SIREN_REGEX).default(DEFAULT_SIREN)
+          siren: Joi.string().pattern(NUMERO_SIREN_REGEX).default(DEFAULT_NUMERO_SIREN)
             .description('Numéro de SIREN tel que renseigné sur le KBIS de l\'entreprise. Si vous êtes une personne morale sans SIREN, ne le remplissez pas.'),
         }).description('Remplir cette partie UNIQUEMENT si le véhicule appartient à une personne morale.'),
       }),
@@ -32,12 +31,12 @@ const reportByDataPayloadSchema = Joi.object({
         .description('Numéro de formule tel que renseigné sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format SIV.'),
       date_emission_certificat_immatriculation: Joi.date()
         .description('Date d\'émission du certificat d\'immatriculation telle que renseignée sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format FNI.'),
-    })
+    }),
   }).label('vehicule_by_data'),
   options: Joi.object({
     controles_techniques: Joi.boolean()
       .description('Récupérer les contrôles techniques du véhicule dans le rapport HistoVec. Désactivé par défaut.'),
-    ignore_utac_cache: Joi.boolean().meta({ swaggerHidden: true })
+    ignore_utac_cache: Joi.boolean().meta({ swaggerHidden: true }),
   }).label('controles_techniques_option_by_data'),
 }).label('Report_by_data_payload')
 
