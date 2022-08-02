@@ -1051,6 +1051,9 @@ export default {
       const hashedIdBuffer = await hash(this.id)
       const encodedHashedId = urlSafeBase64Encode(hashedIdBuffer)
 
+      // eslint-disable-next-line
+      console.log('id - encodedHashedId = ', encodedHashedId)
+
       const hashedKeyBuffer = await hash(this.key)
       const encodedHashedKey = urlSafeBase64Encode(hashedKeyBuffer)
 
