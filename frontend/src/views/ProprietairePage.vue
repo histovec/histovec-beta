@@ -12,7 +12,6 @@ import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@
 import plaqueNonSupporteeSvg from '@/assets/img/plaque_non_supportee.svg?url'
 import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
 import plaqueSivSvg from '@/assets/img/plaque_siv.svg?url'
-import ProprietaireSvg from '@/assets/img/proprietaire.svg'
 
 import imageNomEtPrenomsFNI from '@/assets/img/aide/fni_nom_et_prenoms.jpg'
 import imagePlaqueImmatriculationFNI from '@/assets/img/aide/fni_plaque_immatriculation.jpg'
@@ -27,7 +26,7 @@ import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
 export default defineComponent({
   name: 'ProprietairePage',
 
-  components: { ProprietaireSvg, HistoVecButtonLink },
+  components: {HistoVecButtonLink},
 
   data () {
     const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
@@ -284,79 +283,79 @@ export default defineComponent({
     nomSivErrorMessage () {
       return (
         this.formData.siv.titulaire.particulier.nom && !this.isNomSivValid ?
-        'Le nom doit être renseigné tel qu\'indiqué sur le certificat d\'immatriculation.' :
-        ''
+          'Le nom doit être renseigné tel qu\'indiqué sur le certificat d\'immatriculation.' :
+          ''
       )
     },
     prenomsSivErrorMessage () {
       return (
         this.formData.siv.titulaire.particulier.prenoms && !this.isPrenomsSivValid ?
-        'Le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
-        ''
+          'Le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
+          ''
       )
     },
     raisonSocialeSivErrorMessage () {
       return (
         this.formData.siv.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeSivValid ?
-        'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
-        ''
+          'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
+          ''
       )
     },
     numeroSirenSivErrorMessage () {
       return (
         !this.isNumeroSirenSivValid ?
-        'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
-        ''
+          'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
+          ''
       )
     },
     numeroImmatriculationSivErrorMessage () {
       return (
         this.formData.siv.numeroImmatriculation && !this.isNumeroImmatriculationSivValid ?
-        'Le numéro d\'immatriculation doit respecter le format "AA-123-AA" ou "AA 123 AA" ou "AA123AA".' :
-        ''
+          'Le numéro d\'immatriculation doit respecter le format "AA-123-AA" ou "AA 123 AA" ou "AA123AA".' :
+          ''
       )
     },
     numeroFormuleSivErrorMessage () {
       return (
         this.formData.siv.numeroFormule && !this.isNumeroFormuleSivValid ?
-        'Le numéro de formule doit respecter le format "2013BZ80335".' :
-        ''
+          'Le numéro de formule doit respecter le format "2013BZ80335".' :
+          ''
       )
     },
 
     nomEtPrenomsFniErrorMessage () {
       return (
         this.formData.fni.titulaire.particulier.nomEtPrenoms && !this.isNomEtPrenomsFniValid ?
-        'Le nom et le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
-        ''
+          'Le nom et le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
+          ''
       )
     },
     raisonSocialeFniErrorMessage () {
       return (
         this.formData.fni.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeFniValid ?
-        'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
-        ''
+          'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
+          ''
       )
     },
     numeroSirenFniErrorMessage () {
       return (
         !this.isNumeroSirenFniValid ?
-        'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
-        ''
+          'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
+          ''
       )
     },
     numeroImmatriculationFniErrorMessage () {
       return (
         this.formData.fni.numeroImmatriculation && !this.isNumeroImmatriculationFniValid ?
-        'Le numéro d\'immatriculation doit respecter le format "123-ABC-45" ou "123 ABC 45" ou "123ABC45".' :
-        ''
+          'Le numéro d\'immatriculation doit respecter le format "123-ABC-45" ou "123 ABC 45" ou "123ABC45".' :
+          ''
       )
     },
     dateEmissionCertificatImmatriculationFniErrorMessage () {
       return (
         this.formData.fni.dateEmissionCertificatImmatriculation && !this.isDateEmissionCertificatImmatriculationFniValid ?
-        'La date d\'émission du certificat d\'immatriculation doit respecter le format "31/12/2020".' :
-        ''
+          'La date d\'émission du certificat d\'immatriculation doit respecter le format "31/12/2020".' :
+          ''
       )
     },
   },
@@ -512,7 +511,7 @@ export default defineComponent({
         },
       }
     },
-},
+  },
 })
 </script>
 
@@ -534,11 +533,15 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4  fr-col-xl-4">
-      <DsfrPicture src="">
-        <ProprietaireSvg
-          title="Illustration de la page du propriétaire"
-        />
-      </DsfrPicture>
+      <div class="fr-content-media">
+        <img
+          class="fr-img-responsive fr-pl-2v"
+          alt="Illustration de la page du propriétaire"
+          src="../../src/assets/img/proprietaire.svg"
+          style="width:100%"
+        >
+      </div>
+
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Rassurez vos acheteurs potentiels</h1>
@@ -554,7 +557,8 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
       <p class="fr-text--md">
-        HistoVec permet de consulter l'historique administratif de votre véhicule enregistré dans le Système d'Immatriculation des Véhicules (SIV).
+        HistoVec permet de consulter l'historique administratif de votre véhicule enregistré dans le Système
+        d'Immatriculation des Véhicules (SIV).
       </p>
       <p class="fr-text--md">
         Pour toute demande de renseignements sur votre dossier ou de correction des informations,
@@ -624,7 +628,8 @@ export default defineComponent({
     <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
       <div class="fr-col-12">
         <p class="fr-text--md">
-          Le <span class="fr-blue-text">numéro SIREN</span> correspond au <span class="fr-blue-text">9 premiers caractères du numéro SIRET</span> de votre société.
+          Le <span class="fr-blue-text">numéro SIREN</span> correspond au <span class="fr-blue-text">9 premiers caractères du numéro SIRET</span>
+          de votre société.
         </p>
         <p class="fr-text--md">
           Il figure sur le <span class="fr-blue-text">KBIS</span> de votre société.
@@ -699,7 +704,7 @@ export default defineComponent({
     <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
       <div class="fr-col-12  text-center">
         <img
-          alt="Indication localisation numero d'immatriculation : au dessus du numéro de formule"
+          alt="Indication localisation numéro d'immatriculation : au dessus du numéro de formule"
           :src="images.aide.imagePlaqueImmatriculationSIV"
           class="fr-img-responsive"
           style="height: 220px"
@@ -757,7 +762,7 @@ export default defineComponent({
     <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
       <div class="fr-col-12  text-center">
         <img
-          alt="Indication localisation plaque d'immatriculation : au dessus du nom et prénom"
+          alt="Indication localisation numéro d'immatriculation : au dessus du nom et prénom"
           :src="images.aide.imagePlaqueImmatriculationFNI"
           class="fr-img-responsive"
           style="height: 215px"
@@ -793,7 +798,7 @@ export default defineComponent({
       class="fr-col-12"
     >
       <DsfrTabs
-        tab-list-name="Liste d'onglets pour un véhicule avec une plaque d'immatriculation au format SIV"
+        tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format SIV"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectSivTab"
       >
@@ -1069,7 +1074,7 @@ export default defineComponent({
       class="fr-col-12"
     >
       <DsfrTabs
-        tab-list-name="Liste d'onglets pour un véhicule avec une plaque d'immatriculation au format FNI"
+        tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format FNI"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectFniTab"
       >
@@ -1380,11 +1385,12 @@ export default defineComponent({
   height: 2.5rem;
 }
 
-.histovec-numero-immatriculation-opacity{
+.histovec-numero-immatriculation-opacity {
   opacity: 0.2;
 }
+
 .required-label {
-  color:red;
+  color: red;
 }
 
 .text-center {
@@ -1399,6 +1405,7 @@ export default defineComponent({
   margin-left: 1rem;
   cursor: pointer;
 }
+
 .help-icon {
   margin-left: 0.2rem;
 }
