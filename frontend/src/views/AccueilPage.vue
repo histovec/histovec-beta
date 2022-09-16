@@ -1,9 +1,8 @@
 <script>
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
-import AccueilSvg from '@/assets/img/accueil.svg'
 import confidentielSvg from '@/assets/img/confidentiel.svg?url'
 import gratuitSvg from '@/assets/img/gratuit.svg?url'
 import officielSvg from '@/assets/img/officiel.svg?url'
@@ -13,10 +12,11 @@ import simpleSvg from '@/assets/img/simple.svg?url'
 export default defineComponent({
   name: 'AccueilPage',
 
-  components: { AccueilSvg, HistoVecButtonLink },
+  components: {HistoVecButtonLink},
 
-  data () {
+  data() {
     return {
+
       tilesProprietaire:
         {
           title: 'Propriétaire',
@@ -31,12 +31,28 @@ export default defineComponent({
           to: '/acheteur',
           imgSrc: '',
         },
-      images: {
-        confidentielSvg,
-        gratuitSvg,
-        officielSvg,
-        simpleSvg,
-      },
+      carteItems: [
+        {
+          titre: 'Simple',
+          description: 'En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!',
+          image: simpleSvg,
+        },
+        {
+          titre: 'Officiel',
+          description:'Données issues du Système d\'immatriculation des véhicules.',
+          image:officielSvg,
+        },
+        {
+          titre: 'Confidentiel',
+          description: 'Seul le propriétaire peut partager ses informations.',
+          image:confidentielSvg,
+        },
+        {
+          titre: 'Gratuit',
+          description: 'Un service gratuit pour les propriétaires et les acheteurs.',
+          image:gratuitSvg,
+        },
+      ],
     }
   },
 })
@@ -57,11 +73,14 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <DsfrPicture src="">
-        <AccueilSvg
-          title="Illustration de la page d'accueil"
-        />
-      </DsfrPicture>
+      <div class="fr-content-media">
+        <img
+          class="fr-img-responsive fr-pl-2v"
+          alt="Illustration de la page de la page d'accueil"
+          src="../../src/assets/img/accueil.svg"
+          style="width:100%"
+        >
+      </div>
     </div>
     <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
       <h1>Partagez l'historique de votre véhicule</h1>
@@ -81,51 +100,25 @@ export default defineComponent({
   </div>
 
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Simple"
-        description="En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!"
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.simpleSvg"
-        no-arrow
-      />
-    </div>
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Officiel"
-        description="Données issues du Système d'immatriculation des véhicules."
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.officielSvg"
-        no-arrow
-      />
-    </div>
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Confidentiel"
-        description="Seul le propriétaire peut partager ses informations."
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.confidentielSvg"
-        no-arrow
-      />
-    </div>
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Gratuit"
-        description="Un service gratuit pour les propriétaires et les acheteurs."
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.gratuitSvg"
-        no-arrow
-      />
+    <div v-for="(carteItem, index) in carteItems" :key="index" class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3 fr-col">
+      <div class="bordure fr-m-3 fr-p-2" >
+        <div class="fr-card__header">
+          <div class="fr-card__img">
+            <img class="fr-responsive-img" :src="carteItem.image" alt="">
+          </div>
+        </div>
+        <div class="fr-card__body">
+          <div class="fr-card__content">
+            <h4 class="fr-card__title">
+              <span>{{ carteItem.titre }}</span>
+            </h4>
+            <p class="fr-card__desc">{{carteItem.description}}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
 
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-12  text-center">
@@ -177,5 +170,10 @@ export default defineComponent({
 
 .text-center {
   text-align: center;
+}
+
+.bordure {
+  border: 0.1rem solid #e5e5e5;
+  height:100%
 }
 </style>
