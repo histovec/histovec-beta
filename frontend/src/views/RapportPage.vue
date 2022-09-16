@@ -1,8 +1,8 @@
 <script>
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import dayjs from 'dayjs'
 import QrcodeVue from 'qrcode.vue'
-import { copyText } from 'vue3-clipboard'
+import {copyText} from 'vue3-clipboard'
 
 
 import orderBy from 'lodash.orderby'
@@ -10,35 +10,33 @@ import orderBy from 'lodash.orderby'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
 
-import { hash } from '@/utils/crypto.js'
-import { generateCsa } from '@/utils/csaAsPdf/index.js'
-import { RAPPORT_FILENAME } from '@/utils/csaAsPdf/constants.js'
-import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@/utils/dataPreparationFormat.js'
-import { base64Encode, urlSafeBase64Encode, base64Decode, urlSafeBase64Decode } from '@/utils/encoding.js'
-import { downloadBlob } from '@/utils/file.js'
-import { getExposant } from '@/utils/format.js'
-import { mailTo } from '@/utils/email.js'
-import { getShareReportEmail } from '@/utils/dynamicEmail.js'
+import {hash} from '@/utils/crypto.js'
+import {generateCsa} from '@/utils/csaAsPdf/index.js'
+import {RAPPORT_FILENAME} from '@/utils/csaAsPdf/constants.js'
+import {normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation} from '@/utils/dataPreparationFormat.js'
+import {base64Decode, base64Encode, urlSafeBase64Decode, urlSafeBase64Encode} from '@/utils/encoding.js'
+import {downloadBlob} from '@/utils/file.js'
+import {getExposant} from '@/utils/format.js'
+import {mailTo} from '@/utils/email.js'
+import {getShareReportEmail} from '@/utils/dynamicEmail.js'
 
 import api from '@/api/index.js'
 
 import reportService from '@/services/report.js'
 
-import { formatIsoToFrDate } from '@/assets/js/format.js'
+import {formatIsoToFrDate} from '@/assets/js/format.js'
 import siv from '@/assets/js/siv.js'
 import operationsMapping from '@/assets/json/operations.json'
 import syntheseMapping from '@/assets/json/synthese.json'
 
-import { RESULTAT } from '@/constants/controlesTechniques.js'
-import { REPORT_TABS } from '@/constants/reportTabs.js'
-import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@/constants/type.js'
-import { DEFAULT_DATE_UPDATE } from '@/constants/v.js'
-import { VIGNETTE } from '@/constants/vehicle/critair.js'
-import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
-import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@/constants/usagesSynthese.js'
+import {RESULTAT} from '@/constants/controlesTechniques.js'
+import {REPORT_TABS} from '@/constants/reportTabs.js'
+import {TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT} from '@/constants/type.js'
+import {DEFAULT_DATE_UPDATE} from '@/constants/v.js'
+import {VIGNETTE} from '@/constants/vehicle/critair.js'
+import {DEFAULT_NUMERO_SIREN} from '@/constants/vehicle/numeroSiren.js'
+import {USAGE_AGRICOLE, USAGE_COLLECTION} from '@/constants/usagesSynthese.js'
 
-import RapportAcheteurSvg from '@/assets/img/acheteur.svg'
-import RapportVendeurSvg from '@/assets/img/rapport.svg'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
 // @todo @lazyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
@@ -59,7 +57,6 @@ export default defineComponent({
 
   components: {
     ControlesTechniquesLineChart,
-    RapportAcheteurSvg, RapportVendeurSvg,
     HistoVecButtonLink, QrcodeVue,
   },
 
@@ -70,8 +67,8 @@ export default defineComponent({
     },
   },
 
-  data () {
-    return  {
+  data() {
+    return {
       // Initialized beforeMount
       holderId: null,
       holderKey: null,
@@ -186,28 +183,28 @@ export default defineComponent({
   },
 
   computed: {
-    tilesVehiculeLinks () {
+    tilesVehiculeLinks() {
       return [
         {
           title: 'Le véhicule',
           description: (
             this.isCIAnnule ?
-              `Le certificat demandé a été annulé : ${ this.processedVehiculeData.plaque }` :
-              `Numéro d'immatriculation : ${ this.processedVehiculeData.plaque }`
+              `Le certificat demandé a été annulé : ${this.processedVehiculeData.plaque}` :
+              `Numéro d'immatriculation : ${this.processedVehiculeData.plaque}`
           ),
           to: '',
           imgSrc: '',
         },
       ]
     },
-    tilesDateDonneesVehiculeLinks () {
+    tilesDateDonneesVehiculeLinks() {
       const description = (
         this.flags.showDataDate ? (
             this.isDefaultDataDate ?
-            'Non à jour' :
-            `Datant du ${this.dateMiseAJourFR}`
+              'Non à jour' :
+              `Datant du ${this.dateMiseAJourFR}`
           ) :
-        'Connues d\'HistoVec à ce jour'
+          'Connues d\'HistoVec à ce jour'
       )
 
       return [
@@ -220,7 +217,7 @@ export default defineComponent({
       ]
     },
 
-    breadcrumbLinks () {
+    breadcrumbLinks() {
       return [
         {
           to: '/accueil',
@@ -232,27 +229,27 @@ export default defineComponent({
       ]
     },
 
-    isRapportAcheteur () {
+    isRapportAcheteur() {
       return (
         this.typeRapport === TYPE_RAPPORT.ACHETEUR ||
         (this.typeRapport !== TYPE_RAPPORT.VENDEUR && this.isBuyer)
       )
     },
 
-    isRapportVendeur () {
+    isRapportVendeur() {
       return (
         this.typeRapport === TYPE_RAPPORT.VENDEUR ||
         (this.typeRapport !== TYPE_RAPPORT.ACHETEUR && this.isHolder)
       )
     },
 
-    currentTab () {
+    currentTab() {
       return this.tabs.mapping[this.tabs.selectedTabIndex]
     },
 
     // ----- Partage du rapport acheteur par le vendeur -----
 
-    currentMonthNumber () {
+    currentMonthNumber() {
       let date = dayjs().add(-7, 'day')
 
       if (this.flags.usePreviousMonthForData) {
@@ -261,7 +258,7 @@ export default defineComponent({
 
       return date.format('YYYYMM')
     },
-    titulaireId () {
+    titulaireId() {
       if (this.formData.typePersonne === TYPE_PERSONNE.PARTICULIER) {
         if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
           return this.formData.siv.titulaire.particulier.nom + this.formData.siv.titulaire.particulier.prenoms
@@ -288,7 +285,7 @@ export default defineComponent({
 
       return ''
     },
-    vehicleId () {
+    vehicleId() {
       if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
         return this.formData.siv.numeroImmatriculation + this.formData.siv.numeroFormule
       }
@@ -300,14 +297,14 @@ export default defineComponent({
       return ''
     },
 
-    codePartageHistoVec () {
+    codePartageHistoVec() {
       return `${this.holderId}-${this.holderKey}`
     },
-    baseUrl () {
+    baseUrl() {
       // Equivalent to 'https://histovec.interieur.gouv.fr' for production
       return window.location.protocol + '//' + window.location.host
     },
-    url () {
+    url() {
       const idParam = encodeURIComponent(this.holderId)
       const keyParam = encodeURIComponent(this.holderKey)
       const queryString = `?id=${idParam}&key=${keyParam}`
@@ -323,12 +320,12 @@ export default defineComponent({
       // Plus besoin de mécanisme pour les distinguer.
       // @todo @urlUnsafe2 : Décommenter cette ligne
       // return `${this.baseUrl}/histovec/report${queryString}`
-},
+    },
 
     // ----- Interrogation de l'api pour le rapport acheteur -----
 
-    buyerId () {
-      const { id: buyerId, urlUnsafe } = this.$route.query
+    buyerId() {
+      const {id: buyerId, urlUnsafe} = this.$route.query
 
       /* ----- @todo @urlUnsafe3 : Supprimer ce bloc de code  ------- */
       if (!urlUnsafe && buyerId) {  // old buyer report link
@@ -338,8 +335,8 @@ export default defineComponent({
 
       return buyerId
     },
-    buyerKey () {
-      const { key: buyerKey, urlUnsafe } = this.$route.query
+    buyerKey() {
+      const {key: buyerKey, urlUnsafe} = this.$route.query
 
       /* ----- @todo @urlUnsafe4 : Supprimer ce bloc de code  ------- */
       if (!urlUnsafe && buyerKey) {  // old buyer report link
@@ -353,54 +350,54 @@ export default defineComponent({
 
     // ----- Accès rapide aux données du rapport -----
 
-    caracteristiquesTechniques () {
+    caracteristiquesTechniques() {
       return this.processedVehiculeData.caracteristiquesTechniques
     },
-    certificat () {
+    certificat() {
       return this.processedVehiculeData.certificat
     },
-    controlesTechniquesHistorique () {
+    controlesTechniquesHistorique() {
       return this.controlesTechniques.historique || []
     },
-    dateEmissionCIFR () {
+    dateEmissionCIFR() {
       return formatIsoToFrDate(this.certificat.dateEmissionCI)
     },
-    dateMiseAJourFR () {
+    dateMiseAJourFR() {
       return formatIsoToFrDate(this.processedVehiculeData.dateMiseAJour)
     },
-    datePremiereImmatriculationFR () {
+    datePremiereImmatriculationFR() {
       return formatIsoToFrDate(this.certificat.datePremiereImmatriculation)
     },
-    datePremiereImmatriculationEnFranceFR () {
+    datePremiereImmatriculationEnFranceFR() {
       return formatIsoToFrDate(this.certificat.datePremiereImmatriculationEnFrance)
     },
-    erreurControlesTechniques () {
+    erreurControlesTechniques() {
       return this.controlesTechniques.erreur
       // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
     },
-    hasProcedureVEEnCours () {
+    hasProcedureVEEnCours() {
       return this.processedVehiculeData.administratif.hasProcedureVEEnCours
     },
-    isCIAnnule () {
+    isCIAnnule() {
       return Boolean(
         this.processedVehiculeData &&
         this.processedVehiculeData.administratif &&
         this.processedVehiculeData.administratif.isCIAnnule,
       )
     },
-    isDefaultDataDate () {
+    isDefaultDataDate() {
       return this.processedVehiculeData.dateMiseAJour === DEFAULT_DATE_UPDATE
     },
-    isBuyer () {
+    isBuyer() {
       return Boolean(this.buyerId || this.buyerKey)
     },
-    isHolder () {
+    isHolder() {
       return Boolean(!this.buyerId && this.holderId)
     },
-    isValidBuyer () {
+    isValidBuyer() {
       return Boolean(this.buyerId && this.buyerKey)
     },
-    normalizedControlesTechniquesHistorique () {
+    normalizedControlesTechniquesHistorique() {
       if (this.controlesTechniquesHistorique && this.controlesTechniquesHistorique.length > 0) {
         const orderedControlesTechniques = orderBy(this.controlesTechniquesHistorique, ['date'], ['desc'])
 
@@ -414,27 +411,27 @@ export default defineComponent({
 
       return []
     },
-    oppositionSection () {
+    oppositionSection() {
       return this.processedVehiculeData.administratif.opposition
     },
-    reportLabels () {
+    reportLabels() {
       return this.processedVehiculeData.administratif.reportLabels
     },
-    synthese () {
+    synthese() {
       return this.processedVehiculeData.administratif.reportLabels.synthese
     },
-    titulaire () {
+    titulaire() {
       return this.processedVehiculeData.titulaire
     },
-    vignetteCritair () {
+    vignetteCritair() {
       return this.processedVehiculeData.vignetteCritair
     },
 
 
     // ------------------ email ---------------------
 
-    shareReportEmail () {
-      const SHARE_REPORT_EMAIL = getShareReportEmail({ reportUrl: this.url })
+    shareReportEmail() {
+      const SHARE_REPORT_EMAIL = getShareReportEmail({reportUrl: this.url})
       return mailTo(SHARE_REPORT_EMAIL)
     },
     // ----------------------------------------------
@@ -471,7 +468,13 @@ export default defineComponent({
     if (this.isRapportAcheteur) {
       if (this.isValidBuyer) {
         const buyerReportResponse = await this.getBuyerReport()
-
+        if (buyerReportResponse === null) {
+          // Cas: Aucune Reponse du back
+          this.$router.push({
+            name: 'erreurInattendue',
+          })
+          return
+        }
         if (buyerReportResponse.status === 404) {
           // Cas: véhicule non trouvé
           this.$router.push({
@@ -522,7 +525,13 @@ export default defineComponent({
     } else if (this.isRapportVendeur) {
       if (this.formData) {
         const holderReportResponse = await this.getHolderReport()
-
+        if (holderReportResponse === null) {
+          // Cas: Aucune Reponse du back
+          this.$router.push({
+            name: 'erreurInattendue',
+          })
+          return
+        }
         if (holderReportResponse.status === 404) {
           // Cas: véhicule non trouvé
           this.$router.push({
@@ -567,26 +576,27 @@ export default defineComponent({
       return
     }
 
-    const { vehicule: vehiculeData, controlesTechniques } = report
+
+    const {vehicule: vehiculeData, controlesTechniques} = report
 
     this.processedVehiculeData = siv.processVehiculeData(vehiculeData)
     this.controlesTechniques = controlesTechniques
 
-    const { isDonneeDisponible: areControlesTechinquesDisponibles, historique } = this.controlesTechniques
+    const {isDonneeDisponible: areControlesTechinquesDisponibles, historique} = this.controlesTechniques
 
     const defaultTabTitles = [
-      { title: 'Synthèse'},
-      { title: 'Véhicule'},
-      { title: 'Titulaire & Titre'},
-      { title: 'Situation administrative'},
-      { title: 'Historique'},
+      {title: 'Synthèse'},
+      {title: 'Véhicule'},
+      {title: 'Titulaire & Titre'},
+      {title: 'Situation administrative'},
+      {title: 'Historique'},
     ]
 
     this.tabTitles = (
       (areControlesTechinquesDisponibles && historique.length > 0) ?
         defaultTabTitles.concat([
-          { title: 'Contrôles techniques'},
-          { title: 'Kilométrage'},
+          {title: 'Contrôles techniques'},
+          {title: 'Kilométrage'},
         ]) :
         defaultTabTitles
     )
@@ -653,10 +663,10 @@ export default defineComponent({
     },
 
     // ModalPartagerRapport
-    onCloseModalPartagerRapport () {
+    onCloseModalPartagerRapport() {
       this.modalPartagerRapport.opened = false
     },
-    async onOpenModalPartagerRapport () {
+    async onOpenModalPartagerRapport() {
       // @todo @copyLink2: On force la copie du lien à l'ouverture de la modale
       // en attendant de corriger le bug de copie du lien dans bouton de la modale
       this.utils.copyText(this.url)
@@ -666,7 +676,7 @@ export default defineComponent({
     },
 
     // Tabs
-    async onTabSelected () {
+    async onTabSelected() {
       switch (this.currentTab) {
         case (this.constants.REPORT_TABS.SYNTHESE):
           await api.log(`${this.$route.path}/synthesis`)
@@ -693,14 +703,14 @@ export default defineComponent({
           break
       }
     },
-    async selectTab (idx) {
+    async selectTab(idx) {
       this.tabs.asc = this.tabs.selectedTabIndex < idx
       this.tabs.selectedTabIndex = idx
 
       await this.onTabSelected(idx)
     },
 
-    async computeHolderId () {
+    async computeHolderId() {
       if (!this.formData) {
         return null
       }
@@ -730,7 +740,7 @@ export default defineComponent({
       return holderId
     },
 
-    async computeHolderKey () {
+    async computeHolderKey() {
       if (!this.formData) {
         return null
       }
@@ -752,28 +762,27 @@ export default defineComponent({
       return holderKey
     },
 
-    async getBuyerReport () {
+    async getBuyerReport() {
       const data = {
         id: this.buyerId,
         key: this.buyerKey,
       }
 
-      const report = await reportService.getBuyerReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
+      const report = await reportService.getBuyerReport(data, {ignoreUtacCache: this.flags.ignoreUtacCache})
 
       return report
     },
 
-    async getHolderReport () {
+    async getHolderReport() {
       const data = {
         id: this.holderId,
         formData: this.formData,
       }
 
-      const report = await reportService.getHolderReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
-
+      const report = await reportService.getHolderReport(data, {ignoreUtacCache: this.flags.ignoreUtacCache})
       return report
     },
-    async generatePdf () {
+    async generatePdf() {
       await api.log(`${this.$route.path}/csa/download`)
 
       const {
@@ -795,49 +804,49 @@ export default defineComponent({
       const numeroImmatriculation = this.typeImmatriculation === TYPE_IMMATRICULATION.SIV ? this.formData.siv.numeroImmatriculation : this.formData.fni.numeroImmatriculation
 
       const csaPdfBytes = await generateCsa({
-        isCIAnnule,
-        annulationCurrentStatus: csaLabels.annulationCurrentStatus,
-        dateAnnulationCI,
-        dateDonnees: this.flags.showDataDate ? dateMiseAJour : null,
-        histoVecLogoBytes: this.images.csa.logoHistoVecBytes,
-        marianneImageBytes: this.images.csa.logoMIBytes,
-        marque,
-        // @todo: @renamePlaque
-        // Renommer PARTOUT DANS LE CODE le mot "plaque"/"plaque d'immatriculation" en "numero d'immatriculation"
-        // que ce soit en nom de variable ou en texte descriptif
-        plaque: numeroImmatriculation,
-        premierCertificat: datePremiereImmatriculation,
-        qrCodeUrl: this.url,
-        validityDate: this.validityDate,
-        vin,
-        webSiteUrl: this.baseUrl,
-      },
-      (
-        !isCIAnnule ? {
-          duplicataTitre: csaLabels.titre.duplicata,
-          dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
-          gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
-          historyItems: this.processedVehiculeData.historique.map((item) => `${item.date} ${item.nature}`),
-          otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
-          otcisPVCurrentStatusLines: csaLabels.otcisPVCurrentStatusLines,
-          oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
-          ovesCurrentStatusLines: csaLabels.ovesCurrentStatusLines,
-          perteTitre: csaLabels.titre.perte,
-          proceduresReparationControleeStatus: csaLabels.proceduresReparationControleeStatus,
-          suspensionsCurrentStatusLines: csaLabels.suspensionsCurrentStatusLines,
-          volTitre: csaLabels.titre.vol,
-          volVehicule: csaLabels.vol,
-        } : {}
-      ))
+          isCIAnnule,
+          annulationCurrentStatus: csaLabels.annulationCurrentStatus,
+          dateAnnulationCI,
+          dateDonnees: this.flags.showDataDate ? dateMiseAJour : null,
+          histoVecLogoBytes: this.images.csa.logoHistoVecBytes,
+          marianneImageBytes: this.images.csa.logoMIBytes,
+          marque,
+          // @todo: @renamePlaque
+          // Renommer PARTOUT DANS LE CODE le mot "plaque"/"plaque d'immatriculation" en "numero d'immatriculation"
+          // que ce soit en nom de variable ou en texte descriptif
+          plaque: numeroImmatriculation,
+          premierCertificat: datePremiereImmatriculation,
+          qrCodeUrl: this.url,
+          validityDate: this.validityDate,
+          vin,
+          webSiteUrl: this.baseUrl,
+        },
+        (
+          !isCIAnnule ? {
+            duplicataTitre: csaLabels.titre.duplicata,
+            dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
+            gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
+            historyItems: this.processedVehiculeData.historique.map((item) => `${item.date} ${item.nature}`),
+            otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
+            otcisPVCurrentStatusLines: csaLabels.otcisPVCurrentStatusLines,
+            oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
+            ovesCurrentStatusLines: csaLabels.ovesCurrentStatusLines,
+            perteTitre: csaLabels.titre.perte,
+            proceduresReparationControleeStatus: csaLabels.proceduresReparationControleeStatus,
+            suspensionsCurrentStatusLines: csaLabels.suspensionsCurrentStatusLines,
+            volTitre: csaLabels.titre.vol,
+            volVehicule: csaLabels.vol,
+          } : {}
+        ))
 
       this.csaObjectURL = downloadBlob(
-        new Blob([csaPdfBytes], { type: 'application/pdf' }),
+        new Blob([csaPdfBytes], {type: 'application/pdf'}),
         `${RAPPORT_FILENAME}.pdf`,
       )
     },
 
     /** DsfrBadge **/
-    getDsfrBadgeType (resultatControleTechnique) {
+    getDsfrBadgeType(resultatControleTechnique) {
       if (resultatControleTechnique === RESULTAT.A || resultatControleTechnique === RESULTAT.AP) {
         return 'success'
       }
@@ -851,32 +860,32 @@ export default defineComponent({
     },
 
     /** logs **/
-    async logSimplimmatImage () {
+    async logSimplimmatImage() {
       await api.log(`${this.$route.path}/simplimmat/image`)
     },
-    async logSimplimmatLink () {
+    async logSimplimmatLink() {
       await api.log(`${this.$route.path}/simplimmat/link`)
     },
-    async logPartageDuRapport () {
+    async logPartageDuRapport() {
       await api.log(`${this.$route.path}/share`)
     },
-    async logCopieLienPartage () {
+    async logCopieLienPartage() {
       await api.log(`${this.$route.path}/share/copy`)
     },
-    async logCopieCodePartage () {
+    async logCopieCodePartage() {
       await api.log(`${this.$route.path}/share/code-partage`)
     },
-    async logMailLienPartage () {
+    async logMailLienPartage() {
       await api.log(`${this.$route.path}/share/mail`)
     },
-    async logMonAvisImage () {
+    async logMonAvisImage() {
       await api.log(`${this.$route.path}/mon-avis/image`)
     },
-    async logKilometersError () {
+    async logKilometersError() {
       await api.log(`${this.$route.path}/kilometers-error`)
     },
 
-    async onClickCopyLienPartage () {
+    async onClickCopyLienPartage() {
       // @todo @copyLink3: la copie ne s'effectue pas dans le cadre de la modale,
       // malgré la configuration de VueClipboard dans le main.js
       // On force donc la copie de l'url à l'ouverture de la modale pour dépanner.
@@ -887,7 +896,7 @@ export default defineComponent({
       this.onCloseModalPartagerRapport()
     },
 
-    async onClickCopyCodePartage () {
+    async onClickCopyCodePartage() {
       // @todo @codePartage2: pré-requis @copyLink
       // la copie ne s'effectue pas dans le cadre de la modale,
       // malgré la configuration de VueClipboard dans le main.js
@@ -899,7 +908,7 @@ export default defineComponent({
       this.onCloseModalPartagerRapport()
     },
 
-    async onClickMailLienPartage () {
+    async onClickMailLienPartage() {
       window.location = this.shareReportEmail
 
       await this.logMailLienPartage()
@@ -919,16 +928,22 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4  fr-col-xl-4">
-      <DsfrPicture src="">
-        <RapportVendeurSvg
-          v-if="isRapportVendeur"
-          title="Illustration de la page du rapport vendeur HistoVec"
-        />
-        <RapportAcheteurSvg
-          v-if="isRapportAcheteur"
-          title="Illustration de la page du rapport acheteur HistoVec"
-        />
-      </DsfrPicture>
+      <div class="fr-content-media" v-if="isRapportVendeur">
+        <img
+          class="fr-img-responsive fr-pl-2v"
+          alt="Illustration de la page du rapport vendeur HistoVec"
+          src="../../src/assets/img/rapport.svg"
+          style="width:100%"
+        >
+      </div>
+      <div class="fr-content-media" v-if="isRapportAcheteur">
+        <img
+          class="fr-img-responsive fr-pl-2v"
+          alt="Illustration de la page du rapport acheteur HistoVec"
+          src="../../src/assets/img/acheteur.svg"
+          style="width:100%"
+        >
+      </div>
     </div>
 
     <div
@@ -1076,7 +1091,7 @@ export default defineComponent({
                   class="fr-text--md  fr-mb-1v"
                 >
                   Calculez le montant de votre certificat d'immatriculation
-                  <br />
+                  <br/>
                   <a
                     class="fr-link"
                     href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
@@ -1104,7 +1119,7 @@ export default defineComponent({
                     />
                   </span>
                   {{ constants.USAGE_COLLECTION.text }}
-                  <br />
+                  <br/>
                   <span
                     v-if="constants.USAGE_COLLECTION.adv"
                     class="fr-text--md  fr-mb-1w"
@@ -1128,7 +1143,7 @@ export default defineComponent({
                     />
                   </span>
                   {{ constants.USAGE_AGRICOLE.text }}
-                  <br />
+                  <br/>
                   <!-- @todo @agricoleLink2: décommenter cette section -->
                   <!-- <span
                     v-if="constants.USAGE_AGRICOLE.adv"
@@ -1167,7 +1182,7 @@ export default defineComponent({
                   >
                     une durée inconnue
                   </span>
-                  <br />
+                  <br/>
                   <template v-if="!certificat.isVehiculeImporteDepuisEtranger">
                     <template v-if="isRapportVendeur">
                       Vous êtes le
@@ -1183,10 +1198,10 @@ export default defineComponent({
                       <sup class="fr-blue-text">{{ utils.getExposant(processedVehiculeData.titulairesCount + 1) }}</sup>
                     </template>
                   </template>
-                  <br />
+                  <br/>
                   <template v-if="certificat.isVehiculeImporteDepuisEtranger">
                     Le nombre exact de titulaires ne peut être calculé avec précision
-                    <br />
+                    <br/>
                     (première immatriculation à l'étranger)
                   </template>
                 </p>
@@ -1243,7 +1258,8 @@ export default defineComponent({
                     />
                   </span>
                   <!-- état - un seul sinistre !-->
-                  <template v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
+                  <template
+                    v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
                     Ce véhicule a eu <span class="fr-blue-text">un sinistre déclaré</span>
                     <span
                       v-if="processedVehiculeData.sinistresCount === 1"
@@ -1251,7 +1267,7 @@ export default defineComponent({
                     >
                       en {{ processedVehiculeData.lastSinistreYear }}
                     </span>
-                    <br />
+                    <br/>
                     <template v-if="processedVehiculeData.isApte">
                       et
                       <span class="fr-blue-text"> déclaré apte à circuler</span>
@@ -1267,8 +1283,10 @@ export default defineComponent({
                   <template v-if="processedVehiculeData.sinistresCount > 1">
                     Ce véhicule a eu
                     <span class="fr-blue-text">plusieurs sinistres</span>
-                    , dont le dernier déclaré en <span class="fr-blue-text">{{ processedVehiculeData.lastSinistreYear }}</span>
-                    <br />
+                    , dont le dernier déclaré en <span class="fr-blue-text">{{
+                      processedVehiculeData.lastSinistreYear
+                    }}</span>
+                    <br/>
                     <template v-if="processedVehiculeData.isApte">
                       Le véhicule a été
                       <span class="fr-blue-text"> déclaré apte à circuler</span>
@@ -1281,7 +1299,7 @@ export default defineComponent({
                     </template>
                   </template>
                   <!-- @todo @redirectTab: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Historique" ? -->
-                  <br />
+                  <br/>
                   <!-- Commentaire: un ou plusieurs sinistres -->
                   <span
                     v-if="processedVehiculeData.isApte"
@@ -1296,7 +1314,7 @@ export default defineComponent({
                     {{ assets.syntheseMapping['ove'].adv }}
                   </span>
 
-                  <br />
+                  <br/>
                   <span
                     v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
                     class="fr-blue-text"
@@ -1315,7 +1333,7 @@ export default defineComponent({
                     />
                   </span>
                   <span class="fr-blue-text">Rien à signaler </span>
-                  <br />
+                  <br/>
                   (gages, opposition, vol,...)
                 </p>
 
@@ -1330,9 +1348,9 @@ export default defineComponent({
                   </span>
                   {{ assets.syntheseMapping[entry].text }}
                   <!-- @todo: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Situation administrative" ? -->
-                  <br />
+                  <br/>
                   {{ assets.syntheseMapping[entry].adv }}
-                  <br />
+                  <br/>
                   <a
                     v-if="assets.syntheseMapping[entry].link"
                     class="fr-link"
@@ -1382,10 +1400,10 @@ export default defineComponent({
                   >
                     {{ assets.syntheseMapping['critair_non_classe'].text }}
                   </span>
-                  <br />
+                  <br/>
 
                   {{ assets.syntheseMapping['critair'].adv }}
-                  <br />
+                  <br/>
                   <a
                     v-if="assets.syntheseMapping['critair'].link"
                     class="fr-link"
@@ -1408,10 +1426,11 @@ export default defineComponent({
                       name="ri-indeterminate-circle-fill"
                     />
                   </span>
-                  Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les informations dont nous disposons sont insuffisantes
+                  Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les
+                  informations dont nous disposons sont insuffisantes
 
                   {{ assets.syntheseMapping['critair'].adv }}
-                  <br />
+                  <br/>
                   <a
                     v-if="assets.syntheseMapping['critair'].link"
                     class="fr-link"
@@ -2251,39 +2270,40 @@ export default defineComponent({
         >
           Simplimmat
         </a>.
-        <br />
-        Elle <b>simplifiera</b> et <b>sécurisera</b> vos formalités administratives pour la <b>cession</b> ou <b>l'immatriculation</b> de votre véhicule.
+        <br/>
+        Elle <b>simplifiera</b> et <b>sécurisera</b> vos formalités administratives pour la <b>cession</b> ou <b>l'immatriculation</b>
+        de votre véhicule.
       </div>
 
-    <!-- @todo @numAgree: Si la DSR souhaite de nouveau afficher le numéro d'expert (numAgree), il faut :
-     0 - Demander à l'ingé data de faire de nouveau remonter le champs num_agree dans les opération d'historique : DEC_VE, PREM_RAP_VE, SEC_RAP_VE
-     1 - Autoriser le champs numAgree à remonter dans le backend (cf: rechercher @numAgree1)
-     2 - Autoriser le champs numAgree à remonter dans le frontend (cf: rechercher @numAgree2)
-     3 - L'afficher dans l'historique lorsqu'il est disponible (cf: rechercher @numAgree3)
-     4 - Ajouter un lien vers une modale explicative (cf: rechercher @numAgree4)
-     5 - Implémenter la modale (cf: rechercher @numAgree5)
+      <!-- @todo @numAgree: Si la DSR souhaite de nouveau afficher le numéro d'expert (numAgree), il faut :
+       0 - Demander à l'ingé data de faire de nouveau remonter le champs num_agree dans les opération d'historique : DEC_VE, PREM_RAP_VE, SEC_RAP_VE
+       1 - Autoriser le champs numAgree à remonter dans le backend (cf: rechercher @numAgree1)
+       2 - Autoriser le champs numAgree à remonter dans le frontend (cf: rechercher @numAgree2)
+       3 - L'afficher dans l'historique lorsqu'il est disponible (cf: rechercher @numAgree3)
+       4 - Ajouter un lien vers une modale explicative (cf: rechercher @numAgree4)
+       5 - Implémenter la modale (cf: rechercher @numAgree5)
 
-    @todo @numAgree5: adapter à l'interface de DsfrModal
-      <DsfrModal
-        title="Plus d'infos à propos du numéro d'expert agréé"
-      >
-        <p>
-          HistoVec ne délivre pas les détails des rapports d’experts en automobile.
-        </p>
-        <p>
-          Pour davantage de précisions sur un rapport, vous pouvez rechercher les coordonnées d’un expert en automobile sur la
-          <a
-            href="https://www.securite-routiere.gouv.fr/sites/default/files/2019-10/liste_nationale_des_experts_en_automobile.pdf"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            liste nationale
-            <b><i class="fa fa-file-pdf-o"></i></b>
-          </a>
-          mise à jour par le ministère chargé des transports.
-        </p>
-      </DsfrModal>
-    -->
+      @todo @numAgree5: adapter à l'interface de DsfrModal
+        <DsfrModal
+          title="Plus d'infos à propos du numéro d'expert agréé"
+        >
+          <p>
+            HistoVec ne délivre pas les détails des rapports d’experts en automobile.
+          </p>
+          <p>
+            Pour davantage de précisions sur un rapport, vous pouvez rechercher les coordonnées d’un expert en automobile sur la
+            <a
+              href="https://www.securite-routiere.gouv.fr/sites/default/files/2019-10/liste_nationale_des_experts_en_automobile.pdf"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              liste nationale
+              <b><i class="fa fa-file-pdf-o"></i></b>
+            </a>
+            mise à jour par le ministère chargé des transports.
+          </p>
+        </DsfrModal>
+      -->
     </div>
   </div>
 </template>

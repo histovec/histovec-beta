@@ -1,25 +1,23 @@
 <script>
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 
 import api from '@/api/index.js'
-import { mailTo } from '@/utils/email.js'
-import { ASK_REPORT_EMAIL } from '@/constants/email.js'
-
-import AcheteurSvg from '@/assets/img/acheteur.svg'
+import {mailTo} from '@/utils/email.js'
+import {ASK_REPORT_EMAIL} from '@/constants/email.js'
 
 
 export default defineComponent({
   name: 'AcheteurPage',
 
-  components: { AcheteurSvg, HistoVecButtonLink },
+  components: {HistoVecButtonLink},
 
-  created () {
+  created() {
     this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
   },
 
   methods: {
-    async onClickMailDemandeRapport () {
+    async onClickMailDemandeRapport() {
       window.location = this.askReportEmail
 
       await api.log(`${this.$route.path}`)
@@ -46,11 +44,14 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4  fr-col-xl-4">
-      <DsfrPicture src="">
-        <AcheteurSvg
-          title="Illustration de la page de l'acheteur"
-        />
-      </DsfrPicture>
+      <div class="fr-content-media">
+        <img
+          class="fr-img-responsive fr-pl-2v"
+          alt="Illustration de la page de l'acheteur"
+          src="../../src/assets/img/acheteur.svg"
+          style="width:100%"
+        >
+      </div>
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Achetez en confiance un véhicule d'occasion</h1>
@@ -66,7 +67,8 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
       <p class="fr-text--md">
-        HistoVec permet au vendeur de partager avec un acheteur intéressé l'historique administratif du véhicule enregistré dans le Système d'Immatriculation des Véhicules (SIV), notamment :
+        HistoVec permet au vendeur de partager avec un acheteur intéressé l'historique administratif du véhicule
+        enregistré dans le Système d'Immatriculation des Véhicules (SIV), notamment :
       </p>
       <ul class="fr-ml-4w  fr-pl-0">
         <li>date de mise en circulation ;</li>
