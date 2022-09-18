@@ -218,15 +218,15 @@ export default defineComponent({
       }
 
       return {
-        dateCertificat: '',
-        formule: '',
-        nom: '',
-        plaque: '',
-        prenoms: '',
-        raisonSociale: '',
-        siren: '',
-        typeImmatriculation: '',
-        typePersonne: '',
+        dateCertificat: null,
+        formule: null,
+        nom: null,
+        plaque: null,
+        prenoms: null,
+        raisonSociale: null,
+        siren: null,
+        typeImmatriculation: null,
+        typePersonne: null,
       }
     },
     buildSivIdentity (typePersonne, sivData) {
