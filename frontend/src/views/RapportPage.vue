@@ -737,19 +737,7 @@ export default defineComponent({
 
       const normalizedKey = normalizeKeyAsDataPreparation(this.vehicleId)
       const hashedKeyBuffer = await hash(normalizedKey)
-      const holderKey = base64Encode(hashedKeyBuffer)
-      // @todo @urlUnsafe5 : remove these logs while transition done (8th day of the next month after 'HistoVec code partage' feature deployement)
-      // eslint-disable-next-line no-console
-      console.log(`[NEW] key base64Encoded = ${holderKey}`)
-
-      const urlSafeBase64EncodedKey = urlSafeBase64Encode(base64Decode(holderKey))
-      // eslint-disable-next-line no-console
-      console.log(`[OLD] key urlSafeBase64Encoded = ${urlSafeBase64EncodedKey}`)
-
-      // eslint-disable-next-line no-console
-      console.log(`[KEY] are they different ? ${holderKey !== urlSafeBase64EncodedKey}`)
-
-      return holderKey
+      return base64Encode(hashedKeyBuffer)
     },
 
     async getBuyerReport () {

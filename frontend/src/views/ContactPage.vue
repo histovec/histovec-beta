@@ -142,7 +142,6 @@ export default defineComponent({
     filteredThemesOptions(newOptions) {  // A chaque changement de tag (filtre de thème)
       // Réinitialiser le thème lorsque qu'il ne fait plus partie des choix possibles
       if (this.selectedTheme &&!newOptions.includes(this.selectedTheme)) {
-        console.log('reset selectedThemme')
         this.selectedTheme = undefined
       }
     },

@@ -483,9 +483,6 @@ const processVehiculeData = (vehiculeData) => {
 
   const { isCIAnnule } = etatCI
 
-  /* eslint-disable-next-line no-console */
-  console.log(vehiculeData)
-
   const mappedAdministratifVehicule = administratifVehiculeMapping(etatCI, etatVehicule, situationAdministrative)
   const mappedCertificat = certificatMapping(certificatImmatriculation, importEnFrance, isCIAnnule)
   const mappedCaracteristiquesTechniques = caracteristiquesTechniquesMapping(caracteristiquesTechniques, isCIAnnule)
@@ -501,8 +498,6 @@ const processVehiculeData = (vehiculeData) => {
   }
 
   if (isCIAnnule) {
-    /* eslint-disable-next-line no-console */
-    console.log(processedVehiculeData)
     return processedVehiculeData
   }
 
