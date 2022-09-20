@@ -1129,8 +1129,7 @@ export default defineComponent({
                   </span>
                   {{ constants.USAGE_AGRICOLE.text }}
                   <br />
-                  <!-- @todo @agricoleLink2: décommenter cette section -->
-                  <!-- <span
+                  <span
                     v-if="constants.USAGE_AGRICOLE.adv"
                     class="fr-text--md  fr-mb-1w"
                   >
@@ -1143,7 +1142,7 @@ export default defineComponent({
                     >
                       {{ constants.USAGE_AGRICOLE.adv }}
                     </a>
-                  </span> -->
+                  </span>
                 </p>
               </div>
 
