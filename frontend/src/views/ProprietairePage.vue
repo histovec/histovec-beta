@@ -535,10 +535,9 @@ export default defineComponent({
     <div class="fr-col-lg-4  fr-col-xl-4">
       <div class="fr-content-media">
         <img
-          class="fr-img-responsive fr-pl-2v"
+          class="fr-img-responsive fr-pl-2v tailleImage"
           alt="Illustration de la page du propriétaire"
           src="../../src/assets/img/proprietaire.svg"
-          style="width:100%"
         >
       </div>
 
@@ -1410,4 +1409,7 @@ export default defineComponent({
   margin-left: 0.2rem;
 }
 
+.tailleImage {
+  width:80%
+}
 </style>
