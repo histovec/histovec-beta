@@ -930,18 +930,16 @@ export default defineComponent({
     <div class="fr-col-lg-4  fr-col-xl-4">
       <div class="fr-content-media" v-if="isRapportVendeur">
         <img
-          class="fr-img-responsive fr-pl-2v"
+          class="fr-img-responsive fr-pl-2v tailleImage"
           alt="Illustration de la page du rapport vendeur HistoVec"
           src="../../src/assets/img/rapport.svg"
-          style="width:100%"
         >
       </div>
       <div class="fr-content-media" v-if="isRapportAcheteur">
         <img
-          class="fr-img-responsive fr-pl-2v"
+          class="fr-img-responsive fr-pl-2v tailleImage"
           alt="Illustration de la page du rapport acheteur HistoVec"
           src="../../src/assets/img/acheteur.svg"
-          style="width:100%"
         >
       </div>
     </div>
@@ -2328,5 +2326,9 @@ export default defineComponent({
 
 .text-center {
   text-align: center;
+}
+
+.tailleImage {
+  width:80%
 }
 </style>
