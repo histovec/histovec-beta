@@ -10,6 +10,7 @@ import orderBy from 'lodash.orderby'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
+import LoaderComponent from '@/components/LoaderComponent.vue';
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -59,6 +60,7 @@ export default defineComponent({
   name: 'RapportVendeurPage',
 
   components: {
+    LoaderComponent,
     TuileDsfrNonCliquable,
     ControlesTechniquesLineChart,
     RapportAcheteurSvg, RapportVendeurSvg,
@@ -184,6 +186,7 @@ export default defineComponent({
         ignoreUtacCache: false,
       },
       sessionStorage,
+      isLoading: false,
     }
   },
 
@@ -427,6 +430,7 @@ export default defineComponent({
   },
 
   beforeMount: async function () {
+    this.isLoading = true
     const formDataParams = this.$route.params.formData && JSON.parse(this.$route.params.formData)
 
     if (formDataParams) {
@@ -605,6 +609,7 @@ export default defineComponent({
     if (!areControlesTechinquesDisponibles) {
       await this.logKilometersError()
     }
+    this.isLoading = false;
   },
 
   methods: {
@@ -992,12 +997,14 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-6w">
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <tuile-dsfr-non-cliquable
+        :is-loading="isLoading"
         titre="Le véhicule"
         :description="getVehiculeDescription"
       />
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <tuile-dsfr-non-cliquable
+        :is-loading="isLoading"
         titre="Informations du Ministère de l'Intérieur"
         :description="getMiDescription"
       />
@@ -1015,6 +1022,10 @@ export default defineComponent({
         :tab-titles="tabTitles"
         @select-tab="selectTab"
       >
+        <loader-component
+          v-if="isLoading"
+          taille="md"
+        />
         <DsfrTabContent
           panel-id="report-tab-content-0"
           tab-id="report-tab-0"
