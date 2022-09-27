@@ -13,6 +13,7 @@ import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
 import ImagePresentation from '@/components/ImagePresentation.vue';
 import HistoVecModale from '@/components/HistoVecModale.vue';
+import AlerteComponent from '@/components/AlerteComponent.vue';
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -65,6 +66,7 @@ export default defineComponent({
     LoaderComponent,
     TuileDsfrNonCliquable,
     HistoVecModale,
+    AlerteComponent,
     ControlesTechniquesLineChart,
     HistoVecButtonLink, QrcodeVue,
     ImagePresentation,
@@ -190,6 +192,7 @@ export default defineComponent({
         ignoreUtacCache: false,
       },
       sessionStorage,
+      isAlerteOpened: false,
       isLoading: false,
     }
   },
@@ -875,6 +878,7 @@ export default defineComponent({
       this.copierTextAvecAlerte(this.url)
       await this.logCopieLienPartage()
       this.onCloseModalPartagerRapport()
+      this.ouvrirAlertCopieLien()
     },
 
     async onClickCopyCodePartage () {
@@ -898,6 +902,12 @@ export default defineComponent({
           // todo: récupérer la modale de la pull request 1342
         }
       })
+    },
+    ouvrirAlertCopieLien() {
+      this.isAlerteOpened = true
+    },
+    fermerAlertCopieLien() {
+      this.isAlerteOpened = false
     },
   },
 })
@@ -923,6 +933,12 @@ export default defineComponent({
       />
     </div>
   </HistoVecModale>
+  <alerte-component
+    v-if="isAlerteOpened"
+    description="Le lien de partage du rapport est copier dans le presse papier."
+    small
+    @close="fermerAlertCopieLien"
+  />
   <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
     <div class="fr-col-12">
       <DsfrBreadcrumb
