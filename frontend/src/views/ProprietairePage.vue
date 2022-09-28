@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import '../assets/css/image.css'
 
 import { mailTo } from '@/utils/email.js'
 
@@ -535,7 +536,7 @@ export default defineComponent({
     <div class="fr-col-lg-4  fr-col-xl-4">
       <div class="fr-content-media">
         <img
-          class="fr-img-responsive fr-pl-2v tailleImage"
+          class="fr-img-responsive fr-pl-2v image-presentation__format"
           alt="Illustration de la page du propriétaire"
           src="../../src/assets/img/proprietaire.svg"
         >
@@ -810,7 +811,7 @@ export default defineComponent({
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
-          <div class="fr-grid-row  fr-grid-row--gutters">
+          <div class="fr-grid-row  fr-grid-row--gutters ">
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNomSivValid"
@@ -1407,9 +1408,5 @@ export default defineComponent({
 
 .help-icon {
   margin-left: 0.2rem;
-}
-
-.tailleImage {
-  width:80%
 }
 </style>
