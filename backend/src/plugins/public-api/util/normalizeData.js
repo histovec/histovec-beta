@@ -99,8 +99,6 @@ export const normalizeReport = (report) => {
     new_historique = [],  // Supprimer
     is_apte_a_circuler,
     is_fni,
-    // is_fni_converti,  // @todo @isFniConverti : ne plus exposer côté DATA
-    is_incertain,
     sit_adm: {
       suspensions = [],
       dvs = [],
@@ -292,13 +290,6 @@ export const normalizeReport = (report) => {
       is_fni
         ? {
             is_fni: normalizeToBoolean(is_fni),
-          }
-        : {}
-    ),
-    ...(
-      is_incertain
-        ? {
-            is_incertain: normalizeToBoolean(is_incertain),
           }
         : {}
     ),

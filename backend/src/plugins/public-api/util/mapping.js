@@ -9,7 +9,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
     pers_raison_soc_tit,
     pers_siren_tit,
     adr_code_postal_tit,
-    // is_incertain,  // @todo @isIncertain: ne plus exposer le champ calculé "is_incertain" côté DATA
     date_update,
     date_premiere_immat,
     age_certificat,
