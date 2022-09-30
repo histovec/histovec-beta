@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import '../assets/css/image.css'
+import '@/assets/css/image.css'
 
 import { mailTo } from '@/utils/email.js'
 
@@ -13,6 +13,7 @@ import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@
 import plaqueNonSupporteeSvg from '@/assets/img/plaque_non_supportee.svg?url'
 import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
 import plaqueSivSvg from '@/assets/img/plaque_siv.svg?url'
+import proprietaireSVG from '@/assets/img/proprietaire.svg?url'
 
 import imageNomEtPrenomsFNI from '@/assets/img/aide/fni_nom_et_prenoms.jpg'
 import imagePlaqueImmatriculationFNI from '@/assets/img/aide/fni_plaque_immatriculation.jpg'
@@ -124,6 +125,7 @@ export default defineComponent({
         plaqueNonSupporteeSvg,
         plaqueFniSvg,
         plaqueSivSvg,
+        proprietaireSVG,
 
         aide: {
           imageNomEtPrenomsFNI,
@@ -536,9 +538,9 @@ export default defineComponent({
     <div class="fr-col-lg-4  fr-col-xl-4">
       <div class="fr-content-media">
         <img
-          class="fr-img-responsive fr-pl-2v image-presentation__format"
+          class="fr-responsive-img image-presentation__format"
           alt="Illustration de la page du propriétaire"
-          src="../../src/assets/img/proprietaire.svg"
+          :src="images.proprietaireSVG"
         >
       </div>
 
