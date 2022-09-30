@@ -56,37 +56,36 @@ export default defineComponent({
           to: '/plan-du-site',
         },
       ],
+      mandatoryLinks: [
+          {
+            label: 'Accessibilité : non conforme',
+            to: '/accessibilite',
+          },
+          {
+            label: 'Mentions légales',
+            to: '/mentions-legales',
+          },
+          {
+            label: 'Données personnelles & Gestion des cookies',
+            to: '/donnees-personnelles-et-cookies',
+          },
+        ],
       images: {
         logoHistoVecSvg,
         logoSecuriteRoutiereMb90Svg,
       },
-      licenceText: `HistoVec version ${npmConf.version}`,
+      licenceText: 'Sauf mention contraire, tous les contenus de ce site sont sous ',
     }
   },
 })
 </script>
 
 <template>
-  <!-- @todo @mutualizeCookieEtDonneesPersonnelles:
-  Implémenter une props 'no-cookie' sur le DsfrFooter pour fusionner les links /donnees-personnelles et /cookies en un unique link  and label like this /donnees-personnelles-et-cookies
-  dans le cas où il n'y aurait pas de cookie utilisé sur le site web (comportement attendu par l'équipe RG2A du BPSA) :
-  Cette props 'no-cookie' à true aurait pour effet :
-    1 - d'ignorer les props personalDataLink et cookiesLink
-    2 - de masquer le HTML associé à ces 2 props
-    3 - d'utiliser la props personalDataAndCookiesLink (à implémenter) avec comme valeur par défaut '/donnees-personnelles-et-cookies' et comme label (dans les mandatoryLinks) 'Données personnelles & Gestion des cookies'
-  Implémenter la props 'personalDataAndCookiesLink' pour ajouter un élément à la fin des mandatoryLinks (cf -3)
-
-  Pour le moment, les 2 routes (personalDataLink et cookiesLink)redirigent vers la page /donnees-personnelles-et-cookies
-  -->
   <DsfrFooter
-    a11y-compliance="non conforme"
     :before-mandatory-links="beforeMandatoryLinks"
+    :mandatory-links="mandatoryLinks"
     :logo-text="['Ministère', 'de l’intérieur']"
     home-link="/accueil"
-    a11y-compliance-link="/accessibilite"
-    legal-link="/mentions-legales"
-    personal-data-link="/donnees-personnelles-et-cookies"
-    cookies-link="/donnees-personnelles-et-cookies"
     no-cookie
     :partners="partners"
     :ecosystem-links="ecosystemLinks"
@@ -95,12 +94,9 @@ export default defineComponent({
     :operator-img-src="images.logoHistoVecSvg"
     operator-img-alt="Logo HistoVec"
     :licence-text="licenceText"
-    licence-to=""
-    licence-name="copyright © 2018"
+    licence-to="https://github.com/etalab/licence-ouverte/blob/master/LO.md"
+    licence-name="licence etalab-2.0"
   >
-    <!--
-      @todo @license: Quelle licence utiliser ? Copyright non approprié ? CECILL ?
-    -->
     <template #description>
       <div>
         <p>
