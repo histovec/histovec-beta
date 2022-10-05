@@ -1,22 +1,24 @@
 <script>
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import CarteDsfrNonCliquable from '@/components/CarteDsfrNonCliquable.vue';
+import ImagePresentation from '@/components/ImagePresentation.vue';
 
-import AccueilSvg from '@/assets/img/accueil.svg'
 import confidentielSvg from '@/assets/img/confidentiel.svg?url'
 import gratuitSvg from '@/assets/img/gratuit.svg?url'
 import officielSvg from '@/assets/img/officiel.svg?url'
 import simpleSvg from '@/assets/img/simple.svg?url'
-
+import accueilSVG from '@/assets/img/accueil.svg?url'
 
 export default defineComponent({
   name: 'AccueilPage',
 
-  components: { AccueilSvg, HistoVecButtonLink },
+  components: {CarteDsfrNonCliquable, HistoVecButtonLink, ImagePresentation},
 
-  data () {
+  data() {
     return {
+
       tilesProprietaire:
         {
           title: 'Propriétaire',
@@ -31,11 +33,30 @@ export default defineComponent({
           to: '/acheteur',
           imgSrc: '',
         },
-      images: {
-        confidentielSvg,
-        gratuitSvg,
-        officielSvg,
-        simpleSvg,
+      carteItems: [
+        {
+          titre: 'Simple',
+          description: 'En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!',
+          image: simpleSvg,
+        },
+        {
+          titre: 'Officiel',
+          description: 'Données issues du Système d\'immatriculation des véhicules.',
+          image: officielSvg,
+        },
+        {
+          titre: 'Confidentiel',
+          description: 'Seul le propriétaire peut partager ses informations.',
+          image: confidentielSvg,
+        },
+        {
+          titre: 'Gratuit',
+          description: 'Un service gratuit pour les propriétaires et les acheteurs.',
+          image: gratuitSvg,
+        },
+      ],
+      image: {
+        accueilSVG,
       },
     }
   },
@@ -57,11 +78,7 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <DsfrPicture src="">
-        <AccueilSvg
-          title="Illustration de la page d'accueil"
-        />
-      </DsfrPicture>
+      <ImagePresentation :src="image.accueilSVG" alt="Illustration de la page d'accueil"/>
     </div>
     <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
       <h1>Partagez l'historique de votre véhicule</h1>
@@ -79,53 +96,13 @@ export default defineComponent({
       <h2>Nos garanties</h2>
     </div>
   </div>
-
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Simple"
-        description="En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!"
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.simpleSvg"
-        no-arrow
-      />
-    </div>
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Officiel"
-        description="Données issues du Système d'immatriculation des véhicules."
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.officielSvg"
-        no-arrow
-      />
-    </div>
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Confidentiel"
-        description="Seul le propriétaire peut partager ses informations."
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.confidentielSvg"
-        no-arrow
-      />
-    </div>
-    <div class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3">
-      <DsfrCard
-        title="Gratuit"
-        description="Un service gratuit pour les propriétaires et les acheteurs."
-        detail=""
-        alt-img=""
-        link=""
-        :img-src="images.gratuitSvg"
-        no-arrow
-      />
+    <div v-for="(carteItem, index) in carteItems" :key="index"
+         class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3 fr-col">
+      <CarteDsfrNonCliquable :titre="carteItem.titre" :description="carteItem.description" :image=carteItem.image />
     </div>
   </div>
+
 
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-12  text-center">
@@ -178,4 +155,5 @@ export default defineComponent({
 .text-center {
   text-align: center;
 }
+
 </style>
