@@ -670,8 +670,7 @@ export default defineComponent({
         <img
           alt="Indication localisation nom : au dessus du prénom"
           :src="images.aide.imageNomSIV"
-          class="fr-img-responsive"
-          style="height: 220px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
@@ -689,8 +688,7 @@ export default defineComponent({
         <img
           alt="Indication localisation prenom(s) : en dessous du nom"
           :src="images.aide.imagePrenomsSIV"
-          class="fr-img-responsive"
-          style="height: 220px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
@@ -708,8 +706,7 @@ export default defineComponent({
         <img
           alt="Indication localisation numéro d'immatriculation : au dessus du numéro de formule"
           :src="images.aide.imagePlaqueImmatriculationSIV"
-          class="fr-img-responsive"
-          style="height: 220px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
@@ -727,8 +724,7 @@ export default defineComponent({
         <img
           alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page du certificat d'immatriculation"
           :src="images.aide.imageNumeroFormuleSIV"
-          class="fr-img-responsive"
-          style="height: 189px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
@@ -747,8 +743,7 @@ export default defineComponent({
         <img
           alt="Indication localisation nom et prénom(s) : sous le numéro d'immatriculation"
           :src="images.aide.imageNomEtPrenomsFNI"
-          class="fr-img-responsive"
-          style="height: 215px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
@@ -766,8 +761,7 @@ export default defineComponent({
         <img
           alt="Indication localisation numéro d'immatriculation : au dessus du nom et prénom"
           :src="images.aide.imagePlaqueImmatriculationFNI"
-          class="fr-img-responsive"
-          style="height: 215px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
@@ -785,8 +779,7 @@ export default defineComponent({
         <img
           alt="Indication localisation date du certificat d'immatriculation : à droite du numéro d'immatriculation"
           :src="images.aide.imageDateEmissionCertificatImmatriculationFNI"
-          class="fr-img-responsive"
-          style="height: 215px"
+          class="fr-responsive-img"
         />
       </div>
     </div>
