@@ -29,9 +29,6 @@ router.beforeEach((to, from, next) => {
 
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
-  // @todo @copyLink1: On paramètre vue3-clipboard pour sélectionner
-  // automatiquement le contexte de l'élément du DOM dans lequel sera effectuée la copie
-  // (Notamment dans la DsfrModale)
   .use(VueClipboard, {
     autoSetContainer: true,
     appendToBody: true,
