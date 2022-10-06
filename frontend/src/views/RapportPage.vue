@@ -9,6 +9,8 @@ import orderBy from 'lodash.orderby'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
+import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
+import LoaderComponent from '@/components/LoaderComponent.vue';
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -58,6 +60,8 @@ export default defineComponent({
   name: 'RapportVendeurPage',
 
   components: {
+    LoaderComponent,
+    TuileDsfrNonCliquable,
     ControlesTechniquesLineChart,
     RapportAcheteurSvg, RapportVendeurSvg,
     HistoVecButtonLink, QrcodeVue,
@@ -182,26 +186,20 @@ export default defineComponent({
         ignoreUtacCache: false,
       },
       sessionStorage,
+      isLoading: false,
     }
   },
 
   computed: {
-    tilesVehiculeLinks () {
-      return [
-        {
-          title: 'Le véhicule',
-          description: (
-            this.isCIAnnule ?
-              `Le certificat demandé a été annulé : ${ this.processedVehiculeData.plaque }` :
-              `Numéro d'immatriculation : ${ this.processedVehiculeData.plaque }`
-          ),
-          to: '',
-          imgSrc: '',
-        },
-      ]
+    getVehiculeDescription () {
+      return (
+        this.isCIAnnule ?
+          `Le certificat demandé a été annulé : ${ this.processedVehiculeData.plaque }` :
+          `Numéro d'immatriculation : ${ this.processedVehiculeData.plaque }`
+      )
     },
-    tilesDateDonneesVehiculeLinks () {
-      const description = (
+    getMiDescription () {
+      return (
         this.flags.showDataDate ? (
             this.isDefaultDataDate ?
             'Non à jour' :
@@ -209,15 +207,6 @@ export default defineComponent({
           ) :
         'Connues d\'HistoVec à ce jour'
       )
-
-      return [
-        {
-          title: 'Informations du Ministère de l\'Intérieur',
-          description,
-          to: '',
-          imgSrc: '',
-        },
-      ]
     },
 
     breadcrumbLinks () {
@@ -441,6 +430,7 @@ export default defineComponent({
   },
 
   beforeMount: async function () {
+    this.isLoading = true
     const formDataParams = this.$route.params.formData && JSON.parse(this.$route.params.formData)
 
     if (formDataParams) {
@@ -619,6 +609,7 @@ export default defineComponent({
     if (!areControlesTechinquesDisponibles) {
       await this.logKilometersError()
     }
+    this.isLoading = false;
   },
 
   methods: {
@@ -1005,16 +996,16 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-6w">
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
-      <DsfrTiles
-        :tiles="tilesVehiculeLinks"
-        :horizontal="true"
-      />
+      <TuileDsfrNonCliquable
+        :is-loading="isLoading"
+        titre="Le véhicule"
+      >{{ getVehiculeDescription }}</TuileDsfrNonCliquable>
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
-      <DsfrTiles
-        :tiles="tilesDateDonneesVehiculeLinks"
-        :horizontal="true"
-      />
+      <TuileDsfrNonCliquable
+        :is-loading="isLoading"
+        titre="Informations du Ministère de l'Intérieur"
+      >{{ getMiDescription }}</TuileDsfrNonCliquable>
     </div>
   </div>
 
@@ -1029,6 +1020,10 @@ export default defineComponent({
         :tab-titles="tabTitles"
         @select-tab="selectTab"
       >
+        <LoaderComponent
+          v-if="isLoading"
+          taille="md"
+        />
         <DsfrTabContent
           panel-id="report-tab-content-0"
           tab-id="report-tab-0"
