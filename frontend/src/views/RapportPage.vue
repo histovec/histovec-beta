@@ -466,7 +466,7 @@ export default defineComponent({
       if (this.isValidBuyer) {
         const buyerReportResponse = await this.getBuyerReport()
 
-        if (buyerReportResponse === null) {
+        if (buyerReportResponse === null || buyerReportResponse.status === 500) {
           // Cas: Aucune Reponse du back
           this.$router.push({
             name: 'erreurInattendue',
@@ -525,7 +525,7 @@ export default defineComponent({
       if (this.formData) {
         const holderReportResponse = await this.getHolderReport()
 
-        if (holderReportResponse === null) {
+        if (holderReportResponse === null || holderReportResponse.status === 500) {
           // Cas: Aucune Reponse du back
           this.$router.push({
             name: 'erreurInattendue',
