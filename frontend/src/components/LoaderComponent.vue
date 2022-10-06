@@ -35,9 +35,6 @@ export default defineComponent({
   background-color: rgba(0,0,0,0.5);
   z-index: 100;
 }
-:root[data-fr-theme="dark" i] .loader-container{
-  background-color: rgba(255,255,255,0.5);
-}
 
 .lds-dual-ring {
   display: inline-block;
@@ -60,19 +57,9 @@ export default defineComponent({
   animation: lds-dual-ring 1.2s linear infinite;
 }
 
-:root[data-fr-theme="dark" i] .lds-dual-ring:after {
-  border: 1px solid #000;
-  border-color: #000 transparent #000 transparent;
-}
-
 .md {
   width: 60px;
   height: 60px;
-}
-
-.lg {
-  width: 150px;
-  height: 150px;
 }
 
 @keyframes lds-dual-ring {

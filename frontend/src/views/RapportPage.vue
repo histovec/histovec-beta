@@ -996,18 +996,16 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-6w">
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
-      <tuile-dsfr-non-cliquable
+      <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Le véhicule"
-        :description="getVehiculeDescription"
-      />
+      >{{ getVehiculeDescription }}</TuileDsfrNonCliquable>
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
-      <tuile-dsfr-non-cliquable
+      <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Informations du Ministère de l'Intérieur"
-        :description="getMiDescription"
-      />
+      >{{ getMiDescription }}</TuileDsfrNonCliquable>
     </div>
   </div>
 
@@ -1022,7 +1020,7 @@ export default defineComponent({
         :tab-titles="tabTitles"
         @select-tab="selectTab"
       >
-        <loader-component
+        <LoaderComponent
           v-if="isLoading"
           taille="md"
         />

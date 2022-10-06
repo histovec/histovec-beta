@@ -14,17 +14,13 @@ export default defineComponent({
       type: String,
       default: 'Titre de la tuile',
     },
-    description: {
-      type: String,
-      default: 'Description de la tuile',
-    },
   },
 })
 </script>
 
 <template>
   <div class="fr-tile fr-enlarge">
-    <loader-component
+    <LoaderComponent
       v-if="isLoading"
       taille="md"
     />
@@ -33,7 +29,7 @@ export default defineComponent({
         <span class="fr-tile__link">{{ titre }}</span>
       </h4>
       <p class="fr-tile__desc">
-        {{ description }}
+        <slot />
       </p>
     </div>
   </div>
