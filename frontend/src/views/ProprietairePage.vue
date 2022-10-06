@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import '@/assets/css/image.css'
+import ImagePresentation from '@/components/ImagePresentation.vue'
 
 import { mailTo } from '@/utils/email.js'
 
@@ -28,7 +28,7 @@ import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
 export default defineComponent({
   name: 'ProprietairePage',
 
-  components: {HistoVecButtonLink},
+  components: {HistoVecButtonLink, ImagePresentation},
 
   data () {
     const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
@@ -534,16 +534,8 @@ export default defineComponent({
         ]"
       />
     </div>
-
-    <div class="fr-col-lg-4  fr-col-xl-4">
-      <div class="fr-content-media">
-        <img
-          class="fr-responsive-img image-presentation__format"
-          alt="Illustration de la page du propriétaire"
-          :src="images.proprietaireSVG"
-        >
-      </div>
-
+    <div class="fr-col-lg-4 fr-col-xl-4">
+      <ImagePresentation :src="images.proprietaireSVG" alt="Illustration de la page du propriétaire" />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Rassurez vos acheteurs potentiels</h1>

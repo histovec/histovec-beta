@@ -11,6 +11,8 @@ import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
+import ImagePresentation from '@/components/ImagePresentation.vue';
+
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -39,8 +41,8 @@ import { VIGNETTE } from '@/constants/vehicle/critair.js'
 import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
 import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@/constants/usagesSynthese.js'
 
-import RapportAcheteurSvg from '@/assets/img/acheteur.svg'
-import RapportVendeurSvg from '@/assets/img/rapport.svg'
+import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
+import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
 // @todo @lazyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
@@ -63,8 +65,8 @@ export default defineComponent({
     LoaderComponent,
     TuileDsfrNonCliquable,
     ControlesTechniquesLineChart,
-    RapportAcheteurSvg, RapportVendeurSvg,
     HistoVecButtonLink, QrcodeVue,
+    ImagePresentation,
   },
 
   props: {
@@ -130,6 +132,8 @@ export default defineComponent({
         logoHistoVec,
         logoSimplimmat,
         logoMI,
+        rapportAcheteurSvg,
+        rapportVendeurSvg,
 
         critair: {
           logoVignetteCritair1,
@@ -896,20 +900,11 @@ export default defineComponent({
         :links="breadcrumbLinks"
       />
     </div>
+    <div class="fr-col-lg-4 fr-col-xl-4">
+      <ImagePresentation v-if="isRapportVendeur" :src="images.rapportVendeurSvg" alt="Illustration de la page du rapport vendeur HistoVec" />
 
-    <div class="fr-col-lg-4  fr-col-xl-4">
-      <DsfrPicture src="">
-        <RapportVendeurSvg
-          v-if="isRapportVendeur"
-          title="Illustration de la page du rapport vendeur HistoVec"
-        />
-        <RapportAcheteurSvg
-          v-if="isRapportAcheteur"
-          title="Illustration de la page du rapport acheteur HistoVec"
-        />
-      </DsfrPicture>
+      <ImagePresentation v-if="isRapportAcheteur" :src="images.rapportAcheteurSvg" alt="Illustration de la page du rapport acheteur HistoVec" />
     </div>
-
     <div
       v-if="isRapportVendeur"
       class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v"
