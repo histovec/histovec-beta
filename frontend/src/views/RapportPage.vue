@@ -46,7 +46,6 @@ import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
 import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
-
 // @todo @lazyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
 import logoVignetteCritair1 from '@/assets/img/critair/vignette_1.png'
 import logoVignetteCritair2 from '@/assets/img/critair/vignette_2.png'
