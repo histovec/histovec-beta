@@ -54,9 +54,11 @@ export default defineComponent({
         :links="[]"
       />
     </div>
+
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.erreurSvg" alt="Illustration de la page d'erreur"/>
+      <ImagePresentation :src="image.erreurSvg" alt="Illustration de la page d'erreur" />
     </div>
+
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>{{ title }}</h1>
       <p class="fr-error-subtitle fr-text--xs">
@@ -74,19 +76,6 @@ export default defineComponent({
       >
         {{ errorMessage }}
       </p>
-    </div>
-
-    <div class="fr-col-lg-4  fr-col-xl-4">
-      <!--
-        @todo @erreurSvg1:
-        Récupérer l'image auprès de l'équipe du DSFR:
-        https://gouvfr.atlassian.net/wiki/spaces/DB/pages/993165327/Mod+les+de+pages+d+erreurs
-      -->
-      <!-- <DsfrPicture src="">
-        <ErreurSvg
-          title="Illustration de la page d'erreur"
-        />
-      </DsfrPicture> -->
     </div>
   </div>
 
@@ -108,10 +97,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.text-center {
-  text-align: center;
-}
-
 .fr-error-subtitle {
   color: var(--text-mention-grey);
 }
