@@ -1,23 +1,29 @@
 <script>
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import ImagePresentation from '@/components/ImagePresentation.vue'
 
 import api from '@/api/index.js'
 import { mailTo } from '@/utils/email.js'
 import { ASK_REPORT_EMAIL } from '@/constants/email.js'
 
-import AcheteurSvg from '@/assets/img/acheteur.svg'
-
+import acheteurSvg from '@/assets/img/acheteur.svg?url'
 
 export default defineComponent({
   name: 'AcheteurPage',
 
-  components: { AcheteurSvg, HistoVecButtonLink },
+  components: { HistoVecButtonLink, ImagePresentation },
 
   created () {
     this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
   },
-
+  data () {
+    return {
+      image:{
+        acheteurSvg,
+      },
+    }
+  },
   methods: {
     async onClickMailDemandeRapport () {
       window.location = this.askReportEmail
@@ -44,13 +50,8 @@ export default defineComponent({
         ]"
       />
     </div>
-
-    <div class="fr-col-lg-4  fr-col-xl-4">
-      <DsfrPicture src="">
-        <AcheteurSvg
-          title="Illustration de la page de l'acheteur"
-        />
-      </DsfrPicture>
+    <div class="fr-col-lg-4 fr-col-xl-4">
+      <ImagePresentation :src="image.acheteurSvg" alt="Illustration de la page de l'acheteur" />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Achetez en confiance un véhicule d'occasion</h1>

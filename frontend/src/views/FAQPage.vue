@@ -2,13 +2,14 @@
 import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import ImagePresentation from '@/components/ImagePresentation.vue';
 
 import {
   FAQ_THEMES,
   FAQ_THEMES_OPTIONS,
 } from '@/constants/faq.js'
 
-import FaqSvg from '@/assets/img/faq.svg'
+import faqSvg from '@/assets/img/faq.svg?url'
 
 import { mailTo } from '@/utils/email.js'
 import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
@@ -17,7 +18,7 @@ import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
 export default defineComponent({
   name: 'FAQPage',
 
-  components: { FaqSvg, HistoVecButtonLink },
+  components: { HistoVecButtonLink, ImagePresentation },
 
   data () {
     return {
@@ -38,7 +39,9 @@ export default defineComponent({
           imgSrc: '',
         },
       ],
-
+      image:{
+        faqSvg,
+      },
       selectedTheme: undefined,
 
       // email
@@ -72,13 +75,8 @@ export default defineComponent({
         ]"
       />
     </div>
-
-    <div class="fr-col-lg-4  fr-col-xl-4">
-      <DsfrPicture src="">
-        <FaqSvg
-          title="Illustration de la page de la FAQ"
-        />
-      </DsfrPicture>
+    <div class="fr-col-lg-4 fr-col-xl-4">
+      <ImagePresentation :src="image.faqSvg" alt="Illustration de la page de la FAQ" />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Besoin d'aide ?</h1>
