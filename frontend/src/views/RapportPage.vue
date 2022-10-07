@@ -56,7 +56,6 @@ import logoVignetteCritairElectrique from '@/assets/img/critair/vignette_electri
 // CSA
 import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
 import logoMI from '@/assets/img/deprecated/logo_ministere_interieur.png'
-import { DsfrButton } from '@gouvminint/vue-dsfr';
 
 
 export default defineComponent({
@@ -66,7 +65,6 @@ export default defineComponent({
     LoaderComponent,
     TuileDsfrNonCliquable,
     HistoVecModale,
-    DsfrButton,
     ControlesTechniquesLineChart,
     HistoVecButtonLink, QrcodeVue,
     ImagePresentation,
@@ -168,7 +166,6 @@ export default defineComponent({
       utils: {
         api,
         getExposant,
-        copyText,
       },
 
       // @todo: @featureFlags
@@ -876,8 +873,8 @@ export default defineComponent({
       await this.logMailLienPartage()
       this.onCloseModalPartagerRapport()
     },
-    copierTextAvecAlerte (text) {
-      copyText(text, undefined, (error, event) => {
+    copierTextAvecAlerte (textACopier) {
+      copyText(textACopier, undefined, (error, event) => {
         if (error) {
           // todo: récupérer la modale de la pull request 1342
         }
@@ -892,11 +889,9 @@ export default defineComponent({
 
 <template>
   <HistoVecModale
-    titre="Envoyer le rapport Custome"
+    titre="Envoyer le rapport"
     :opened="modalPartagerRapport.opened"
     :actions="modaleActions"
-    :origin="$refs.modalPartagerRapport"
-    is-alert
     @close="onCloseModalPartagerRapport()"
   >
     <p>

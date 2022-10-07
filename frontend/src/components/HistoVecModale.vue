@@ -1,10 +1,8 @@
 <script>
 import { defineComponent } from 'vue'
-import { DsfrButtonGroup } from '@gouvminint/vue-dsfr';
 
 export default defineComponent({
   name: 'HistoVecModale',
-  components: {DsfrButtonGroup},
   inheritAttrs: false,
   props: {
     titre: {
@@ -32,19 +30,16 @@ export default defineComponent({
       },
     }
   },
-  mounted () {
-    this.startListeningToEscape()
-  },
-  beforeUnmount () {
-    this.stopListeningToEscape()
+  watch: {
+    opened(newValue) {
+      if (newValue) {
+        document.addEventListener('keydown', this.closeIfEscape)
+      } else {
+        document.removeEventListener('keydown', this.closeIfEscape)
+      }
+    },
   },
   methods: {
-    startListeningToEscape () {
-      document.addEventListener('keydown', this.closeIfEscape)
-    },
-    stopListeningToEscape () {
-      document.removeEventListener('keydown', this.closeIfEscape)
-    },
     close () {
       this.$emit('close')
     },
@@ -68,7 +63,7 @@ export default defineComponent({
                 ref="closeBtn"
                 class="fr-btn--close fr-btn"
                 aria-controls="fr-modal-1"
-                title="Fermer"
+                title="Fermer la fenêtre modale"
                 role="button"
                 @click="close()"
               >
@@ -85,14 +80,12 @@ export default defineComponent({
               <slot />
             </div>
             <div class="fr-modal__footer">
-              <ul class="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse fr-btns-group--inline-lg fr-btns-group--icon-left">
-                <DsfrButtonGroup
-                  align="right"
-                  :buttons="actions"
-                  inline
-                  reverse
-                />
-              </ul>
+              <DsfrButtonGroup
+                align="right"
+                :buttons="actions"
+                inline
+                reverse
+              />
             </div>
           </div>
         </div>
