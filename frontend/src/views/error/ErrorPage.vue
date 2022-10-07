@@ -1,15 +1,14 @@
 <script>
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import ImagePresentation from '@/components/ImagePresentation.vue'
 
-// @erreurSvg2: ajouter et importer l'image sous le nom 'erreur.svg'
-// import ErreurSvg from '@/assets/img/erreur.svg'
-
+import erreurSvg from '@/assets/img/erreur.svg?url'
 
 export default defineComponent({
   name: 'ErreurPage',
 
-  components: { HistoVecButtonLink },
+  components: { HistoVecButtonLink, ImagePresentation },
 
   props: {
     title: {
@@ -37,6 +36,13 @@ export default defineComponent({
       default: () => null,
     },
   },
+  data() {
+    return {
+      image : {
+        erreurSvg,
+      },
+    }
+  },
 })
 </script>
 
@@ -47,6 +53,10 @@ export default defineComponent({
         class="fr-mb-0"
         :links="[]"
       />
+    </div>
+
+    <div class="fr-col-lg-4 fr-col-xl-4">
+      <ImagePresentation :src="image.erreurSvg" alt="Illustration de la page d'erreur" />
     </div>
 
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
@@ -66,19 +76,6 @@ export default defineComponent({
       >
         {{ errorMessage }}
       </p>
-    </div>
-
-    <div class="fr-col-lg-4  fr-col-xl-4">
-      <!--
-        @todo @erreurSvg1:
-        Récupérer l'image auprès de l'équipe du DSFR:
-        https://gouvfr.atlassian.net/wiki/spaces/DB/pages/993165327/Mod+les+de+pages+d+erreurs
-      -->
-      <!-- <DsfrPicture src="">
-        <ErreurSvg
-          title="Illustration de la page d'erreur"
-        />
-      </DsfrPicture> -->
     </div>
   </div>
 
@@ -100,10 +97,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.text-center {
-  text-align: center;
-}
-
 .fr-error-subtitle {
   color: var(--text-mention-grey);
 }
