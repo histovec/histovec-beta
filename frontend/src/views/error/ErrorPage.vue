@@ -1,15 +1,14 @@
 <script>
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
+import ImagePresentation from '@/components/ImagePresentation.vue'
 
-// @erreurSvg2: ajouter et importer l'image sous le nom 'erreur.svg'
-// import ErreurSvg from '@/assets/img/erreur.svg'
-
+import erreurSvg from '@/assets/img/erreur.svg?url'
 
 export default defineComponent({
   name: 'ErreurPage',
 
-  components: { HistoVecButtonLink },
+  components: { HistoVecButtonLink, ImagePresentation },
 
   props: {
     title: {
@@ -37,6 +36,13 @@ export default defineComponent({
       default: () => null,
     },
   },
+  data() {
+    return {
+      image : {
+        erreurSvg,
+      },
+    }
+  },
 })
 </script>
 
@@ -48,7 +54,9 @@ export default defineComponent({
         :links="[]"
       />
     </div>
-
+    <div class="fr-col-lg-4 fr-col-xl-4">
+      <ImagePresentation :src="image.erreurSvg" alt="Illustration de la page d'erreur"/>
+    </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>{{ title }}</h1>
       <p class="fr-error-subtitle fr-text--xs">
