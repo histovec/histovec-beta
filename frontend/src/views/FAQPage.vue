@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue';
+import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 
 import {
   FAQ_THEMES,
@@ -18,27 +19,12 @@ import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
 export default defineComponent({
   name: 'FAQPage',
 
-  components: { HistoVecButtonLink, ImagePresentation },
+  components: { HistoVecButtonLink, ImagePresentation, TuileDsfrNonCliquable },
 
   data () {
     return {
       expandedId: undefined,
-      tilesVendeursLinks: [
-        {
-          title: 'Pour les vendeurs',
-          description: 'Rassurez vos acheteurs potentiels avec le rapport et obtenez votre certificat de non gage.',
-          to: '',
-          imgSrc: '',
-        },
-      ],
-      tilesAcheteursLinks: [
-        {
-          title: 'Pour les acheteurs',
-          description: 'Rassurez vos acheteurs potentiels avec le rapport et obtenez votre certificat de non gage.',
-          to: '',
-          imgSrc: '',
-        },
-      ],
+
       image:{
         faqSvg,
       },
@@ -94,16 +80,64 @@ export default defineComponent({
 
     <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
       <div class="fr-col-12  fr-col-md-6  fr-col-lg-5  fr-col-xl-5">
-        <DsfrTiles
-          :tiles="tilesVendeursLinks"
+        <TuileDsfrNonCliquable
+          titre="Pour les vendeurs"
           :horizontal="true"
-        />
+        >
+          <ul class="text-left">
+            <li> Prendre connaissance des démarches
+              <a
+                class="fr-link"
+                href="https://service-public.fr"
+                title="Service Public - www.service-public.fr - Nouvelle fenêtre"
+              > (Service Public)
+              </a>
+            </li>
+            <li> Télécharger le certificat de situation administrative
+              <router-link
+                class="fr-link"
+                to="/proprietaire"
+                title="Proprietaire - HISTOVEC - Nouvelle fenêtre"
+              > (HistoVec)
+              </router-link>
+            </li>
+            <li> Déclarer la cession d'un véhicule
+              <a
+                class="fr-link"
+                href="https://immatriculation.ants.gouv.fr"
+                title="ANTS - www.immatriculation.ants.gouv.fr - Nouvelle fenêtre"
+              >
+                (ANTS)
+              </a>
+            </li>
+          </ul>
+        </TuileDsfrNonCliquable>
       </div>
       <div class="fr-col-12  fr-col-md-6  fr-col-lg-5  fr-col-xl-5">
-        <DsfrTiles
-          :tiles="tilesAcheteursLinks"
+        <TuileDsfrNonCliquable
+          titre="Pour les acheteurs"
           :horizontal="true"
-        />
+        >
+          <ul class="text-left">
+            <li> Prendre connaissance des démarches
+              <a
+                class="fr-link"
+                href="https://service-public.fr"
+                title="Service Public - www.service-public.fr - Nouvelle fenêtre"
+              > (Service Public)
+              </a>
+            </li>
+            <li> Faire une demande de changement de titulaire du certificat d'immatriculation
+              <a
+                class="fr-link"
+                href="https://immatriculation.ants.gouv.fr"
+                title="ANTS - www.immatriculation.ants.gouv.fr - Nouvelle fenêtre"
+              >
+                (ANTS)
+              </a>
+            </li>
+          </ul>
+        </TuileDsfrNonCliquable>
       </div>
     </div>
   </div>
@@ -882,6 +916,9 @@ export default defineComponent({
 
 .text-center {
   text-align: center;
+}
+.text-left {
+  text-align: left;
 }
 </style>
 
