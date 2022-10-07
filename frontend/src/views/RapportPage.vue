@@ -12,7 +12,7 @@ import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineCh
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
 import ImagePresentation from '@/components/ImagePresentation.vue';
-
+import HistoVecModale from '@/components/HistoVecModale.vue';
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -64,6 +64,7 @@ export default defineComponent({
   components: {
     LoaderComponent,
     TuileDsfrNonCliquable,
+    HistoVecModale,
     ControlesTechniquesLineChart,
     HistoVecButtonLink, QrcodeVue,
     ImagePresentation,
@@ -165,7 +166,6 @@ export default defineComponent({
       utils: {
         api,
         getExposant,
-        copyText,
       },
 
       // @todo: @featureFlags
@@ -652,10 +652,6 @@ export default defineComponent({
       this.modalPartagerRapport.opened = false
     },
     async onOpenModalPartagerRapport () {
-      // @todo @copyLink2: On force la copie du lien à l'ouverture de la modale
-      // en attendant de corriger le bug de copie du lien dans bouton de la modale
-      this.utils.copyText(this.url)
-
       await this.logPartageDuRapport()
       this.modalPartagerRapport.opened = true
     },
@@ -860,24 +856,13 @@ export default defineComponent({
     },
 
     async onClickCopyLienPartage () {
-      // @todo @copyLink3: la copie ne s'effectue pas dans le cadre de la modale,
-      // malgré la configuration de VueClipboard dans le main.js
-      // On force donc la copie de l'url à l'ouverture de la modale pour dépanner.
-      // PS: la lib '@soerenmartius/vue3-clipboard' a été testée sans succès
-
-      // this.utils.copyText(this.url)
+      this.copierTextAvecAlerte(this.url)
       await this.logCopieLienPartage()
       this.onCloseModalPartagerRapport()
     },
 
     async onClickCopyCodePartage () {
-      // @todo @codePartage2: pré-requis @copyLink
-      // la copie ne s'effectue pas dans le cadre de la modale,
-      // malgré la configuration de VueClipboard dans le main.js
-      // On ne peut pas forcer 2 copies en même temps à l'ouverture de la modale
-      // /!\ Cette feature ne pourra fonctionner qu'après correction du bug copy clipboard dans la DsfrModale /!\
-
-      // this.utils.copyText(this.codePartageHistoVec)
+      this.copierTextAvecAlerte(this.codePartageHistoVec)
       await this.logCopieCodePartage()
       this.onCloseModalPartagerRapport()
     },
@@ -888,11 +873,40 @@ export default defineComponent({
       await this.logMailLienPartage()
       this.onCloseModalPartagerRapport()
     },
+    copierTextAvecAlerte (textACopier) {
+      copyText(textACopier, undefined, (error, event) => {
+        if (error) {
+          // todo: récupérer la modale de la pull request 1342
+        }
+        if (event) {
+          // todo: récupérer la modale de la pull request 1342
+        }
+      })
+    },
   },
 })
 </script>
 
 <template>
+  <HistoVecModale
+    titre="Envoyer le rapport"
+    :opened="modalPartagerRapport.opened"
+    :actions="modaleActions"
+    @close="onCloseModalPartagerRapport()"
+  >
+    <p>
+      Vous pouvez transmettre le lien du rapport à votre acheteur potentiel.
+      Ce lien est valide jusqu'au 8 du mois suivant.
+      Ex: un lien transmis le 18/01/2022 sera accessible jusqu'au 08/02/2022.
+    </p>
+    <div class="text-center">
+      <qrcode-vue
+        :value="url"
+        :size="150"
+        level="L"
+      />
+    </div>
+  </HistoVecModale>
   <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
     <div class="fr-col-12">
       <DsfrBreadcrumb
@@ -2167,33 +2181,6 @@ export default defineComponent({
         secondary
         @click="onOpenModalPartagerRapport()"
       />
-
-      <DsfrModal
-        ref="modal"
-        :opened="modalPartagerRapport.opened"
-        :actions="modaleActions"
-        title="Envoyer le rapport"
-        :origin="$refs.modalPartagerRapport"
-        @close="onCloseModalPartagerRapport()"
-      >
-        <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-          <div class="fr-col-12">
-            <p>
-              Vous pouvez transmettre le lien du rapport à votre acheteur potentiel.
-              Ce lien est valide jusqu'au 8 du mois suivant.
-              Ex: un lien transmis le 18/01/2022 sera accessible jusqu'au 08/02/2022.
-            </p>
-          </div>
-
-          <div class="fr-col-12  text-center">
-            <qrcode-vue
-              :value="url"
-              :size="150"
-              level="L"
-            />
-          </div>
-        </div>
-      </DsfrModal>
     </div>
   </div>
 
