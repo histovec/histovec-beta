@@ -466,6 +466,14 @@ export default defineComponent({
       if (this.isValidBuyer) {
         const buyerReportResponse = await this.getBuyerReport()
 
+        if (buyerReportResponse === null || buyerReportResponse.status === 500) {
+          // Cas: Aucune Reponse du back
+          this.$router.push({
+            name: 'erreurInattendue',
+          })
+          return
+        }
+
         if (buyerReportResponse.status === 404) {
           // Cas: véhicule non trouvé
           this.$router.push({
@@ -516,6 +524,14 @@ export default defineComponent({
     } else if (this.isRapportVendeur) {
       if (this.formData) {
         const holderReportResponse = await this.getHolderReport()
+
+        if (holderReportResponse === null || holderReportResponse.status === 500) {
+          // Cas: Aucune Reponse du back
+          this.$router.push({
+            name: 'erreurInattendue',
+          })
+          return
+        }
 
         if (holderReportResponse.status === 404) {
           // Cas: véhicule non trouvé

@@ -157,10 +157,9 @@ export default {
 
     try {
       const { report, status } = await api.getHolderReport(payload)
-
       updateReport({ report, reportId: id, status })
     } catch (error) {
-      updateReport({ report: null, reportId: null, status: 500 })
+      updateReport({ report: {}, reportId: null, status: 500 })
     }
 
     return reportWithExpiry(id)
@@ -183,7 +182,7 @@ export default {
 
       updateReport({ report, reportId: id, status })
     } catch (error) {
-      updateReport({ report: null, reportId: null, status: 500 })
+      updateReport({ report: {}, reportId: null, status: 500 })
     }
 
     return reportWithExpiry(id)
