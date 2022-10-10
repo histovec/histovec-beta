@@ -1,10 +1,8 @@
 <script>
 import { defineComponent } from 'vue'
-import {DsfrAlert} from '@gouvminint/vue-dsfr';
 
 export default defineComponent({
   name: 'AlerteComponent',
-  components: {DsfrAlert},
   props: {
     titre: {
       type: String,

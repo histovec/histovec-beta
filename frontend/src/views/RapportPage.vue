@@ -192,7 +192,8 @@ export default defineComponent({
         ignoreUtacCache: false,
       },
       sessionStorage,
-      isAlerteOpened: false,
+      isNotificationOpened: false,
+      texteNotification: '',
       isLoading: false,
     }
   },
@@ -875,14 +876,13 @@ export default defineComponent({
     },
 
     async onClickCopyLienPartage () {
-      this.copierTextAvecAlerte(this.url)
+      this.copierTextAvecAlerte(this.url, 'Le lien de partage du rapport est copier dans le presse papier.')
       await this.logCopieLienPartage()
       this.onCloseModalPartagerRapport()
-      this.ouvrirAlertCopieLien()
     },
 
     async onClickCopyCodePartage () {
-      this.copierTextAvecAlerte(this.codePartageHistoVec)
+      this.copierTextAvecAlerte(this.codePartageHistoVec, 'Le code de partage du rapport est copier dans le presse papier.')
       await this.logCopieCodePartage()
       this.onCloseModalPartagerRapport()
     },
@@ -893,21 +893,23 @@ export default defineComponent({
       await this.logMailLienPartage()
       this.onCloseModalPartagerRapport()
     },
-    copierTextAvecAlerte (textACopier) {
-      copyText(textACopier, undefined, (error, event) => {
+    copierTextAvecAlerte (texteACopier, texteNotification) {
+      copyText(texteACopier, undefined, (error, event) => {
         if (error) {
-          // todo: récupérer la modale de la pull request 1342
+          this.ouvrirAlerte(error.text)
         }
         if (event) {
-          // todo: récupérer la modale de la pull request 1342
+          this.ouvrirAlerte(texteNotification)
         }
       })
     },
-    ouvrirAlertCopieLien() {
-      this.isAlerteOpened = true
+    ouvrirAlerte(texteNotification) {
+      this.texteNotification = texteNotification
+      this.isNotificationOpened = true
     },
-    fermerAlertCopieLien() {
-      this.isAlerteOpened = false
+    fermerAlerte() {
+      this.isNotificationOpened = false
+      this.texteNotification = ''
     },
   },
 })
@@ -933,11 +935,11 @@ export default defineComponent({
       />
     </div>
   </HistoVecModale>
-  <alerte-component
-    v-if="isAlerteOpened"
-    description="Le lien de partage du rapport est copier dans le presse papier."
+  <AlerteComponent
+    v-if="isNotificationOpened"
+    :description="texteNotification"
     small
-    @close="fermerAlertCopieLien"
+    @close="fermerAlerte"
   />
   <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
     <div class="fr-col-12">
