@@ -19,7 +19,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fr-tile fr-enlarge">
+  <div class="fr-tile fr-enlarge fr-tile--horizontal">
     <LoaderComponent
       v-if="isLoading"
       taille="md"
