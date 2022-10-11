@@ -4,13 +4,11 @@ const historiqueVehiculeMapping = (historique) => {
       date,
       date_annulation: dateAnnulation,
       type,
-      // numAgree,  @todo @numAgree2
     }) => (
       {
         date,
         dateAnnulation,
         type,
-        // numAgree,  @todo @numAgree2
       }
     ),
   )
