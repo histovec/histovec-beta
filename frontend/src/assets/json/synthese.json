@@ -18,7 +18,7 @@
   "fin_ove_vendeur": {
     "icon": "ri-information-line",
     "text": "Ce véhicule a eu un sinistre déclaré, et déclaré apte à circuler",
-    "adv": "Pensez à transmettre une copie des rapports d'expertise à l'acquéreur",
+    "adv": "Pensez à transmettre une copie des rapports d'expertise à l'acheteur",
     "link": "https://www.service-public.fr/particuliers/vosdroits/F1473"
   },
   "ove": {
