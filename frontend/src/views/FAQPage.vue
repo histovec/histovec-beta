@@ -159,13 +159,6 @@ export default defineComponent({
       />
     </div>
 
-    <!--
-      @todo @renameCarteGrise :
-
-      Voir avec la DSR pour renommer toute les occurence de "Carte grise" en "Certificat d'immatriculation" dans la FAQ
-      Ce renommage avait déjà été validé ailleurs sur l'application web HistoVec
-    -->
-
     <div
       v-if="selectedTheme === FAQ_THEMES.WHY_HISTOVEC"
       class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
@@ -233,7 +226,7 @@ export default defineComponent({
             <h6>Vous êtes vendeur :</h6>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
-                Sur la page Propriétaire, remplissez le formulaire avec les informations figurant sur la carte grise en cours de validité.
+                Sur la page Propriétaire, remplissez le formulaire avec les informations figurant sur le certificat d'immatriculation en cours de validité.
                 Si le véhicule appartient à une entreprise, une collectivité, ou une association, cliquez sur « Personne morale » et renseignez, le cas échéant, le numéro de SIREN.
               </li>
               <li>
@@ -262,7 +255,7 @@ export default defineComponent({
               Seul le titulaire du certificat d'immatriculation en cours de validité peut générer le rapport HistoVec de son véhicule, qu'il choisit de transmettre à des tiers.
             </p>
             <p>
-              Si vous n’êtes pas le titulaire de la carte grise en cours de validité, vous ne pouvez pas consulter directement les données HistoVec pour ce véhicule. Il vous est possible de demander au propriétaire actuel la transmission par mél du rapport HistoVec en sélectionnant le profil acheteur sur la page d'accueil du site HistoVec.
+              Si vous n’êtes pas le titulaire du certificat d'immatriculation en cours de validité, vous ne pouvez pas consulter directement les données HistoVec pour ce véhicule. Il vous est possible de demander au propriétaire actuel la transmission par mél du rapport HistoVec en sélectionnant le profil acheteur sur la page d'accueil du site HistoVec.
             </p>
             <p>
               Les locataires longue durée (LDD) doivent être mandatés par le propriétaire du véhicule.
@@ -312,7 +305,7 @@ export default defineComponent({
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
-            <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux noti ons différentes :</p>
+            <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes :</p>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>Propriétaire: il s'agit du propriétaire du véhicule et qui peut donc le vendre.</li>
               <li>Titulaire: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</li>
@@ -342,10 +335,10 @@ export default defineComponent({
             @expand="expandedId = $event"
           >
             <p>
-              Il convient d’indiquer le nom de naissance du titulaire du certificat d’immatriculation en cours de validité et son ou ses prénoms. Assurez-vous de reprendre bien l’orthographe telle qu’elle figure sur la carte grise et vérifiez le nombre de prénoms.
+              Il convient d’indiquer le nom de naissance du titulaire du certificat d’immatriculation en cours de validité et son ou ses prénoms. Assurez-vous de reprendre bien l’orthographe telle qu’elle figure sur le certificat d'immatriculation et vérifiez le nombre de prénoms.
             </p>
             <p>
-              Pour les véhicules avec un ancien numéro d'immatriculation, reprenez les nom et prénom exactement comme ils sont indiqués sur la carte grise, sans préciser "M et Mme" par exemple.
+              Pour les véhicules avec un ancien numéro d'immatriculation, reprenez les nom et prénom exactement comme ils sont indiqués sur le certificat d'immatriculation, sans préciser "M et Mme" par exemple.
             </p>
           </DsfrAccordion>
         </li>
@@ -378,7 +371,7 @@ export default defineComponent({
         </li>
         <li>
           <DsfrAccordion
-            title="Comment consulter HistoVec si je n’ai pas la carte grise en cours de validité ?"
+            title="Comment consulter HistoVec si je n’ai pas le certificat d'immatriculation en cours de validité ?"
             :expanded-id="expandedId"
             @expand="expandedId = $event"
           >
@@ -386,7 +379,7 @@ export default defineComponent({
               La consultation d'HistoVec n'est possible que par le titulaire de ce certificat d'immatriculation, c'est pourquoi il est notamment nécessaire d'indiquer le n° de formule figurant sur ce document.
             </p>
             <p>
-              Si vous ne disposez plus de la carte grise en cours de validité, nous vous invitons à contacter l'Agence nationale des titres sécurisés qui délivre ce document et les duplicatas :
+              Si vous ne disposez plus du certificat d'immatriculation en cours de validité, nous vous invitons à contacter l'Agence nationale des titres sécurisés qui délivre ce document et les duplicatas :
             </p>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
@@ -433,16 +426,16 @@ export default defineComponent({
             </p>
             <ul class="fr-ml-4w  fr-pl-0">
               <li>
-                Les nom et prénom du titulaire actuel de la carte grise (nom de naissance, orthographe, nombre de prénoms…) ;
+                Les nom et prénom du titulaire actuel du certificat d'immatriculation (nom de naissance, orthographe, nombre de prénoms…) ;
               </li>
               <li>
                 Si le véhicule appartient à une entreprise, assurez-vous de renseigner le formulaire sous l’onglet « Personne morale » et, s’il s’agit d’une entreprise, d’indiquer le n° SIREN ou SIRET correspondant à votre société ;
               </li>
               <li>
-                Le n° de formule doit être celui de la carte grise en cours de validité :
+                Le n° de formule doit être celui du certificat d'immatriculation en cours de validité :
                 <ul class="fr-ml-4w  fr-pl-0">
                   <li>
-                    Si la carte grise a précédemment été déclarée perdue ou volée, un duplicata vous a été adressé. Il convient d'indiquer sur HistoVec le n° de formule de ce dernier certificat d'immatriculation.
+                    Si le certificat d'immatriculation a précédemment été déclaré perdu ou volé, un duplicata vous a été adressé. Il convient d'indiquer sur HistoVec le n° de formule de ce dernier certificat d'immatriculation.
                   </li>
                   <li>
                     Si le véhicule n’est plus immatriculé à votre nom, vous ne pouvez plus avoir accès à ces informations sur HistoVec.
@@ -450,7 +443,7 @@ export default defineComponent({
                 </ul>
               </li>
               <li>
-                Si votre véhicule est immatriculé sous un ancien n° d’immatriculation, assurez-vous d'indiquer la date de la carte grise, et non la date de 1ère immatriculation du véhicule.
+                Si votre véhicule est immatriculé sous un ancien n° d’immatriculation, assurez-vous d'indiquer la date du certificat d'immatriculation, et non la date de 1ère immatriculation du véhicule.
               </li>
             </ul>
           </DsfrAccordion>
@@ -618,13 +611,13 @@ export default defineComponent({
                 Cession (vente du véhicule), véhicule vendu par un particulier ou par un professionnel.
               </li>
               <li>
-                Changement de titulaire, opération correspondant au moment où un particulier effectue sa demande de carte grise pour la mettre à son nom.
+                Changement de titulaire, opération correspondant au moment où un particulier effectue sa demande de certificat d'immatriculation pour le mettre à son nom.
               </li>
               <li>
                 Achat ou reprise par un professionnel, opération correspondant au moment où un professionnel devient acquéreur du véhicule.
               </li>
               <li>
-                Opposition au transfert de la carte grise, état bloquant tout changement de titulaire.
+                Opposition au transfert du certificat d'immatriculation, état bloquant tout changement de titulaire.
               </li>
               <li>
                 Procédure de réparation contrôlée, procédure pendant laquelle les réparations sont contrôlées par un expert en automobile.
