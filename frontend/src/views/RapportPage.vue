@@ -194,6 +194,7 @@ export default defineComponent({
       sessionStorage,
       isNotificationOpened: false,
       texteNotification: '',
+      typeNotification: 'success',
       isLoading: false,
     }
   },
@@ -876,13 +877,13 @@ export default defineComponent({
     },
 
     async onClickCopyLienPartage () {
-      this.copierTextAvecAlerte(this.url, 'Le lien de partage du rapport est copier dans le presse papier.')
+      this.copierTexteAvecAlerte(this.url, 'lien')
       await this.logCopieLienPartage()
       this.onCloseModalPartagerRapport()
     },
 
     async onClickCopyCodePartage () {
-      this.copierTextAvecAlerte(this.codePartageHistoVec, 'Le code de partage du rapport est copier dans le presse papier.')
+      this.copierTexteAvecAlerte(this.codePartageHistoVec, 'code')
       await this.logCopieCodePartage()
       this.onCloseModalPartagerRapport()
     },
@@ -893,18 +894,19 @@ export default defineComponent({
       await this.logMailLienPartage()
       this.onCloseModalPartagerRapport()
     },
-    copierTextAvecAlerte (texteACopier, texteNotification) {
+    copierTexteAvecAlerte (texteACopier, typeText) {
       copyText(texteACopier, undefined, (error, event) => {
         if (error) {
-          this.ouvrirAlerte(error.text)
+          this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + '.', 'error')
         }
         if (event) {
-          this.ouvrirAlerte(texteNotification)
+          this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copier dans le presse papier.', 'success')
         }
       })
     },
-    ouvrirAlerte(texteNotification) {
+    ouvrirAlerte(texteNotification, typeNotification) {
       this.texteNotification = texteNotification
+      this.typeNotification = typeNotification
       this.isNotificationOpened = true
     },
     fermerAlerte() {
@@ -938,6 +940,7 @@ export default defineComponent({
   <AlerteComponent
     v-if="isNotificationOpened"
     :description="texteNotification"
+    :type="typeNotification"
     small
     @close="fermerAlerte"
   />

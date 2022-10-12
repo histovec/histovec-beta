@@ -16,6 +16,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: 'success',
+    },
     small: {
       type: Boolean,
       default: false,
@@ -38,7 +42,7 @@ export default defineComponent({
     <DsfrAlert
       :title="titre"
       :description="description"
-      type="success"
+      :type="type"
       :small="small"
       closeable
       @close="fermerAlerte"
