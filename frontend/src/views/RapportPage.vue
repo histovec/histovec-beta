@@ -897,10 +897,10 @@ export default defineComponent({
     copierTexteAvecAlerte (texteACopier, typeText) {
       copyText(texteACopier, undefined, (error, event) => {
         if (error) {
-          this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + '.', 'error')
+          this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + ' de partage.', 'error')
         }
         if (event) {
-          this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copier dans le presse papier.', 'success')
+          this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copié dans le presse papier.', 'success')
         }
       })
     },
