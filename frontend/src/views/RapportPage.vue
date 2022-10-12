@@ -2047,17 +2047,6 @@ export default defineComponent({
               <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-blue-text">
                 <span class="info_red txt-small-12">
                   {{ entry.nature }}
-                  <!-- @todo @numAgree3
-                  <span
-                    v-if="entry.numAgree"
-                  >
-                    n° d'agrément <b>{{ entry.numAgree }}</b> -
-
-                    @todo @numAgree4: brancher une modale sur ce lien
-                    <a class="fr-link">
-                      En savoir plus
-                    </a>
-                  </span> -->
                 </span>
               </div>
             </template>
@@ -2234,36 +2223,6 @@ export default defineComponent({
         <br />
         Elle <b>simplifiera</b> et <b>sécurisera</b> vos formalités administratives pour la <b>cession</b> ou <b>l'immatriculation</b> de votre véhicule.
       </div>
-
-    <!-- @todo @numAgree: Si la DSR souhaite de nouveau afficher le numéro d'expert (numAgree), il faut :
-     0 - Demander à l'ingé data de faire de nouveau remonter le champs num_agree dans les opération d'historique : DEC_VE, PREM_RAP_VE, SEC_RAP_VE
-     1 - Autoriser le champs numAgree à remonter dans le backend (cf: rechercher @numAgree1)
-     2 - Autoriser le champs numAgree à remonter dans le frontend (cf: rechercher @numAgree2)
-     3 - L'afficher dans l'historique lorsqu'il est disponible (cf: rechercher @numAgree3)
-     4 - Ajouter un lien vers une modale explicative (cf: rechercher @numAgree4)
-     5 - Implémenter la modale (cf: rechercher @numAgree5)
-
-    @todo @numAgree5: adapter à l'interface de DsfrModal
-      <DsfrModal
-        title="Plus d'infos à propos du numéro d'expert agréé"
-      >
-        <p>
-          HistoVec ne délivre pas les détails des rapports d’experts en automobile.
-        </p>
-        <p>
-          Pour davantage de précisions sur un rapport, vous pouvez rechercher les coordonnées d’un expert en automobile sur la
-          <a
-            href="https://www.securite-routiere.gouv.fr/sites/default/files/2019-10/liste_nationale_des_experts_en_automobile.pdf"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            liste nationale
-            <b><i class="fa fa-file-pdf-o"></i></b>
-          </a>
-          mise à jour par le ministère chargé des transports.
-        </p>
-      </DsfrModal>
-    -->
     </div>
   </div>
 </template>
