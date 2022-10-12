@@ -14,6 +14,7 @@ import { apiUrl } from './config.js'
 
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { isTrue, getInteger } from './utils/envFormat';
 
 dayjs.extend(customParseFormat)
 
@@ -27,13 +28,22 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-createApp(App)
-  .use(VueDsfr, { icons: Object.values(icons) } )
+const app = createApp(App)
+
+// Ajout des variables globales
+app.config.globalProperties.$outdatedData = isTrue(import.meta.env.VITE_OUTDATED_DATA);
+app.config.globalProperties.$showDataDate = isTrue(import.meta.env.VITE_SHOW_DATA_DATE);
+app.config.globalProperties.$codePartage = isTrue(import.meta.env.VITE_CODE_PARTAGE);
+app.config.globalProperties.$usePreviousMonthForData = isTrue(import.meta.env.VITE_USE_PREVIOUS_MONTH_FOR_DATA);
+app.config.globalProperties.$previousMonthShift = getInteger(import.meta.env.VITE_PREVIOUS_MONTH_SHIFT);
+app.config.globalProperties.$ignoreUtacCache = isTrue(import.meta.env.VITE_IGNORE_UTAC_CACHE);
+
+app.use(VueDsfr, { icons: Object.values(icons) } )
   // On paramètre vue3-clipboard pour sélectionner
   // automatiquement le contexte de l'élément du DOM dans lequel sera effectuée la copie
-  .use(VueClipboard, {
+app.use(VueClipboard, {
     autoSetContainer: true,
     appendToBody: true,
   })
-  .use(router)
-  .mount('#app')
+app.use(router)
+app.mount('#app')

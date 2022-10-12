@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import AccueilPage from '@/views/AccueilPage.vue'
 import { TYPE_RAPPORT } from '../constants/type'
+import { config } from '../config';
 
 const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
 const AcheteurPage = () => import('@/views/AcheteurPage.vue')
@@ -16,12 +17,8 @@ const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
 const UnavailableServicePage = () => import('@/views/error/UnavailableServicePage.vue')
 const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue')
 
-
-// @flag @makeSiteUnavailable
-const isHistoVecUnavailable = false
-
 const routes = (
-  isHistoVecUnavailable ?
+  config.isHistovecUnavailable ?
   [
     { path: '/', name: 'root', redirect: { name: 'serviceIndisponible' }, meta: { title: 'HistoVec - Service indisponible' } },
     { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage, meta: { title: 'HistoVec - Service indisponible' } },

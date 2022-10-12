@@ -167,28 +167,6 @@ export default defineComponent({
         api,
         getExposant,
       },
-
-      // @todo: @featureFlags
-      // Feature flags à centraliser au niveau de la création de l'application Vue et à configurer via des variables d'environnement
-      // Actuellement la construction des builds de PROD ne permet pas d'injecter de variable d'environnement, pour que cela fonctionne en PROD, il faudrait revoir le mode de build du front.
-      // Pour pouvoir changer les feature flags en PROD, il est actuellement nécessaire de faire un commit en modifiant les flags ci-dessous, et donc un nouveau build.
-      // En local, il suffit de modifier les flags ci-dessous et sauvergarder: le hot module reload (HMR) de Vite actualisera le code en temps réel dans la navigateur web.
-
-      // @shortCutConfig1: brancher ces features flags sur un raccourci clavier si besoin
-      flags: {
-        // Gestion de la fraîcheur des données
-        outdatedData: false,  // @flag @outdatedData : A activer quand la DSR juge que la donnée n'est pas assez fraîche
-        showDataDate: true,  // @feature @showDataDate : Permet d'afficher la vraie date des données dans le CSA et le rapport HTML HistoVec - Devrait toujours rester à true
-        codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
-
-        // Flag du 8
-        usePreviousMonthForData: false, // @flag @usePreviousMonthForData
-        previousMonthShift: 1, // @flag @previousMonthShift
-
-        // @flag @ignoreUtacCache
-        // Outil de debug (doublé par côté backend pour empêcher son usage en PROD)
-        ignoreUtacCache: false,
-      },
       sessionStorage,
       isLoading: false,
     }
@@ -204,7 +182,7 @@ export default defineComponent({
     },
     getMiDescription () {
       return (
-        this.flags.showDataDate ? (
+        this.$showDataDate ? (
             this.isDefaultDataDate ?
             'Non à jour' :
             `Datant du ${this.dateMiseAJourFR}`
@@ -248,8 +226,8 @@ export default defineComponent({
     currentMonthNumber () {
       let date = dayjs().add(-7, 'day')
 
-      if (this.flags.usePreviousMonthForData) {
-        date = date.add(-this.flags.previousMonthShift, 'month')
+      if (this.$usePreviousMonthForData) {
+        date = date.add(-this.$previousMonthShift, 'month')
       }
 
       return date.format('YYYYMM')
@@ -617,7 +595,7 @@ export default defineComponent({
       },
     ]
 
-    if (this.flags.codePartage) {
+    if (this.$codePartage) {
       this.modaleActions.push({
         label: 'Copier le \'Code partage HistoVec\'',
         icon: 'ri-clipboard-line',
@@ -753,7 +731,7 @@ export default defineComponent({
         key: this.buyerKey,
       }
 
-      const report = await reportService.getBuyerReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
+      const report = await reportService.getBuyerReport(data, { ignoreUtacCache: this.$ignoreUtacCache })
 
       return report
     },
@@ -764,7 +742,7 @@ export default defineComponent({
         formData: this.formData,
       }
 
-      const report = await reportService.getHolderReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
+      const report = await reportService.getHolderReport(data, { ignoreUtacCache: this.$ignoreUtacCache })
 
       return report
     },
@@ -793,7 +771,7 @@ export default defineComponent({
         isCIAnnule,
         annulationCurrentStatus: csaLabels.annulationCurrentStatus,
         dateAnnulationCI,
-        dateDonnees: this.flags.showDataDate ? dateMiseAJour : null,
+        dateDonnees: this.$showDataDate ? dateMiseAJour : null,
         histoVecLogoBytes: this.images.csa.logoHistoVecBytes,
         marianneImageBytes: this.images.csa.logoMIBytes,
         marque,
@@ -931,9 +909,17 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation v-if="isRapportVendeur" :src="images.rapportVendeurSvg" alt="Illustration de la page du rapport vendeur HistoVec" />
+      <ImagePresentation
+        v-if="isRapportVendeur"
+        :src="images.rapportVendeurSvg"
+        alt="Illustration de la page du rapport vendeur HistoVec"
+      />
 
-      <ImagePresentation v-if="isRapportAcheteur" :src="images.rapportAcheteurSvg" alt="Illustration de la page du rapport acheteur HistoVec" />
+      <ImagePresentation
+        v-if="isRapportAcheteur"
+        :src="images.rapportAcheteurSvg"
+        alt="Illustration de la page du rapport acheteur HistoVec"
+      />
     </div>
     <div
       v-if="isRapportVendeur"
@@ -991,7 +977,7 @@ export default defineComponent({
   </div>
 
   <div
-    v-if="flags.outdatedData"
+    v-if="$outdatedData"
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-3w"
   >
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
@@ -1008,7 +994,7 @@ export default defineComponent({
   </div>
 
   <div
-    v-if="flags.outdatedData && isRapportVendeur"
+    v-if="$outdatedData && isRapportVendeur"
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
     <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4  text-center">
@@ -1024,13 +1010,17 @@ export default defineComponent({
       <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Le véhicule"
-      >{{ getVehiculeDescription }}</TuileDsfrNonCliquable>
+      >
+        {{ getVehiculeDescription }}
+      </TuileDsfrNonCliquable>
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Informations du Ministère de l'Intérieur"
-      >{{ getMiDescription }}</TuileDsfrNonCliquable>
+      >
+        {{ getMiDescription }}
+      </TuileDsfrNonCliquable>
     </div>
   </div>
 
