@@ -84,7 +84,7 @@ export default defineComponent({
           titre="Pour les vendeurs"
           :horizontal="true"
         >
-          <ul class="text-left">
+          <ul>
             <li> Prendre connaissance des démarches
               <a
                 class="fr-link"
@@ -118,7 +118,7 @@ export default defineComponent({
           titre="Pour les acheteurs"
           :horizontal="true"
         >
-          <ul class="text-left">
+          <ul>
             <li> Prendre connaissance des démarches
               <a
                 class="fr-link"
@@ -910,8 +910,6 @@ export default defineComponent({
 .text-center {
   text-align: center;
 }
-.text-left {
-  text-align: left;
-}
+
 </style>
 
