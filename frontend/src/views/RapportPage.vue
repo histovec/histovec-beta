@@ -46,7 +46,6 @@ import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
 import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
-
 // @todo @lazyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
 import logoVignetteCritair1 from '@/assets/img/critair/vignette_1.png'
 import logoVignetteCritair2 from '@/assets/img/critair/vignette_2.png'
@@ -1271,21 +1270,6 @@ export default defineComponent({
                       :name="processedVehiculeData.isApte ? 'ri-thumb-up-line' : 'ri-error-warning-fill'"
                     />
                   </span>
-
-                  <!-- Commentaire: un ou plusieurs sinistres -->
-                  <span
-                    v-if="processedVehiculeData.isApte"
-                    class="fr-blue-text"
-                  >
-                    {{ assets.syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
-                  </span>
-                  <span
-                    v-else
-                    class="fr-blue-text"
-                  >
-                    {{ assets.syntheseMapping['ove'].adv }}
-                  </span>
-                </p>
                   <!-- état - un seul sinistre !-->
                   <template v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
                     Ce véhicule a eu <span class="fr-blue-text">un sinistre déclaré</span>
@@ -1317,7 +1301,7 @@ export default defineComponent({
                       Le véhicule a été
                       <span class="fr-blue-text"> déclaré apte à circuler</span>
                       <span
-                        v-if="processedVehiculeData.isApte"
+                        v-if="!processedVehiculeData.isApte"
                         class="fr-blue-text"
                       >
                         en {{ processedVehiculeData.lastResolutionYear }}
@@ -1325,14 +1309,29 @@ export default defineComponent({
                     </template>
                   </template>
                   <!-- @todo @redirectTab: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Historique" ? -->
+                  <br />
+                  <!-- Commentaire: un ou plusieurs sinistres -->
+                  <span
+                    v-if="processedVehiculeData.isApte"
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
+                  </span>
+                  <span
+                    v-else
+                    class="fr-blue-text"
+                  >
+                    {{ assets.syntheseMapping['ove'].adv }}
+                  </span>
 
+                  <br />
                   <span
                     v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
                     class="fr-blue-text"
                   >
                     {{ assets.syntheseMapping['multi_ove'].adv }}
                   </span>
-
+                </p>
 
                 <p
                   v-if="synthese.length === 0 && !processedVehiculeData.lastSinistreYear"
@@ -1966,15 +1965,15 @@ export default defineComponent({
                   </h6>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <div class="fr-text--md">
-                    <div
+                  <p class="fr-text--md">
+                    <span
                       v-for="(suspensionInfos, index) in reportLabels.suspensionsInfos"
                       :key="index"
                     >
                       <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>
                       <span class="fr-blue-text">{{ suspensionInfos.label }}</span>
-                    </div>
-                  </div>
+                    </span>
+                  </p>
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
