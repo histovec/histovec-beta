@@ -1284,7 +1284,7 @@ export default defineComponent({
                       et
                       <span class="fr-blue-text"> déclaré apte à circuler</span>
                       <span
-                        v-if="!processedVehiculeData.isApte"
+                        v-if="processedVehiculeData.lastResolutionYear"
                         class="fr-blue-text"
                       >
                         en {{ processedVehiculeData.lastResolutionYear }}
@@ -1965,15 +1965,15 @@ export default defineComponent({
                   </h6>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
+                  <div class="fr-text--md">
+                    <div
                       v-for="(suspensionInfos, index) in reportLabels.suspensionsInfos"
                       :key="index"
                     >
                       <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>
                       <span class="fr-blue-text">{{ suspensionInfos.label }}</span>
-                    </span>
-                  </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
