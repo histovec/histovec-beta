@@ -13,6 +13,7 @@ import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
 import ImagePresentation from '@/components/ImagePresentation.vue';
 import HistoVecModale from '@/components/HistoVecModale.vue';
+import AlerteComponent from '@/components/AlerteComponent.vue';
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -65,6 +66,7 @@ export default defineComponent({
     LoaderComponent,
     TuileDsfrNonCliquable,
     HistoVecModale,
+    AlerteComponent,
     ControlesTechniquesLineChart,
     HistoVecButtonLink, QrcodeVue,
     ImagePresentation,
@@ -190,6 +192,9 @@ export default defineComponent({
         ignoreUtacCache: false,
       },
       sessionStorage,
+      isNotificationOpened: false,
+      texteNotification: '',
+      typeNotification: 'success',
       isLoading: false,
     }
   },
@@ -872,13 +877,13 @@ export default defineComponent({
     },
 
     async onClickCopyLienPartage () {
-      this.copierTextAvecAlerte(this.url)
+      this.copierTexteAvecAlerte(this.url, 'lien')
       await this.logCopieLienPartage()
       this.onCloseModalPartagerRapport()
     },
 
     async onClickCopyCodePartage () {
-      this.copierTextAvecAlerte(this.codePartageHistoVec)
+      this.copierTexteAvecAlerte(this.codePartageHistoVec, 'code')
       await this.logCopieCodePartage()
       this.onCloseModalPartagerRapport()
     },
@@ -889,15 +894,24 @@ export default defineComponent({
       await this.logMailLienPartage()
       this.onCloseModalPartagerRapport()
     },
-    copierTextAvecAlerte (textACopier) {
-      copyText(textACopier, undefined, (error, event) => {
+    copierTexteAvecAlerte (texteACopier, typeText) {
+      copyText(texteACopier, undefined, (error, event) => {
         if (error) {
-          // todo: récupérer la modale de la pull request 1342
+          this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + ' de partage.', 'error')
         }
         if (event) {
-          // todo: récupérer la modale de la pull request 1342
+          this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copié dans le presse papier.', 'success')
         }
       })
+    },
+    ouvrirAlerte(texteNotification, typeNotification) {
+      this.texteNotification = texteNotification
+      this.typeNotification = typeNotification
+      this.isNotificationOpened = true
+    },
+    fermerAlerte() {
+      this.isNotificationOpened = false
+      this.texteNotification = ''
     },
   },
 })
@@ -923,6 +937,13 @@ export default defineComponent({
       />
     </div>
   </HistoVecModale>
+  <AlerteComponent
+    v-if="isNotificationOpened"
+    :description="texteNotification"
+    :type="typeNotification"
+    small
+    @close="fermerAlerte"
+  />
   <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
     <div class="fr-col-12">
       <DsfrBreadcrumb
