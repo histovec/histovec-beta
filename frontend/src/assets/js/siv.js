@@ -469,7 +469,6 @@ const processVehiculeData = (vehiculeData) => {
     dateFinDerniereProcedureVE,
     isApteACirculer,
     nombreDeProceduresVE,
-    hasProcedureVEEnCours,
   } = proceduresVE
 
   const { isVehiculeImporteDepuisEtranger } = importEnFrance
@@ -503,6 +502,7 @@ const processVehiculeData = (vehiculeData) => {
 
   const lastSinistreYear = new Date(dateDerniereProcedureVE).getFullYear()
   const lastResolutionYear = new Date(dateFinDerniereProcedureVE).getFullYear()
+  const hasNombreDeProceduresVE = Boolean(nombreDeProceduresVE>0)
 
   const labelizedHistorique = historique.map(elt => (
     {
@@ -518,7 +518,7 @@ const processVehiculeData = (vehiculeData) => {
     historique: labelizedHistorique,
     isApte: isApteACirculer,
     titulairesCount: nombreDeTitulaires,
-    hasSinistre: hasProcedureVEEnCours,
+    hasSinistre: hasNombreDeProceduresVE,
     lastSinistreYear,
     sinistresCount: nombreDeProceduresVE,
     lastResolutionYear,
