@@ -35,27 +35,33 @@ export default defineComponent({
         },
       carteItems: [
         {
+          id: 'carte-simple',
           titre: 'Simple',
           description: 'En 3 étapes seulement : Identifiez-vous, générez le rapport et partagez-le!',
           image: simpleSvg,
         },
         {
+          id: 'carte-officiel',
           titre: 'Officiel',
           description: 'Données issues du Système d\'immatriculation des véhicules.',
           image: officielSvg,
         },
         {
+          id: 'carte-confidentiel',
           titre: 'Confidentiel',
           description: 'Seul le propriétaire peut partager ses informations.',
           image: confidentielSvg,
         },
         {
+          id: 'carte-gratuit',
           titre: 'Gratuit',
           description: 'Un service gratuit pour les propriétaires et les acheteurs.',
           image: gratuitSvg,
         },
       ],
       image: {
+        id: 'image-accueil',
+        alt: "Illustration de la page d'accueil",
         accueilSVG,
       },
     }
@@ -78,7 +84,7 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.accueilSVG" alt="Illustration de la page d'accueil"/>
+      <ImagePresentation :id="image.id" :src="image.accueilSVG" :alt="image.alt"/>
     </div>
     <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
       <h1>Partagez l'historique de votre véhicule</h1>
@@ -99,7 +105,7 @@ export default defineComponent({
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
     <div v-for="(carteItem, index) in carteItems" :key="index"
          class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3 fr-col">
-      <CarteDsfrNonCliquable :titre="carteItem.titre" :description="carteItem.description" :image=carteItem.image />
+      <CarteDsfrNonCliquable :id="carteItem.id" :titre="carteItem.titre" :description="carteItem.description" :image=carteItem.image />
     </div>
   </div>
 

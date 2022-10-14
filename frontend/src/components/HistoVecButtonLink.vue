@@ -65,13 +65,10 @@ export default defineComponent({
   </a>
   <router-link
     v-else
-    v-slot="{ navigate }"
     v-bind="routerLinkProps"
-    custom
   >
     <DsfrButton
       v-bind="buttonProps"
-      @click="navigate"
     />
   </router-link>
 </template>
