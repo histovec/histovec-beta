@@ -9,6 +9,8 @@ import { VIN_REGEX } from '../../../constant/regex.js'
 
 import { appLogger, syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
+import { anonymize } from '../../../util/anonymiserData.js'
+import { anonymizedControlesTechniques } from '../../../util/anonymiserControlesTechniques.js'
 
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
@@ -53,7 +55,8 @@ export const getReport = async (payload) => {
   syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  appLogger.debug(`-- [backend] immat ==> ${immat}`)
+  const anonymeImmat = anonymize(immat)
+  appLogger.debug(`-- [backend] immat ==> ${anonymeImmat}`)
 
   // 2 - UTAC
   const utacDataKey = computeUtacDataKey(encryptedImmat)
@@ -115,16 +118,19 @@ export const getReport = async (payload) => {
   }
 
   const normalizedImmat = normalizeImmatForUtac(immat)
-  appLogger.debug(`-- normalized immat ==> ${normalizedImmat}`)
+  const anonymizedNormalizedImmat = anonymize(normalizedImmat)
+  appLogger.debug(`-- normalized immat ==> ${anonymizedNormalizedImmat}`)
 
   const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
   const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
   const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
-  appLogger.debug(`-- vin ==> ${vin}`)
+  const anonymizedVin = anonymize(vin, 3)
+  appLogger.debug(`-- vin ==> ${anonymizedVin}`)
 
   const normalizedVin = vin.toUpperCase()
-  appLogger.debug(`-- normalized vin ==> ${normalizedVin}`)
+  const anonymizedNormalizedVin = anonymize(normalizedVin, 3)
+  appLogger.debug(`-- normalized vin ==> ${anonymizedNormalizedVin}`)
 
   const isValidVin = Boolean(VIN_REGEX.test(vin))
 
@@ -219,8 +225,8 @@ export const getReport = async (payload) => {
       ct,
       ctUpdateDate,
     }
-
-    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: freshUtacData })
+    const anonymizedFreshUtacData = anonymizedControlesTechniques(freshUtacData)
+    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: anonymizedFreshUtacData })
 
     // Encrypt utac data before storing it in redis cache
     const encryptedFreshUtacData = encryptJson(freshUtacData, utacDataKey)
