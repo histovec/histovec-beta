@@ -55,8 +55,7 @@ export const getReport = async (payload) => {
   syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  const anonymeImmat = anonymize(immat)
-  appLogger.debug(`-- [backend] immat ==> ${anonymeImmat}`)
+  appLogger.debug(`-- [backend] immat ==> ${anonymize(immat)}`)
 
   // 2 - UTAC
   const utacDataKey = computeUtacDataKey(encryptedImmat)
@@ -118,19 +117,16 @@ export const getReport = async (payload) => {
   }
 
   const normalizedImmat = normalizeImmatForUtac(immat)
-  const anonymizedNormalizedImmat = anonymize(normalizedImmat)
-  appLogger.debug(`-- normalized immat ==> ${anonymizedNormalizedImmat}`)
+  appLogger.debug(`-- normalized immat ==> ${anonymize(normalizedImmat)}`)
 
   const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
   const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
   const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
-  const anonymizedVin = anonymize(vin, 3)
-  appLogger.debug(`-- vin ==> ${anonymizedVin}`)
+  appLogger.debug(`-- vin ==> ${anonymize(vin, 3)}`)
 
   const normalizedVin = vin.toUpperCase()
-  const anonymizedNormalizedVin = anonymize(normalizedVin, 3)
-  appLogger.debug(`-- normalized vin ==> ${anonymizedNormalizedVin}`)
+  appLogger.debug(`-- normalized vin ==> ${anonymize(normalizedVin, 3)}`)
 
   const isValidVin = Boolean(VIN_REGEX.test(vin))
 
@@ -225,9 +221,7 @@ export const getReport = async (payload) => {
       ct,
       ctUpdateDate,
     }
-    const anonymizedFreshUtacData = anonymizedControlesTechniques(freshUtacData)
-    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: anonymizedFreshUtacData })
-
+    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: anonymizedControlesTechniques(freshUtacData) })
     // Encrypt utac data before storing it in redis cache
     const encryptedFreshUtacData = encryptJson(freshUtacData, utacDataKey)
 

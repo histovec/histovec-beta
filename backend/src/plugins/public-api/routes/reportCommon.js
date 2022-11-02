@@ -128,21 +128,15 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
         },
       })
 
-      syslogLogger.info({
-        key: 'res',
-        tag: logLabel,
-        value: {
-          res,
-        },
-      })
-
       const { sivData, utacData: rawControlesTechniques, error, message } = res
+      const anonymizedControleTechnique = anonymizedControlesTechniques(rawControlesTechniques)
+
       syslogLogger.info({
         key: 'sub-result',
         tag: logLabel,
         value: {
           sivData,
-          rawControlesTechniques,
+          anonymizedControleTechnique,
           error,
           message,
           base64EncodedReportKeyBuffer,
