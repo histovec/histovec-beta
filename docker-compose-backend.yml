@@ -57,6 +57,7 @@ services:
       - MAIL_TO=${MAIL_TO}
       - PUBLIC_BACKEND=false
       - IS_UTAC_CACHE_IGNORABLE=${IS_UTAC_CACHE_IGNORABLE}
+      - NIVEAU_LOG_A_FORCER=${NIVEAU_LOG_A_FORCER}
     restart: on-failure
     links:
       - redis

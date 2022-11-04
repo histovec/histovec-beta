@@ -1,4 +1,4 @@
-import { createLogger, format, transports } from 'winston'
+import { createLogger, format, transports, config as configWinston } from 'winston'
 import { inspect } from 'util'
 import config from '../config.js'
 
@@ -9,9 +9,7 @@ const APP_LABEL = 'app'
 
 const { isProd, isTest } = config
 
-// DEBUG logs are only displayed for LOCAL development
-// All other environments use INFO log level (except TEST mode using WARN log level)
-const level = isProd ? 'info' : isTest ? 'warn' : 'debug'
+const level = config.niveauLog
 
 const consoleOptions = {
   level,

@@ -3,7 +3,7 @@ import { getRedisClient } from './connectors/redis.js'
 import { getElasticsearchClient } from './connectors/elasticsearch.js'
 import { getUtacClient } from './connectors/utac.js'
 import { appLogger, techLogger } from './util/logger.js'
-import config from './config.js'
+import {default as config, verifierParametrages} from './config.js'
 
 const API_NAME = config.apiName // 'backend' or 'public-backend'
 
@@ -124,6 +124,8 @@ const initServer = async () => {
   }
 
   try {
+    verifierParametrages()
+
     await server.start()
     techLogger.info(
       `✅  ${API_NAME} REST server started at ${server.info.uri}`,

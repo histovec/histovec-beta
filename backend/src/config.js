@@ -1,7 +1,18 @@
 import npmVersion from '../package.json' assert {type: "json"}
+import {config as configWinston} from 'winston'
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development'
 const isPublicApi = process.env.PUBLIC_BACKEND === 'true'
+const isProductionMode = process.env.NODE_ENV === 'production'
+const isTestMode = process.env.NODE_ENV === 'test'
+
+const niveauLogAForcer = process.env.NIVEAU_LOG_A_FORCER
+
+// Si on paramètre un niveau de log spécifique on l'utilise,
+// sinon on utilise des niveaux par défaut (prod = info, test = warn sinon debug)
+const niveauLog = niveauLogAForcer
+  ? niveauLogAForcer
+  : (isProductionMode ? 'info' : isTestMode ? 'warn' : 'debug');
 
 const config = {
   port: process.env.BACKEND_PORT,
@@ -10,8 +21,9 @@ const config = {
   version: npmVersion.version,
   publicApiVersion: '1.0.0',
   utacIdKey: process.env.UTAC_ID_KEY,
-  isProd: process.env.NODE_ENV === 'production',
-  isTest: process.env.NODE_ENV === 'test',
+  isProd: isProductionMode,
+  isTest: isTestMode,
+  niveauLog: niveauLog,
   isDevelopmentMode,
   isPublicApi,
   isHistovecUnavailable: process.env.PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE === 'true',
@@ -56,4 +68,12 @@ const config = {
   },
 }
 
-export default config
+const verifierParametrages = () => {
+  // Vérification que le niveau de log à forcer paramétré est correct par rapport
+  // aux valeurs possibles pour "winston" (format "npm" par défaut)
+  if(niveauLogAForcer && configWinston.npm.levels[niveauLogAForcer] === undefined) {
+    throw new Error(`Mauvaise configuration du paramètre [NIVEAU_LOG_A_FORCER] : ${niveauLogAForcer}`)
+  }
+}
+
+export {config as default, verifierParametrages}
