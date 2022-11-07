@@ -9,8 +9,7 @@ import { VIN_REGEX } from '../../../constant/regex.js'
 
 import { appLogger, syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
-import { anonymize } from '../../../util/anonymiserData.js'
-import { anonymizedControlesTechniques } from '../../../util/anonymiserControlesTechniques.js'
+import { anonymize, anonymizedControlesTechniques } from '../../../util/anonymiserData.js'
 
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
@@ -221,9 +220,10 @@ export const getReport = async (payload) => {
       ct,
       ctUpdateDate,
     }
-    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: anonymizedControlesTechniques(freshUtacData) })
+    const anonymizedFreshUtacData = anonymizedControlesTechniques(freshUtacData)
+    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: anonymizedFreshUtacData })
     // Encrypt utac data before storing it in redis cache
-    const encryptedFreshUtacData = encryptJson(freshUtacData, utacDataKey)
+    const encryptedFreshUtacData = encryptJson(anonymizedFreshUtacData, utacDataKey)
 
     try {
       // Cache supported vehicles
@@ -240,7 +240,7 @@ export const getReport = async (payload) => {
 
     return {
       sivData,
-      utacData: freshUtacData,
+      utacData: anonymizedFreshUtacData,
     }
   } catch ({ message: errorMessage }) {
     appLogger.error({
