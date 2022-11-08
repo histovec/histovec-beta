@@ -770,6 +770,7 @@ export default defineComponent({
                 :error-message="nomSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-input-nom-naissance"
                   v-model="formData.siv.titulaire.particulier.nom"
                   label="Nom de naissance"
                   label-visible
@@ -801,6 +802,7 @@ export default defineComponent({
                 :error-message="prenomsSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-input-prenom"
                   v-model="formData.siv.titulaire.particulier.prenoms"
                   label="Prénom(s)"
                   label-visible
@@ -838,6 +840,7 @@ export default defineComponent({
                 :error-message="numeroImmatriculationSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-input-numero-immatriculation"
                   v-model="formData.siv.numeroImmatriculation"
                   label="Numéro d'immatriculation"
                   label-visible
@@ -869,6 +872,7 @@ export default defineComponent({
                 :error-message="numeroFormuleSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-input-numero-formule"
                   v-model="formData.siv.numeroFormule"
                   label="Numéro de formule"
                   label-visible
@@ -1322,6 +1326,7 @@ export default defineComponent({
       style="text-align: right"
     >
       <DsfrButton
+        id="bouton-recherche"
         label="Rechercher"
         icon="ri-search-line"
         :disabled="!isFormValid"
@@ -1333,6 +1338,7 @@ export default defineComponent({
       style="text-align: left"
     >
       <DsfrButton
+        id="bouton-effacer"
         label="Effacer"
         icon="ri-close-line"
         secondary

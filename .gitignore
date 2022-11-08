@@ -218,8 +218,9 @@ $RECYCLE.BIN/
 mongo-dev/
 out/
 
-# Cypress screenshots
+# Cypress screenshots and videos
 screenshots/
+videos/
 
 # Act artifacts
 artifacts*/

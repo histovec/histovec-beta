@@ -12,7 +12,8 @@
     "lint:js": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "start": "NODE_OPTIONS=--openssl-legacy-provider vite",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@gouvfr/dsfr": "~1.4.1",
@@ -40,6 +41,7 @@
     "@vue/test-utils": "^2.0.0-alpha.6",
     "aria-mocha": "^0.7.3",
     "aria-vue": "^0.4.1",
+    "cypress": "^10.11.0",
     "dotenv": "^16.0.1",
     "eslint": "^8.20.0",
     "eslint-plugin-vue": "^9.3.0",

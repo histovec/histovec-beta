@@ -1697,10 +1697,10 @@ export default defineComponent({
               {{ titulaire.identite }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-0">
+            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
               Code postal
             </div>
-            <div class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
+            <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ titulaire.adresse }}
             </div>
 
@@ -1729,10 +1729,10 @@ export default defineComponent({
               </div>
             </template>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-0">
+            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
               Date du certificat d'immatriculation actuel
             </div>
-            <div class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
+            <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ dateEmissionCIFR }}
             </div>
           </div>
