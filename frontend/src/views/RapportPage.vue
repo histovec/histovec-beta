@@ -1125,54 +1125,60 @@ export default defineComponent({
                 <h6 class="fr-mb-0  fr-pb-2w">
                   Usage
                 </h6>
-
-                <p class="fr-text--md  fr-mb-2w">
-                  <span class="fr-blue-text">
-                    <VIcon
-                      :name="constants.USAGE_COLLECTION.icon"
-                    />
-                  </span>
-                  {{ constants.USAGE_COLLECTION.text }}
-                  <br />
-                  <span
-                    v-if="constants.USAGE_COLLECTION.adv"
-                    class="fr-text--md  fr-mb-1w"
-                  >
-                    <a
-                      class="fr-link"
-                      :href="constants.USAGE_COLLECTION.link"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      :title="constants.USAGE_COLLECTION.adv"
+                <div
+                  v-if="processedVehiculeData.usage.vehiculeDeCollection "
+                >
+                  <p class="fr-text--md  fr-mb-2w">
+                    <span class="fr-blue-text">
+                      <VIcon
+                        :name="constants.USAGE_COLLECTION.icon"
+                      />
+                    </span>
+                    {{ constants.USAGE_COLLECTION.text }}
+                    <br />
+                    <span
+                      v-if="constants.USAGE_COLLECTION.adv"
+                      class="fr-text--md  fr-mb-1w"
                     >
-                      {{ constants.USAGE_COLLECTION.adv }}
-                    </a>
-                  </span>
-                </p>
-
-                <p class="fr-text--md  fr-mb-0">
-                  <span class="fr-blue-text">
-                    <VIcon
-                      :name="constants.USAGE_AGRICOLE.icon"
-                    />
-                  </span>
-                  {{ constants.USAGE_AGRICOLE.text }}
-                  <br />
-                  <span
-                    v-if="constants.USAGE_AGRICOLE.adv"
-                    class="fr-text--md  fr-mb-1w"
-                  >
-                    <a
-                      class="fr-link"
-                      :href="constants.USAGE_AGRICOLE.link"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                      :title="constants.USAGE_AGRICOLE.adv"
+                      <a
+                        class="fr-link"
+                        :href="constants.USAGE_COLLECTION.link"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        :title="constants.USAGE_COLLECTION.adv"
+                      >
+                        {{ constants.USAGE_COLLECTION.adv }}
+                      </a>
+                    </span>
+                  </p>
+                </div>
+                <div
+                  v-if="processedVehiculeData.usage.vehiculeAgricole"
+                >
+                  <p class="fr-text--md  fr-mb-0">
+                    <span class="fr-blue-text">
+                      <VIcon
+                        :name="constants.USAGE_AGRICOLE.icon"
+                      />
+                    </span>
+                    {{ constants.USAGE_AGRICOLE.text }}
+                    <br />
+                    <span
+                      v-if="constants.USAGE_AGRICOLE.adv"
+                      class="fr-text--md  fr-mb-1w"
                     >
-                      {{ constants.USAGE_AGRICOLE.adv }}
-                    </a>
-                  </span>
-                </p>
+                      <a
+                        class="fr-link"
+                        :href="constants.USAGE_AGRICOLE.link"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        :title="constants.USAGE_AGRICOLE.adv"
+                      >
+                        {{ constants.USAGE_AGRICOLE.adv }}
+                      </a>
+                    </span>
+                  </p>
+                </div>
               </div>
 
               <div class="fr-pb-0  fr-pt-0">
