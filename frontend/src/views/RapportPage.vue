@@ -792,7 +792,7 @@ export default defineComponent({
         },
       } = this.processedVehiculeData
 
-      const numeroImmatriculation = this.typeImmatriculation === TYPE_IMMATRICULATION.SIV ? this.formData.siv.numeroImmatriculation : this.formData.fni.numeroImmatriculation
+      const numeroImmatriculation = this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV ? this.formData.siv.numeroImmatriculation : this.formData.fni.numeroImmatriculation
 
       const csaPdfBytes = await generateCsa({
         isCIAnnule,
