@@ -144,7 +144,7 @@ export default defineComponent({
         Établissement de cette déclaration d’accessibilité
       </h5>
       <p>
-        Cette déclaration a été établie le 15 novembre 2022 .Elle a été mise à jour le 15 novembre 2022.
+        Cette déclaration a été établie le 15 novembre 2022. Elle a été mise à jour le 15 novembre 2022.
       </p>
       <p>
         Technologies utilisées pour la réalisation du site web :
