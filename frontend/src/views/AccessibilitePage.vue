@@ -55,7 +55,7 @@ export default defineComponent({
         Cette page vise à vous guider dans l'utilisation du site.
       </p>
       <p>
-        L'initiative internationale pour l'accessibilité du Web (WAI) définit l'accesibilité du Web comme suite :
+        L'initiative internationale pour l'accessibilité du Web (WAI) définit l'accessibilité du Web comme suit :
       </p>
       <p>
         L'accessibilité du Web signifie que les personnes en situation de handicap peuvent utiliser le Web, et qu'elles peuvent contribuer sur le Web.
@@ -94,23 +94,17 @@ export default defineComponent({
         État de conformité
       </h3>
       <p>
-        <router-link
-          class="fr-link"
-          to="/accueil"
-        >
-          {{ HISTOVEC_BASE_URL }}
-        </router-link>
-        n’est pas en conformité avec le référentiel général d'amélioration de l'accessibilité. La non-conformité est énumérées ci-dessous.
+        Le site HistoVec est non conforme avec le référentiel général d'amélioration de l'accessibilité.
       </p>
 
-      <h3 class="fr-blue-title">
+      <h4 class="fr-blue-title">
         Résultat des tests
-      </h3>
+      </h4>
       <p>
-        L'audit de conformité réalisée en interne révèle que :
+        L'audit de conformité réalisé en interne révèle que :
       </p>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
-        <li>41% des critères du RGAA 4.1 sont respectés.</li>
+        <li>41% des critères RGAA sont respectés.</li>
       </ul>
 
       <h3 class="fr-blue-title">
@@ -119,11 +113,11 @@ export default defineComponent({
       <p>
         Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes.
       </p>
-      <p>
-        Non conformité :
-      </p>
+      <h4 class="fr-blue-title">
+        Non conformités
+      </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
-        <li>Images : gestion de l'attribut "alt" à améliorer pour distinguer des éléments pertinents des éléments de décoration</li>
+        <li>Images : alternative textuelle des images à améliorer pour distinguer des éléments pertinents des éléments de décoration</li>
         <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité</li>
         <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer</li>
         <li>Liens : pertinence des informations associées aux liens à améliorer</li>
@@ -142,9 +136,9 @@ export default defineComponent({
       <p>
         Cette déclaration a été établie le 15 novembre 2022. Elle a été mise à jour le 15 novembre 2022.
       </p>
-      <p>
-        Technologies utilisées pour la réalisation du site web :
-      </p>
+      <h4>
+        Technologies utilisées pour la réalisation du site web
+      </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
         <li>HTML</li>
         <li>CSS</li>
@@ -152,20 +146,20 @@ export default defineComponent({
         <li>Vue.js</li>
       </ul>
 
-      <h3 class="fr-blue-title">
-        Agents utilisateurs, technologies d'assistance et outils utilisés pour vérifier l'accessibilité
-      </h3>
+      <h4 class="fr-blue-title">
+        Environnement de test
+      </h4>
       <p>
-        Les tests des pages web ont été effectués avec les combinaisons de navigateurs web et lecteurs d'écran suivants :
+        Agents utilisateurs, technologies d'assistance et outils utilisés pour vérifier l'accessibilité :
       </p>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
         <li>Technologie d'assistance : NVDA</li>
         <li>Navigateur : Firefox</li>
         <li>Système d'exploitation : Windows 10</li>
       </ul>
-      <p>
-        Les outils suivants ont été utilisés lors de l’évaluation :
-      </p>
+      <h4 class="fr-blue-title">
+        Les outils utilisés lors de l’évaluation
+      </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
         <li>
           Validateur du code :
@@ -203,9 +197,9 @@ export default defineComponent({
           <li>Wave (webaim)</li>
         </ul>
       </ul>
-      <p>
-        Pages du site ayant fait l’objet de la vérification de conformité :
-      </p>
+      <h4 class="fr-blue-title">
+        Pages du site ayant fait l’objet de la vérification de conformité
+      </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
         <li>Accueil</li>
         <li>Propriétaire</li>
@@ -216,7 +210,7 @@ export default defineComponent({
         <li>Plan du site</li>
         <li>Accessibilité</li>
         <li>Mentions légales</li>
-        <li>Données personnelles</li>
+        <li>Données personnelles & Gestion des cookies</li>
       </ul>
 
       <h3 class="fr-blue-title">
