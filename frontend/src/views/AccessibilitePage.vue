@@ -45,18 +45,17 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-12">
-      <!-- @todo @rgaa : Voir avec l'équipe de l'audit RGAA du BPSA, quel contenu mettre en attendant l'audit RGAA -->
       <h1>Accessibilité</h1>
 
-      <h5 class="fr-blue-title">
+      <h2 class="fr-blue-title">
         Introduction
-      </h5>
+      </h2>
 
       <p>
         Cette page vise à vous guider dans l'utilisation du site.
       </p>
       <p>
-        L'initiative internationale pour l'accessibilité du Web (WAI) définit l'accesibilité du Web comme suite :
+        L'initiative internationale pour l'accessibilité du Web (WAI) définit l'accessibilité du Web comme suit :
       </p>
       <p>
         L'accessibilité du Web signifie que les personnes en situation de handicap peuvent utiliser le Web, et qu'elles peuvent contribuer sur le Web.
@@ -65,18 +64,21 @@ export default defineComponent({
         L'accessibilité du Web comprend tous les handicaps qui affectent l'accès au Web, ce qui inclut les handicaps visuels, auditifs, physiques, de parole, cognitifs et neurologiques.
       </p>
       <p>
-        <!-- @todo: quelle url ? -->
         <a
           class="fr-link"
-          href="https://www.google.com"
+          href="https://www.w3.org/WAI/"
           rel="noopener noreferrer"
+          title="WAI"
           target="_blank"
         >
           Voir l'introduction de la WAI
         </a>
       </p>
+      <h2 class="fr-blue-title">
+        Déclaration d’accessibilité
+      </h2>
       <p>
-        L'équipe du site HistoVec s'engage à rendre son site accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005.
+        L'équipe du site HistoVec s'engage à rendre son site internet accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005.
       </p>
       <p>
         Cette déclaration d'accessibilité s'applique à
@@ -88,147 +90,198 @@ export default defineComponent({
         </router-link>
       </p>
 
-      <h5 class="fr-blue-title">
-        Etat de conformité
-      </h5>
+      <h3 class="fr-blue-title">
+        État de conformité
+      </h3>
       <p>
-        <router-link
-          class="fr-link"
-          to="/accueil"
-        >
-          {{ HISTOVEC_BASE_URL }}
-        </router-link>
-        est en totale conformité avec le référentiel général d'amélioration de l'accessibilité.
+        Le site HistoVec est non conforme avec le référentiel général d'amélioration de l'accessibilité.
       </p>
 
-      <h5 class="fr-blue-title">
+      <h4 class="fr-blue-title">
         Résultat des tests
-      </h5>
+      </h4>
       <p>
-        L'audit de conformité réalisée par XXX révèle que 100% des critères du RGAA 4.1 sont respectés.
+        L'audit de conformité réalisé en interne révèle que :
       </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>41% des critères RGAA sont respectés.</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
-        Date de déclaration
-      </h5>
+      <h3 class="fr-blue-title">
+        Contenus non accessibles
+      </h3>
       <p>
-        Cette déclaration a été établie le JJ MM AAA.
+        Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes.
       </p>
+      <h4 class="fr-blue-title">
+        Non conformités
+      </h4>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Images : alternative textuelle des images à améliorer pour distinguer des éléments pertinents des éléments de décoration</li>
+        <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité</li>
+        <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer</li>
+        <li>Liens : pertinence des informations associées aux liens à améliorer</li>
+        <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer</li>
+        <li>Éléments obligatoires : structure HTML des pages à améliorer</li>
+        <li>Structuration de l'information : gestion de la structure de l'information à améliorer (titres, tableaux, etc.)</li>
+        <li>Présentation de l'information : affichage de l'information à améliorer en fonction des conditions d'accès (utilisation d'une liseuse, utilisation d'un zoom, désactivation CSS, etc.)</li>
+        <li>Formulaires : manipulation et navigation dans les formulaires à améliorer</li>
+        <li>Navigation : gestion de la navigation à améliorer (tabulation au clavier, liens d'évitement, etc.)</li>
+        <li>Consultation : accessibilité des informations du rapport et du certificat de situation administrative à améliorer</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
-        Technologies utilisées pour la réalisation de ce site
-      </h5>
+      <h3 class="fr-blue-title">
+        Établissement de cette déclaration d’accessibilité
+      </h3>
       <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>JavaScript</li>
-          <li>Vue.js</li>
-        </ul>
+        Cette déclaration a été établie le 15 novembre 2022. Elle a été mise à jour le 15 novembre 2022.
       </p>
+      <h4>
+        Technologies utilisées pour la réalisation du site web
+      </h4>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Vue.js</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
-        Agents utilisateurs, technologies d'assistance et outils utilisés pour vérifier l'accessibilité
-      </h5>
+      <h4 class="fr-blue-title">
+        Environnement de test
+      </h4>
       <p>
-        Les tests des pages web ont été effectuées avec les combinaisons de navigateurs web et lecteurs d'écran suivants :
+        Agents utilisateurs, technologies d'assistance et outils utilisés pour vérifier l'accessibilité :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>XXX et XXX</li>
-          <li>XXX et XXX</li>
-          <li>XXX et XXX</li>
-        </ul>
-      </p>
-      <p>
-        L'évaluation de l'accessibilité est le résultat de tests manuels, assistés par des outils (feuilles CSS dédiées, extensions HeadingsMaps et WebDeveloper Toolbar, Color Contrast Analyser).
-      </p>
-
-      <h5 class="fr-blue-title">
-        Pages du site ayant fait l'objet de la vérification de conformité
-      </h5>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>Accueil</li>
-          <li>Propriétaire</li>
-          <li>Rapport propriétaire</li>
-          <li>Acheteur</li>
-          <li>Rapport acheteur</li>
-          <li>FAQ & Liens utiles</li>
-          <li>Contact</li>
-          <li>Plan du site</li>
-          <li>Accessibilité</li>
-          <li>Mentions légales</li>
-          <li>Données personnelles</li>
-        </ul>
-      </p>
-
-      <h5 class="fr-blue-title">
-        Signaler un dysfonctionnement
-      </h5>
-      <p>
-        Si, malgré notre vigilance, vous rencontriez le moindre problème d'accessibilité sur notre site, n'hésitez pas à nous écrire à
-        <a
-          class="fr-link"
-          :href="reportAccessibilityErrorEmail"
-        >
-          {{ HISTOVEC_SUPPORT_EMAIL }}
-        </a>
-      </p>
-
-      <h5 class="fr-blue-title">
-        Voie de recours
-      </h5>
-      <p>
-        Si vous constatez un défaut d'accessibilité vous empêchant d'accéder à un contenu ou une fonctionnalité du site,
-        vous rencontriez le moindre problème d'accessibilité sur notre site, que vous nous le signalez et que vous ne parvenez pas à obtenir une réponse rapide de notre part,
-        vous êtes en droit de faire parvenir vos doléances ou une demande de saisie au Défenseur des droits.
-      </p>
-      <p>Plusieurs moyens sont à votre disposition :</p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Technologie d'assistance : NVDA</li>
+        <li>Navigateur : Firefox</li>
+        <li>Système d'exploitation : Windows 10</li>
+      </ul>
+      <h4 class="fr-blue-title">
+        Les outils utilisés lors de l’évaluation
+      </h4>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>
+          Validateur du code :
+          <a
+            class="fr-link"
+            href="https://validator.w3.org/"
+            rel="noopener noreferrer"
+            title="validator.w3.org"
+            target="_blank"
+          >
+            validator.w3.org
+          </a>
+        </li>
+        <li>Vérification des contrastes de couleur :</li>
+        <ul class="fr-ml-4w  fr-pl-0 sous-liste">
           <li>
-            <!-- @todo: quelle url ? -->
             <a
               class="fr-link"
-              href="https://www.google.com"
+              href="https://webaim.org/resources/contrastchecker/"
               rel="noopener noreferrer"
+              title="webaim.org"
               target="_blank"
             >
-              le formulaire de contact en ligne
+              https://webaim.org/resources/contrastchecker/
             </a>
           </li>
-          <li>
-            <!-- @todo: quelle url ? -->
-            <a
-              class="fr-link"
-              href="https://www.google.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              la liste du ou des délégués de votre région
-            </a>
-            avec leurs informations de contact direct
-          </li>
-          <li>
-            <!-- @todo: quelle url ? -->
-            <a
-              class="fr-link"
-              href="https://www.google.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              en langue des signes française
-            </a>
-          </li>
-          <li>
-            leur adresse postale : <br />
-            le Défenseur des droits <br />
-            Libre réponse 71120 <br />
-            75342 Paris CEDEX 07
-          </li>
+          <li>WCAG Contrast checker (plugin)</li>
         </ul>
+        <li>Désactivation du JavaScript : JavaScript Switcher</li>
+        <li>Outillage web : Web Developer (plugin)</li>
+        <li>Outils d’évaluation de pages web (plugins) :</li>
+        <ul class="fr-ml-4w  fr-pl-0 sous-liste">
+          <li>Tanaguru webext</li>
+          <li>Axe DevTools</li>
+          <li>Wave (webaim)</li>
+        </ul>
+      </ul>
+      <h4 class="fr-blue-title">
+        Pages du site ayant fait l’objet de la vérification de conformité
+      </h4>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Accueil</li>
+        <li>Propriétaire</li>
+        <li>Rapport propriétaire / acheteur</li>
+        <li>Acheteur</li>
+        <li>FAQ & Liens utiles</li>
+        <li>Contact</li>
+        <li>Plan du site</li>
+        <li>Accessibilité</li>
+        <li>Mentions légales</li>
+        <li>Données personnelles & Gestion des cookies</li>
+      </ul>
+
+      <h3 class="fr-blue-title">
+        Retour d'information et contact
+      </h3>
+      <p>
+        Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable du site internet pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
       </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>
+          Envoyer un message <router-link
+            class="fr-link"
+            to="/contact"
+          >
+            via le formulaire de contact
+          </router-link>
+        </li>
+        <li>
+          Envoyer un mail à <a
+            class="fr-link"
+            :href="reportAccessibilityErrorEmail"
+            title="Envoyer un mail au support"
+          >
+            {{ HISTOVEC_SUPPORT_EMAIL }}
+          </a>
+        </li>
+      </ul>
+
+      <h3 class="fr-blue-title">
+        Voies de recours
+      </h3>
+      <p>
+        Cette procédure est à utiliser dans le cas suivant.
+      </p>
+      <p>
+        Vous avez signalé au responsable du site internet un défaut d’accessibilité qui vous empêche d’accéder à un contenu ou à un des services du portail et vous n’avez pas obtenu de réponse satisfaisante.
+      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>
+          Écrire un message au Défenseur des droits (
+          <a
+            class="fr-link"
+            href="https://formulaire.defenseurdesdroits.fr/"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="https://formulaire.defenseurdesdroits.fr/"
+          >
+            https://formulaire.defenseurdesdroits.fr/
+          </a>
+          ).
+        </li>
+        <li>
+          Contacter le délégué du Défenseur des droits dans votre région (
+          <a
+            class="fr-link"
+            href="https://www.defenseurdesdroits.fr/saisir/delegues"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="https://www.defenseurdesdroits.fr/saisir/delegues"
+          >
+            https://www.defenseurdesdroits.fr/saisir/delegues
+          </a>
+          ).
+        </li>
+        <li>
+          Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) :<br />
+          Défenseur des droits<br />
+          Libre réponse 71120<br />
+          75342 Paris CEDEX 07
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -242,5 +295,8 @@ export default defineComponent({
 .fr-title-link {
   text-decoration: none;
   color: var(--blue-france-sun-113-625);
+}
+.sous-liste {
+  list-style-type: circle;
 }
 </style>
