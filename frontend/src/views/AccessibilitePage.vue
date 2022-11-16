@@ -123,7 +123,7 @@ export default defineComponent({
         <li>Liens : pertinence des informations associées aux liens à améliorer</li>
         <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer</li>
         <li>Éléments obligatoires : structure HTML des pages à améliorer</li>
-        <li>Structuration de l'information : gestion de la structure de l'information à améliorer (titre, tableaux, etc.)</li>
+        <li>Structuration de l'information : gestion de la structure de l'information à améliorer (titres, tableaux, etc.)</li>
         <li>Présentation de l'information : affichage de l'information à améliorer en fonction des conditions d'accès (utilisation d'une liseuse, utilisation d'un zoom, désactivation CSS, etc.)</li>
         <li>Formulaires : manipulation et navigation dans les formulaires à améliorer</li>
         <li>Navigation : gestion de la navigation à améliorer (tabulation au clavier, liens d'évitement, etc.)</li>
