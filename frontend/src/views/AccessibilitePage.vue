@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { mailTo } from '@/utils/email.js'
-import { HISTOVEC_SUPPORT_EMAIL, REPORT_ACCESSIBILITY_ERROR_EMAIL } from '@/constants/email.js'
+import { HISTOVEC_BASE_URL, HISTOVEC_SUPPORT_EMAIL, REPORT_ACCESSIBILITY_ERROR_EMAIL } from '@/constants/email.js'
 
 
 export default defineComponent({
@@ -13,6 +13,9 @@ export default defineComponent({
 
   data () {
     return {
+      // url
+      HISTOVEC_BASE_URL,
+
       // email
       HISTOVEC_SUPPORT_EMAIL,
     }
@@ -44,9 +47,9 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Accessibilité</h1>
 
-      <h5 class="fr-blue-title">
+      <h2 class="fr-blue-title">
         Introduction
-      </h5>
+      </h2>
 
       <p>
         Cette page vise à vous guider dans l'utilisation du site.
@@ -71,9 +74,9 @@ export default defineComponent({
           Voir l'introduction de la WAI
         </a>
       </p>
-      <h5 class="fr-blue-title">
+      <h2 class="fr-blue-title">
         Déclaration d’accessibilité
-      </h5>
+      </h2>
       <p>
         L'équipe du site HistoVec s'engage à rendre son site internet accessible conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005.
       </p>
@@ -83,198 +86,184 @@ export default defineComponent({
           class="fr-link"
           to="/accueil"
         >
-          HistoVec
+          {{ HISTOVEC_BASE_URL }}
         </router-link>
       </p>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         État de conformité
-      </h5>
+      </h3>
       <p>
         <router-link
           class="fr-link"
           to="/accueil"
         >
-          HistoVec
+          {{ HISTOVEC_BASE_URL }}
         </router-link>
         n’est pas en conformité avec le référentiel général d'amélioration de l'accessibilité. La non-conformité est énumérées ci-dessous.
       </p>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         Résultat des tests
-      </h5>
+      </h3>
       <p>
         L'audit de conformité réalisée en interne révèle que :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>41% des critères du RGAA 4.1 sont respectés.</li>
-          <li>Le taux moyen de conformité du service en ligne s’élève à 50%.</li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>41% des critères du RGAA 4.1 sont respectés.</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         Contenus non accessibles
-      </h5>
+      </h3>
       <p>
         Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes.
       </p>
       <p>
         Non conformité :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>Images</li>
-          <li>Cadres</li>
-          <li>Couleurs</li>
-          <li>Multimédia</li>
-          <li>Tableaux</li>
-          <li>Liens</li>
-          <li>Scripts</li>
-          <li>Éléments obligatoires</li>
-          <li>Structuration de l'information</li>
-          <li>Présentation de l'information</li>
-          <li>Formulaires</li>
-          <li>Navigation</li>
-          <li>Consultation</li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>images : gestion de l'attribut "alt" à améliorer pour distinguer des éléments pertinents des éléments de décoration.</li>
+        <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité.</li>
+        <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer.</li>
+        <li>Liens : la pertinence des informations associées aux liens à améliorer.</li>
+        <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer.</li>
+        <li>Éléments obligatoires : structure globale des pages à améliorer (fermeture des balises notamment).</li>
+        <li>Structuration de l'information : gestion de la structure de l'informations à améliorer (titre, tableaux, etc.).</li>
+        <li>Présentation de l'information : affichage de l'information à améliorer en fonction des conditions d'accès (utilisation d'une liseuse, utilisation d'un zoom, désactivation css, etc.).</li>
+        <li>Formulaires : manipulation et navigation dans les formulaires à améliorer.</li>
+        <li>Navigation : gestion de la navigation à améliorer (tabulation au clavier, liens d'évitement, etc.).</li>
+        <li>Consultation : mise à disposition accessible des informations du rapport et du certificat de situation administrative à améliorer.</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         Établissement de cette déclaration d’accessibilité
-      </h5>
+      </h3>
       <p>
         Cette déclaration a été établie le 15 novembre 2022. Elle a été mise à jour le 15 novembre 2022.
       </p>
       <p>
         Technologies utilisées pour la réalisation du site web :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>JavaScript</li>
-          <li>Vue.js</li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>Vue.js</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         Agents utilisateurs, technologies d'assistance et outils utilisés pour vérifier l'accessibilité
-      </h5>
+      </h3>
       <p>
         Les tests des pages web ont été effectués avec les combinaisons de navigateurs web et lecteurs d'écran suivants :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>Technologie d'assistance : NVDA</li>
-          <li>Navigateur : Firefox</li>
-          <li>Système d'exploitation : Windows 10</li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Technologie d'assistance : NVDA</li>
+        <li>Navigateur : Firefox</li>
+        <li>Système d'exploitation : Windows 10</li>
+      </ul>
       <p>
         Les outils suivants ont été utilisés lors de l’évaluation :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>validator.w3.org pour l'utilisation : Validateur du code</li>
-          <li>https://webaim.org/resources/contrastchecker/ pour l'utilisation : Vérification des contrastes de couleur</li>
-          <li>WCAG Contrast checker pour l'utilisation : Vérification des contrastes de couleur (plugin)</li>
-          <li>JavaScript Switcher pour l'utilisation : Désactivation du JavaScript</li>
-          <li>Web Developer pour l'utilisation : Outillage web (plugin)</li>
-          <li>Tanaguru webext pour l'utilisation : Outil d’évaluation de pages web (plugin)</li>
-          <li>Axe DevTools pour l'utilisation : Outil d’évaluation de pages web (plugin)</li>
-          <li>Wave (webaim) pour l'utilisation : Outil d’évaluation de pages web (plugin)</li>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Validateur du code : validator.w3.org</li>
+        <li>Vérification des contrastes de couleur : https://webaim.org/resources/contrastchecker/</li>
+        <li>Vérification des contrastes de couleur (plugin) : WCAG Contrast checker</li>
+        <li>Désactivation du JavaScript : JavaScript Switcher</li>
+        <li>Outillage web (plugin) : Web Developer</li>
+        <li>Outil d’évaluation de pages web (plugin) :</li>
+        <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+          <li>Tanaguru webext</li>
+          <li>Axe DevTools</li>
+          <li>Wave (webaim)</li>
         </ul>
-      </p>
+      </ul>
       <p>
         Pages du site ayant fait l’objet de la vérification de conformité :
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>Accueil</li>
-          <li>Propriétaire</li>
-          <li>Rapport propriétaire</li>
-          <li>Acheteur</li>
-          <li>FAQ & Liens utiles</li>
-          <li>Contact</li>
-          <li>Plan du site</li>
-          <li>Accessibilité</li>
-          <li>Mentions légales</li>
-          <li>Données personnelles</li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Accueil</li>
+        <li>Propriétaire</li>
+        <li>Rapport propriétaire / acheteur</li>
+        <li>Acheteur</li>
+        <li>FAQ & Liens utiles</li>
+        <li>Contact</li>
+        <li>Plan du site</li>
+        <li>Accessibilité</li>
+        <li>Mentions légales</li>
+        <li>Données personnelles</li>
+      </ul>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         Retour d'information et contact
-      </h5>
+      </h3>
       <p>
         Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable du site internet pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>
-            Envoyer un message <router-link
-              class="fr-link"
-              to="/contact"
-            >
-              via le formulaire de contact
-            </router-link>
-          </li>
-          <li>
-            Envoyer un mail à <a
-              class="fr-link"
-              :href="reportAccessibilityErrorEmail"
-              title="Envoyer un mail au support"
-            >
-              {{ HISTOVEC_SUPPORT_EMAIL }}
-            </a>
-          </li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>
+          Envoyer un message <router-link
+            class="fr-link"
+            to="/contact"
+          >
+            via le formulaire de contact
+          </router-link>
+        </li>
+        <li>
+          Envoyer un mail à <a
+            class="fr-link"
+            :href="reportAccessibilityErrorEmail"
+            title="Envoyer un mail au support"
+          >
+            {{ HISTOVEC_SUPPORT_EMAIL }}
+          </a>
+        </li>
+      </ul>
 
-      <h5 class="fr-blue-title">
+      <h3 class="fr-blue-title">
         Voies de recours
-      </h5>
+      </h3>
       <p>
         Cette procédure est à utiliser dans le cas suivant.
       </p>
       <p>
         Vous avez signalé au responsable du site internet un défaut d’accessibilité qui vous empêche d’accéder à un contenu ou à un des services du portail et vous n’avez pas obtenu de réponse satisfaisante.
       </p>
-      <p>
-        <ul class="fr-ml-4w  fr-pl-0">
-          <li>
-            Écrire un message au Défenseur des droits (
-            <a
-              class="fr-link"
-              href="https://formulaire.defenseurdesdroits.fr/"
-              rel="noopener noreferrer"
-              target="_blank"
-              title="https://formulaire.defenseurdesdroits.fr/"
-            >
-              https://formulaire.defenseurdesdroits.fr/
-            </a>
-            ).
-          </li>
-          <li>
-            Contacter le délégué du Défenseur des droits dans votre région (
-            <a
-              class="fr-link"
-              href="https://www.defenseurdesdroits.fr/saisir/delegues"
-              rel="noopener noreferrer"
-              target="_blank"
-              title="https://www.defenseurdesdroits.fr/saisir/delegues"
-            >
-              https://www.defenseurdesdroits.fr/saisir/delegues
-            </a>
-            ).
-          </li>
-          <li>
-            Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) Défenseur des droits.<br />
-            Libre réponse 71120 75342 Paris CEDEX 07
-          </li>
-        </ul>
-      </p>
+      <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>
+          Écrire un message au Défenseur des droits (
+          <a
+            class="fr-link"
+            href="https://formulaire.defenseurdesdroits.fr/"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="https://formulaire.defenseurdesdroits.fr/"
+          >
+            https://formulaire.defenseurdesdroits.fr/
+          </a>
+          ).
+        </li>
+        <li>
+          Contacter le délégué du Défenseur des droits dans votre région (
+          <a
+            class="fr-link"
+            href="https://www.defenseurdesdroits.fr/saisir/delegues"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="https://www.defenseurdesdroits.fr/saisir/delegues"
+          >
+            https://www.defenseurdesdroits.fr/saisir/delegues
+          </a>
+          ).
+        </li>
+        <li>
+          Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) :<br />
+          Défenseur des droits<br />
+          Libre réponse 71120<br />
+          75342 Paris CEDEX 07
+        </li>
+      </ul>
     </div>
   </div>
 </template>
