@@ -128,7 +128,7 @@ export default defineComponent({
         <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer</li>
         <li>Liens : pertinence des informations associées aux liens à améliorer</li>
         <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer</li>
-        <li>Éléments obligatoires : structure html des pages à améliorer</li>
+        <li>Éléments obligatoires : structure HTML des pages à améliorer</li>
         <li>Structuration de l'information : gestion de la structure de l'information à améliorer (titre, tableaux, etc.)</li>
         <li>Présentation de l'information : affichage de l'information à améliorer en fonction des conditions d'accès (utilisation d'une liseuse, utilisation d'un zoom, désactivation CSS, etc.)</li>
         <li>Formulaires : manipulation et navigation dans les formulaires à améliorer</li>
@@ -168,7 +168,7 @@ export default defineComponent({
       </p>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
         <li>
-          Validateur du code : validator.w3.org
+          Validateur du code :
           <a
             class="fr-link"
             href="https://validator.w3.org/"
@@ -196,7 +196,7 @@ export default defineComponent({
         </ul>
         <li>Désactivation du JavaScript : JavaScript Switcher</li>
         <li>Outillage web : Web Developer (plugin)</li>
-        <li>Outils d’évaluation de pages web (plugin) :</li>
+        <li>Outils d’évaluation de pages web (plugins) :</li>
         <ul class="fr-ml-4w  fr-pl-0 sous-liste">
           <li>Tanaguru webext</li>
           <li>Axe DevTools</li>
