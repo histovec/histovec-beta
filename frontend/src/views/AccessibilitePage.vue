@@ -123,17 +123,17 @@ export default defineComponent({
         Non conformité :
       </p>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
-        <li>images : gestion de l'attribut "alt" à améliorer pour distinguer des éléments pertinents des éléments de décoration.</li>
-        <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité.</li>
-        <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer.</li>
-        <li>Liens : la pertinence des informations associées aux liens à améliorer.</li>
-        <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer.</li>
-        <li>Éléments obligatoires : structure globale des pages à améliorer (fermeture des balises notamment).</li>
-        <li>Structuration de l'information : gestion de la structure de l'informations à améliorer (titre, tableaux, etc.).</li>
-        <li>Présentation de l'information : affichage de l'information à améliorer en fonction des conditions d'accès (utilisation d'une liseuse, utilisation d'un zoom, désactivation css, etc.).</li>
-        <li>Formulaires : manipulation et navigation dans les formulaires à améliorer.</li>
-        <li>Navigation : gestion de la navigation à améliorer (tabulation au clavier, liens d'évitement, etc.).</li>
-        <li>Consultation : mise à disposition accessible des informations du rapport et du certificat de situation administrative à améliorer.</li>
+        <li>Images : gestion de l'attribut "alt" à améliorer pour distinguer des éléments pertinents des éléments de décoration</li>
+        <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité</li>
+        <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer</li>
+        <li>Liens : pertinence des informations associées aux liens à améliorer</li>
+        <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer</li>
+        <li>Éléments obligatoires : structure html des pages à améliorer</li>
+        <li>Structuration de l'information : gestion de la structure de l'information à améliorer (titre, tableaux, etc.)</li>
+        <li>Présentation de l'information : affichage de l'information à améliorer en fonction des conditions d'accès (utilisation d'une liseuse, utilisation d'un zoom, désactivation CSS, etc.)</li>
+        <li>Formulaires : manipulation et navigation dans les formulaires à améliorer</li>
+        <li>Navigation : gestion de la navigation à améliorer (tabulation au clavier, liens d'évitement, etc.)</li>
+        <li>Consultation : accessibilité des informations du rapport et du certificat de situation administrative à améliorer</li>
       </ul>
 
       <h3 class="fr-blue-title">
@@ -167,13 +167,37 @@ export default defineComponent({
         Les outils suivants ont été utilisés lors de l’évaluation :
       </p>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
-        <li>Validateur du code : validator.w3.org</li>
-        <li>Vérification des contrastes de couleur : https://webaim.org/resources/contrastchecker/</li>
-        <li>Vérification des contrastes de couleur (plugin) : WCAG Contrast checker</li>
+        <li>
+          Validateur du code : validator.w3.org
+          <a
+            class="fr-link"
+            href="https://validator.w3.org/"
+            rel="noopener noreferrer"
+            title="validator.w3.org"
+            target="_blank"
+          >
+            validator.w3.org
+          </a>
+        </li>
+        <li>Vérification des contrastes de couleur :</li>
+        <ul class="fr-ml-4w  fr-pl-0 sous-liste">
+          <li>
+            <a
+              class="fr-link"
+              href="https://webaim.org/resources/contrastchecker/"
+              rel="noopener noreferrer"
+              title="webaim.org"
+              target="_blank"
+            >
+              https://webaim.org/resources/contrastchecker/
+            </a>
+          </li>
+          <li>WCAG Contrast checker (plugin)</li>
+        </ul>
         <li>Désactivation du JavaScript : JavaScript Switcher</li>
-        <li>Outillage web (plugin) : Web Developer</li>
-        <li>Outil d’évaluation de pages web (plugin) :</li>
-        <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
+        <li>Outillage web : Web Developer (plugin)</li>
+        <li>Outils d’évaluation de pages web (plugin) :</li>
+        <ul class="fr-ml-4w  fr-pl-0 sous-liste">
           <li>Tanaguru webext</li>
           <li>Axe DevTools</li>
           <li>Wave (webaim)</li>
@@ -277,5 +301,8 @@ export default defineComponent({
 .fr-title-link {
   text-decoration: none;
   color: var(--blue-france-sun-113-625);
+}
+.sous-liste {
+  list-style-type: circle;
 }
 </style>
