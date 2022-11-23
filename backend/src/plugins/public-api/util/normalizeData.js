@@ -16,9 +16,11 @@ const normalizeToBoolean = (value) => {
       return false
     case '1':
       return true
+    case 't':
     case true:
     case 'OUI':
       return true
+    case 'f':
     case false:
     case 'NON':
       return false
