@@ -1,11 +1,11 @@
 <script>
-import { defineComponent } from 'vue'
-import { RouterLink } from 'vue-router'
+import {defineComponent} from 'vue'
+import {RouterLink} from 'vue-router'
 
 export default defineComponent({
   name: 'PlanDuSitePage',
 
-  components: { RouterLink },
+  components: {RouterLink},
 })
 </script>
 
@@ -29,85 +29,87 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Plan du site</h1>
 
-      <h3 class="fr-title-link">
-        <router-link
-          to="/accueil"
-        >
-          Accueil
-        </router-link>
-      </h3>
+      <ul class="fr-raw-list">
+        <li class="fr-h5 fr-title-link ">
+          <router-link
+            to="/accueil"
+          >
+            Accueil
+          </router-link>
+        </li>
 
-      <h4 class="fr-title-link  fr-ml-3w">
-        <router-link
-          to="/proprietaire"
-        >
-          Propriétaire
-        </router-link>
-      </h4>
+        <li class="fr-h5 fr-title-link fr-ml-3w">
+          <router-link
+            to="/proprietaire"
+          >
+            Propriétaire
+          </router-link>
+        </li>
 
-      <h5 class="fr-ml-5w">
-        Rapport propriétaire
-      </h5>
+        <li class="fr-h5 fr-ml-5w">
+          Rapport propriétaire
+        </li>
 
-      <h4 class="fr-title-link  fr-ml-3w">
-        <router-link
-          to="/acheteur"
-        >
-          Acheteur
-        </router-link>
-      </h4>
+        <li class="fr-h5 fr-title-link fr-ml-3w">
+          <router-link
+            to="/acheteur"
+          >
+            Acheteur
+          </router-link>
+        </li>
 
-      <h5 class="fr-ml-5w">
-        Rapport acheteur
-      </h5>
+        <li class="fr-h5 fr-ml-5w">
+          Rapport acheteur
+        </li>
 
-      <h4 class="fr-title-link  fr-ml-3w">
-        <router-link
-          to="/faq"
-        >
-          FAQ & Liens utiles
-        </router-link>
-      </h4>
+        <li class="fr-h5 fr-title-link fr-ml-3w">
+          <router-link
+            to="/faq"
+          >
+            FAQ & Liens utiles
+          </router-link>
+        </li>
 
-      <h4 class="fr-title-link  fr-ml-3w">
-        <router-link
-          to="/contact"
-        >
-          Contact
-        </router-link>
-      </h4>
+        <li class="fr-h5 fr-title-link fr-ml-3w">
+          <router-link
+            to="/contact"
+          >
+            Contact
+          </router-link>
+        </li>
 
-      <h3 class="fr-title-link">
-        <router-link
-          to="/plan-du-site"
-        >
-          Plan du site
-        </router-link>
-      </h3>
+        <li class="fr-h5 fr-title-link">
+          <router-link
+            to="/plan-du-site"
+          >
+            Plan du site
+          </router-link>
+        </li>
 
-      <h3 class="fr-title-link">
-        <router-link
-          to="/accessibilite"
-        >
-          Accessibilité
-        </router-link>
-      </h3>
+        <li class="fr-h5 fr-title-link">
+          <router-link
+            to="/accessibilite"
+          >
+            Accessibilité
+          </router-link>
+        </li>
 
-      <h3 class="fr-title-link">
-        <router-link
-          to="/mentions-legales"
-        >
-          Mentions légales
-        </router-link>
-      </h3>
+        <li class="fr-h5 fr-title-link">
+          <router-link
+            to="/mentions-legales"
+          >
+            Mentions légales
+          </router-link>
+        </li>
 
-      <h3 class="fr-title-link">
-        <router-link
-          to="/donnees-personnelles-et-cookies"
-        >
-          Données personnelles & Gestion des cookies
-        </router-link>
-      </h3>
+        <li class="fr-h5 fr-title-link">
+          <router-link
+            to="/donnees-personnelles-et-cookies"
+          >
+            Données personnelles & Gestion des cookies
+          </router-link>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
