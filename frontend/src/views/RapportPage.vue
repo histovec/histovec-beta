@@ -900,9 +900,9 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation v-if="isRapportVendeur" :src="images.rapportVendeurSvg" alt="Illustration de la page du rapport vendeur HistoVec" />
+      <ImagePresentation v-if="isRapportVendeur" :src="images.rapportVendeurSvg" alt="" />
 
-      <ImagePresentation v-if="isRapportAcheteur" :src="images.rapportAcheteurSvg" alt="Illustration de la page du rapport acheteur HistoVec" />
+      <ImagePresentation v-if="isRapportAcheteur" :src="images.rapportAcheteurSvg" alt="" />
     </div>
     <div
       v-if="isRapportVendeur"
