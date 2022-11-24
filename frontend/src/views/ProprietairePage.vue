@@ -535,7 +535,10 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="images.proprietaireSVG" alt="Illustration de la page du propriétaire" />
+      <ImagePresentation
+        :src="images.proprietaireSVG"
+        alt="Illustration de la page du propriétaire"
+      />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Rassurez vos acheteurs potentiels</h1>
@@ -572,45 +575,47 @@ export default defineComponent({
       <h6>Veuillez sélectionner le format d'immatriculation de votre véhicule</h6>
     </div>
   </div>
-
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
-        :src="images.plaqueSivSvg"
-        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.SIV)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation depuis 2009
-      </p>
-    </div>
-
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
-        :src="images.plaqueFniSvg"
-        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.FNI)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation avant 2009
-      </p>
-    </div>
-
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
-        :src="images.plaqueNonSupporteeSvg"
-        @click="() => selectTypeImmatriculation(OLD_IMMATRICULATION_TYPE)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation avant 1995
-      </p>
-    </div>
-  </div>
-
+  <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
+    <li class="bouton_immatriculation__position">
+      <div>
+        <img
+          class="histovec-numero-immatriculation"
+          :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
+          :src="images.plaqueSivSvg"
+          @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.SIV)"
+        />
+        <p class="fr-text--xs">
+          Immatriculation depuis 2009
+        </p>
+      </div>
+    </li>
+    <li class="bouton_immatriculation__position">
+      <div>
+        <img
+          class="histovec-numero-immatriculation"
+          :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
+          :src="images.plaqueFniSvg"
+          @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.FNI)"
+        />
+        <p class="fr-text--xs">
+          Immatriculation avant 2009
+        </p>
+      </div>
+    </li>
+    <li class="bouton_immatriculation__position">
+      <div>
+        <img
+          class="histovec-numero-immatriculation"
+          :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
+          :src="images.plaqueNonSupporteeSvg"
+          @click="() => selectTypeImmatriculation(OLD_IMMATRICULATION_TYPE)"
+        />
+        <p class="fr-text--xs">
+          Immatriculation avant 1995
+        </p>
+      </div>
+    </li>
+  </ul>
   <!-- Modals -->
   <DsfrModal
     ref="modalNumeroSiren"
@@ -1395,5 +1400,8 @@ export default defineComponent({
 
 .help-icon {
   margin-left: 0.2rem;
+}
+.bouton_immatriculation__position {
+  margin: 3.5vw;
 }
 </style>
