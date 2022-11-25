@@ -693,6 +693,7 @@ export default defineComponent({
           Vous pouvez aussi l'obtenir sur ce
           <a
             class="fr-link"
+            title="Le site de societe.com"
             href="https://www.societe.com/"
             rel="noopener noreferrer"
             target="_blank"
