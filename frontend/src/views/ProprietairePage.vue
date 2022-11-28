@@ -879,6 +879,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNomSivValid"
                   aria-errormessage="nom-particulier-SIV-erreur-message"
+                  aria-describedby="nom-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -913,6 +914,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isPrenomsSivValid"
                   aria-errormessage="prenom-particulier-SIV-erreur-message"
+                  aria-describedby="prenom-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -953,6 +955,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationSivValid"
                   aria-errormessage="numero-immatriculation-particulier-SIV-erreur-message"
+                  aria-describedby="numero-immatriculation-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -987,6 +990,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNumeroFormuleSivValid"
                   aria-errormessage="numero-formule-particulier-SIV-erreur-message"
+                  aria-describedby="numero-formule-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1039,6 +1043,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isRaisonSocialeSivValid"
                   aria-errormessage="raison-sociale-personne-morale-SIV-erreur-message"
+                  aria-describedby="raison-sociale-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1059,6 +1064,7 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
                   :aria-invalid="!isNumeroSirenSivValid"
                   aria-errormessage="numero-siren-personne-morale-SIV-erreur-message"
+                  aria-describedby="numero-siren-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <span
@@ -1098,6 +1104,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationSivValid"
                   aria-errormessage="numero-immatriculation-personne-morale-SIV-erreur-message"
+                  aria-describedby="numero-immatriculation-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1132,6 +1139,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNumeroFormuleSivValid"
                   aria-errormessage="numero-formule-personne-morale-SIV-erreur-message"
+                  aria-describedby="numero-formule-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1194,6 +1202,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNomEtPrenomsFniValid"
                   aria-errormessage="nom-et-prenom-particulier-FNI-erreur-message"
+                  aria-describedby="nom-et-prenom-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1235,6 +1244,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationFniValid"
                   aria-errormessage="numero-immatriculation-particulier-FNI-erreur-message"
+                  aria-describedby="numero-immatriculation-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1269,6 +1279,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
                   aria-errormessage="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
+                  aria-describedby="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1321,6 +1332,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isRaisonSocialeFniValid"
                   aria-errormessage="raison-sociale-personne-morale-FNI-erreur-message"
+                  aria-describedby="raison-sociale-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1341,6 +1353,7 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
                   :aria-invalid="!isNumeroSirenFniValid"
                   aria-errormessage="numero-siren-personne-morale-FNI-erreur-message"
+                  aria-describedby="numero-siren-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <span
@@ -1381,6 +1394,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationFniValid"
                   aria-errormessage="numero-immatriculation-personne-morale-FNI-erreur-message"
+                  aria-describedby="numero-immatriculation-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1415,6 +1429,7 @@ export default defineComponent({
                   aria-required="true"
                   :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
                   aria-errormessage="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
+                  aria-describedby="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
