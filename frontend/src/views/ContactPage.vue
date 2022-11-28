@@ -472,6 +472,7 @@ export default defineComponent({
           required
           :aria-invalid="!isMessageEmailValid"
           aria-errormessage="email-erreur-message"
+          aria-describedby="email-erreur-message"
         />
       </DsfrInputGroup>
     </div>
@@ -490,6 +491,7 @@ export default defineComponent({
           required
           :aria-invalid="!isMessageValid"
           aria-errormessage="message-erreur-message"
+          aria-describedby="message-erreur-message"
         />
       </DsfrInputGroup>
     </div>
