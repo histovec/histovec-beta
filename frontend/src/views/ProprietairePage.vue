@@ -690,7 +690,7 @@ export default defineComponent({
           Il figure sur le <span class="fr-blue-text">KBIS</span> de votre société.
         </p>
         <p class="fr-text--md">
-          Vous pouvez aussi l'obtenir sur ce
+          Vous pouvez aussi l'obtenir sur le site
           <a
             class="fr-link"
             title="Le site de societe.com"
@@ -698,7 +698,7 @@ export default defineComponent({
             rel="noopener noreferrer"
             target="_blank"
           >
-            site
+            societe.com
           </a>
           en effectuant une <span class="fr-blue-text">recherche avec le nom de votre société</span>.
         </p>
