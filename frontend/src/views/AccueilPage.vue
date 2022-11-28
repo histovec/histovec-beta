@@ -93,20 +93,31 @@ export default defineComponent({
 
   <div class="fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-12  text-center">
-      <h2>Nos garanties</h2>
+      <h3 class="fr-h2">
+        Nos garanties
+      </h3>
     </div>
   </div>
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div v-for="(carteItem, index) in carteItems" :key="index"
-         class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3 fr-col">
-      <CarteDsfrNonCliquable :titre="carteItem.titre" :description="carteItem.description" :image=carteItem.image />
+    <div
+      v-for="(carteItem, index) in carteItems"
+      :key="index"
+      class="fr-col-10  fr-col-md-3  fr-col-lg-3  fr-col-xl-3 fr-col"
+    >
+      <CarteDsfrNonCliquable
+        :titre="carteItem.titre"
+        :description="carteItem.description"
+        :image="carteItem.image"
+      />
     </div>
   </div>
 
 
   <div class="fr-grid-row fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-12  text-center">
-      <h2>Propriétaire ou Acheteur ?</h2>
+      <h3 class="fr-h2">
+        Propriétaire ou Acheteur ?
+      </h3>
       <p class="fr-text--xl">
         Propriétaire, générez le rapport.
       </p>
