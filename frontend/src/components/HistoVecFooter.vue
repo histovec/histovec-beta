@@ -64,7 +64,7 @@ export default defineComponent({
             to: '/mentions-legales',
           },
           {
-            label: 'Données personnelles & Gestion des cookies',
+            label: 'Données personnelles et Gestion des cookies',
             to: '/donnees-personnelles-et-cookies',
           },
         ],
@@ -87,7 +87,7 @@ export default defineComponent({
     no-cookie
     :partners="partners"
     :ecosystem-links="ecosystemLinks"
-    operator-link-text="Logo HistoVec"
+    operator-link-text="Retour à l’accueil"
     operator-to="/accueil"
     :operator-img-src="images.logoHistoVecSvg"
     operator-img-alt="Logo HistoVec"
