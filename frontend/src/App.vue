@@ -37,14 +37,20 @@ export default defineComponent({
       >
       </span> -->
   <LienEvitement />
-  <HistoVecHeader />
+  <HistoVecHeader class="background-default-white"/>
   <main
     id="contenu"
     role="main"
-    class="fr-container fr-mb-6w"
+    class="fr-container fr-mb-6w background-default-white"
   >
     <router-view />
   </main>
-  <HistoVecFooter />
+  <HistoVecFooter class="background-default-white" />
   <!-- </div> -->
 </template>
+
+<style>
+.background-default-white {
+  background-color: white;
+}
+</style>
