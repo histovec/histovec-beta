@@ -4,7 +4,6 @@ import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
 
-import { ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
 
@@ -120,9 +119,6 @@ export default defineComponent({
       // types
       TYPE_IMMATRICULATION,
       OLD_IMMATRICULATION_TYPE,
-
-      // email
-      ANTS_PERSONAL_DATA_EMAIL,
 
       images: {
         plaqueNonSupporteeSvg,
@@ -267,14 +263,14 @@ export default defineComponent({
     raisonSocialeSivErrorMessage () {
       return (
         this.formData.siv.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeSivValid ?
-          'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
+          'La raison sociale doit être renseignée telle qu\'indiquée sur le k&#8203;b&#8203;i&#8203;s&#8203;.' :
           ''
       )
     },
     numeroSirenSivErrorMessage () {
       return (
         !this.isNumeroSirenSivValid ?
-          'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
+          'Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.' :
           ''
       )
     },
@@ -303,14 +299,14 @@ export default defineComponent({
     raisonSocialeFniErrorMessage () {
       return (
         this.formData.fni.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeFniValid ?
-          'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
+          'La raison sociale doit être renseignée telle qu\'indiquée sur le k&#8203;b&#8203;i&#8203;s&#8203;.' :
           ''
       )
     },
     numeroSirenFniErrorMessage () {
       return (
         !this.isNumeroSirenFniValid ?
-          'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
+          'Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.' :
           ''
       )
     },
@@ -509,11 +505,11 @@ export default defineComponent({
     <div class="fr-col-12">
       <p class="fr-text--md">
         HistoVec permet de consulter l'historique administratif de votre véhicule enregistré dans le Système
-        d'Immatriculation des Véhicules (SIV).
+        d'Immatriculation des Véhicules (S&#8203;I&#8203;V&#8203;).
       </p>
       <p class="fr-text--md">
         Pour toute demande de renseignements sur votre dossier ou de correction des informations,
-        adressez-vous à l'Agence Nationale Des Titres Sécurisés (ANTS) en suivant la procédure indiquée sur cette page :
+        adressez-vous à l'Agence Nationale Des Titres Sécurisés (A&#8203;N&#8203;T&#8203;S) en suivant la procédure indiquée sur cette page :
         <a
           class="fr-link"
           href="https://immatriculation.ants.gouv.fr/demarches-en-ligne"
@@ -638,18 +634,18 @@ export default defineComponent({
   <DsfrModal
     ref="modalNumeroSiren"
     :opened="modals.common.numeroSiren.opened"
-    title="Où trouver le numéro de SIREN ?"
+    title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N ?"
     :origin="$refs.buttonNumeroSiren"
     @close="onCloseModalNumeroSiren()"
   >
     <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
       <div class="fr-col-12">
         <p class="fr-text--md">
-          Le <span class="fr-text--bleu">numéro SIREN</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
+          Le <span class="fr-text--bleu">numéro S&#8203;I&#8203;R&#8203;E&#8203;N</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
           de votre société.
         </p>
         <p class="fr-text--md">
-          Il figure sur le <span class="fr-text--bleu">KBIS</span> de votre société.
+          Il figure sur le <span class="fr-text--bleu">K&#8203;B&#8203;I&#8203;S&#8203;</span> de votre société.
         </p>
         <p class="fr-text--md">
           Vous pouvez aussi l'obtenir sur le site
@@ -665,10 +661,10 @@ export default defineComponent({
           en effectuant une <span class="fr-text--bleu">recherche avec le nom de votre société</span>.
         </p>
         <p class="fr-text--md">
-          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de SIREN</span>.
+          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de S&#8203;I&#8203;R&#8203;E&#8203;N</span>.
         </p>
         <p class="fr-text--md">
-          Dans ce cas, <span class="fr-text--bleu">laissez le champs SIREN vide</span>.
+          Dans ce cas, <span class="fr-text--bleu">laissez le champs S&#8203;I&#8203;R&#8203;E&#8203;N vide</span>.
         </p>
       </div>
     </div>
@@ -1009,7 +1005,7 @@ export default defineComponent({
                   v-model="formData.siv.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
                   aria-required="true"
@@ -1032,9 +1028,9 @@ export default defineComponent({
                 <DsfrInput
                   id="form-siv-personne-morale-numero-siren"
                   v-model="formData.siv.titulaire.personneMorale.numeroSiren"
-                  label="Numéro SIREN"
+                  label="Numéro S&#8203;I&#8203;R&#8203;E&#8203;N"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
                   :aria-invalid="!isNumeroSirenSivValid"
                   aria-errormessage="numero-siren-personne-morale-SIV-erreur-message"
@@ -1044,7 +1040,7 @@ export default defineComponent({
                     <span
                       ref="buttonNumeroSiren"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de SIREN de votre société ?"
+                      title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
                       @click="onOpenModalNumeroSiren()"
                     >
                       Où le trouver
@@ -1312,7 +1308,7 @@ export default defineComponent({
                   v-model="formData.fni.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
                   aria-required="true"
@@ -1337,7 +1333,7 @@ export default defineComponent({
                   v-model="formData.fni.titulaire.personneMorale.numeroSiren"
                   label="Numéro SIREN"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
                   :aria-invalid="!isNumeroSirenFniValid"
                   aria-errormessage="numero-siren-personne-morale-FNI-erreur-message"
@@ -1347,7 +1343,7 @@ export default defineComponent({
                     <span
                       ref="buttonNumeroSiren"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de SIREN de votre société ?"
+                      title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
                       @click="onOpenModalNumeroSiren()"
                     >
                       Où le trouver
@@ -1456,7 +1452,7 @@ export default defineComponent({
         title="Historique indisponible à ce jour"
         description="
           L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
-          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (CSA) sur le site de l'ANTS.
+          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (CSA) sur le site de l'A&#8203;N&#8203;T&#8203;S.
         "
       />
     </div>
@@ -1467,7 +1463,7 @@ export default defineComponent({
   >
     <div class="fr-col-12  fr-col-lg-3  fr-col-xl-3  text-center">
       <HistoVecButtonLink
-        label="Obtenir le CSA via l'ANTS"
+        label="Obtenir le CSA via l'A&#8203;N&#8203;T&#8203;S"
         to="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
       />
     </div>
