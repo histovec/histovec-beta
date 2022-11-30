@@ -939,7 +939,7 @@ export default defineComponent({
               class="fr-responsive-img"
               style="height: 5rem;"
               src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-              alt="Lien vers un formulaire permettant de donner son avis sur la démarche HistoVec"
+              alt="Lien vers jedonnemonavis.numerique.gouv.fr pour donner son avis sur la démarche HistoVec"
               title="Je donne mon avis sur cette démarche"
             />
           </a>
@@ -1338,6 +1338,7 @@ export default defineComponent({
                   <a
                     v-if="assets.syntheseMapping[entry].link"
                     class="fr-link"
+                    title="Lien vers service-public.fr"
                     :href="assets.syntheseMapping[entry].link"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -2110,28 +2111,18 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
     <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  text-center">
-      <a
-        id="simplimmatImage"
-        class="fr-link"
-        href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
-        rel="noopener noreferrer"
-        target="_blank"
-        @click="logSimplimmatImage"
-      >
         <img
           class="fr-responsive-img"
-          style="hieght: 5rem;"
           :src="images.logoSimplimmat"
-          alt="Lien vers l'application Simplimmat"
-          title="Logo de l'application Simplimmat"
+          alt=""
         >
-      </a>
     </div>
     <div class="fr-col-12  fr-col-md-8  fr-col-lg-8  fr-col-xl-8  text-center">
       <div class="fr-ml-4w">
         Utilisez maintenant l’application officielle
         <a
           class="fr-link"
+          title="Lien vers securite-routiere.gouv.fr"
           href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
           rel="noopener noreferrer"
           target="_blank"
