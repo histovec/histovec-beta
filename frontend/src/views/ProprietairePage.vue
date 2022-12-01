@@ -246,34 +246,6 @@ export default defineComponent({
 
     // ----- Error messages -----
 
-    nomSivErrorMessage () {
-      return (
-        this.formData.siv.titulaire.particulier.nom && !this.isNomSivValid ?
-          'Le nom doit être renseigné tel qu\'indiqué sur le certificat d\'immatriculation.' :
-          ''
-      )
-    },
-    prenomsSivErrorMessage () {
-      return (
-        this.formData.siv.titulaire.particulier.prenoms && !this.isPrenomsSivValid ?
-          'Le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
-          ''
-      )
-    },
-    raisonSocialeSivErrorMessage () {
-      return (
-        this.formData.siv.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeSivValid ?
-          'La raison sociale doit être renseignée telle qu\'indiquée sur le k&#8203;b&#8203;i&#8203;s&#8203;.' :
-          ''
-      )
-    },
-    numeroSirenSivErrorMessage () {
-      return (
-        !this.isNumeroSirenSivValid ?
-          'Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.' :
-          ''
-      )
-    },
     numeroImmatriculationSivErrorMessage () {
       return (
         this.formData.siv.numeroImmatriculation && !this.isNumeroImmatriculationSivValid ?
@@ -285,28 +257,6 @@ export default defineComponent({
       return (
         this.formData.siv.numeroFormule && !this.isNumeroFormuleSivValid ?
           'Le numéro de formule doit respecter le format "2013BZ80335".' :
-          ''
-      )
-    },
-
-    nomEtPrenomsFniErrorMessage () {
-      return (
-        this.formData.fni.titulaire.particulier.nomEtPrenoms && !this.isNomEtPrenomsFniValid ?
-          'Le nom et le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
-          ''
-      )
-    },
-    raisonSocialeFniErrorMessage () {
-      return (
-        this.formData.fni.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeFniValid ?
-          'La raison sociale doit être renseignée telle qu\'indiquée sur le k&#8203;b&#8203;i&#8203;s&#8203;.' :
-          ''
-      )
-    },
-    numeroSirenFniErrorMessage () {
-      return (
-        !this.isNumeroSirenFniValid ?
-          'Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.' :
           ''
       )
     },
@@ -805,7 +755,7 @@ export default defineComponent({
       class="fr-col-12"
     >
       <DsfrTabs
-        tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format SIV"
+        tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format S&#8203;I&#8203;V"
         :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
         @select-tab="selectSivTab"
       >
@@ -845,7 +795,7 @@ export default defineComponent({
                     <span
                       ref="buttonSivNom"
                       class="fr-link  help-link"
-                      title="Où trouver le nom sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le nom sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNom()"
                     >
                       Où le trouver
@@ -861,8 +811,6 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isPrenomsSivValid"
-                :error-message="prenomsSivErrorMessage"
-                description-id="prenom-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.titulaire.particulier.prenoms"
@@ -881,7 +829,7 @@ export default defineComponent({
                     <span
                       ref="buttonSivPrenoms"
                       class="fr-link  help-link"
-                      title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivPrenoms()"
                     >
                       Où le(s) trouver
@@ -923,7 +871,7 @@ export default defineComponent({
                     <span
                       ref="buttonSivNumeroImmatriculation"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroImmatriculation()"
                     >
                       Où le trouver
@@ -959,7 +907,7 @@ export default defineComponent({
                     <span
                       ref="buttonSivNumeroFormule"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroFormule()"
                     >
                       Où le trouver
@@ -993,8 +941,6 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeSivValid"
-                :error-message="raisonSocialeSivErrorMessage"
-                description-id="raison-sociale-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.titulaire.personneMorale.raisonSociale"
@@ -1017,7 +963,7 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenSivValid"
-                :error-message="numeroSirenSivErrorMessage"
+                :error-message='!isNumeroSirenSivValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'              >
                 description-id="numero-siren-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
@@ -1076,7 +1022,7 @@ export default defineComponent({
                     <span
                       ref="buttonSivNumeroImmatriculation"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroImmatriculation()"
                     >
                       Où le trouver
@@ -1112,7 +1058,7 @@ export default defineComponent({
                     <span
                       ref="buttonSivNumeroFormule"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroFormule()"
                     >
                       Où le trouver
@@ -1156,8 +1102,6 @@ export default defineComponent({
             <div class="fr-col-12">
               <DsfrInputGroup
                 :is-valid="isNomEtPrenomsFniValid"
-                :error-message="nomEtPrenomsFniErrorMessage"
-                description-id="nom-et-prenom-particulier-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.titulaire.particulier.nomEtPrenoms"
@@ -1289,8 +1233,6 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeFniValid"
-                :error-message="raisonSocialeFniErrorMessage"
-                description-id="raison-sociale-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.titulaire.personneMorale.raisonSociale"
@@ -1313,12 +1255,12 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenFniValid"
-                :error-message="numeroSirenFniErrorMessage"
+                :error-message='!isNumeroSirenFniValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'
                 description-id="numero-siren-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.titulaire.personneMorale.numeroSiren"
-                  label="Numéro SIREN"
+                  label="Numéro S&#8203;I&#8203;R&#8203;E&#8203;N"
                   label-visible
                   hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
@@ -1437,7 +1379,7 @@ export default defineComponent({
         title="Historique indisponible à ce jour"
         description="
           L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
-          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (CSA) sur le site de l'A&#8203;N&#8203;T&#8203;S.
+          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (C&#8203;S&#8203;A) sur le site de l'A&#8203;N&#8203;T&#8203;S.
         "
       />
     </div>
@@ -1448,7 +1390,7 @@ export default defineComponent({
   >
     <div class="fr-col-12  fr-col-lg-3  fr-col-xl-3  text-center">
       <HistoVecButtonLink
-        label="Obtenir le CSA via l'A&#8203;N&#8203;T&#8203;S"
+        label="Obtenir le C&#8203;S&#8203;A via l'A&#8203;N&#8203;T&#8203;S"
         to="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
       />
     </div>
