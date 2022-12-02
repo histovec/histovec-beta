@@ -797,6 +797,7 @@ export default defineComponent({
                   v-model="formData.siv.titulaire.particulier.nom"
                   label="Nom de naissance"
                   label-visible
+                  autocomplete="family-name"
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
@@ -830,6 +831,7 @@ export default defineComponent({
                   v-model="formData.siv.titulaire.particulier.prenoms"
                   label="Prénom(s)"
                   label-visible
+                  autocomplete="given-name"
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
@@ -1114,6 +1116,7 @@ export default defineComponent({
                   v-model="formData.fni.titulaire.particulier.nomEtPrenoms"
                   label="Nom de naissance et prénom(s)"
                   label-visible
+                  autocomplete="name"
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
