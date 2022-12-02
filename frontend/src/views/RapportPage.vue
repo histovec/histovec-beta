@@ -932,6 +932,7 @@ export default defineComponent({
             id="monAvisImage"
             href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
             rel="noopener noreferrer"
+            title="Lien vers jedonnemonavis.numerique.gouv.fr pour donner son avis sur la démarche HistoVec"
             target="_blank"
             @click="logMonAvisImage"
           >
@@ -939,8 +940,7 @@ export default defineComponent({
               class="fr-responsive-img"
               style="height: 5rem;"
               src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-              alt="Lien vers jedonnemonavis.numerique.gouv.fr pour donner son avis sur la démarche HistoVec"
-              title="Je donne mon avis sur cette démarche"
+              alt=""
             />
           </a>
         </div>
