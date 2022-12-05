@@ -48,7 +48,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
     perte_ci,
     ci_vole,
     nb_titulaires,
-    critair,
     vehicule_vole,
     is_fni,
     date_dernier_sinistre,
@@ -215,7 +214,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
     },
     etat: {
       nombre_de_titulaires: nb_titulaires,
-      vignette_critair: critair,
       vole: vehicule_vole,
       procedures_ve: {
         numero_immatriculation_au_format_fni: is_fni,  // @todo @isFni: Continuer d'exposer le champs "is_fni" côté DATA. Finalement on s'en sert.

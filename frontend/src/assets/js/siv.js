@@ -460,7 +460,6 @@ const processVehiculeData = (vehiculeData) => {
 
   const {
     nombreDeTitulaires,
-    vignetteCritair,
     proceduresVE,
   } = etatVehicule
 
@@ -522,7 +521,6 @@ const processVehiculeData = (vehiculeData) => {
     lastSinistreYear,
     sinistresCount: nombreDeProceduresVE,
     lastResolutionYear,
-    vignetteCritair,
     usage,
   }
 
