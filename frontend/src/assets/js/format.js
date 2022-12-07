@@ -45,8 +45,7 @@ export const formatIsoToFrDate = (isoDate) => {
 		return ''
 	}
 
-	const date = new Date(Date.parse(isoDate) + new Date().getTimezoneOffset() * 60 * 1000 + 120 * 60 * 1000 )
-	return Intl.DateTimeFormat('fr-FR').format(date)
+  return new Date(isoDate).toLocaleDateString('fr-FR')
 }
 
 export const formatIsoToFrDateOrDefault = (isoDate, defaultValue=MISSING_VALUE) => {
