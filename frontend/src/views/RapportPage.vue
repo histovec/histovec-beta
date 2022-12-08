@@ -1754,10 +1754,11 @@ export default defineComponent({
                     <span>
                       <a
                         class="fr-link"
+                        title="En savoir plus sur les gages - Lien vers service-public.fr"
                         :href="assets.syntheseMapping['otci'].link"
                         rel="noopener noreferrer"
                         target="_blank"
-                      >
+                      > En savoir plus
                       </a>
                     </span>
                   </h6>
@@ -1780,10 +1781,11 @@ export default defineComponent({
                     <span>
                       <a
                         class="fr-link"
+                        title="En savoir plus sur les oppositions - Lien vers service-public.fr"
                         :href="assets.syntheseMapping['otci'].link"
                         rel="noopener noreferrer"
                         target="_blank"
-                      >
+                      > En savoir plus
                       </a>
                     </span>
                   </h6>
