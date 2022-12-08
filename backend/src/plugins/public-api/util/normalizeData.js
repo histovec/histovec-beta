@@ -27,6 +27,15 @@ const normalizeToBoolean = (value) => {
   }
 }
 
+const formatDateFrToEn = (date) => {
+  const frDateMatches = date.match(FR_DATE_EXTRACT_REGEX)
+  if (frDateMatches && frDateMatches[1] && frDateMatches[2] && frDateMatches[3]) {
+    return `${frDateMatches[3]}-${frDateMatches[2]}-${frDateMatches[1]}`
+  }
+
+  return null
+}
+
 // @todo @isoDateNormalization:
 // Supprimer la normalisation des dates lorsque la DATA utilisera des dates au format ISO8601 dans tous les champs du V
 // et qu'il n'y aura plus aucune date au format FR (DD/MM/YYYY)
@@ -36,14 +45,14 @@ const normalizeToISODate = (value) => {
     return
   }
 
-  const frDateMatches = value.match(FR_DATE_EXTRACT_REGEX)
-  if (frDateMatches && frDateMatches[1] && frDateMatches[1] && frDateMatches[1]) {
-    return `${frDateMatches[3]}-${frDateMatches[2]}-${frDateMatches[1]}`
-  }
+  const dateEn = formatDateFrToEn(value)
+  if (dateEn) return dateEn;
 
-  const isoDateMatches = value.match(ISO_8601_DATE_EXTRACT_REGEX)
-  if (isoDateMatches && isoDateMatches[0]) {
-    return isoDateMatches[0]
+  if (value.match(ISO_8601_DATE_EXTRACT_REGEX)) {
+    const dateTimeFr = new Date(value).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })
+
+    const dateTimeEn = formatDateFrToEn(dateTimeFr)
+    if (dateTimeEn) return dateTimeEn;
   }
 
   throw new Error(`${value} of type is not convertible to ISO8601 Date`)
