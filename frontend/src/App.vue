@@ -36,9 +36,9 @@ export default defineComponent({
       >
       </span> -->
   <HistoVecHeader />
-  <div class="fr-container  fr-mb-6w">
+  <main class="fr-container  fr-mb-6w">
     <router-view />
-  </div>
+  </main>
   <HistoVecFooter />
   <!-- </div> -->
 </template>
