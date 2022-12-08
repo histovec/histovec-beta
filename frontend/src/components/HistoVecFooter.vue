@@ -45,7 +45,7 @@ export default defineComponent({
           name: 'Sécurité routière',
           href: 'https://securite-routiere.gouv.fr',
           logo: logoSecuriteRoutiereMb90Svg,
-          alt: 'Sécurité routière',
+          alt: 'Redirection vers le site securite-routiere.gouv.fr',
         },
       },
       beforeMandatoryLinks: [
