@@ -50,7 +50,9 @@ const normalizeToISODate = (value) => {
 
   if (value.match(ISO_8601_DATE_EXTRACT_REGEX)) {
     const dateTimeFr = new Date(value).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })
-    return formatDateFrToEn(dateTimeFr)
+
+    const dateTimeEn = formatDateFrToEn(dateTimeFr)
+    if (dateTimeEn) return dateTimeEn;
   }
 
   throw new Error(`${value} of type is not convertible to ISO8601 Date`)
