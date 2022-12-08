@@ -49,14 +49,14 @@ export default defineComponent({
             text: 'Accueil',
           },
           {
-            text: 'Données personnelles & Gestion des cookies',
+            text: 'Données personnelles et Gestion des cookies',
           },
         ]"
       />
     </div>
 
     <div class="fr-col-12">
-      <h1>Données personnelles & Gestion des cookies</h1>
+      <h1>Données personnelles et Gestion des cookies</h1>
 
       <h5>
         Introduction
