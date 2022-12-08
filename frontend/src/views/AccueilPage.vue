@@ -88,7 +88,7 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :id="image.id" :src="image.accueilSVG" :alt="image.alt"/>
+      <ImagePresentation :id="image.id" :src="image.accueilSVG" />
     </div>
     <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
       <h1>Partagez l'historique de votre véhicule</h1>
