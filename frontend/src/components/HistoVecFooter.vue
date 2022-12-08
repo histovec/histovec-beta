@@ -9,7 +9,7 @@ export default defineComponent({
   name: 'HistoVecFooter',
   data () {
     return {
-      ecosystemLinks: [
+      contentLinks: [
         {
           label: 'legifrance.gouv.fr',
           href: 'https://legifrance.gouv.fr',
@@ -26,7 +26,6 @@ export default defineComponent({
           label: 'data.gouv.fr',
           href: 'https://data.gouv.fr',
         },
-
         {
           label: 'interieur.gouv.fr',
           href: 'https://interieur.gouv.fr',
@@ -40,72 +39,86 @@ export default defineComponent({
           href: 'https://immatriculation.ants.gouv.fr',
         },
       ],
-      partners: {
-        mainPartner: {
-          name: 'Sécurité routière',
-          href: 'https://securite-routiere.gouv.fr',
-          logo: logoSecuriteRoutiereMb90Svg,
-          alt: 'Redirection vers le site securite-routiere.gouv.fr',
-        },
-      },
-      beforeMandatoryLinks: [
-        {
-          label: 'Plan du site',
-          to: '/plan-du-site',
-        },
-      ],
       mandatoryLinks: [
           {
+            label: 'Plan du site',
+            href: '/histovec/plan-du-site',
+          },
+          {
             label: 'Accessibilité : non conforme',
-            to: '/accessibilite',
+            href: '/histovec/accessibilite',
           },
           {
             label: 'Mentions légales',
-            to: '/mentions-legales',
+            href: '/histovec/mentions-legales',
           },
           {
             label: 'Données personnelles et Gestion des cookies',
-            to: '/donnees-personnelles-et-cookies',
+            href: '/histovec/donnees-personnelles-et-cookies',
           },
         ],
       images: {
         logoHistoVecSvg,
         logoSecuriteRoutiereMb90Svg,
       },
-      licenceText: 'Sauf mention contraire, tous les contenus de ce site sont sous ',
     }
   },
 })
 </script>
 
 <template>
-  <DsfrFooter
-    :before-mandatory-links="beforeMandatoryLinks"
-    :mandatory-links="mandatoryLinks"
-    :logo-text="['Ministère', 'de l’intérieur']"
-    home-link="/accueil"
-    no-cookie
-    :partners="partners"
-    :ecosystem-links="ecosystemLinks"
-    operator-link-text="Retour à l’accueil"
-    operator-to="/accueil"
-    :operator-img-src="images.logoHistoVecSvg"
-    operator-img-alt="Logo HistoVec"
-    :licence-text="licenceText"
-    licence-to="https://github.com/etalab/licence-ouverte/blob/master/LO.md"
-    licence-name="licence etalab-2.0"
-  >
-    <template #description>
-      <div>
-        <p>
-          HistoVec : un service proposé par la délégation à la sécurité routière.
-        </p>
-        <p>
-          Jouez la transparence : partagez l'historique de votre véhicule.
-        </p>
+  <footer class="fr-footer" role="contentinfo" id="footer">
+    <div class="fr-container">
+      <div class="fr-footer__body">
+        <div class="fr-footer__brand fr-enlarge-link">
+          <p class="fr-logo">
+            Ministère
+            <br>de l’intérieur
+          </p>
+          <a class="fr-footer__brand-link" href="/" title="Ministère de l’intérieur - HistoVec - Retour à l’accueil du site">
+            <img class="fr-footer__logo" style="width:7.5rem;" :src='images.logoHistoVecSvg' alt="" />
+          </a>
+        </div>
+        <div class="fr-footer__content">
+          <p class="fr-footer__content-desc">HistoVec : un service proposé par la délégation à la sécurité routière.
+          </p>
+          <p class="fr-footer__content-desc">Jouez la transparence : partagez l'historique de votre véhicule.
+          </p>
+          <ul class="fr-footer__content-list">
+            <li v-for="(contentLink, index) in contentLinks"
+                :key="index"
+                class="fr-footer__content-item"
+            >
+              <a class="fr-footer__content-link" target="_blank" :href="contentLink.href">{{ contentLink.label }}</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </template>
-  </DsfrFooter>
+      <div class="fr-footer__partners">
+        <h4 class="fr-footer__partners-title">Nos partenaires</h4>
+        <div class="fr-footer__partners-logos">
+          <div class="fr-footer__partners-main">
+            <a class="fr-footer__partners-link" href="https://securite-routiere.gouv.fr" title="Securité routière - Lien vers le site securite-routiere.gouv">
+              <img class="fr-footer__logo" style="height: 5.625rem" :src='images.logoSecuriteRoutiereMb90Svg' alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="fr-footer__bottom">
+        <ul class="fr-footer__bottom-list">
+          <li v-for="(mandatoryLink, index) in mandatoryLinks"
+              :key="index"
+              class="fr-footer__bottom-item"
+          >
+            <a class="fr-footer__bottom-link" :href="mandatoryLink.href">{{ mandatoryLink.label }}</a>
+          </li>
+        </ul>
+        <div class="fr-footer__bottom-copy">
+          <p>Sauf mention contraire, tous les contenus de ce site sont sous <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank">licence etalab-2.0</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 </template>
-
 
