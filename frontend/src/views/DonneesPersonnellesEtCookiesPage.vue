@@ -117,7 +117,16 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <DsfrTable
         :title="title"
-        :headers="['Type de données', 'Durée de conservation']"
+        :headers="[
+          {
+            text: 'Type de données',
+            headerAttrs: {scope: 'col'}
+          },
+          {
+            text: 'Durée de conservation',
+            headerAttrs: {scope: 'col'}
+          }
+        ]"
         :rows="[
           [
             'Issues du SIV, notamment les données d’identification du véhicule (numéro d’immatriculation, numéro VIN, numéro de formule du certificat d’immatriculation… )',
