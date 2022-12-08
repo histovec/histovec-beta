@@ -120,7 +120,6 @@ export const vehiculeMapping = ({
     },
     etat: {
       nombre_de_titulaires: nombreDeTitulaires,
-      vignette_critair: vignetteCritair,
       vole: isVehiculeVole,
       procedures_ve: {
         numero_immatriculation_au_format_fni: isNumeroImmatriculationAuFormatFNI,
@@ -219,7 +218,6 @@ export const vehiculeMapping = ({
     },
     etat: {
       nombreDeTitulaires,
-      vignetteCritair,
       isVehiculeVole,
       proceduresVE: {
         isNumeroImmatriculationAuFormatFNI,

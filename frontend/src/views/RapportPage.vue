@@ -38,7 +38,6 @@ import { RESULTAT } from '@/constants/controlesTechniques.js'
 import { REPORT_TABS } from '@/constants/reportTabs.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@/constants/type.js'
 import { DEFAULT_DATE_UPDATE } from '@/constants/v.js'
-import { VIGNETTE } from '@/constants/vehicle/critair.js'
 import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
 import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@/constants/usagesSynthese.js'
 
@@ -46,13 +45,6 @@ import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
 import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
-// @todo @lazyLoadCritairImage1 Le lazy loading dynamique serait bien mieux, mais je n'ai pas réussi à le mettre en place avec le temps qu'il me reste
-import logoVignetteCritair1 from '@/assets/img/critair/vignette_1.png'
-import logoVignetteCritair2 from '@/assets/img/critair/vignette_2.png'
-import logoVignetteCritair3 from '@/assets/img/critair/vignette_3.png'
-import logoVignetteCritair4 from '@/assets/img/critair/vignette_4.png'
-import logoVignetteCritair5 from '@/assets/img/critair/vignette_5.png'
-import logoVignetteCritairElectrique from '@/assets/img/critair/vignette_electrique.png'
 
 // CSA
 import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
@@ -85,7 +77,6 @@ export default defineComponent({
       holderId: null,
       holderKey: null,
       processedVehiculeData: {
-        vignetteCritair: null,
         administratif: {
           opposition: {},
           csaLabels: {},
@@ -138,15 +129,6 @@ export default defineComponent({
         rapportAcheteurSvg,
         rapportVendeurSvg,
 
-        critair: {
-          logoVignetteCritair1,
-          logoVignetteCritair2,
-          logoVignetteCritair3,
-          logoVignetteCritair4,
-          logoVignetteCritair5,
-          logoVignetteCritairElectrique,
-        },
-
         csa: {
           logoHistoVecBytes: '',
           logoMIBytes: '',
@@ -157,7 +139,6 @@ export default defineComponent({
         REPORT_TABS,
         USAGE_AGRICOLE,
         USAGE_COLLECTION,
-        VIGNETTE,
       },
 
       assets: {
@@ -424,10 +405,6 @@ export default defineComponent({
     titulaire () {
       return this.processedVehiculeData.titulaire
     },
-    vignetteCritair () {
-      return this.processedVehiculeData.vignetteCritair
-    },
-
 
     // ------------------ email ---------------------
 
@@ -638,35 +615,6 @@ export default defineComponent({
   },
 
   methods: {
-    getVignetteCritairImage(vignetteCritair) {
-      // @todo @lazyLoadCritairImage2 lazy loader les images dynamiquement
-
-      if (vignetteCritair === VIGNETTE[1]) {
-        return this.images.critair.logoVignetteCritair1
-      }
-
-      if (vignetteCritair === VIGNETTE[2]) {
-        return this.images.critair.logoVignetteCritair2
-      }
-
-      if (vignetteCritair === VIGNETTE[3]) {
-        return this.images.critair.logoVignetteCritair3
-      }
-
-      if (vignetteCritair === VIGNETTE[4]) {
-        return this.images.critair.logoVignetteCritair4
-      }
-
-      if (vignetteCritair === VIGNETTE[5]) {
-        return this.images.critair.logoVignetteCritair5
-      }
-
-      if (vignetteCritair === VIGNETTE['ELECTRIQUE']) {
-        return this.images.critair.logoVignetteCritairElectrique
-      }
-
-      return
-    },
 
     // ModalPartagerRapport
     onCloseModalPartagerRapport () {
@@ -1379,84 +1327,7 @@ export default defineComponent({
                 </p>
               </div>
 
-              <div class="fr-pb-3w  fr-pt-0">
-                <h6 class="fr-mb-0  fr-pb-2w">
-                  Crit'Air
-                  <img
-                    v-if="vignetteCritair !== constants.VIGNETTE.NON_CLASSE"
-                    class="fr-img-responsive"
-                    style="height: 1.5rem;"
-                    :src="getVignetteCritairImage(vignetteCritair)"
-                    alt="Vignette Critair"
-                    title="Vignette Critair"
-                  >
-                </h6>
-                <p
-                  v-if="vignetteCritair"
-                  class="fr-text--md  fr-mb-1v"
-                >
-                  <span
-                    v-if="vignetteCritair === constants.VIGNETTE.NON_CLASSE"
-                    class="fr-blue-text"
-                  >
-                    <VIcon
-                      name="ri-question-line"
-                    />
-                  </span>
 
-                  <span
-                    v-if="vignetteCritair !== constants.VIGNETTE.NON_CLASSE"
-                    class="fr-blue-text"
-                  >
-                    {{ assets.syntheseMapping['critair'].text }} {{ vignetteCritair }}
-                  </span>
-                  <span
-                    v-if="vignetteCritair === constants.VIGNETTE.NON_CLASSE"
-                    class="fr-blue-text"
-                  >
-                    {{ assets.syntheseMapping['critair_non_classe'].text }}
-                  </span>
-                  <br />
-
-                  {{ assets.syntheseMapping['critair'].adv }}
-                  <br />
-                  <a
-                    v-if="assets.syntheseMapping['critair'].link"
-                    class="fr-link"
-                    :href="assets.syntheseMapping['critair'].link"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    En savoir plus
-                  </a>
-                </p>
-
-                <p
-                  v-if="!vignetteCritair && !processedVehiculeData.usage.vehiculeDeCollection"
-                  class="fr-text--md  fr-mb-1v"
-                >
-                  <span
-                    class="fr-blue-text"
-                  >
-                    <VIcon
-                      name="ri-indeterminate-circle-fill"
-                    />
-                  </span>
-                  Votre véhicule ne répond pas aux critères retenus pour l'attribution d'une vignette Crit'air ou les informations dont nous disposons sont insuffisantes
-
-                  {{ assets.syntheseMapping['critair'].adv }}
-                  <br />
-                  <a
-                    v-if="assets.syntheseMapping['critair'].link"
-                    class="fr-link"
-                    :href="assets.syntheseMapping['critair'].link"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    En savoir plus
-                  </a>
-                </p>
-              </div>
             </div>
           </div>
         </DsfrTabContent>

@@ -1,6 +1,5 @@
 import Joi from 'joi'
 import { NATURE, RESULTAT } from '../../constant/controlesTechniques.js'
-import { VIGNETTE } from '../../constant/critair.js'
 
 import config from '../../config.js'
 
@@ -81,7 +80,6 @@ export const reportResponseSchema = Joi.object({
     }).label(`${RESPONSE_PREFIX}certificat_immatriculation`),
     etat: Joi.object({
       nombre_de_titulaires: Joi.number().integer().min(0).description('Nombre de titulaire(s) depuis la date de 1ère immatriculation en France du véhicule (titulaire actuel compris). Seules les immatriculations en France sont comptabilisées.'),
-      vignette_critair: Joi.string().valid(...Object.values(VIGNETTE)).description('Numéro de la vignette Critair.'),
       vole: Joi.boolean().description('Le véhicule a été volé.'),
       procedures_ve: Joi.object({
         numero_immatriculation_au_format_fni: Joi.boolean().description('Le véhicule possède encore un numéro d\'immatriculation au format FNI.'),
