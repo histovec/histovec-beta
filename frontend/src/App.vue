@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 
 import HistoVecHeader from '@/components/HistoVecHeader.vue'
 import HistoVecFooter from '@/components/HistoVecFooter.vue'
+import LienEvitement from '@/components/LienEvitement.vue'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -15,7 +16,7 @@ if (localStorage.getItem('userId') === null) {
 
 export default defineComponent({
   name: 'App',
-  components: { HistoVecHeader, HistoVecFooter },
+  components: {LienEvitement, HistoVecHeader, HistoVecFooter },
 })
 </script>
 
@@ -35,8 +36,9 @@ export default defineComponent({
         @shortkey="$store.commit('toggleConfig', index)"
       >
       </span> -->
+  <LienEvitement />
   <HistoVecHeader />
-  <main class="fr-container  fr-mb-6w">
+  <main class="fr-container  fr-mb-6w" id="contenu">
     <router-view />
   </main>
   <HistoVecFooter />
