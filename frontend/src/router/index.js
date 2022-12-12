@@ -98,7 +98,6 @@ export default createRouter({
     return {
       top: 0,
       left: 0,
-      behavior: 'smooth',
     }
   },
 })
