@@ -1,17 +1,29 @@
+<script>
+import {defineComponent} from 'vue'
+
+export default defineComponent({
+  name: 'LienEvitement',
+  data () {
+    return {
+      links: [
+        {
+          id: 'contenu',
+          text: 'Contenu',
+        },
+        {
+          id: 'button-menu-header',
+          text: 'Menu',
+        },
+        {
+          id: 'footer',
+          text: 'Pied de page',
+        },
+      ],
+    }
+  },
+})
+</script>
+
 <template>
-  <div class="fr-skiplinks">
-    <nav class="fr-container" role="navigation" aria-label="Accès rapide">
-      <ul class="fr-skiplinks__list">
-        <li>
-          <a class="fr-link" href="#contenu">Contenu</a>
-        </li>
-        <li>
-          <a class="fr-link" href="#button-menu-header">Menu</a>
-        </li>
-        <li>
-          <a class="fr-link" href="#footer">Pied de page</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  <DsfrSkipLinks :links="links" />
 </template>
