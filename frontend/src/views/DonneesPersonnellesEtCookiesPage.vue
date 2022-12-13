@@ -61,20 +61,24 @@ export default defineComponent({
       <h5>
         Introduction
       </h5>
-      <p>
-        Conformément à la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés modifiée et au règlement général sur la protection des données (RGPD), la déléguée interministérielle à la sécurité routière (Place Beauvau 75800 Paris CEDEX 08), met en œuvre le service HistoVec (Historique des Véhicules) dont les finalités sont les suivantes :
+      <div>
+        Conformément à la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés
+        modifiée et au règlement général sur la protection des données (RGPD), la déléguée interministérielle à la
+        sécurité routière (Place Beauvau 75800 Paris CEDEX 08), met en œuvre le service HistoVec (Historique des
+        Véhicules) dont les finalités sont les suivantes :
         <ul class="fr-ml-4w  fr-pl-0">
           <li>Permettre aux propriétaires de véhicules de générer et de consulter l'historique et les informations techniques et administratives du véhicule ;</li>
           <li>Permettre de communiquer ce rapport à un acheteur potentiel ;</li>
           <li>Editer le certificat de situation administrative prévu à l’article R. 322-4 du code de la route.</li>
         </ul>
-      </p>
+      </div>
 
       <h5>
         Données collectées
       </h5>
-      <p>
-        Ce téléservice a pour fondement juridique l’article 6 .1.e) du RGPD : « l'exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
+      <div>
+        Ce téléservice a pour fondement juridique l’article 6 .1.e) du RGPD : « l'exécution d'une mission d'intérêt
+        public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
         Il collecte les catégories de données suivantes :
         <ul class="fr-ml-4w  fr-pl-0">
           <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° SIREN et/ou n° SIRET) ;</li>
@@ -83,7 +87,7 @@ export default defineComponent({
           <li>Traces fonctionnelles : deux traceurs utilisés par l'observatoire de la qualité des démarches numériques. Ces traceurs sont activés par les utilisateurs qui donnent leurs avis sur le site HistoVec, à destination de l'observatoire de la qualité des démarches numériques. Ils portent sur l’identifiant de session, et la langue et la mesure d'audience.</li>
           <li>Statistiques.</li>
         </ul>
-      </p>
+      </div>
 
       <p>
         Les données d’identification des personnes et d’historique du véhicule sont collectées dans le Système d’immatriculation des Véhicules (SIV) et l’UTAC-OTC.
@@ -116,7 +120,8 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <DsfrTable
-        :title="title"
+        :title="'Durée de conservation des données personnelles'"
+        :no-caption="true"
         :headers="[
           {
             text: 'Type de données',
