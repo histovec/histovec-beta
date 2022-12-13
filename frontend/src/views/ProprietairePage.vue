@@ -335,18 +335,6 @@ export default defineComponent({
   },
 
   methods: {
-    selectTypeImmatriculation (typeImmatriculation) {
-      this.formData.typeImmatriculation = typeImmatriculation
-      if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
-        this.selectSivTab(0)
-        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
-      }
-      if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-        this.selectFniTab(0)
-        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
-      }
-    },
-
     // Modales communes (SIV et FNI)
     onOpenModalNumeroSiren () {
       this.modals.common.numeroSiren.opened = true
@@ -481,6 +469,12 @@ export default defineComponent({
         },
       }
     },
+    setOpacite (typeImmatriculationCompare) {
+      return this.formData.typeImmatriculation && this.formData.typeImmatriculation !== typeImmatriculationCompare
+    },
+    setActive (typeImmatriculationCompare) {
+      return this.formData.typeImmatriculation === typeImmatriculationCompare;
+    },
   },
 })
 </script>
@@ -536,49 +530,113 @@ export default defineComponent({
       </p>
     </div>
   </div>
-
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-11  fr-col-lg-8  fr-col-xl-8  text-center">
       <h6>Veuillez sélectionner le format d'immatriculation de votre véhicule</h6>
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
-        :src="images.plaqueSivSvg"
-        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.SIV)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation depuis 2009
-      </p>
-    </div>
-
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
-        :src="images.plaqueFniSvg"
-        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.FNI)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation avant 2009
-      </p>
-    </div>
-
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
-        :src="images.plaqueNonSupporteeSvg"
-        @click="() => selectTypeImmatriculation(OLD_IMMATRICULATION_TYPE)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation avant 1995
-      </p>
-    </div>
+  <div class="fr-form-group">
+    <fieldset class="fr-fieldset">
+      <legend
+        id="radio-rich-legend"
+        class="fr-fieldset__legend"
+      >
+        Sélectionner le type de votre plaque d'immatriculation :
+      </legend>
+      <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
+        <li class="bouton_immatriculation__position">
+          <label :for="TYPE_IMMATRICULATION.SIV">
+            <div
+              class="card-immatriculation"
+              :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.SIV) }"
+            >
+              <div class="card-immatriculation--image--wrap">
+                <img
+                  class="card-immatriculation--image"
+                  :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.SIV) }"
+                  :src="images.plaqueSivSvg"
+                  alt="Format d'immatriculation depuis 2009"
+                  title="Format d'immatriculation depuis 2009"
+                />
+              </div>
+              <input
+                :id="TYPE_IMMATRICULATION.SIV"
+                name="Immatriculation depuis 2009"
+                v-model="formData.typeImmatriculation"
+                class="card-immatriculation--radio"
+                type="radio"
+                :value="TYPE_IMMATRICULATION.SIV"
+              >
+              <div
+                class="fr-label"
+              >Immatriculation depuis 2009
+              </div>
+            </div>
+          </label>
+        </li>
+        <li class="bouton_immatriculation__position">
+          <label :for="TYPE_IMMATRICULATION.FNI">
+            <div
+              class="card-immatriculation"
+              :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.FNI) }"
+            >
+              <div class="card-immatriculation--image--wrap">
+                <img
+                  class="card-immatriculation--image"
+                  :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.FNI) }"
+                  :src="images.plaqueFniSvg"
+                  alt="Format d'immatriculation avant 2009"
+                  title="Format d'immatriculation avant 2009"
+                />
+              </div>
+              <input
+                :id="TYPE_IMMATRICULATION.FNI"
+                name="Immatriculation avant 2009"
+                v-model="formData.typeImmatriculation"
+                class="card-immatriculation--radio"
+                type="radio"
+                :value="TYPE_IMMATRICULATION.FNI"
+              >
+              <div
+                class="fr-label"
+              >Immatriculation avant 2009
+              </div>
+            </div>
+          </label>
+        </li>
+        <li class="bouton_immatriculation__position">
+          <label :for="OLD_IMMATRICULATION_TYPE">
+            <div
+              class="card-immatriculation"
+              :class="{ 'card-immatriculation--active': setActive(OLD_IMMATRICULATION_TYPE) }"
+            >
+              <div class="card-immatriculation--image--wrap">
+                <img
+                  class="card-immatriculation--image"
+                  :class="{ 'card-immatriculation--image--opacity': setOpacite(OLD_IMMATRICULATION_TYPE) }"
+                  :src="images.plaqueNonSupporteeSvg"
+                  alt="Format d'immatriculation avant 1995"
+                  title="Format d'immatriculation avant 1995"
+                />
+              </div>
+              <input
+                :id="OLD_IMMATRICULATION_TYPE"
+                name="Immatriculation avant 1995"
+                v-model="formData.typeImmatriculation"
+                class="card-immatriculation--radio"
+                type="radio"
+                :value="OLD_IMMATRICULATION_TYPE"
+              >
+              <div
+                class="fr-label"
+              >Immatriculation avant 1995
+              </div>
+            </div>
+          </label>
+        </li>
+      </ul>
+    </fieldset>
   </div>
 
   <!-- Modals -->
@@ -1369,15 +1427,6 @@ export default defineComponent({
   font-weight: bold !important;
 }
 
-.histovec-numero-immatriculation {
-  cursor: pointer;
-  height: 2.5rem;
-}
-
-.histovec-numero-immatriculation-opacity {
-  opacity: 0.2;
-}
-
 .required-label {
   color: red;
 }
@@ -1393,5 +1442,42 @@ export default defineComponent({
 
 .help-icon {
   margin-left: 0.2rem;
+}
+.card-immatriculation {
+  text-align: center;
+  width: 270px;
+  margin: 1rem;
+  cursor: pointer;
+  background: var(--background-default-grey);
+  border: 2px var(--grey-925-125) solid;
+  padding: 1rem;
+}
+.card-immatriculation--active {
+  border-color: var(--blue-france-sun-113-625);
+}
+.card-immatriculation:hover,
+.card-immatriculation:focus,
+.card-immatriculation:focus-within {
+  background: var(--grey-1000-50-hover);
+  outline: 2px solid var(--info-425-625-hover);
+}
+.card-immatriculation:hover img,
+.card-immatriculation:focus img,
+.card-immatriculation:focus-within img {
+  opacity: 1;
+}
+.card-immatriculation--image--wrap {
+  height: 70px;
+  width: 100%;
+}
+.card-immatriculation--image {
+  background: var(--background-default-grey);
+  height: 3rem;
+}
+.card-immatriculation--image--opacity {
+  opacity: 0.2;
+}
+.card-immatriculation--radio {
+  outline:none;
 }
 </style>
