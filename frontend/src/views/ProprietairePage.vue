@@ -368,18 +368,6 @@ export default defineComponent({
   },
 
   methods: {
-    selectTypeImmatriculation (typeImmatriculation) {
-      this.formData.typeImmatriculation = typeImmatriculation
-      if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
-        this.selectSivTab(0)
-        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
-      }
-      if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-        this.selectFniTab(0)
-        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
-      }
-    },
-
     // Modales communes (SIV et FNI)
     onOpenModalNumeroSiren () {
       this.modals.common.numeroSiren.opened = true
