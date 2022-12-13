@@ -459,9 +459,13 @@ export default defineComponent({
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-0"
   >
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+      <p class="fr-text--xs">
+        Tous les champs sont obligatoires.
+      </p>
       <DsfrInputGroup
         :is-valid="isMessageEmailValid"
         :error-message="messageEmailErrorMessage"
+        description-id="email-erreur-message"
       >
         <DsfrInput
           v-model="messageEmail"
@@ -470,17 +474,17 @@ export default defineComponent({
           hint="Votre email"
           type="email"
           required
-        >
-          <template #required-tip>
-            <em class="required-label"> *</em>
-          </template>
-        </DsfrInput>
+          :aria-invalid="!isMessageEmailValid"
+          aria-errormessage="email-erreur-message"
+          aria-describedby="email-erreur-message"
+        />
       </DsfrInputGroup>
     </div>
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <DsfrInputGroup
         :is-valid="isMessageValid"
         :error-message="messageErrorMessage"
+        description-id="message-erreur-message"
       >
         <DsfrInput
           v-model="message"
@@ -489,11 +493,10 @@ export default defineComponent({
           hint="Votre message"
           is-textarea
           required
-        >
-          <template #required-tip>
-            <em class="required-label"> *</em>
-          </template>
-        </DsfrInput>
+          :aria-invalid="!isMessageValid"
+          aria-errormessage="message-erreur-message"
+          aria-describedby="message-erreur-message"
+        />
       </DsfrInputGroup>
     </div>
     <div
