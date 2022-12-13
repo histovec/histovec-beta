@@ -42,19 +42,19 @@ export default defineComponent({
       mandatoryLinks: [
           {
             label: 'Plan du site',
-            href: '/histovec/plan-du-site',
+            to: '/plan-du-site',
           },
           {
             label: 'Accessibilité : non conforme',
-            href: '/histovec/accessibilite',
+            to: '/accessibilite',
           },
           {
             label: 'Mentions légales',
-            href: '/histovec/mentions-legales',
+            to: '/mentions-legales',
           },
           {
             label: 'Données personnelles et Gestion des cookies',
-            href: '/histovec/donnees-personnelles-et-cookies',
+            to: '/donnees-personnelles-et-cookies',
           },
         ],
       images: {
@@ -75,9 +75,9 @@ export default defineComponent({
             Ministère
             <br>de l’intérieur
           </p>
-          <a class="fr-footer__brand-link" href="/" title="Ministère de l’intérieur - HistoVec - Retour à l’accueil du site">
+          <router-link class="fr-footer__brand-link" to="/" title="Ministère de l’intérieur - HistoVec - Retour à l’accueil du site">
             <img class="fr-footer__logo" style="width:7.5rem;" :src='images.logoHistoVecSvg' alt="" />
-          </a>
+          </router-link>
         </div>
         <div class="fr-footer__content">
           <p class="fr-footer__content-desc">HistoVec : un service proposé par la délégation à la sécurité routière.
@@ -98,7 +98,7 @@ export default defineComponent({
         <h4 class="fr-footer__partners-title">Nos partenaires</h4>
         <div class="fr-footer__partners-logos">
           <div class="fr-footer__partners-main">
-            <a class="fr-footer__partners-link" href="https://securite-routiere.gouv.fr" title="Securité routière - Lien vers le site securite-routiere.gouv">
+            <a id="securiteRoutiereIconeImage" class="fr-footer__partners-link" rel="noopener noreferrer" target="_blank" href="https://securite-routiere.gouv.fr" title="Securité routière - Lien vers le site securite-routiere.gouv.fr">
               <img class="fr-footer__logo" style="height: 5.625rem" :src='images.logoSecuriteRoutiereMb90Svg' alt="" />
             </a>
           </div>
@@ -110,7 +110,7 @@ export default defineComponent({
               :key="index"
               class="fr-footer__bottom-item"
           >
-            <a class="fr-footer__bottom-link" :href="mandatoryLink.href">{{ mandatoryLink.label }}</a>
+            <router-link class="fr-footer__bottom-link" :to="mandatoryLink.to">{{ mandatoryLink.label }}</router-link>
           </li>
         </ul>
         <div class="fr-footer__bottom-copy">
@@ -121,4 +121,10 @@ export default defineComponent({
     </div>
   </footer>
 </template>
+<style scoped>
+
+#securiteRoutiereIconeImage[target=_blank]:after {
+  content: '';
+}
+</style>
 
