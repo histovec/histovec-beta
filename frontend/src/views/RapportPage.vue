@@ -2138,10 +2138,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-#simplimmatImage[target=_blank]:after {
-  content: '';
-}
-
 #monAvisImage[target=_blank]:after {
   content: '';
 }
