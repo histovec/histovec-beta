@@ -2141,10 +2141,6 @@ export default defineComponent({
   background-image: none;
 }
 
-#simplimmatImage[target=_blank]:after {
-  content: '';
-}
-
 #monAvisImage[target=_blank]:after {
   content: '';
 }
