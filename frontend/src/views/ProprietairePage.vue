@@ -66,9 +66,11 @@ export default defineComponent({
         },
       }
     )
+    const mentionChampObligatoire ='Les champs marqués d\'un astérisque sont obligatoires.'
 
     return {
       formData,
+      mentionChampObligatoire,
 
       modals: {
         common: {
@@ -858,7 +860,7 @@ export default defineComponent({
           :asc="tabs.siv.tabsAsc"
         >
           <p class="fr-text--xs">
-            Les champs marqués d'un astérisque sont obligatoires.
+            {{ mentionChampObligatoire }}
           </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
@@ -1020,7 +1022,7 @@ export default defineComponent({
           :asc="tabs.siv.tabsAsc"
         >
           <p class="fr-text--xs">
-            Les champs marqués d'un astérisque sont obligatoires.
+            {{ mentionChampObligatoire }}
           </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
@@ -1179,7 +1181,7 @@ export default defineComponent({
           :asc="tabs.fni.tabsAsc"
         >
           <p class="fr-text--xs">
-            Les champs marqués d'un astérisque sont obligatoires.
+            {{ mentionChampObligatoire }}
           </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
@@ -1309,7 +1311,7 @@ export default defineComponent({
           :asc="tabs.fni.tabsAsc"
         >
           <p class="fr-text--xs">
-            Les champs marqués d'un astérisque sont obligatoires.
+            {{ mentionChampObligatoire }}
           </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
