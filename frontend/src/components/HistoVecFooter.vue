@@ -123,8 +123,8 @@ export default defineComponent({
 </template>
 <style scoped>
 
-#securiteRoutiereIconeImage[target=_blank]:after {
-  content: '';
+#securiteRoutiereIconeImage:after {
+  content: none;
 }
 </style>
 
