@@ -72,7 +72,7 @@ export default defineComponent({
     messageEmailErrorMessage () {
       return (
         this.messageEmail !== null && !this.isMessageEmailValid ?
-        'L\'email est obligatoire. Veuillez le renseigner.' :
+        'L\'adresse email n\'est pas valide. Format: nom@exemple.com' :
         ''
       )
     },
