@@ -603,15 +603,15 @@ export default defineComponent({
     // pour confirmer visuellement la prise en compte des actions
     this.modaleActions = [
       {
+        label: 'Copier le lien',
+        icon: 'ri-clipboard-line',
+        onClick: this.onClickCopyLienPartage,
+      },
+      {
         label: 'Envoyer le lien par mail',
         icon: 'ri-send-plane-fill',
         secondary: true,
         onClick: this.onClickMailLienPartage,
-      },
-      {
-        label: 'Copier le lien',
-        icon: 'ri-clipboard-line',
-        onClick: this.onClickCopyLienPartage,
       },
     ]
 
