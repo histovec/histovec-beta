@@ -14,7 +14,7 @@ import { NUMERO_IMMATRICULATION_SIV_REGEX } from '../../../constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
 
 import config from '../../../config.js'
-import { anonymizedIdentite } from '../../../util/identiteLogAnonymiser.js'
+import { anonymizedIdentite } from '../../../util/anonymiserData.js'
 
 const DEFAULT_UUID = config.isPublicApi ? config.apiUuid : ''
 
