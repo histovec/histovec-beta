@@ -2,7 +2,6 @@
 import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 import QrcodeVue from 'qrcode.vue'
-import { copyText } from 'vue3-clipboard'
 import '@/assets/stylesheets/globale.css'
 
 
@@ -855,14 +854,12 @@ export default defineComponent({
       this.onCloseModalPartagerRapport()
     },
     copierTexteAvecAlerte (texteACopier, typeText) {
-      copyText(texteACopier, undefined, (error, event) => {
-        if (error) {
-          this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + ' de partage.', 'error')
-        }
-        if (event) {
-          this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copié dans le presse papier.', 'success')
-        }
-      })
+      try {
+        navigator.clipboard.writeText(texteACopier)
+        this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copié dans le presse papier.', 'success')
+      } catch (e) {
+        this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + ' de partage.', 'error')
+      }
     },
     ouvrirAlerte(texteNotification, typeNotification) {
       this.texteNotification = texteNotification
@@ -912,9 +909,15 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation v-if="isRapportVendeur" :src="images.rapportVendeurSvg" />
+      <ImagePresentation
+        v-if="isRapportVendeur"
+        :src="images.rapportVendeurSvg"
+      />
 
-      <ImagePresentation v-if="isRapportAcheteur" :src="images.rapportAcheteurSvg" />
+      <ImagePresentation
+        v-if="isRapportAcheteur"
+        :src="images.rapportAcheteurSvg"
+      />
     </div>
     <div
       v-if="isRapportVendeur"
@@ -1005,13 +1008,17 @@ export default defineComponent({
       <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Le véhicule"
-      >{{ getVehiculeDescription }}</TuileDsfrNonCliquable>
+      >
+        {{ getVehiculeDescription }}
+      </TuileDsfrNonCliquable>
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Informations du Ministère de l'Intérieur"
-      >{{ getMiDescription }}</TuileDsfrNonCliquable>
+      >
+        {{ getMiDescription }}
+      </TuileDsfrNonCliquable>
     </div>
   </div>
 
@@ -1338,8 +1345,6 @@ export default defineComponent({
                   </a>
                 </p>
               </div>
-
-
             </div>
           </div>
         </DsfrTabContent>
@@ -2141,7 +2146,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
 #simplimmatImage[target=_blank]:after {
   content: '';
 }
