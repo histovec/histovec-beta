@@ -23,7 +23,6 @@ import imagePrenomsSIV from '@/assets/img/aide/siv_prenoms.jpg'
 import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatriculation.jpg'
 import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
 
-
 export default defineComponent({
   name: 'ProprietairePage',
 
@@ -800,7 +799,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonSivNom"
                       class="fr-link  help-link"
                       title="Où trouver le nom sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
@@ -811,7 +810,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -834,7 +833,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonSivPrenoms"
                       class="fr-link  help-link"
                       title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
@@ -845,7 +844,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -876,7 +875,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonSivNumeroImmatriculation"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
@@ -887,7 +886,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -912,7 +911,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonSivNumeroFormule"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
@@ -923,7 +922,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -985,7 +984,7 @@ export default defineComponent({
                   aria-describedby="numero-siren-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
-                    <span
+                    <button
                       ref="buttonNumeroSiren"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
@@ -996,7 +995,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1027,7 +1026,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonSivNumeroImmatriculation"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
@@ -1038,7 +1037,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1063,7 +1062,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonSivNumeroFormule"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
@@ -1074,7 +1073,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1125,7 +1124,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonFniNomEtPrenoms"
                       class="fr-link  help-link"
                       title="Où trouver le nom et le(s) prénom(s) sur le certificat d'immatriculation au format FNI"
@@ -1136,7 +1135,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1168,7 +1167,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonFniNumeroImmatriculation"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
@@ -1179,7 +1178,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1204,7 +1203,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonFniDateEmissionCertificatImmatriculation"
                       class="fr-link  help-link"
                       title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
@@ -1215,7 +1214,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1277,7 +1276,7 @@ export default defineComponent({
                   aria-describedby="numero-siren-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
-                    <span
+                    <button
                       ref="buttonNumeroSiren"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
@@ -1288,7 +1287,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1320,7 +1319,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonFniNumeroImmatriculation"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
@@ -1331,7 +1330,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1356,7 +1355,7 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <span
+                    <button
                       ref="buttonFniDateEmissionCertificatImmatriculation"
                       class="fr-link  help-link"
                       title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
@@ -1367,7 +1366,7 @@ export default defineComponent({
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </span>
+                    </button>
                   </template>
                 </DsfrInput>
               </dsfrinputgroup>
@@ -1432,7 +1431,6 @@ export default defineComponent({
     </div>
   </div>
 </template>
-
 <style scoped>
 .histovec-input-group-title {
   font-weight: bold !important;
