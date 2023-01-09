@@ -468,6 +468,7 @@ export default defineComponent({
           label="Email"
           label-visible
           hint="Votre email"
+          autocomplete="email"
           type="email"
           required
           :aria-invalid="!isMessageEmailValid"
