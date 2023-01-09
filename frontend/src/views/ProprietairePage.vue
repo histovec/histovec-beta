@@ -492,10 +492,7 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation
-        :src="images.proprietaireSVG"
-        alt="Illustration de la page du propriétaire"
-      />
+      <ImagePresentation :src="images.proprietaireSVG" />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Rassurez vos acheteurs potentiels</h1>
