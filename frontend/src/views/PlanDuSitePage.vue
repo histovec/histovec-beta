@@ -66,7 +66,7 @@ export default defineComponent({
           <router-link
             to="/faq"
           >
-            FAQ & Liens utiles
+            FAQ et Liens utiles
           </router-link>
         </li>
 
@@ -106,7 +106,7 @@ export default defineComponent({
           <router-link
             to="/donnees-personnelles-et-cookies"
           >
-            Données personnelles & Gestion des cookies
+            Données personnelles et Gestion des cookies
           </router-link>
         </li>
       </ul>
