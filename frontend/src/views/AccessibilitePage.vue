@@ -205,12 +205,12 @@ export default defineComponent({
         <li>Propriétaire</li>
         <li>Rapport propriétaire / acheteur</li>
         <li>Acheteur</li>
-        <li>FAQ & Liens utiles</li>
+        <li>FAQ et Liens utiles</li>
         <li>Contact</li>
         <li>Plan du site</li>
         <li>Accessibilité</li>
         <li>Mentions légales</li>
-        <li>Données personnelles & Gestion des cookies</li>
+        <li>Données personnelles et Gestion des cookies</li>
       </ul>
 
       <h3>
