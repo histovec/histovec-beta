@@ -533,7 +533,9 @@ export default defineComponent({
   </div>
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-11  fr-col-lg-8  fr-col-xl-8  text-center">
-      <h6>Veuillez sélectionner le format d'immatriculation de votre véhicule</h6>
+      <h3 class="fr-h4">
+        Veuillez sélectionner le format d'immatriculation de votre véhicule
+      </h3>
     </div>
   </div>
 
