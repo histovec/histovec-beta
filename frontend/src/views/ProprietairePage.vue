@@ -66,11 +66,13 @@ export default defineComponent({
         },
       }
     )
+    const mentionChampObligatoire ='Les champs marqués d\'un astérisque sont obligatoires.'
 
     return {
       formData,
       collerPressePapierEtDistribuerDansFormulaire: collerPressePapierEtDistribuerDansFormulaire,
       CHAMP_MODIFIE: CHAMP_MODIFIE,
+      mentionChampObligatoire,
       modals: {
         common: {
           numeroSiren: {
@@ -143,7 +145,6 @@ export default defineComponent({
   },
 
   computed: {
-
     // @todo @focusTrap:
     // Implémenter un focus automatique sur le 1er élément du formulaire (en haut à gauche) lors de la sélection d’un format de plaque (SIV ou FNI) pour que l’usager n’ait pas à scroller sur le formulaire suite à la sélection.
     // (probablement via la dépendance 'focus-trap-vue')
@@ -819,6 +820,9 @@ export default defineComponent({
           :selected="tabs.siv.selectedTabIndex === 0"
           :asc="tabs.siv.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -827,6 +831,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNomSivValid"
                 :error-message="nomSivErrorMessage"
+                description-id="nom-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.titulaire.particulier.nom"
@@ -835,6 +840,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNomSivValid"
+                  aria-errormessage="nom-particulier-SIV-erreur-message"
+                  aria-describedby="nom-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -858,6 +867,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isPrenomsSivValid"
                 :error-message="prenomsSivErrorMessage"
+                description-id="prenom-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.titulaire.particulier.prenoms"
@@ -866,6 +876,10 @@ export default defineComponent({
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isPrenomsSivValid"
+                  aria-errormessage="prenom-particulier-SIV-erreur-message"
+                  aria-describedby="prenom-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -895,6 +909,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationSivValid"
                 :error-message="numeroImmatriculationSivErrorMessage"
+                description-id="numero-immatriculation-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.numeroImmatriculation"
@@ -903,6 +918,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationSivValid"
+                  aria-errormessage="numero-immatriculation-particulier-SIV-erreur-message"
+                  aria-describedby="numero-immatriculation-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -926,6 +945,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroFormuleSivValid"
                 :error-message="numeroFormuleSivErrorMessage"
+                description-id="numero-formule-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.numeroFormule"
@@ -934,6 +954,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroFormuleSivValid"
+                  aria-errormessage="numero-formule-particulier-SIV-erreur-message"
+                  aria-describedby="numero-formule-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -962,6 +986,9 @@ export default defineComponent({
           :selected="tabs.siv.selectedTabIndex === 1"
           :asc="tabs.siv.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -972,6 +999,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeSivValid"
                 :error-message="raisonSocialeSivErrorMessage"
+                description-id="raison-sociale-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.titulaire.personneMorale.raisonSociale"
@@ -980,6 +1008,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le kbis."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isRaisonSocialeSivValid"
+                  aria-errormessage="raison-sociale-personne-morale-SIV-erreur-message"
+                  aria-describedby="raison-sociale-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -991,6 +1023,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroSirenSivValid"
                 :error-message="numeroSirenSivErrorMessage"
+                description-id="numero-siren-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.titulaire.personneMorale.numeroSiren"
@@ -998,6 +1031,9 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
+                  :aria-invalid="!isNumeroSirenSivValid"
+                  aria-errormessage="numero-siren-personne-morale-SIV-erreur-message"
+                  aria-describedby="numero-siren-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <span
@@ -1026,6 +1062,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationSivValid"
                 :error-message="numeroImmatriculationSivErrorMessage"
+                description-id="numero-immatriculation-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.numeroImmatriculation"
@@ -1034,6 +1071,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationSivValid"
+                  aria-errormessage="numero-immatriculation-personne-morale-SIV-erreur-message"
+                  aria-describedby="numero-immatriculation-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1057,6 +1098,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroFormuleSivValid"
                 :error-message="numeroFormuleSivErrorMessage"
+                description-id="numero-formule-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.siv.numeroFormule"
@@ -1065,6 +1107,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroFormuleSivValid"
+                  aria-errormessage="numero-formule-personne-morale-SIV-erreur-message"
+                  aria-describedby="numero-formule-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1103,6 +1149,9 @@ export default defineComponent({
           :selected="tabs.fni.selectedTabIndex === 0"
           :asc="tabs.fni.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -1113,6 +1162,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNomEtPrenomsFniValid"
                 :error-message="nomEtPrenomsFniErrorMessage"
+                description-id="nom-et-prenom-particulier-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.titulaire.particulier.nomEtPrenoms"
@@ -1121,6 +1171,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNomEtPrenomsFniValid"
+                  aria-errormessage="nom-et-prenom-particulier-FNI-erreur-message"
+                  aria-describedby="nom-et-prenom-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1149,7 +1203,9 @@ export default defineComponent({
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
+                :is-valid="isNumeroImmatriculationFniValid"
                 :error-message="numeroImmatriculationFniErrorMessage"
+                description-id="numero-immatriculation-particulier-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.numeroImmatriculation"
@@ -1158,6 +1214,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationFniValid"
+                  aria-errormessage="numero-immatriculation-particulier-FNI-erreur-message"
+                  aria-describedby="numero-immatriculation-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1181,6 +1241,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isDateEmissionCertificatImmatriculationFniValid"
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
+                description-id="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.dateEmissionCertificatImmatriculation"
@@ -1189,6 +1250,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
+                  aria-errormessage="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
+                  aria-describedby="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1217,6 +1282,9 @@ export default defineComponent({
           :selected="tabs.fni.selectedTabIndex === 1"
           :asc="tabs.fni.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -1227,6 +1295,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeFniValid"
                 :error-message="raisonSocialeFniErrorMessage"
+                description-id="raison-sociale-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.titulaire.personneMorale.raisonSociale"
@@ -1235,6 +1304,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le kbis."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isRaisonSocialeFniValid"
+                  aria-errormessage="raison-sociale-personne-morale-FNI-erreur-message"
+                  aria-describedby="raison-sociale-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1246,6 +1319,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroSirenFniValid"
                 :error-message="numeroSirenFniErrorMessage"
+                description-id="numero-siren-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.titulaire.personneMorale.numeroSiren"
@@ -1253,6 +1327,9 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
+                  :aria-invalid="!isNumeroSirenFniValid"
+                  aria-errormessage="numero-siren-personne-morale-FNI-erreur-message"
+                  aria-describedby="numero-siren-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <span
@@ -1282,6 +1359,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationFniValid"
                 :error-message="numeroImmatriculationFniErrorMessage"
+                description-id="numero-immatriculation-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.numeroImmatriculation"
@@ -1290,6 +1368,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationFniValid"
+                  aria-errormessage="numero-immatriculation-personne-morale-FNI-erreur-message"
+                  aria-describedby="numero-immatriculation-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1313,6 +1395,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isDateEmissionCertificatImmatriculationFniValid"
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
+                description-id="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   v-model="formData.fni.dateEmissionCertificatImmatriculation"
@@ -1321,6 +1404,10 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
+                  aria-errormessage="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
+                  aria-describedby="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
