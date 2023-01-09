@@ -58,7 +58,7 @@ export default defineComponent({
             text: 'Accueil',
           },
           {
-            text: 'FAQ & Liens utiles',
+            text: 'FAQ et Liens utiles',
           },
         ]"
       />

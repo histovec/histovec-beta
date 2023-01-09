@@ -23,7 +23,7 @@ export default defineComponent({
         },
         {
           to: 'faq',
-          text: 'FAQ & Liens utiles',
+          text: 'FAQ et Liens utiles',
         },
         {
           to: 'contact',
