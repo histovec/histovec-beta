@@ -510,8 +510,8 @@ export default defineComponent({
               </div>
               <input
                 :id="TYPE_IMMATRICULATION.SIV"
-                name="Immatriculation depuis 2009"
                 v-model="formData.typeImmatriculation"
+                name="Immatriculation depuis 2009"
                 class="card-immatriculation--radio"
                 type="radio"
                 :value="TYPE_IMMATRICULATION.SIV"
@@ -540,8 +540,8 @@ export default defineComponent({
               </div>
               <input
                 :id="TYPE_IMMATRICULATION.FNI"
-                name="Immatriculation avant 2009"
                 v-model="formData.typeImmatriculation"
+                name="Immatriculation avant 2009"
                 class="card-immatriculation--radio"
                 type="radio"
                 :value="TYPE_IMMATRICULATION.FNI"
@@ -570,8 +570,8 @@ export default defineComponent({
               </div>
               <input
                 :id="OLD_IMMATRICULATION_TYPE"
-                name="Immatriculation avant 1995"
                 v-model="formData.typeImmatriculation"
+                name="Immatriculation avant 1995"
                 class="card-immatriculation--radio"
                 type="radio"
                 :value="OLD_IMMATRICULATION_TYPE"
@@ -970,7 +970,7 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenSivValid"
-                :error-message='!isNumeroSirenSivValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'              >
+                :error-message='!isNumeroSirenSivValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'
                 description-id="numero-siren-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
