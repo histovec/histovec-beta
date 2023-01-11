@@ -510,6 +510,10 @@ export default defineComponent({
     setActive (typeImmatriculationCompare) {
       return this.formData.typeImmatriculation === typeImmatriculationCompare;
     },
+
+    setActiveButton (typeImmatriculationCompare) {
+      return this.formData.typeImmatriculation = typeImmatriculationCompare;
+    },
   },
 })
 </script>
@@ -594,19 +598,20 @@ export default defineComponent({
                   title="Format d'immatriculation depuis 2009"
                 />
               </div>
-              <input
+              <button
                 :id="TYPE_IMMATRICULATION.SIV"
                 name="Immatriculation depuis 2009"
-                v-model="formData.typeImmatriculation"
-                class="card-immatriculation--radio"
-                type="radio"
+                class="card-immatriculation--radio bouton-immat"
                 :value="TYPE_IMMATRICULATION.SIV"
+                @click="setActiveButton(TYPE_IMMATRICULATION.SIV)"
               >
-              <div
-                class="fr-label"
-              >Immatriculation depuis 2009
-              </div>
+                <div
+                  class="fr-label"
+                >Immatriculation depuis 2009
+                </div>
+              </button>
             </div>
+
           </label>
         </li>
         <li class="bouton_immatriculation__position">
@@ -624,18 +629,18 @@ export default defineComponent({
                   title="Format d'immatriculation avant 2009"
                 />
               </div>
-              <input
+              <button
                 :id="TYPE_IMMATRICULATION.FNI"
                 name="Immatriculation avant 2009"
-                v-model="formData.typeImmatriculation"
-                class="card-immatriculation--radio"
-                type="radio"
+                class="card-immatriculation--radio bouton-immat"
                 :value="TYPE_IMMATRICULATION.FNI"
+                @click="setActiveButton(TYPE_IMMATRICULATION.FNI)"
               >
-              <div
-                class="fr-label"
-              >Immatriculation avant 2009
-              </div>
+                <div
+                  class="fr-label"
+                >Immatriculation avant 2009
+                </div>
+              </button>
             </div>
           </label>
         </li>
@@ -654,18 +659,18 @@ export default defineComponent({
                   title="Format d'immatriculation avant 1995"
                 />
               </div>
-              <input
+              <button
                 :id="OLD_IMMATRICULATION_TYPE"
                 name="Immatriculation avant 1995"
-                v-model="formData.typeImmatriculation"
-                class="card-immatriculation--radio"
-                type="radio"
+                class="card-immatriculation--radio bouton-immat"
                 :value="OLD_IMMATRICULATION_TYPE"
+                @click="setActiveButton(OLD_IMMATRICULATION_TYPE)"
               >
-              <div
-                class="fr-label"
-              >Immatriculation avant 1995
-              </div>
+                <div
+                  class="fr-label"
+                >Immatriculation avant 1995
+                </div>
+              </button>
             </div>
           </label>
         </li>
@@ -1538,7 +1543,7 @@ export default defineComponent({
 }
 .card-immatriculation {
   text-align: center;
-  width: 270px;
+  width: 280px;
   margin: 1rem;
   cursor: pointer;
   background: var(--background-default-grey);
@@ -1572,5 +1577,9 @@ export default defineComponent({
 }
 .card-immatriculation--radio {
   outline:none;
+}
+.bouton-immat {
+  --hover-tint : none;
+  --active-tint: none;
 }
 </style>
