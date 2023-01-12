@@ -410,6 +410,12 @@ export default defineComponent({
           dateEmissionCertificatImmatriculation: '',
         },
       }
+      if(this.formData.typeImmatriculation=== TYPE_IMMATRICULATION.SIV){
+        this.$refs.SIVPlaque.focus()
+      }
+      else{
+        this.$refs.FNIPlaque.focus()
+      }
     },
     setOpacite (typeImmatriculationCompare) {
       return this.formData.typeImmatriculation && this.formData.typeImmatriculation !== typeImmatriculationCompare
@@ -503,6 +509,7 @@ export default defineComponent({
               </div>
               <input
                 :id="TYPE_IMMATRICULATION.SIV"
+                ref="SIVPlaque"
                 v-model="formData.typeImmatriculation"
                 name="Immatriculation depuis 2009"
                 class="card-immatriculation--radio"
@@ -533,6 +540,7 @@ export default defineComponent({
               </div>
               <input
                 :id="TYPE_IMMATRICULATION.FNI"
+                ref="FNIPlaque"
                 v-model="formData.typeImmatriculation"
                 name="Immatriculation avant 2009"
                 class="card-immatriculation--radio"
