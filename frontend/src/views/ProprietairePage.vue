@@ -483,7 +483,7 @@ export default defineComponent({
 
     onClear () {
       this.formData = {
-        typeImmatriculation: null,
+        typeImmatriculation: this.formData.typeImmatriculation,
         typePersonne: TYPE_PERSONNE.PARTICULIER,
         siv: {
           titulaire: {
