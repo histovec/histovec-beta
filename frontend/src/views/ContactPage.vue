@@ -72,7 +72,7 @@ export default defineComponent({
     messageEmailErrorMessage () {
       return (
         this.messageEmail !== null && !this.isMessageEmailValid ?
-        'L\'adresse email n\'est pas valide. Format: nom@exemple.com' :
+        'Saisissez une adresse avec un format valide, exemple : nom@exemple.fr' :
         ''
       )
     },
