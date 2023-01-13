@@ -38,7 +38,11 @@ export default defineComponent({
       </span> -->
   <LienEvitement />
   <HistoVecHeader />
-  <main class="fr-container  fr-mb-6w" id="contenu">
+  <main
+    id="contenu"
+    role="main"
+    class="fr-container fr-mb-6w"
+  >
     <router-view />
   </main>
   <HistoVecFooter />
