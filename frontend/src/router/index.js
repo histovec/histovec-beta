@@ -95,8 +95,14 @@ export default createRouter({
   routes,
   scrollBehavior () {
     // Scroll top for every route navigation
+    let element = '#header'
+
+    if (window.location.hash) {
+      element = window.location.hash
+    }
+
     return {
-      el: '#header',
+      el: element,
       top: 0,
       left: 0,
       behavior: 'smooth',
