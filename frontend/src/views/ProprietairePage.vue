@@ -1459,7 +1459,7 @@ export default defineComponent({
 }
 
 .required-label {
-  color: red;
+  color: #e1000f;
 }
 
 .text-center {
