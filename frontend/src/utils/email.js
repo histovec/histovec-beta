@@ -5,7 +5,5 @@ export const mailTo = ({ recipients, subject, body }) => {
 		})
 		.join(',');
 
-	return `mailto:${concatenedRecipients || ''}
-	?subject=${subject ? encodeURIComponent(subject) : ''}
-	&body=${body ? encodeURIComponent(body) : ''}`;
+	return `mailto:${concatenedRecipients || ''}?subject=${subject ? encodeURIComponent(subject) : ''}&body=${body ? encodeURIComponent(body) : ''}`;
 };
