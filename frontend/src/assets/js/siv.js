@@ -38,6 +38,10 @@ const labelizeCertifDepuis = (nbMonths) => {
     return `${yearLabel} et ${month} mois`
   }
 
+  if((month>6)&& (year >=10)){
+    return `${year+1} ans`
+  }
+
   return yearLabel
 }
 
