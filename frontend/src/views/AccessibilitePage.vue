@@ -173,29 +173,31 @@ export default defineComponent({
             validator.w3.org
           </a>
         </li>
-        <li>Vérification des contrastes de couleur :</li>
-        <ul class="fr-ml-4w  fr-pl-0 sous-liste">
-          <li>
-            <a
-              class="fr-link"
-              href="https://webaim.org/resources/contrastchecker/"
-              rel="noopener noreferrer"
-              title="webaim.org"
-              target="_blank"
-            >
-              https://webaim.org/resources/contrastchecker/
-            </a>
-          </li>
-          <li>WCAG Contrast checker (plugin)</li>
-        </ul>
+        <li>Vérification des contrastes de couleur :
+          <ul class="fr-ml-4w  fr-pl-0 sous-liste">
+            <li>
+              <a
+                class="fr-link"
+                href="https://webaim.org/resources/contrastchecker/"
+                rel="noopener noreferrer"
+                title="webaim.org"
+                target="_blank"
+              >
+                https://webaim.org/resources/contrastchecker/
+              </a>
+            </li>
+            <li>WCAG Contrast checker (plugin)</li>
+          </ul>
+        </li>
         <li>Désactivation du JavaScript : JavaScript Switcher</li>
         <li>Outillage web : Web Developer (plugin)</li>
-        <li>Outils d’évaluation de pages web (plugins) :</li>
-        <ul class="fr-ml-4w  fr-pl-0 sous-liste">
-          <li>Tanaguru webext</li>
-          <li>Axe DevTools</li>
-          <li>Wave (webaim)</li>
-        </ul>
+        <li>Outils d’évaluation de pages web (plugins) :
+          <ul class="fr-ml-4w  fr-pl-0 sous-liste">
+            <li>Tanaguru webext</li>
+            <li>Axe DevTools</li>
+            <li>Wave (webaim)</li>
+          </ul>
+        </li>
       </ul>
       <h4>
         Pages du site ayant fait l’objet de la vérification de conformité
@@ -287,7 +289,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
 .sous-liste {
   list-style-type: circle;
 }
