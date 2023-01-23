@@ -25,12 +25,12 @@ export default defineComponent({
 
   data () {
     const tags = [
-      { label: 'Certificat d\'immatriculation / Carte grise', tagName: 'button', type: CONTACT_TAG_TYPES.CERTIFICAT_IMMATRICULATION },  // Anciennement appelé "carte grise"
-      { label: 'Titulaire / Propriétaire', tagName: 'button', type: CONTACT_TAG_TYPES.PROPRIETAIRE_OU_TITULAIRE },
-      { label: 'Rapport HistoVec', tagName: 'button', type: CONTACT_TAG_TYPES.RAPPORT_HISTOVEC },
-      { label: 'Véhicule', tagName: 'button', type: CONTACT_TAG_TYPES.VEHICULE },
-      // { label: 'CSA (Certificat de Situation Administrative)', tagName: 'button', type: CONTACT_TAG_TYPES.CSA },  // Anciennement appelé "Certificat de non gage"
-      { label: 'Autre', tagName: 'button', type: CONTACT_TAG_TYPES.AUTRE },
+      { label: 'Certificat d\'immatriculation / Carte grise', tagName: 'button', id: CONTACT_TAG_TYPES.CERTIFICAT_IMMATRICULATION },  // Anciennement appelé "carte grise"
+      { label: 'Titulaire / Propriétaire', tagName: 'button', id: CONTACT_TAG_TYPES.PROPRIETAIRE_OU_TITULAIRE },
+      { label: 'Rapport HistoVec', tagName: 'button', id: CONTACT_TAG_TYPES.RAPPORT_HISTOVEC },
+      { label: 'Véhicule', tagName: 'button', id: CONTACT_TAG_TYPES.VEHICULE },
+      // { label: 'CSA (Certificat de Situation Administrative)', tagName: 'button', id: CONTACT_TAG_TYPES.CSA },  // Anciennement appelé "Certificat de non gage"
+      { label: 'Autre', tagName: 'button', id: CONTACT_TAG_TYPES.AUTRE },
     ]
 
     return {
@@ -103,8 +103,8 @@ export default defineComponent({
     selectedTags () {
       return this.tags.filter((tag) => tag.selected)
     },
-    selectedTagsTypes () {
-      return this.selectedTags.map(({ type }) => type)
+    selectedTagsIds () {
+      return this.selectedTags.map(({ id }) => id)
     },
     filteredThemesOptions () {
       if (this.selectedTags.length === 0) {
@@ -112,10 +112,9 @@ export default defineComponent({
       }
 
       const filteredThemes = CONTACT_THEMES_OPTIONS.filter(({ types }) => {
-        const intersection = this.selectedTagsTypes.filter(type => types.includes(type))
+        const intersection = this.selectedTagsIds.filter(id => types.includes(id))
         return intersection.length !== 0
       })
-
       return filteredThemes.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
     },
     normalizedMessage () {
@@ -473,7 +472,6 @@ export default defineComponent({
             required
             :aria-invalid="!isMessageEmailValid"
             aria-errormessage="email-erreur-message"
-            aria-describedby="email-erreur-message"
           />
         </DsfrInputGroup>
       </div>
@@ -492,7 +490,6 @@ export default defineComponent({
             required
             :aria-invalid="!isMessageValid"
             aria-errormessage="message-erreur-message"
-            aria-describedby="message-erreur-message"
           />
         </DsfrInputGroup>
       </div>
