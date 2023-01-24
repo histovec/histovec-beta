@@ -28,9 +28,9 @@ export default defineComponent({
       <h4 class="fr-tile__title">
         <span class="fr-tile__link">{{ titre }}</span>
       </h4>
-      <p class="fr-tile__desc">
+      <div class="fr-tile__desc">
         <slot />
-      </p>
+      </div>
     </div>
   </div>
 </template>
