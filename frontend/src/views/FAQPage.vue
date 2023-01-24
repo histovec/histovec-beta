@@ -84,7 +84,6 @@ export default defineComponent({
       <div class="fr-col-12  fr-col-md-6  fr-col-lg-5  fr-col-xl-5">
         <TuileDsfrNonCliquable
           titre="Pour les vendeurs"
-          :horizontal="true"
         >
           <ul>
             <li> Prendre connaissance des démarches
@@ -118,7 +117,6 @@ export default defineComponent({
       <div class="fr-col-12  fr-col-md-6  fr-col-lg-5  fr-col-xl-5">
         <TuileDsfrNonCliquable
           titre="Pour les acheteurs"
-          :horizontal="true"
         >
           <ul>
             <li> Prendre connaissance des démarches
