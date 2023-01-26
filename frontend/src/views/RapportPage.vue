@@ -579,18 +579,18 @@ export default defineComponent({
     const { isDonneeDisponible: areControlesTechinquesDisponibles, historique } = this.controlesTechniques
 
     const defaultTabTitles = [
-      { title: 'Synthèse'},
-      { title: 'Véhicule'},
-      { title: 'Titulaire & Titre'},
-      { title: 'Situation administrative'},
-      { title: 'Historique'},
+      { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
+      { title: 'Véhicule', panelId: 'report-tab-content-1', tabId:'report-tab-1'},
+      { title: 'Titulaire & Titre', panelId: 'report-tab-content-2', tabId:'report-tab-2'},
+      { title: 'Situation administrative', panelId: 'report-tab-content-3', tabId:'report-tab-3'},
+      { title: 'Historique', panelId: 'report-tab-content-4', tabId:'report-tab-4'},
     ]
 
     this.tabTitles = (
       (areControlesTechinquesDisponibles && historique.length > 0) ?
         defaultTabTitles.concat([
-          { title: 'Contrôles techniques'},
-          { title: 'Kilométrage'},
+          { title: 'Contrôles techniques', panelId: 'report-tab-content-5', tabId:'report-tab-5'},
+          { title: 'Kilométrage', panelId: 'report-tab-content-6', tabId:'report-tab-6'},
         ]) :
         defaultTabTitles
     )
