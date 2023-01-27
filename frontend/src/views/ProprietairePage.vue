@@ -584,95 +584,76 @@ export default defineComponent({
       </legend>
       <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
         <li class="bouton_immatriculation__position">
-          <label :for="TYPE_IMMATRICULATION.SIV">
-            <div
-              class="card-immatriculation"
-              :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.SIV) }"
-            >
-              <div class="card-immatriculation--image--wrap">
-                <img
-                  class="card-immatriculation--image"
-                  :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.SIV) }"
-                  :src="images.plaqueSivSvg"
-                  alt="Format d'immatriculation depuis 2009"
-                  title="Format d'immatriculation depuis 2009"
-                />
-              </div>
-              <button
-                :id="TYPE_IMMATRICULATION.SIV"
-                name="Immatriculation depuis 2009"
-                class="card-immatriculation--radio bouton-immat"
-                :value="TYPE_IMMATRICULATION.SIV"
-                @click="setActiveButton(TYPE_IMMATRICULATION.SIV)"
-              >
-                <div
-                  class="fr-label"
-                >Immatriculation depuis 2009
-                </div>
-              </button>
-            </div>
-
-          </label>
+          <button
+            :id="TYPE_IMMATRICULATION.SIV"
+            name="Immatriculation depuis 2009"
+            class="card-immatriculation"
+            :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.SIV) }"
+            :value="TYPE_IMMATRICULATION.SIV"
+            @click="setActiveButton(TYPE_IMMATRICULATION.SIV)"
+          >
+            <span class="card-immatriculation--image--wrap">
+              <img
+                class="card-immatriculation--image"
+                :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.SIV) }"
+                :src="images.plaqueSivSvg"
+                alt="Format d'immatriculation depuis 2009"
+                title="Format d'immatriculation depuis 2009"
+              />
+            </span>
+            <span
+              class="fr-label fr-mt-3w"
+            >Immatriculation depuis 2009
+            </span>
+          </button>
         </li>
         <li class="bouton_immatriculation__position">
-          <label :for="TYPE_IMMATRICULATION.FNI">
-            <div
-              class="card-immatriculation"
-              :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.FNI) }"
-            >
-              <div class="card-immatriculation--image--wrap">
-                <img
-                  class="card-immatriculation--image"
-                  :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.FNI) }"
-                  :src="images.plaqueFniSvg"
-                  alt="Format d'immatriculation avant 2009"
-                  title="Format d'immatriculation avant 2009"
-                />
-              </div>
-              <button
-                :id="TYPE_IMMATRICULATION.FNI"
-                name="Immatriculation avant 2009"
-                class="card-immatriculation--radio bouton-immat"
-                :value="TYPE_IMMATRICULATION.FNI"
-                @click="setActiveButton(TYPE_IMMATRICULATION.FNI)"
-              >
-                <div
-                  class="fr-label"
-                >Immatriculation avant 2009
-                </div>
-              </button>
-            </div>
-          </label>
+          <button
+            :id="TYPE_IMMATRICULATION.FNI"
+            name="Immatriculation avant 2009"
+            class="card-immatriculation"
+            :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.FNI) }"
+            :value="TYPE_IMMATRICULATION.FNI"
+            @click="setActiveButton(TYPE_IMMATRICULATION.FNI)"
+          >
+            <span class="card-immatriculation--image--wrap">
+              <img
+                class="card-immatriculation--image"
+                :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.FNI) }"
+                :src="images.plaqueFniSvg"
+                alt="Format d'immatriculation avant 2009"
+                title="Format d'immatriculation avant 2009"
+              />
+            </span>
+            <span
+              class="fr-label fr-mt-3w"
+            >Immatriculation avant 2009
+            </span>
+          </button>
         </li>
         <li class="bouton_immatriculation__position">
-          <label :for="OLD_IMMATRICULATION_TYPE">
-            <div
-              class="card-immatriculation"
-              :class="{ 'card-immatriculation--active': setActive(OLD_IMMATRICULATION_TYPE) }"
-            >
-              <div class="card-immatriculation--image--wrap">
-                <img
-                  class="card-immatriculation--image"
-                  :class="{ 'card-immatriculation--image--opacity': setOpacite(OLD_IMMATRICULATION_TYPE) }"
-                  :src="images.plaqueNonSupporteeSvg"
-                  alt="Format d'immatriculation avant 1995"
-                  title="Format d'immatriculation avant 1995"
-                />
-              </div>
-              <button
-                :id="OLD_IMMATRICULATION_TYPE"
-                name="Immatriculation avant 1995"
-                class="card-immatriculation--radio bouton-immat"
-                :value="OLD_IMMATRICULATION_TYPE"
-                @click="setActiveButton(OLD_IMMATRICULATION_TYPE)"
-              >
-                <div
-                  class="fr-label"
-                >Immatriculation avant 1995
-                </div>
-              </button>
-            </div>
-          </label>
+          <button
+            :id="OLD_IMMATRICULATION_TYPE"
+            name="Immatriculation avant 1995"
+            class="card-immatriculation"
+            :class="{ 'card-immatriculation--active': setActive(OLD_IMMATRICULATION_TYPE) }"
+            :value="OLD_IMMATRICULATION_TYPE"
+            @click="setActiveButton(OLD_IMMATRICULATION_TYPE)"
+          >
+            <span class="card-immatriculation--image--wrap">
+              <img
+                class="card-immatriculation--image"
+                :class="{ 'card-immatriculation--image--opacity': setOpacite(OLD_IMMATRICULATION_TYPE) }"
+                :src="images.plaqueNonSupporteeSvg"
+                alt="Format d'immatriculation avant 1995"
+                title="Format d'immatriculation avant 1995"
+              />
+            </span>
+            <span
+              class="fr-label fr-mt-3w"
+            >Immatriculation avant 1995
+            </span>
+          </button>
         </li>
       </ul>
     </fieldset>
@@ -1549,6 +1530,8 @@ export default defineComponent({
   background: var(--background-default-grey);
   border: 2px var(--grey-925-125) solid;
   padding: 1rem;
+  --hover-tint : none;
+  --active-tint: none;
 }
 .card-immatriculation--active {
   border-color: var(--blue-france-sun-113-625);
@@ -1558,6 +1541,7 @@ export default defineComponent({
 .card-immatriculation:focus-within {
   background: var(--grey-1000-50-hover);
   outline: 2px solid var(--info-425-625-hover);
+  outline-offset: 0;
 }
 .card-immatriculation:hover img,
 .card-immatriculation:focus img,
@@ -1575,11 +1559,5 @@ export default defineComponent({
 .card-immatriculation--image--opacity {
   opacity: 0.2;
 }
-.card-immatriculation--radio {
-  outline:none;
-}
-.bouton-immat {
-  --hover-tint : none;
-  --active-tint: none;
-}
+
 </style>
