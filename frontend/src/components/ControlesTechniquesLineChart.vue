@@ -2,6 +2,8 @@
   <LineChart
     :chart-data="lineData"
     :chart-options="chartOptions"
+    role="img"
+    :aria-label="ariaLabel"
   />
 </template>
 
@@ -25,6 +27,10 @@ export default {
     controlesTechniques: {
       type: Array,
       default: () => [],
+    },
+    ariaLabel: {
+      type: String,
+      default: '',
     },
   },
 
