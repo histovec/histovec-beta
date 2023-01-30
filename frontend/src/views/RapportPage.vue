@@ -341,6 +341,17 @@ export default defineComponent({
     controlesTechniquesHistorique () {
       return this.controlesTechniques.historique || []
     },
+    controlesTechniquesHistoriqueAriaLabel () {
+      let ariaLabel = 'Graphique représentant l\'évolution du kilométrage relevé lors des controles techniques en fonction des années. '
+      if(this.normalizedControlesTechniquesHistorique && this.normalizedControlesTechniquesHistorique.length >0){
+        for (const controleTechnique of this.normalizedControlesTechniquesHistorique) {
+          ariaLabel = ariaLabel + controleTechnique.date + ': ' + controleTechnique.km + ' km ' + controleTechnique.resultatLibelle + '. '
+        }
+        return ariaLabel
+      }
+      return ariaLabel + 'Ce véhicule ne possède actuellement aucun contrôle technique.'
+
+    },
     dateEmissionCIFR () {
       return formatIsoToFrDate(this.certificat.dateEmissionCI)
     },
@@ -2050,6 +2061,7 @@ export default defineComponent({
                 v-if="controlesTechniquesHistorique.length > 0"
                 class="fr-col-12"
                 :controles-techniques="controlesTechniquesHistorique"
+                :aria-label="controlesTechniquesHistoriqueAriaLabel"
               />
               <div
                 v-if="controlesTechniquesHistorique === 0"
