@@ -1438,7 +1438,7 @@ export default defineComponent({
 }
 
 .required-label {
-  color: #e1000f;
+  color: var(--red-marianne-main-472) ;
 }
 
 .text-center {
