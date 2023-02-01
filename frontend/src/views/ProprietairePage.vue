@@ -410,10 +410,10 @@ export default defineComponent({
           dateEmissionCertificatImmatriculation: '',
         },
       }
-      if(this.formData.typeImmatriculation=== TYPE_IMMATRICULATION.SIV){
+      if(this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
         this.$refs.SIVPlaque.focus()
       }
-      else{
+      if(this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
         this.$refs.FNIPlaque.focus()
       }
     },
