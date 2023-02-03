@@ -268,48 +268,19 @@ class UTACClient {
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
 
-      response = await this.axios.post('/immat/search', {
-        immat,
-        vin,
-      })
-      const { data } = response
+      response = await this.appelUtacControlesTechniques(response, start, { uuid, encryptedImmat, encryptedVin, immat, vin })
 
-      const end = new Date()
-      const executionTime = end - start
-
-      const { error } = utacResponseSchema.validate(data)
-
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
-
-      if (error) {
-        return {
-          status: 500,
-          message: ERROR_MESSAGES.malformedResponse,
-        }
+      if (response.status === 500) {
+        return response
       }
     } catch (error) {
       if (error.status === 403) {
         await this._reauthenticate()
 
-        // Replay request
-        response = await this.axios.post('/immat/search', {
-          immat,
-          vin,
-        })
+        response = await this.appelUtacControlesTechniques(response, start, { uuid, encryptedImmat, encryptedVin, immat, vin })
 
-        const end = new Date()
-        const executionTime = end - start
-        const { error } = utacResponseSchema.validate(response.data)
-
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
-
-        if (error) {
-          return {
-            status: 500,
-            message: ERROR_MESSAGES.malformedResponse,
-          }
+        if (response.status === 500) {
+          return response
         }
       } else {
         // That should never happen
@@ -338,6 +309,30 @@ class UTACClient {
       status: response.status,
       ct: response.data.ct,
       updateDate: response.data.update_date,
+    }
+  }
+
+  async appelUtacControlesTechniques (response, startDate, { uuid, encryptedImmat, encryptedVin, immat, vin }) {
+    response = await this.axios.post('/immat/search', {
+      immat,
+      vin,
+    })
+
+    const end = new Date()
+    const executionTime = end - startDate
+
+    const { error } = utacResponseSchema.validate(response.data)
+
+    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
+    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
+
+    if (error) {
+      return {
+        status: 500,
+        message: ERROR_MESSAGES.malformedResponse,
+      }
+    } else {
+      return response
     }
   }
 }
