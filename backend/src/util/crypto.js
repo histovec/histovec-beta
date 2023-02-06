@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import { syslogLogger } from './logger.js'
 
 export const base64Encode = (text) => {
   return Buffer.from(text, 'binary').toString('base64')
@@ -71,9 +72,7 @@ const encrypt = (input, key) => {
     cipher.final(),
   ])
 
-  const urlSafeBase64EncodedIvAndEncrypted = urlSafeBase64Encode(Buffer.concat([iv, encrypted]))
-
-  return urlSafeBase64EncodedIvAndEncrypted
+  return urlSafeBase64Encode(Buffer.concat([iv, encrypted]))
 }
 
 const decrypt = (urlSafeBase64EncodedIvAndEncrypted, key) => {
@@ -84,24 +83,22 @@ const decrypt = (urlSafeBase64EncodedIvAndEncrypted, key) => {
 
   const decipher = crypto.createDecipheriv(AES_ALGORITHM, bufferedKey, iv)
 
-  const decrypted = Buffer.concat([
+  return Buffer.concat([
     decipher.update(encrypted),
     decipher.final(),
   ])
-
-  return decrypted
 }
 
 export const encryptJson = (json, key) => {
   const stringifiedJson = JSON.stringify(json)
-  const encryptedJson = encrypt(stringifiedJson, key)
-
-  return encryptedJson
+  return encrypt(stringifiedJson, key)
 }
 
 export const decryptJson = (encryptedJson, key) => {
-  const stringifiedJson = decrypt(encryptedJson, key)
-  const json = JSON.parse(stringifiedJson)
-
-  return json
+  try {
+    const stringifiedJson = decrypt(encryptedJson, key)
+    return JSON.parse(stringifiedJson)
+  } catch (e) {
+    syslogLogger.info({ key: 'dechiffrement_utac', tag: 'CRYPTO', value: { encryptedJson, key, message: 'problème déchiffrement format Json' } })
+  }
 }
