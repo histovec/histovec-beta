@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
+import { sleep } from '../utils/sleep';
 
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
@@ -277,6 +278,48 @@ export default defineComponent({
           'La date d\'émission du certificat d\'immatriculation doit respecter le format "31/12/2020".' :
           ''
       )
+    },
+  },
+  watch: {
+    'formData.typeImmatriculation': function (val) {
+      sleep(100).then(() => {
+        if (val === TYPE_IMMATRICULATION.SIV) {
+          if (this.tabs.siv.selectedTabIndex === 0) {
+            this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+            document.getElementById('form-siv-particulier-nom-naissance').focus()
+          } else {
+            this.selectSivTab(0)
+          }
+        }
+        if (val === TYPE_IMMATRICULATION.FNI) {
+          if (this.tabs.fni.selectedTabIndex === 0) {
+            this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+            document.getElementById('form-fni-particulier-nom-prenom').focus()
+          } else {
+            this.selectFniTab(0)
+          }
+        }
+      })
+    },
+    'tabs.siv.selectedTabIndex': function (val) {
+      sleep(100).then(() => {
+        if (val === 0) {
+          document.getElementById('form-siv-particulier-nom-naissance').focus()
+        }
+        if (val === 1) {
+          document.getElementById('form-siv-personne-morale-raison-sociale').focus()
+        }
+      })
+    },
+    'tabs.fni.selectedTabIndex': function (val) {
+      sleep(100).then(() => {
+        if (val === 0) {
+          document.getElementById('form-fni-particulier-nom-prenom').focus()
+        }
+        if (val === 1) {
+          document.getElementById('form-fni-personne-morale-raison-sociale').focus()
+        }
+      })
     },
   },
 
