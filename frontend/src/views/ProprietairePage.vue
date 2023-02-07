@@ -4,6 +4,7 @@ import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
 import { mailTo } from '@/utils/email.js'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
+import { sleep } from '../utils/sleep';
 
 import { ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
@@ -279,6 +280,48 @@ export default defineComponent({
           'La date d\'émission du certificat d\'immatriculation doit respecter le format "31/12/2020".' :
           ''
       )
+    },
+  },
+  watch: {
+    'formData.typeImmatriculation': function (val) {
+      sleep(100).then(() => {
+        if (val === TYPE_IMMATRICULATION.SIV) {
+          if (this.tabs.siv.selectedTabIndex === 0) {
+            this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+            document.getElementById('input-siv-particulier-nom').focus()
+          } else {
+            this.selectSivTab(0)
+          }
+        }
+        if (val === TYPE_IMMATRICULATION.FNI) {
+          if (this.tabs.fni.selectedTabIndex === 0) {
+            this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+            document.getElementById('input-fni-particulier-nom-prenom').focus()
+          } else {
+            this.selectFniTab(0)
+          }
+        }
+      })
+    },
+    'tabs.siv.selectedTabIndex': function (val) {
+      sleep(100).then(() => {
+        if (val === 0) {
+          document.getElementById('input-siv-particulier-nom').focus()
+        }
+        if (val === 1) {
+          document.getElementById('input-siv-pro-raison-sociale').focus()
+        }
+      })
+    },
+    'tabs.fni.selectedTabIndex': function (val) {
+      sleep(100).then(() => {
+        if (val === 0) {
+          document.getElementById('input-fni-particulier-nom-prenom').focus()
+        }
+        if (val === 1) {
+          document.getElementById('input-fni-pro-raison-sociale').focus()
+        }
+      })
     },
   },
 
@@ -794,6 +837,7 @@ export default defineComponent({
                 description-id="nom-particulier-SIV-erreur-message"
               >
                 <DsfrInput
+                  id="input-siv-particulier-nom"
                   v-model="formData.siv.titulaire.particulier.nom"
                   label="Nom de naissance"
                   label-visible
@@ -956,6 +1000,7 @@ export default defineComponent({
                 :is-valid="isRaisonSocialeSivValid"
               >
                 <DsfrInput
+                  id="input-siv-pro-raison-sociale"
                   v-model="formData.siv.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
@@ -1113,6 +1158,7 @@ export default defineComponent({
                 :is-valid="isNomEtPrenomsFniValid"
               >
                 <DsfrInput
+                  id="input-fni-particulier-nom-prenom"
                   v-model="formData.fni.titulaire.particulier.nomEtPrenoms"
                   label="Nom de naissance et prénom(s)"
                   label-visible
@@ -1242,6 +1288,7 @@ export default defineComponent({
                 :is-valid="isRaisonSocialeFniValid"
               >
                 <DsfrInput
+                  id="input-fni-pro-raison-sociale"
                   v-model="formData.fni.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
