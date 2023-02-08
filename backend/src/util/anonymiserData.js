@@ -5,19 +5,17 @@ export const anonymize = (text, nbVisibleCharAtPrefixAndSuffix = 2) => {
   return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
 }
 
-export const anonymizeIdentite = (text) => {
+export const anonymizeText = (text) => {
   let anonymizedText = ''
-  let indiceText = 0
-  for (let i = 0; i < text.length; i++) {
-    if (text[i] === ' ') {
-      const hidennTextInter = '*'.repeat(i - indiceText - 1)
-      anonymizedText = anonymizedText + text[indiceText] + hidennTextInter + ' '
-      indiceText = i + 1
+  for (const textSplit of text.split(' ')) {
+    if (textSplit.length === 0) {
+      anonymizedText = anonymizedText + textSplit + ' '
+    } else {
+      const hidennTextInter = '*'.repeat(textSplit.length - 1)
+      anonymizedText = anonymizedText + textSplit[0] + hidennTextInter + ' '
     }
   }
-  const hidennText = '*'.repeat(text.length - indiceText - 1)
-  anonymizedText = anonymizedText + text[indiceText] + hidennText
-  return anonymizedText
+  return anonymizedText.substring(0, anonymizedText.length - 1)
 }
 
 export const anonymizedControlesTechniques = (controlesTechniques) => {
@@ -41,20 +39,20 @@ export const anonymizedControlesTechniques = (controlesTechniques) => {
   }
 }
 
-export const anonymizedIdentite = (identiteLog) => {
+export const anonymizeIdentite = (identite) => {
   const anonymizedDataIdentite =
     {
-      alreadyHasIdAndKey: identiteLog.alreadyHasIdAndKey,
-      uuid: identiteLog.uuid,
-      anonymizedNom: identiteLog.nom ? anonymizeIdentite(identiteLog.nom) : undefined,
-      anonymizedPrenom: (identiteLog.prenoms && identiteLog.typeImmatriculation === TYPE_IMMATRICULATION.SIV) ? anonymizeIdentite(identiteLog.prenoms[0]) : undefined,
-      anonymizedRaisonSociale: identiteLog.raisonSociale ? anonymizeIdentite(identiteLog.raisonSociale) : undefined,
-      anonymizedSiren: identiteLog.siren ? anonymizeIdentite(identiteLog.siren) : undefined,
-      anonymizedNumeroImmatriculation: identiteLog.numeroImmatriculation ? anonymizeIdentite(identiteLog.numeroImmatriculation) : undefined,
-      anonymizedNumeroFormule: identiteLog.numeroFormule ? anonymizeIdentite(identiteLog.numeroFormule) : undefined,
-      dateEmissionCertificatImmatriculation: identiteLog.dateEmissionCertificatImmatriculation,
-      id: identiteLog.id,
-      key: identiteLog.key,
+      alreadyHasIdAndKey: identite.alreadyHasIdAndKey,
+      uuid: identite.uuid,
+      anonymizedNom: identite.nom ? anonymizeText(identite.nom) : undefined,
+      anonymizedPrenom: (identite.prenoms && identite.typeImmatriculation === TYPE_IMMATRICULATION.SIV) ? anonymizeText(identite.prenoms[0]) : undefined,
+      anonymizedRaisonSociale: identite.raisonSociale ? anonymizeText(identite.raisonSociale) : undefined,
+      anonymizedSiren: identite.siren ? anonymizeText(identite.siren) : undefined,
+      anonymizedNumeroImmatriculation: identite.numeroImmatriculation ? anonymizeText(identite.numeroImmatriculation) : undefined,
+      anonymizedNumeroFormule: identite.numeroFormule ? anonymizeText(identite.numeroFormule) : undefined,
+      dateEmissionCertificatImmatriculation: identite.dateEmissionCertificatImmatriculation,
+      id: identite.id,
+      key: identite.key,
     }
   return {
     anonymizedDataIdentite,
