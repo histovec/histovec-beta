@@ -65,7 +65,7 @@ export APP_USER := $(shell whoami)
 export APP_VERSION	:= $(shell git describe --tags || cat VERSION)
 export LOGS=${APP_PATH}/log
 # build options
-export DC_BUILD_ARGS = --pull --no-cache --depth 20
+export DC_BUILD_ARGS = --pull --no-cache
 export BUILD_DIR=${APP_PATH}/${APP}-build
 export DC_DIR=${APP_PATH}
 export DC_PREFIX=${DC_DIR}/docker-compose
