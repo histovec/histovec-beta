@@ -66,7 +66,7 @@ const certificatMapping = (certificatImmatriculation, importEnFrance, isCIAnnule
 
   return {
     dateEmissionCI,
-    ageEnMoisDuCertificatImmatriculationCourant: labelizeCertifDepuis(ageEnMoisDuCertificatImmatriculationCourant),
+    ageDuCertificatImmatriculationCourant : labelizeCertifDepuis(ageEnMoisDuCertificatImmatriculationCourant),
     isVehiculeImporteDepuisEtranger,
     datePremiereImmatriculationEnFrance,
     datePremiereImmatriculation,
