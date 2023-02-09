@@ -15,7 +15,7 @@ import {
 	MISSING_VALUE,
 	TO_BE_CONTINUED_SYMBOL,
 	TOP_PAGE_MARGIN,
-} from './constants.js'
+} from '@/constants/csaAsPdf.js'
 
 import {
 	getEmbeddedFont,
