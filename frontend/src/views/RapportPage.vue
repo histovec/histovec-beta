@@ -18,7 +18,7 @@ import AlerteComponent from '@/components/AlerteComponent.vue';
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
-import { RAPPORT_FILENAME } from '@/utils/csaAsPdf/constants.js'
+import { RAPPORT_FILENAME } from '@/constants/csaAsPdf.js'
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@/utils/dataPreparationFormat.js'
 import { base64Encode, urlSafeBase64Encode, base64Decode, urlSafeBase64Decode } from '@/utils/encoding.js'
 import { downloadBlob } from '@/utils/file.js'

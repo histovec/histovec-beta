@@ -8,7 +8,6 @@ export const TO_BE_CONTINUED_SYMBOL = '... / ...'
 
 export const TOP_PAGE_MARGIN = 10
 export const TOP_FOOTER_MARGIN = 700
-export const TOP_PAGE_NUMBER_MARGIN = 750
 
 export const MULTILINES_MARGIN = 4
 
