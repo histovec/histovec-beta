@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
+import '@/views/css/views.css'
 
 import { mailTo } from '@/utils/email.js'
 import { HISTOVEC_BASE_URL, HISTOVEC_SUPPORT_EMAIL, REPORT_ACCESSIBILITY_ERROR_EMAIL } from '@/constants/email.js'
@@ -47,7 +48,7 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Accessibilité</h1>
 
-      <h2 class="fr-blue-title">
+      <h2 class="histovec-fr-text">
         Introduction
       </h2>
 
@@ -74,7 +75,7 @@ export default defineComponent({
           Voir l'introduction de la WAI
         </a>
       </p>
-      <h2 class="fr-blue-title">
+      <h2 class="histovec-fr-text">
         Déclaration d’accessibilité
       </h2>
       <p>
@@ -90,14 +91,14 @@ export default defineComponent({
         </router-link>
       </p>
 
-      <h3 class="fr-blue-title">
+      <h3 class="histovec-fr-text">
         État de conformité
       </h3>
       <p>
         Le site HistoVec est non conforme avec le référentiel général d'amélioration de l'accessibilité.
       </p>
 
-      <h4 class="fr-blue-title">
+      <h4 class="histovec-fr-text">
         Résultat des tests
       </h4>
       <p>
@@ -107,13 +108,13 @@ export default defineComponent({
         <li>41% des critères RGAA sont respectés.</li>
       </ul>
 
-      <h3 class="fr-blue-title">
+      <h3 class="histovec-fr-text">
         Contenus non accessibles
       </h3>
       <p>
         Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes.
       </p>
-      <h4 class="fr-blue-title">
+      <h4 class="histovec-fr-text">
         Non conformités
       </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
@@ -130,13 +131,13 @@ export default defineComponent({
         <li>Consultation : accessibilité des informations du rapport et du certificat de situation administrative à améliorer</li>
       </ul>
 
-      <h3 class="fr-blue-title">
+      <h3 class="histovec-fr-text">
         Établissement de cette déclaration d’accessibilité
       </h3>
       <p>
         Cette déclaration a été établie le 15 novembre 2022. Elle a été mise à jour le 15 novembre 2022.
       </p>
-      <h4>
+      <h4 class="histovec-fr-text">
         Technologies utilisées pour la réalisation du site web
       </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
@@ -146,7 +147,7 @@ export default defineComponent({
         <li>Vue.js</li>
       </ul>
 
-      <h4 class="fr-blue-title">
+      <h4 class="histovec-fr-text">
         Environnement de test
       </h4>
       <p>
@@ -157,7 +158,7 @@ export default defineComponent({
         <li>Navigateur : Firefox</li>
         <li>Système d'exploitation : Windows 10</li>
       </ul>
-      <h4 class="fr-blue-title">
+      <h4 class="histovec-fr-text">
         Les outils utilisés lors de l’évaluation
       </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
@@ -197,7 +198,7 @@ export default defineComponent({
           <li>Wave (webaim)</li>
         </ul>
       </ul>
-      <h4 class="fr-blue-title">
+      <h4 class="histovec-fr-text">
         Pages du site ayant fait l’objet de la vérification de conformité
       </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
@@ -213,7 +214,7 @@ export default defineComponent({
         <li>Données personnelles & Gestion des cookies</li>
       </ul>
 
-      <h3 class="fr-blue-title">
+      <h3 class="histovec-fr-text">
         Retour d'information et contact
       </h3>
       <p>
@@ -239,7 +240,7 @@ export default defineComponent({
         </li>
       </ul>
 
-      <h3 class="fr-blue-title">
+      <h3 class="histovec-fr-text">
         Voies de recours
       </h3>
       <p>
@@ -287,15 +288,10 @@ export default defineComponent({
 </template>
 
 <style scoped>
-/* @todo centralize these rules in common CSS file as a .histovec-fr-title-link class */
 [href] {
   background-image: none;
 }
 
-.fr-title-link {
-  text-decoration: none;
-  color: var(--blue-france-sun-113-625);
-}
 .sous-liste {
   list-style-type: circle;
 }
