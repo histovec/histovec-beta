@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
+import '@/views/css/views.css'
 
 import { mailTo } from '@/utils/email.js'
 import {
@@ -58,7 +59,7 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Données personnelles & Gestion des cookies</h1>
 
-      <h5 class="fr-blue-title">
+      <h5 class="histovec-fr-text">
         Introduction
       </h5>
       <p>
@@ -70,7 +71,7 @@ export default defineComponent({
         </ul>
       </p>
 
-      <h5 class="fr-blue-title">
+      <h5 class="histovec-fr-text">
         Données collectées
       </h5>
       <p>
@@ -105,7 +106,7 @@ export default defineComponent({
         Les données relatives aux résultats des contrôles techniques et au kilométrage des véhicules proviennent de l’UTAC –OTC. HistoVec interroge la base de données de l’UTAC-OTC lors de chaque consultation.
       </p>
 
-      <h5 class="fr-blue-title">
+      <h5 class="histovec-fr-text">
         Conservation des données
       </h5>
       <p>
@@ -145,7 +146,7 @@ export default defineComponent({
   </div>
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
-      <h5 class="fr-blue-title">
+      <h5 class="histovec-fr-text">
         Droit d'accès et de modification
       </h5>
       <p>
@@ -193,11 +194,3 @@ export default defineComponent({
     </div>
   </div>
 </template>
-
-<style scoped>
-/* @todo centralize these rules in common CSS file as a .histovec-fr-title class */
-
-.fr-blue-title {
-  color: var(--blue-france-sun-113-625);
-}
-</style>
