@@ -1,6 +1,6 @@
 <script>
 import {defineComponent} from 'vue'
-import '@/assets/css/image.css'
+import '@/assets/stylesheets/image.css'
 
 export default defineComponent({
   name: 'ImagePresentation',

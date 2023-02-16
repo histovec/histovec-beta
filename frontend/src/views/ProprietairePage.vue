@@ -8,6 +8,8 @@ import { ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
 
+import '@/assets/stylesheets/globale.css'
+
 import plaqueNonSupporteeSvg from '@/assets/img/plaque_non_supportee.svg?url'
 import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
 import plaqueSivSvg from '@/assets/img/plaque_siv.svg?url'
@@ -585,11 +587,11 @@ export default defineComponent({
     <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
       <div class="fr-col-12">
         <p class="fr-text--md">
-          Le <span class="fr-blue-text">numéro SIREN</span> correspond au <span class="fr-blue-text">9 premiers caractères du numéro SIRET</span>
+          Le <span class="fr-text--bleu">numéro SIREN</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
           de votre société.
         </p>
         <p class="fr-text--md">
-          Il figure sur le <span class="fr-blue-text">KBIS</span> de votre société.
+          Il figure sur le <span class="fr-text--bleu">KBIS</span> de votre société.
         </p>
         <p class="fr-text--md">
           Vous pouvez aussi l'obtenir sur ce
@@ -601,13 +603,13 @@ export default defineComponent({
           >
             site
           </a>
-          en effectuant une <span class="fr-blue-text">recherche avec le nom de votre société</span>.
+          en effectuant une <span class="fr-text--bleu">recherche avec le nom de votre société</span>.
         </p>
         <p class="fr-text--md">
-          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-blue-text">pas de numéro de SIREN</span>.
+          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de SIREN</span>.
         </p>
         <p class="fr-text--md">
-          Dans ce cas, <span class="fr-blue-text">laissez le champs SIREN vide</span>.
+          Dans ce cas, <span class="fr-text--bleu">laissez le champs SIREN vide</span>.
         </p>
       </div>
     </div>
@@ -1360,10 +1362,6 @@ export default defineComponent({
 
 .text-center {
   text-align: center;
-}
-
-.fr-blue-text {
-  color: var(--blue-france-sun-113-625);
 }
 
 .help-link {

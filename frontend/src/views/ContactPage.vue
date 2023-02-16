@@ -16,7 +16,7 @@ import {
 } from '@/constants/contact.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
 import { EMAIL_REGEX } from '@/constants/regex.js'
-
+import '@/assets/stylesheets/globale.css'
 
 export default defineComponent({
   name: 'ContactPage',
@@ -505,34 +505,34 @@ export default defineComponent({
             v-if="identity.typePersonne === TYPE_PERSONNE.PRO"
             class="fr-ml-4w  fr-pl-0"
           >
-            <li> Raison sociale: <span class="fr-blue-text">{{ identity.raisonSociale || 'non renseigné' }}</span> </li>
-            <li> Numéro SIREN: <span class="fr-blue-text">{{ identity.siren || 'non renseigné' }}</span> </li>
+            <li> Raison sociale: <span class="fr-text--bleu">{{ identity.raisonSociale || 'non renseigné' }}</span> </li>
+            <li> Numéro SIREN: <span class="fr-text--bleu">{{ identity.siren || 'non renseigné' }}</span> </li>
           </ul>
           <ul
             v-else
             class="fr-ml-4w  fr-pl-0"
           >
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Nom de naissance: <span class="fr-blue-text">{{ identity.nom || 'non renseigné' }}</span>
+              Nom de naissance: <span class="fr-text--bleu">{{ identity.nom || 'non renseigné' }}</span>
             </li>
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Prénom(s): <span class="fr-blue-text">{{ identity.prenoms || 'non renseigné' }}</span>
+              Prénom(s): <span class="fr-text--bleu">{{ identity.prenoms || 'non renseigné' }}</span>
             </li>
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
-              Nom de naissance et prénom(s): <span class="fr-blue-text">{{ identity.nom || 'non renseigné' }}</span>
+              Nom de naissance et prénom(s): <span class="fr-text--bleu">{{ identity.nom || 'non renseigné' }}</span>
             </li>
           </ul>
         </div>
         <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
           <ul class="fr-ml-4w  fr-pl-0">
             <li>
-              Immatriculation: <span class="fr-blue-text">{{ identity.plaque || 'non renseigné' }}</span>
+              Immatriculation: <span class="fr-text--bleu">{{ identity.plaque || 'non renseigné' }}</span>
             </li>
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Numéro de formule: <span class="fr-blue-text">{{ identity.formule || 'non renseigné' }}</span>
+              Numéro de formule: <span class="fr-text--bleu">{{ identity.formule || 'non renseigné' }}</span>
             </li>
             <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
-              Date du certificat : <span class="fr-blue-text">{{ identity.dateCertificat || 'non renseigné' }}</span>
+              Date du certificat : <span class="fr-text--bleu">{{ identity.dateCertificat || 'non renseigné' }}</span>
             </li>
           </ul>
         </div>
@@ -578,11 +578,9 @@ export default defineComponent({
 </template>
 
 <style scoped>
-  .fr-blue-text {
-    color: var(--blue-france-sun-113-625);
-  }
 
   .text-center {
     text-align: center;
   }
+
 </style>

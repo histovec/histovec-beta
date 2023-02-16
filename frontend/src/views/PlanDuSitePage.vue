@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
-import '@/views/css/views.css'
+import '@/assets/stylesheets/globale.css'
 
 export default defineComponent({
   name: 'PlanDuSitePage',
@@ -30,7 +30,7 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Plan du site</h1>
 
-      <h3 class="histovec-fr-text">
+      <h3 class="fr-text--bleu">
         <router-link
           to="/accueil"
         >
@@ -38,7 +38,7 @@ export default defineComponent({
         </router-link>
       </h3>
 
-      <h4 class="histovec-fr-text  fr-ml-3w">
+      <h4 class="fr-text--bleu  fr-ml-3w">
         <router-link
           to="/proprietaire"
         >
@@ -50,7 +50,7 @@ export default defineComponent({
         Rapport propriétaire
       </h5>
 
-      <h4 class="histovec-fr-text  fr-ml-3w">
+      <h4 class="fr-text--bleu  fr-ml-3w">
         <router-link
           to="/acheteur"
         >
@@ -62,7 +62,7 @@ export default defineComponent({
         Rapport acheteur
       </h5>
 
-      <h4 class="histovec-fr-text  fr-ml-3w">
+      <h4 class="fr-text--bleu  fr-ml-3w">
         <router-link
           to="/faq"
         >
@@ -70,7 +70,7 @@ export default defineComponent({
         </router-link>
       </h4>
 
-      <h4 class="histovec-fr-text  fr-ml-3w">
+      <h4 class="fr-text--bleu  fr-ml-3w">
         <router-link
           to="/contact"
         >
@@ -78,7 +78,7 @@ export default defineComponent({
         </router-link>
       </h4>
 
-      <h3 class="histovec-fr-text">
+      <h3 class="fr-text--bleu">
         <router-link
           to="/plan-du-site"
         >
@@ -86,7 +86,7 @@ export default defineComponent({
         </router-link>
       </h3>
 
-      <h3 class="histovec-fr-text">
+      <h3 class="fr-text--bleu">
         <router-link
           to="/accessibilite"
         >
@@ -94,7 +94,7 @@ export default defineComponent({
         </router-link>
       </h3>
 
-      <h3 class="histovec-fr-text">
+      <h3 class="fr-text--bleu">
         <router-link
           to="/mentions-legales"
         >
@@ -102,7 +102,7 @@ export default defineComponent({
         </router-link>
       </h3>
 
-      <h3 class="histovec-fr-text">
+      <h3 class="fr-text--bleu">
         <router-link
           to="/donnees-personnelles-et-cookies"
         >
@@ -112,10 +112,3 @@ export default defineComponent({
     </div>
   </div>
 </template>
-
-<style scoped>
-[href] {
-  background-image: none;
-}
-
-</style>
