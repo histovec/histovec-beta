@@ -5,6 +5,7 @@ import HistoVecHeader from '@/components/HistoVecHeader.vue'
 import HistoVecFooter from '@/components/HistoVecFooter.vue'
 
 import { v4 as uuidv4 } from 'uuid'
+import statutApi from '@/api/statutApi.js'
 
 
 // Ajout d'un id anonyme pour un usage statistique
@@ -16,6 +17,10 @@ if (localStorage.getItem('userId') === null) {
 export default defineComponent({
   name: 'App',
   components: { HistoVecHeader, HistoVecFooter },
+  created: async function () {
+    await statutApi.getHealthApi()
+    await statutApi.getVersionApi()
+  },
 })
 </script>
 

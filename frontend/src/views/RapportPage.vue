@@ -451,6 +451,8 @@ export default defineComponent({
 
         if (buyerReportResponse === null || buyerReportResponse.status === 500) {
           // Cas: Aucune Reponse du back
+          api.log('/buyer/notFound')
+
           this.$router.push({
             name: 'erreurInattendue',
           })
@@ -459,6 +461,8 @@ export default defineComponent({
 
         if (buyerReportResponse.status === 404) {
           // Cas: véhicule non trouvé
+          api.log('/buyer/notFound')
+
           this.$router.push({
             name: 'pageNonTrouvee',
             query: {
@@ -479,6 +483,7 @@ export default defineComponent({
 
         if (buyerReportResponse.status !== 200) {
           // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
+          api.log('/buyer/notFound')
           this.$router.push({
             name: 'serviceIndisponible',
           })
@@ -488,6 +493,8 @@ export default defineComponent({
         report = buyerReportResponse.report
       } else {
         // Cas: lien acheteur invalide
+        api.log('/buyer/invalid')
+
         this.$router.push({
           name: 'erreurInattendue',
           query: {
@@ -510,6 +517,8 @@ export default defineComponent({
 
         if (holderReportResponse === null || holderReportResponse.status === 500) {
           // Cas: Aucune Reponse du back
+          api.log('/holder/notFound')
+
           this.$router.push({
             name: 'erreurInattendue',
           })
@@ -518,6 +527,8 @@ export default defineComponent({
 
         if (holderReportResponse.status === 404) {
           // Cas: véhicule non trouvé
+          api.log('/holder/notFound')
+
           this.$router.push({
             name: 'pageNonTrouvee',
             query: {
@@ -538,11 +549,14 @@ export default defineComponent({
 
         if (holderReportResponse.status !== 200) {
           // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
+          api.log('/holder/notFound')
+
           this.$router.push({
             name: 'serviceIndisponible',
           })
           return
         }
+
 
         report = holderReportResponse.report
       } else {
@@ -613,6 +627,13 @@ export default defineComponent({
       await this.logKilometersError()
     }
     this.isLoading = false;
+
+    if (this.isRapportAcheteur) {
+      api.log('/buyer/ok')
+    }
+    if (this.isRapportVendeur) {
+      api.log('/holder/ok')
+    }
   },
 
   methods: {
@@ -630,25 +651,25 @@ export default defineComponent({
     async onTabSelected () {
       switch (this.currentTab) {
         case (this.constants.REPORT_TABS.SYNTHESE):
-          await api.log(`${this.$route.path}/synthesis`)
+          await api.log('/synthesis')
           break;
         case (this.constants.REPORT_TABS.VEHICULE):
-          await api.log(`${this.$route.path}/vehicle`)
+          await api.log('/vehicle')
           break;
         case (this.constants.REPORT_TABS.TITULAIRE_ET_TITRE):
-          await api.log(`${this.$route.path}/holder`)
+          await api.log('/holder')
           break
         case (this.constants.REPORT_TABS.SITUATION_ADMINISTRATIVE):
-          await api.log(`${this.$route.path}/administrative-status`)
+          await api.log('/administrative-status')
           break
         case (this.constants.REPORT_TABS.HISTORIQUE):
-          await api.log(`${this.$route.path}/history`)
+          await api.log('/history')
           break
         case (this.constants.REPORT_TABS.CONTROLES_TECHNIQUES):
-          await api.log(`${this.$route.path}/technical-control`)
+          await api.log('/technical-control')
           break
         case (this.constants.REPORT_TABS.KILOMETRAGE):
-          await api.log(`${this.$route.path}/kilometers`)
+          await api.log('/kilometers')
           break
         default:
           break
@@ -707,9 +728,7 @@ export default defineComponent({
         key: this.buyerKey,
       }
 
-      const report = await reportService.getBuyerReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
-
-      return report
+      return await reportService.getBuyerReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
     },
 
     async getHolderReport () {
@@ -718,12 +737,10 @@ export default defineComponent({
         formData: this.formData,
       }
 
-      const report = await reportService.getHolderReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
-
-      return report
+      return await reportService.getHolderReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
     },
     async generatePdf () {
-      await api.log(`${this.$route.path}/csa/download`)
+      await api.log('/csa/download')
 
       const {
         dateMiseAJour,
@@ -801,28 +818,28 @@ export default defineComponent({
 
     /** logs **/
     async logSimplimmatImage () {
-      await api.log(`${this.$route.path}/simplimmat/image`)
+      await api.log('/simplimmat/image')
     },
     async logSimplimmatLink () {
-      await api.log(`${this.$route.path}/simplimmat/link`)
+      await api.log('/simplimmat/link')
     },
     async logPartageDuRapport () {
-      await api.log(`${this.$route.path}/share`)
+      await api.log('/share')
     },
     async logCopieLienPartage () {
-      await api.log(`${this.$route.path}/share/copy`)
+      await api.log('/share/copy')
     },
     async logCopieCodePartage () {
-      await api.log(`${this.$route.path}/share/code-partage`)
+      await api.log('/share/code-partage')
     },
     async logMailLienPartage () {
-      await api.log(`${this.$route.path}/share/mail`)
+      await api.log('/share/mail')
     },
     async logMonAvisImage () {
-      await api.log(`${this.$route.path}/mon-avis/image`)
+      await api.log('/mon-avis/image')
     },
     async logKilometersError () {
-      await api.log(`${this.$route.path}/kilometers-error`)
+      await api.log('/kilometers-error')
     },
 
     async onClickCopyLienPartage () {

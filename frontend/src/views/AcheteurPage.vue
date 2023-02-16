@@ -14,9 +14,6 @@ export default defineComponent({
 
   components: { HistoVecButtonLink, ImagePresentation },
 
-  created () {
-    this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
-  },
   data () {
     return {
       image:{
@@ -24,11 +21,13 @@ export default defineComponent({
       },
     }
   },
+  created () {
+    api.log('/buyer')
+    this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
+  },
   methods: {
     async onClickMailDemandeRapport () {
       window.location = this.askReportEmail
-
-      await api.log(`${this.$route.path}`)
     },
   },
 })

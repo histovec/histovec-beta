@@ -10,6 +10,7 @@ import gratuitSvg from '@/assets/img/gratuit.svg?url'
 import officielSvg from '@/assets/img/officiel.svg?url'
 import simpleSvg from '@/assets/img/simple.svg?url'
 import accueilSVG from '@/assets/img/accueil.svg?url'
+import api from '@/api/index.js'
 
 export default defineComponent({
   name: 'AccueilPage',
@@ -65,6 +66,9 @@ export default defineComponent({
         accueilSVG,
       },
     }
+  },
+  created () {
+    api.log('/home')
   },
 })
 </script>

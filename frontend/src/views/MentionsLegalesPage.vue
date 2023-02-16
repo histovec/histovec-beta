@@ -8,6 +8,7 @@ import {
   ANTS_PERSONAL_DATA_EMAIL, UTAC_PERSONAL_DATA_EMAIL, HISTOVEC_SUPPORT_EMAIL, OPPOSITION_PERSONAL_DATA_EMAIL,
   REPRODUCTION_REQUEST_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_UTAC_PERSONAL_DATA_EMAIL, SEND_LIMITATION_PERSONAL_DATA_EMAIL, SEND_OPPOSITION_PERSONAL_DATA_EMAIL,
 } from '@/constants/email.js'
+import api from '@/api/index.js'
 
 export default defineComponent({
   name: 'MentionsLegalesPage',
@@ -30,6 +31,7 @@ export default defineComponent({
   },
 
   created () {
+    api.log('/legal')
     this.reproductionRequestEmail = mailTo(REPRODUCTION_REQUEST_EMAIL)
     this.readOrUpdateAntsPersonalDataEmail = mailTo(READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL)
     this.readOrUpdateUtacPersonalDataEmail = mailTo(READ_OR_UPDATE_UTAC_PERSONAL_DATA_EMAIL)
