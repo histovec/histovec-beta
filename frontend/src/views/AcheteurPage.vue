@@ -14,6 +14,14 @@ export default defineComponent({
 
   components: { HistoVecButtonLink, ImagePresentation },
 
+  beforeRouteEnter(to, from) {
+    if (from.href) {
+      api.log('/buyer/navigation')
+    }
+    if (from.href === undefined) {
+      api.log('/buyer/redirection')
+    }
+  },
   data () {
     return {
       image:{
@@ -22,7 +30,6 @@ export default defineComponent({
     }
   },
   created () {
-    api.log('/buyer')
     this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
   },
   methods: {

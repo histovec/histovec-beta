@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import ErrorPage from '@/views/error/ErrorPage.vue'
-
+import api from '@/api/index.js'
 
 export default defineComponent({
   name: 'UnavailableServicePage',
@@ -35,6 +35,9 @@ export default defineComponent({
       type: Object,
       default: () => null,
     },
+  },
+  created () {
+    api.log('/unavailable')
   },
 })
 </script>

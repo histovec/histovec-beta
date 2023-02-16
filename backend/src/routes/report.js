@@ -323,7 +323,7 @@ export const generateGetReport = (utacClient) =>
 
       if (utacStatus !== 200) {
         appLogger.error({
-          error: 'UTAC response failed',
+          error: '[UTAC] response call_failed',
           status: utacStatus,
           remote_error: utacMessage,
         })
@@ -385,7 +385,7 @@ export const generateGetReport = (utacClient) =>
       })
     } catch ({ message: errorMessage }) {
       appLogger.error({
-        error: 'UTAC error',
+        error: '[UTAC] call_error',
         remote_error: errorMessage,
       })
 
