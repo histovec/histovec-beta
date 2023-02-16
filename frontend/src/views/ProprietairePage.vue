@@ -302,7 +302,7 @@ export default defineComponent({
       })
     },
     'tabs.siv.selectedTabIndex': function (val) {
-      sleep(100).then(() => {
+      sleep(300).then(() => {
         if (val === 0) {
           document.getElementById('form-siv-particulier-nom-naissance').focus()
         }
@@ -312,7 +312,7 @@ export default defineComponent({
       })
     },
     'tabs.fni.selectedTabIndex': function (val) {
-      sleep(100).then(() => {
+      sleep(300).then(() => {
         if (val === 0) {
           document.getElementById('form-fni-particulier-nom-prenom').focus()
         }
