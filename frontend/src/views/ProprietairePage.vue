@@ -301,7 +301,7 @@ export default defineComponent({
       })
     },
     'tabs.siv.selectedTabIndex': function (val) {
-      sleep(100).then(() => {
+      sleep(300).then(() => {
         if (val === 0) {
           document.getElementById('input-siv-particulier-nom').focus()
         }
@@ -311,7 +311,7 @@ export default defineComponent({
       })
     },
     'tabs.fni.selectedTabIndex': function (val) {
-      sleep(100).then(() => {
+      sleep(300).then(() => {
         if (val === 0) {
           document.getElementById('input-fni-particulier-nom-prenom').focus()
         }
