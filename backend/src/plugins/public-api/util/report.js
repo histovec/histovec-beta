@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 
+import format from 'date-fns/format'
+
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../../../util/dataPreparationFormat.js'
 import { hash } from '../../../util/crypto.js'
 import { checkId, checkKey } from './check/reportByCode.js'
@@ -7,6 +9,7 @@ import { syslogLogger } from '../../../util/logger.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
 import { FR_DATE_FORMAT } from '../../../constant/date/format.js'
 import config from '../../../config.js'
+import add from 'date-fns/add'
 
 export const buildIdAndKey = (code, uuid) => {
   if (!code) {
@@ -62,6 +65,15 @@ export const buildReportId = (
   }
 
   const dataValidityMonth = dataValidityDate.format('YYYYMM')
+
+  let date = add(new Date(), { days: -7 })
+  console.log(date + ' date -7')
+  // if (config.usePreviousMonthForData) {
+  date = add(date, { months: -config.previousMonthShift })
+  console.log(date + ' mois -1')
+  // }
+  const dataValide = format(date, 'yyyyMM')
+  console.log(dataValide)
 
   const rawReportId = `${personneId}${vehicleId}${dataValidityMonth}`
 
