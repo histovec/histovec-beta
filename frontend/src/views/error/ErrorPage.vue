@@ -56,7 +56,7 @@ export default defineComponent({
     </div>
 
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.erreurSvg" alt="Illustration de la page d'erreur" />
+      <ImagePresentation :src="image.erreurSvg" />
     </div>
 
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
