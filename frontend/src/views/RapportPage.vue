@@ -308,6 +308,7 @@ export default defineComponent({
     // ----- Interrogation de l'api pour le rapport acheteur -----
 
     buyerId () {
+      console.log(this.$route.query)
       const { id: buyerId, urlUnsafe } = this.$route.query
 
       /* ----- @todo @urlUnsafe3 : Supprimer ce bloc de code  ------- */
@@ -451,8 +452,6 @@ export default defineComponent({
 
         if (buyerReportResponse === null || buyerReportResponse.status === 500) {
           // Cas: Aucune Reponse du back
-          api.log('/buyer/notFound')
-
           this.$router.push({
             name: 'erreurInattendue',
           })
@@ -461,8 +460,6 @@ export default defineComponent({
 
         if (buyerReportResponse.status === 404) {
           // Cas: véhicule non trouvé
-          api.log('/buyer/notFound')
-
           this.$router.push({
             name: 'pageNonTrouvee',
             query: {
@@ -483,7 +480,6 @@ export default defineComponent({
 
         if (buyerReportResponse.status !== 200) {
           // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-          api.log('/buyer/notFound')
           this.$router.push({
             name: 'serviceIndisponible',
           })
@@ -517,8 +513,6 @@ export default defineComponent({
 
         if (holderReportResponse === null || holderReportResponse.status === 500) {
           // Cas: Aucune Reponse du back
-          api.log('/holder/notFound')
-
           this.$router.push({
             name: 'erreurInattendue',
           })
@@ -527,8 +521,6 @@ export default defineComponent({
 
         if (holderReportResponse.status === 404) {
           // Cas: véhicule non trouvé
-          api.log('/holder/notFound')
-
           this.$router.push({
             name: 'pageNonTrouvee',
             query: {
@@ -549,8 +541,6 @@ export default defineComponent({
 
         if (holderReportResponse.status !== 200) {
           // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-          api.log('/holder/notFound')
-
           this.$router.push({
             name: 'serviceIndisponible',
           })
@@ -561,6 +551,7 @@ export default defineComponent({
         report = holderReportResponse.report
       } else {
         // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
+        api.log('/holder/invalid')
         this.$router.push({
           name: 'proprietaire',
         })
@@ -568,6 +559,7 @@ export default defineComponent({
       }
     } else {
       // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
+      api.log('/holder/invalid')
       this.$router.push({
         name: 'proprietaire',
       })
@@ -623,9 +615,6 @@ export default defineComponent({
       })
     }
 
-    if (!areControlesTechinquesDisponibles) {
-      await this.logKilometersError()
-    }
     this.isLoading = false;
 
     if (this.isRapportAcheteur) {
@@ -837,9 +826,6 @@ export default defineComponent({
     },
     async logMonAvisImage () {
       await api.log('/mon-avis/image')
-    },
-    async logKilometersError () {
-      await api.log('/kilometers-error')
     },
 
     async onClickCopyLienPartage () {

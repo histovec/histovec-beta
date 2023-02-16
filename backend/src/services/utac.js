@@ -161,7 +161,7 @@ class UTACClient {
 
   async healthCheck () {
     appLogger.debug({
-      debug: 'UTACClient - healthCheck',
+      debug: '[UTAC] Client - healthCheck',
     })
 
     const { status } = await this.axios.get('/healthcheck').catch(err => err)
@@ -181,7 +181,7 @@ class UTACClient {
       const token = response.data && response.data.token
       if (token) {
         appLogger.debug({
-          debug: 'UTAC authentication succeed',
+          debug: '[UTAC] authentication succeed',
           token,
         })
 
@@ -192,11 +192,11 @@ class UTACClient {
       }
 
       appLogger.error({
-        error: 'UTAC authentication error : no token',
+        error: '[UTAC] authentication_error no_token',
       })
     } catch (error) {
       appLogger.error({
-        error: 'UTAC authentication failed',
+        error: '[UTAC] authentication_failed',
         remoteError: error,
       })
     }
@@ -223,7 +223,7 @@ class UTACClient {
       const { error } = utacResponseSchema.validate(data)
 
       if (error) {
-        appLogger.info(`UTAC response validation error : ${error}`)
+        appLogger.info(`[UTAC] response validation error : ${error}`)
         appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
 
         return {
@@ -292,7 +292,7 @@ class UTACClient {
     }
 
     appLogger.debug({
-      debug: 'UTAC result found',
+      debug: '[UTAC] result found',
       immat,
       ct: response.data.ct,
       update_date: response.data.update_date,

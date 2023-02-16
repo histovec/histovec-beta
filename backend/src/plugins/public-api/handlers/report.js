@@ -175,7 +175,7 @@ export const getReport = async (payload) => {
 
     if (utacStatus !== 200) {
       appLogger.error({
-        error: 'UTAC response failed',
+        error: '[UTAC] response call_failed',
         status: utacStatus,
         remoteError: utacMessage,
       })
@@ -242,7 +242,7 @@ export const getReport = async (payload) => {
     }
   } catch ({ message: errorMessage }) {
     appLogger.error({
-      error: 'UTAC error',
+      error: '[UTAC] call_error',
       remoteError: errorMessage,
     })
 
