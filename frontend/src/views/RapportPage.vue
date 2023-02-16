@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 import QrcodeVue from 'qrcode.vue'
 import { copyText } from 'vue3-clipboard'
-import '@/views/css/views.css'
+import '@/assets/stylesheets/globale.css'
 
 
 import orderBy from 'lodash.orderby'
@@ -1038,7 +1038,7 @@ export default defineComponent({
                   Modèle
                 </h6>
 
-                <p class="fr-text--md  histovec-fr-text  fr-mb-1v">
+                <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
                   {{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}
                 </p>
 
@@ -1046,7 +1046,7 @@ export default defineComponent({
                   v-if="caracteristiquesTechniques.puissance.cv"
                   class="fr-text--md  fr-mb-1v"
                 >
-                  Puissance fiscale : <span class="histovec-fr-text">{{ caracteristiquesTechniques.puissance.cv }} ch</span>
+                  Puissance fiscale : <span class="fr-text--bleu">{{ caracteristiquesTechniques.puissance.cv }} ch</span>
                 </p>
 
                 <p
@@ -1078,7 +1078,7 @@ export default defineComponent({
                   v-if="processedVehiculeData.usage.vehiculeDeCollection "
                 >
                   <p class="fr-text--md  fr-mb-2w">
-                    <span class="histovec-fr-text">
+                    <span class="fr-text--bleu">
                       <VIcon
                         :name="constants.USAGE_COLLECTION.icon"
                       />
@@ -1105,7 +1105,7 @@ export default defineComponent({
                   v-if="processedVehiculeData.usage.vehiculeAgricole"
                 >
                   <p class="fr-text--md  fr-mb-0">
-                    <span class="histovec-fr-text">
+                    <span class="fr-text--bleu">
                       <VIcon
                         :name="constants.USAGE_AGRICOLE.icon"
                       />
@@ -1136,17 +1136,17 @@ export default defineComponent({
                 </h6>
 
                 <p class="fr-text--md  fr-mb-0">
-                  <span class="histovec-fr-text">{{ processedVehiculeData.titulaire.identite }}</span>
+                  <span class="fr-text--bleu">{{ processedVehiculeData.titulaire.identite }}</span>
                   depuis
                   <span
                     v-if="certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
-                    class="histovec-fr-text"
+                    class="fr-text--bleu"
                   >
                     {{ certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }}
                   </span>
                   <span
                     v-if="!certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
-                    class="histovec-fr-text"
+                    class="fr-text--bleu"
                   >
                     une durée inconnue
                   </span>
@@ -1154,16 +1154,16 @@ export default defineComponent({
                   <template v-if="!certificat.isVehiculeImporteDepuisEtranger">
                     <template v-if="isRapportVendeur">
                       Vous êtes le
-                      <span class="histovec-fr-text">{{ processedVehiculeData.titulairesCount }}</span>
-                      <sup class="histovec-fr-text">{{ utils.getExposant(processedVehiculeData.titulairesCount) }}</sup>
+                      <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
+                      <sup class="fr-text--bleu">{{ utils.getExposant(processedVehiculeData.titulairesCount) }}</sup>
                       titulaire de ce véhicule
                     </template>
                     <template v-if="isRapportAcheteur">
                       Ce véhicule a déjà eu
-                      <span class="histovec-fr-text">{{ processedVehiculeData.titulairesCount }}</span>
+                      <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
                       titulaire(s), en l'achetant vous serez le
-                      <span class="histovec-fr-text">{{ Number(processedVehiculeData.titulairesCount) + 1 }}</span>
-                      <sup class="histovec-fr-text">{{ utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
+                      <span class="fr-text--bleu">{{ Number(processedVehiculeData.titulairesCount) + 1 }}</span>
+                      <sup class="fr-text--bleu">{{ utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
                     </template>
                   </template>
                   <br />
@@ -1185,25 +1185,25 @@ export default defineComponent({
                 <p class="fr-text--md  fr-mb-1v">
                   <template v-if="datePremiereImmatriculationFR">
                     Première immatriculation le
-                    <span class="histovec-fr-text">{{ datePremiereImmatriculationFR }}</span>
+                    <span class="fr-text--bleu">{{ datePremiereImmatriculationFR }}</span>
                   </template>
 
                   <template v-if="!datePremiereImmatriculationFR">
-                    Date de première immatriculation <span class="histovec-fr-text">inconnue</span>
+                    Date de première immatriculation <span class="fr-text--bleu">inconnue</span>
                   </template>
                 </p>
 
                 <template v-if="certificat.isVehiculeImporteDepuisEtranger">
-                  <p class="fr-text--md  histovec-fr-text  fr-mb-1v">
-                    <span class="histovec-fr-text">
+                  <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
+                    <span class="fr-text--bleu">
                       <VIcon
                         name="ri-earth-line"
                       />
                     </span>
-                    Ce véhicule a été <span class="histovec-fr-text">importé</span>
+                    Ce véhicule a été <span class="fr-text--bleu">importé</span>
                     <span
                       v-if="isRapportAcheteur"
-                      class="histovec-fr-text"
+                      class="fr-text--bleu"
                     >
                       Vérifier les options incluses qui peuvent être différentes
                     </span>
@@ -1220,27 +1220,27 @@ export default defineComponent({
                   v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours"
                   class="fr-text--md  fr-mb-1v"
                 >
-                  <span class="histovec-fr-text">
+                  <span class="fr-text--bleu">
                     <VIcon
                       :name="processedVehiculeData.isApte ? 'ri-thumb-up-line' : 'ri-error-warning-fill'"
                     />
                   </span>
                   <!-- état - un seul sinistre !-->
                   <template v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
-                    Ce véhicule a eu <span class="histovec-fr-text">un sinistre déclaré</span>
+                    Ce véhicule a eu <span class="fr-text--bleu">un sinistre déclaré</span>
                     <span
                       v-if="processedVehiculeData.sinistresCount === 1"
-                      class="histovec-fr-text"
+                      class="fr-text--bleu"
                     >
                       en {{ processedVehiculeData.lastSinistreYear }}
                     </span>
                     <br />
                     <template v-if="processedVehiculeData.isApte">
                       et
-                      <span class="histovec-fr-text"> déclaré apte à circuler</span>
+                      <span class="fr-text--bleu"> déclaré apte à circuler</span>
                       <span
                         v-if="processedVehiculeData.lastResolutionYear"
-                        class="histovec-fr-text"
+                        class="fr-text--bleu"
                       >
                         en {{ processedVehiculeData.lastResolutionYear }}
                       </span>
@@ -1249,15 +1249,15 @@ export default defineComponent({
                   <!-- état - plusieurs sinistres !-->
                   <template v-if="processedVehiculeData.sinistresCount > 1">
                     Ce véhicule a eu
-                    <span class="histovec-fr-text">plusieurs sinistres</span>
-                    , dont le dernier déclaré en <span class="histovec-fr-text">{{ processedVehiculeData.lastSinistreYear }}</span>
+                    <span class="fr-text--bleu">plusieurs sinistres</span>
+                    , dont le dernier déclaré en <span class="fr-text--bleu">{{ processedVehiculeData.lastSinistreYear }}</span>
                     <br />
                     <template v-if="processedVehiculeData.isApte">
                       Le véhicule a été
-                      <span class="histovec-fr-text"> déclaré apte à circuler</span>
+                      <span class="fr-text--bleu"> déclaré apte à circuler</span>
                       <span
                         v-if="!processedVehiculeData.isApte"
-                        class="histovec-fr-text"
+                        class="fr-text--bleu"
                       >
                         en {{ processedVehiculeData.lastResolutionYear }}
                       </span>
@@ -1268,13 +1268,13 @@ export default defineComponent({
                   <!-- Commentaire: un ou plusieurs sinistres -->
                   <span
                     v-if="processedVehiculeData.isApte"
-                    class="histovec-fr-text"
+                    class="fr-text--bleu"
                   >
                     {{ assets.syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
                   </span>
                   <span
                     v-else
-                    class="histovec-fr-text"
+                    class="fr-text--bleu"
                   >
                     {{ assets.syntheseMapping['ove'].adv }}
                   </span>
@@ -1282,7 +1282,7 @@ export default defineComponent({
                   <br />
                   <span
                     v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
-                    class="histovec-fr-text"
+                    class="fr-text--bleu"
                   >
                     {{ assets.syntheseMapping['multi_ove'].adv }}
                   </span>
@@ -1292,12 +1292,12 @@ export default defineComponent({
                   v-if="synthese.length === 0 && !processedVehiculeData.lastSinistreYear"
                   class="fr-text--md  fr-mb-1v"
                 >
-                  <span class="histovec-fr-text">
+                  <span class="fr-text--bleu">
                     <VIcon
                       name="ri-check-line"
                     />
                   </span>
-                  <span class="histovec-fr-text">Rien à signaler </span>
+                  <span class="fr-text--bleu">Rien à signaler </span>
                   <br />
                   (gages, opposition, vol,...)
                 </p>
@@ -1306,7 +1306,7 @@ export default defineComponent({
                   v-for="(entry, index) in synthese"
                   :key="index"
                 >
-                  <span class="histovec-fr-text">
+                  <span class="fr-text--bleu">
                     <VIcon
                       :name="assets.syntheseMapping[entry].icon"
                     />
@@ -1352,7 +1352,7 @@ export default defineComponent({
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
               D.1
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.marque }}
             </div>
 
@@ -1362,7 +1362,7 @@ export default defineComponent({
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
               D.2
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.tvv }}
             </div>
 
@@ -1372,7 +1372,7 @@ export default defineComponent({
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
               D.2.1
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.cnit }}
             </div>
 
@@ -1382,7 +1382,7 @@ export default defineComponent({
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
               D.3
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.modele }}
             </div>
 
@@ -1391,7 +1391,7 @@ export default defineComponent({
             </div>
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.couleur }}
             </div>
 
@@ -1400,7 +1400,7 @@ export default defineComponent({
             </div>
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.reception.type }}
             </div>
 
@@ -1410,7 +1410,7 @@ export default defineComponent({
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
               E
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.vin }}
             </div>
 
@@ -1421,7 +1421,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 F.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.admissible }}
               </div>
             </template>
@@ -1433,7 +1433,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 F.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.AC }}
               </div>
             </template>
@@ -1445,7 +1445,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 F.3
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.RA }}
               </div>
             </template>
@@ -1457,7 +1457,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 G
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.service }}
               </div>
             </template>
@@ -1469,7 +1469,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 G.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.AV }}
               </div>
             </template>
@@ -1481,7 +1481,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 J
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.categorie }}
               </div>
             </template>
@@ -1493,7 +1493,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 J.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.genre }}
               </div>
             </template>
@@ -1505,7 +1505,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 J.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.carrosserie.ce }}
               </div>
             </template>
@@ -1517,7 +1517,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 J.3
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.carrosserie.national }}
               </div>
             </template>
@@ -1529,7 +1529,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 K
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.reception.numero }}
               </div>
             </template>
@@ -1541,7 +1541,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 P.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.cylindres }}
               </div>
             </template>
@@ -1553,7 +1553,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 P.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.nette }}
               </div>
             </template>
@@ -1565,7 +1565,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 P.3
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.energie }}
               </div>
             </template>
@@ -1577,7 +1577,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 P.6
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.cv }}
               </div>
             </template>
@@ -1589,7 +1589,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 Q
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.norm }}
               </div>
             </template>
@@ -1601,7 +1601,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 S.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.places.assis }}
               </div>
             </template>
@@ -1612,7 +1612,7 @@ export default defineComponent({
             <div class="fr-col-2  fr-pt-0  fr-pb-1w">
               S.2
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               <template v-if="caracteristiquesTechniques.places.debout">
                 {{ caracteristiquesTechniques.places.debout }}
               </template>
@@ -1625,7 +1625,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 U.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.db }}
               </div>
             </template>
@@ -1637,7 +1637,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 U.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.moteur }}
               </div>
             </template>
@@ -1649,7 +1649,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 V.7
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.co2 }}
               </div>
             </template>
@@ -1661,7 +1661,7 @@ export default defineComponent({
               <div class="fr-col-2  fr-pt-0  fr-pb-1w">
                 V.9
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.environnement }}
               </div>
             </template>
@@ -1685,7 +1685,7 @@ export default defineComponent({
               <div class="fr-col-6  fr-pt-0  fr-pb-1w">
                 Nature
               </div>
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ titulaire.nature }}
               </div>
             </template>
@@ -1693,14 +1693,14 @@ export default defineComponent({
             <div class="fr-col-6  fr-pt-0  fr-pb-1w">
               Identité
             </div>
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ titulaire.identite }}
             </div>
 
             <div class="fr-col-6  fr-pt-0  fr-pb-0">
               Code postal
             </div>
-            <div class="fr-col-6  fr-pt-0  fr-pb-0  histovec-fr-text">
+            <div class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
               {{ titulaire.adresse }}
             </div>
 
@@ -1716,7 +1716,7 @@ export default defineComponent({
                 à l'étranger
               </span>
             </div>
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w  histovec-fr-text">
+            <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ datePremiereImmatriculationFR }}
             </div>
 
@@ -1724,7 +1724,7 @@ export default defineComponent({
               <div class="fr-col-6  fr-pt-0  fr-pb-1w">
                 Date de première immatriculation en France
               </div>
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w  histovec-fr-text">
+              <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ datePremiereImmatriculationEnFranceFR }}
               </div>
             </template>
@@ -1732,7 +1732,7 @@ export default defineComponent({
             <div class="fr-col-6  fr-pt-0  fr-pb-0">
               Date du certificat d'immatriculation actuel
             </div>
-            <div class="fr-col-6  fr-pt-0  fr-pb-0  histovec-fr-text">
+            <div class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
               {{ dateEmissionCIFR }}
             </div>
           </div>
@@ -1768,7 +1768,7 @@ export default defineComponent({
                       :key="index"
                     >
                       <span v-if="gageInfos.date">{{ gageInfos.date }} - </span>
-                      <span class="histovec-fr-text">{{ gageInfos.label }}</span>
+                      <span class="fr-text--bleu">{{ gageInfos.label }}</span>
                     </span>
                   </p>
                 </div>
@@ -1794,7 +1794,7 @@ export default defineComponent({
                       :key="index"
                     >
                       <span v-if="oppositionInfos.date">{{ oppositionInfos.date }} - </span>
-                      <span class="histovec-fr-text">{{ oppositionInfos.label }}</span>
+                      <span class="fr-text--bleu">{{ oppositionInfos.label }}</span>
                       <span
                         v-if="isRapportVendeur && oppositionInfos.label.includes('PV') && oppositionSection.hasOtciPV"
                       >
@@ -1812,7 +1812,7 @@ export default defineComponent({
                 <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
                   Déclaré volé
                 </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  histovec-fr-text">
+                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
                   {{ reportLabels.vol }}
                 </div>
               </div>
@@ -1832,7 +1832,7 @@ export default defineComponent({
                       :key="index"
                     >
                       <span v-if="dvs.date">{{ dvs.date }} - </span>
-                      <span class="histovec-fr-text">{{ dvs.label }}</span>
+                      <span class="fr-text--bleu">{{ dvs.label }}</span>
                     </span>
                   </p>
                 </div>
@@ -1849,7 +1849,7 @@ export default defineComponent({
                       :key="index"
                     >
                       <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>
-                      <span class="histovec-fr-text">{{ suspensionInfos.label }}</span>
+                      <span class="fr-text--bleu">{{ suspensionInfos.label }}</span>
                     </div>
                   </div>
                 </div>
@@ -1862,19 +1862,19 @@ export default defineComponent({
                 <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
                   Déclaré volée
                 </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  histovec-fr-text">
+                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
                   {{ reportLabels.titre.vol }}
                 </div>
                 <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
                   Déclaré perdue
                 </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  histovec-fr-text">
+                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
                   {{ reportLabels.titre.perte }}
                 </div>
                 <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
                   Duplicata
                 </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  histovec-fr-text">
+                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
                   {{ reportLabels.titre.duplicata }}
                 </div>
               </div>
@@ -1910,7 +1910,7 @@ export default defineComponent({
               <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
                 {{ datePremiereImmatriculationFR }}
               </div>
-              <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  histovec-fr-text">
+              <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
                 <!-- @todo:
                   Il serait plus sûr de créer un enum HISTORIQUE_OPERATION_TYPE pour l'utiliser ici
                   et dans le fichier assets/js/operations.json afin de tokenizer les opérations et réduire les erreurs liées à une typo
@@ -1943,7 +1943,7 @@ export default defineComponent({
               <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
                 <span class="txt-small-12">{{ entry.date }}</span>
               </div>
-              <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  histovec-fr-text">
+              <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-text--bleu">
                 <span class="info_red txt-small-12">
                   {{ entry.nature }}
                 </span>
@@ -1995,20 +1995,20 @@ export default defineComponent({
                   v-for="(entry, index) in normalizedControlesTechniquesHistorique"
                   :key="index"
                 >
-                  <div class="fr-col-12  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  histovec-fr-text">
+                  <div class="fr-col-12  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
                     {{ entry.date }}
                   </div>
-                  <div class="fr-col-12  fr-col-sm-6  fr-col-md-6  fr-col-lg-5  fr-col-xl-5  fr-pb-0  histovec-fr-text">
+                  <div class="fr-col-12  fr-col-sm-6  fr-col-md-6  fr-col-lg-5  fr-col-xl-5  fr-pb-0  fr-text--bleu">
                     {{ entry.natureLibelle }}
                   </div>
-                  <div class="fr-col-4  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  histovec-fr-text">
+                  <div class="fr-col-4  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-text--bleu">
                     <DsfrBadge
                       :label="entry.resultatLibelle"
                       :type="getDsfrBadgeType(entry.resultat)"
                       :no-icon="true"
                     />
                   </div>
-                  <div class="fr-col-8  fr-col-sm-2  fr-col-md-2  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  histovec-fr-text">
+                  <div class="fr-col-8  fr-col-sm-2  fr-col-md-2  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
                     {{ entry.kmLibelle }} km
                   </div>
                 </template>
@@ -2127,9 +2127,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-[href] {
-  background-image: none;
-}
 
 #simplimmatImage[target=_blank]:after {
   content: '';

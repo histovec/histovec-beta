@@ -1,7 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
-import '@/views/css/views.css'
 
 import { mailTo } from '@/utils/email.js'
 import {
@@ -48,7 +47,7 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Mentions légales</h1>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Informations éditeurs
       </h5>
       <p>
@@ -58,14 +57,14 @@ export default defineComponent({
         Il est hébergé par la Direction du numérique (DNUM) du ministère de l’intérieur - Place Beauvau - 75800 Paris CEDEX 08.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Directeur de la publication
       </h5>
       <p>
         Marie GAUTIER-MELLERAY, déléguée interministérielle à la sécurité routière.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Avertissement
       </h5>
       <p>
@@ -82,7 +81,7 @@ export default defineComponent({
         sont susceptibles de faire l’objet de mise à jour à tout moment.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Crédits
       </h5>
       <p>
@@ -118,7 +117,7 @@ export default defineComponent({
         et libres de droits.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Conception et réalisation
       </h5>
       <p>
@@ -134,7 +133,7 @@ export default defineComponent({
         ).
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Liens hypertextes entrants
       </h5>
       <p>
@@ -151,7 +150,7 @@ export default defineComponent({
         L’autorisation de mise en place d’un lien est valable pour tout support, à l’exception de ceux diffusant des informations à caractère polémique, pornographique, xénophobe ou pouvant, dans une plus large mesure, porter atteinte à la sensibilité du plus grand nombre.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Liens hypertextes sortants
       </h5>
       <p>
@@ -165,7 +164,7 @@ export default defineComponent({
         .
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Code applicatif open source
       </h5>
       <p>
@@ -198,17 +197,17 @@ export default defineComponent({
         </a>.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Stabilité des adresses
       </h5>
       <p>Nous essayons de maintenir des adresses URL de pages stables. Toutefois, ce site pouvant faire à tout moment l’objet de réorganisations, nous ne pouvons pas garantir la stabilité de l’adresse des pages internes du site.</p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Droit d’auteur
       </h5>
       <p>Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Aux termes des dispositions de l’article L. 122-4 du code de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.</p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Limitations de responsabilité
       </h5>
       <p>Le site HistoVec fournit les informations issues du système d’immatriculation des véhicules (SIV). La responsabilité de l'éditeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’immatriculation des véhicules ou du traitement relatif à la gestion du contrôle technique des véhicules mis en œuvre par l’Organisme Technique Central, ou d’anomalies de traitement informatique.</p>
@@ -255,7 +254,7 @@ export default defineComponent({
       </p>
       <p>Le droit à l’effacement, prévu à l’article 17 du RGPD, ne s’applique pas dans la mesure où le téléservice est nécessaire à l’exécution d’une mission d’intérêt public.</p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Disponibilité
       </h5>
       <p>
@@ -266,7 +265,7 @@ export default defineComponent({
         Site optimisé pour Firefox 45+ et Chrome 50+.
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Propriété intellectuelle et droits d'utilisation
       </h5>
       <p>
@@ -278,7 +277,7 @@ export default defineComponent({
         </ul>
       </p>
 
-      <h5 class="histovec-fr-text">
+      <h5>
         Autre
       </h5>
       <div class="fr-col-12">
