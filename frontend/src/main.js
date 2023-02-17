@@ -10,13 +10,6 @@ import App from '@/App.vue'
 import router from '@/router/index.js'
 import { apiUrl } from '@/config.js'
 
-
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-
-dayjs.extend(customParseFormat)
-
-
 window.addEventListener('beforeunload', function () {
   navigator.sendBeacon(apiUrl + 'log/exit')
 }, false)

@@ -30,7 +30,6 @@
     "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "date-fns": "^2.29.1",
-    "dayjs": "^1.11.4",
     "elasticsearch": "^16.7.3",
     "hapi-swagger": "^14.5.5",
     "ioredis": "^4.28.5",

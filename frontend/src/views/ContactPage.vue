@@ -271,11 +271,7 @@ export default defineComponent({
         dateEmissionCertificatImmatriculation = '',
       } = fniData
 
-      const isoDateCertificat = (
-        dateEmissionCertificatImmatriculation ?
-          new Date(dateEmissionCertificatImmatriculation).toLocaleDateString('fr-FR'):
-          ''
-      )
+      const isoDateCertificat = dateEmissionCertificatImmatriculation.split('/').reverse().join('-')
 
       return {
         dateCertificat: isoDateCertificat,

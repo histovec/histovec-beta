@@ -1,15 +1,12 @@
-import dayjs from 'dayjs'
-
-import format from 'date-fns/format'
+import format from 'date-fns/format/index.js'
+import add from 'date-fns/add/index.js'
 
 import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '../../../util/dataPreparationFormat.js'
 import { hash } from '../../../util/crypto.js'
 import { checkId, checkKey } from './check/reportByCode.js'
 import { syslogLogger } from '../../../util/logger.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
-import { FR_DATE_FORMAT } from '../../../constant/date/format.js'
 import config from '../../../config.js'
-import add from 'date-fns/add'
 
 export const buildIdAndKey = (code, uuid) => {
   if (!code) {
@@ -49,7 +46,7 @@ export const buildReportId = (
       : raisonSociale + siren
   )
 
-  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? dayjs(dateEmissionCertificatImmatriculation).format(FR_DATE_FORMAT) : null
+  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? new Date(dateEmissionCertificatImmatriculation).toLocaleDateString('fr-FR') : null
 
   const vehicleId = (
     typeImmatriculation === TYPE_IMMATRICULATION.SIV
@@ -58,22 +55,13 @@ export const buildReportId = (
   )
 
   // Control about data validity date
-  let dataValidityDate = dayjs().add(-7, 'day')
+  let dataValidityDate = add(new Date(), { days: -7 })
 
   if (config.usePreviousMonthForData) {
-    dataValidityDate = dataValidityDate.add(-config.previousMonthShift, 'month')
+    dataValidityDate = add(dataValidityDate, { months: -config.previousMonthShift })
   }
 
-  const dataValidityMonth = dataValidityDate.format('YYYYMM')
-
-  let date = add(new Date(), { days: -7 })
-  console.log(date + ' date -7')
-  // if (config.usePreviousMonthForData) {
-  date = add(date, { months: -config.previousMonthShift })
-  console.log(date + ' mois -1')
-  // }
-  const dataValide = format(date, 'yyyyMM')
-  console.log(dataValide)
+  const dataValidityMonth = format(dataValidityDate, 'yyyyMM')
 
   const rawReportId = `${personneId}${vehicleId}${dataValidityMonth}`
 
@@ -94,8 +82,7 @@ export const buildReportKey = (
     typeImmatriculation,
   },
 ) => {
-  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? dayjs(dateEmissionCertificatImmatriculation).format(FR_DATE_FORMAT) : null
-
+  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? new Date(dateEmissionCertificatImmatriculation).toLocaleDateString('fr-FR') : null
   const rawReportKey = (
     typeImmatriculation === TYPE_IMMATRICULATION.SIV
       ? `${numeroImmatriculation}${numeroFormule}`

@@ -24,7 +24,6 @@
     "chart.js": "^3.8.2",
     "chartjs-adapter-date-fns": "^2.0.0",
     "date-fns": "^2.29.1",
-    "dayjs": "^1.11.4",
     "detect-browser": "^5.3.0",
     "lodash.orderby": "^4.6.0",
     "pdf-lib": "^1.17.1",
