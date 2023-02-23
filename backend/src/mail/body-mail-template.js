@@ -1,4 +1,7 @@
 export const json2html = json => {
+  if (!json) {
+    return ''
+  }
   if (typeof json === 'string' || typeof json === 'number') {
     return `${json}`
   }
@@ -8,7 +11,14 @@ export const json2html = json => {
   if (typeof json === 'object') {
     let res = '<ul>'
     Object.keys(json).forEach(key => {
-      res = res + `<li>${key} : ${json2html(json[key])}</li>`
+      if (json[key]) {
+        if(key === "dateCertificat") {
+          res = res + `<li>${key} : ${json[key].toLocaleDateString("fr-FR")}</li>`
+        } else {
+          res = res + `<li>${key} : ${json2html(json[key])}</li>`
+        }
+
+      }
     })
     return res + '</ul>'
   }

@@ -20,7 +20,6 @@ const formDataShortcut = (identity) => {
   const emptyNom = ' '
   const emptyPrenom = ' '
   let table = '<table><tr>'
-
   // No data shortcut available if user didn't complete any report form
   if (!typeImmatriculation) return ''
 
@@ -42,9 +41,9 @@ const formDataShortcut = (identity) => {
 
     case TYPE_IMMATRICULATION.FNI:
       if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        elements = [nom, plaque, dateCertificat]
+        elements = [nom, plaque, dateCertificat.toLocaleDateString('fr-FR')]
       } else if (typePersonne === TYPE_PERSONNE.PRO) {
-        elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat]
+        elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat.toLocaleDateString('fr-FR')]
       }
       break
   }
@@ -58,7 +57,7 @@ const formDataShortcut = (identity) => {
 }
 
 export const sendMailToSupport = async (from, subject, payload) => {
-  const shortcut = formDataShortcut(payload.identity)
+  const shortcut = payload.identity.typeImmatriculation ? formDataShortcut(payload.identity) : ''
 
   const json = {
     ...payload,
