@@ -12,7 +12,12 @@ export const json2html = json => {
     let res = '<ul>'
     Object.keys(json).forEach(key => {
       if (json[key]) {
-        res = res + `<li>${key} : ${json2html(json[key])}</li>`
+        if(key === "dateCertificat") {
+          res = res + `<li>${key} : ${json[key].toLocaleDateString("fr-FR")}</li>`
+        } else {
+          res = res + `<li>${key} : ${json2html(json[key])}</li>`
+        }
+
       }
     })
     return res + '</ul>'
