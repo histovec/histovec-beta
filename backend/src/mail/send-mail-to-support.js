@@ -41,9 +41,9 @@ const formDataShortcut = (identity) => {
 
     case TYPE_IMMATRICULATION.FNI:
       if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        elements = [nom, plaque, dateCertificat]
+        elements = [nom, plaque, dateCertificat.toLocaleDateString('fr-FR')]
       } else if (typePersonne === TYPE_PERSONNE.PRO) {
-        elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat]
+        elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat.toLocaleDateString('fr-FR')]
       }
       break
   }
