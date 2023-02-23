@@ -1161,8 +1161,8 @@ export default defineComponent({
                       Ce véhicule a déjà eu
                       <span class="fr-blue-text">{{ processedVehiculeData.titulairesCount }}</span>
                       titulaire(s), en l'achetant vous serez le
-                      <span class="fr-blue-text">{{ processedVehiculeData.titulairesCount + 1 }}</span>
-                      <sup class="fr-blue-text">{{ utils.getExposant(processedVehiculeData.titulairesCount + 1) }}</sup>
+                      <span class="fr-blue-text">{{ Number(processedVehiculeData.titulairesCount) + 1 }}</span>
+                      <sup class="fr-blue-text">{{ utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
                     </template>
                   </template>
                   <br />
