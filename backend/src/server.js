@@ -85,23 +85,23 @@ if (!config.isPublicApi) {
             holder: Joi.boolean().allow('').required()
               .description('L\'usager est-il propriétaire du véhicule ?'),
             identity: Joi.object({
-              dateCertificat: Joi.date().iso().allow('')
+              dateCertificat: Joi.date().iso().allow(null).allow('')
                 .description('Date d\'émission du certificat d\'immatriculation du véhicule (pour les véhicules FNI : immatriculés avant 2009)'),
-              formule: Joi.string().allow('').pattern(NUMERO_FORMULE_REGEX)
+              formule: Joi.string().allow(null).allow('').pattern(NUMERO_FORMULE_REGEX)
                 .description('Numéro de formule du certificat d\'immatriculation du véhicule (pour les véhicules SIV : immatriculés à partir de 2009)'),
-              nom: Joi.string().allow('').trim()
+              nom: Joi.string().allow(null).allow('').trim()
                 .description('Nom du propriétaire du véhicule'),
-              plaque: Joi.string().allow('').pattern(NUMERO_IMMATRICULATION_REGEX)
+              plaque: Joi.string().allow(null).allow('').pattern(NUMERO_IMMATRICULATION_REGEX)
                 .description('Numéro d\'immatriculation du véhicule'),
-              prenoms: Joi.string().allow('').trim()
+              prenoms: Joi.string().allow(null).allow('').trim()
                 .description('Prénoms du propriétaire du véhicule'),
-              raisonSociale: Joi.string().allow('').trim()
+              raisonSociale: Joi.string().allow(null).allow('').trim()
                 .description('Raison sociale de la société propriétaire du véhicule'),
-              siren: Joi.string().allow('').pattern(NUMERO_SIREN_REGEX)
+              siren: Joi.string().allow(null).allow('').pattern(NUMERO_SIREN_REGEX)
                 .description('Numéro de SIREN de la société propriétaire du véhicule'),
-              typeImmatriculation: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_IMMATRICULATION))
+              typeImmatriculation: Joi.string().uppercase().allow(null).allow('').valid(...Object.values(TYPE_IMMATRICULATION))
                 .description('Type d\'immatriculation du véhicule (FNI pour les véhicules immatriculés avant 2009, SIV pour les autres)'),
-              typePersonne: Joi.string().uppercase().allow('').valid(...Object.values(TYPE_PERSONNE))
+              typePersonne: Joi.string().uppercase().allow(null).allow('').valid(...Object.values(TYPE_PERSONNE))
                 .description('Type de propriétaire du véhicule'),
             }),
             message: Joi.string().allow('').trim()

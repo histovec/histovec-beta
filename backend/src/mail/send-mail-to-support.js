@@ -20,7 +20,6 @@ const formDataShortcut = (identity) => {
   const emptyNom = ' '
   const emptyPrenom = ' '
   let table = '<table><tr>'
-
   // No data shortcut available if user didn't complete any report form
   if (!typeImmatriculation) return ''
 
@@ -58,7 +57,7 @@ const formDataShortcut = (identity) => {
 }
 
 export const sendMailToSupport = async (from, subject, payload) => {
-  const shortcut = formDataShortcut(payload.identity)
+  const shortcut = payload.identity.typeImmatriculation ? formDataShortcut(payload.identity) : ''
 
   const json = {
     ...payload,
