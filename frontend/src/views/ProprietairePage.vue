@@ -777,7 +777,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -808,7 +808,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -845,7 +845,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -876,7 +876,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -922,7 +922,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -940,7 +940,7 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -976,7 +976,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1007,7 +1007,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1063,7 +1063,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1100,7 +1100,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1131,7 +1131,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1177,7 +1177,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1195,7 +1195,7 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -1232,7 +1232,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1263,7 +1263,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
-                  @paste="collerPressePapier(formData)"
+                  @paste="collerPressePapier(formData, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
