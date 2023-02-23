@@ -160,7 +160,7 @@ export default defineComponent({
       // @shortCutConfig1: brancher ces features flags sur un raccourci clavier si besoin
       flags: {
         // Gestion de la fraîcheur des données
-        outdatedData: false,  // @flag @outdatedData : A activer quand la DSR juge que la donnée n'est pas assez fraîche
+        outdatedData: true,  // @flag @outdatedData : A activer quand la DSR juge que la donnée n'est pas assez fraîche
         showDataDate: true,  // @feature @showDataDate : Permet d'afficher la vraie date des données dans le CSA et le rapport HTML HistoVec - Devrait toujours rester à true
         codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
