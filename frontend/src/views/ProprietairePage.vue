@@ -1,10 +1,9 @@
 <script>
 import { defineComponent } from 'vue'
-
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
-
 import { mailTo } from '@/utils/email.js'
+import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
 
 import { ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
@@ -69,7 +68,8 @@ export default defineComponent({
 
     return {
       formData,
-
+      collerPressePapierEtDistribuerDansFormulaire: collerPressePapierEtDistribuerDansFormulaire,
+      CHAMP_MODIFIE: CHAMP_MODIFIE,
       modals: {
         common: {
           numeroSiren: {
@@ -142,47 +142,12 @@ export default defineComponent({
   },
 
   computed: {
+
     // @todo @focusTrap:
     // Implémenter un focus automatique sur le 1er élément du formulaire (en haut à gauche) lors de la sélection d’un format de plaque (SIV ou FNI) pour que l’usager n’ait pas à scroller sur le formulaire suite à la sélection.
     // (probablement via la dépendance 'focus-trap-vue')
 
-    // @todo @csvCopy: Réimplementer le copier coller des data du CSV dans le formulaire en utilisant vue3-shortkey
-    // onPaste (evt) {
-    //   const data = evt.clipboardData.getData('Text').replace(/\s*$/, '').split(/\t+/)
 
-    //   if (data.length > 1) {
-    //     if (evt.target.name === 'nom') {
-    //       if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-    //         // 1st element has already been pasted on current target name : 'nom'
-    //         // It is equivalent to :
-    //         // this.nom = data[0]
-    //         this.prenom = data[1]
-    //         this.plaque = data[2]
-    //         this.formule = data[3]
-    //       }
-    //       if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-    //         // 1st element has already been pasted on current target name : 'nom'
-    //         // It is equivalent to :
-    //         // this.nom = data[0]
-    //         this.plaque = data[1]
-    //         this.dateCertificat = data[2]
-    //       }
-    //     }
-    //     if (evt.target.name === 'raisonSociale') {
-    //       // 1st element has already been pasted on current target name : 'raisonSociale'
-    //       // It is equivalent to :
-    //       // this.raisonSociale = data[0]
-    //       this.siren = data[1]
-    //       this.plaque = data[2]
-    //       if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.SIV) {
-    //         this.formule = data[3]
-    //       }
-    //       if (this.formData.typeImmatriculation === this.TYPE_IMMATRICULATION.FNI) {
-    //         this.dateCertificat = data[3]
-    //       }
-    //     }
-    //   }
-    // },
 
     // ----- Validation -----
 
@@ -484,7 +449,7 @@ export default defineComponent({
     onClear () {
       this.formData = {
         typeImmatriculation: this.formData.typeImmatriculation,
-        typePersonne: TYPE_PERSONNE.PARTICULIER,
+        typePersonne: this.formData.typePersonne,
         siv: {
           titulaire: {
             particulier: {
@@ -535,7 +500,10 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="images.proprietaireSVG" alt="Illustration de la page du propriétaire" />
+      <ImagePresentation
+        :src="images.proprietaireSVG"
+        alt="Illustration de la page du propriétaire"
+      />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Rassurez vos acheteurs potentiels</h1>
@@ -810,6 +778,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -840,6 +809,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -876,6 +846,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -906,6 +877,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -951,6 +923,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -968,6 +941,7 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -1003,6 +977,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1033,6 +1008,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1088,6 +1064,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1124,6 +1101,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1154,6 +1132,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1199,6 +1178,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1216,6 +1196,7 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -1252,6 +1233,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1282,6 +1264,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
