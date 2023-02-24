@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
 import { mailTo } from '@/utils/email.js'
-import { collerPressePapier } from '@/utils/collerPressePapier.js'
+import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
 
 import { ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
@@ -68,7 +68,8 @@ export default defineComponent({
 
     return {
       formData,
-      collerPressePapier,
+      collerPressePapierEtDistribuerDansFormulaire: collerPressePapierEtDistribuerDansFormulaire,
+      CHAMP_MODIFIE: CHAMP_MODIFIE,
       modals: {
         common: {
           numeroSiren: {
@@ -448,7 +449,7 @@ export default defineComponent({
     onClear () {
       this.formData = {
         typeImmatriculation: this.formData.typeImmatriculation,
-        typePersonne: TYPE_PERSONNE.PARTICULIER,
+        typePersonne: this.formData.typePersonne,
         siv: {
           titulaire: {
             particulier: {
@@ -777,7 +778,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -808,7 +809,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -845,7 +846,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -876,7 +877,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -922,7 +923,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -940,7 +941,7 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -976,7 +977,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1007,7 +1008,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1063,7 +1064,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1100,7 +1101,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1131,7 +1132,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1177,7 +1178,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le kbis."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1195,7 +1196,7 @@ export default defineComponent({
                   label="Numéro SIREN"
                   label-visible
                   hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -1232,7 +1233,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1263,7 +1264,7 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
-                  @paste="collerPressePapier(formData, $event)"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
