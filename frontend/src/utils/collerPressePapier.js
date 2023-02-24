@@ -1,13 +1,12 @@
 import {TYPE_IMMATRICULATION, TYPE_PERSONNE} from '@/constants/type.js'
 
 export function collerPressePapier(formData, event) {
-  event.preventDefault();
+  event.preventDefault()
   let dataCopie = event.clipboardData.getData('text')
   let dataSplite = dataCopie.toString().replace(/\s*$/, '').split(/\t+/)
   if (dataSplite.length > 1) {
     if (formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
       if (formData.typePersonne === TYPE_PERSONNE.PARTICULIER) {
-
         formData.siv.titulaire.particulier.nom = dataSplite[0]
         formData.siv.titulaire.particulier.prenoms = dataSplite[1]
       }
