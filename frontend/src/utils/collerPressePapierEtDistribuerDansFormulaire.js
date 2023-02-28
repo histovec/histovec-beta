@@ -16,7 +16,6 @@ export const CHAMP_MODIFIE = {
 
 export function collerPressePapierEtDistribuerDansFormulaire(formData, champModifie, event) {
   event.preventDefault()
-  console.log(event)
   let dataCopiee = event.clipboardData.getData('text')
   let dataSplite = dataCopiee.toString().replace(/\s*$/, '').split(/\t+/)
 
@@ -28,7 +27,7 @@ export function collerPressePapierEtDistribuerDansFormulaire(formData, champModi
       }
       if (formData.typePersonne === TYPE_PERSONNE.PRO) {
         formData.siv.titulaire.personneMorale.raisonSociale = dataSplite[0] ?? ''
-        formData.siv.titulaire.personneMorale.numeroSiren = dataSplite[1] ?? ''
+        formData.siv.titulaire.personneMorale.numeroSiren = numeroSiretToSiren(dataSplite[1]) ?? ''
       }
       formData.siv.numeroImmatriculation = dataSplite[2] ?? ''
       formData.siv.numeroFormule = dataSplite[3] ?? ''
@@ -41,7 +40,7 @@ export function collerPressePapierEtDistribuerDansFormulaire(formData, champModi
       }
       if (formData.typePersonne === TYPE_PERSONNE.PRO) {
         formData.fni.titulaire.personneMorale.raisonSociale = dataSplite[0] ?? ''
-        formData.fni.titulaire.personneMorale.numeroSiren = dataSplite[1] ?? ''
+        formData.fni.titulaire.personneMorale.numeroSiren = numeroSiretToSiren(dataSplite[1]) ?? ''
         formData.fni.numeroImmatriculation = dataSplite[2] ?? ''
         formData.fni.dateEmissionCertificatImmatriculation = dataSplite[3] ?? ''
       }
@@ -64,7 +63,7 @@ function collerSimple(formData, champModifie, dataCopiee) {
       formData.siv.titulaire.personneMorale.raisonSociale = dataCopiee;
       break;
     case CHAMP_MODIFIE.SIV_SIREN:
-      formData.siv.titulaire.personneMorale.numeroSiren = dataCopiee;
+      formData.siv.titulaire.personneMorale.numeroSiren = numeroSiretToSiren(dataCopiee);
       break;
     case CHAMP_MODIFIE.SIV_IMMATRICULATION:
       formData.siv.numeroImmatriculation = dataCopiee;
@@ -73,7 +72,7 @@ function collerSimple(formData, champModifie, dataCopiee) {
       formData.siv.numeroFormule = dataCopiee;
       break;
     case CHAMP_MODIFIE.FNI_SIREN:
-      formData.fni.titulaire.personneMorale.numeroSiren = dataCopiee;
+      formData.fni.titulaire.personneMorale.numeroSiren = numeroSiretToSiren(dataCopiee);
       break;
     case CHAMP_MODIFIE.FNI_RAISON_SOCIALE:
       formData.fni.titulaire.personneMorale.raisonSociale = dataCopiee;
@@ -88,4 +87,12 @@ function collerSimple(formData, champModifie, dataCopiee) {
       formData.fni.dateEmissionCertificatImmatriculation = dataCopiee;
       break;
   }
+}
+
+function numeroSiretToSiren(numero) {
+  if (numero.length > 9) {
+    return numero.slice(0, 9)
+  }
+
+  return numero
 }
