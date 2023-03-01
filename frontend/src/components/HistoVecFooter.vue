@@ -76,7 +76,7 @@ export default defineComponent({
             <br>de l’intérieur
           </p>
           <router-link class="fr-footer__brand-link" to="/" title="Ministère de l’intérieur - HistoVec - Retour à l’accueil du site">
-            <img class="fr-footer__logo" style="width:7.5rem;" :src='images.logoHistoVecSvg' alt="" />
+            <img class="fr-footer__logo footer__logo__histovec" :src='images.logoHistoVecSvg' alt="" />
           </router-link>
         </div>
         <div class="fr-footer__content">
@@ -99,7 +99,7 @@ export default defineComponent({
         <div class="fr-footer__partners-logos">
           <div class="fr-footer__partners-main">
             <a id="securiteRoutiereIconeImage" class="fr-footer__partners-link" rel="noopener noreferrer" target="_blank" href="https://securite-routiere.gouv.fr" title="Securité routière - Lien vers le site securite-routiere.gouv.fr">
-              <img class="fr-footer__logo" style="height: 5.625rem" :src='images.logoSecuriteRoutiereMb90Svg' alt="" />
+              <img class="fr-footer__logo footer__logo__securiteRoutiere" :src='images.logoSecuriteRoutiereMb90Svg' alt="" />
             </a>
           </div>
         </div>
@@ -125,6 +125,14 @@ export default defineComponent({
 
 #securiteRoutiereIconeImage:after {
   content: none;
+}
+
+.footer__logo__histovec{
+  height: 5rem;
+}
+
+.footer__logo__securiteRoutiere{
+  height: 5.625rem;
 }
 </style>
 
