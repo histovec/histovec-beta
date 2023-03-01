@@ -96,8 +96,10 @@ export default createRouter({
   scrollBehavior () {
     // Scroll top for every route navigation
     return {
+      el: '#header',
       top: 0,
       left: 0,
+      behavior: 'smooth',
     }
   },
 })
