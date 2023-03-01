@@ -132,7 +132,7 @@ export default defineComponent({
 }
 
 .footer__logo__securiteRoutiere{
-  height: 5.625rem;
+  height: 5rem;
 }
 </style>
 
