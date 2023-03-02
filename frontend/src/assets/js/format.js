@@ -1,5 +1,7 @@
 import { MISSING_VALUE } from '@Assets/js/constants'
 
+export const FR_DATE_FORMAT = 'fr-FR'
+
 export const booleanLabel = (
 	test,
 	{ upperCase }={ upperCase: true },
@@ -21,7 +23,7 @@ export const formatIsoToHumanReadableFrDate = (isoDate) => {
 		return ''
 	}
 
-  return new Date(isoDate).toLocaleDateString('fr-FR',
+  return new Date(isoDate).toLocaleDateString(FR_DATE_FORMAT,
     { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
   }
 
@@ -30,7 +32,7 @@ export const formatIsoToFrDate = (isoDate) => {
 		return ''
 	}
 
-  return new Date(isoDate).toLocaleDateString('fr-FR')
+  return new Date(isoDate).toLocaleDateString(FR_DATE_FORMAT)
 }
 
 export const formatIsoToFrDateOrDefault = (isoDate, defaultValue=MISSING_VALUE) => {

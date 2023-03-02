@@ -7,6 +7,7 @@ import { checkId, checkKey } from './check/reportByCode.js'
 import { syslogLogger } from '../../../util/logger.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../../../constant/type.js'
 import config from '../../../config.js'
+import { FR_DATE_FORMAT } from '../../../constant/date/format.js'
 
 export const buildIdAndKey = (code, uuid) => {
   if (!code) {
@@ -46,7 +47,7 @@ export const buildReportId = (
       : raisonSociale + siren
   )
 
-  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? new Date(dateEmissionCertificatImmatriculation).toLocaleDateString('fr-FR') : null
+  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? new Date(dateEmissionCertificatImmatriculation).toLocaleDateString(FR_DATE_FORMAT) : null
 
   const vehicleId = (
     typeImmatriculation === TYPE_IMMATRICULATION.SIV
@@ -82,7 +83,7 @@ export const buildReportKey = (
     typeImmatriculation,
   },
 ) => {
-  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? new Date(dateEmissionCertificatImmatriculation).toLocaleDateString('fr-FR') : null
+  const dateEmissionCertificatImmatriculationFrance = dateEmissionCertificatImmatriculation ? new Date(dateEmissionCertificatImmatriculation).toLocaleDateString(FR_DATE_FORMAT) : null
   const rawReportKey = (
     typeImmatriculation === TYPE_IMMATRICULATION.SIV
       ? `${numeroImmatriculation}${numeroFormule}`

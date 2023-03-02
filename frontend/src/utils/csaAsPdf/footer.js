@@ -12,7 +12,7 @@ import {
 	TOP_FOOTER_MARGIN,
 } from '@Constants/csaAsPdf.js'
 import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from '@Utils/csaAsPdf/utils.js'
-import { formatIsoToHumanReadableFrDate, padString } from '@Assets/js/format.js'
+import { formatIsoToHumanReadableFrDate, padString, FR_DATE_FORMAT } from '@Assets/js/format.js'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = ({
@@ -118,7 +118,7 @@ const writeValidityDate = ({
 }) => {
 	const now = new Date()
 	const nowHumanReadableDateString = now.toLocaleDateString(
-		'fr-FR',
+    FR_DATE_FORMAT,
 		{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
 	)
 	const nowHumanReadableHourString = `${padString(now.getHours(), 2)}h${padString(now.getMinutes(), 2)}`
