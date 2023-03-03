@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect } from "vitest";
-import HistoVecFooter from "../../../components/HistoVecFooter.vue";
+import { describe, it, expect } from 'vitest'
+import HistoVecFooter from '../../../components/HistoVecFooter.vue'
 
 describe('HistoVecFooter', () => {
   it('Doit afficher le footer avec les bonnes informations', () => {

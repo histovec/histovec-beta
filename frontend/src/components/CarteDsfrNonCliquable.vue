@@ -40,7 +40,7 @@ export default defineComponent({
       if (this.alt && this.alt.length > 0) return this.alt
       return this.titre
     },
-  }
+  },
 })
 </script>
 

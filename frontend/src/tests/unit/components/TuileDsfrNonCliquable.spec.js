@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest'
 import TuileDsfrNonCliquable from '../../../components/TuileDsfrNonCliquable.vue';
 
 describe('TuileDsfrNonCliquable', () => {

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import { describe, it, expect } from "vitest";
-import HistoVecModale from "../../../components/HistoVecModale.vue";
+import { describe, it, expect } from 'vitest'
+import HistoVecModale from '../../../components/HistoVecModale.vue'
 
 describe('HistoVecModale', () => {
   it('Doit afficher une modale avec les bonnes informations', () => {
@@ -112,8 +112,8 @@ describe('HistoVecModale', () => {
     const button = wrapper.find('button');
 
     expect(button.exists()).true;
-    await button.trigger("click");
-    expect(wrapper.emitted()).toHaveProperty("close");
+    await button.trigger('click');
+    expect(wrapper.emitted()).toHaveProperty('close');
     expect(wrapper.emitted().close.length).toBe(1);
   })
   it('Doit afficher le bon nombre de bouton', async () => {

@@ -1,5 +1,5 @@
-import {describe, expect, it} from "vitest";
-import {mount} from "@vue/test-utils";
+import {describe, expect, it} from 'vitest'
+import {mount} from '@vue/test-utils'
 import CarteDsfrNonCliquable from '../../../components/CarteDsfrNonCliquable.vue';
 import simpleSvg from '@/assets/img/simple.svg?url'
 
