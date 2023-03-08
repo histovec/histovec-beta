@@ -5,6 +5,7 @@ frontend/dist-build
 dist/
 .env
 .idea
+*.iml
 .lastcommit
 histovec-build
 *.tar.gz
