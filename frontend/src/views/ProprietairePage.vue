@@ -2,10 +2,9 @@
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
-import { mailTo } from '@/utils/email.js'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
 
-import { ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
+import { ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
 
@@ -328,10 +327,6 @@ export default defineComponent({
     },
   },
 
-  created () {
-    this.readOrUpdateAntsPersonalDataEmail = mailTo(READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL)
-  },
-
   methods: {
     selectTypeImmatriculation (typeImmatriculation) {
       this.formData.typeImmatriculation = typeImmatriculation
@@ -524,13 +519,13 @@ export default defineComponent({
       </p>
       <p class="fr-text--md">
         Pour toute demande de renseignements sur votre dossier ou de correction des informations,
-        adressez-vous à l'Agence Nationale Des Titres Sécurisés (ANTS) par voie électronique (
+        adressez-vous à l'Agence Nationale Des Titres Sécurisés (ANTS) en suivant la procédure indiquée sur cette page :
         <a
           class="fr-link"
-          :href="readOrUpdateAntsPersonalDataEmail"
-        >
-          {{ ANTS_PERSONAL_DATA_EMAIL }}
-        </a>).
+          href="https://immatriculation.ants.gouv.fr/demarches-en-ligne"
+          rel="noopener noreferrer"
+          target="_blank"
+        >https://immatriculation.ants.gouv.fr/demarches-en-ligne</a>.
       </p>
     </div>
   </div>
