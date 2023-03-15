@@ -45,6 +45,7 @@ import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
 import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
+import '@/assets/css/background.css'
 
 // CSA
 import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
@@ -1039,6 +1040,7 @@ export default defineComponent({
           taille="md"
         />
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-0"
           tab-id="report-tab-0"
           :selected="tabs.selectedTabIndex === 0"
@@ -1352,6 +1354,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-1"
           tab-id="report-tab-1"
           :selected="tabs.selectedTabIndex === 1"
@@ -1687,6 +1690,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-2"
           tab-id="report-tab-2"
           :selected="tabs.selectedTabIndex === 2"
@@ -1757,6 +1761,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-3"
           tab-id="report-tab-3"
           :selected="tabs.selectedTabIndex === 3"
@@ -1903,6 +1908,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-4"
           tab-id="report-tab-4"
           :selected="tabs.selectedTabIndex === 4"
@@ -1973,6 +1979,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-5"
           tab-id="report-tab-5"
           :selected="tabs.selectedTabIndex === 5"
@@ -2044,6 +2051,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-6"
           tab-id="report-tab-6"
           :selected="tabs.selectedTabIndex === 6"

@@ -25,6 +25,8 @@ import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatric
 import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
 import api from '@/api/index.js'
 
+import '@/assets/css/background.css'
+
 export default defineComponent({
   name: 'ProprietairePage',
 
@@ -816,6 +818,7 @@ export default defineComponent({
         @select-tab="selectSivTab"
       >
         <DsfrTabContent
+          class="background-default-white"
           panel-id="siv-tab-content-0"
           tab-id="siv-tab-0"
           :selected="tabs.siv.selectedTabIndex === 0"
@@ -982,6 +985,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="siv-tab-content-1"
           tab-id="siv-tab-1"
           :selected="tabs.siv.selectedTabIndex === 1"
@@ -1143,6 +1147,7 @@ export default defineComponent({
         @select-tab="selectFniTab"
       >
         <DsfrTabContent
+          class="background-default-white"
           panel-id="fni-tab-content-0"
           tab-id="fni-tab-0"
           :selected="tabs.fni.selectedTabIndex === 0"
@@ -1275,6 +1280,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="fni-tab-content-1"
           tab-id="fni-tab-1"
           :selected="tabs.fni.selectedTabIndex === 1"
