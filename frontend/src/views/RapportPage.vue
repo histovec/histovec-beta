@@ -165,7 +165,7 @@ export default defineComponent({
         codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
         // Flag du 8
-        usePreviousMonthForData: true, // @flag @usePreviousMonthForData
+        usePreviousMonthForData: false, // @flag @usePreviousMonthForData
         previousMonthShift: 1, // @flag @previousMonthShift
 
         // @flag @ignoreUtacCache
