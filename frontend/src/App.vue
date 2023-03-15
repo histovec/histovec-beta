@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 
 import HistoVecHeader from '@/components/HistoVecHeader.vue'
 import HistoVecFooter from '@/components/HistoVecFooter.vue'
+import '@/assets/css/background.css'
 import LienEvitement from '@/components/LienEvitement.vue'
 
 import { v4 as uuidv4 } from 'uuid'
@@ -37,7 +38,7 @@ export default defineComponent({
       >
       </span> -->
   <LienEvitement />
-  <HistoVecHeader class="background-default-white"/>
+  <HistoVecHeader class="background-default-white" />
   <main
     id="contenu"
     role="main"
@@ -48,9 +49,3 @@ export default defineComponent({
   <HistoVecFooter class="background-default-white" />
   <!-- </div> -->
 </template>
-
-<style>
-.background-default-white {
-  background-color: white;
-}
-</style>

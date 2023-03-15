@@ -15,6 +15,7 @@ import faqSvg from '@/assets/img/faq.svg?url'
 import {mailTo} from '@/utils/email.js'
 import {CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL} from '@/constants/email.js'
 
+import '@/assets/css/background.css'
 
 export default defineComponent({
   name: 'FAQPage',
@@ -159,7 +160,7 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10" aria-live="polite">
       <div
         v-if="selectedTheme === FAQ_THEMES.WHY_HISTOVEC" >
-        <DsfrAccordionsGroup>
+        <DsfrAccordionsGroup class="background-default-white">
           <li>
             <DsfrAccordion
               title="Je vends mon véhicule d’occasion"
@@ -213,7 +214,7 @@ export default defineComponent({
 
       <div
         v-if="selectedTheme === FAQ_THEMES.HOW_HISTOVEC">
-        <DsfrAccordionsGroup>
+        <DsfrAccordionsGroup class="background-default-white">
           <li>
             <DsfrAccordion
               title="Qui peut consulter HistoVec ?"
@@ -425,7 +426,7 @@ export default defineComponent({
 
       <div
         v-if="selectedTheme === FAQ_THEMES.VEHICLE_NOT_FOUND" >
-        <DsfrAccordionsGroup>
+        <DsfrAccordionsGroup class="background-default-white">
           <li>
             <DsfrAccordion
               title="Que faire si je ne parviens pas à lancer la recherche de mon véhicule ?"
@@ -628,7 +629,7 @@ export default defineComponent({
 
       <div
         v-if="selectedTheme === FAQ_THEMES.AVAILABLE_INFORMATIONS" >
-        <DsfrAccordionsGroup>
+        <DsfrAccordionsGroup class="background-default-white">
           <li>
             <DsfrAccordion
               title="Que signifient les termes des opérations figurant dans l’historique ?"
@@ -867,7 +868,7 @@ export default defineComponent({
 
       <div
         v-if="selectedTheme === FAQ_THEMES.ERROR_IN_DISPLAYED_INFORMATIONS" >
-        <DsfrAccordionsGroup>
+        <DsfrAccordionsGroup class="background-default-white">
           <li>
             <DsfrAccordion
               title="Comment corriger une information manquante ou inexacte sur les données de mon véhicule ?"
@@ -903,7 +904,7 @@ export default defineComponent({
 
       <div
         v-if="selectedTheme === FAQ_THEMES.KILOMETERS_AND_TECHNICAL_CONTROLS" >
-        <DsfrAccordionsGroup>
+        <DsfrAccordionsGroup class="background-default-white">
           <li>
             <DsfrAccordion
               title="Que faire si le kilométrage ou le contrôle technique de mon véhicule ne figurent pas sur HistoVec ?"

@@ -1,5 +1,6 @@
 <script>
 import {defineComponent} from 'vue'
+import '@/assets/css/background.css'
 
 
 export default defineComponent({
@@ -22,7 +23,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fr-card fr-card--no-arrow">
+  <div class="fr-card fr-card--no-arrow background-default-white">
     <div class="fr-card__body">
       <h4 class="fr-card__title">
         <span>{{ titre }}</span>
