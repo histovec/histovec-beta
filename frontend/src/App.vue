@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 
 import HistoVecHeader from '@/components/HistoVecHeader.vue'
 import HistoVecFooter from '@/components/HistoVecFooter.vue'
-import '@/assets/css/background.css'
+import '@/assets/stylesheets/globale.css'
 import LienEvitement from '@/components/LienEvitement.vue'
 
 import { v4 as uuidv4 } from 'uuid'

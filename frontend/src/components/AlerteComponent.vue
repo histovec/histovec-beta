@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 
-import '@/assets/css/background.css'
+import '@/assets/stylesheets/globale.css'
 
 export default defineComponent({
   name: 'AlerteComponent',

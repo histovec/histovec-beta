@@ -2,8 +2,6 @@
 import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 import QrcodeVue from 'qrcode.vue'
-import '@/assets/stylesheets/globale.css'
-
 
 import orderBy from 'lodash.orderby'
 
@@ -45,7 +43,7 @@ import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
 import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
-import '@/assets/css/background.css'
+import '@/assets/stylesheets/globale.css'
 
 // CSA
 import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
