@@ -71,7 +71,7 @@ export default defineComponent({
   <footer class="fr-footer" role="contentinfo" id="footer">
     <div class="fr-container">
       <div class="fr-footer__body">
-        <div class="fr-footer__brand fr-enlarge-link">
+        <div class="fr-footer__brand fr-enlarge-link background-default-white">
           <p class="fr-logo">
             Ministère
             <br>de l’intérieur
@@ -98,7 +98,7 @@ export default defineComponent({
       <div class="fr-footer__partners">
         <h4 class="fr-footer__partners-title">Nos partenaires</h4>
         <div class="fr-footer__partners-logos">
-          <div class="fr-footer__partners-main">
+          <div class="fr-footer__partners-main background-default-white">
             <a id="securiteRoutiereIconeImage" class="fr-footer__partners-link" rel="noopener noreferrer" target="_blank" href="https://securite-routiere.gouv.fr" title="Securité routière - Lien vers le site securite-routiere.gouv.fr">
               <img class="fr-footer__logo footer__logo__securiteRoutiere" :src='images.logoSecuriteRoutiereMb90Svg' alt="" />
             </a>
