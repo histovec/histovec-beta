@@ -1,25 +1,11 @@
-.background-default-white,
-.background-accordeon-white,
+main,
 .fr-btn--secondary,
 .alert-content,
-.fr-nav__link,
-.fr-header__tools-links .fr-btn,
 .fr-footer{
-  background-color: var(--grey-1000-75);
+  background: var(--grey-1000-75);
 }
 
+.background-accordeon-white,
 .fr-nav__link{
-  margin-top: 0.1rem !important;
-}
-
-.fr-header__tools-links .fr-btn{
-  margin-right: 0.25rem !important;
-}
-
-.fr-header__menu-links .fr-btn{
-  margin-bottom: 0.25rem !important;
-}
-
-.background-accordeon-white{
-  padding-bottom: 0.25rem !important;
+  background: transparent;
 }
