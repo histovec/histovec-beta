@@ -3,6 +3,8 @@ import { defineComponent } from 'vue'
 
 import logoHistoVec from '@/assets/img/logo_histovec_simple.svg?url'
 
+import '@/assets/css/background.css'
+
 export default defineComponent({
   name: 'HistoVecHeader',
 
@@ -61,7 +63,7 @@ export default defineComponent({
 
 <template>
   <header
-      id="header"
+    id="header"
     role="banner"
     class="fr-header"
   >

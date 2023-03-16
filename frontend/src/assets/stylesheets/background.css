@@ -1,3 +1,19 @@
-.background-default-white {
-  background-color: white;
+.background-default-white,
+.fr-btn--secondary,
+.alert-content,
+.fr-nav__link,
+.fr-footer{
+  background-color: var(--grey-1000-75);
+}
+
+ .fr-header__tools-links .fr-btn{
+   background: var(--grey-1000-75) !important;
+ }
+
+.fr-header__tools-links .fr-btn:hover{
+  background: red !important;
+}
+
+.fr-header__tools-links .fr-btn:active{
+  background: blue !important;
 }
