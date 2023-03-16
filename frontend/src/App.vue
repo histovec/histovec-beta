@@ -42,7 +42,7 @@ export default defineComponent({
   <main
     id="contenu"
     role="main"
-    class="fr-container fr-mb-6w background-default-white"
+    class="fr-container fr-mb-6w"
   >
     <router-view />
   </main>
