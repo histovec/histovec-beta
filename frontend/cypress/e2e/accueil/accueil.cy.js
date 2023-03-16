@@ -8,14 +8,28 @@ context('Accueil', () => {
 
   it("Naviguer vers page propriétaire", () => {
 
-    cy.get("a").contains("Propriétaire").click();
+    cy.get('a[title*="Propriétaire"]').contains("Propriétaire").click();
+    cy.url().should("eq", "http://localhost:8080/histovec/proprietaire");
+
+  })
+
+  it("Naviguer vers page propriétaire via la tuile", () => {
+
+    cy.get('div[class*="fr-tile--horizontal"]').contains("Propriétaire").click();
     cy.url().should("eq", "http://localhost:8080/histovec/proprietaire");
 
   })
 
   it("Naviguer vers page acheteur", () => {
 
-    cy.get("a").contains("Acheteur").click();
+    cy.get('div[class*="fr-tile--horizontal"]').contains("Acheteur").click();
+    cy.url().should("eq", "http://localhost:8080/histovec/acheteur");
+
+  })
+
+  it("Naviguer vers page acheteur via la tuile", () => {
+
+    cy.get('a[title*="Acheteur"]').contains("Acheteur").click();
     cy.url().should("eq", "http://localhost:8080/histovec/acheteur");
 
   })
@@ -27,9 +41,23 @@ context('Accueil', () => {
 
   })
 
+  it("Naviguer vers page contact via bouton", () => {
+
+    cy.get("button[class*='fr-btn--secondary']").contains("Contactez-nous").click();
+    cy.url().should("eq", "http://localhost:8080/histovec/contact");
+
+  })
+
   it("Naviguer vers page faq", () => {
 
     cy.get("button[class*='fr-btn']").contains("Besoin d'aide").click();
+    cy.url().should("eq", "http://localhost:8080/histovec/faq");
+
+  })
+
+  it("Naviguer vers page faq via bouton", () => {
+
+    cy.get("button[class*='fr-btn inline-flex']").contains("Besoin d'aide").click();
     cy.url().should("eq", "http://localhost:8080/histovec/faq");
 
   })
@@ -48,14 +76,14 @@ context('Accueil', () => {
 
   })
 
-  it("Naviguer vers page Mentions Légales", () => {
+  it("Naviguer vers page Plan du site", () => {
 
     cy.get("a[class*='fr-footer__bottom-link']").contains("Plan du site").click();
     cy.url().should("eq", "http://localhost:8080/histovec/plan-du-site");
 
   })
 
-  it("Naviguer vers page Mentions Légales", () => {
+  it("Naviguer vers page Accessibilité", () => {
 
     cy.get("a[class*='fr-footer__bottom-link']").contains("Accessibilité").click();
     cy.url().should("eq", "http://localhost:8080/histovec/accessibilite");
