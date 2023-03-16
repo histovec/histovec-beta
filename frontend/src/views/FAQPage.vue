@@ -165,7 +165,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Je vends mon véhicule d’occasion"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -179,7 +179,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="J’achète un véhicule d’occasion"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -192,7 +192,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Je suis un professionnel négociant automobile"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -205,7 +205,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Je loue ma voiture à des particuliers"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -223,7 +223,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Qui peut consulter HistoVec ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -256,7 +256,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Comment consulter le rapport d’un véhicule qui ne m’appartient pas ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -279,7 +279,7 @@ export default defineComponent({
           <li>
             <!-- @todo @doublonFaq3 Voir avec la DSR lequel on souhaite garder -->
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -318,7 +318,7 @@ export default defineComponent({
           <li>
             <!-- @todo @doublonFaq4 Voir avec la DSR lequel on souhaite garder -->
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -339,7 +339,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si le message « accès non autorisé » s’affiche lors de ma recherche ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -354,7 +354,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Quelles sont les informations à indiquer pour effectuer ma recherche ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -373,7 +373,7 @@ export default defineComponent({
           <li>
             <!-- @todo @doublonFaq1 Voir avec la DSR lequel on souhaite garder -->
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -407,7 +407,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Comment consulter HistoVec si je n’ai pas le certificat d'immatriculation en cours de validité ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -443,7 +443,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si je ne parviens pas à lancer la recherche de mon véhicule ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -456,7 +456,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si la recherche de mon véhicule n’aboutit pas ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -497,7 +497,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Je viens de recevoir mon certificat d’immatriculation mais je ne trouve pas mon véhicule sur HistoVec"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -524,7 +524,7 @@ export default defineComponent({
           <li>
             <!-- @todo @doublonFaq1 Voir avec la DSR lequel on souhaite garder -->
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Comment effectuer la recherche sur HistoVec pour un véhicule en location longue durée (LLD) ou en location avec option d’achat (LOA ou leasing) ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -558,7 +558,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Tous les véhicules figurent-ils sur HistoVec ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -608,7 +608,7 @@ export default defineComponent({
           <li>
             <!-- @todo @doublonFaq3 Voir avec la DSR lequel on souhaite garder -->
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si le lien du rapport HistoVec que l’on m’a envoyé ne fonctionne pas ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -652,7 +652,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que signifient les termes des opérations figurant dans l’historique ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -713,7 +713,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Quels sinistres figurent sur HistoVec ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -728,7 +728,7 @@ export default defineComponent({
           <li>
             <!-- @todo @doublonFaq4 Voir avec la DSR lequel on souhaite garder -->
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Quelle différence y a-t-il entre la notion de propriétaire et titulaire ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -749,7 +749,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Comment puis-je récupérer le rapport d’un expert en automobile ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -763,7 +763,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Pourquoi HistoVec affiche-t-il une opposition au transfert du certificat d’immatriculation ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -811,7 +811,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si mon véhicule est gagé ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -845,7 +845,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire en cas de déclaration valant saisie ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -868,7 +868,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si je reçois des amendes concernant un véhicule dont je ne suis plus propriétaire ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -899,7 +899,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Comment corriger une information manquante ou inexacte sur les données de mon véhicule ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -936,7 +936,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si le kilométrage ou le contrôle technique de mon véhicule ne figurent pas sur HistoVec ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -958,7 +958,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
-              class="background-default-white"
+              class="background-accordeon-white"
               title="Que faire si le kilométrage de mon véhicule présente une incohérence ?"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
