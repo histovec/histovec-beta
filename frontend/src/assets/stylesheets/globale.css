@@ -1,3 +1,16 @@
 .fr-text--bleu {
   color: var(--blue-france-sun-113-625);
 }
+
+main,
+.fr-btn--secondary,
+.background-default-white,
+.alert-content,
+.fr-footer{
+  background: var(--grey-1000-75);
+}
+
+.background-accordeon-white,
+.fr-nav__link{
+  background: transparent;
+}

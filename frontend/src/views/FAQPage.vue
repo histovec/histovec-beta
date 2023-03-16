@@ -16,7 +16,7 @@ import { mailTo } from '@/utils/email.js'
 import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
 import api from '@/api/index.js'
 
-import '@/assets/css/background.css'
+import '@/assets/stylesheets/globale.css'
 
 export default defineComponent({
   name: 'FAQPage',

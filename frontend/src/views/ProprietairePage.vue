@@ -25,8 +25,6 @@ import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatric
 import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
 import api from '@/api/index.js'
 
-import '@/assets/css/background.css'
-
 export default defineComponent({
   name: 'ProprietairePage',
 
