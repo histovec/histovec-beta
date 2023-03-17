@@ -2,6 +2,8 @@
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import '@/assets/stylesheets/globale.css'
+
 import { mailTo } from '@/utils/email.js'
 import {
   HISTOVEC_BASE_URL,
@@ -286,6 +288,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
+              class="background-accordeon-white"
               title="Textes de référence"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -357,6 +360,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              class="background-accordeon-white"
               title="Pour en savoir plus"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
