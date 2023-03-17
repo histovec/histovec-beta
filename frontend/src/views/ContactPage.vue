@@ -389,7 +389,7 @@ export default defineComponent({
             >
               démarches de déclaration de cession du véhicule
             </a>
-            auprès de l'ANTS (Agence Nationale des Titres Sécurisés).
+            auprès de l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés).
           </p>
 
           <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_CHANGE">
@@ -402,7 +402,7 @@ export default defineComponent({
             >
               démarches de changement de titulaire du certificat d'immatriculation
             </a>
-            auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+            auprès de l' A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés)
           </p>
 
           <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_LOSS">
@@ -415,7 +415,7 @@ export default defineComponent({
             >
               démarches de déclaration de perte ou de vol du certificat d'immatriculation
             </a>
-            auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
+            auprès de l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés)
           </p>
 
           <p v-if="selectedTheme === CONTACT_THEME.RESOLVE_PV">
@@ -426,7 +426,7 @@ export default defineComponent({
               rel="noopener noreferrer"
               target="_blank"
             >
-              l'Agence nationale de traitement automatisé des infractions (ANTAI)
+              l'Agence nationale de traitement automatisé des infractions (A&#8203;N&#8203;T&#8203;A&#8203;I)
             </a>.
           </p>
 
@@ -443,7 +443,7 @@ export default defineComponent({
             >
               les démarches
             </a>
-            proposées par l'ANTS (Agence Nationale des Titres Sécurisés)
+            proposées par l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés)
           </p>
         </div>
       </div>

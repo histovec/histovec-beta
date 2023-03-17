@@ -983,7 +983,7 @@ export default defineComponent({
         title="Fraîcheur des données"
         description="
           HistoVec rencontre actuellement des difficultés techniques dans la mise à jour des données relatives aux véhicules qu'il vous permet de consulter.
-          Seul le certificat de situation administrative disponible sur le site de l'ANTS fait foi.
+          Seul le certificat de situation administrative disponible sur le site de l'A&#8203;N&#8203;T&#8203;S fait foi.
           Veuillez nous excuser pour la gêne occasionnée.
         "
       />
