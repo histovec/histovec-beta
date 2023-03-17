@@ -406,7 +406,7 @@ export default defineComponent({
             >
               démarches de changement de titulaire du certificat d'immatriculation
             </a>
-            auprès de l' A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés)
+            auprès de l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés)
           </p>
 
           <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_LOSS">
