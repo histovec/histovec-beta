@@ -81,7 +81,7 @@ export default defineComponent({
         public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
         Il collecte les catégories de données suivantes :
         <ul class="fr-ml-4w  fr-pl-0">
-          <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° SIREN et/ou n° SIRET) ;</li>
+          <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° S&#8203;I&#8203;R&#8203;E&#8203;N et/ou n° SIRET) ;</li>
           <li>Les données d’identification du véhicule (numéro d’immatriculation, numéro VIN, numéro de formule du certificat d’immatriculation ou date du certificat d'immatriculation) ;</li>
           <li>Les données d’historique du véhicule (notamment date de mise en circulation, date de première immatriculation, marque, modèle, couleur, puissance CV, date de sinistre, état de vol, état de perte, gages, oppositions, procédures, résultats des contrôles techniques, kilométrages) ;</li>
           <li>Traces fonctionnelles : deux traceurs utilisés par l'observatoire de la qualité des démarches numériques. Ces traceurs sont activés par les utilisateurs qui donnent leurs avis sur le site HistoVec, à destination de l'observatoire de la qualité des démarches numériques. Ils portent sur l’identifiant de session, et la langue et la mesure d'audience.</li>
