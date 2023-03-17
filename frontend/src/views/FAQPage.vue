@@ -107,7 +107,7 @@ export default defineComponent({
                 href="https://immatriculation.ants.gouv.fr"
                 title="ANTS - www.immatriculation.ants.gouv.fr - Nouvelle fenêtre"
               >
-                (ANTS)
+                (A&#8203;N&#8203;T&#8203;S)
               </a>
             </li>
           </ul>
@@ -132,7 +132,7 @@ export default defineComponent({
                 href="https://immatriculation.ants.gouv.fr"
                 title="ANTS - www.immatriculation.ants.gouv.fr - Nouvelle fenêtre"
               >
-                (ANTS)
+                (A&#8203;N&#8203;T&#8203;S)
               </a>
             </li>
           </ul>
@@ -232,7 +232,7 @@ export default defineComponent({
                   Sur la page Propriétaire, remplissez le formulaire avec les informations figurant sur le certificat
                   d'immatriculation en cours de validité.
                   Si le véhicule appartient à une entreprise, une collectivité, ou une association, cliquez sur «
-                  Personne morale » et renseignez, le cas échéant, le numéro de SIREN.
+                  Personne morale » et renseignez, le cas échéant, le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N.
                 </li>
                 <li>
                   Le rapport du véhicule est affiché. Vous pouvez consulter les différentes sections sur le menu de
@@ -382,7 +382,7 @@ export default defineComponent({
               </p>
               <p>
                 Par exemple, pour une société de location, cliquez sur l'onglet Personne morale et remplissez le
-                formulaire de recherche en indiquant, le cas échéant, le n° SIREN de la société qui vous loue le
+                formulaire de recherche en indiquant, le cas échéant, le n° S&#8203;I&#8203;R&#8203;E&#8203;N de la société qui vous loue le
                 véhicule.
               </p>
               <p>
@@ -469,7 +469,7 @@ export default defineComponent({
                 </li>
                 <li>
                   Si le véhicule appartient à une entreprise, assurez-vous de renseigner le formulaire sous l’onglet «
-                  Personne morale » et, s’il s’agit d’une entreprise, d’indiquer le n° SIREN ou SIRET correspondant à
+                  Personne morale » et, s’il s’agit d’une entreprise, d’indiquer le n° S&#8203;I&#8203;R&#8203;E&#8203;N ou SIRET correspondant à
                   votre société ;
                 </li>
                 <li>
@@ -515,7 +515,7 @@ export default defineComponent({
                   href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
                   rel="noopener noreferrer"
                   target="_blank"
-                >site de l'ANTS</a>.
+                >site de l'A&#8203;N&#8203;T&#8203;S</a>.
               </p>
             </DsfrAccordion>
           </li>
@@ -533,7 +533,7 @@ export default defineComponent({
               </p>
               <p>
                 Par exemple, pour une société de location, cliquez sur l'onglet Personne morale et remplissez le
-                formulaire de recherche en indiquant, le cas échéant, le n° SIREN de la société qui vous loue le
+                formulaire de recherche en indiquant, le cas échéant, le n° S&#8203;I&#8203;R&#8203;E&#8203;N de la société qui vous loue le
                 véhicule.
               </p>
               <p>
@@ -566,7 +566,7 @@ export default defineComponent({
               </p>
               <p>
                 Si vous souhaitez disposer du certificat de situation administrative, nous vous invitons à le
-                télécharger auprès de l’ANTS (Agence Nationale des Titres Sécurisés) en suivant
+                télécharger auprès de l’A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés) en suivant
                 <a
                   class="fr-link"
                   href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
@@ -576,7 +576,7 @@ export default defineComponent({
               </p>
               <p>
                 <!-- @todo @doublonFaq2 Voir avec la DSR lequel on souhaite garder -->
-                Pour toute information, vous pouvez contacter l'ANTS par téléphone au 3400.
+                Pour toute information, vous pouvez contacter l'A&#8203;N&#8203;T&#8203;S par téléphone au 3400.
               </p>
               <p>
                 Pour des raisons de sécurité, les véhicules diplomatiques et les véhicules des administrations de l’Etat
@@ -589,7 +589,7 @@ export default defineComponent({
               </p>
               <p>
                 Pour les véhicules des administrations civiles de l’Etat, nous vous invitons à télécharger le certificat
-                de situation administrative détaillé auprès de l’ANTS (Agence Nationale des Titres Sécurisés) en suivant
+                de situation administrative détaillé auprès de l’A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés) en suivant
                 <a
                   class="fr-link"
                   href="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
@@ -599,7 +599,7 @@ export default defineComponent({
               </p>
               <p>
                 <!-- @todo @doublonFaq2 Voir avec la DSR lequel on souhaite garder -->
-                Pour toute information, vous pouvez contacter l'ANTS par téléphone au 3400.
+                Pour toute information, vous pouvez contacter l'A&#8203;N&#8203;T&#8203;S par téléphone au 3400.
               </p>
             </DsfrAccordion>
           </li>
@@ -678,7 +678,7 @@ export default defineComponent({
                 </li>
                 <li>
                   Conversion au nouveau format d'immatriculation, changement d'immatriculation d'un véhicule passant du
-                  format 1234 ABC 56 au format AB-123-CD.
+                  format 1&#8203;2&#8203;3&#8203;4 ABC 5&#8203;6 au format AB-1&#8203;2&#8203;3-CD.
                 </li>
                 <li>
                   Cession (vente du véhicule), véhicule vendu par un particulier ou par un professionnel.
@@ -785,7 +785,7 @@ export default defineComponent({
                   href="http://www.antai.gouv.fr"
                   rel="noopener noreferrer"
                   target="_blank"
-                >l'ANTAI</a> :
+                >l'A&#8203;N&#8203;T&#8203;A&#8203;I</a> :
               </p>
               <ul class="fr-ml-4w  fr-pl-0">
                 <li>
@@ -829,7 +829,7 @@ export default defineComponent({
                 >ce lien</a>.
               </p>
               <p>
-                Pour toute information, vous pouvez contacter l'ANTS par téléphone au 3400.
+                Pour toute information, vous pouvez contacter l'A&#8203;N&#8203;T&#8203;S par téléphone au 3400.
               </p>
               <p>
                 Si le créancier a demandé récemment la levée du gage, il convient d’attendre quelques jours la mise à
@@ -837,7 +837,7 @@ export default defineComponent({
               </p>
               <p>
                 Dans l’attente, nous vous invitons à télécharger le certificat de situation administrative auprès de
-                l’ANTS en suivant ce lien précité.
+                l’A&#8203;N&#8203;T&#8203;S en suivant ce lien précité.
               </p>
             </DsfrAccordion>
           </li>
@@ -849,7 +849,7 @@ export default defineComponent({
               @expand="expandedId = $event"
             >
               <p>
-                Pour obtenir des précisions sur une déclaration valant saisie, nous vous invitions à contacter l'ANTS :
+                Pour obtenir des précisions sur une déclaration valant saisie, nous vous invitions à contacter l'A&#8203;N&#8203;T&#8203;S :
               </p>
               <ul class="fr-ml-4w  fr-pl-0">
                 <li>
