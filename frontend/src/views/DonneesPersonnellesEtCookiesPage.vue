@@ -58,9 +58,9 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Données personnelles et Gestion des cookies</h1>
 
-      <h5>
+      <h2>
         Introduction
-      </h5>
+      </h2>
       <div>
         Conformément à la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés
         modifiée et au règlement général sur la protection des données (RGPD), la déléguée interministérielle à la
@@ -73,9 +73,9 @@ export default defineComponent({
         </ul>
       </div>
 
-      <h5>
+      <h2>
         Données collectées
-      </h5>
+      </h2>
       <div>
         Ce téléservice a pour fondement juridique l’article 6 .1.e) du RGPD : « l'exécution d'une mission d'intérêt
         public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
@@ -109,9 +109,9 @@ export default defineComponent({
         Les données relatives aux résultats des contrôles techniques et au kilométrage des véhicules proviennent de l’UTAC –OTC. HistoVec interroge la base de données de l’UTAC-OTC lors de chaque consultation.
       </p>
 
-      <h5>
+      <h2>
         Conservation des données
-      </h5>
+      </h2>
       <p>
         Les durées de conservation des données sont les suivantes :
       </p>
@@ -159,9 +159,9 @@ export default defineComponent({
   </div>
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
-      <h5>
+      <h2>
         Droit d'accès et de modification
-      </h5>
+      </h2>
       <p>
         S’agissant des informations issues du système d’immatriculation des véhicules fournies par HistoVec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (
         <a
