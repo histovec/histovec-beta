@@ -124,14 +124,16 @@ export default defineComponent({
       }
 
       const { message } = this
+      let messageNormalized
+
       try {
-        message.normalize('NFD')
+        messageNormalized = message.normalize('NFD')
       } catch (e) {
-        message.replace(/[\u0300-\u036f]*/g, '')
+        messageNormalized = message.replace(/[\u0300-\u036f]*/g, '')
       }
 
       // eslint-disable-next-line no-misleading-character-class
-      return message.replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ')
+      return messageNormalized.replace(/[^a-z0-9\n\u0300-\u036f,.?\-:;%()]/gi,' ')
     },
     themeLabel () {
       const themeCount = this.filteredThemesOptions.length
