@@ -358,7 +358,7 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0" aria-live="polite">
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
-      <h6>Veuillez choisir un ou plusieurs thèmes :</h6>
+      <h2 class="fr-h6">Veuillez choisir un ou plusieurs thèmes :</h2>
       <DsfrTags
         :tags="tags"
       />
@@ -378,7 +378,7 @@ export default defineComponent({
     <template v-if="isReadonlyTheme">
       <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-4w">
         <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-0">
-          <h5>Marche à suivre</h5>
+          <h2 class="fr-h5">Marche à suivre</h2>
         </div>
       </div>
       <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w  fr-mt-0">
@@ -501,9 +501,9 @@ export default defineComponent({
         v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV || identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
         class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-mt-3w"
       >
-        <h6 class="fr-mb-1w">
+        <h2 class="fr-mb-1w fr-h6">
           Données transmises pour l'assistance
-        </h6>
+        </h2>
         <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
           <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
             <ul
