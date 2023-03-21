@@ -18,10 +18,10 @@ context('Proprietaire', () => {
       .contains("Immatriculation avant 2009")
 
     // formulaire non visible
-    cy.get("input[id*='form-input-nom-naissance']").should("not.exist")
-    cy.get("input[id*='form-input-prenom']").should("not.exist")
-    cy.get("input[id*='form-input-numero-immatriculation']").should("not.exist")
-    cy.get("input[id*='form-input-numero-formule']").should("not.exist")
+    cy.get("input[id*='form-siv-particulier-nom-naissance']").should("not.exist")
+    cy.get("input[id*='form-siv-particulier-prenom']").should("not.exist")
+    cy.get("input[id*='form-siv-particulier-numero-immatriculation']").should("not.exist")
+    cy.get("input[id*='form-siv-particulier-numero-formule']").should("not.exist")
 
     // clique sur 'immatriculation depuis 2009' et bouton selectionné
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
@@ -34,16 +34,16 @@ context('Proprietaire', () => {
       .should('be.disabled')
 
     // renseignement du formulaire
-    cy.get("input[id*='form-input-nom-naissance']")
+    cy.get("input[id*='form-siv-particulier-nom-naissance']")
       .should("exist")
       .type('nom')
-    cy.get("input[id*='form-input-prenom']")
+    cy.get("input[id*='form-siv-particulier-prenom']")
       .should("exist")
       .type('prenom')
-    cy.get("input[id*='form-input-numero-immatriculation']")
+    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
       .should("exist")
       .type('AA-123-AA')
-    cy.get("input[id*='form-input-numero-formule']")
+    cy.get("input[id*='form-siv-particulier-numero-formule']")
       .should("exist")
       .type('2013BZ80335')
 
@@ -55,16 +55,16 @@ context('Proprietaire', () => {
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
       .click()
-    cy.get("input[id*='form-input-nom-naissance']")
+    cy.get("input[id*='form-siv-particulier-nom-naissance']")
       .should("exist")
       .type('nom')
-    cy.get("input[id*='form-input-prenom']")
+    cy.get("input[id*='form-siv-particulier-prenom']")
       .should("exist")
       .type('prenom')
-    cy.get("input[id*='form-input-numero-immatriculation']")
+    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
       .should("exist")
       .type('AA-123-AA')
-    cy.get("input[id*='form-input-numero-formule']")
+    cy.get("input[id*='form-siv-particulier-numero-formule']")
       .should("exist")
       .type('2013BZ80335')
 

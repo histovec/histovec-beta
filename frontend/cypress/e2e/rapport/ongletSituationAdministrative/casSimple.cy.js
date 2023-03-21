@@ -10,16 +10,16 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
       .click()
-    cy.get("input[id*='form-input-nom-naissance']")
+    cy.get("input[id*='form-siv-particulier-nom-naissance']")
       .should("exist")
       .type('nom')
-    cy.get("input[id*='form-input-prenom']")
+    cy.get("input[id*='form-siv-particulier-prenom']")
       .should("exist")
       .type('prenom')
-    cy.get("input[id*='form-input-numero-immatriculation']")
+    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
       .should("exist")
       .type('AA-123-AA')
-    cy.get("input[id*='form-input-numero-formule']")
+    cy.get("input[id*='form-siv-particulier-numero-formule']")
       .should("exist")
       .type('2013BZ80335')
 
@@ -65,7 +65,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .find("div[class*='fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0']")
       .should('have.length', 1)
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu']")
       .should('have.length', 1)
 
     cy.get("div[id*='report-tab-content-3']")
@@ -89,10 +89,10 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .find("div[class*='fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0']")
       .should('have.length', 1)
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-text--bleu']")
       .should('have.length', 2)
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu']")
       .should('have.length', 1)
 
     // Gages
@@ -117,7 +117,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(0)
-      .find("span[class='fr-blue-text']")
+      .find("span[class='fr-text--bleu']")
       .contains("NON")
 
     // Oppositions
@@ -142,7 +142,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(0)
-      .find("span[class='fr-blue-text']")
+      .find("span[class='fr-text--bleu']")
       .contains("NON")
 
     // Véhicule
@@ -160,7 +160,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .find("div[class*='fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0']")
       .contains("Déclaré volé")
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu']")
       .contains("NON")
 
     // Déclarations valant saisie
@@ -177,7 +177,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(0)
-      .find("span[class='fr-blue-text']")
+      .find("span[class='fr-text--bleu']")
       .contains("NON")
 
     // Suspensions
@@ -194,7 +194,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(1)
-      .find("span[class='fr-blue-text']")
+      .find("span[class='fr-text--bleu']")
       .contains("NON")
 
     // Certificat d'immatriculation
@@ -221,15 +221,15 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .eq(0)
       .contains("Duplicata")
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-text--bleu']")
       .eq(0)
       .contains("NON")
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-text--bleu']")
       .eq(1)
       .contains("NON")
       .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-blue-text']")
+      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu']")
       .eq(0)
       .contains("NON")
   })

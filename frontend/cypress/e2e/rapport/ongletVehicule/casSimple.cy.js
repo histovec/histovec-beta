@@ -95,16 +95,16 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
       .click()
-    cy.get("input[id*='form-input-nom-naissance']")
+    cy.get("input[id*='form-siv-particulier-nom-naissance']")
       .should("exist")
       .type('nom')
-    cy.get("input[id*='form-input-prenom']")
+    cy.get("input[id*='form-siv-particulier-prenom']")
       .should("exist")
       .type('prenom')
-    cy.get("input[id*='form-input-numero-immatriculation']")
+    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
       .should("exist")
       .type('AA-123-AA')
-    cy.get("input[id*='form-input-numero-formule']")
+    cy.get("input[id*='form-siv-particulier-numero-formule']")
       .should("exist")
       .type('2013BZ80335')
 
@@ -148,7 +148,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
       .should('have.length', 26)
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-4 fr-pt-0 fr-pb-1w fr-blue-text']")
+      .find("div[class*='fr-col-4 fr-pt-0 fr-pb-1w fr-text--bleu']")
       .should('have.length', 26)
   })
   it("Affichage de l'onglet véhicule - contenue", () => {
@@ -172,7 +172,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
       })
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-4 fr-pt-0 fr-pb-1w fr-blue-text']")
+      .find("div[class*='fr-col-4 fr-pt-0 fr-pb-1w fr-text--bleu']")
       .should('have.length', 26)
       .each(($el, index) => {
         if (listeCaracteristiqueVehicule[index]) {
