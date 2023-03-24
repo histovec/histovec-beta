@@ -11,6 +11,7 @@
     "format": "eslint src --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "lint:js": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "start": "NODE_OPTIONS=--openssl-legacy-provider vite",
+    "pretest": "npm run lint",
     "test": "vitest run",
     "test:watch": "vitest",
     "cy:run": "cypress run"
