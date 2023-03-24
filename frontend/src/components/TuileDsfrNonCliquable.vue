@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
-import LoaderComponent from './LoaderComponent.vue';
+import LoaderComponent from '@/components/LoaderComponent.vue';
 
 export default defineComponent({
   name: 'TuileDsfrNonCliquable',

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import AccueilPage from '@/views/AccueilPage.vue'
-import { TYPE_RAPPORT } from '../constants/type'
+import { TYPE_RAPPORT } from '@Constants/type'
 
 const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
 const AcheteurPage = () => import('@/views/AcheteurPage.vue')

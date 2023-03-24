@@ -1,6 +1,6 @@
 import { PDFDocument } from 'pdf-lib'
 
-import { writeContent } from './content.js'
+import { writeContent } from '@/utils/csaAsPdf/content.js'
 import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from '@/constants/csaAsPdf.js'
 
 

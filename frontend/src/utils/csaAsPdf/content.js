@@ -1,4 +1,4 @@
-import { writeFooter } from './footer.js'
+import { writeFooter } from '@/utils/csaAsPdf/footer.js'
 import { formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
 
 import {
@@ -24,7 +24,7 @@ import {
 	writeText,
 	writeTitle,
 	writeWithSpacing,
-} from './utils.js'
+} from '@/utils/csaAsPdf/utils.js'
 
 
 const SECTION_TITLE_BULLET = '-'

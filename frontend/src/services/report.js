@@ -5,7 +5,7 @@ import { vehiculeMapping, controlesTechniquesMapping } from '@/utils/mapping/ind
 import { getTomorrowTime, getTodayTime } from '@/utils/date.js'
 import { labelizeControlesTechniques } from '@/utils/vehicle/formatControlesTechniques.js'
 
-import { TYPE_IMMATRICULATION } from '../constants/type'
+import { TYPE_IMMATRICULATION } from '@Constants/type'
 
 
 // @todo @frontendCacheImplementation : Utiliser le session storage au lieu d'un objet global dans le service
