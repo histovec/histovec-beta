@@ -1,14 +1,16 @@
+import routes from "../../constants/urls.json";
+
 context('Proprietaire', () => {
   beforeEach(() => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/accueil')
+    cy.visit(routes.url_accueil)
     cy.title().should('eq', 'HistoVec - Accueil')
 
     cy.get('a[title*="Propriétaire"]')
       .contains("Propriétaire")
       .click()
 
-    cy.url().should("eq", "http://localhost:8080/histovec/proprietaire")
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire)
   })
   it("Recherche d'une immatriculation depuis 2009", () => {
     // bouton recherche 'immatriculation depuis 2009' non selectionné
@@ -75,7 +77,7 @@ context('Proprietaire', () => {
 
     // page de redirection
     cy.wait(500)
-    const urlErreur = "http://localhost:8080/histovec/?errorTitle=Ce+v%C3%A9hicule+est+inconnu+d%27HistoVec&errorMessages=[%22Vos+noms+et+pr%C3%A9noms+sont+susceptibles+d%27avoir+fait+l%27objet+d%27erreurs+lors+de+la+saisie+de+votre+dossier.%22,%22Recopiez+exactement+les+donn%C3%A9es+de+votre+certificat+d%27immatriculation.+Le+certificat+d%27immatriculation+que+vous+utilisez+n%27est+peut-%C3%AAtre+pas+le+dernier+en+cours+de+validit%C3%A9+(perte,+vol,+...).%22]&primaryAction={%22label%22:%22Revenir+au+formulaire+de+recherche%22,%22icon%22:%22ri-arrow-right-fill%22,%22to%22:%22/proprietaire%22}";
-    cy.url().should("eq", urlErreur)
+    const urlErreur = Cypress.config('baseUrl') + '?errorTitle=Ce+v%C3%A9hicule+est+inconnu+d%27HistoVec&errorMessages=[%22Vos+noms+et+pr%C3%A9noms+sont+susceptibles+d%27avoir+fait+l%27objet+d%27erreurs+lors+de+la+saisie+de+votre+dossier.%22,%22Recopiez+exactement+les+donn%C3%A9es+de+votre+certificat+d%27immatriculation.+Le+certificat+d%27immatriculation+que+vous+utilisez+n%27est+peut-%C3%AAtre+pas+le+dernier+en+cours+de+validit%C3%A9+(perte,+vol,+...).%22]&primaryAction={%22label%22:%22Revenir+au+formulaire+de+recherche%22,%22icon%22:%22ri-arrow-right-fill%22,%22to%22:%22/proprietaire%22}';
+    cy.url().should('eq', urlErreur)
   })
 })

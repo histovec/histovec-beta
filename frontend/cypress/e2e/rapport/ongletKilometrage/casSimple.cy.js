@@ -1,3 +1,5 @@
+import routes from "../../../constants/urls.json";
+
 context('Rapport vehicule cas simple - onglet Kilométrage', () => {
   const listeDate = ["26/12/2018", "10/12/2016", "11/12/2014"];
   const listeNature = ["Contrôle Technique Périodique", "Visite Technique Périodique", "Visite Technique Périodique"];
@@ -5,7 +7,7 @@ context('Rapport vehicule cas simple - onglet Kilométrage', () => {
 
   before(() => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -34,7 +36,7 @@ context('Rapport vehicule cas simple - onglet Kilométrage', () => {
 
     // page de redirection
     cy.wait(500)
-    cy.url().should("eq", "http://localhost:8080/histovec/rapport-vendeur")
+    cy.url().should('eq',  Cypress.config('baseUrl') + routes.url_rapport_vendeur)
     cy.title().should('eq', 'HistoVec - Rapport vendeur')
 
     // Onlget Situation administrative selectionné

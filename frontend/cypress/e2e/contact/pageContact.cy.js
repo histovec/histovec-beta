@@ -1,4 +1,5 @@
 import { CONTACT_THEMES_OPTIONS, DEFAULT_CONTACT_THEMES_OPTIONS } from '../../../src/constants/contact'
+import routes from "../../constants/urls.json";
 
 context('Contact', () => {
   function QuestionSelectAbsente(listeQuestion) {
@@ -71,8 +72,8 @@ context('Contact', () => {
   }
 
   beforeEach(() => {
-    cy.visit('http://localhost:8080/histovec/contact');
-    cy.url().should('eq', 'http://localhost:8080/histovec/contact');
+    cy.visit(routes.url_contact)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
   })
 
@@ -247,7 +248,7 @@ context('Contact', () => {
   })
   it('Affichage données particulier - immatriculation depuis 2009 ', () => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -280,12 +281,12 @@ context('Contact', () => {
 
     // page de redirection
     cy.wait(500);
-    cy.url().should('eq', 'http://localhost:8080/histovec/rapport-vendeur');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
     cy.title().should('eq', 'HistoVec - Rapport vendeur');
 
     // retour page contact
     cy.get('a[title*="Contact"]').contains('Contact').click();
-    cy.url().should('eq', 'http://localhost:8080/histovec/contact');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
@@ -303,7 +304,8 @@ context('Contact', () => {
   })
   it('Affichage données personne morale - immatriculation depuis 2009 ', () => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -341,12 +343,12 @@ context('Contact', () => {
 
     // page de redirection
     cy.wait(500);
-    cy.url().should('eq', 'http://localhost:8080/histovec/rapport-vendeur');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
     cy.title().should('eq', 'HistoVec - Rapport vendeur');
 
     // retour page contact
     cy.get('a[title*="Contact"]').contains('Contact').click();
-    cy.url().should('eq', 'http://localhost:8080/histovec/contact');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
@@ -364,7 +366,8 @@ context('Contact', () => {
   })
   it('Affichage données particulier - immatriculation avant 2009 ', () => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -395,12 +398,12 @@ context('Contact', () => {
 
     // page de redirection
     cy.wait(500);
-    cy.url().should('eq', 'http://localhost:8080/histovec/rapport-vendeur');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
     cy.title().should('eq', 'HistoVec - Rapport vendeur');
 
     // retour page contact
     cy.get('a[title*="Contact"]').contains('Contact').click();
-    cy.url().should('eq', 'http://localhost:8080/histovec/contact');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
@@ -417,7 +420,8 @@ context('Contact', () => {
   })
   it('Affichage données personne morale - immatriculation avant 2009 ', () => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -455,12 +459,12 @@ context('Contact', () => {
 
     // page de redirection
     cy.wait(500);
-    cy.url().should('eq', 'http://localhost:8080/histovec/rapport-vendeur');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
     cy.title().should('eq', 'HistoVec - Rapport vendeur');
 
     // retour page contact
     cy.get('a[title*="Contact"]').contains('Contact').click();
-    cy.url().should('eq', 'http://localhost:8080/histovec/contact');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
@@ -508,7 +512,8 @@ context('Contact', () => {
   })
   it('Envoyer Mail avec donnée proprietaire', () => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -537,12 +542,12 @@ context('Contact', () => {
 
     // page de redirection
     cy.wait(500);
-    cy.url().should('eq', 'http://localhost:8080/histovec/rapport-vendeur');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
     cy.title().should('eq', 'HistoVec - Rapport vendeur');
     cy.get('a[title*="Contact"]').contains('Contact').click();
 
     // retour page contact
-    cy.url().should('eq', 'http://localhost:8080/histovec/contact');
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 

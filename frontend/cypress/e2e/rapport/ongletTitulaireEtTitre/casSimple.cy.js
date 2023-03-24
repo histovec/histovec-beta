@@ -1,10 +1,12 @@
+import routes from "../../../constants/urls.json";
+
 context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
   const listeCategories = ["Identité", "Code postal", "Date de première immatriculation", "Date du certificat d'immatriculation actuel"];
   const listeContenue = ["H**** S******", "60270", "13/05/2009", "13/05/2009"];
 
   before(() => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -33,7 +35,7 @@ context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
 
     // page de redirection
     cy.wait(500)
-    cy.url().should("eq", "http://localhost:8080/histovec/rapport-vendeur")
+    cy.url().should('eq',  Cypress.config('baseUrl') + routes.url_rapport_vendeur)
     cy.title().should('eq', 'HistoVec - Rapport vendeur')
 
     // Onlget Titulaire & Titre selectionné
@@ -65,7 +67,7 @@ context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
     // Categories
     cy.get("div[id*='report-tab-content-2']")
       .should("have.class", "fr-tabs__panel fr-tabs__panel--selected")
-      .find("div[class='fr-col-6 fr-pt-0 fr-pb-1w']")
+      .find("div[id*='titre-']")
       .should('have.length', 4)
       .each(($el, index) => {
         cy.wrap($el)
@@ -75,7 +77,7 @@ context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
     // Contenue
     cy.get("div[id*='report-tab-content-2']")
       .should("have.class", "fr-tabs__panel fr-tabs__panel--selected")
-      .find("div[class='fr-col-6 fr-pt-0 fr-pb-1w fr-text--bleu']")
+      .find("div[id*='valeur-']")
       .should('have.length', 4)
       .each(($el, index) => {
         cy.wrap($el)

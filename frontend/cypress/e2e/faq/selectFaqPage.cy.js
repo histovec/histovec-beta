@@ -1,15 +1,17 @@
 import { FAQ_THEMES_OPTIONS } from '../../../src/constants/faq'
+import routes from "../../constants/urls.json";
 
 context('FAQ', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8080/histovec/accueil');
+    cy.visit(routes.url_accueil)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_accueil);
     cy.title().should('eq', 'HistoVec - Accueil');
 
     cy.get('a[title*="FAQ & Liens utiles"]')
       .contains("FAQ & Liens utiles")
       .click();
 
-    cy.url().should("eq", "http://localhost:8080/histovec/faq");
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_faq);
   })
   it("Filtrer les thèmes de la liste déroulante", () => {
 
@@ -20,7 +22,7 @@ context('FAQ', () => {
     cy.get("p").contains("HistoVec vous permet de valoriser votre offre en fournissant gratuitement un rapport d’historique officiel qui rassurera vos acheteurs potentiels. Le certificat de situation administrative détaillée y est également téléchargeable.");
 
     cy.get("button[class*='fr-btn']").contains("Contactez-nous").click();
-    cy.url().should("eq", "http://localhost:8080/histovec/contact");
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
 
   })
 })

@@ -1,3 +1,5 @@
+import routes from "../../../constants/urls.json";
+
 context('Rapport vehicule cas simple - onglet véhicule', () => {
   const listeCaracteristiqueTitre = [
     " Marque ",
@@ -86,7 +88,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
 
   before(() => {
     // redirection vers la page propriétaire
-    cy.visit('http://localhost:8080/histovec/proprietaire')
+    cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
@@ -115,7 +117,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
 
     // page de redirection
     cy.wait(500)
-    cy.url().should("eq", "http://localhost:8080/histovec/rapport-vendeur")
+    cy.url().should('eq',  Cypress.config('baseUrl') + routes.url_rapport_vendeur)
     cy.title().should('eq', 'HistoVec - Rapport vendeur')
 
     // Onlget Véhicule selectionné
