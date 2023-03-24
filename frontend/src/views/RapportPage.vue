@@ -6,12 +6,20 @@ import QrcodeVue from 'qrcode.vue'
 import orderBy from 'lodash.orderby'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
 import ImagePresentation from '@/components/ImagePresentation.vue';
 import HistoVecModale from '@/components/HistoVecModale.vue';
 import AlerteComponent from '@/components/AlerteComponent.vue';
+import OngletSynthese from '@/views/ongletRapport/OngletSynthese.vue';
+import OngletVehicule from '@/views/ongletRapport/OngletVehicule.vue';
+import OngletTitulaire from '@/views/ongletRapport/OngletTitulaire.vue';
+import OngletSituationAdministrative from '@/views/ongletRapport/OngletSituationAdministrative.vue';
+import OngletHistorique from '@/views/ongletRapport/OngletHistorique.vue';
+import OngletControlesTechniques from '@/views/ongletRapport/OngletControlesTechniques.vue';
+import OngletKilometrage from '@/views/ongletRapport/OnlgetKilometrage.vue';
+
+
 
 import { hash } from '@/utils/crypto.js'
 import { generateCsa } from '@/utils/csaAsPdf/index.js'
@@ -54,11 +62,17 @@ export default defineComponent({
   name: 'RapportVendeurPage',
 
   components: {
+    OngletKilometrage,
+    OngletControlesTechniques,
+    OngletHistorique,
+    OngletSituationAdministrative,
+    OngletTitulaire,
+    OngletVehicule,
+    OngletSynthese,
     LoaderComponent,
     TuileDsfrNonCliquable,
     HistoVecModale,
     AlerteComponent,
-    ControlesTechniquesLineChart,
     HistoVecButtonLink, QrcodeVue,
     ImagePresentation,
   },
@@ -72,6 +86,9 @@ export default defineComponent({
 
   data () {
     return  {
+      expandedId: undefined,
+      windowWidth: window.innerWidth,
+      formatMobile: 767,
       // Initialized beforeMount
       holderId: null,
       holderKey: null,
@@ -370,6 +387,9 @@ export default defineComponent({
     hasProcedureVEEnCours () {
       return this.processedVehiculeData.administratif.hasProcedureVEEnCours
     },
+    isControleTechniqueDisponible () {
+      return this.controlesTechniques.isDonneeDisponible && this.controlesTechniques.historique.length > 0
+    },
     isCIAnnule () {
       return Boolean(
         this.processedVehiculeData &&
@@ -423,6 +443,11 @@ export default defineComponent({
       return mailTo(SHARE_REPORT_EMAIL)
     },
     // ----------------------------------------------
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    })
   },
 
   beforeMount: async function () {
@@ -633,7 +658,9 @@ export default defineComponent({
   },
 
   methods: {
-
+    onResize() {
+      this.windowWidth = window.innerWidth
+    },
     // ModalPartagerRapport
     onCloseModalPartagerRapport () {
       this.modalPartagerRapport.opened = false
@@ -1028,1068 +1055,219 @@ export default defineComponent({
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
     <div class="fr-col-12  fr-col-lg-11  fr-col-xl-11">
-      <!-- @todo @reportAccordeon : pour la vue mobile sm et xs : utiliser un accordeon ? -->
-      <DsfrTabs
-        tab-list-name="Liste d'onglets du rapport du véhicule"
-        :tab-titles="tabTitles"
-        @select-tab="selectTab"
-      >
-        <LoaderComponent
-          v-if="isLoading"
-          taille="md"
-        />
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-0"
-          tab-id="report-tab-0"
-          :selected="tabs.selectedTabIndex === 0"
-          :asc="tabs.asc"
+      <div v-if="windowWidth <= formatMobile">
+        <DsfrAccordionsGroup>
+          <li>
+            <DsfrAccordion
+              title="Synthèse"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletSynthese
+                :caracteristiques-techniques="caracteristiquesTechniques"
+                :processed-vehicule-data="processedVehiculeData"
+                :constants="constants"
+                :certificat="certificat"
+                :utils="utils"
+                :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
+                :assets="assets"
+                :synthese="synthese"
+                :has-procedure-v-e-en-cours="hasProcedureVEEnCours"
+                :is-rapport-vendeur="isRapportVendeur"
+                :is-rapport-acheteur="!isRapportVendeur"
+              />
+            </DsfrAccordion>
+          </li>
+          <li>
+            <DsfrAccordion
+              title="Véhicule"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletVehicule
+                :caracteristiques-techniques="caracteristiquesTechniques"
+              />
+            </DsfrAccordion>
+          </li>
+          <li>
+            <DsfrAccordion
+              title="Titulaire et Titre"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletTitulaire
+                :titulaire="titulaire"
+                :certificat="certificat"
+                :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
+                :date-premiere-immatriculation-en-france-f-r="datePremiereImmatriculationEnFranceFR"
+                :date-emission-c-i-f-r="dateEmissionCIFR"
+              />
+            </DsfrAccordion>
+          </li>
+          <li>
+            <DsfrAccordion
+              title="Situation administrative"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletSituationAdministrative
+                :assets="assets"
+                :report-labels="reportLabels"
+                :is-rapport-vendeur="isRapportVendeur"
+              />
+            </DsfrAccordion>
+          </li>
+          <li>
+            <DsfrAccordion
+              title="Historique"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletHistorique
+                :assets="assets"
+                :certificat="certificat"
+                :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
+                :processed-vehicule-data="processedVehiculeData"
+              />
+            </DsfrAccordion>
+          </li>
+          <li>
+            <DsfrAccordion
+              v-if="isControleTechniqueDisponible"
+              title="Contrôles techniques"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletControlesTechniques
+                :erreur-controles-techniques="erreurControlesTechniques"
+                :normalized-controles-techniques-historique="normalizedControlesTechniquesHistorique"
+              />
+            </DsfrAccordion>
+          </li>
+          <li>
+            <DsfrAccordion
+              v-if="isControleTechniqueDisponible"
+              title="Kilométrage"
+              :expanded-id="expandedId"
+              @expand="expandedId = $event"
+            >
+              <OngletKilometrage
+                :erreur-controles-techniques="erreurControlesTechniques"
+                :controles-techniques-historique="controlesTechniquesHistorique"
+              />
+            </DsfrAccordion>
+          </li>
+        </DsfrAccordionsGroup>
+      </div>
+      <div v-if="windowWidth > formatMobile">
+        <DsfrTabs
+          tab-list-name="Liste d'onglets du rapport du véhicule"
+          :tab-titles="tabTitles"
+          @select-tab="selectTab"
         >
-          <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-12  fr-pb-3w">
-              <h3 class="fr-mb-0 fr-h5">
-                Résumé
-              </h3>
-            </div>
-
-            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
-              <div class="fr-pb-3w  fr-pt-0">
-                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
-                  Modèle
-                </h4>
-
-                <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
-                  {{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}
-                </p>
-
-                <p
-                  v-if="caracteristiquesTechniques.puissance.cv"
-                  class="fr-text--md  fr-mb-1v"
-                >
-                  Puissance fiscale : <span class="fr-text--bleu">{{ caracteristiquesTechniques.puissance.cv }} ch</span>
-                </p>
-
-                <p
-                  v-if="isRapportAcheteur"
-                  class="fr-text--md  fr-mb-1v"
-                >
-                  Calculez le montant de votre certificat d'immatriculation
-                  <br />
-                  <a
-                    class="fr-link"
-                    href="https://siv.interieur.gouv.fr/map-usg-ui/do/simtax_accueil"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    title="Simulateur"
-                  >
-                    Accédez au simulateur de calcul
-                  </a>
-                </p>
-              </div>
-
-              <div
-                v-if="processedVehiculeData.usage.vehiculeDeCollection || processedVehiculeData.usage.vehiculeAgricole"
-                class="fr-pb-3w  fr-pt-0"
-              >
-                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
-                  Usage
-                </h4>
-                <div
-                  v-if="processedVehiculeData.usage.vehiculeDeCollection "
-                >
-                  <p class="fr-text--md  fr-mb-2w">
-                    <span class="fr-text--bleu">
-                      <VIcon
-                        :name="constants.USAGE_COLLECTION.icon"
-                      />
-                    </span>
-                    {{ constants.USAGE_COLLECTION.text }}
-                    <br />
-                    <span
-                      v-if="constants.USAGE_COLLECTION.adv"
-                      class="fr-text--md  fr-mb-1w"
-                    >
-                      <a
-                        class="fr-link"
-                        :href="constants.USAGE_COLLECTION.link"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        :title="constants.USAGE_COLLECTION.adv"
-                      >
-                        {{ constants.USAGE_COLLECTION.adv }}
-                      </a>
-                    </span>
-                  </p>
-                </div>
-                <div
-                  v-if="processedVehiculeData.usage.vehiculeAgricole"
-                >
-                  <p class="fr-text--md  fr-mb-0">
-                    <span class="fr-text--bleu">
-                      <VIcon
-                        :name="constants.USAGE_AGRICOLE.icon"
-                      />
-                    </span>
-                    {{ constants.USAGE_AGRICOLE.text }}
-                    <br />
-                    <span
-                      v-if="constants.USAGE_AGRICOLE.adv"
-                      class="fr-text--md  fr-mb-1w"
-                    >
-                      <a
-                        class="fr-link"
-                        :href="constants.USAGE_AGRICOLE.link"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        :title="constants.USAGE_AGRICOLE.adv"
-                      >
-                        {{ constants.USAGE_AGRICOLE.adv }}
-                      </a>
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              <div class="fr-pb-0  fr-pt-0">
-                <h4 class="fr-mb-0  fr-pb-0 fr-h6">
-                  Propriétaire actuel
-                </h4>
-
-                <p class="fr-text--md  fr-mb-0">
-                  <span class="fr-text--bleu">{{ processedVehiculeData.titulaire.identite }}</span>
-                  depuis
-                  <span
-                    v-if="certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
-                    class="fr-text--bleu"
-                  >
-                    {{ certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }}
-                  </span>
-                  <span
-                    v-if="!certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
-                    class="fr-text--bleu"
-                  >
-                    une durée inconnue
-                  </span>
-                  <br />
-                  <template v-if="!certificat.isVehiculeImporteDepuisEtranger">
-                    <template v-if="isRapportVendeur">
-                      Vous êtes le
-                      <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
-                      <sup class="fr-text--bleu">{{ utils.getExposant(processedVehiculeData.titulairesCount) }}</sup>
-                      titulaire de ce véhicule
-                    </template>
-                    <template v-if="isRapportAcheteur">
-                      Ce véhicule a déjà eu
-                      <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
-                      titulaire(s), en l'achetant vous serez le
-                      <span class="fr-text--bleu">{{ Number(processedVehiculeData.titulairesCount) + 1 }}</span>
-                      <sup class="fr-text--bleu">{{ utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
-                    </template>
-                  </template>
-                  <br />
-                  <template v-if="certificat.isVehiculeImporteDepuisEtranger">
-                    Le nombre exact de titulaires ne peut être calculé avec précision
-                    <br />
-                    (première immatriculation à l'étranger)
-                  </template>
-                </p>
-              </div>
-            </div>
-
-            <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
-              <div class="fr-pb-3w  fr-pt-0">
-                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
-                  Immatriculation
-                </h4>
-
-                <p class="fr-text--md  fr-mb-1v">
-                  <template v-if="datePremiereImmatriculationFR">
-                    Première immatriculation le
-                    <span class="fr-text--bleu">{{ datePremiereImmatriculationFR }}</span>
-                  </template>
-
-                  <template v-if="!datePremiereImmatriculationFR">
-                    Date de première immatriculation <span class="fr-text--bleu">inconnue</span>
-                  </template>
-                </p>
-
-                <template v-if="certificat.isVehiculeImporteDepuisEtranger">
-                  <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
-                    <span class="fr-text--bleu">
-                      <VIcon
-                        name="ri-earth-line"
-                      />
-                    </span>
-                    Ce véhicule a été <span class="fr-text--bleu">importé</span>
-                    <span
-                      v-if="isRapportAcheteur"
-                      class="fr-text--bleu"
-                    >
-                      Vérifier les options incluses qui peuvent être différentes
-                    </span>
-                  </p>
-                </template>
-              </div>
-
-              <div class="fr-pb-3w  fr-pt-0">
-                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
-                  Situation administrative
-                </h4>
-
-                <p
-                  v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours"
-                  class="fr-text--md  fr-mb-1v"
-                >
-                  <span class="fr-text--bleu">
-                    <VIcon
-                      :name="processedVehiculeData.isApte ? 'ri-thumb-up-line' : 'ri-error-warning-fill'"
-                    />
-                  </span>
-                  <!-- état - un seul sinistre !-->
-                  <template v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
-                    Ce véhicule a eu <span class="fr-text--bleu">un sinistre déclaré</span>
-                    <span
-                      v-if="processedVehiculeData.sinistresCount === 1"
-                      class="fr-text--bleu"
-                    >
-                      en {{ processedVehiculeData.lastSinistreYear }}
-                    </span>
-                    <br />
-                    <template v-if="processedVehiculeData.isApte">
-                      et
-                      <span class="fr-text--bleu"> déclaré apte à circuler</span>
-                      <span
-                        v-if="processedVehiculeData.lastResolutionYear"
-                        class="fr-text--bleu"
-                      >
-                        en {{ processedVehiculeData.lastResolutionYear }}
-                      </span>
-                    </template>
-                  </template>
-                  <!-- état - plusieurs sinistres !-->
-                  <template v-if="processedVehiculeData.sinistresCount > 1">
-                    Ce véhicule a eu
-                    <span class="fr-text--bleu">plusieurs sinistres</span>
-                    , dont le dernier déclaré en <span class="fr-text--bleu">{{ processedVehiculeData.lastSinistreYear }}</span>
-                    <br />
-                    <template v-if="processedVehiculeData.isApte">
-                      Le véhicule a été
-                      <span class="fr-text--bleu"> déclaré apte à circuler</span>
-                      <span
-                        v-if="!processedVehiculeData.isApte"
-                        class="fr-text--bleu"
-                      >
-                        en {{ processedVehiculeData.lastResolutionYear }}
-                      </span>
-                    </template>
-                  </template>
-                  <!-- @todo @redirectTab: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Historique" ? -->
-                  <br />
-                  <!-- Commentaire: un ou plusieurs sinistres -->
-                  <span
-                    v-if="processedVehiculeData.isApte"
-                    class="fr-text--bleu"
-                  >
-                    {{ assets.syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
-                  </span>
-                  <span
-                    v-else
-                    class="fr-text--bleu"
-                  >
-                    {{ assets.syntheseMapping['ove'].adv }}
-                  </span>
-
-                  <br />
-                  <span
-                    v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
-                    class="fr-text--bleu"
-                  >
-                    {{ assets.syntheseMapping['multi_ove'].adv }}
-                  </span>
-                </p>
-
-                <p
-                  v-if="synthese.length === 0 && !processedVehiculeData.lastSinistreYear"
-                  class="fr-text--md  fr-mb-1v"
-                >
-                  <span class="fr-text--bleu">
-                    <VIcon
-                      name="ri-check-line"
-                    />
-                  </span>
-                  <span class="fr-text--bleu">Rien à signaler </span>
-                  <br />
-                  (gages, opposition, vol,...)
-                </p>
-
-                <p
-                  v-for="(entry, index) in synthese"
-                  :key="index"
-                >
-                  <span class="fr-text--bleu">
-                    <VIcon
-                      :name="assets.syntheseMapping[entry].icon"
-                    />
-                  </span>
-                  {{ assets.syntheseMapping[entry].text }}
-                  <!-- @todo: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Situation administrative" ? -->
-                  <br />
-                  {{ assets.syntheseMapping[entry].adv }}
-                  <br />
-                  <a
-                    v-if="assets.syntheseMapping[entry].link"
-                    class="fr-link"
-                    title="Lien vers service-public.fr"
-                    :href="assets.syntheseMapping[entry].link"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    En savoir plus
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </DsfrTabContent>
-
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-1"
-          tab-id="report-tab-1"
-          :selected="tabs.selectedTabIndex === 1"
-          :asc="tabs.asc"
-        >
-          <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-12  fr-pb-2w">
-              <h3 class="fr-mb-0 fr-h5">
-                Caractéristiques techniques
-              </h3>
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6 fr-pt-0  fr-pb-1w">
-              Marque
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2 fr-pt-0  fr-pb-1w">
-              D.1
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4 fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.marque }}
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Type variante version
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-              D.2
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.tvv }}
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Numéro CNIT
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-              D.2.1
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.cnit }}
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Nom commercial
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-              D.3
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.modele }}
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Couleur
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.couleur }}
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Type de réception
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.reception.type }}
-            </div>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Numéro d'identification véhicule
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-              E
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ caracteristiquesTechniques.vin }}
-            </div>
-
-            <template v-if="caracteristiquesTechniques.PT.admissible">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                PT techniquement admissible (kg)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                F.1
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.PT.admissible }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.PT.AC">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                PTAC (kg)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                F.2
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.PT.AC }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.PT.RA">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                PTRA (kg)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                F.3
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.PT.RA }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.PT.service">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                PT en service (kg)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                G
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.PT.service }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.PT.AV">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                PTAV (kg)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                G.1
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.PT.AV }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.categorie">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Catégorie (CE)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                J
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.categorie }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.genre">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Genre (National)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                J.1
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.genre }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.carrosserie.ce">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Carrosserie (CE)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                J.2
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.carrosserie.ce }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.carrosserie.national">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Carrosserie (National)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                J.3
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.carrosserie.national }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.reception.numero">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Numéro de réception
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                K
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.reception.numero }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.puissance.cylindres">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Cylindrée (cm3)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                P.1
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.puissance.cylindres }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.puissance.nette">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Puissance nette max (kW)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                P.2
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.puissance.nette }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.energie">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Energie
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                P.3
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.energie }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.puissance.cv">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Puissance CV
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                P.6
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.puissance.cv }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.puissance.norm">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Puissance / masse (kW/kg)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                Q
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.puissance.norm }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.places.assis">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Places assises
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                S.1
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.places.assis }}
-              </div>
-            </template>
-
-            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-              Places debout
-            </div>
-            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-              S.2
-            </div>
-            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              <template v-if="caracteristiquesTechniques.places.debout">
-                {{ caracteristiquesTechniques.places.debout }}
-              </template>
-            </div>
-
-            <template v-if="caracteristiquesTechniques.db">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Niveau sonore (db(A))
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                U.1
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.db }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.moteur">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Vitesse moteur (min-1)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                U.2
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.moteur }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.co2">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                CO2 (g/km)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                V.7
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.co2 }}
-              </div>
-            </template>
-
-            <template v-if="caracteristiquesTechniques.environnement">
-              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
-                Classe environnement (CE)
-              </div>
-              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
-                V.9
-              </div>
-              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ caracteristiquesTechniques.environnement }}
-              </div>
-            </template>
-          </div>
-        </DsfrTabContent>
-
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-2"
-          tab-id="report-tab-2"
-          :selected="tabs.selectedTabIndex === 2"
-          :asc="tabs.asc"
-        >
-          <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-12  fr-pb-2w">
-              <h3 class="fr-mb-0 fr-h5">
-                Titulaire & Titre
-              </h3>
-            </div>
-
-            <template v-if="titulaire.nature">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
-                Nature
-              </div>
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ titulaire.nature }}
-              </div>
-            </template>
-
-            <div id="titre-identite" class="fr-col-6  fr-pt-0  fr-pb-1w">
-              Identité
-            </div>
-            <div id="valeur-identite" class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ titulaire.identite }}
-            </div>
-
-            <div id="titre-code-postal" class="fr-col-6  fr-pt-0  fr-pb-0">
-              Code postal
-            </div>
-            <div id="valeur-code-postal" class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
-              {{ titulaire.adresse }}
-            </div>
-
-            <div class="fr-col-12  fr-pt-3w  fr-pb-2w">
-              <h3 class="fr-mb-0 fr-h5">
-                Certificat d'immatriculation
-              </h3>
-            </div>
-
-            <div id="titre-date-immatriculation" class="fr-col-6  fr-pt-0  fr-pb-1w">
-              Date de première immatriculation
-              <span v-if="certificat.isVehiculeImporteDepuisEtranger">
-                à l'étranger
-              </span>
-            </div>
-            <div id="valeur-date-immatriculation" class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
-              {{ datePremiereImmatriculationFR }}
-            </div>
-
-            <template v-if="certificat.isVehiculeImporteDepuisEtranger">
-              <div id="titre-date-immatriculation-france" class="fr-col-6  fr-pt-0  fr-pb-1w">
-                Date de première immatriculation en France
-              </div>
-              <div id="valeur-date-immatriculation-france" class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
-                {{ datePremiereImmatriculationEnFranceFR }}
-              </div>
-            </template>
-
-            <div id="titre-date-certificat" class="fr-col-6  fr-pt-0  fr-pb-0">
-              Date du certificat d'immatriculation actuel
-            </div>
-            <div id="valeur-date-certificat" class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
-              {{ dateEmissionCIFR }}
-            </div>
-          </div>
-        </DsfrTabContent>
-
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-3"
-          tab-id="report-tab-3"
-          :selected="tabs.selectedTabIndex === 3"
-          :asc="tabs.asc"
-        >
-          <div class="fr-grid-row  fr-grid-row--gutters">
-            <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
-              <div class="fr-grid-row  fr-grid-row--gutters">
-                <div class="fr-col-12  fr-pb-2w">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Gages
-                    <span>
-                      <a
-                        class="fr-link"
-                        title="En savoir plus sur les gages - Lien vers service-public.fr"
-                        :href="assets.syntheseMapping['otci'].link"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      > En savoir plus
-                      </a>
-                    </span>
-                  </h3>
-                </div>
-                <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
-                      v-for="(gageInfos, index) in reportLabels.gagesInfos"
-                      :key="index"
-                    >
-                      <span v-if="gageInfos.date">{{ gageInfos.date }} - </span>
-                      <span class="fr-text--bleu">{{ gageInfos.label }}</span>
-                    </span>
-                  </p>
-                </div>
-
-                <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Oppositions
-                    <span>
-                      <a
-                        class="fr-link"
-                        title="En savoir plus sur les oppositions - Lien vers service-public.fr"
-                        :href="assets.syntheseMapping['otci'].link"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      > En savoir plus
-                      </a>
-                    </span>
-                  </h3>
-                </div>
-                <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
-                      v-for="(oppositionInfos, index) in reportLabels.oppositionsInfos"
-                      :key="index"
-                    >
-                      <span v-if="oppositionInfos.date">{{ oppositionInfos.date }} - </span>
-                      <span class="fr-text--bleu">{{ oppositionInfos.label }}</span>
-                      <span
-                        v-if="isRapportVendeur && oppositionInfos.label.includes('PV') && oppositionSection.hasOtciPV"
-                      >
-                        ( Appelez le 08 21 08 00 31 )
-                      </span>
-                    </span>
-                  </p>
-                </div>
-
-                <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Véhicule
-                  </h3>
-                </div>
-                <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
-                  Déclaré volé
-                </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
-                  {{ reportLabels.vol }}
-                </div>
-              </div>
-            </div>
-
-            <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
-              <div class="fr-grid-row  fr-grid-row--gutters">
-                <div class="fr-col-12  fr-pb-2w">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Déclarations valant saisie
-                  </h3>
-                </div>
-                <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
-                      v-for="(dvs, index) in reportLabels.dvsInfos"
-                      :key="index"
-                    >
-                      <span v-if="dvs.date">{{ dvs.date }} - </span>
-                      <span class="fr-text--bleu">{{ dvs.label }}</span>
-                    </span>
-                  </p>
-                </div>
-
-                <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Suspensions
-                  </h3>
-                </div>
-                <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <div class="fr-text--md">
-                    <div
-                      v-for="(suspensionInfos, index) in reportLabels.suspensionsInfos"
-                      :key="index"
-                    >
-                      <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>
-                      <span class="fr-text--bleu">{{ suspensionInfos.label }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Certificat d'immatriculation
-                  </h3>
-                </div>
-                <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
-                  Déclaré volée
-                </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
-                  {{ reportLabels.titre.vol }}
-                </div>
-                <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
-                  Déclaré perdue
-                </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
-                  {{ reportLabels.titre.perte }}
-                </div>
-                <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
-                  Duplicata
-                </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
-                  {{ reportLabels.titre.duplicata }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </DsfrTabContent>
-
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-4"
-          tab-id="report-tab-4"
-          :selected="tabs.selectedTabIndex === 4"
-          :asc="tabs.asc"
-        >
-          <div
-            class="fr-grid-row  fr-grid-row--gutters"
+          <LoaderComponent
+            v-if="isLoading"
+            taille="md"
+          />
+          <DsfrTabContent
+            panel-id="report-tab-content-0"
+            tab-id="report-tab-0"
+            :selected="tabs.selectedTabIndex === 0"
+            :asc="tabs.asc"
           >
-            <template v-if="certificat.isVehiculeImporteDepuisEtranger">
-              <div class="fr-col-12  fr-pb-3w">
-                <h3 class="fr-mb-0 fr-h5">
-                  Historique des opérations à l'étranger
-                </h3>
-              </div>
-              <div class="fr-col-2  fr-pb-2w  fr-pt-0">
-                <h4 class="fr-mb-0 fr-h6">
-                  Date
-                </h4>
-              </div>
-              <div class="fr-col-10  fr-pb-2w  fr-pt-0">
-                <h4 class="fr-mb-0 fr-h6">
-                  Opération
-                </h4>
-              </div>
-              <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-                {{ datePremiereImmatriculationFR }}
-              </div>
-              <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
-                <!-- @todo:
-                  Il serait plus sûr de créer un enum HISTORIQUE_OPERATION_TYPE pour l'utiliser ici
-                  et dans le fichier assets/js/operations.json afin de tokenizer les opérations et réduire les erreurs liées à une typo
-                  Pas urgent : en pratique, on ne se sert que très peu de ces HISTORIQUE_OPERATION_TYPE (appelé opa_type dans le SIV)
-                -->
-                {{ assets.operationsMapping['IMMAT_NORMALE_PREM_ETRANGER'] }}
-              </div>
-            </template>
+            <OngletSynthese
+              :caracteristiques-techniques="caracteristiquesTechniques"
+              :processed-vehicule-data="processedVehiculeData"
+              :constants="constants"
+              :certificat="certificat"
+              :utils="utils"
+              :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
+              :assets="assets"
+              :synthese="synthese"
+              :has-procedure-v-e-en-cours="hasProcedureVEEnCours"
+              :is-rapport-vendeur="isRapportVendeur"
+              :is-rapport-acheteur="!isRapportVendeur"
+            />
+          </DsfrTabContent>
 
-            <div class="fr-col-12  fr-pb-3w">
-              <h3 class="fr-mb-0 fr-h5">
-                Historique des opérations en France
-              </h3>
-            </div>
-            <div class="fr-col-2  fr-pb-2w  fr-pt-0">
-              <h4 class="fr-mb-0 fr-h6">
-                Date
-              </h4>
-            </div>
-            <div class="fr-col-10  fr-pb-2w  fr-pt-0">
-              <h4 class="fr-mb-0 fr-h6">
-                Opération
-              </h4>
-            </div>
-
-            <template
-              v-for="(entry, index) in processedVehiculeData.historique"
-              :key="index"
-            >
-              <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-                <span class="txt-small-12">{{ entry.date }}</span>
-              </div>
-              <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-text--bleu">
-                <span class="info_red txt-small-12">
-                  {{ entry.nature }}
-                </span>
-              </div>
-            </template>
-          </div>
-        </DsfrTabContent>
-
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-5"
-          tab-id="report-tab-5"
-          :selected="tabs.selectedTabIndex === 5"
-          :asc="tabs.asc"
-        >
-          <div class="fr-grid-row  fr-grid-row--gutters">
-            <div
-              v-if="erreurControlesTechniques"
-              class="fr-col-12"
-            >
-              <DsfrAlert
-                type="error"
-                role="alert"
-                title="Erreur lors de la récupération des contrôles techniques"
-                :description="erreurControlesTechniques"
-              />
-            </div>
-            <template v-if="!erreurControlesTechniques">
-              <template v-if="normalizedControlesTechniquesHistorique.length > 0">
-                <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Date
-                  </h3>
-                </div>
-                <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Nature
-                  </h3>
-                </div>
-                <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-0">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Résultat
-                  </h3>
-                </div>
-                <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-3w">
-                  <h3 class="fr-mb-0 fr-h5">
-                    Kilométrage
-                  </h3>
-                </div>
-                <template
-                  v-for="(entry, index) in normalizedControlesTechniquesHistorique"
-                  :key="index"
-                >
-                  <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
-                    {{ entry.date }}
-                  </div>
-                  <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-text--bleu">
-                    {{ entry.natureLibelle }}
-                  </div>
-                  <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-text--bleu">
-                    <DsfrBadge
-                      :label="entry.resultatLibelle"
-                      :type="getDsfrBadgeType(entry.resultat)"
-                      :no-icon="true"
-                    />
-                  </div>
-                  <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
-                    {{ entry.kmLibelle }} km
-                  </div>
-                </template>
-              </template>
-              <div
-                v-if="normalizedControlesTechniquesHistorique === 0"
-                class="fr-col-12"
-              >
-                Ce véhicule ne possède actuellement aucun contrôle technique.
-              </div>
-            </template>
-          </div>
-        </DsfrTabContent>
-
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-6"
-          tab-id="report-tab-6"
-          :selected="tabs.selectedTabIndex === 6"
-          :asc="tabs.asc"
-        >
-          <div
-            class="fr-grid-row  fr-grid-row--gutters"
+          <DsfrTabContent
+            panel-id="report-tab-content-1"
+            tab-id="report-tab-1"
+            :selected="tabs.selectedTabIndex === 1"
+            :asc="tabs.asc"
           >
-            <div
-              v-if="erreurControlesTechniques"
-              class="fr-col-12"
-            >
-              <DsfrAlert
-                type="error"
-                role="alert"
-                title="Erreur lors de la récupération des contrôles techniques"
-                :description="erreurControlesTechniques"
-              />
-            </div>
-            <template
-              v-if="!erreurControlesTechniques"
-            >
-              <controles-techniques-line-chart
-                v-if="controlesTechniquesHistorique.length > 0"
-                class="fr-col-12"
-                :controles-techniques="controlesTechniquesHistorique"
-                :aria-label="controlesTechniquesHistoriqueAriaLabel"
-              />
-              <div
-                v-if="controlesTechniquesHistorique === 0"
-                class="fr-col-12"
-              >
-                Ce véhicule ne possède actuellement aucun contrôle technique.
-              </div>
-            </template>
-          </div>
-        </DsfrTabContent>
-      </DsfrTabs>
+            <OngletVehicule
+              :caracteristiques-techniques="caracteristiquesTechniques"
+            />
+          </DsfrTabContent>
+
+          <DsfrTabContent
+            panel-id="report-tab-content-2"
+            tab-id="report-tab-2"
+            :selected="tabs.selectedTabIndex === 2"
+            :asc="tabs.asc"
+          >
+            <OngletTitulaire
+              :titulaire="titulaire"
+              :certificat="certificat"
+              :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
+              :date-premiere-immatriculation-en-france-f-r="datePremiereImmatriculationEnFranceFR"
+              :date-emission-c-i-f-r="dateEmissionCIFR"
+            />
+          </DsfrTabContent>
+
+          <DsfrTabContent
+            panel-id="report-tab-content-3"
+            tab-id="report-tab-3"
+            :selected="tabs.selectedTabIndex === 3"
+            :asc="tabs.asc"
+          >
+            <OngletSituationAdministrative
+              :assets="assets"
+              :report-labels="reportLabels"
+              :is-rapport-vendeur="isRapportVendeur"
+            />
+          </DsfrTabContent>
+
+          <DsfrTabContent
+            panel-id="report-tab-content-4"
+            tab-id="report-tab-4"
+            :selected="tabs.selectedTabIndex === 4"
+            :asc="tabs.asc"
+          >
+            <OngletHistorique
+              :assets="assets"
+              :certificat="certificat"
+              :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
+              :processed-vehicule-data="processedVehiculeData"
+            />
+          </DsfrTabContent>
+
+          <DsfrTabContent
+            panel-id="report-tab-content-5"
+            tab-id="report-tab-5"
+            :selected="tabs.selectedTabIndex === 5"
+            :asc="tabs.asc"
+          >
+            <OngletControlesTechniques
+              :erreur-controles-techniques="erreurControlesTechniques"
+              :normalized-controles-techniques-historique="normalizedControlesTechniquesHistorique"
+            />
+          </DsfrTabContent>
+
+          <DsfrTabContent
+            panel-id="report-tab-content-6"
+            tab-id="report-tab-6"
+            :selected="tabs.selectedTabIndex === 6"
+            :asc="tabs.asc"
+          >
+            <OngletKilometrage
+              :erreur-controles-techniques="erreurControlesTechniques"
+              :controles-techniques-historique="controlesTechniquesHistorique"
+            />
+          </DsfrTabContent>
+        </DsfrTabs>
+      </div>
     </div>
   </div>
 
