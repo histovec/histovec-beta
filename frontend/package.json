@@ -11,7 +11,8 @@
     "format": "eslint src --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "lint:js": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "start": "NODE_OPTIONS=--openssl-legacy-provider vite",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@gouvfr/dsfr": "~1.4.1",
@@ -49,6 +50,7 @@
     "postcss-preset-env": "^7.7.2",
     "stylelint-config-standard": "^26.0.0",
     "vite": "^3.0.4",
+    "vite-svg-loader": "^3.4.0",
     "vitest": "^0.24.3"
   },
   "browserslist": [

@@ -61,7 +61,7 @@ export default defineComponent({
       ],
       image: {
         id: 'image-accueil',
-        alt: "Illustration de la page d'accueil",
+        alt: 'Illustration de la page d\'accueil',
         accueilSVG,
       },
     }

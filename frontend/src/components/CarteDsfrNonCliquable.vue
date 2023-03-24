@@ -7,7 +7,7 @@ export default defineComponent({
   props: {
     id: {
       type: String,
-      default: '',
+      default: null,
     },
     titre: {
       type: String,
@@ -19,7 +19,7 @@ export default defineComponent({
     },
     alt: {
       type: String,
-      default: '',
+      default: null,
     },
     image: {
       type: String,
@@ -38,7 +38,7 @@ export default defineComponent({
     },
     getAlt() {
       if (this.alt && this.alt.length > 0) return this.alt
-      return this.titre
+      return null
     },
   },
 })

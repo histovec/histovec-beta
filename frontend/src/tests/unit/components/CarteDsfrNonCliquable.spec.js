@@ -23,7 +23,7 @@ describe('CarteDsfrNonCliquable', () => {
       } })
 
     const image = wrapper.find('img');
-    expect(image.attributes().alt).toBe(wrapper.vm.titre);
+    expect(image.attributes().alt).undefined;
   })
   it('Doit afficher une carte correctement', () => {
     const wrapper = mount(CarteDsfrNonCliquable, { props: {
