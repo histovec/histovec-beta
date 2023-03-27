@@ -10,9 +10,9 @@ import {
 	HORIZONTAL_TABULATION,
 	QR_CODE_PIXEL_SIZE,
 	TOP_FOOTER_MARGIN,
-} from '@/constants/csaAsPdf.js'
-import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from '@/utils/csaAsPdf/utils.js'
-import { formatIsoToHumanReadableFrDate, padString } from '@/assets/js/format.js'
+} from '@Constants/csaAsPdf.js'
+import { drawFilledRectangle, writeText, writeTitle, writeWithSpacing } from '@Utils/csaAsPdf/utils.js'
+import { formatIsoToHumanReadableFrDate, padString } from '@Assets/js/format.js'
 
 /* ********************** QR CODE ********************** */
 const drawQrCode = ({

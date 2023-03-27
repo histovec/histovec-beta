@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
-import HistoVecButtonInternLink from '@/components/HistoVecButtonInternLink.vue'
+import HistoVecButtonInternLink from '@Components/HistoVecButtonInternLink.vue'
 
 const propsForButtonOnly = ['disabled', 'label', 'secondary', 'tertiary', 'icon', 'iconRight', 'iconOnly']
 

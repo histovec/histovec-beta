@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
-import ErrorPage from '@/views/error/ErrorPage.vue'
-import api from '@/api/index.js'
+import ErrorPage from '@Views/error/ErrorPage.vue'
+import api from '@Api/index.js'
 
 export default defineComponent({
   name: 'UnavailableServicePage',

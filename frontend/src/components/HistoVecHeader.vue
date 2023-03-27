@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 
-import logoHistoVec from '@/assets/img/logo_histovec_simple.svg?url'
+import logoHistoVec from '@Assets/img/logo_histovec_simple.svg?url'
 
 import '@/assets/stylesheets/globale.css'
 

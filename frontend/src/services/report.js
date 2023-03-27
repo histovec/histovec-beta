@@ -1,9 +1,9 @@
-import api from '@/api/index.js'
-import { buildReportByDataPayload, buildReportByCodePayload } from '@/api/utils/index.js'
+import api from '@Api/index.js'
+import { buildReportByDataPayload, buildReportByCodePayload } from '@Api/utils/index.js'
 
-import { vehiculeMapping, controlesTechniquesMapping } from '@/utils/mapping/index.js'
-import { getTomorrowTime, getTodayTime } from '@/utils/date.js'
-import { labelizeControlesTechniques } from '@/utils/vehicle/formatControlesTechniques.js'
+import { vehiculeMapping, controlesTechniquesMapping } from '@Utils/mapping/index.js'
+import { getTomorrowTime, getTodayTime } from '@Utils/date.js'
+import { labelizeControlesTechniques } from '@Utils/vehicle/formatControlesTechniques.js'
 
 import { TYPE_IMMATRICULATION } from '@Constants/type'
 
