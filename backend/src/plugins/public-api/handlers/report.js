@@ -22,7 +22,6 @@ export const getReport = async (payload) => {
   const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
   appLogger.info(`-- [backend] idv ==> ${urlSafeBase64EncodedId}`)
 
-  
   // 1 - SIV
   const {
     status: sivStatus,

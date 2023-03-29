@@ -141,8 +141,6 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       })
 
       const report = decryptJson(sivData, base64EncodedReportKeyBuffer)
-      syslogLogger.info({ key: 'decrypted_raw_report', tag: logLabel, value: { ...report } })
-
       const normalizedReport = normalizeReport(report)
       syslogLogger.debug({ key: 'normalized_report', tag: logLabel, value: { ...normalizedReport } })
 

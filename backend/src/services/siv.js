@@ -1,5 +1,5 @@
 import { getElasticsearchClient } from '../connectors/elasticsearch.js'
-import { appLogger, syslogLogger } from '../util/logger.js'
+import { appLogger } from '../util/logger.js'
 import config from '../config.js'
 
 const elasticsearchClient = getElasticsearchClient()
@@ -45,10 +45,7 @@ export const getSIV = async (id, uuid) => {
       utac_ask_ct: rawAskCt = '',
       utac_encrypted_immat: encryptedImmat = '',
       utac_encrypted_vin: encryptedVin = '',
-      controle_qualite: controleQualite = '',
     } = hits[0]._source
-
-    syslogLogger.info({ key: '-- controle_qualite ==> ', value: { controleQualite } })
 
     const askCt = rawAskCt === 'OUI'
     appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
