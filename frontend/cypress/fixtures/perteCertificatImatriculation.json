@@ -1,0 +1,153 @@
+{
+  "vehicule": {
+    "date_mise_a_jour": "1900-01-01",
+    "certificat_immatriculation": {
+      "date_premiere_immatriculation": "2009-04-08",
+      "nombre_de_mois_depuis_date_emission_certificat_immatriculation": "16",
+      "numero_immatriculation_anonymisee": "BC-0**-KS",
+      "titulaire": {
+        "particulier": {
+          "nom_anonymise": "G*****",
+          "prenoms_anonymises": "A*****",
+          "code_postal": "97118"
+        }
+      },
+      "caracteristiques_techniques": {
+        "marque": "RENAULT",
+        "tvv": "BR1F0",
+        "nom_commercial": "CLIO",
+        "couleur": "GRIS FONCE",
+        "vin_anonymise": "VF1L********84388",
+        "ptta": 1665,
+        "ptac": 1665,
+        "ptra": 2550,
+        "ptes": 2550,
+        "ptav": 1175,
+        "date_emission": "2020-06-29",
+        "categorie_ue": "M1",
+        "genre_national": "VP",
+        "carrosserie_ue": "AB",
+        "carrosserie_fr": "CI",
+        "numero_de_reception": "e2*2001/116*0327*23",
+        "cylindree": 1461,
+        "puissance_nette": 63,
+        "energie": "GO",
+        "puissance_cv": 5,
+        "rapport_puissance_masse": 0,
+        "places_assises": 5,
+        "places_debout": 0,
+        "niveau_sonore": 76,
+        "vitesse_du_moteur": 2813,
+        "emission_co2": 116,
+        "classe_environnementale_ue": "70/220*2003/7"
+      },
+      "etat": {
+        "duplicata": true,
+        "annule": false,
+        "perdu": true,
+        "vole": false
+      }
+    },
+    "etat": {
+      "nombre_de_titulaires": 3,
+      "vignette_critair": "2",
+      "vole": false,
+      "procedures_ve": {
+        "numero_immatriculation_au_format_fni": false,
+        "apte_a_circuler": true,
+        "nombre_de_procedures_ve": 0,
+        "procedure_ve_en_cours": false
+      },
+      "vehicule_a_usage_agricole": false,
+      "vehicule_a_usage_de_collection": false
+    },
+    "historique": [
+      {
+        "date": "2020-06-29",
+        "type": "DECLARATION_PERTE_TITRE"
+      },
+      {
+        "date": "2020-06-29",
+        "type": "DECLARATION_PERTE_TITRE"
+      },
+      {
+        "date": "2020-06-26",
+        "type": "CHANG_TIT_NORMAL"
+      },
+      {
+        "date": "2020-06-26",
+        "type": "DECLARATION_PERTE_TITRE"
+      },
+      {
+        "date": "2010-07-20",
+        "type": "CHANG_TIT_NORMAL"
+      },
+      {
+        "date": "2010-07-20",
+        "type": "CONVERSION_DOSSIER_FNI"
+      },
+      {
+        "date": "2010-07-19",
+        "type": "DECLARATION_CESSION"
+      },
+      {
+        "date": "2010-02-23",
+        "type": "DECLARATION_ACHAT"
+      },
+      {
+        "date": "2009-11-13",
+        "type": "DECLARATION_ACHAT"
+      },
+      {
+        "date": "2009-04-08",
+        "type": "IMMAT_NORMALE"
+      }
+    ],
+    "import_en_france": {
+      "vehicule_importe_depuis_etranger": false,
+      "date_import": "2009-04-08"
+    },
+    "situation_administrative": {
+      "declarations_valant_saisie": [],
+      "gages": [],
+      "opposition": {
+        "oves": [],
+        "oveis": [],
+        "otcis": [],
+        "otcis_pv": []
+      },
+      "suspensions": []
+    },
+    "extra": {}
+  },
+  "controles_techniques": {
+    "date_mise_a_jour": "2021-08-01",
+    "historique": [
+      {
+        "date": "2014-12-11",
+        "nature": "VTP",
+        "nature_libelle": "Visite Technique Périodique",
+        "resultat": "A",
+        "resultat_libelle": "Favorable",
+        "km": 98429
+      },
+      {
+        "date": "2016-12-10",
+        "nature": "VTP",
+        "nature_libelle": "Visite Technique Périodique",
+        "resultat": "A",
+        "resultat_libelle": "Favorable",
+        "km": 132874
+      },
+      {
+        "date": "2018-12-26",
+        "nature": "VTP",
+        "nature_libelle": "Contrôle Technique Périodique",
+        "resultat": "A",
+        "resultat_libelle": "Favorable",
+        "km": 160532
+      }
+    ],
+    "donnee_disponible": true
+  }
+}

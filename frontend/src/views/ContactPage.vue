@@ -571,6 +571,7 @@ export default defineComponent({
       class="fr-col-12  text-center"
     >
       <DsfrButton
+        id="bouton-envoyer"
         :disabled="!isFormValid || isAlertVisible"
         label="Envoyer"
         @click="sendContactEmail"

@@ -770,6 +770,7 @@ export default defineComponent({
                 :error-message="nomSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-particulier-nom-naissance"
                   v-model="formData.siv.titulaire.particulier.nom"
                   label="Nom de naissance"
                   label-visible
@@ -801,6 +802,7 @@ export default defineComponent({
                 :error-message="prenomsSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-particulier-prenom"
                   v-model="formData.siv.titulaire.particulier.prenoms"
                   label="Prénom(s)"
                   label-visible
@@ -838,6 +840,7 @@ export default defineComponent({
                 :error-message="numeroImmatriculationSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-particulier-numero-immatriculation"
                   v-model="formData.siv.numeroImmatriculation"
                   label="Numéro d'immatriculation"
                   label-visible
@@ -869,6 +872,7 @@ export default defineComponent({
                 :error-message="numeroFormuleSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-particulier-numero-formule"
                   v-model="formData.siv.numeroFormule"
                   label="Numéro de formule"
                   label-visible
@@ -915,6 +919,7 @@ export default defineComponent({
                 :error-message="raisonSocialeSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-personne-morale-raison-sociale"
                   v-model="formData.siv.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
@@ -934,6 +939,7 @@ export default defineComponent({
                 :error-message="numeroSirenSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-personne-morale-numero-siren"
                   v-model="formData.siv.titulaire.personneMorale.numeroSiren"
                   label="Numéro SIREN"
                   label-visible
@@ -969,6 +975,7 @@ export default defineComponent({
                 :error-message="numeroImmatriculationSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-personne-morale-numero-immatriculation"
                   v-model="formData.siv.numeroImmatriculation"
                   label="Numéro d'immatriculation"
                   label-visible
@@ -1000,6 +1007,7 @@ export default defineComponent({
                 :error-message="numeroFormuleSivErrorMessage"
               >
                 <DsfrInput
+                  id="form-siv-personne-morale-numero-formule"
                   v-model="formData.siv.numeroFormule"
                   label="Numéro de formule"
                   label-visible
@@ -1056,6 +1064,7 @@ export default defineComponent({
                 :error-message="nomEtPrenomsFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-particulier-nom-prenom"
                   v-model="formData.fni.titulaire.particulier.nomEtPrenoms"
                   label="Nom de naissance et prénom(s)"
                   label-visible
@@ -1093,6 +1102,7 @@ export default defineComponent({
                 :error-message="numeroImmatriculationFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-particulier-numero-immatriculation"
                   v-model="formData.fni.numeroImmatriculation"
                   label="Numéro d'immatriculation"
                   label-visible
@@ -1124,6 +1134,7 @@ export default defineComponent({
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-particulier-date-emission"
                   v-model="formData.fni.dateEmissionCertificatImmatriculation"
                   label="Date d'émission du certificat d'immatriculation"
                   label-visible
@@ -1170,6 +1181,7 @@ export default defineComponent({
                 :error-message="raisonSocialeFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-personne-morale-raison-sociale"
                   v-model="formData.fni.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
@@ -1189,6 +1201,7 @@ export default defineComponent({
                 :error-message="numeroSirenFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-personne-morale-numero-siren"
                   v-model="formData.fni.titulaire.personneMorale.numeroSiren"
                   label="Numéro SIREN"
                   label-visible
@@ -1225,6 +1238,7 @@ export default defineComponent({
                 :error-message="numeroImmatriculationFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-personne-morale-numero-immatriculation"
                   v-model="formData.fni.numeroImmatriculation"
                   label="Numéro d'immatriculation"
                   label-visible
@@ -1256,6 +1270,7 @@ export default defineComponent({
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
               >
                 <DsfrInput
+                  id="form-fni-personne-morale-date-emission"
                   v-model="formData.fni.dateEmissionCertificatImmatriculation"
                   label="Date d'émission du certificat d'immatriculation"
                   label-visible
@@ -1322,6 +1337,7 @@ export default defineComponent({
       style="text-align: right"
     >
       <DsfrButton
+        id="bouton-recherche"
         label="Rechercher"
         icon="ri-search-line"
         :disabled="!isFormValid"
@@ -1333,6 +1349,7 @@ export default defineComponent({
       style="text-align: left"
     >
       <DsfrButton
+        id="bouton-effacer"
         label="Effacer"
         icon="ri-close-line"
         secondary

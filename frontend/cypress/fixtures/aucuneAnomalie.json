@@ -1,0 +1,119 @@
+{
+  "vehicule": {
+    "date_mise_a_jour": "1900-01-01",
+    "certificat_immatriculation": {
+      "date_premiere_immatriculation": "2009-05-13",
+      "nombre_de_mois_depuis_date_emission_certificat_immatriculation": "149",
+      "numero_immatriculation_anonymisee": "CY-9**-RX",
+      "titulaire": {
+        "particulier": {
+          "nom_anonymise": "H****",
+          "prenoms_anonymises": "S******",
+          "code_postal": "60270"
+        }
+      },
+      "caracteristiques_techniques": {
+        "marque": "CITROEN",
+        "tvv": "PNCFAC",
+        "numero_cnit": "MCT1012TD456",
+        "nom_commercial": "C1",
+        "couleur": "GRIS CLAIR",
+        "type_de_reception": "CE",
+        "vin_anonymise": "WVGZ********64552",
+        "ptta": 1190,
+        "ptac": 1190,
+        "ptra": 0,
+        "ptes": 930,
+        "ptav": 855,
+        "date_emission": "2009-05-13",
+        "categorie_ue": "M1",
+        "genre_national": "VP",
+        "carrosserie_ue": "AB",
+        "carrosserie_fr": "CI",
+        "numero_de_reception": "e11*2001/116*0238*06",
+        "cylindree": 998,
+        "puissance_nette": 50,
+        "energie": "ES",
+        "puissance_cv": 4,
+        "rapport_puissance_masse": 0,
+        "places_assises": 4,
+        "places_debout": 0,
+        "niveau_sonore": 80,
+        "vitesse_du_moteur": 4500,
+        "emission_co2": 106,
+        "classe_environnementale_ue": "70/220*2003/76EURO4"
+      },
+      "etat": {
+        "duplicata": false,
+        "annule": false,
+        "perdu": false,
+        "vole": false
+      }
+    },
+    "etat": {
+      "nombre_de_titulaires": 1,
+      "vignette_critair": "2",
+      "vole": false,
+      "procedures_ve": {
+        "numero_immatriculation_au_format_fni": false,
+        "apte_a_circuler": true,
+        "nombre_de_procedures_ve": 0,
+        "procedure_ve_en_cours": false
+      },
+      "vehicule_a_usage_agricole": false,
+      "vehicule_a_usage_de_collection": false
+    },
+    "historique": [
+      {
+        "date": "2009-05-13",
+        "type": "IMMAT_NORMALE"
+      }
+    ],
+    "import_en_france": {
+      "vehicule_importe_depuis_etranger": false,
+      "date_import": "2009-05-13"
+    },
+    "situation_administrative": {
+      "declarations_valant_saisie": [],
+      "gages": [],
+      "opposition": {
+        "oves": [],
+        "oveis": [],
+        "otcis": [],
+        "otcis_pv": []
+      },
+      "suspensions": []
+    },
+    "extra": {}
+  },
+  "controles_techniques": {
+    "date_mise_a_jour": "2021-08-01",
+    "historique": [
+      {
+        "date": "2014-12-11",
+        "nature": "VTP",
+        "nature_libelle": "Visite Technique Périodique",
+        "resultat": "A",
+        "resultat_libelle": "Favorable",
+        "km": 98429
+      },
+      {
+        "date": "2016-12-10",
+        "nature": "VTP",
+        "nature_libelle": "Visite Technique Périodique",
+        "resultat": "A",
+        "resultat_libelle": "Favorable",
+        "km": 132874
+      },
+      {
+        "date": "2018-12-26",
+        "nature": "VTP",
+        "nature_libelle": "Contrôle Technique Périodique",
+        "resultat": "A",
+        "resultat_libelle": "Favorable",
+        "km": 160532
+      }
+    ],
+    "donnee_disponible": true
+  }
+}
