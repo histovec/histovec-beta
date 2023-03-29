@@ -308,7 +308,6 @@ export default defineComponent({
     // ----- Interrogation de l'api pour le rapport acheteur -----
 
     buyerId () {
-      console.log(this.$route.query)
       const { id: buyerId, urlUnsafe } = this.$route.query
 
       /* ----- @todo @urlUnsafe3 : Supprimer ce bloc de code  ------- */
@@ -546,7 +545,6 @@ export default defineComponent({
           })
           return
         }
-
 
         report = holderReportResponse.report
       } else {

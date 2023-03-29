@@ -5,7 +5,6 @@ import { Agent as HttpsAgent } from 'https'
 import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
-import { anonymize } from '../util/anonymiserData.js'
 
 // @todo: A supprimer si on ne souhaite plus avoir de mock API UTAC
 // @todo: Ou à migrer vers un serveur de mock API UTAC
@@ -251,12 +250,6 @@ class UTACClient {
     let response = null
 
     try {
-      const anonymizedUtacImmat = anonymize(immat)
-      const anonymizedUtacVin = anonymize(vin)
-
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
-
       response = await this.axios.post('/immat/search', {
         immat,
         vin,
