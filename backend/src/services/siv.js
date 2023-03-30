@@ -45,10 +45,7 @@ export const getSIV = async (id, uuid) => {
       utac_ask_ct: rawAskCt = '',
       utac_encrypted_immat: encryptedImmat = '',
       utac_encrypted_vin: encryptedVin = '',
-      controle_qualite: controleQualite = '',
     } = hits[0]._source
-
-    appLogger.info(`-- controle_qualite ==> ${controleQualite}`)
 
     const askCt = rawAskCt === 'OUI'
     appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
