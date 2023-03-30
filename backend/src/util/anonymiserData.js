@@ -1,4 +1,4 @@
-import { TYPE_IMMATRICULATION } from '../constant/type.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../constant/type.js'
 
 export const anonymize = (text, nbVisibleCharAtPrefixAndSuffix = 2) => {
   const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
@@ -53,6 +53,8 @@ export const anonymizeIdentite = (identite) => {
       dateEmissionCertificatImmatriculation: identite.dateEmissionCertificatImmatriculation,
       id: identite.id,
       key: identite.key,
+      typeImmatriculation: identite.typeImmatriculation,
+      typePersonne: identite.nom ? TYPE_PERSONNE.PARTICULIER : TYPE_PERSONNE.PRO,
     }
   return {
     anonymizedDataIdentite,

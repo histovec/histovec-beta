@@ -51,7 +51,7 @@ export const getReport = async (payload) => {
 
   // @todo @syslog2
   // Exemple d'utilisation du syslogLogger
-  syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
+  syslogLogger.info({ key: 'siv_data_reponse', tag: 'SIV', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
   appLogger.debug(`-- [backend] immat ==> ${anonymize(immat)}`)
@@ -116,16 +116,14 @@ export const getReport = async (payload) => {
   }
 
   const normalizedImmat = normalizeImmatForUtac(immat)
-  appLogger.debug(`-- normalized immat ==> ${anonymize(normalizedImmat)}`)
-
   const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
   const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
   const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
-  appLogger.debug(`-- vin ==> ${anonymize(vin, 3)}`)
-
   const normalizedVin = vin.toUpperCase()
-  appLogger.debug(`-- normalized vin ==> ${anonymize(normalizedVin, 3)}`)
+
+  syslogLogger.debug({ key: 'immatriculation_anonymisee', tag: 'SIV', value: normalizedImmat })
+  syslogLogger.debug({ key: 'vin_anonymise', tag: 'SIV', value: normalizedVin })
 
   const isValidVin = Boolean(VIN_REGEX.test(vin))
 
@@ -220,8 +218,8 @@ export const getReport = async (payload) => {
       ct,
       ctUpdateDate,
     }
+
     const anonymizedFreshUtacData = anonymizedControlesTechniques(freshUtacData)
-    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: anonymizedFreshUtacData })
     // Encrypt utac data before storing it in redis cache
     const encryptedFreshUtacData = encryptJson(anonymizedFreshUtacData, utacDataKey)
 
