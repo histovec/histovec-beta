@@ -136,21 +136,16 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
           rawControlesTechniques,
           error,
           message,
+          base64EncodedReportKeyBuffer,
         },
       })
 
-      syslogLogger.info({ key: 'encrypted_raw_report', tag: logLabel, value: { sivData, rawControlesTechniques, base64EncodedReportKeyBuffer } })
-
       const report = decryptJson(sivData, base64EncodedReportKeyBuffer)
-      syslogLogger.info({ key: 'decrypted_raw_report', tag: logLabel, value: { ...report } })
-
       const normalizedReport = normalizeReport(report)
-      syslogLogger.info({ key: 'normalized_report', tag: logLabel, value: { ...normalizedReport } })
-
-      syslogLogger.info({ key: 'raw_controles_techniques', tag: logLabel, value: { ...rawControlesTechniques } })
+      syslogLogger.debug({ key: 'normalized_report', tag: logLabel, value: { ...normalizedReport } })
 
       const mappedVehicule = vehiculeMapping(normalizedReport, config.isPublicApi)
-      syslogLogger.info({ key: 'mapped_report', tag: logLabel, value: { ...mappedVehicule } })
+      syslogLogger.debug({ key: 'mapped_report', tag: logLabel, value: { ...mappedVehicule } })
 
       if (!askControlesTechniques) {
         const reportWithoutControlesTechniques = {
@@ -162,13 +157,13 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       }
 
       const normalizedControlesTechniques = normalizeControlesTechniques(rawControlesTechniques)
-      syslogLogger.info({ key: 'normalized_controles_techniques', tag: logLabel, value: { ...normalizedControlesTechniques } })
+      syslogLogger.debug({ key: 'normalized_controles_techniques', tag: logLabel, value: { ...normalizedControlesTechniques } })
 
       const labeledControlesTechniques = processControlesTechniques(normalizedControlesTechniques)
-      syslogLogger.info({ key: 'labeled_controles_techniques', tag: logLabel, value: { ...labeledControlesTechniques } })
+      syslogLogger.debug({ key: 'labeled_controles_techniques', tag: logLabel, value: { ...labeledControlesTechniques } })
 
       const mappedControlesTechniques = controlesTechniquesMapping(labeledControlesTechniques)
-      syslogLogger.info({ key: 'mapped_controles_techniques', tag: logLabel, value: { ...mappedControlesTechniques } })
+      syslogLogger.debug({ key: 'mapped_controles_techniques', tag: logLabel, value: { ...mappedControlesTechniques } })
 
       const reportWithControlesTechniques = {
         vehicule: mappedVehicule,
