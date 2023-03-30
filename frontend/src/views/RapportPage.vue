@@ -29,9 +29,9 @@ import reportService from '@/services/report.js'
 
 import { formatIsoToFrDate } from '@/assets/js/format.js'
 import siv from '@/assets/js/siv.js'
-import operationsMapping from '@/assets/json/operations.json'
 import syntheseMapping from '@/assets/json/synthese.json'
 
+import { HISTORIQUE_OPERATION_TYPE } from '@/constants/operations.js'
 import { RESULTAT } from '@/constants/controlesTechniques.js'
 import { REPORT_TABS } from '@/constants/reportTabs.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@/constants/type.js'
@@ -142,7 +142,7 @@ export default defineComponent({
 
       assets: {
         syntheseMapping,
-        operationsMapping,
+        HISTORIQUE_OPERATION_TYPE,
       },
 
       utils: {
@@ -1936,12 +1936,8 @@ export default defineComponent({
                 {{ datePremiereImmatriculationFR }}
               </div>
               <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
-                <!-- @todo:
-                  Il serait plus sûr de créer un enum HISTORIQUE_OPERATION_TYPE pour l'utiliser ici
-                  et dans le fichier assets/js/operations.json afin de tokenizer les opérations et réduire les erreurs liées à une typo
-                  Pas urgent : en pratique, on ne se sert que très peu de ces HISTORIQUE_OPERATION_TYPE (appelé opa_type dans le SIV)
-                -->
-                {{ assets.operationsMapping['IMMAT_NORMALE_PREM_ETRANGER'] }}
+                {{ assets.HISTORIQUE_OPERATION_TYPE.find(({ value }) =>
+                  value === 'IMMAT_NORMALE_PREM_ETRANGER').text }}
               </div>
             </template>
 
