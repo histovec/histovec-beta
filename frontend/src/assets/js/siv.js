@@ -510,8 +510,7 @@ const processVehiculeData = (vehiculeData) => {
     {
       ...elt,
       date: formatIsoToFrDate(elt.date),
-      nature: HISTORIQUE_OPERATION_TYPE.find(({ value }) =>
-        value === elt.type).text,
+      nature: HISTORIQUE_OPERATION_TYPE[elt.type]??null,
     }
   ))
 

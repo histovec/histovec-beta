@@ -138,11 +138,11 @@ export default defineComponent({
         REPORT_TABS,
         USAGE_AGRICOLE,
         USAGE_COLLECTION,
+        HISTORIQUE_OPERATION_TYPE,
       },
 
       assets: {
         syntheseMapping,
-        HISTORIQUE_OPERATION_TYPE,
       },
 
       utils: {
@@ -1936,8 +1936,7 @@ export default defineComponent({
                 {{ datePremiereImmatriculationFR }}
               </div>
               <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
-                {{ assets.HISTORIQUE_OPERATION_TYPE.find(({ value }) =>
-                  value === 'IMMAT_NORMALE_PREM_ETRANGER').text }}
+                {{ constants.HISTORIQUE_OPERATION_TYPE.IMMAT_NORMALE_PREM_ETRANGER }}
               </div>
             </template>
 
