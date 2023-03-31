@@ -8,31 +8,25 @@ import { labelizeControlesTechniques } from '@/utils/vehicle/formatControlesTech
 import { TYPE_IMMATRICULATION } from '../constants/type'
 
 
-// @todo @frontendCacheImplementation : Utiliser le session storage au lieu d'un objet global dans le service
-const reportCache = {
-  report: {
-    vehicule : null,
-    controlesTechniques: null,
-  },
-  reportId: null,
-  reportExpiry: getTodayTime(), // expired by default
-  lastReportStatusCode: null,
-}
-
 const reportWithExpiry = (reportId) => {
-  if (reportId !== reportCache.reportId) {
+
+  if (reportId !== sessionStorage.getItem('reportId')) {
     return null
   }
 
   const now = getTodayTime()
 
-  if (now >= reportCache.reportExpiry) {
-    return null
+  if (now >= Number(sessionStorage.getItem('reportExpiry'))) {
+      return null
   }
 
   return {
-    report: reportCache.report,
-    status: reportCache.lastReportStatusCode,
+
+    report: {
+      controlesTechniques: JSON.parse(sessionStorage.getItem('controlesTechniques')),
+      vehicule: JSON.parse(sessionStorage.getItem('vehicule')),
+    },
+    status: parseInt(sessionStorage.getItem('status')),
   }
 }
 
@@ -49,8 +43,9 @@ const updateReport = (
     status,
   },
 ) => {
-  reportCache.lastReportStatusCode = status
-  reportCache.reportId = reportId
+
+  sessionStorage.setItem('status', status)
+  sessionStorage.setItem('reportId', reportId)
 
   if (status !== 200 && status !== 404) {
     // Don't cache report if api send an error
@@ -58,25 +53,19 @@ const updateReport = (
   }
 
   if (!vehicule) {
-    reportCache.report = {
-      vehicule: null,
-      controlesTechniques: null,
-    }
-
-    reportCache.reportExpiry = getTomorrowTime()
-    return
+        sessionStorage.setItem('vehicule', null)
+        sessionStorage.setItem('controlesTechniques', null)
+        sessionStorage.setItem('reportExpiry', getTomorrowTime())
+        return
   }
 
   const mappedVehicule = vehiculeMapping(vehicule)
   const mappedControlesTechniques = controlesTechniquesMapping(controles_techniques)
   const labelizedControlesTechniques = labelizeControlesTechniques(mappedControlesTechniques)
+  sessionStorage.setItem('vehicule', JSON.stringify(mappedVehicule))
+  sessionStorage.setItem('controlesTechniques', JSON.stringify(labelizedControlesTechniques))
+  sessionStorage.setItem('reportExpiry', getTomorrowTime())
 
-  reportCache.report = {
-    vehicule: mappedVehicule,
-    controlesTechniques: labelizedControlesTechniques,
-  }
-
-  reportCache.reportExpiry = getTomorrowTime()
 }
 
 export default {
