@@ -5,6 +5,7 @@ import { Agent as HttpsAgent } from 'https'
 import { appLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
+import { anonymize } from '../util/anonymiserData.js'
 
 // @todo: A supprimer si on ne souhaite plus avoir de mock API UTAC
 // @todo: Ou à migrer vers un serveur de mock API UTAC
@@ -54,11 +55,6 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
   status: 200,
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
-
-const anonymize = (text, nbVisibleCharAtPrefixAndSuffix = 2) => {
-  const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
-  return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
-}
 
 const ERROR_MESSAGES = {
   401: 'Authentication to UTAC api failed',
