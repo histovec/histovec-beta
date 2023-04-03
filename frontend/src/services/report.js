@@ -8,7 +8,7 @@ import { labelizeControlesTechniques } from '@/utils/vehicle/formatControlesTech
 import { TYPE_IMMATRICULATION } from '../constants/type'
 
 
-const reportWithExpiry = (reportId) => {
+export const reportWithExpiry = (reportId) => {
 
   if (reportId !== sessionStorage.getItem('reportId')) {
     return null
@@ -30,7 +30,7 @@ const reportWithExpiry = (reportId) => {
   }
 }
 
-const updateReport = (
+export const updateReport = (
   {
     report: {
       vehicule,
