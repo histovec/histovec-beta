@@ -36,7 +36,7 @@ describe('CarteDsfrNonCliquable', () => {
 
     const divs = wrapper.findAll('div');
     expect(divs.length).toBe(3);
-    expect(divs[0].attributes().class).toBe('fr-card fr-card--no-arrow');
+    expect(divs[0].attributes().class).toBe('fr-card fr-card--no-arrow background-default-white');
 
     const divBody = divs[1];
     const divImage = divs[2];
