@@ -15,7 +15,7 @@ describe('TuileDsfrNonCliquable', () => {
     const divTuileBody = divTuile.find('div');
     const titre = divTuileBody.find('h4');
     const lien = titre.find('span');
-    const description = divTuileBody.find('p');
+    const description = divTuileBody.find('div');
 
     expect(divTuile.attributes().class.includes('fr-tile')).true;
     expect(divTuile.attributes().class.includes('fr-enlarge')).true;
@@ -41,7 +41,7 @@ describe('TuileDsfrNonCliquable', () => {
     const divTuileBody = divTuile.find('div');
     const titre = divTuileBody.find('h4');
     const lien = titre.find('span');
-    const description = divTuileBody.find('p');
+    const description = divTuileBody.find('div');
 
     expect(divTuile.attributes().class.includes('fr-tile')).true;
     expect(divTuile.attributes().class.includes('fr-enlarge')).true;
