@@ -228,7 +228,7 @@ export default defineComponent({
               :expanded-id="expandedId"
               @expand="expandedId = $event"
             >
-              <h6>Vous êtes vendeur :</h6>
+              <h3>Vous êtes vendeur :</h3>
               <ul class="fr-ml-4w  fr-pl-0">
                 <li>
                   Sur la page Propriétaire, remplissez le formulaire avec les informations figurant sur le certificat
@@ -246,7 +246,7 @@ export default defineComponent({
                 </li>
               </ul>
 
-              <h6>Vous êtes acheteur :</h6>
+              <h3>Vous êtes acheteur :</h3>
               <ul class="fr-ml-4w  fr-pl-0">
                 <li>
                   Demandez au vendeur de vous transmettre le lien vers le rapport en le générant sur le site HistoVec.
