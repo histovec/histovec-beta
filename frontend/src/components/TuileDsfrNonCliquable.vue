@@ -25,9 +25,9 @@ export default defineComponent({
       taille="md"
     />
     <div class="fr-tile__body">
-      <h4 class="fr-tile__title">
+      <h3 class="fr-tile__title">
         <span class="fr-tile__link">{{ titre }}</span>
-      </h4>
+      </h3>
       <div class="fr-tile__desc">
         <slot />
       </div>

@@ -107,7 +107,7 @@ describe('HistoVecFooter', () => {
     const partenaires = divStructure[3];
     expect(partenaires.classes('fr-footer__partners')).true;
 
-    const partenaireTitre = partenaires.find('h4');
+    const partenaireTitre = partenaires.find('span');
     expect(partenaireTitre.attributes().class).toBe('fr-footer__partners-title');
     expect(partenaireTitre.text()).toBe('Nos partenaires');
 

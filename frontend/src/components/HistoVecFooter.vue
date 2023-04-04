@@ -96,7 +96,7 @@ export default defineComponent({
         </div>
       </div>
       <div class="fr-footer__partners">
-        <h4 class="fr-footer__partners-title">Nos partenaires</h4>
+        <span class="fr-footer__partners-title">Nos partenaires</span>
         <div class="fr-footer__partners-logos">
           <div class="fr-footer__partners-main background-default-white">
             <a id="securiteRoutiereIconeImage" class="fr-footer__partners-link" rel="noopener noreferrer" target="_blank" href="https://securite-routiere.gouv.fr" title="Securité routière - Lien vers le site securite-routiere.gouv.fr">
@@ -134,6 +134,10 @@ export default defineComponent({
 
 .footer__logo__securiteRoutiere{
   height: 5rem;
+}
+
+.fr-footer__partners-title {
+  font-weight: bold;
 }
 </style>
 
