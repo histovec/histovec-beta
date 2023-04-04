@@ -7,7 +7,7 @@ export default defineComponent({
   props: {
     id: {
       type: String,
-      default: '',
+      default: null,
     },
     alt: {
       type: String,
