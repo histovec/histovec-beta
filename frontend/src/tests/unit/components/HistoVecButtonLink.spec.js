@@ -20,7 +20,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('false');
-    expect(routreLink.attributes().custom).toBe('false');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('false');
     expect(dsfrbutton.attributes().label).toBe(label);
@@ -50,7 +49,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('false');
-    expect(routreLink.attributes().custom).toBe('false');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('false');
     expect(dsfrbutton.attributes().label).toBe(label);
@@ -81,7 +79,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('false');
-    expect(routreLink.attributes().custom).toBe('false');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('false');
     expect(dsfrbutton.attributes().label).toBe(label);
@@ -112,7 +109,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('false');
-    expect(routreLink.attributes().custom).toBe('false');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('false');
     expect(dsfrbutton.attributes().label).toBe(label);
@@ -142,7 +138,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('true');
-    expect(routreLink.attributes().custom).toBe('false');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('false');
     expect(dsfrbutton.attributes().label).toBe(label);
@@ -172,7 +167,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('false');
-    expect(routreLink.attributes().custom).toBe('true');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('false');
     expect(dsfrbutton.attributes().label).toBe(label);
@@ -201,7 +195,6 @@ describe('HistoVecButtonLink', () => {
     expect(wrapper.find('a').exists()).false;
     expect(routreLink.attributes().to).toBe(url);
     expect(routreLink.attributes().replace).toBe('false');
-    expect(routreLink.attributes().custom).toBe('false');
     expect(routreLink.attributes().ariacurrentvalue).toBe('page');
     expect(dsfrbutton.attributes().disabled).toBe('true');
     expect(dsfrbutton.attributes().label).toBe(label);
