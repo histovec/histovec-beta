@@ -980,6 +980,7 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
       <DsfrAlert
         type="warning"
+        role="alert"
         title="Fraîcheur des données"
         description="
           HistoVec rencontre actuellement des difficultés techniques dans la mise à jour des données relatives aux véhicules qu'il vous permet de consulter.
@@ -1989,6 +1990,7 @@ export default defineComponent({
             >
               <DsfrAlert
                 type="error"
+                role="alert"
                 title="Erreur lors de la récupération des contrôles techniques"
                 :description="erreurControlesTechniques"
               />
@@ -2063,6 +2065,7 @@ export default defineComponent({
             >
               <DsfrAlert
                 type="error"
+                role="alert"
                 title="Erreur lors de la récupération des contrôles techniques"
                 :description="erreurControlesTechniques"
               />

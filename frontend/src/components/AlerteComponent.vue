@@ -46,6 +46,7 @@ export default defineComponent({
       :description="description"
       :type="type"
       :small="small"
+      role="alert"
       closeable
       @close="fermerAlerte"
     />

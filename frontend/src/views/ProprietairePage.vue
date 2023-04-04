@@ -1434,6 +1434,7 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
       <DsfrAlert
         type="info"
+        role="alert"
         title="Historique indisponible à ce jour"
         description="
           L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
