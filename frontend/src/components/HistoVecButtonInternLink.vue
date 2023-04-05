@@ -33,6 +33,8 @@ export default defineComponent({
   <router-link
     v-bind="routerLinkProps"
     custom
+    :v-slot="{ navigate }"
+    :to="to"
   >
     <DsfrButton
       v-bind="buttonProps"
