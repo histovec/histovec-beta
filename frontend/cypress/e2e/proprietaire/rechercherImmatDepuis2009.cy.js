@@ -15,8 +15,9 @@ context('Proprietaire', () => {
   it("Recherche d'une immatriculation depuis 2009", () => {
     // bouton recherche 'immatriculation depuis 2009' non selectionné
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
-      .should("have.class", "histovec-numero-immatriculation-opacity")
-      .get("p")
+      .should("have.class", "card-immatriculation--image")
+      .parent()
+      .get("span")
       .contains("Immatriculation avant 2009")
 
     // formulaire non visible
@@ -29,7 +30,7 @@ context('Proprietaire', () => {
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
       .click()
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
-      .should("not.have.class", "histovec-numero-immatriculation-opacity")
+      .should("not.have.class", "card-immatriculation--image--opacity")
 
     // bouton validation du formulaire disabled
     cy.get("button[id*='bouton-recherche']")
