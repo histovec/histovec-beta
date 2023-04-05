@@ -20,7 +20,7 @@ export default defineComponent({
     },
     alt: {
       type: String,
-      default: null,
+      default: '',
     },
     image: {
       type: String,
@@ -37,10 +37,6 @@ export default defineComponent({
 
       return 'carte-' + newId
     },
-    getAlt() {
-      if (this.alt && this.alt.length > 0) return this.alt
-      return null
-    },
   },
 })
 </script>
@@ -54,7 +50,7 @@ export default defineComponent({
       <p class="fr-card__desc">{{ description }}</p>
     </div>
     <div class="fr-card__img">
-      <img class="fr-responsive-img" :src="image" :alt="getAlt()"/>
+      <img class="fr-responsive-img" :src="image" :alt="alt"/>
       <!-- L’alternative de l’image (attribut alt) doit rester vide car l’image est illustrative et ne doit pas être restituée aux technologies d’assistance -->
     </div>
   </div>
