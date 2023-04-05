@@ -9,7 +9,6 @@ context('Contact', () => {
   }
   function verificationFormulaireMail() {
     cy.contains('label','Email').within(() => {
-        cy.get('em').contains('*')
         cy.get('span').contains('Votre email')
       })
       .parents().within(() => {
@@ -21,7 +20,6 @@ context('Contact', () => {
       })
 
     cy.contains('label','Message').within(() => {
-        cy.get('em').contains('*')
         cy.get('span').contains('Votre message')
       })
       .parents().within(() => {
@@ -43,7 +41,7 @@ context('Contact', () => {
       .parents().find('input').type('mauvais@mail')
       .parents().find('p').find('span')
       .should('exist')
-      .contains('L\'email est obligatoire. Veuillez le renseigner.')
+      .contains('Saisissez une adresse avec un format valide, exemple : nom@exemple.fr')
       .should('be.visible')
 
     // vérification du message d'erreur sur le message
@@ -102,7 +100,7 @@ context('Contact', () => {
     cy.contains('p', 'Remplissez le formulaire ci-dessous et expliquez-nous votre problème.')
 
     // formulaire
-    cy.contains('h6', 'Veuillez choisir un ou plusieurs thèmes :')
+    cy.contains('h2', 'Veuillez choisir un ou plusieurs thèmes :')
       .parent()
       .find('ul').within(() => {
         cy.get('li').should('have.length', 5)
@@ -137,7 +135,7 @@ context('Contact', () => {
     cy.get('label[class*=\'fr-label\']').contains('Thèmes (10 choix possibles)');
     cy.get('select[class*=\'fr-select\']').contains(CONTACT_THEMES_OPTIONS[1].text);
     // Critere RGAA remplace type par des id
-    cy.get('button[type*=\'CERTIFICAT_IMMATRICULATION\']').click();
+    cy.get('button[id*=\'CERTIFICAT_IMMATRICULATION\']').click();
 
     //Filtre Select Tag Certificat
     cy.get('label[class*=\'fr-label\']').contains('Thèmes (3 choix possibles)');
@@ -146,29 +144,29 @@ context('Contact', () => {
     QuestionSelectAbsente([6, 3, 4, 5, 7, 8]);
 
     //Filtre Select Tag Titulaire
-    cy.get('button[type*=\'CERTIFICAT_IMMATRICULATION\']').click();
-    cy.get('button[type*=\'PROPRIETAIRE_OU_TITULAIRE\']').click();
+    cy.get('button[id*=\'CERTIFICAT_IMMATRICULATION\']').click();
+    cy.get('button[id*=\'PROPRIETAIRE_OU_TITULAIRE\']').click();
 
     cy.get('label[class*=\'fr-label\']').contains('Thèmes (7 choix possibles)');
     QuestionSelectAbsente([5, 7, 8]);
 
     //Filtre Select Tag Rapport
-    cy.get('button[type*=\'PROPRIETAIRE_OU_TITULAIRE\']').click();
-    cy.get('button[type*=\'RAPPORT_HISTOVEC\']').click();
+    cy.get('button[id*=\'PROPRIETAIRE_OU_TITULAIRE\']').click();
+    cy.get('button[id*=\'RAPPORT_HISTOVEC\']').click();
 
     cy.get('label[class*=\'fr-label\']').contains('Thèmes (5 choix possibles)');
     QuestionSelectAbsente([0, 1, 2, 3, 8]);
 
     //Filtre Select Tag Véhicule
-    cy.get('button[type*=\'RAPPORT_HISTOVEC\']').click();
-    cy.get('button[type*=\'VEHICULE\']').click();
+    cy.get('button[id*=\'RAPPORT_HISTOVEC\']').click();
+    cy.get('button[id*=\'VEHICULE\']').click();
 
     cy.get('label[class*=\'fr-label\']').contains('Thèmes (8 choix possibles)');
     QuestionSelectAbsente([7, 8]);
 
     //Filtre Select Tag Autre
-    cy.get('button[type*=\'VEHICULE\']').click();
-    cy.get('button[type*=\'AUTRE\']').click();
+    cy.get('button[id*=\'VEHICULE\']').click();
+    cy.get('button[id*=\'AUTRE\']').click();
 
     cy.get('label[class*=\'fr-label\']').contains('Thèmes (5 choix possibles)');
     QuestionSelectAbsente([0, 1, 2, 4, 6]);
@@ -176,40 +174,40 @@ context('Contact', () => {
   it('Sélectionner thème Marche à Suivre', () => {
     // question 1
     cy.get('select').select(CONTACT_THEMES_OPTIONS[0].text);
-    cy.contains('h5', 'Marche à suivre');
-    cy.contains('p', 'Il convient d\'effectuer les démarches de déclaration de cession du véhicule auprès de l\'ANTS (Agence Nationale des Titres Sécurisés).')
+    cy.contains('h2', 'Marche à suivre');
+    cy.contains('p', 'Il convient d\'effectuer les démarches de déclaration de cession du véhicule auprès de l\'A​N​T​S (Agence Nationale des Titres Sécurisés).')
       .find('a')
       .contains('démarches de déclaration de cession du véhicule')
       .should('have.attr', 'href').and('include', 'https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession')
 
     // question 2
     cy.get('select').select(CONTACT_THEMES_OPTIONS[1].text);
-    cy.contains('h5', 'Marche à suivre');
-    cy.contains('p', 'Il convient d\'effectuer les démarches de changement de titulaire du certificat d\'immatriculation auprès de l\'ANTS (Agence Nationale des Titres Sécurisés)')
+    cy.contains('h2', 'Marche à suivre');
+    cy.contains('p', 'Il convient d\'effectuer les démarches de changement de titulaire du certificat d\'immatriculation auprès de l\'A​N​T​S (Agence Nationale des Titres Sécurisés).')
       .find('a')
       .contains('démarches de changement de titulaire du certificat d\'immatriculation')
       .should('have.attr', 'href').and('include', 'https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion')
 
     // question 3
     cy.get('select[class*=\'fr-select\']').select(CONTACT_THEMES_OPTIONS[2].text);
-    cy.contains('h5', 'Marche à suivre');
-    cy.contains('p', 'Il convient d\'effectuer les démarches de déclaration de perte ou de vol du certificat d\'immatriculation auprès de l\'ANTS (Agence Nationale des Titres Sécurisés)')
+    cy.contains('h2', 'Marche à suivre');
+    cy.contains('p', 'Il convient d\'effectuer les démarches de déclaration de perte ou de vol du certificat d\'immatriculation auprès de l\'A​N​T​S (Agence Nationale des Titres Sécurisés).')
       .find('a')
       .contains('démarches de déclaration de perte ou de vol du certificat d\'immatriculation')
       .should('have.attr', 'href').and('include', 'https://immatriculation.ants.gouv.fr/Vos-demarches/Obtenir-un-duplicata-en-cas-de-perte-vol-deterioration')
 
     // question 4
     cy.get('select[class*=\'fr-select\']').select(CONTACT_THEMES_OPTIONS[3].text);
-    cy.contains('h5', 'Marche à suivre');
-    cy.contains('p', 'Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou l\'Agence nationale de traitement automatisé des infractions (ANTAI) .')
+    cy.contains('h2', 'Marche à suivre');
+    cy.contains('p', 'Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou l\'Agence nationale de traitement automatisé des infractions (A​N​T​A​I) .')
       .find('a')
-      .contains('l\'Agence nationale de traitement automatisé des infractions (ANTAI)')
+      .contains('l\'Agence nationale de traitement automatisé des infractions (A​N​T​A​I)')
       .should('have.attr', 'href').and('include', 'https://www.antai.gouv.fr')
 
     // question 5
     cy.get('select[class*=\'fr-select\']').select(CONTACT_THEMES_OPTIONS[4].text);
-    cy.contains('h5', 'Marche à suivre');
-    cy.contains('p', 'HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d\'Immatriculation des Véhicules). Pour toute modification de vos données, rendez-vous sur les démarches proposées par l\'ANTS (Agence Nationale des Titres Sécurisés)')
+    cy.contains('h2', 'Marche à suivre');
+    cy.contains('p', 'HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d\'Immatriculation des Véhicules). Pour toute modification de vos données, rendez-vous sur les démarches proposées par l\'A​N​T​S (Agence Nationale des Titres Sécurisés).')
       .find('a')
       .contains('les démarches')
       .should('have.attr', 'href').and('include', 'https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande')
@@ -291,7 +289,7 @@ context('Contact', () => {
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
     // verification de l'affichage
-    cy.wait(500).get('h6')
+    cy.wait(500).get('h2')
       .contains('Données transmises pour l\'assistance')
       .should('exist')
       .parent().within(() => {
@@ -353,7 +351,7 @@ context('Contact', () => {
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
     // verification de l'affichage
-    cy.wait(500).get('h6')
+    cy.wait(500).get('h2')
       .contains('Données transmises pour l\'assistance')
       .should('exist')
       .parent().within(() => {
@@ -408,7 +406,7 @@ context('Contact', () => {
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
     // verification de l'affichage
-    cy.wait(500).get('h6')
+    cy.wait(500).get('h2')
       .contains('Données transmises pour l\'assistance')
       .should('exist')
       .parent().within(() => {
@@ -469,7 +467,7 @@ context('Contact', () => {
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
 
     // verification de l'affichage
-    cy.wait(500).get('h6')
+    cy.wait(500).get('h2')
       .contains('Données transmises pour l\'assistance')
       .should('exist')
       .parent().within(() => {
@@ -505,7 +503,7 @@ context('Contact', () => {
     cy.get('div[class*=\'fr-alert fr-alert--error\']').within(() => {
       cy.get('p').should('have.length', 2)
       cy.get('p').eq(0)
-        .contains('Echec de l\'envoi du message')
+        .contains('Échec de l\'envoi du message')
       cy.get('p').eq(1)
         .contains('Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.')
     })
