@@ -14,7 +14,7 @@ describe('CarteDsfrNonCliquable', () => {
     const div = wrapper.find('div');
     expect(div.attributes().id).toBe('carte-titre-de-la-carte');
   })
-  it('Doit afficher une carte sans alt donné', () => {
+  it('Doit afficher une carte avec un alt vide', () => {
     const wrapper = mount(CarteDsfrNonCliquable, { props: {
         id: 'id-carte',
         titre: 'Titre de la carte',
@@ -23,7 +23,7 @@ describe('CarteDsfrNonCliquable', () => {
       } })
 
     const image = wrapper.find('img');
-    expect(image.attributes().alt).undefined;
+    expect(image.attributes().alt).toBe('');
   })
   it('Doit afficher une carte correctement', () => {
     const wrapper = mount(CarteDsfrNonCliquable, { props: {
