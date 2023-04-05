@@ -54,7 +54,7 @@ context('Rapport vehicule cas simple - onglet Historique', () => {
       .should('have.length', 1)
       .find("div[class='fr-col-12 fr-pb-3w']")
       .should('have.length', 1)
-      .find("h5")
+      .find("h3")
       .should('have.length', 1)
       .contains("Historique des opérations en France")
       .parent()

@@ -7,8 +7,8 @@ context('FAQ', () => {
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_accueil);
     cy.title().should('eq', 'HistoVec - Accueil');
 
-    cy.get('a[title*="FAQ & Liens utiles"]')
-      .contains("FAQ & Liens utiles")
+    cy.get('a[title*="FAQ et Liens utiles"]')
+      .contains("FAQ et Liens utiles")
       .click();
 
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_faq);
