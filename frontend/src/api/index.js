@@ -62,15 +62,12 @@ export default {
     }
 
     const uuid = localStorage.getItem('userId')
-    const normalizedPath = path.replace(/^\/\w+\//, '')
 
     const options = {
       method: 'PUT',
     }
 
-    const response = await fetch(`${apiUrl}/log/${uuid}${normalizedPath}`, options)
-
-    return response
+    return await fetch(`${apiUrl}/log/${uuid}${path}`, options)
   },
   sendContactEmail: async (contact) => {
     const headers = new Headers()

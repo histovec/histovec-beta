@@ -163,7 +163,9 @@ export default defineComponent({
       this.resetAlertStates()
     },
   },
-
+  created () {
+    api.log('/contact')
+  },
   beforeMount() {
     this.identity = this.buildIdentity()
   },
@@ -308,14 +310,14 @@ export default defineComponent({
 
         if (status === 201) {
           this.isSuccessAlertVisible = true
-          await api.log(`${this.$route.path}/mail/ok`)
+          await api.log('/mail/ok')
         } else {
           this.isErrorAlertVisible = true
-          await api.log(`${this.$route.path}/mail/ko`)
+          await api.log('/mail/ko')
         }
       } catch(error) {
         this.isErrorAlertVisible = true
-        await api.log(`${this.$route.path}/mail/ko`)
+        await api.log('/mail/ko')
       }
     },
   },

@@ -23,6 +23,7 @@ import imageNomSIV from '@/assets/img/aide/siv_nom.jpg'
 import imagePrenomsSIV from '@/assets/img/aide/siv_prenoms.jpg'
 import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatriculation.jpg'
 import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
+import api from '@/api/index.js'
 
 
 export default defineComponent({
@@ -327,6 +328,10 @@ export default defineComponent({
           ''
       )
     },
+  },
+
+  created () {
+    api.log('/search')
   },
 
   methods: {

@@ -9,6 +9,7 @@ import { VIN_REGEX } from '../../../constant/regex.js'
 
 import { appLogger, syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
+import { anonymize, anonymizedControlesTechniques } from '../../../util/anonymiserData.js'
 
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
@@ -50,10 +51,10 @@ export const getReport = async (payload) => {
 
   // @todo @syslog2
   // Exemple d'utilisation du syslogLogger
-  syslogLogger.info({ key: 'sivData', tag: 'getReport', value: sivData })
+  syslogLogger.info({ key: 'siv_data_reponse', tag: 'SIV', value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  appLogger.debug(`-- [backend] immat ==> ${immat}`)
+  appLogger.debug(`-- [backend] immat ==> ${anonymize(immat)}`)
 
   // 2 - UTAC
   const utacDataKey = computeUtacDataKey(encryptedImmat)
@@ -115,16 +116,14 @@ export const getReport = async (payload) => {
   }
 
   const normalizedImmat = normalizeImmatForUtac(immat)
-  appLogger.debug(`-- normalized immat ==> ${normalizedImmat}`)
-
   const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
   const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
   const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
-  appLogger.debug(`-- vin ==> ${vin}`)
-
   const normalizedVin = vin.toUpperCase()
-  appLogger.debug(`-- normalized vin ==> ${normalizedVin}`)
+
+  syslogLogger.debug({ key: 'immatriculation_anonymisee', tag: 'SIV', value: normalizedImmat })
+  syslogLogger.debug({ key: 'vin_anonymise', tag: 'SIV', value: normalizedVin })
 
   const isValidVin = Boolean(VIN_REGEX.test(vin))
 
@@ -176,7 +175,7 @@ export const getReport = async (payload) => {
 
     if (utacStatus !== 200) {
       appLogger.error({
-        error: 'UTAC response failed',
+        error: '[UTAC] response call_failed',
         status: utacStatus,
         remoteError: utacMessage,
       })
@@ -220,10 +219,9 @@ export const getReport = async (payload) => {
       ctUpdateDate,
     }
 
-    syslogLogger.info({ key: 'freshUtacData', tag: 'getReport', value: freshUtacData })
-
+    const anonymizedFreshUtacData = anonymizedControlesTechniques(freshUtacData)
     // Encrypt utac data before storing it in redis cache
-    const encryptedFreshUtacData = encryptJson(freshUtacData, utacDataKey)
+    const encryptedFreshUtacData = encryptJson(anonymizedFreshUtacData, utacDataKey)
 
     try {
       // Cache supported vehicles
@@ -240,11 +238,11 @@ export const getReport = async (payload) => {
 
     return {
       sivData,
-      utacData: freshUtacData,
+      utacData: anonymizedFreshUtacData,
     }
   } catch ({ message: errorMessage }) {
     appLogger.error({
-      error: 'UTAC error',
+      error: '[UTAC] call_error',
       remoteError: errorMessage,
     })
 

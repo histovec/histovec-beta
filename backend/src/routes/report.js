@@ -65,10 +65,7 @@ const getSIV = async (id, uuid) => {
       utac_ask_ct: rawAskCt = '',
       utac_encrypted_immat: encryptedImmat = '',
       utac_encrypted_vin: encryptedVin = '',
-      controle_qualite: controleQualite = '',
     } = hits[0]._source
-
-    appLogger.info(`-- controle_qualite ==> ${controleQualite}`)
 
     const askCt = rawAskCt === 'OUI'
     appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
@@ -326,7 +323,7 @@ export const generateGetReport = (utacClient) =>
 
       if (utacStatus !== 200) {
         appLogger.error({
-          error: 'UTAC response failed',
+          error: '[UTAC] response call_failed',
           status: utacStatus,
           remote_error: utacMessage,
         })
@@ -388,7 +385,7 @@ export const generateGetReport = (utacClient) =>
       })
     } catch ({ message: errorMessage }) {
       appLogger.error({
-        error: 'UTAC error',
+        error: '[UTAC] call_error',
         remote_error: errorMessage,
       })
 

@@ -14,6 +14,7 @@ import faqSvg from '@/assets/img/faq.svg?url'
 
 import { mailTo } from '@/utils/email.js'
 import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
+import api from '@/api/index.js'
 
 
 export default defineComponent({
@@ -40,6 +41,7 @@ export default defineComponent({
   },
 
   created () {
+    api.log('/faq')
     this.aboutUnpaidPvEmail = mailTo(ABOUT_UNPAID_PV_EMAIL)
   },
 })

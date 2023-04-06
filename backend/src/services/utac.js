@@ -55,11 +55,6 @@ const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-const anonymize = (text, nbVisibleCharAtPrefixAndSuffix = 2) => {
-  const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
-  return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
-}
-
 const ERROR_MESSAGES = {
   401: 'Authentication to UTAC api failed',
   403: 'Forbidden',
@@ -165,7 +160,7 @@ class UTACClient {
 
   async healthCheck () {
     appLogger.debug({
-      debug: 'UTACClient - healthCheck',
+      debug: '[UTAC] Client - healthCheck',
     })
 
     const { status } = await this.axios.get('/healthcheck').catch(err => err)
@@ -185,7 +180,7 @@ class UTACClient {
       const token = response.data && response.data.token
       if (token) {
         appLogger.debug({
-          debug: 'UTAC authentication succeed',
+          debug: '[UTAC] authentication succeed',
           token,
         })
 
@@ -196,11 +191,11 @@ class UTACClient {
       }
 
       appLogger.error({
-        error: 'UTAC authentication error : no token',
+        error: '[UTAC] authentication_error no_token',
       })
     } catch (error) {
       appLogger.error({
-        error: 'UTAC authentication failed',
+        error: '[UTAC] authentication_failed',
         remoteError: error,
       })
     }
@@ -227,7 +222,7 @@ class UTACClient {
       const { error } = utacResponseSchema.validate(data)
 
       if (error) {
-        appLogger.info(`UTAC response validation error : ${error}`)
+        appLogger.info(`[UTAC] response validation error : ${error}`)
         appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
 
         return {
@@ -255,12 +250,6 @@ class UTACClient {
     let response = null
 
     try {
-      const anonymizedUtacImmat = anonymize(immat)
-      const anonymizedUtacVin = anonymize(vin)
-
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_immat ${anonymizedUtacImmat}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} anonymized_sent_vin ${anonymizedUtacVin}`)
-
       response = await this.axios.post('/immat/search', {
         immat,
         vin,
@@ -296,7 +285,7 @@ class UTACClient {
     }
 
     appLogger.debug({
-      debug: 'UTAC result found',
+      debug: '[UTAC] result found',
       immat,
       ct: response.data.ct,
       update_date: response.data.update_date,

@@ -14,8 +14,13 @@ export default defineComponent({
 
   components: { HistoVecButtonLink, ImagePresentation },
 
-  created () {
-    this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
+  beforeRouteEnter(to, from) {
+    if (from.href) {
+      api.log('/buyer/navigation')
+    }
+    if (from.href === undefined) {
+      api.log('/buyer/redirection')
+    }
   },
   data () {
     return {
@@ -24,11 +29,12 @@ export default defineComponent({
       },
     }
   },
+  created () {
+    this.askReportEmail = mailTo(ASK_REPORT_EMAIL)
+  },
   methods: {
     async onClickMailDemandeRapport () {
       window.location = this.askReportEmail
-
-      await api.log(`${this.$route.path}`)
     },
   },
 })

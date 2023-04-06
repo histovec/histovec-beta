@@ -488,6 +488,8 @@ export default defineComponent({
         report = buyerReportResponse.report
       } else {
         // Cas: lien acheteur invalide
+        api.log('/buyer/invalid')
+
         this.$router.push({
           name: 'erreurInattendue',
           query: {
@@ -547,6 +549,7 @@ export default defineComponent({
         report = holderReportResponse.report
       } else {
         // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
+        api.log('/holder/invalid')
         this.$router.push({
           name: 'proprietaire',
         })
@@ -554,6 +557,7 @@ export default defineComponent({
       }
     } else {
       // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
+      api.log('/holder/invalid')
       this.$router.push({
         name: 'proprietaire',
       })
@@ -609,10 +613,14 @@ export default defineComponent({
       })
     }
 
-    if (!areControlesTechinquesDisponibles) {
-      await this.logKilometersError()
-    }
     this.isLoading = false;
+
+    if (this.isRapportAcheteur) {
+      api.log('/buyer/ok')
+    }
+    if (this.isRapportVendeur) {
+      api.log('/holder/ok')
+    }
   },
 
   methods: {
@@ -630,25 +638,25 @@ export default defineComponent({
     async onTabSelected () {
       switch (this.currentTab) {
         case (this.constants.REPORT_TABS.SYNTHESE):
-          await api.log(`${this.$route.path}/synthesis`)
+          await api.log('/synthesis')
           break;
         case (this.constants.REPORT_TABS.VEHICULE):
-          await api.log(`${this.$route.path}/vehicle`)
+          await api.log('/vehicle')
           break;
         case (this.constants.REPORT_TABS.TITULAIRE_ET_TITRE):
-          await api.log(`${this.$route.path}/holder`)
+          await api.log('/holder')
           break
         case (this.constants.REPORT_TABS.SITUATION_ADMINISTRATIVE):
-          await api.log(`${this.$route.path}/administrative-status`)
+          await api.log('/administrative-status')
           break
         case (this.constants.REPORT_TABS.HISTORIQUE):
-          await api.log(`${this.$route.path}/history`)
+          await api.log('/history')
           break
         case (this.constants.REPORT_TABS.CONTROLES_TECHNIQUES):
-          await api.log(`${this.$route.path}/technical-control`)
+          await api.log('/technical-control')
           break
         case (this.constants.REPORT_TABS.KILOMETRAGE):
-          await api.log(`${this.$route.path}/kilometers`)
+          await api.log('/kilometers')
           break
         default:
           break
@@ -707,9 +715,7 @@ export default defineComponent({
         key: this.buyerKey,
       }
 
-      const report = await reportService.getBuyerReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
-
-      return report
+      return await reportService.getBuyerReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
     },
 
     async getHolderReport () {
@@ -718,12 +724,10 @@ export default defineComponent({
         formData: this.formData,
       }
 
-      const report = await reportService.getHolderReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
-
-      return report
+      return await reportService.getHolderReport(data, { ignoreUtacCache: this.flags.ignoreUtacCache })
     },
     async generatePdf () {
-      await api.log(`${this.$route.path}/csa/download`)
+      await api.log('/csa/download')
 
       const {
         dateMiseAJour,
@@ -801,28 +805,25 @@ export default defineComponent({
 
     /** logs **/
     async logSimplimmatImage () {
-      await api.log(`${this.$route.path}/simplimmat/image`)
+      await api.log('/simplimmat/image')
     },
     async logSimplimmatLink () {
-      await api.log(`${this.$route.path}/simplimmat/link`)
+      await api.log('/simplimmat/link')
     },
     async logPartageDuRapport () {
-      await api.log(`${this.$route.path}/share`)
+      await api.log('/share')
     },
     async logCopieLienPartage () {
-      await api.log(`${this.$route.path}/share/copy`)
+      await api.log('/share/copy')
     },
     async logCopieCodePartage () {
-      await api.log(`${this.$route.path}/share/code-partage`)
+      await api.log('/share/code-partage')
     },
     async logMailLienPartage () {
-      await api.log(`${this.$route.path}/share/mail`)
+      await api.log('/share/mail')
     },
     async logMonAvisImage () {
-      await api.log(`${this.$route.path}/mon-avis/image`)
-    },
-    async logKilometersError () {
-      await api.log(`${this.$route.path}/kilometers-error`)
+      await api.log('/mon-avis/image')
     },
 
     async onClickCopyLienPartage () {

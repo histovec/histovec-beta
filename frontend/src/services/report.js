@@ -84,6 +84,7 @@ export default {
     const cachedReport = reportWithExpiry(id)
 
     if (cachedReport) {
+      api.log('/holder/cached')
       return cachedReport
     }
 
@@ -156,9 +157,15 @@ export default {
     )
 
     try {
+      // requete
       const { report, status } = await api.getHolderReport(payload)
+
+      if (status !== 200) {
+        api.log('/holder/notFound')
+      }
       updateReport({ report, reportId: id, status })
     } catch (error) {
+      api.log('/holder/unavailable')
       updateReport({ report: {}, reportId: null, status: 500 })
     }
 
@@ -168,6 +175,7 @@ export default {
     const cachedReport = reportWithExpiry(id)
 
     if (cachedReport) {
+      api.log('/buyer/cached')
       return cachedReport
     }
 
@@ -180,8 +188,12 @@ export default {
     try {
       const { report, status } = await api.getBuyerReport(payload)
 
+      if (status !== 200) {
+        api.log('/buyer/notFound')
+      }
       updateReport({ report, reportId: id, status })
     } catch (error) {
+      api.log('/buyer/unavailable')
       updateReport({ report: {}, reportId: null, status: 500 })
     }
 
