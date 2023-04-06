@@ -116,9 +116,7 @@ export default defineComponent({
         Les durées de conservation des données sont les suivantes :
       </p>
     </div>
-  </div>
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
-    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+    <div class="fr-col-12">
       <DsfrTable
         :title="'Durée de conservation des données personnelles'"
         :no-caption="true"
@@ -156,8 +154,6 @@ export default defineComponent({
         ]"
       />
     </div>
-  </div>
-  <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
       <h2>
         Droit d'accès et de modification
