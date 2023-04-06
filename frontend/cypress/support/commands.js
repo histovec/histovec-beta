@@ -23,3 +23,19 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+import 'cypress-axe';
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false
+});
+Cypress.Commands.add('injectAxe', () => {
+  cy.readFile('node_modules/axe-core/axe.min.js').then(source => {
+    return cy.window({log: false}).then(window => {
+      window.eval(source);
+    });
+  });
+});
+

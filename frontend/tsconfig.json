@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "es5",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "cypress-axe"
+    ]
+  },
+  "include": [
+    "**/*.ts",
+    "./node_modules/cypress-axe/dist/index.d.ts",
+    "./node_modules/axe-core/axe.d.ts"
+  ]
+}

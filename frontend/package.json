@@ -41,7 +41,9 @@
     "@vue/test-utils": "^2.0.0-alpha.6",
     "aria-mocha": "^0.7.3",
     "aria-vue": "^0.4.1",
+    "axe-core": "^4.6.3",
     "cypress": "^10.11.0",
+    "cypress-axe": "^1.4.0",
     "dotenv": "^16.0.1",
     "eslint": "^8.20.0",
     "eslint-plugin-vue": "^9.3.0",
@@ -51,6 +53,7 @@
     "postcss-nested": "^5.0.6",
     "postcss-preset-env": "^7.7.2",
     "stylelint-config-standard": "^26.0.0",
+    "typescript": "^5.0.3",
     "vite": "^3.0.4",
     "vite-svg-loader": "^3.4.0",
     "vitest": "^0.24.3"
