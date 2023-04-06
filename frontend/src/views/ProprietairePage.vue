@@ -538,7 +538,7 @@ export default defineComponent({
         Sélectionner le type de votre plaque d'immatriculation :
       </legend>
       <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
-        <li class="bouton_immatriculation__position">
+        <li>
           <label
             :for="TYPE_IMMATRICULATION.SIV"
             class="card-immatriculation"
@@ -568,7 +568,7 @@ export default defineComponent({
             </span>
           </label>
         </li>
-        <li class="bouton_immatriculation__position">
+        <li>
           <label
             :for="TYPE_IMMATRICULATION.FNI"
             class="card-immatriculation"
@@ -598,7 +598,7 @@ export default defineComponent({
             </span>
           </label>
         </li>
-        <li class="bouton_immatriculation__position">
+        <li>
           <label
             :for="OLD_IMMATRICULATION_TYPE"
             class="card-immatriculation"
@@ -827,7 +827,6 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNomSivValid"
-                :error-message="nomSivErrorMessage"
                 description-id="nom-particulier-SIV-erreur-message"
               >
                 <DsfrInput
@@ -845,18 +844,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonSivNom"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le nom sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNom()"
+                      @keydown.enter="onOpenModalSivNom()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -880,18 +882,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonSivPrenoms"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivPrenoms()"
+                      @keydown.enter="onOpenModalSivPrenoms()"
                     >
                       Où le(s) trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -922,18 +927,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonSivNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalSivNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -958,18 +966,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonSivNumeroFormule"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroFormule()"
+                      @keydown.enter="onOpenModalSivNumeroFormule()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1032,18 +1043,21 @@ export default defineComponent({
                   aria-errormessage="numero-siren-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
-                    <button
+                    <span
                       ref="buttonNumeroSiren"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
                       @click="onOpenModalNumeroSiren()"
+                      @keydown.enter="onOpenModalNumeroSiren()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1074,18 +1088,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonSivNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalSivNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1110,18 +1127,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonSivNumeroFormule"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroFormule()"
+                      @keydown.enter="onOpenModalSivNumeroFormule()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1174,18 +1194,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonFniNomEtPrenoms"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le nom et le(s) prénom(s) sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniNomEtPrenoms()"
+                      @keydown.enter="onOpenModalFniNomEtPrenoms()"
                     >
                       Où les trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1217,18 +1240,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonFniNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalFniNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1253,18 +1279,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonFniDateEmissionCertificatImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                      @keydown.enter="onOpenModalFniDateEmissionCertificatImmatriculation()"
                     >
                       Où la trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1327,18 +1356,21 @@ export default defineComponent({
                   aria-errormessage="numero-siren-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
-                    <button
+                    <span
                       ref="buttonNumeroSiren"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
                       @click="onOpenModalNumeroSiren()"
+                      @keydown.enter="onOpenModalNumeroSiren()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1370,18 +1402,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonFniNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalFniNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </DsfrInputGroup>
@@ -1406,18 +1441,21 @@ export default defineComponent({
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
-                    <button
+                    <span
                       ref="buttonFniDateEmissionCertificatImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                      @keydown.enter="onOpenModalFniDateEmissionCertificatImmatriculation()"
                     >
                       Où la trouver
                       <VIcon
                         class="help-icon"
                         name="ri-information-line"
                       />
-                    </button>
+                    </span>
                   </template>
                 </DsfrInput>
               </dsfrinputgroup>
