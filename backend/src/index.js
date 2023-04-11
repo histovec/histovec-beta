@@ -2,7 +2,7 @@ import { createServer } from './server.js'
 import { getRedisClient } from './connectors/redis.js'
 import { getElasticsearchClient } from './connectors/elasticsearch.js'
 import { getUtacClient } from './connectors/utac.js'
-import { appLogger, techLogger } from './util/logger.js'
+import { appLogger, syslogLogger } from './util/logger.js'
 import config from './config.js'
 
 const API_NAME = config.apiName // 'backend' or 'public-backend'
@@ -56,12 +56,10 @@ const cleanUp = async (server, code, reason) => {
 }
 
 const initServer = async () => {
-  techLogger.debug(
-    `🔧  ${JSON.stringify(config)}`,
-  )
-  appLogger.info(`[CONFIG] usePreviousMonthForData ${config.usePreviousMonthForData}`)
-  appLogger.info(`[CONFIG] previousMonthShift ${config.previousMonthShift}`)
-  appLogger.info(`[CONFIG] version ${config.version}`)
+  syslogLogger.debug({ key: 'config infos', tag: 'CONFIG', value: config })
+  syslogLogger.info({ key: 'usePreviousMonthForData', tag: 'CONFIG', value: config.usePreviousMonthForData })
+  syslogLogger.info({ key: 'previousMonthShift', tag: 'CONFIG', value: config.previousMonthShift })
+  syslogLogger.info({ key: 'version', tag: 'CONFIG', value: config.version })
 
   const server = await createServer()
 
@@ -72,67 +70,36 @@ const initServer = async () => {
         q: 'version',
         size: '1',
       })
-      techLogger.info(
-        `✅  ${API_NAME} REST server connected to elasticsearch`,
-      )
-      appLogger.info('[SERVER-START] elasticsearch connect')
+      syslogLogger.info({ key: '✅ REST server connected to elasticsearch', tag: 'SERVER-START' })
     } catch (error) {
-      techLogger.error(
-        `❌  ${API_NAME} REST server could not connect to elasticsearch…`,
-      )
-      techLogger.error(error)
-      appLogger.info('[SERVER-START] elasticsearch_down unable_to_connect_at_start')
-      appLogger.info('-- elasticsearch is down => cannot connect to elasticsearch')
+      syslogLogger.info({ key: '❌ elasticsearch_down unable_to_connect_at_start', tag: 'SERVER-START', value: error })
     }
 
     try {
       await redisClient.get('')
-      techLogger.info(
-        `✅  ${API_NAME} REST server connected to redis`,
-      )
-      appLogger.info('[SERVER-START] redis connect')
+      syslogLogger.info({ key: '✅ redis connected', tag: 'SERVER-START' })
     } catch (error) {
-      techLogger.error(
-        `❌  ${API_NAME} REST server could not connect to redis…`,
-      )
-      techLogger.error(error)
-      appLogger.info('[SERVER-START] redis_down unable_to_connect_at_start')
-      appLogger.info('-- redis is down => cannot connect to redis')
+      syslogLogger.info({ key: '❌ redis_down unable_to_connect_at_start', tag: 'SERVER-START', value: error })
     }
 
     try {
       const response = await utacClient.healthCheck()
 
       if (response.status === 200) {
-        techLogger.info(
-          '✅  UTAC API server is ok',
-        )
-        appLogger.info('[SERVER-START] utac_api ok')
+        syslogLogger.info({ key: '✅ utac_api ok', tag: 'SERVER-START' })
       } else {
-        techLogger.info(
-          `❌  UTAC API is not available… (status : ${response.status})`,
-        )
-        appLogger.info(`[SERVER-START] utac_api ko ${response.status}`)
+        syslogLogger.info({ key: '❌ utac_api ko', tag: 'SERVER-START', value: { status: response.status } })
       }
     } catch (error) {
-      techLogger.error(
-        '❌  UTAC API is not available…',
-      )
-      techLogger.error(error)
-      appLogger.info('[SERVER-START] utac_api ko')
+      syslogLogger.info({ key: '❌ utac_api ko', tag: 'SERVER-START', value: error })
     }
   }
 
   try {
     await server.start()
-    techLogger.info(
-      `✅  ${API_NAME} REST server started at ${server.info.uri}`,
-    )
+    syslogLogger.info({ key: `✅ REST server started at ${server.info.uri}`, tag: 'SERVER-START' })
   } catch (error) {
-    techLogger.error(
-      `❌  ${API_NAME} REST server failed to start, exiting…`,
-    )
-    techLogger.error(error)
+    syslogLogger.error({ key: '❌ REST server failed to start, exiting…', tag: 'SERVER-START', value: error })
   }
 
   // Uncatched errors

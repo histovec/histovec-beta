@@ -16,12 +16,13 @@ const redisClient = getRedisClient()
 
 export const getReport = async (payload) => {
   const { uuid, id: base64EncodedId, options: { ignoreControlesTechniques, ignoreUtacCache } = {} } = payload
-  appLogger.info(`-- [CONFIG] -- ignoreUtacCache => ${ignoreUtacCache}`)
-  appLogger.info(`-- [CONFIG] -- ignoreControlesTechniques => ${ignoreControlesTechniques}`)
-  appLogger.info(`-- [CONFIG] -- isUtacMockForBpsaActivated => ${config.utac.isUtacMockForBpsaActivated}`)
+  syslogLogger.debug({ key: 'ignoreUtacCache', tag: 'CONFIG', uuid, value: { ignoreUtacCache } })
+  syslogLogger.debug({ key: 'ignoreControlesTechniques', tag: 'CONFIG', uuid, value: { ignoreControlesTechniques } })
+  const isUtacMockForBpsaActivated = config.utac.isUtacMockForBpsaActivated
+  syslogLogger.debug({ key: 'isUtacMockForBpsaActivated', tag: 'CONFIG', uuid, value: { isUtacMockForBpsaActivated } })
 
   const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
-  appLogger.info(`-- [backend] idv ==> ${urlSafeBase64EncodedId}`)
+  syslogLogger.info({ key: 'idv', tag: 'CONFIG', uuid, value: { idv: urlSafeBase64EncodedId } })
 
   // 1 - SIV
   const {

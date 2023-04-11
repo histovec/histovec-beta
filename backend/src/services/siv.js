@@ -1,5 +1,5 @@
 import { getElasticsearchClient } from '../connectors/elasticsearch.js'
-import { appLogger } from '../util/logger.js'
+import { syslogLogger } from '../util/logger.js'
 import config from '../config.js'
 
 const elasticsearchClient = getElasticsearchClient()
@@ -29,9 +29,7 @@ export const getSIV = async (id, uuid) => {
     const hits = (response && response.hits && response.hits.hits) || []
 
     if (hits.length <= 0) {
-      appLogger.warn({
-        error: 'No hit in Elasticsearch',
-      })
+      syslogLogger.warn({ key: 'No hit in Elasticsearch', tag: 'SIV', uuid })
 
       return {
         status: 404,
@@ -48,15 +46,11 @@ export const getSIV = async (id, uuid) => {
     } = hits[0]._source
 
     const askCt = rawAskCt === 'OUI'
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
+    syslogLogger.info({ key: `${encryptedImmat}_${encryptedVin} ask_ct`, tag: 'UTAC', uuid, value: { askCt } })
 
     if (!sivData) {
       const message = 'Wrong data format in Elasticsearch response'
-
-      appLogger.error({
-        error: message,
-        response: hits,
-      })
+      syslogLogger.error({ key: message, tag: 'SIV', uuid, value: { reponse: hits } })
 
       return {
         status: 500,
@@ -76,32 +70,17 @@ export const getSIV = async (id, uuid) => {
     }
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
-      const message = 'Unreachable database'
-      appLogger.error({
-        error: message,
-        id,
-        uuid,
-        remoteError: errorMessage,
-      })
-
-      appLogger.info(`[SIV] ${uuid} undefined_undefined elasticsearch_down get_report ${id}`)
-      appLogger.info('-- elasticsearch is down => cannot get SIV report from elasticsearch')
+      syslogLogger.error({ key: 'elasticsearch_down get_report', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
       return {
         status: 503,
-        message,
+        message: 'Unreachable database',
         utac: {},
       }
     }
 
     const message = 'Couldn\'t process Elasticsearch response'
-
-    appLogger.error({
-      error: message,
-      id,
-      uuid,
-      remoteError: errorMessage,
-    })
+    syslogLogger.error({ key: message, tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
     return {
       status: 500,
