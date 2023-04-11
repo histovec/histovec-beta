@@ -60,7 +60,7 @@ export const appLogger = createLogger({
 })
 
 const syslogFormat = printf(({ level, message, timestamp }) => {
-  const { key, value, tag } = message
+  const { key, value, tag, uuid } = message
 
   if (!key) {
     return inspect(
@@ -69,8 +69,10 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
     )
   }
 
-  const completeValue = typeof value === 'object' ? JSON.stringify(value) : value
+  const completeValue = value ? typeof value === 'object' ? JSON.stringify(value) : value : ''
   const completeTag = tag ? ` [${tag}]` : ''
+
+  const uuidTag = uuid ? ` ${uuid}` : ''
 
   // @todo @syslog1:
   // Utiliser ce format pour remplacer tous les logs de l'application via l'utilitaire syslogLogger
@@ -80,7 +82,7 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
   // Syslog format avec tag: <timestamp> <application_name> [<tag>] <log_level>: <key> <value>
   // Syslog format sans tag: <timestamp> <application_name> <log_level>: <key> <value>
   return inspect(
-    `${timestamp} ${config.apiName}${completeTag} ${level}: ${key} ${completeValue}`,
+    `${timestamp} ${config.apiName}${completeTag} ${level}${uuidTag}: ${key}${completeValue ? ' ' + completeValue : ''}`,
     inspectOptions,
   )
 })

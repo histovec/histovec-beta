@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
 
-import { syslogLogger } from '../../../util/logger.js'
+import { appLogger, syslogLogger } from '../../../util/logger.js'
 import { decryptJson, base64Encode } from '../../../util/crypto.js'
 import { buildReportId, buildReportKey, buildIdAndKey } from '../util/report.js'
 import { normalizeReport, normalizeControlesTechniques } from '../util/normalizeData.js'
@@ -110,6 +110,8 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       const report = decryptJson(sivData, base64EncodedReportKeyBuffer)
       const normalizedReport = normalizeReport(report)
       syslogLogger.debug({ key: 'SIV_decrypted', tag: logLabel, value: { ...normalizedReport } })
+
+      appLogger.info('[SIV_decrypted] ')
 
       const mappedVehicule = vehiculeMapping(normalizedReport, config.isPublicApi)
       syslogLogger.debug({ key: 'SIV_decrypted_and_mapped', tag: logLabel, value: { ...mappedVehicule } })

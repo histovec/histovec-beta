@@ -8,7 +8,7 @@ import {
   urlSafeBase64Encode,
 } from '../util/crypto'
 import config from '../config.js'
-import { appLogger } from '../util/logger.js'
+import { appLogger, syslogLogger } from '../util/logger.js'
 import { getAsync, setAsync } from '../connectors/redis.js'
 
 import { VIN_REGEX } from '../constant/regex.js'
@@ -49,9 +49,7 @@ const getSIV = async (id, uuid) => {
     const hits = (response && response.hits && response.hits.hits) || []
 
     if (hits.length <= 0) {
-      appLogger.warn({
-        error: 'No hit',
-      })
+      syslogLogger.warn({ key: 'No hit in Elasticsearch', tag: 'SIV', uuid })
 
       return {
         status: 404,
@@ -68,17 +66,15 @@ const getSIV = async (id, uuid) => {
     } = hits[0]._source
 
     const askCt = rawAskCt === 'OUI'
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
+    syslogLogger.info({ key: `${encryptedImmat}_${encryptedVin} ask_ct`, tag: 'UTAC', uuid, value: { askCt } })
 
     if (!sivData) {
-      appLogger.error({
-        error: 'Bad Content in elasticsearch response',
-        response: hits,
-      })
+      const message = 'Wrong data format in Elasticsearch response'
+      syslogLogger.error({ key: message, tag: 'SIV', uuid, value: { reponse: hits } })
 
       return {
         status: 500,
-        message: 'Bad Content from Elasticsearch',
+        message,
         utac: {},
       }
     }
@@ -94,12 +90,7 @@ const getSIV = async (id, uuid) => {
     }
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
-      appLogger.error({
-        error: 'Elasticsearch service not available',
-        id,
-        uuid,
-        remote_error: errorMessage,
-      })
+      syslogLogger.error({ key: 'elasticsearch_down get_report', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
       return {
         status: 502,
@@ -108,12 +99,7 @@ const getSIV = async (id, uuid) => {
       }
     }
 
-    appLogger.error({
-      error: 'Couldn\'t process Elasticsearch response',
-      id,
-      uuid,
-      remote_error: errorMessage,
-    })
+    syslogLogger.error({ key: 'Couldn\'t process Elasticsearch response', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
     return {
       status: 500,
@@ -153,8 +139,10 @@ export const generateGetReport = (utacClient) =>
   async (req, res) => {
     const { id, uuid, options: { ignoreUtacCache } } = req.body
     appLogger.warn(`-- CONFIG -- ignoreUtacCache => ${ignoreUtacCache}`)
+    syslogLogger.debug({ key: 'ignoreUtacCache', tag: 'CONFIG', value: { ignoreUtacCache } })
 
     appLogger.info(`-- idv ==> ${id}`)
+    syslogLogger.debug({ key: 'idv', tag: 'CONFIG', value: { idv: id } })
 
     if (!checkUuid(uuid) || !checkId(id)) {
       appLogger.error({

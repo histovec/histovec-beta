@@ -2,7 +2,7 @@ import axios from 'axios'
 import { readFileSync } from 'fs'
 import { utacResponseSchema } from '../services/utac/schemas/response.js'
 import { Agent as HttpsAgent } from 'https'
-import { appLogger } from '../util/logger.js'
+import { appLogger, syslogLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 
@@ -117,13 +117,18 @@ class UTACClient {
     }
 
     const authInterceptor = async (request) => {
-      appLogger.debug({
-        debug: `UTAC - ${request.url}`,
-        data: request.data || {},
-        auth: request.auth || {},
-        headersCommon: request.headers.common || {},
-        headers: request.headers || {},
-      })
+      syslogLogger.debug(
+        {
+          key: `requete_to ${request.url}`,
+          tag: 'UTAC',
+          value: {
+            data: request.data || {},
+            auth: request.auth || {},
+            headersCommon: request.headers.common || {},
+            headers: request.headers || {},
+          },
+        },
+      )
 
       if (!needAuth(request)) {
         return request
@@ -141,12 +146,7 @@ class UTACClient {
       const status = error?.response?.status || 'default'
       const message = ERROR_MESSAGES[status]
 
-      appLogger.debug({
-        debug: 'errorInterceptor',
-        error,
-        status,
-        message,
-      })
+      syslogLogger.debug({ key: 'error_interceptor', tag: 'UTAC', value: { status, message } })
 
       const customError = new Error(message)
       customError.status = status === 'default' ? 500 : status
@@ -159,9 +159,7 @@ class UTACClient {
   }
 
   async healthCheck () {
-    appLogger.debug({
-      debug: '[UTAC] Client - healthCheck',
-    })
+    syslogLogger.debug({ key: 'Client - healthCheck', tag: 'UTAC' })
 
     const { status } = await this.axios.get('/healthcheck').catch(err => err)
 
@@ -179,10 +177,7 @@ class UTACClient {
 
       const token = response.data && response.data.token
       if (token) {
-        appLogger.debug({
-          debug: '[UTAC] authentication succeed',
-          token,
-        })
+        syslogLogger.debug({ key: 'authentication succeed', tag: 'UTAC', value: { token } })
 
         const authorizationHeader = `bearer ${token}`
         this.axios.defaults.headers.common.Authorization = authorizationHeader
@@ -190,14 +185,9 @@ class UTACClient {
         return authorizationHeader
       }
 
-      appLogger.error({
-        error: '[UTAC] authentication_error no_token',
-      })
+      syslogLogger.error({ key: 'authentication_error no_token', tag: 'UTAC' })
     } catch (error) {
-      appLogger.error({
-        error: '[UTAC] authentication_failed',
-        remoteError: error,
-      })
+      syslogLogger.error({ key: 'authentication_failed', tag: 'UTAC', value: { error } })
     }
   }
 
