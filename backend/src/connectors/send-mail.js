@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import config from '../config.js'
-import { appLogger, techLogger } from '../util/logger.js'
+import { syslogLogger } from '../util/logger.js'
 
 export const sendMail = async ({ from, to, cc, subject, content: html }) => {
   let transporter
@@ -35,14 +35,13 @@ export const sendMail = async ({ from, to, cc, subject, content: html }) => {
       subject,
       html,
     })
-    appLogger.info(`Mail sent: ${info.messageId} - ${info.response}`)
-
+    syslogLogger.info({ key: 'Mail sent:', tag: 'MAIL', value: { messageId: info.messageId, reponse: info.response } })
     if (isMailerMocked) {
       // Preview only available when sending through an Ethereal account
-      appLogger.info(`Preview URL for email: -  ${nodemailer.getTestMessageUrl(info)}  -`)
+      syslogLogger.debug({ key: 'Preview URL for email: ', tag: 'MAIL', value: { lien: nodemailer.getTestMessageUrl(info) } })
     }
   } catch (error) {
-    techLogger.error(error)
+    syslogLogger.error({ key: '❌ Error while sending mail : ', tag: 'MAIL', value: error })
     throw error
   } finally {
     transporter.close()
