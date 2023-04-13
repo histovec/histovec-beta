@@ -25,12 +25,12 @@ export default defineComponent({
       taille="md"
     />
     <div class="fr-tile__body">
-      <h4 class="fr-tile__title">
+      <h3 class="fr-tile__title">
         <span class="fr-tile__link">{{ titre }}</span>
-      </h4>
-      <p class="fr-tile__desc">
+      </h3>
+      <div class="fr-tile__desc">
         <slot />
-      </p>
+      </div>
     </div>
   </div>
 </template>

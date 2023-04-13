@@ -3,6 +3,8 @@ import { defineComponent } from 'vue'
 
 import logoHistoVec from '@/assets/img/logo_histovec_simple.svg?url'
 
+import '@/assets/stylesheets/globale.css'
+
 export default defineComponent({
   name: 'HistoVecHeader',
 
@@ -23,7 +25,7 @@ export default defineComponent({
         },
         {
           to: 'faq',
-          text: 'FAQ & Liens utiles',
+          text: 'FAQ et Liens utiles',
         },
         {
           to: 'contact',
@@ -61,13 +63,14 @@ export default defineComponent({
 
 <template>
   <header
+    id="header"
     role="banner"
     class="fr-header"
   >
     <div class="fr-header__body">
       <div class="fr-container">
         <div class="fr-header__body-row">
-          <div class="fr-header__brand fr-enlarge-link">
+          <div class="fr-header__brand fr-enlarge-link background-default-white">
             <div class="fr-header__brand-top">
               <div class="fr-header__logo">
                 <p class="fr-logo">

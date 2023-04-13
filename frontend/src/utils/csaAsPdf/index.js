@@ -39,6 +39,8 @@ export const generateCsa = async (
 	} = {},
 ) => {
 	const doc = await PDFDocument.create()
+  doc.setTitle('Certificat de situation administrative détaillé', { showInWindowTitleBar: true })
+  doc.setAuthor('Histovec')
 
 	const font = await doc.embedFont(FONT)
 	const fontItalic = await doc.embedFont(FONT_ITALIC)

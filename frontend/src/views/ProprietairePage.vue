@@ -3,8 +3,8 @@ import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import ImagePresentation from '@/components/ImagePresentation.vue'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
+import { sleep } from '../utils/sleep';
 
-import { ANTS_PERSONAL_DATA_EMAIL } from '@/constants/email.js'
 import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
 
@@ -24,7 +24,6 @@ import imagePrenomsSIV from '@/assets/img/aide/siv_prenoms.jpg'
 import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatriculation.jpg'
 import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
 import api from '@/api/index.js'
-
 
 export default defineComponent({
   name: 'ProprietairePage',
@@ -67,11 +66,17 @@ export default defineComponent({
         },
       }
     )
+    const mentionChampObligatoire ='Les champs marqués d\'un astérisque sont obligatoires.'
+    const tabSivTitles = [{ title: 'Particulier', panelId: 'siv-tab-content-0', tabId:'siv-tab-0'}, { title: 'Personne morale', panelId: 'siv-tab-content-1', tabId:'siv-tab-1'}]
+    const tabFniTitles = [{ title: 'Particulier', panelId: 'fni-tab-content-0', tabId:'fni-tab-0'}, { title: 'Personne morale', panelId: 'fni-tab-content-1', tabId:'fni-tab-1'}]
 
     return {
       formData,
       collerPressePapierEtDistribuerDansFormulaire: collerPressePapierEtDistribuerDansFormulaire,
       CHAMP_MODIFIE: CHAMP_MODIFIE,
+      tabSivTitles,
+      tabFniTitles,
+      mentionChampObligatoire,
       modals: {
         common: {
           numeroSiren: {
@@ -120,9 +125,6 @@ export default defineComponent({
       TYPE_IMMATRICULATION,
       OLD_IMMATRICULATION_TYPE,
 
-      // email
-      ANTS_PERSONAL_DATA_EMAIL,
-
       images: {
         plaqueNonSupporteeSvg,
         plaqueFniSvg,
@@ -144,7 +146,6 @@ export default defineComponent({
   },
 
   computed: {
-
     // @todo @focusTrap:
     // Implémenter un focus automatique sur le 1er élément du formulaire (en haut à gauche) lors de la sélection d’un format de plaque (SIV ou FNI) pour que l’usager n’ait pas à scroller sur le formulaire suite à la sélection.
     // (probablement via la dépendance 'focus-trap-vue')
@@ -250,34 +251,6 @@ export default defineComponent({
 
     // ----- Error messages -----
 
-    nomSivErrorMessage () {
-      return (
-        this.formData.siv.titulaire.particulier.nom && !this.isNomSivValid ?
-          'Le nom doit être renseigné tel qu\'indiqué sur le certificat d\'immatriculation.' :
-          ''
-      )
-    },
-    prenomsSivErrorMessage () {
-      return (
-        this.formData.siv.titulaire.particulier.prenoms && !this.isPrenomsSivValid ?
-          'Le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
-          ''
-      )
-    },
-    raisonSocialeSivErrorMessage () {
-      return (
-        this.formData.siv.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeSivValid ?
-          'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
-          ''
-      )
-    },
-    numeroSirenSivErrorMessage () {
-      return (
-        !this.isNumeroSirenSivValid ?
-          'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
-          ''
-      )
-    },
     numeroImmatriculationSivErrorMessage () {
       return (
         this.formData.siv.numeroImmatriculation && !this.isNumeroImmatriculationSivValid ?
@@ -289,28 +262,6 @@ export default defineComponent({
       return (
         this.formData.siv.numeroFormule && !this.isNumeroFormuleSivValid ?
           'Le numéro de formule doit respecter le format "2013BZ80335".' :
-          ''
-      )
-    },
-
-    nomEtPrenomsFniErrorMessage () {
-      return (
-        this.formData.fni.titulaire.particulier.nomEtPrenoms && !this.isNomEtPrenomsFniValid ?
-          'Le nom et le ou les prénoms doivent être renseignés tel(s) qu\'indiqué(s) sur le certificat d\'immatriculation.' :
-          ''
-      )
-    },
-    raisonSocialeFniErrorMessage () {
-      return (
-        this.formData.fni.titulaire.personneMorale.raisonSociale && !this.isRaisonSocialeFniValid ?
-          'La raison sociale doit être renseignée telle qu\'indiquée sur le kbis.' :
-          ''
-      )
-    },
-    numeroSirenFniErrorMessage () {
-      return (
-        !this.isNumeroSirenFniValid ?
-          'Le numéro SIREN doit comporter 9 chiffres ou être vide. Format : 123456789.' :
           ''
       )
     },
@@ -329,24 +280,54 @@ export default defineComponent({
       )
     },
   },
+  watch: {
+    'formData.typeImmatriculation': function (val) {
+      sleep(100).then(() => {
+        if (val === TYPE_IMMATRICULATION.SIV) {
+          if (this.tabs.siv.selectedTabIndex === 0) {
+            this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+            document.getElementById('form-siv-particulier-nom-naissance').focus()
+          } else {
+            this.selectSivTab(0)
+          }
+        }
+        if (val === TYPE_IMMATRICULATION.FNI) {
+          if (this.tabs.fni.selectedTabIndex === 0) {
+            this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+            document.getElementById('form-fni-particulier-nom-prenom').focus()
+          } else {
+            this.selectFniTab(0)
+          }
+        }
+      })
+    },
+    'tabs.siv.selectedTabIndex': function (val) {
+      sleep(300).then(() => {
+        if (val === 0) {
+          document.getElementById('form-siv-particulier-nom-naissance').focus()
+        }
+        if (val === 1) {
+          document.getElementById('form-siv-personne-morale-raison-sociale').focus()
+        }
+      })
+    },
+    'tabs.fni.selectedTabIndex': function (val) {
+      sleep(300).then(() => {
+        if (val === 0) {
+          document.getElementById('form-fni-particulier-nom-prenom').focus()
+        }
+        if (val === 1) {
+          document.getElementById('form-fni-personne-morale-raison-sociale').focus()
+        }
+      })
+    },
+  },
 
   created () {
     api.log('/search')
   },
 
   methods: {
-    selectTypeImmatriculation (typeImmatriculation) {
-      this.formData.typeImmatriculation = typeImmatriculation
-      if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
-        this.selectSivTab(0)
-        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
-      }
-      if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-        this.selectFniTab(0)
-        this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
-      }
-    },
-
     // Modales communes (SIV et FNI)
     onOpenModalNumeroSiren () {
       this.modals.common.numeroSiren.opened = true
@@ -480,6 +461,18 @@ export default defineComponent({
           dateEmissionCertificatImmatriculation: '',
         },
       }
+      if(this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
+        this.$refs.SIVPlaque.focus()
+      }
+      if(this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
+        this.$refs.FNIPlaque.focus()
+      }
+    },
+    setOpacite (typeImmatriculationCompare) {
+      return this.formData.typeImmatriculation && this.formData.typeImmatriculation !== typeImmatriculationCompare
+    },
+    setActive (typeImmatriculationCompare) {
+      return this.formData.typeImmatriculation === typeImmatriculationCompare;
     },
   },
 })
@@ -502,10 +495,7 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation
-        :src="images.proprietaireSVG"
-        alt="Illustration de la page du propriétaire"
-      />
+      <ImagePresentation :src="images.proprietaireSVG" />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Rassurez vos acheteurs potentiels</h1>
@@ -522,11 +512,11 @@ export default defineComponent({
     <div class="fr-col-12">
       <p class="fr-text--md">
         HistoVec permet de consulter l'historique administratif de votre véhicule enregistré dans le Système
-        d'Immatriculation des Véhicules (SIV).
+        d'Immatriculation des Véhicules (S&#8203;I&#8203;V&#8203;).
       </p>
       <p class="fr-text--md">
         Pour toute demande de renseignements sur votre dossier ou de correction des informations,
-        adressez-vous à l'Agence Nationale Des Titres Sécurisés (ANTS) en suivant la procédure indiquée sur cette page :
+        adressez-vous à l'Agence Nationale Des Titres Sécurisés (A&#8203;N&#8203;T&#8203;S) en suivant la procédure indiquée sur cette page :
         <a
           class="fr-link"
           href="https://immatriculation.ants.gouv.fr/demarches-en-ligne"
@@ -536,85 +526,151 @@ export default defineComponent({
       </p>
     </div>
   </div>
-
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-11  fr-col-lg-8  fr-col-xl-8  text-center">
-      <h6>Veuillez sélectionner le format d'immatriculation de votre véhicule</h6>
+      <h3 class="fr-h4">
+        Veuillez sélectionner le format d'immatriculation de votre véhicule
+      </h3>
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.SIV }"
-        :src="images.plaqueSivSvg"
-        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.SIV)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation depuis 2009
-      </p>
-    </div>
-
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== TYPE_IMMATRICULATION.FNI }"
-        :src="images.plaqueFniSvg"
-        @click="() => selectTypeImmatriculation(TYPE_IMMATRICULATION.FNI)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation avant 2009
-      </p>
-    </div>
-
-    <div class="fr-col-12  fr-col-md-3 fr-col-lg-3  fr-col-xl-3  text-center">
-      <img
-        class="histovec-numero-immatriculation"
-        :class="{ 'histovec-numero-immatriculation-opacity': formData.typeImmatriculation !== OLD_IMMATRICULATION_TYPE }"
-        :src="images.plaqueNonSupporteeSvg"
-        @click="() => selectTypeImmatriculation(OLD_IMMATRICULATION_TYPE)"
-      />
-      <p class="fr-text--xs">
-        Immatriculation avant 1995
-      </p>
-    </div>
+  <div class="fr-form-group">
+    <fieldset class="fr-fieldset">
+      <legend
+        id="radio-rich-legend"
+        class="fr-fieldset__legend"
+      >
+        Sélectionner le type de votre plaque d'immatriculation :
+      </legend>
+      <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
+        <li>
+          <label
+            :for="TYPE_IMMATRICULATION.SIV"
+            class="card-immatriculation"
+            :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.SIV) }"
+          >
+            <span class="card-immatriculation--image--wrap">
+              <img
+                class="card-immatriculation--image"
+                :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.SIV) }"
+                :src="images.plaqueSivSvg"
+                alt="Format d'immatriculation depuis 2009"
+                title="Format d'immatriculation depuis 2009"
+              />
+            </span>
+            <input
+              :id="TYPE_IMMATRICULATION.SIV"
+              ref="SIVPlaque"
+              v-model="formData.typeImmatriculation"
+              name="Immatriculation depuis 2009"
+              class="card-immatriculation--radio"
+              type="radio"
+              :value="TYPE_IMMATRICULATION.SIV"
+            >
+            <span
+              class="fr-label fr-mt-3w"
+            >Immatriculation depuis 2009
+            </span>
+          </label>
+        </li>
+        <li>
+          <label
+            :for="TYPE_IMMATRICULATION.FNI"
+            class="card-immatriculation"
+            :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.FNI) }"
+          >
+            <span class="card-immatriculation--image--wrap">
+              <img
+                class="card-immatriculation--image"
+                :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.FNI) }"
+                :src="images.plaqueFniSvg"
+                alt="Format d'immatriculation avant 2009"
+                title="Format d'immatriculation avant 2009"
+              />
+            </span>
+            <input
+              :id="TYPE_IMMATRICULATION.FNI"
+              ref="FNIPlaque"
+              v-model="formData.typeImmatriculation"
+              name="Immatriculation avant 2009"
+              class="card-immatriculation--radio"
+              type="radio"
+              :value="TYPE_IMMATRICULATION.FNI"
+            >
+            <span
+              class="fr-label fr-mt-3w"
+            >Immatriculation avant 2009
+            </span>
+          </label>
+        </li>
+        <li>
+          <label
+            :for="OLD_IMMATRICULATION_TYPE"
+            class="card-immatriculation"
+            :class="{ 'card-immatriculation--active': setActive(OLD_IMMATRICULATION_TYPE) }"
+          >
+            <span class="card-immatriculation--image--wrap">
+              <img
+                class="card-immatriculation--image"
+                :class="{ 'card-immatriculation--image--opacity': setOpacite(OLD_IMMATRICULATION_TYPE) }"
+                :src="images.plaqueNonSupporteeSvg"
+                alt="Format d'immatriculation avant 1995"
+                title="Format d'immatriculation avant 1995"
+              />
+            </span>
+            <input
+              :id="OLD_IMMATRICULATION_TYPE"
+              v-model="formData.typeImmatriculation"
+              name="Immatriculation avant 1995"
+              class="card-immatriculation--radio"
+              type="radio"
+              :value="OLD_IMMATRICULATION_TYPE"
+            >
+            <span
+              class="fr-label fr-mt-3w"
+            >Immatriculation avant 1995
+            </span>
+          </label>
+        </li>
+      </ul>
+    </fieldset>
   </div>
 
   <!-- Modals -->
   <DsfrModal
     ref="modalNumeroSiren"
     :opened="modals.common.numeroSiren.opened"
-    title="Où trouver le numéro de SIREN ?"
+    title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N ?"
     :origin="$refs.buttonNumeroSiren"
     @close="onCloseModalNumeroSiren()"
   >
     <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
       <div class="fr-col-12">
         <p class="fr-text--md">
-          Le <span class="fr-text--bleu">numéro SIREN</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
+          Le <span class="fr-text--bleu">numéro S&#8203;I&#8203;R&#8203;E&#8203;N</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
           de votre société.
         </p>
         <p class="fr-text--md">
-          Il figure sur le <span class="fr-text--bleu">KBIS</span> de votre société.
+          Il figure sur le <span class="fr-text--bleu">K&#8203;B&#8203;I&#8203;S&#8203;</span> de votre société.
         </p>
         <p class="fr-text--md">
-          Vous pouvez aussi l'obtenir sur ce
+          Vous pouvez aussi l'obtenir sur le site
           <a
             class="fr-link"
+            title="Le site de societe.com"
             href="https://www.societe.com/"
             rel="noopener noreferrer"
             target="_blank"
           >
-            site
+            societe.com
           </a>
           en effectuant une <span class="fr-text--bleu">recherche avec le nom de votre société</span>.
         </p>
         <p class="fr-text--md">
-          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de SIREN</span>.
+          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de S&#8203;I&#8203;R&#8203;E&#8203;N</span>.
         </p>
         <p class="fr-text--md">
-          Dans ce cas, <span class="fr-text--bleu">laissez le champs SIREN vide</span>.
+          Dans ce cas, <span class="fr-text--bleu">laissez le champs S&#8203;I&#8203;R&#8203;E&#8203;N vide</span>.
         </p>
       </div>
     </div>
@@ -755,16 +811,20 @@ export default defineComponent({
       class="fr-col-12"
     >
       <DsfrTabs
-        tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format SIV"
-        :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
+        tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format S&#8203;I&#8203;V"
+        :tab-titles="tabSivTitles"
         @select-tab="selectSivTab"
       >
         <DsfrTabContent
+          class="background-default-white"
           panel-id="siv-tab-content-0"
           tab-id="siv-tab-0"
           :selected="tabs.siv.selectedTabIndex === 0"
           :asc="tabs.siv.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -772,24 +832,31 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNomSivValid"
-                :error-message="nomSivErrorMessage"
+                description-id="nom-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   id="form-siv-particulier-nom-naissance"
                   v-model="formData.siv.titulaire.particulier.nom"
                   label="Nom de naissance"
                   label-visible
+                  autocomplete="family-name"
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNomSivValid"
+                  aria-errormessage="nom-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonSivNom"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le nom sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le nom sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNom()"
+                      @keydown.enter="onOpenModalSivNom()"
                     >
                       Où le trouver
                       <VIcon
@@ -804,24 +871,30 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isPrenomsSivValid"
-                :error-message="prenomsSivErrorMessage"
               >
                 <DsfrInput
                   id="form-siv-particulier-prenom"
                   v-model="formData.siv.titulaire.particulier.prenoms"
                   label="Prénom(s)"
                   label-visible
+                  autocomplete="given-name"
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isPrenomsSivValid"
+                  aria-errormessage="prenom-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonSivPrenoms"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivPrenoms()"
+                      @keydown.enter="onOpenModalSivPrenoms()"
                     >
                       Où le(s) trouver
                       <VIcon
@@ -843,6 +916,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationSivValid"
                 :error-message="numeroImmatriculationSivErrorMessage"
+                description-id="numero-immatriculation-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   id="form-siv-particulier-numero-immatriculation"
@@ -852,14 +926,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationSivValid"
+                  aria-errormessage="numero-immatriculation-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonSivNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalSivNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
@@ -875,6 +955,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroFormuleSivValid"
                 :error-message="numeroFormuleSivErrorMessage"
+                description-id="numero-formule-particulier-SIV-erreur-message"
               >
                 <DsfrInput
                   id="form-siv-particulier-numero-formule"
@@ -884,14 +965,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroFormuleSivValid"
+                  aria-errormessage="numero-formule-particulier-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonSivNumeroFormule"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroFormule()"
+                      @keydown.enter="onOpenModalSivNumeroFormule()"
                     >
                       Où le trouver
                       <VIcon
@@ -907,11 +994,15 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="siv-tab-content-1"
           tab-id="siv-tab-1"
           :selected="tabs.siv.selectedTabIndex === 1"
           :asc="tabs.siv.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -921,16 +1012,18 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeSivValid"
-                :error-message="raisonSocialeSivErrorMessage"
               >
                 <DsfrInput
                   id="form-siv-personne-morale-raison-sociale"
                   v-model="formData.siv.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isRaisonSocialeSivValid"
+                  aria-errormessage="raison-sociale-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -941,22 +1034,28 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenSivValid"
-                :error-message="numeroSirenSivErrorMessage"
+                :error-message='!isNumeroSirenSivValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'
+                description-id="numero-siren-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   id="form-siv-personne-morale-numero-siren"
                   v-model="formData.siv.titulaire.personneMorale.numeroSiren"
-                  label="Numéro SIREN"
+                  label="Numéro S&#8203;I&#8203;R&#8203;E&#8203;N"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
+                  :aria-invalid="!isNumeroSirenSivValid"
+                  aria-errormessage="numero-siren-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <span
                       ref="buttonNumeroSiren"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de SIREN de votre société ?"
+                      title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
                       @click="onOpenModalNumeroSiren()"
+                      @keydown.enter="onOpenModalNumeroSiren()"
                     >
                       Où le trouver
                       <VIcon
@@ -978,6 +1077,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationSivValid"
                 :error-message="numeroImmatriculationSivErrorMessage"
+                description-id="numero-immatriculation-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   id="form-siv-personne-morale-numero-immatriculation"
@@ -987,14 +1087,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationSivValid"
+                  aria-errormessage="numero-immatriculation-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonSivNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalSivNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
@@ -1010,6 +1116,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroFormuleSivValid"
                 :error-message="numeroFormuleSivErrorMessage"
+                description-id="numero-formule-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
                   id="form-siv-personne-morale-numero-formule"
@@ -1019,14 +1126,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroFormuleSivValid"
+                  aria-errormessage="numero-formule-personne-morale-SIV-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonSivNumeroFormule"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format SIV"
+                      title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
                       @click="onOpenModalSivNumeroFormule()"
+                      @keydown.enter="onOpenModalSivNumeroFormule()"
                     >
                       Où le trouver
                       <VIcon
@@ -1048,15 +1161,19 @@ export default defineComponent({
     >
       <DsfrTabs
         tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format FNI"
-        :tab-titles="[{ title: 'Particulier'}, { title: 'Personne morale'}]"
+        :tab-titles="tabFniTitles"
         @select-tab="selectFniTab"
       >
         <DsfrTabContent
+          class="background-default-white"
           panel-id="fni-tab-content-0"
           tab-id="fni-tab-0"
           :selected="tabs.fni.selectedTabIndex === 0"
           :asc="tabs.fni.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -1066,24 +1183,30 @@ export default defineComponent({
             <div class="fr-col-12">
               <DsfrInputGroup
                 :is-valid="isNomEtPrenomsFniValid"
-                :error-message="nomEtPrenomsFniErrorMessage"
               >
                 <DsfrInput
                   id="form-fni-particulier-nom-prenom"
                   v-model="formData.fni.titulaire.particulier.nomEtPrenoms"
                   label="Nom de naissance et prénom(s)"
                   label-visible
+                  autocomplete="name"
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNomEtPrenomsFniValid"
+                  aria-errormessage="nom-et-prenom-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonFniNomEtPrenoms"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le nom et le(s) prénom(s) sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniNomEtPrenoms()"
+                      @keydown.enter="onOpenModalFniNomEtPrenoms()"
                     >
                       Où les trouver
                       <VIcon
@@ -1104,7 +1227,9 @@ export default defineComponent({
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
+                :is-valid="isNumeroImmatriculationFniValid"
                 :error-message="numeroImmatriculationFniErrorMessage"
+                description-id="numero-immatriculation-particulier-FNI-erreur-message"
               >
                 <DsfrInput
                   id="form-fni-particulier-numero-immatriculation"
@@ -1114,14 +1239,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationFniValid"
+                  aria-errormessage="numero-immatriculation-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonFniNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalFniNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
@@ -1137,6 +1268,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isDateEmissionCertificatImmatriculationFniValid"
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
+                description-id="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
               >
                 <DsfrInput
                   id="form-fni-particulier-date-emission"
@@ -1146,14 +1278,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
+                  aria-errormessage="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonFniDateEmissionCertificatImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                      @keydown.enter="onOpenModalFniDateEmissionCertificatImmatriculation()"
                     >
                       Où la trouver
                       <VIcon
@@ -1169,11 +1307,15 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="fni-tab-content-1"
           tab-id="fni-tab-1"
           :selected="tabs.fni.selectedTabIndex === 1"
           :asc="tabs.fni.tabsAsc"
         >
+          <p class="fr-text--xs">
+            {{ mentionChampObligatoire }}
+          </p>
           <p class="fr-text--md  histovec-input-group-title">
             Titulaire
           </p>
@@ -1183,16 +1325,18 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isRaisonSocialeFniValid"
-                :error-message="raisonSocialeFniErrorMessage"
               >
                 <DsfrInput
                   id="form-fni-personne-morale-raison-sociale"
                   v-model="formData.fni.titulaire.personneMorale.raisonSociale"
                   label="Raison sociale"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isRaisonSocialeFniValid"
+                  aria-errormessage="raison-sociale-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1203,22 +1347,28 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenFniValid"
-                :error-message="numeroSirenFniErrorMessage"
+                :error-message='!isNumeroSirenFniValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'
+                description-id="numero-siren-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   id="form-fni-personne-morale-numero-siren"
                   v-model="formData.fni.titulaire.personneMorale.numeroSiren"
-                  label="Numéro SIREN"
+                  label="Numéro S&#8203;I&#8203;R&#8203;E&#8203;N"
                   label-visible
-                  hint="Tel qu'indiqué sur le kbis. Format: 123456789 ou vide si vous n'en avez pas."
+                  hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
+                  :aria-invalid="!isNumeroSirenFniValid"
+                  aria-errormessage="numero-siren-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <span
                       ref="buttonNumeroSiren"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
-                      title="Où trouver le numéro de SIREN de votre société ?"
+                      title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
                       @click="onOpenModalNumeroSiren()"
+                      @keydown.enter="onOpenModalNumeroSiren()"
                     >
                       Où le trouver
                       <VIcon
@@ -1241,6 +1391,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isNumeroImmatriculationFniValid"
                 :error-message="numeroImmatriculationFniErrorMessage"
+                description-id="numero-immatriculation-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   id="form-fni-personne-morale-numero-immatriculation"
@@ -1250,14 +1401,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isNumeroImmatriculationFniValid"
+                  aria-errormessage="numero-immatriculation-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonFniNumeroImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniNumeroImmatriculation()"
+                      @keydown.enter="onOpenModalFniNumeroImmatriculation()"
                     >
                       Où le trouver
                       <VIcon
@@ -1273,6 +1430,7 @@ export default defineComponent({
               <DsfrInputGroup
                 :is-valid="isDateEmissionCertificatImmatriculationFniValid"
                 :error-message="dateEmissionCertificatImmatriculationFniErrorMessage"
+                description-id="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
                   id="form-fni-personne-morale-date-emission"
@@ -1282,14 +1440,20 @@ export default defineComponent({
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
                   @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
+                  aria-required="true"
+                  :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
+                  aria-errormessage="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
                     <span
                       ref="buttonFniDateEmissionCertificatImmatriculation"
+                      tabindex="0"
+                      role="button"
                       class="fr-link  help-link"
                       title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
                       @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                      @keydown.enter="onOpenModalFniDateEmissionCertificatImmatriculation()"
                     >
                       Où la trouver
                       <VIcon
@@ -1313,10 +1477,11 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
       <DsfrAlert
         type="info"
+        role="alert"
         title="Historique indisponible à ce jour"
         description="
           L'historique de ce véhicule n'est pas disponible sur HistoVec à ce jour.
-          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (CSA) sur le site de l'ANTS.
+          Nous vous invitons à télécharger le Certificat de Situation Administrative détaille (C&#8203;S&#8203;A) sur le site de l'A&#8203;N&#8203;T&#8203;S.
         "
       />
     </div>
@@ -1327,7 +1492,7 @@ export default defineComponent({
   >
     <div class="fr-col-12  fr-col-lg-3  fr-col-xl-3  text-center">
       <HistoVecButtonLink
-        label="Obtenir le CSA via l'ANTS"
+        label="Obtenir le C&#8203;S&#8203;A via l'A&#8203;N&#8203;T&#8203;S"
         to="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
       />
     </div>
@@ -1363,23 +1528,13 @@ export default defineComponent({
     </div>
   </div>
 </template>
-
 <style scoped>
 .histovec-input-group-title {
   font-weight: bold !important;
 }
 
-.histovec-numero-immatriculation {
-  cursor: pointer;
-  height: 2.5rem;
-}
-
-.histovec-numero-immatriculation-opacity {
-  opacity: 0.2;
-}
-
 .required-label {
-  color: red;
+  color: var(--red-marianne-main-472);
 }
 
 .text-center {
@@ -1393,5 +1548,43 @@ export default defineComponent({
 
 .help-icon {
   margin-left: 0.2rem;
+}
+.card-immatriculation {
+  text-align: center;
+  width: 270px;
+  margin: 1rem;
+  cursor: pointer;
+  background: var(--background-default-grey);
+  border: 2px var(--grey-925-125) solid;
+  padding: 1rem;
+  display:block;
+}
+.card-immatriculation--active {
+  border-color: var(--blue-france-sun-113-625);
+}
+.card-immatriculation:hover,
+.card-immatriculation:focus,
+.card-immatriculation:focus-within {
+  background: var(--grey-1000-50-hover);
+  outline: 2px solid var(--info-425-625-hover);
+}
+.card-immatriculation:hover img,
+.card-immatriculation:focus img,
+.card-immatriculation:focus-within img {
+  opacity: 1;
+}
+.card-immatriculation--image--wrap {
+  height: 70px;
+  width: 100%;
+}
+.card-immatriculation--image {
+  background: var(--background-default-grey);
+  height: 3rem;
+}
+.card-immatriculation--image--opacity {
+  opacity: 0.2;
+}
+.card-immatriculation--radio {
+  outline:none;
 }
 </style>

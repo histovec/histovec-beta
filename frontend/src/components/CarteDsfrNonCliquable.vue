@@ -1,5 +1,6 @@
 <script>
 import {defineComponent} from 'vue'
+import '@/assets/stylesheets/globale.css'
 
 
 export default defineComponent({
@@ -19,7 +20,7 @@ export default defineComponent({
     },
     alt: {
       type: String,
-      default: null,
+      default: '',
     },
     image: {
       type: String,
@@ -36,16 +37,12 @@ export default defineComponent({
 
       return 'carte-' + newId
     },
-    getAlt() {
-      if (this.alt && this.alt.length > 0) return this.alt
-      return null
-    },
   },
 })
 </script>
 
 <template>
-  <div :id="getId()" class="fr-card fr-card--no-arrow">
+  <div :id="getId()" class="fr-card fr-card--no-arrow background-default-white">
     <div class="fr-card__body">
       <h4 class="fr-card__title">
         <span>{{ titre }}</span>
@@ -53,7 +50,7 @@ export default defineComponent({
       <p class="fr-card__desc">{{ description }}</p>
     </div>
     <div class="fr-card__img">
-      <img class="fr-responsive-img" :src="image" :alt="getAlt()"/>
+      <img class="fr-responsive-img" :src="image" :alt="alt"/>
       <!-- L’alternative de l’image (attribut alt) doit rester vide car l’image est illustrative et ne doit pas être restituée aux technologies d’assistance -->
     </div>
   </div>

@@ -2,6 +2,8 @@
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import '@/assets/stylesheets/globale.css'
+
 import { mailTo } from '@/utils/email.js'
 import {
   HISTOVEC_BASE_URL,
@@ -49,9 +51,9 @@ export default defineComponent({
     <div class="fr-col-12">
       <h1>Mentions légales</h1>
 
-      <h5>
+      <h2>
         Informations éditeurs
-      </h5>
+      </h2>
       <p>
         Ce site est géré par la Délégation à la sécurité routière (DSR) du ministère de l’intérieur, Place Beauvau 75800 PARIS CEDEX 08 Tél. : 01 49 27 49 27.
       </p>
@@ -59,16 +61,16 @@ export default defineComponent({
         Il est hébergé par la Direction du numérique (DNUM) du ministère de l’intérieur - Place Beauvau - 75800 Paris CEDEX 08.
       </p>
 
-      <h5>
+      <h3>
         Directeur de la publication
-      </h5>
+      </h3>
       <p>
         Marie GAUTIER-MELLERAY, déléguée interministérielle à la sécurité routière.
       </p>
 
-      <h5>
+      <h3>
         Avertissement
-      </h5>
+      </h3>
       <p>
         Malgré tout le soin apporté à la mise en ligne des informations, des erreurs typographiques ou des inexactitudes techniques ne peuvent être exclues. Le ministère de l’intérieur se réserve le droit de les corriger à tout moment dès qu’elles sont portées à sa connaissance.
       </p>
@@ -83,9 +85,9 @@ export default defineComponent({
         sont susceptibles de faire l’objet de mise à jour à tout moment.
       </p>
 
-      <h5>
+      <h3>
         Crédits
-      </h5>
+      </h3>
       <p>
         Le ministère de l'intérieur est titulaire des droits relatifs à la propriété intellectuelle des contenus (infographies et autres éléments techniques et graphiques), disponibles sur le site
         <router-link
@@ -119,9 +121,9 @@ export default defineComponent({
         et libres de droits.
       </p>
 
-      <h5>
+      <h2>
         Conception et réalisation
-      </h5>
+      </h2>
       <p>
         Conception et réalisation direction du numérique du ministère de l'intérieur avec le bureau de l'expertise automobile (BEA) de la Délégation à la sécurité routière (
         <a
@@ -135,9 +137,9 @@ export default defineComponent({
         ).
       </p>
 
-      <h5>
+      <h3>
         Liens hypertextes entrants
-      </h5>
+      </h3>
       <p>
         Tout site public ou privé est autorisé à établir, sans autorisation préalable, un lien hypertexte vers le site HistoVec.
         En revanche les pages du site
@@ -152,9 +154,9 @@ export default defineComponent({
         L’autorisation de mise en place d’un lien est valable pour tout support, à l’exception de ceux diffusant des informations à caractère polémique, pornographique, xénophobe ou pouvant, dans une plus large mesure, porter atteinte à la sensibilité du plus grand nombre.
       </p>
 
-      <h5>
+      <h3>
         Liens hypertextes sortants
-      </h5>
+      </h3>
       <p>
         Le site indique en permanence l'identité des sites externes indiqués en lien, et ce sur toutes les pages. Néanmoins, ces pages web dont les adresses URL sont régulièrement vérifiées ne font pas partie du site et par conséquent n'engagent en rien la responsabilité du site
         <router-link
@@ -166,9 +168,9 @@ export default defineComponent({
         .
       </p>
 
-      <h5>
+      <h3>
         Code applicatif open source
-      </h5>
+      </h3>
       <p>
         Conformément à la
         <a
@@ -199,19 +201,19 @@ export default defineComponent({
         </a>.
       </p>
 
-      <h5>
+      <h2>
         Stabilité des adresses
-      </h5>
+      </h2>
       <p>Nous essayons de maintenir des adresses URL de pages stables. Toutefois, ce site pouvant faire à tout moment l’objet de réorganisations, nous ne pouvons pas garantir la stabilité de l’adresse des pages internes du site.</p>
 
-      <h5>
+      <h2>
         Droit d’auteur
-      </h5>
+      </h2>
       <p>Les contenus disponibles sur ce site sont protégés par le droit d’auteur. Aux termes des dispositions de l’article L. 122-4 du code de la propriété intellectuelle, vous ne pouvez reproduire tout ou partie de ces œuvres sans en avoir obtenu l’autorisation expresse au préalable.</p>
 
-      <h5>
+      <h3>
         Limitations de responsabilité
-      </h5>
+      </h3>
       <p>Le site HistoVec fournit les informations issues du système d’immatriculation des véhicules (SIV). La responsabilité de l'éditeur ne peut être engagée sur des inexactitudes concernant les informations fournies, qu’elles proviennent d’erreurs issues du Système d’immatriculation des véhicules ou du traitement relatif à la gestion du contrôle technique des véhicules mis en œuvre par l’Organisme Technique Central, ou d’anomalies de traitement informatique.</p>
       <p>Les modalités d’exercice des droits d’accès, de rectification, d’effacement et d’opposition sont décrits ci-dessous.</p>
       <p>
@@ -256,9 +258,9 @@ export default defineComponent({
       </p>
       <p>Le droit à l’effacement, prévu à l’article 17 du RGPD, ne s’applique pas dans la mesure où le téléservice est nécessaire à l’exécution d’une mission d’intérêt public.</p>
 
-      <h5>
+      <h3>
         Disponibilité
-      </h5>
+      </h3>
       <p>
         Le ministère de l’intérieur s’efforce de donner accès en continu au site. Néanmoins, la responsabilité du ministère de l’intérieur ne peut être engagée en cas de non accessibilité à son site internet et à l’ensemble des téléservices proposés.
         <br>
@@ -267,9 +269,9 @@ export default defineComponent({
         Site optimisé pour Firefox 45+ et Chrome 50+.
       </p>
 
-      <h5>
+      <h3>
         Propriété intellectuelle et droits d'utilisation
-      </h5>
+      </h3>
       <p>
         L'utilisateur s'engage, sous peine de voir sa responsabilité civile et/ou pénale engagée, à ne pas utiliser le site HistoVec pour :
         <ul class="fr-ml-4w  fr-pl-0">
@@ -279,13 +281,14 @@ export default defineComponent({
         </ul>
       </p>
 
-      <h5>
+      <h2>
         Autre
-      </h5>
+      </h2>
       <div class="fr-col-12">
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
+              class="background-accordeon-white"
               title="Textes de référence"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -357,6 +360,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              class="background-accordeon-white"
               title="Pour en savoir plus"
               :expanded-id="expandedId"
               @expand="expandedId = $event"

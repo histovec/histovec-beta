@@ -1,11 +1,14 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
+import HistoVecButtonInternLink from '@/components/HistoVecButtonInternLink.vue'
 
 const propsForButtonOnly = ['disabled', 'label', 'secondary', 'tertiary', 'icon', 'iconRight', 'iconOnly']
 
 export default defineComponent({
   name: 'HistoVecButtonLink',
+
+  components: { HistoVecButtonInternLink },
 
   inheritAttrs: false,
 
@@ -25,7 +28,6 @@ export default defineComponent({
     iconRight: Boolean,
     iconOnly: Boolean,
   },
-
   computed: {
     isExternalLink() {
       return typeof this.to === 'string' && this.to.startsWith('http')
@@ -52,7 +54,6 @@ export default defineComponent({
   },
 })
 </script>
-
 <template>
   <a
     v-if="isExternalLink"
@@ -63,12 +64,10 @@ export default defineComponent({
   >
     {{ label }}
   </a>
-  <router-link
+  <HistoVecButtonInternLink
     v-else
-    v-bind="routerLinkProps"
-  >
-    <DsfrButton
-      v-bind="buttonProps"
-    />
-  </router-link>
+    :router-link-props="routerLinkProps"
+    :button-props="buttonProps"
+    :to="to"
+  />
 </template>

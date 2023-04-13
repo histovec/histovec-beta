@@ -66,7 +66,7 @@ context('Accueil', () => {
 
   it("Naviguer vers page Données personnelles et Cookies", () => {
 
-    cy.get("a[class*='fr-footer__bottom-link']").contains("Données personnelles & Gestion des cookies").click();
+    cy.get("a[class*='fr-footer__bottom-link']").contains("Données personnelles et Gestion des cookies").click();
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_donnees_personnelles);
 
   })

@@ -1,6 +1,8 @@
 <script>
 import { defineComponent } from 'vue'
 
+import '@/assets/stylesheets/globale.css'
+
 export default defineComponent({
   name: 'AlerteComponent',
   props: {
@@ -44,6 +46,7 @@ export default defineComponent({
       :description="description"
       :type="type"
       :small="small"
+      role="alert"
       closeable
       @close="fermerAlerte"
     />

@@ -49,41 +49,45 @@ export default defineComponent({
             text: 'Accueil',
           },
           {
-            text: 'Données personnelles & Gestion des cookies',
+            text: 'Données personnelles et Gestion des cookies',
           },
         ]"
       />
     </div>
 
     <div class="fr-col-12">
-      <h1>Données personnelles & Gestion des cookies</h1>
+      <h1>Données personnelles et Gestion des cookies</h1>
 
-      <h5>
+      <h2>
         Introduction
-      </h5>
-      <p>
-        Conformément à la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés modifiée et au règlement général sur la protection des données (RGPD), la déléguée interministérielle à la sécurité routière (Place Beauvau 75800 Paris CEDEX 08), met en œuvre le service HistoVec (Historique des Véhicules) dont les finalités sont les suivantes :
+      </h2>
+      <div>
+        Conformément à la loi n° 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés
+        modifiée et au règlement général sur la protection des données (RGPD), la déléguée interministérielle à la
+        sécurité routière (Place Beauvau 75800 Paris CEDEX 08), met en œuvre le service HistoVec (Historique des
+        Véhicules) dont les finalités sont les suivantes :
         <ul class="fr-ml-4w  fr-pl-0">
           <li>Permettre aux propriétaires de véhicules de générer et de consulter l'historique et les informations techniques et administratives du véhicule ;</li>
           <li>Permettre de communiquer ce rapport à un acheteur potentiel ;</li>
           <li>Editer le certificat de situation administrative prévu à l’article R. 322-4 du code de la route.</li>
         </ul>
-      </p>
+      </div>
 
-      <h5>
+      <h2>
         Données collectées
-      </h5>
-      <p>
-        Ce téléservice a pour fondement juridique l’article 6 .1.e) du RGPD : « l'exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
+      </h2>
+      <div>
+        Ce téléservice a pour fondement juridique l’article 6 .1.e) du RGPD : « l'exécution d'une mission d'intérêt
+        public ou relevant de l'exercice de l'autorité publique dont est investi le responsable du traitement ».
         Il collecte les catégories de données suivantes :
         <ul class="fr-ml-4w  fr-pl-0">
-          <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° SIREN et/ou n° SIRET) ;</li>
+          <li>Les données d’identification des personnes physiques ou morales, propriétaire du véhicule (Nom/Prénom ou Raison Sociale/n° S&#8203;I&#8203;R&#8203;E&#8203;N et/ou n° SIRET) ;</li>
           <li>Les données d’identification du véhicule (numéro d’immatriculation, numéro VIN, numéro de formule du certificat d’immatriculation ou date du certificat d'immatriculation) ;</li>
           <li>Les données d’historique du véhicule (notamment date de mise en circulation, date de première immatriculation, marque, modèle, couleur, puissance CV, date de sinistre, état de vol, état de perte, gages, oppositions, procédures, résultats des contrôles techniques, kilométrages) ;</li>
           <li>Traces fonctionnelles : deux traceurs utilisés par l'observatoire de la qualité des démarches numériques. Ces traceurs sont activés par les utilisateurs qui donnent leurs avis sur le site HistoVec, à destination de l'observatoire de la qualité des démarches numériques. Ils portent sur l’identifiant de session, et la langue et la mesure d'audience.</li>
           <li>Statistiques.</li>
         </ul>
-      </p>
+      </div>
 
       <p>
         Les données d’identification des personnes et d’historique du véhicule sont collectées dans le Système d’immatriculation des Véhicules (SIV) et l’UTAC-OTC.
@@ -105,9 +109,9 @@ export default defineComponent({
         Les données relatives aux résultats des contrôles techniques et au kilométrage des véhicules proviennent de l’UTAC –OTC. HistoVec interroge la base de données de l’UTAC-OTC lors de chaque consultation.
       </p>
 
-      <h5>
+      <h2>
         Conservation des données
-      </h5>
+      </h2>
       <p>
         Les durées de conservation des données sont les suivantes :
       </p>
@@ -116,8 +120,18 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <DsfrTable
-        :title="title"
-        :headers="['Type de données', 'Durée de conservation']"
+        :title="'Durée de conservation des données personnelles'"
+        :no-caption="true"
+        :headers="[
+          {
+            text: 'Type de données',
+            headerAttrs: {scope: 'col'}
+          },
+          {
+            text: 'Durée de conservation',
+            headerAttrs: {scope: 'col'}
+          }
+        ]"
         :rows="[
           [
             'Issues du SIV, notamment les données d’identification du véhicule (numéro d’immatriculation, numéro VIN, numéro de formule du certificat d’immatriculation… )',
@@ -145,9 +159,9 @@ export default defineComponent({
   </div>
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
-      <h5>
+      <h2>
         Droit d'accès et de modification
-      </h5>
+      </h2>
       <p>
         S’agissant des informations issues du système d’immatriculation des véhicules fournies par HistoVec, les droits d’accès et de rectification, respectivement prévus aux articles 15 et 16 du RGPD, des données issues du système d’immatriculation des véhicules s’exercent en justifiant son identité, par voie électronique (
         <a

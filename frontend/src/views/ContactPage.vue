@@ -25,12 +25,12 @@ export default defineComponent({
 
   data () {
     const tags = [
-      { label: 'Certificat d\'immatriculation / Carte grise', tagName: 'button', type: CONTACT_TAG_TYPES.CERTIFICAT_IMMATRICULATION },  // Anciennement appelé "carte grise"
-      { label: 'Titulaire / Propriétaire', tagName: 'button', type: CONTACT_TAG_TYPES.PROPRIETAIRE_OU_TITULAIRE },
-      { label: 'Rapport HistoVec', tagName: 'button', type: CONTACT_TAG_TYPES.RAPPORT_HISTOVEC },
-      { label: 'Véhicule', tagName: 'button', type: CONTACT_TAG_TYPES.VEHICULE },
-      // { label: 'CSA (Certificat de Situation Administrative)', tagName: 'button', type: CONTACT_TAG_TYPES.CSA },  // Anciennement appelé "Certificat de non gage"
-      { label: 'Autre', tagName: 'button', type: CONTACT_TAG_TYPES.AUTRE },
+      { label: 'Certificat d\'immatriculation / Carte grise', tagName: 'button', id: CONTACT_TAG_TYPES.CERTIFICAT_IMMATRICULATION },  // Anciennement appelé "carte grise"
+      { label: 'Titulaire / Propriétaire', tagName: 'button', id: CONTACT_TAG_TYPES.PROPRIETAIRE_OU_TITULAIRE },
+      { label: 'Rapport HistoVec', tagName: 'button', id: CONTACT_TAG_TYPES.RAPPORT_HISTOVEC },
+      { label: 'Véhicule', tagName: 'button', id: CONTACT_TAG_TYPES.VEHICULE },
+      // { label: 'CSA (Certificat de Situation Administrative)', tagName: 'button', id: CONTACT_TAG_TYPES.CSA },  // Anciennement appelé "Certificat de non gage"
+      { label: 'Autre', tagName: 'button', id: CONTACT_TAG_TYPES.AUTRE },
     ]
 
     return {
@@ -72,7 +72,7 @@ export default defineComponent({
     messageEmailErrorMessage () {
       return (
         this.messageEmail !== null && !this.isMessageEmailValid ?
-        'L\'email est obligatoire. Veuillez le renseigner.' :
+        'Saisissez une adresse avec un format valide, exemple : nom@exemple.fr' :
         ''
       )
     },
@@ -103,8 +103,8 @@ export default defineComponent({
     selectedTags () {
       return this.tags.filter((tag) => tag.selected)
     },
-    selectedTagsTypes () {
-      return this.selectedTags.map(({ type }) => type)
+    selectedTagsIds () {
+      return this.selectedTags.map(({ id }) => id)
     },
     filteredThemesOptions () {
       if (this.selectedTags.length === 0) {
@@ -112,10 +112,9 @@ export default defineComponent({
       }
 
       const filteredThemes = CONTACT_THEMES_OPTIONS.filter(({ types }) => {
-        const intersection = this.selectedTagsTypes.filter(type => types.includes(type))
+        const intersection = this.selectedTagsIds.filter(id => types.includes(id))
         return intersection.length !== 0
       })
-
       return filteredThemes.concat(DEFAULT_CONTACT_THEMES_OPTIONS)
     },
     normalizedMessage () {
@@ -357,9 +356,9 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0">
+  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0" aria-live="polite">
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
-      <h6>Veuillez choisir un ou plusieurs thèmes :</h6>
+      <h2 class="fr-h6">Veuillez choisir un ou plusieurs thèmes :</h2>
       <DsfrTags
         :tags="tags"
       />
@@ -375,170 +374,173 @@ export default defineComponent({
       />
     </div>
   </div>
-
-  <template v-if="isReadonlyTheme">
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-4w">
-      <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-0">
-        <h5>Marche à suivre</h5>
-      </div>
-    </div>
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w  fr-mt-0">
-      <div class="fr-col-12  fr-col-offset-md-1  fr-col-md-11  fr-col-offset-lg-1  fr-col-lg-11  fr-col-offset-xl-1  fr-col-xl-11">
-        <p v-if="selectedTheme === CONTACT_THEME.TRANSFER">
-          Il convient d'effectuer les
-          <a
-            class="fr-link"
-            href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            démarches de déclaration de cession du véhicule
-          </a>
-          auprès de l'ANTS (Agence Nationale des Titres Sécurisés).
-        </p>
-
-        <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_CHANGE">
-          Il convient d'effectuer les
-          <a
-            class="fr-link"
-            href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            démarches de changement de titulaire du certificat d'immatriculation
-          </a>
-          auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
-        </p>
-
-        <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_LOSS">
-          Il convient d'effectuer les
-          <a
-            class="fr-link"
-            href="https://immatriculation.ants.gouv.fr/Vos-demarches/Obtenir-un-duplicata-en-cas-de-perte-vol-deterioration"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            démarches de déclaration de perte ou de vol du certificat d'immatriculation
-          </a>
-          auprès de l'ANTS (Agence Nationale des Titres Sécurisés)
-        </p>
-
-        <p v-if="selectedTheme === CONTACT_THEME.RESOLVE_PV">
-          Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou
-          <a
-            class="fr-link"
-            href="https://www.antai.gouv.fr"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            l'Agence nationale de traitement automatisé des infractions (ANTAI)
-          </a>.
-        </p>
-
-        <p v-if="selectedTheme === CONTACT_THEME.PERSONAL_DATA || selectedTheme === CONTACT_THEME.REPORT_DATA">
-          HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d'Immatriculation des Véhicules).
-          <br />
-          <br />
-          Pour toute modification de vos données, rendez-vous sur
-          <a
-            class="fr-link"
-            href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            les démarches
-          </a>
-          proposées par l'ANTS (Agence Nationale des Titres Sécurisés)
-        </p>
-      </div>
-    </div>
-  </template>
-
-  <div
-    v-if="!isFormMasked"
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-0"
-  >
-    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
-      <DsfrInputGroup
-        :is-valid="isMessageEmailValid"
-        :error-message="messageEmailErrorMessage"
-      >
-        <DsfrInput
-          v-model="messageEmail"
-          label="Email"
-          label-visible
-          hint="Votre email"
-          type="email"
-          required
-        >
-          <template #required-tip>
-            <em class="required-label"> *</em>
-          </template>
-        </DsfrInput>
-      </DsfrInputGroup>
-    </div>
-    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
-      <DsfrInputGroup
-        :is-valid="isMessageValid"
-        :error-message="messageErrorMessage"
-      >
-        <DsfrInput
-          v-model="message"
-          label="Message"
-          label-visible
-          hint="Votre message"
-          is-textarea
-          required
-        >
-          <template #required-tip>
-            <em class="required-label"> *</em>
-          </template>
-        </DsfrInput>
-      </DsfrInputGroup>
-    </div>
-    <div
-      v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV || identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
-      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-mt-3w"
-    >
-      <h6 class="fr-mb-1w">
-        Données transmises pour l'assistance
-      </h6>
-      <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
-        <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
-          <ul
-            v-if="identity.typePersonne === TYPE_PERSONNE.PRO"
-            class="fr-ml-4w  fr-pl-0"
-          >
-            <li> Raison sociale: <span class="fr-text--bleu">{{ identity.raisonSociale || 'non renseigné' }}</span> </li>
-            <li> Numéro SIREN: <span class="fr-text--bleu">{{ identity.siren || 'non renseigné' }}</span> </li>
-          </ul>
-          <ul
-            v-else
-            class="fr-ml-4w  fr-pl-0"
-          >
-            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Nom de naissance: <span class="fr-text--bleu">{{ identity.nom || 'non renseigné' }}</span>
-            </li>
-            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Prénom(s): <span class="fr-text--bleu">{{ identity.prenoms || 'non renseigné' }}</span>
-            </li>
-            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
-              Nom de naissance et prénom(s): <span class="fr-text--bleu">{{ identity.nom || 'non renseigné' }}</span>
-            </li>
-          </ul>
+  <div aria-live="polite">
+    <template v-if="isReadonlyTheme">
+      <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-4w">
+        <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-0">
+          <h2 class="fr-h5">Marche à suivre</h2>
         </div>
-        <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
-          <ul class="fr-ml-4w  fr-pl-0">
-            <li>
-              Immatriculation: <span class="fr-text--bleu">{{ identity.plaque || 'non renseigné' }}</span>
-            </li>
-            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
-              Numéro de formule: <span class="fr-text--bleu">{{ identity.formule || 'non renseigné' }}</span>
-            </li>
-            <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
-              Date du certificat : <span class="fr-text--bleu">{{ identity.dateCertificat || 'non renseigné' }}</span>
-            </li>
-          </ul>
+      </div>
+      <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w  fr-mt-0">
+        <div class="fr-col-12  fr-col-offset-md-1  fr-col-md-11  fr-col-offset-lg-1  fr-col-lg-11  fr-col-offset-xl-1  fr-col-xl-11">
+          <p v-if="selectedTheme === CONTACT_THEME.TRANSFER">
+            Il convient d'effectuer les
+            <a
+              class="fr-link"
+              href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Vendre-ou-donner-mon-vehicule/Commencer-une-declaration-de-cession"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              démarches de déclaration de cession du véhicule
+            </a>
+            auprès de l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés).
+          </p>
+
+          <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_CHANGE">
+            Il convient d'effectuer les
+            <a
+              class="fr-link"
+              href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Acheter-ou-recevoir-un-vehicule-d-occasion/Realiser-la-teleprocedure-J-achete-ou-je-recois-un-vehicule-d-occasion"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              démarches de changement de titulaire du certificat d'immatriculation
+            </a>
+            auprès de l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés).
+          </p>
+
+          <p v-if="selectedTheme === CONTACT_THEME.REGISTRATION_CARD_LOSS">
+            Il convient d'effectuer les
+            <a
+              class="fr-link"
+              href="https://immatriculation.ants.gouv.fr/Vos-demarches/Obtenir-un-duplicata-en-cas-de-perte-vol-deterioration"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              démarches de déclaration de perte ou de vol du certificat d'immatriculation
+            </a>
+            auprès de l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés).
+          </p>
+
+          <p v-if="selectedTheme === CONTACT_THEME.RESOLVE_PV">
+            Il convient de contacter le Centre Amendes Service au 08 21 08 00 31 (appel surtaxé) ou
+            <a
+              class="fr-link"
+              href="https://www.antai.gouv.fr"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              l'Agence nationale de traitement automatisé des infractions (A&#8203;N&#8203;T&#8203;A&#8203;I)
+            </a>.
+          </p>
+
+          <p v-if="selectedTheme === CONTACT_THEME.PERSONAL_DATA || selectedTheme === CONTACT_THEME.REPORT_DATA">
+            HistoVec vous permet de consulter les données enregistrées dans le SIV (Système d'Immatriculation des Véhicules).
+            <br />
+            <br />
+            Pour toute modification de vos données, rendez-vous sur
+            <a
+              class="fr-link"
+              href="https://immatriculation.ants.gouv.fr/Questions-frequentes/Demarche-Je-souhaite-faire-une-autre-demande"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              les démarches
+            </a>
+            proposées par l'A&#8203;N&#8203;T&#8203;S (Agence Nationale des Titres Sécurisés).
+          </p>
+        </div>
+      </div>
+    </template>
+
+    <div
+      v-if="!isFormMasked"
+      class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-0"
+    >
+      <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+        <p class="fr-text--xs">
+          Tous les champs sont obligatoires.
+        </p>
+        <DsfrInputGroup
+          :is-valid="isMessageEmailValid"
+          :error-message="messageEmailErrorMessage"
+          description-id="email-erreur-message"
+        >
+          <DsfrInput
+            v-model="messageEmail"
+            label="Email"
+            label-visible
+            hint="Votre email"
+            autocomplete="email"
+            type="email"
+            required
+            :aria-invalid="!isMessageEmailValid"
+            aria-errormessage="email-erreur-message"
+          />
+        </DsfrInputGroup>
+      </div>
+      <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
+        <DsfrInputGroup
+          :is-valid="isMessageValid"
+          :error-message="messageErrorMessage"
+          description-id="message-erreur-message"
+        >
+          <DsfrInput
+            v-model="message"
+            label="Message"
+            label-visible
+            hint="Votre message"
+            is-textarea
+            required
+            :aria-invalid="!isMessageValid"
+            aria-errormessage="message-erreur-message"
+          />
+        </DsfrInputGroup>
+      </div>
+      <div
+        v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV || identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
+        class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-mt-3w"
+      >
+        <h2 class="fr-mb-1w fr-h6">
+          Données transmises pour l'assistance
+        </h2>
+        <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center">
+          <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
+            <ul
+              v-if="identity.typePersonne === TYPE_PERSONNE.PRO"
+              class="fr-ml-4w  fr-pl-0"
+            >
+              <li> Raison sociale: <span class="fr-text--bleu">{{ identity.raisonSociale || 'non renseigné' }}</span> </li>
+              <li> Numéro SIREN: <span class="fr-text--bleu">{{ identity.siren || 'non renseigné' }}</span> </li>
+            </ul>
+            <ul
+              v-else
+              class="fr-ml-4w  fr-pl-0"
+            >
+              <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+                Nom de naissance: <span class="fr-text--bleu">{{ identity.nom || 'non renseigné' }}</span>
+              </li>
+              <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+                Prénom(s): <span class="fr-text--bleu">{{ identity.prenoms || 'non renseigné' }}</span>
+              </li>
+              <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
+                Nom de naissance et prénom(s): <span class="fr-text--bleu">{{ identity.nom || 'non renseigné' }}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
+            <ul class="fr-ml-4w  fr-pl-0">
+              <li>
+                Immatriculation: <span class="fr-text--bleu">{{ identity.plaque || 'non renseigné' }}</span>
+              </li>
+              <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.SIV">
+                Numéro de formule: <span class="fr-text--bleu">{{ identity.formule || 'non renseigné' }}</span>
+              </li>
+              <li v-if="identity.typeImmatriculation === TYPE_IMMATRICULATION.FNI">
+                Date du certificat : <span class="fr-text--bleu">{{ identity.dateCertificat || 'non renseigné' }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -549,6 +551,7 @@ export default defineComponent({
       <DsfrAlert
         v-show="isSuccessAlertVisible"
         type="success"
+        role="alert"
         title="Envoi du message effectué avec succès"
         description="
           Votre message a bien été transmis à nos équipes.
@@ -558,7 +561,8 @@ export default defineComponent({
       <DsfrAlert
         v-show="isErrorAlertVisible"
         type="error"
-        title="Echec de l'envoi du message"
+        role="alert"
+        title="Échec de l'envoi du message"
         description="
           Une erreur est survenue lors de l'envoi de votre message.
           Veuillez réessayer plus tard.
@@ -583,9 +587,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
   .text-center {
     text-align: center;
   }
-
 </style>

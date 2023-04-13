@@ -2,9 +2,6 @@
 import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 import QrcodeVue from 'qrcode.vue'
-import { copyText } from 'vue3-clipboard'
-import '@/assets/stylesheets/globale.css'
-
 
 import orderBy from 'lodash.orderby'
 
@@ -46,6 +43,7 @@ import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
 import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
 import logoSimplimmat from '@/assets/img/simplimmat.png'
 
+import '@/assets/stylesheets/globale.css'
 
 // CSA
 import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
@@ -342,6 +340,17 @@ export default defineComponent({
     controlesTechniquesHistorique () {
       return this.controlesTechniques.historique || []
     },
+    controlesTechniquesHistoriqueAriaLabel () {
+      let ariaLabel = 'Graphique représentant l\'évolution du kilométrage relevé lors des controles techniques en fonction des années. '
+      if(this.normalizedControlesTechniquesHistorique && this.normalizedControlesTechniquesHistorique.length >0){
+        for (const controleTechnique of this.normalizedControlesTechniquesHistorique) {
+          ariaLabel = ariaLabel + controleTechnique.date + ': ' + controleTechnique.km + ' km ' + controleTechnique.resultatLibelle + '. '
+        }
+        return ariaLabel
+      }
+      return ariaLabel + 'Ce véhicule ne possède actuellement aucun contrôle technique.'
+
+    },
     dateEmissionCIFR () {
       return formatIsoToFrDate(this.certificat.dateEmissionCI)
     },
@@ -572,18 +581,18 @@ export default defineComponent({
     const { isDonneeDisponible: areControlesTechinquesDisponibles, historique } = this.controlesTechniques
 
     const defaultTabTitles = [
-      { title: 'Synthèse'},
-      { title: 'Véhicule'},
-      { title: 'Titulaire & Titre'},
-      { title: 'Situation administrative'},
-      { title: 'Historique'},
+      { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
+      { title: 'Véhicule', panelId: 'report-tab-content-1', tabId:'report-tab-1'},
+      { title: 'Titulaire & Titre', panelId: 'report-tab-content-2', tabId:'report-tab-2'},
+      { title: 'Situation administrative', panelId: 'report-tab-content-3', tabId:'report-tab-3'},
+      { title: 'Historique', panelId: 'report-tab-content-4', tabId:'report-tab-4'},
     ]
 
     this.tabTitles = (
       (areControlesTechinquesDisponibles && historique.length > 0) ?
         defaultTabTitles.concat([
-          { title: 'Contrôles techniques'},
-          { title: 'Kilométrage'},
+          { title: 'Contrôles techniques', panelId: 'report-tab-content-5', tabId:'report-tab-5'},
+          { title: 'Kilométrage', panelId: 'report-tab-content-6', tabId:'report-tab-6'},
         ]) :
         defaultTabTitles
     )
@@ -592,15 +601,15 @@ export default defineComponent({
     // pour confirmer visuellement la prise en compte des actions
     this.modaleActions = [
       {
+        label: 'Copier le lien',
+        icon: 'ri-clipboard-line',
+        onClick: this.onClickCopyLienPartage,
+      },
+      {
         label: 'Envoyer le lien par mail',
         icon: 'ri-send-plane-fill',
         secondary: true,
         onClick: this.onClickMailLienPartage,
-      },
-      {
-        label: 'Copier le lien',
-        icon: 'ri-clipboard-line',
-        onClick: this.onClickCopyLienPartage,
       },
     ]
 
@@ -845,14 +854,12 @@ export default defineComponent({
       this.onCloseModalPartagerRapport()
     },
     copierTexteAvecAlerte (texteACopier, typeText) {
-      copyText(texteACopier, undefined, (error, event) => {
-        if (error) {
-          this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + ' de partage.', 'error')
-        }
-        if (event) {
-          this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copié dans le presse papier.', 'success')
-        }
-      })
+      try {
+        navigator.clipboard.writeText(texteACopier)
+        this.ouvrirAlerte('Le ' + typeText + ' de partage du rapport est copié dans le presse papier.', 'success')
+      } catch (e) {
+        this.ouvrirAlerte('Une erreur est survenue lors de la copie du ' + typeText + ' de partage.', 'error')
+      }
     },
     ouvrirAlerte(texteNotification, typeNotification) {
       this.texteNotification = texteNotification
@@ -902,9 +909,15 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation v-if="isRapportVendeur" :src="images.rapportVendeurSvg" alt="Illustration de la page du rapport vendeur HistoVec" />
+      <ImagePresentation
+        v-if="isRapportVendeur"
+        :src="images.rapportVendeurSvg"
+      />
 
-      <ImagePresentation v-if="isRapportAcheteur" :src="images.rapportAcheteurSvg" alt="Illustration de la page du rapport acheteur HistoVec" />
+      <ImagePresentation
+        v-if="isRapportAcheteur"
+        :src="images.rapportAcheteurSvg"
+      />
     </div>
     <div
       v-if="isRapportVendeur"
@@ -918,6 +931,7 @@ export default defineComponent({
             id="monAvisImage"
             href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
             rel="noopener noreferrer"
+            title="Lien vers jedonnemonavis.numerique.gouv.fr pour donner son avis sur la démarche HistoVec"
             target="_blank"
             @click="logMonAvisImage"
           >
@@ -925,8 +939,7 @@ export default defineComponent({
               class="fr-responsive-img"
               style="height: 5rem;"
               src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-              alt="Lien vers un formulaire permettant de donner son avis sur la démarche HistoVec"
-              title="Je donne mon avis sur cette démarche"
+              alt=""
             />
           </a>
         </div>
@@ -968,10 +981,11 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
       <DsfrAlert
         type="warning"
+        role="alert"
         title="Fraîcheur des données"
         description="
           HistoVec rencontre actuellement des difficultés techniques dans la mise à jour des données relatives aux véhicules qu'il vous permet de consulter.
-          Seul le certificat de situation administrative disponible sur le site de l'ANTS fait foi.
+          Seul le certificat de situation administrative disponible sur le site de l'A&#8203;N&#8203;T&#8203;S fait foi.
           Veuillez nous excuser pour la gêne occasionnée.
         "
       />
@@ -995,13 +1009,17 @@ export default defineComponent({
       <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Le véhicule"
-      >{{ getVehiculeDescription }}</TuileDsfrNonCliquable>
+      >
+        {{ getVehiculeDescription }}
+      </TuileDsfrNonCliquable>
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <TuileDsfrNonCliquable
         :is-loading="isLoading"
         titre="Informations du Ministère de l'Intérieur"
-      >{{ getMiDescription }}</TuileDsfrNonCliquable>
+      >
+        {{ getMiDescription }}
+      </TuileDsfrNonCliquable>
     </div>
   </div>
 
@@ -1021,6 +1039,7 @@ export default defineComponent({
           taille="md"
         />
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-0"
           tab-id="report-tab-0"
           :selected="tabs.selectedTabIndex === 0"
@@ -1028,16 +1047,16 @@ export default defineComponent({
         >
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-pb-3w">
-              <h5 class="fr-mb-0">
+              <h3 class="fr-mb-0 fr-h5">
                 Résumé
-              </h5>
+              </h3>
             </div>
 
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <div class="fr-pb-3w  fr-pt-0">
-                <h6 class="fr-mb-0  fr-pb-2w">
+                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
                   Modèle
-                </h6>
+                </h4>
 
                 <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
                   {{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}
@@ -1072,9 +1091,9 @@ export default defineComponent({
                 v-if="processedVehiculeData.usage.vehiculeDeCollection || processedVehiculeData.usage.vehiculeAgricole"
                 class="fr-pb-3w  fr-pt-0"
               >
-                <h6 class="fr-mb-0  fr-pb-2w">
+                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
                   Usage
-                </h6>
+                </h4>
                 <div
                   v-if="processedVehiculeData.usage.vehiculeDeCollection "
                 >
@@ -1132,9 +1151,9 @@ export default defineComponent({
               </div>
 
               <div class="fr-pb-0  fr-pt-0">
-                <h6 class="fr-mb-0  fr-pb-0">
+                <h4 class="fr-mb-0  fr-pb-0 fr-h6">
                   Propriétaire actuel
-                </h6>
+                </h4>
 
                 <p class="fr-text--md  fr-mb-0">
                   <span class="fr-text--bleu">{{ processedVehiculeData.titulaire.identite }}</span>
@@ -1179,9 +1198,9 @@ export default defineComponent({
 
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <div class="fr-pb-3w  fr-pt-0">
-                <h6 class="fr-mb-0  fr-pb-2w">
+                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
                   Immatriculation
-                </h6>
+                </h4>
 
                 <p class="fr-text--md  fr-mb-1v">
                   <template v-if="datePremiereImmatriculationFR">
@@ -1213,9 +1232,9 @@ export default defineComponent({
               </div>
 
               <div class="fr-pb-3w  fr-pt-0">
-                <h6 class="fr-mb-0  fr-pb-2w">
+                <h4 class="fr-mb-0  fr-pb-2w fr-h6">
                   Situation administrative
-                </h6>
+                </h4>
 
                 <p
                   v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours"
@@ -1320,6 +1339,7 @@ export default defineComponent({
                   <a
                     v-if="assets.syntheseMapping[entry].link"
                     class="fr-link"
+                    title="Lien vers service-public.fr"
                     :href="assets.syntheseMapping[entry].link"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -1328,13 +1348,12 @@ export default defineComponent({
                   </a>
                 </p>
               </div>
-
-
             </div>
           </div>
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-1"
           tab-id="report-tab-1"
           :selected="tabs.selectedTabIndex === 1"
@@ -1342,327 +1361,327 @@ export default defineComponent({
         >
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-pb-2w">
-              <h6 class="fr-mb-0">
+              <h3 class="fr-mb-0 fr-h5">
                 Caractéristiques techniques
-              </h6>
+              </h3>
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6 fr-pt-0  fr-pb-1w">
               Marque
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2 fr-pt-0  fr-pb-1w">
               D.1
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4 fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.marque }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Type variante version
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
               D.2
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.tvv }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Numéro CNIT
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
               D.2.1
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.cnit }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Nom commercial
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
               D.3
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.modele }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Couleur
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.couleur }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Type de réception
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.reception.type }}
             </div>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Numéro d'identification véhicule
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
               E
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               {{ caracteristiquesTechniques.vin }}
             </div>
 
             <template v-if="caracteristiquesTechniques.PT.admissible">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 PT techniquement admissible (kg)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 F.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.admissible }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.PT.AC">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 PTAC (kg)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 F.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.AC }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.PT.RA">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 PTRA (kg)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 F.3
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.RA }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.PT.service">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 PT en service (kg)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 G
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.service }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.PT.AV">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 PTAV (kg)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 G.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.PT.AV }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.categorie">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Catégorie (CE)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 J
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.categorie }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.genre">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Genre (National)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 J.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.genre }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.carrosserie.ce">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Carrosserie (CE)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 J.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.carrosserie.ce }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.carrosserie.national">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Carrosserie (National)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 J.3
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.carrosserie.national }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.reception.numero">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Numéro de réception
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 K
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.reception.numero }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.puissance.cylindres">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Cylindrée (cm3)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 P.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.cylindres }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.puissance.nette">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Puissance nette max (kW)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 P.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.nette }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.energie">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Energie
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 P.3
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.energie }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.puissance.cv">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Puissance CV
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 P.6
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.cv }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.puissance.norm">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Puissance / masse (kW/kg)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 Q
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.puissance.norm }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.places.assis">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Places assises
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 S.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.places.assis }}
               </div>
             </template>
 
-            <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
               Places debout
             </div>
-            <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+            <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
               S.2
             </div>
-            <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+            <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
               <template v-if="caracteristiquesTechniques.places.debout">
                 {{ caracteristiquesTechniques.places.debout }}
               </template>
             </div>
 
             <template v-if="caracteristiquesTechniques.db">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Niveau sonore (db(A))
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 U.1
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.db }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.moteur">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Vitesse moteur (min-1)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 U.2
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.moteur }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.co2">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 CO2 (g/km)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 V.7
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.co2 }}
               </div>
             </template>
 
             <template v-if="caracteristiquesTechniques.environnement">
-              <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
                 Classe environnement (CE)
               </div>
-              <div class="fr-col-2  fr-pt-0  fr-pb-1w">
+              <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
                 V.9
               </div>
-              <div class="fr-col-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
+              <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
                 {{ caracteristiquesTechniques.environnement }}
               </div>
             </template>
@@ -1670,6 +1689,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-2"
           tab-id="report-tab-2"
           :selected="tabs.selectedTabIndex === 2"
@@ -1677,9 +1697,9 @@ export default defineComponent({
         >
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-pb-2w">
-              <h6 class="fr-mb-0">
+              <h3 class="fr-mb-0 fr-h5">
                 Titulaire & Titre
-              </h6>
+              </h3>
             </div>
 
             <template v-if="titulaire.nature">
@@ -1706,9 +1726,9 @@ export default defineComponent({
             </div>
 
             <div class="fr-col-12  fr-pt-3w  fr-pb-2w">
-              <h6 class="fr-mb-0">
+              <h3 class="fr-mb-0 fr-h5">
                 Certificat d'immatriculation
-              </h6>
+              </h3>
             </div>
 
             <div id="titre-date-immatriculation" class="fr-col-6  fr-pt-0  fr-pb-1w">
@@ -1740,6 +1760,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-3"
           tab-id="report-tab-3"
           :selected="tabs.selectedTabIndex === 3"
@@ -1749,18 +1770,19 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
               <div class="fr-grid-row  fr-grid-row--gutters">
                 <div class="fr-col-12  fr-pb-2w">
-                  <h6 class="fr-mb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Gages
                     <span>
                       <a
                         class="fr-link"
+                        title="En savoir plus sur les gages - Lien vers service-public.fr"
                         :href="assets.syntheseMapping['otci'].link"
                         rel="noopener noreferrer"
                         target="_blank"
-                      >
+                      > En savoir plus
                       </a>
                     </span>
-                  </h6>
+                  </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
                   <p class="fr-text--md">
@@ -1775,18 +1797,19 @@ export default defineComponent({
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h6 class="fr-mb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Oppositions
                     <span>
                       <a
                         class="fr-link"
+                        title="En savoir plus sur les oppositions - Lien vers service-public.fr"
                         :href="assets.syntheseMapping['otci'].link"
                         rel="noopener noreferrer"
                         target="_blank"
-                      >
+                      > En savoir plus
                       </a>
                     </span>
-                  </h6>
+                  </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
                   <p class="fr-text--md">
@@ -1806,9 +1829,9 @@ export default defineComponent({
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h6 class="fr-mb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Véhicule
-                  </h6>
+                  </h3>
                 </div>
                 <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
                   Déclaré volé
@@ -1822,9 +1845,9 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
               <div class="fr-grid-row  fr-grid-row--gutters">
                 <div class="fr-col-12  fr-pb-2w">
-                  <h6 class="fr-mb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Déclarations valant saisie
-                  </h6>
+                  </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
                   <p class="fr-text--md">
@@ -1839,9 +1862,9 @@ export default defineComponent({
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h6 class="fr-mb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Suspensions
-                  </h6>
+                  </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
                   <div class="fr-text--md">
@@ -1856,9 +1879,9 @@ export default defineComponent({
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h6 class="fr-mb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Certificat d'immatriculation
-                  </h6>
+                  </h3>
                 </div>
                 <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
                   Déclaré volée
@@ -1884,6 +1907,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-4"
           tab-id="report-tab-4"
           :selected="tabs.selectedTabIndex === 4"
@@ -1894,19 +1918,19 @@ export default defineComponent({
           >
             <template v-if="certificat.isVehiculeImporteDepuisEtranger">
               <div class="fr-col-12  fr-pb-3w">
-                <h5 class="fr-mb-0">
+                <h3 class="fr-mb-0 fr-h5">
                   Historique des opérations à l'étranger
-                </h5>
+                </h3>
               </div>
               <div class="fr-col-2  fr-pb-2w  fr-pt-0">
-                <h6 class="fr-mb-0">
+                <h4 class="fr-mb-0 fr-h6">
                   Date
-                </h6>
+                </h4>
               </div>
               <div class="fr-col-10  fr-pb-2w  fr-pt-0">
-                <h6 class="fr-mb-0">
+                <h4 class="fr-mb-0 fr-h6">
                   Opération
-                </h6>
+                </h4>
               </div>
               <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
                 {{ datePremiereImmatriculationFR }}
@@ -1922,19 +1946,19 @@ export default defineComponent({
             </template>
 
             <div class="fr-col-12  fr-pb-3w">
-              <h5 class="fr-mb-0">
+              <h3 class="fr-mb-0 fr-h5">
                 Historique des opérations en France
-              </h5>
+              </h3>
             </div>
             <div class="fr-col-2  fr-pb-2w  fr-pt-0">
-              <h6 class="fr-mb-0">
+              <h4 class="fr-mb-0 fr-h6">
                 Date
-              </h6>
+              </h4>
             </div>
             <div class="fr-col-10  fr-pb-2w  fr-pt-0">
-              <h6 class="fr-mb-0">
+              <h4 class="fr-mb-0 fr-h6">
                 Opération
-              </h6>
+              </h4>
             </div>
 
             <template
@@ -1954,6 +1978,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-5"
           tab-id="report-tab-5"
           :selected="tabs.selectedTabIndex === 5"
@@ -1966,50 +1991,51 @@ export default defineComponent({
             >
               <DsfrAlert
                 type="error"
+                role="alert"
                 title="Erreur lors de la récupération des contrôles techniques"
                 :description="erreurControlesTechniques"
               />
             </div>
             <template v-if="!erreurControlesTechniques">
               <template v-if="normalizedControlesTechniquesHistorique.length > 0">
-                <div class="fr-col-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
-                  <h6 class="fr-mb-0">
+                <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Date
-                  </h6>
+                  </h3>
                 </div>
-                <div class="fr-col-3  fr-col-md-6  fr-col-lg-5  fr-col-xl-5  fr-pb-0">
-                  <h6 class="fr-mb-0">
+                <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Nature
-                  </h6>
+                  </h3>
                 </div>
-                <div class="fr-col-3  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
-                  <h6 class="fr-mb-0">
+                <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-0">
+                  <h3 class="fr-mb-0 fr-h5">
                     Résultat
-                  </h6>
+                  </h3>
                 </div>
-                <div class="fr-col-2  fr-col-md-2  fr-col-lg-3  fr-col-xl-3  fr-pb-3w">
-                  <h6 class="fr-mb-0">
+                <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-3w">
+                  <h3 class="fr-mb-0 fr-h5">
                     Kilométrage
-                  </h6>
+                  </h3>
                 </div>
                 <template
                   v-for="(entry, index) in normalizedControlesTechniquesHistorique"
                   :key="index"
                 >
-                  <div class="fr-col-12  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
+                  <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
                     {{ entry.date }}
                   </div>
-                  <div class="fr-col-12  fr-col-sm-6  fr-col-md-6  fr-col-lg-5  fr-col-xl-5  fr-pb-0  fr-text--bleu">
+                  <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-text--bleu">
                     {{ entry.natureLibelle }}
                   </div>
-                  <div class="fr-col-4  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-text--bleu">
+                  <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-text--bleu">
                     <DsfrBadge
                       :label="entry.resultatLibelle"
                       :type="getDsfrBadgeType(entry.resultat)"
                       :no-icon="true"
                     />
                   </div>
-                  <div class="fr-col-8  fr-col-sm-2  fr-col-md-2  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
+                  <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
                     {{ entry.kmLibelle }} km
                   </div>
                 </template>
@@ -2025,6 +2051,7 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
+          class="background-default-white"
           panel-id="report-tab-content-6"
           tab-id="report-tab-6"
           :selected="tabs.selectedTabIndex === 6"
@@ -2039,6 +2066,7 @@ export default defineComponent({
             >
               <DsfrAlert
                 type="error"
+                role="alert"
                 title="Erreur lors de la récupération des contrôles techniques"
                 :description="erreurControlesTechniques"
               />
@@ -2050,6 +2078,7 @@ export default defineComponent({
                 v-if="controlesTechniquesHistorique.length > 0"
                 class="fr-col-12"
                 :controles-techniques="controlesTechniquesHistorique"
+                :aria-label="controlesTechniquesHistoriqueAriaLabel"
               />
               <div
                 v-if="controlesTechniquesHistorique === 0"
@@ -2091,28 +2120,18 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
     <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  text-center">
-      <a
-        id="simplimmatImage"
-        class="fr-link"
-        href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
-        rel="noopener noreferrer"
-        target="_blank"
-        @click="logSimplimmatImage"
-      >
         <img
           class="fr-responsive-img"
-          style="hieght: 5rem;"
           :src="images.logoSimplimmat"
-          alt="Lien vers l'application Simplimmat"
-          title="Logo de l'application Simplimmat"
+          alt=""
         >
-      </a>
     </div>
     <div class="fr-col-12  fr-col-md-8  fr-col-lg-8  fr-col-xl-8  text-center">
       <div class="fr-ml-4w">
         Utilisez maintenant l’application officielle
         <a
           class="fr-link"
+          title="Lien vers securite-routiere.gouv.fr"
           href="https://urldefense.com/v3/__https://www.securite-routiere.gouv.fr/reglementation-liee-aux-modes-de-deplacements/immatriculation-des-vehicules/lapplication-simplimmat__;!!AaIhyw!402trV61GnNGBOc6PZbaQq5BpJ9ZCyPe0Cpqc92evWW2ur8CuVl7aVhUfwsvF5Q$"
           rel="noopener noreferrer"
           target="_blank"
@@ -2128,11 +2147,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
-#simplimmatImage[target=_blank]:after {
-  content: '';
-}
-
 #monAvisImage[target=_blank]:after {
   content: '';
 }

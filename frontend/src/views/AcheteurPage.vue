@@ -57,7 +57,7 @@ export default defineComponent({
       />
     </div>
     <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.acheteurSvg" alt="Illustration de la page de l'acheteur" />
+      <ImagePresentation :src="image.acheteurSvg" />
     </div>
     <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
       <h1>Achetez en confiance un véhicule d'occasion</h1>

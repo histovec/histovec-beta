@@ -138,32 +138,32 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
       .should("have.class", "fr-tabs__panel fr-tabs__panel--selected")
       .find("div[class*='fr-col-12 fr-pb-2w']")
       .should('have.length', 1)
-      .find("h6")
+      .find("h3")
       .contains("Caractéristiques techniques")
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-6 fr-pt-0 fr-pb-1w']")
+      .find("div[class*='fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6 fr-pt-0 fr-pb-1w']")
       .should('have.length', 26)
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-2 fr-pt-0 fr-pb-1w']")
+      .find("div[class*='fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2 fr-pt-0 fr-pb-1w']")
       .should('have.length', 26)
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-4 fr-pt-0 fr-pb-1w fr-text--bleu']")
+      .find("div[class*='fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4 fr-pt-0 fr-pb-1w fr-text--bleu']")
       .should('have.length', 26)
   })
   it("Affichage de l'onglet véhicule - contenue", () => {
     // contenue
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-6 fr-pt-0 fr-pb-1w']")
+      .find("div[class*='fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6 fr-pt-0 fr-pb-1w']")
       .should('have.length', 26)
       .each(($el, index) => {
         cy.wrap($el).should('have.text', listeCaracteristiqueTitre[index])
       })
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-2 fr-pt-0 fr-pb-1w']")
+      .find("div[class*='fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2 fr-pt-0 fr-pb-1w']")
       .should('have.length', 26)
       .each(($el, index) => {
         if (listeCaracteristiqueCode[index]) {
@@ -174,7 +174,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
       })
 
     cy.get("div[id*='report-tab-content-1']")
-      .find("div[class*='fr-col-4 fr-pt-0 fr-pb-1w fr-text--bleu']")
+      .find("div[class*='fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4 fr-pt-0 fr-pb-1w fr-text--bleu']")
       .should('have.length', 26)
       .each(($el, index) => {
         if (listeCaracteristiqueVehicule[index]) {
