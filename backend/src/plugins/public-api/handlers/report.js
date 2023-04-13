@@ -96,7 +96,7 @@ export const getReport = async (payload) => {
     try {
       syslogLogger.info({ key: 'before_cache', tag: 'getReport' })
 
-      const encryptedUtacData = await redisClient.get(utacDataCacheId)
+      const encryptedUtacData = await redisClient.get(utacDataCacheId, uuid)
 
       appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
       if (encryptedUtacData) {
@@ -138,6 +138,7 @@ export const getReport = async (payload) => {
       await redisClient.set(
         utacDataCacheId,
         encryptedEmptyUtacData,
+        uuid,
         'EX',
         config.redisPersit,
       )
@@ -187,6 +188,7 @@ export const getReport = async (payload) => {
           await redisClient.set(
             utacDataCacheId,
             encryptedEmptyUtacData,
+            uuid,
             'EX',
             config.redisPersit,
           )
@@ -229,6 +231,7 @@ export const getReport = async (payload) => {
       await redisClient.set(
         utacDataCacheId,
         encryptedFreshUtacData,
+        uuid,
         'EX',
         config.redisPersit,
       )
