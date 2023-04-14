@@ -2,55 +2,47 @@ import { createServer } from './server.js'
 import { getRedisClient } from './connectors/redis.js'
 import { getElasticsearchClient } from './connectors/elasticsearch.js'
 import { getUtacClient } from './connectors/utac.js'
-import { appLogger, syslogLogger } from './util/logger.js'
+import { syslogLogger } from './util/logger.js'
 import config from './config.js'
-
-const API_NAME = config.apiName // 'backend' or 'public-backend'
 
 const elasticsearchClient = getElasticsearchClient()
 const redisClient = getRedisClient()
 const utacClient = getUtacClient()
 
 const cleanUp = async (server, code, reason) => {
-  appLogger.info(`${API_NAME} REST server shutting down… (${reason})`)
+  syslogLogger.info({ key: 'REST server shutting down…', tag: 'SERVER-STOP', value: { code, reason } })
 
   if (!config.isHistovecUnavailable) {
     try {
       // Closing elasticsearch connection
       await elasticsearchClient.close()
-      appLogger.info('elasticsearch client is shutting down properly…')
-      appLogger.info('[SERVER-STOP] elasticsearch quit')
+      syslogLogger.info({ key: 'elasticsearch client is shutting down properly…', tag: 'SERVER-STOP' })
     } catch (error) {
-      appLogger.info(`elasticsearch client shutdown with error: ${error}`)
-      appLogger.info('[SERVER-STOP] elasticsearch error')
+      syslogLogger.info({ key: 'elasticsearch client shutdown with error', tag: 'SERVER-STOP', value: error })
     }
 
     try {
       // Closing redis connection
       await redisClient.quit()
-      appLogger.info('redis client is shutting down properly…')
-      appLogger.info('[SERVER-STOP] redis quit')
+      syslogLogger.info({ key: 'redis client is shutting down properly…', tag: 'SERVER-STOP' })
     } catch (error) {
-      appLogger.info('Error while shutting down properly.')
-      appLogger.info('redis client is shutting down hardly…')
+      syslogLogger.info({ key: 'redis client is shutting down hardly…', tag: 'SERVER-STOP' })
       try {
         await redisClient.disconnect()
-        appLogger.info('[SERVER-STOP] redis disconnect')
+        syslogLogger.info({ key: 'redis disconnect', tag: 'SERVER-STOP' })
       } catch {
-        appLogger.info('[SERVER-STOP] redis is already stopped')
+        syslogLogger.info({ key: 'redis is already stopped', tag: 'SERVER-STOP' })
       }
     }
-    appLogger.info('redis client shutdown complete')
+    syslogLogger.info({ key: 'redis client shutdown complete', tag: 'SERVER-STOP' })
   }
 
   // Stopping server
   try {
     await server.stop({ timeout: 10000 }) // Wait 10s to stop
-    appLogger.info(`${API_NAME} REST server shutdown complete`)
-    appLogger.info('[SERVER-STOP] server graceful-stop')
+    syslogLogger.info({ key: 'REST server graceful-stop shutdown complete', tag: 'SERVER-STOP' })
   } catch (error) {
-    appLogger.info(`${API_NAME} REST server shutdown complete with error: ${error}`)
-    appLogger.info('[SERVER-STOP] server hard-stop')
+    syslogLogger.info({ key: 'REST server hard-stop shutdown complete with error', tag: 'SERVER-STOP', value: error })
   }
   process.exit(code)
 }
