@@ -41,7 +41,7 @@ export const sendMail = async ({ from, to, cc, subject, uuid, content: html }) =
       syslogLogger.debug({ key: 'Preview URL for email: ', tag: 'MAIL', uuid, value: { lien: nodemailer.getTestMessageUrl(info) } })
     }
   } catch (error) {
-    syslogLogger.error({ key: '❌ Error while sending mail : ', tag: 'MAIL', uuid, value: error })
+    syslogLogger.error({ key: '❌ mail_sending_erreur Error while sending mail : ', tag: 'MAIL', uuid, value: error })
     throw error
   } finally {
     transporter.close()
