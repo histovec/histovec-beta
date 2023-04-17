@@ -11,13 +11,13 @@ export const checkPayload = ({ uuid, logLabel, nom, prenoms, raisonSociale, sire
   }
 
   if (siren && !raisonSociale) {
-    syslogLogger.info({ key: 'data_missing numero de siren manquant sur le titulaire du vehicule', tag: logLabel, uuid, value: { raisonSociale } })
+    syslogLogger.info({ key: 'data_missing raison sociale manquant sur le titulaire du vehicule', tag: logLabel, uuid, value: { siren } })
 
     throw Boom.badRequest()
   }
 
   if (raisonSociale && !siren) {
-    syslogLogger.info({ key: 'data_missing raison sociale manquant sur le titulaire du vehicule', tag: logLabel, uuid, value: { siren } })
+    syslogLogger.info({ key: 'data_missing numero de siren manquant sur le titulaire du vehicule', tag: logLabel, uuid, value: { raisonSociale } })
 
     throw Boom.badRequest()
   }
