@@ -18,7 +18,7 @@ class RedisClient {
 
     this.redisClient.config('SET', 'save', '')
     this.redisClient.on('error', (error) => {
-      syslogLogger.info({ key: '❌ redis_down unable_to_connect_at_start redis server crashed with error: ', tag: 'SERVER-RUN', value: error })
+      syslogLogger.info({ key: '❌ redis_down unable_to_connect_at_start redis server crashed', tag: 'REDIS', value: error })
     })
   }
 
@@ -30,14 +30,14 @@ class RedisClient {
     if (this._isUp()) {
       return this.redisClient.get(key)
     }
-    syslogLogger.info({ key: '--> skipping redisClient get() call... ', tag: 'SERVER-CACHE', uuid })
+    syslogLogger.info({ key: 'redis_not_started skipping get() call', tag: 'REDIS', uuid })
   }
 
   async set (key, value, uuid) {
     if (this._isUp()) {
       return this.redisClient.set(key, value)
     }
-    syslogLogger.info({ key: '--> skipping redisClient set() call... ', tag: 'SERVER-CACHE', uuid })
+    syslogLogger.info({ key: 'redis_not_started skipping set() call', tag: 'REDIS', uuid })
   }
 
   async quit () {
