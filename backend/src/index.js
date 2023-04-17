@@ -68,7 +68,7 @@ const initServer = async () => {
     }
 
     try {
-      await redisClient.get('')
+      await redisClient.get('', '')
       syslogLogger.info({ key: '✅ redis connected', tag: 'SERVER-START' })
     } catch (error) {
       syslogLogger.info({ key: '❌ redis_down unable_to_connect_at_start', tag: 'SERVER-START', value: error })

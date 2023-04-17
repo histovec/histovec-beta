@@ -1,5 +1,5 @@
 import Redis from 'ioredis'
-import { appLogger } from '../util/logger.js'
+import { syslogLogger } from '../util/logger.js'
 import config from '../config.js'
 
 class RedisClient {
@@ -17,10 +17,8 @@ class RedisClient {
     })
 
     this.redisClient.config('SET', 'save', '')
-
     this.redisClient.on('error', (error) => {
-      appLogger.info(`redis server crashed with error: ${error}`)
-      appLogger.info('[SERVER-RUN] redis_down unable_to_connect')
+      syslogLogger.info({ key: '❌ redis_down unable_to_connect_at_start redis server crashed', tag: 'REDIS', value: error })
     })
   }
 
@@ -28,18 +26,18 @@ class RedisClient {
     return this.redisClient.status === 'ready'
   }
 
-  async get (key) {
+  async get (key, uuid) {
     if (this._isUp()) {
       return this.redisClient.get(key)
     }
-    appLogger.info('--> skipping get() call...')
+    syslogLogger.info({ key: 'redis_not_started skipping get() call', tag: 'REDIS', uuid })
   }
 
-  async set (key, value) {
+  async set (key, value, uuid) {
     if (this._isUp()) {
       return this.redisClient.set(key, value)
     }
-    appLogger.info('--> skipping set() call...')
+    syslogLogger.info({ key: 'redis_not_started skipping set() call', tag: 'REDIS', uuid })
   }
 
   async quit () {
