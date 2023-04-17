@@ -69,6 +69,7 @@ export const sendMailToSupport = async (from, subject, payload) => {
     cc: from,
     to: config.mailTo,
     subject,
+    uuid: payload.uuid,
     content: getHtmlBody({
       content: `
         <b> message </b>: <br />
