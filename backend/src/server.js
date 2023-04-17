@@ -41,7 +41,7 @@ const routes = [
       syslogLogger.debug({ key: 'config.version', tag: 'VERSION', value: config.version })
 
       const match = Boolean(VERSION_REGEX.test(config.version))
-      syslogLogger.debug({ key: 'match fromat version', tag: 'VERSION', value: match })
+      syslogLogger.debug({ key: 'match format version', tag: 'VERSION', value: match })
 
       return { version: config.version }
     },
