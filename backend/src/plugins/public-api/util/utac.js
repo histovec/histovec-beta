@@ -1,5 +1,4 @@
 import { hash } from '../../../util/crypto.js'
-import { appLogger } from '../../../util/logger.js'
 
 // Use a default value to compute utacDataKey for annulationCI vehicles
 export const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
@@ -28,9 +27,6 @@ export const validateControlesTechniques = (sentVin, controlesTechniques) => {
   const inconsistentVin = controlesTechniques.find(ct => ct.ct_vin !== sentVin)
 
   if (inconsistentVin) {
-    appLogger.error({
-      message: 'VINs are differents',
-    })
     return false
   }
 

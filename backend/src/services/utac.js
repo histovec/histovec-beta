@@ -2,7 +2,7 @@ import axios from 'axios'
 import { readFileSync } from 'fs'
 import { utacResponseSchema } from '../services/utac/schemas/response.js'
 import { Agent as HttpsAgent } from 'https'
-import { appLogger, syslogLogger } from '../util/logger.js'
+import { syslogLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 
@@ -195,25 +195,23 @@ class UTACClient {
     if (isMocked) {
       // Wait same times as production UTAC api response time
       const utacResponseTimeEstimationInMs = Math.trunc(248 + (100 * Math.random() - 100 / 2))
-      appLogger.debug(`-- utacResponseTimeEstimationInMs begin ==> ${utacResponseTimeEstimationInMs}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_time_to_wait ${utacResponseTimeEstimationInMs}`)
+      syslogLogger.debug({ key: 'bpsa_mock_time_to_wait', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, utacResponseTimeEstimationInMs } })
 
       const start = new Date()
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_start`)
+      syslogLogger.info({ key: 'bpsa_mock_call_start', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
 
       await sleep(utacResponseTimeEstimationInMs)
 
       const end = new Date()
       const executionTime = end - start
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_end ${executionTime}`)
+      syslogLogger.info({ key: 'bpsa_mock_call_end', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, executionTime } })
 
       const data = CONTROL_TECHNIQUES_MOCK_FOR_BPSA
 
       const { error } = utacResponseSchema.validate(data)
 
       if (error) {
-        appLogger.info(`[UTAC] response validation error : ${error}`)
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
+        syslogLogger.error({ key: 'malformed_mock_utac_response', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, error } })
 
         return {
           status: 500,
@@ -229,13 +227,8 @@ class UTACClient {
     }
 
     const start = new Date()
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_start`)
-
-    appLogger.debug({
-      debug: 'UTACClient - readControlesTechniques',
-      immat,
-      vin,
-    })
+    syslogLogger.info({ key: 'call_start', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+    syslogLogger.debug({ key: 'readControlesTechniques', tag: 'UTAC', uuid, value: { immat, vin } })
 
     let response = null
 
@@ -251,22 +244,20 @@ class UTACClient {
 
       const { error } = utacResponseSchema.validate(data)
       if (error) {
+        syslogLogger.error({ key: 'malformed_utac_response', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, error } })
+
         return {
           status: 500,
           message: ERROR_MESSAGES.malformedResponse,
         }
       }
 
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
+      syslogLogger.info({ key: 'call_end call_ok', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, executionTime } })
     } catch (error) {
       // That should never happen
       const end = new Date()
       const executionTime = end - start
-      appLogger.info(`Error while reading technical controls (${uuid}): ${error}`)
-
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
+      syslogLogger.error({ key: 'call_end call_ko', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, executionTime, error } })
 
       return {
         status: 500,
@@ -274,12 +265,7 @@ class UTACClient {
       }
     }
 
-    appLogger.debug({
-      debug: '[UTAC] result found',
-      immat,
-      ct: response.data.ct,
-      update_date: response.data.update_date,
-    })
+    syslogLogger.debug({ key: 'result_found', tag: 'UTAC', uuid, value: { immat, ct: response.data.ct, update_date: response.data.update_date } })
 
     return {
       status: response.status,

@@ -7,7 +7,7 @@ import { getRedisClient } from '../../../connectors/redis.js'
 import { getUtacClient } from '../../../connectors/utac.js'
 import { VIN_REGEX } from '../../../constant/regex.js'
 
-import { appLogger, syslogLogger } from '../../../util/logger.js'
+import { syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
 import { anonymize, anonymizedControlesTechniques } from '../../../util/anonymiserData.js'
 
@@ -16,10 +16,8 @@ const redisClient = getRedisClient()
 
 export const getReport = async (payload) => {
   const { uuid, id: base64EncodedId, options: { ignoreControlesTechniques, ignoreUtacCache } = {} } = payload
-  syslogLogger.debug({ key: 'ignoreUtacCache', tag: 'CONFIG', uuid, value: { ignoreUtacCache } })
-  syslogLogger.debug({ key: 'ignoreControlesTechniques', tag: 'CONFIG', uuid, value: { ignoreControlesTechniques } })
   const isUtacMockForBpsaActivated = config.utac.isUtacMockForBpsaActivated
-  syslogLogger.debug({ key: 'isUtacMockForBpsaActivated', tag: 'CONFIG', uuid, value: { isUtacMockForBpsaActivated } })
+  syslogLogger.debug({ key: 'get_vehicule', tag: 'CONFIG', uuid, value: { ignoreUtacCache, ignoreControlesTechniques, isUtacMockForBpsaActivated } })
 
   const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
   syslogLogger.info({ key: 'idv', tag: 'CONFIG', uuid, value: { idv: urlSafeBase64EncodedId } })
@@ -52,10 +50,10 @@ export const getReport = async (payload) => {
 
   // @todo @syslog2
   // Exemple d'utilisation du syslogLogger
-  syslogLogger.info({ key: 'siv_data_reponse', tag: 'SIV', value: sivData })
+  syslogLogger.info({ key: 'siv_data_reponse', tag: 'SIV', uuid, value: sivData })
 
   const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  appLogger.debug(`-- [backend] immat ==> ${anonymize(immat)}`)
+  syslogLogger.info({ key: 'immatriculation_anonymisee', tag: 'UTAC', uuid, value: { immatriculation: anonymize(immat) } })
 
   // 2 - UTAC
   const utacDataKey = computeUtacDataKey(encryptedImmat)
@@ -71,15 +69,15 @@ export const getReport = async (payload) => {
   const isCIAnnule = Boolean(!encryptedImmat)
   if (!askCt || isCIAnnule || !config.utac.isApiActivated) {
     if (!askCt) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call ask_ct_false`)
+      syslogLogger.info({ key: 'no_call ask_ct_false', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
     }
 
     if (isCIAnnule) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call annulation_CI`)
+      syslogLogger.info({ key: 'no_call annulation_CI', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
     }
 
     if (!config.utac.isApiActivated) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call api_not_activated`)
+      syslogLogger.info({ key: 'no_call api_not_activated', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
     }
 
     return {
@@ -92,13 +90,14 @@ export const getReport = async (payload) => {
 
   const ignoreCache = config.isUtacCacheIgnorable && ignoreUtacCache
 
+  // revoir ici
   if (!ignoreCache) {
     try {
-      syslogLogger.info({ key: 'before_cache', tag: 'getReport' })
+      syslogLogger.info({ key: 'before_cache', tag: 'UTAC', uuid })
 
       const encryptedUtacData = await redisClient.get(utacDataCacheId, uuid)
 
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
+      syslogLogger.info({ key: 'call_cached', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
       if (encryptedUtacData) {
         const utacData = decryptJson(encryptedUtacData, utacDataKey)
         return {
@@ -106,14 +105,13 @@ export const getReport = async (payload) => {
           utacData,
         }
       } else {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} cache_miss`)
+        syslogLogger.info({ key: 'cache_miss', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
       }
-    } catch (e) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down get_vehicle`)
-      appLogger.info('-- redis is down => cannot read vehicle in UTAC cache')
+    } catch (error) {
+      syslogLogger.info({ key: 'redis_down get_vehicle can_not_read_cache', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
     }
   } else {
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
+    syslogLogger.info({ key: 'ignore_cache', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
   }
 
   const normalizedImmat = normalizeImmatForUtac(immat)
@@ -123,15 +121,12 @@ export const getReport = async (payload) => {
   const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
   const normalizedVin = vin.toUpperCase()
 
-  syslogLogger.debug({ key: 'immatriculation_anonymisee', tag: 'SIV', value: normalizedImmat })
-  syslogLogger.debug({ key: 'vin_anonymise', tag: 'SIV', value: normalizedVin })
+  syslogLogger.debug({ key: 'informations_vehicule', tag: 'SIV', uuid, value: { immatriculation: normalizedImmat, vin: normalizedVin } })
 
   const isValidVin = Boolean(VIN_REGEX.test(vin))
 
   if (!isValidImmat) {
-    appLogger.error({
-      error: 'Invalid immatriculation for UTAC api',
-    })
+    syslogLogger.error({ key: 'Invalid immatriculation for UTAC api', tag: 'SIV', uuid })
 
     try {
       // Cache unsupported vehicles
@@ -143,8 +138,7 @@ export const getReport = async (payload) => {
         config.redisPersit,
       )
     } catch (e) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_utac_invalid_immat_vehicle`)
-      appLogger.info('-- redis is down => cannot set vehicle with invalid immat in UTAC cache')
+      syslogLogger.info({ key: 'redis_down set_utac_invalid_immat_vehicle', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
     }
 
     return {
@@ -154,9 +148,7 @@ export const getReport = async (payload) => {
   }
 
   if (!isValidVin) {
-    appLogger.warn({
-      error: 'Malformed VIN',
-    })
+    syslogLogger.warn({ key: 'malformed_vin', tag: 'SIV', uuid })
   }
 
   const isMocked = config.utac.isUtacMockForBpsaActivated
@@ -176,11 +168,7 @@ export const getReport = async (payload) => {
     })
 
     if (utacStatus !== 200) {
-      appLogger.error({
-        error: '[UTAC] response call_failed',
-        status: utacStatus,
-        remoteError: utacMessage,
-      })
+      syslogLogger.error({ key: 'response call_failed', tag: 'UTAC', uuid, value: { status: utacStatus, remoteError: utacMessage } })
 
       if (utacStatus === 404 || utacStatus === 406) {
         try {
@@ -193,8 +181,7 @@ export const getReport = async (payload) => {
             config.redisPersit,
           )
         } catch (e) {
-          appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_utac_not_found_vehicle`)
-          appLogger.info('-- redis is down => cannot set UTAC not found vehicle in UTAC cache')
+          syslogLogger.info({ key: 'redis_down set_utac_not_found_vehicle', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
         }
 
         return {
@@ -214,6 +201,7 @@ export const getReport = async (payload) => {
     }
 
     if (!isMocked && !validateControlesTechniques(vin, ct)) {
+      syslogLogger.error({ key: 'VINs are differents', tag: 'UTAC', uuid })
       throw new Error('Inconsistency for technical control')
     }
 
@@ -236,8 +224,7 @@ export const getReport = async (payload) => {
         config.redisPersit,
       )
     } catch (e) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} redis_down set_vehicle`)
-      appLogger.info('-- redis is down => cannot set vehicle in UTAC cache')
+      syslogLogger.info({ key: 'redis_down set_utac_vehicle', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
     }
 
     return {
@@ -245,10 +232,7 @@ export const getReport = async (payload) => {
       utacData: anonymizedFreshUtacData,
     }
   } catch ({ message: errorMessage }) {
-    appLogger.error({
-      error: '[UTAC] call_error',
-      remoteError: errorMessage,
-    })
+    syslogLogger.error({ key: 'call_error', tag: 'UTAC', uuid, value: { errorMessage } })
 
     // Don't cache errors
     return {
