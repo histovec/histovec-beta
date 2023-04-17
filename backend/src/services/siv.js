@@ -46,7 +46,7 @@ export const getSIV = async (id, uuid) => {
     } = hits[0]._source
 
     const askCt = rawAskCt === 'OUI'
-    syslogLogger.info({ key: `${encryptedImmat}_${encryptedVin} ask_ct`, tag: 'UTAC', uuid, value: { askCt } })
+    syslogLogger.info({ key: 'ask_ct', tag: 'UTAC', uuid, value: { askCt, encryptedImmat, encryptedVin } })
 
     if (!sivData) {
       const message = 'Wrong data format in Elasticsearch response'
