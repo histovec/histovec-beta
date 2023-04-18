@@ -31,6 +31,10 @@ const syslogFormat = printf(({ level, message, timestamp }) => {
 
   const uuidTag = uuid ? ` ${uuid}` : ''
 
+  // /!\ DON'T TOUCH without working with data logs engineer) /!\
+  // This format has been defined with data logs engineer for production exploitation.
+  // Syslog format avec tag: <timestamp> <application_name> [<tag>] <log_level> <uuid>: <key> <value>
+  // Syslog format sans tag: <timestamp> <application_name> <log_level> <uuid>: <key> <value>
   return inspect(
     `${timestamp} ${config.apiName}${completeTag} ${level}${uuidTag}: ${key}${completeValue ? ' ' + completeValue : ''}`,
     inspectOptions,
