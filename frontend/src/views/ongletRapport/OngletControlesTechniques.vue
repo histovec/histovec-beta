@@ -40,50 +40,51 @@ export default defineComponent({
     >
       <DsfrAlert
         type="error"
+        role="alert"
         title="Erreur lors de la récupération des contrôles techniques"
         :description="erreurControlesTechniques"
       />
     </div>
     <template v-if="!erreurControlesTechniques">
       <template v-if="normalizedControlesTechniquesHistorique.length > 0">
-        <div class="fr-col-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
-          <h6 class="fr-mb-0">
+        <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Date
-          </h6>
+          </h3>
         </div>
-        <div class="fr-col-3  fr-col-md-6  fr-col-lg-5  fr-col-xl-5  fr-pb-0">
-          <h6 class="fr-mb-0">
+        <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Nature
-          </h6>
+          </h3>
         </div>
-        <div class="fr-col-3  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
-          <h6 class="fr-mb-0">
+        <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Résultat
-          </h6>
+          </h3>
         </div>
-        <div class="fr-col-2  fr-col-md-2  fr-col-lg-3  fr-col-xl-3  fr-pb-3w">
-          <h6 class="fr-mb-0">
+        <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-3w">
+          <h3 class="fr-mb-0 fr-h5">
             Kilométrage
-          </h6>
+          </h3>
         </div>
         <template
           v-for="(entry, index) in normalizedControlesTechniquesHistorique"
           :key="index"
         >
-          <div class="fr-col-12  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
+          <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
             {{ entry.date }}
           </div>
-          <div class="fr-col-12  fr-col-sm-6  fr-col-md-6  fr-col-lg-5  fr-col-xl-5  fr-pb-0  fr-text--bleu">
+          <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-text--bleu">
             {{ entry.natureLibelle }}
           </div>
-          <div class="fr-col-4  fr-col-sm-2  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-text--bleu">
+          <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-text--bleu">
             <DsfrBadge
               :label="entry.resultatLibelle"
               :type="getDsfrBadgeType(entry.resultat)"
               :no-icon="true"
             />
           </div>
-          <div class="fr-col-8  fr-col-sm-2  fr-col-md-2  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
+          <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
             {{ entry.kmLibelle }} km
           </div>
         </template>

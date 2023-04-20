@@ -50,16 +50,16 @@ export default defineComponent({
 <template>
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12  fr-pb-3w">
-      <h5 class="fr-mb-0">
+      <h3 class="fr-mb-0 fr-h5">
         Résumé
-      </h5>
+      </h3>
     </div>
 
     <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
       <div class="fr-pb-3w  fr-pt-0">
-        <h6 class="fr-mb-0  fr-pb-2w">
+        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
           Modèle
-        </h6>
+        </h4>
 
         <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
           {{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}
@@ -94,9 +94,9 @@ export default defineComponent({
         v-if="processedVehiculeData.usage.vehiculeDeCollection || processedVehiculeData.usage.vehiculeAgricole"
         class="fr-pb-3w  fr-pt-0"
       >
-        <h6 class="fr-mb-0  fr-pb-2w">
+        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
           Usage
-        </h6>
+        </h4>
         <div
           v-if="processedVehiculeData.usage.vehiculeDeCollection "
         >
@@ -154,9 +154,9 @@ export default defineComponent({
       </div>
 
       <div class="fr-pb-0  fr-pt-0">
-        <h6 class="fr-mb-0  fr-pb-0">
+        <h4 class="fr-mb-0  fr-pb-0 fr-h6">
           Propriétaire actuel
-        </h6>
+        </h4>
 
         <p class="fr-text--md  fr-mb-0">
           <span class="fr-text--bleu">{{ processedVehiculeData.titulaire.identite }}</span>
@@ -186,9 +186,7 @@ export default defineComponent({
               <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
               titulaire(s), en l'achetant vous serez le
               <span class="fr-text--bleu">{{ Number(processedVehiculeData.titulairesCount) + 1 }}</span>
-              <sup class="fr-text--bleu">{{
-                utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1)
-              }}</sup>
+              <sup class="fr-text--bleu">{{ utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
             </template>
           </template>
           <br />
@@ -203,9 +201,9 @@ export default defineComponent({
 
     <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
       <div class="fr-pb-3w  fr-pt-0">
-        <h6 class="fr-mb-0  fr-pb-2w">
+        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
           Immatriculation
-        </h6>
+        </h4>
 
         <p class="fr-text--md  fr-mb-1v">
           <template v-if="datePremiereImmatriculationFR">
@@ -237,9 +235,9 @@ export default defineComponent({
       </div>
 
       <div class="fr-pb-3w  fr-pt-0">
-        <h6 class="fr-mb-0  fr-pb-2w">
+        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
           Situation administrative
-        </h6>
+        </h4>
 
         <p
           v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours"
@@ -251,9 +249,7 @@ export default defineComponent({
             />
           </span>
           <!-- état - un seul sinistre !-->
-          <template
-            v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)"
-          >
+          <template v-if="processedVehiculeData.sinistresCount === 1 || (processedVehiculeData.sinistresCount === 0 && hasProcedureVEEnCours)">
             Ce véhicule a eu <span class="fr-text--bleu">un sinistre déclaré</span>
             <span
               v-if="processedVehiculeData.sinistresCount === 1"
@@ -346,6 +342,7 @@ export default defineComponent({
           <a
             v-if="assets.syntheseMapping[entry].link"
             class="fr-link"
+            title="Lien vers service-public.fr"
             :href="assets.syntheseMapping[entry].link"
             rel="noopener noreferrer"
             target="_blank"

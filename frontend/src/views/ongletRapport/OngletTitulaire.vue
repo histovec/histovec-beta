@@ -31,9 +31,9 @@ export default defineComponent({
 <template>
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12  fr-pb-2w">
-      <h6 class="fr-mb-0">
+      <h3 class="fr-mb-0 fr-h5">
         Titulaire & Titre
-      </h6>
+      </h3>
     </div>
 
     <template v-if="titulaire.nature">
@@ -45,49 +45,49 @@ export default defineComponent({
       </div>
     </template>
 
-    <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+    <div id="titre-identite" class="fr-col-6  fr-pt-0  fr-pb-1w">
       Identité
     </div>
-    <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
+    <div id="valeur-identite" class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
       {{ titulaire.identite }}
     </div>
 
-    <div class="fr-col-6  fr-pt-0  fr-pb-0">
+    <div id="titre-code-postal" class="fr-col-6  fr-pt-0  fr-pb-0">
       Code postal
     </div>
-    <div class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
+    <div id="valeur-code-postal" class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
       {{ titulaire.adresse }}
     </div>
 
     <div class="fr-col-12  fr-pt-3w  fr-pb-2w">
-      <h6 class="fr-mb-0">
+      <h3 class="fr-mb-0 fr-h5">
         Certificat d'immatriculation
-      </h6>
+      </h3>
     </div>
 
-    <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+    <div id="titre-date-immatriculation" class="fr-col-6  fr-pt-0  fr-pb-1w">
       Date de première immatriculation
       <span v-if="certificat.isVehiculeImporteDepuisEtranger">
-                à l'étranger
-              </span>
+        à l'étranger
+      </span>
     </div>
-    <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
+    <div id="valeur-date-immatriculation" class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
       {{ datePremiereImmatriculationFR }}
     </div>
 
     <template v-if="certificat.isVehiculeImporteDepuisEtranger">
-      <div class="fr-col-6  fr-pt-0  fr-pb-1w">
+      <div id="titre-date-immatriculation-france" class="fr-col-6  fr-pt-0  fr-pb-1w">
         Date de première immatriculation en France
       </div>
-      <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
+      <div id="valeur-date-immatriculation-france" class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
         {{ datePremiereImmatriculationEnFranceFR }}
       </div>
     </template>
 
-    <div class="fr-col-6  fr-pt-0  fr-pb-0">
+    <div id="titre-date-certificat" class="fr-col-6  fr-pt-0  fr-pb-0">
       Date du certificat d'immatriculation actuel
     </div>
-    <div class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
+    <div id="valeur-date-certificat" class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu">
       {{ dateEmissionCIFR }}
     </div>
   </div>

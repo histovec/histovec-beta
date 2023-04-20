@@ -29,19 +29,19 @@ export default defineComponent({
   >
     <template v-if="certificat.isVehiculeImporteDepuisEtranger">
       <div class="fr-col-12  fr-pb-3w">
-        <h5 class="fr-mb-0">
+        <h3 class="fr-mb-0 fr-h5">
           Historique des opérations à l'étranger
-        </h5>
+        </h3>
       </div>
       <div class="fr-col-2  fr-pb-2w  fr-pt-0">
-        <h6 class="fr-mb-0">
+        <h4 class="fr-mb-0 fr-h6">
           Date
-        </h6>
+        </h4>
       </div>
       <div class="fr-col-10  fr-pb-2w  fr-pt-0">
-        <h6 class="fr-mb-0">
+        <h4 class="fr-mb-0 fr-h6">
           Opération
-        </h6>
+        </h4>
       </div>
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
         {{ datePremiereImmatriculationFR }}
@@ -57,19 +57,19 @@ export default defineComponent({
     </template>
 
     <div class="fr-col-12  fr-pb-3w">
-      <h5 class="fr-mb-0">
+      <h3 class="fr-mb-0 fr-h5">
         Historique des opérations en France
-      </h5>
+      </h3>
     </div>
     <div class="fr-col-2  fr-pb-2w  fr-pt-0">
-      <h6 class="fr-mb-0">
+      <h4 class="fr-mb-0 fr-h6">
         Date
-      </h6>
+      </h4>
     </div>
     <div class="fr-col-10  fr-pb-2w  fr-pt-0">
-      <h6 class="fr-mb-0">
+      <h4 class="fr-mb-0 fr-h6">
         Opération
-      </h6>
+      </h4>
     </div>
 
     <template

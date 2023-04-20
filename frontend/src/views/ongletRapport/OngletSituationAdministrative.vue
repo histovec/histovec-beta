@@ -25,18 +25,19 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
       <div class="fr-grid-row  fr-grid-row--gutters">
         <div class="fr-col-12  fr-pb-2w">
-          <h6 class="fr-mb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Gages
             <span>
               <a
                 class="fr-link"
+                title="En savoir plus sur les gages - Lien vers service-public.fr"
                 :href="assets.syntheseMapping['otci'].link"
                 rel="noopener noreferrer"
                 target="_blank"
-              >
+              > En savoir plus
               </a>
             </span>
-          </h6>
+          </h3>
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <p class="fr-text--md">
@@ -51,18 +52,19 @@ export default defineComponent({
         </div>
 
         <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-          <h6 class="fr-mb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Oppositions
             <span>
               <a
                 class="fr-link"
+                title="En savoir plus sur les oppositions - Lien vers service-public.fr"
                 :href="assets.syntheseMapping['otci'].link"
                 rel="noopener noreferrer"
                 target="_blank"
-              >
+              > En savoir plus
               </a>
             </span>
-          </h6>
+          </h3>
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <p class="fr-text--md">
@@ -82,9 +84,9 @@ export default defineComponent({
         </div>
 
         <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-          <h6 class="fr-mb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Véhicule
-          </h6>
+          </h3>
         </div>
         <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
           Déclaré volé
@@ -98,9 +100,9 @@ export default defineComponent({
     <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
       <div class="fr-grid-row  fr-grid-row--gutters">
         <div class="fr-col-12  fr-pb-2w">
-          <h6 class="fr-mb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Déclarations valant saisie
-          </h6>
+          </h3>
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <p class="fr-text--md">
@@ -115,9 +117,9 @@ export default defineComponent({
         </div>
 
         <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-          <h6 class="fr-mb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Suspensions
-          </h6>
+          </h3>
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <div class="fr-text--md">
@@ -132,9 +134,9 @@ export default defineComponent({
         </div>
 
         <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-          <h6 class="fr-mb-0">
+          <h3 class="fr-mb-0 fr-h5">
             Certificat d'immatriculation
-          </h6>
+          </h3>
         </div>
         <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
           Déclaré volée

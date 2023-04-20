@@ -15,6 +15,10 @@ export default defineComponent({
     controlesTechniquesHistorique: {
       type: Object,
     },
+    controlesTechniquesHistoriqueAriaLabel: {
+      type: String,
+      default: '',
+    },
   },
 })
 </script>
@@ -30,6 +34,7 @@ export default defineComponent({
     >
       <DsfrAlert
         type="error"
+        role="alert"
         title="Erreur lors de la récupération des contrôles techniques"
         :description="erreurControlesTechniques"
       />
@@ -41,6 +46,7 @@ export default defineComponent({
         v-if="controlesTechniquesHistorique.length > 0"
         class="fr-col-12"
         :controles-techniques="controlesTechniquesHistorique"
+        :aria-label="controlesTechniquesHistoriqueAriaLabel"
       />
       <div
         v-if="controlesTechniquesHistorique === 0"

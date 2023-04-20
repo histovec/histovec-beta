@@ -1059,6 +1059,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
+              class="background-default-white"
               title="Synthèse"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1080,6 +1081,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              class="background-default-white"
               title="Véhicule"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1091,6 +1093,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              class="background-default-white"
               title="Titulaire et Titre"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1106,6 +1109,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              class="background-default-white"
               title="Situation administrative"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1119,6 +1123,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              class="background-default-white"
               title="Historique"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1134,6 +1139,7 @@ export default defineComponent({
           <li>
             <DsfrAccordion
               v-if="isControleTechniqueDisponible"
+              class="background-default-white"
               title="Contrôles techniques"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1147,6 +1153,7 @@ export default defineComponent({
           <li>
             <DsfrAccordion
               v-if="isControleTechniqueDisponible"
+              class="background-default-white"
               title="Kilométrage"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
@@ -1154,6 +1161,7 @@ export default defineComponent({
               <OngletKilometrage
                 :erreur-controles-techniques="erreurControlesTechniques"
                 :controles-techniques-historique="controlesTechniquesHistorique"
+                :controlesTechniquesHistoriqueAriaLabel="controlesTechniquesHistoriqueAriaLabel"
               />
             </DsfrAccordion>
           </li>
@@ -1170,6 +1178,7 @@ export default defineComponent({
             taille="md"
           />
           <DsfrTabContent
+            class="background-default-white"
             panel-id="report-tab-content-0"
             tab-id="report-tab-0"
             :selected="tabs.selectedTabIndex === 0"
@@ -1191,6 +1200,7 @@ export default defineComponent({
           </DsfrTabContent>
 
           <DsfrTabContent
+            class="background-default-white"
             panel-id="report-tab-content-1"
             tab-id="report-tab-1"
             :selected="tabs.selectedTabIndex === 1"
@@ -1202,6 +1212,7 @@ export default defineComponent({
           </DsfrTabContent>
 
           <DsfrTabContent
+            class="background-default-white"
             panel-id="report-tab-content-2"
             tab-id="report-tab-2"
             :selected="tabs.selectedTabIndex === 2"
@@ -1217,6 +1228,7 @@ export default defineComponent({
           </DsfrTabContent>
 
           <DsfrTabContent
+            class="background-default-white"
             panel-id="report-tab-content-3"
             tab-id="report-tab-3"
             :selected="tabs.selectedTabIndex === 3"
@@ -1230,6 +1242,7 @@ export default defineComponent({
           </DsfrTabContent>
 
           <DsfrTabContent
+            class="background-default-white"
             panel-id="report-tab-content-4"
             tab-id="report-tab-4"
             :selected="tabs.selectedTabIndex === 4"
@@ -1244,6 +1257,7 @@ export default defineComponent({
           </DsfrTabContent>
 
           <DsfrTabContent
+            class="background-default-white"
             panel-id="report-tab-content-5"
             tab-id="report-tab-5"
             :selected="tabs.selectedTabIndex === 5"
@@ -1264,6 +1278,7 @@ export default defineComponent({
             <OngletKilometrage
               :erreur-controles-techniques="erreurControlesTechniques"
               :controles-techniques-historique="controlesTechniquesHistorique"
+              :controlesTechniquesHistoriqueAriaLabel="controlesTechniquesHistoriqueAriaLabel"
             />
           </DsfrTabContent>
         </DsfrTabs>
@@ -1298,11 +1313,11 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
     <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  text-center">
-        <img
-          class="fr-responsive-img"
-          :src="images.logoSimplimmat"
-          alt=""
-        >
+      <img
+        class="fr-responsive-img"
+        :src="images.logoSimplimmat"
+        alt=""
+      >
     </div>
     <div class="fr-col-12  fr-col-md-8  fr-col-lg-8  fr-col-xl-8  text-center">
       <div class="fr-ml-4w">
