@@ -38,10 +38,10 @@ const routes = [
     },
     handler: (request, h) => {
       // HistoVec backend and HistoVec public-backend will be merged soon, so version number is share between both
-      syslogLogger.debug({ key: 'config.version', tag: 'VERSION', value: config.version })
+      syslogLogger.info({ key: 'api_version', tag: 'VERSION', value: config.version })
 
       const match = Boolean(VERSION_REGEX.test(config.version))
-      syslogLogger.debug({ key: 'match format version', tag: 'VERSION', value: match })
+      syslogLogger.info({ key: 'format_version_validate', tag: 'VERSION', value: match })
 
       return { version: config.version }
     },

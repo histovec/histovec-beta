@@ -67,15 +67,15 @@ export const getReport = async (payload) => {
   const isCIAnnule = Boolean(!encryptedImmat)
   if (!askCt || isCIAnnule || !config.utac.isApiActivated) {
     if (!askCt) {
-      syslogLogger.info({ key: 'no_call ask_ct_false', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'no_call_ask_ct_false', tag: 'UTAC', uuid })
     }
 
     if (isCIAnnule) {
-      syslogLogger.info({ key: 'no_call annulation_CI', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'no_call_annulation_CI', tag: 'UTAC', uuid })
     }
 
     if (!config.utac.isApiActivated) {
-      syslogLogger.info({ key: 'no_call api_not_activated', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'no_call_api_not_activated', tag: 'UTAC', uuid })
     }
 
     return {
@@ -95,21 +95,22 @@ export const getReport = async (payload) => {
 
       const encryptedUtacData = await redisClient.get(utacDataCacheId, uuid)
 
-      syslogLogger.info({ key: 'call_cached', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'call_cached', tag: 'UTAC', uuid })
       if (encryptedUtacData) {
+        syslogLogger.info({ key: 'call_cache_succeed', tag: 'UTAC', uuid })
         const utacData = decryptJson(encryptedUtacData, utacDataKey)
         return {
           sivData,
           utacData,
         }
       } else {
-        syslogLogger.info({ key: 'cache_miss', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+        syslogLogger.info({ key: 'cache_miss', tag: 'UTAC', uuid })
       }
     } catch (error) {
-      syslogLogger.info({ key: 'redis_down get_vehicle can_not_read_cache', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'redis_down_can_not_read_cache', tag: 'UTAC', uuid })
     }
   } else {
-    syslogLogger.info({ key: 'ignore_cache', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+    syslogLogger.info({ key: 'ignore_cache', tag: 'UTAC', uuid })
   }
 
   const normalizedImmat = normalizeImmatForUtac(immat)
@@ -124,7 +125,7 @@ export const getReport = async (payload) => {
   const isValidVin = Boolean(VIN_REGEX.test(vin))
 
   if (!isValidImmat) {
-    syslogLogger.error({ key: 'Invalid immatriculation for UTAC api', tag: 'SIV', uuid })
+    syslogLogger.error({ key: 'immatriculation_format_invalid', tag: 'SIV', uuid })
 
     try {
       // Cache unsupported vehicles
@@ -136,7 +137,7 @@ export const getReport = async (payload) => {
         config.redisPersit,
       )
     } catch (e) {
-      syslogLogger.info({ key: 'redis_down set_utac_invalid_immat_vehicle', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'redis_down_set_utac_invalid_immat_vehicle', tag: 'UTAC', uuid })
     }
 
     return {
@@ -166,7 +167,7 @@ export const getReport = async (payload) => {
     })
 
     if (utacStatus !== 200) {
-      syslogLogger.error({ key: 'response call_failed', tag: 'UTAC', uuid, value: { status: utacStatus, remoteError: utacMessage } })
+      syslogLogger.error({ key: 'call_utac_failed', tag: 'UTAC', uuid, value: { status: utacStatus, remoteError: utacMessage } })
 
       if (utacStatus === 404 || utacStatus === 406) {
         try {
@@ -179,7 +180,7 @@ export const getReport = async (payload) => {
             config.redisPersit,
           )
         } catch (e) {
-          syslogLogger.info({ key: 'redis_down set_utac_not_found_vehicle', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+          syslogLogger.info({ key: 'redis_down_set_vehicule_missing_utac_failed', tag: 'UTAC', uuid })
         }
 
         return {
@@ -199,7 +200,7 @@ export const getReport = async (payload) => {
     }
 
     if (!isMocked && !validateControlesTechniques(vin, ct)) {
-      syslogLogger.error({ key: 'VINs are differents', tag: 'UTAC', uuid })
+      syslogLogger.error({ key: 'vin_not_match_with_ct', tag: 'UTAC', uuid })
       throw new Error('Inconsistency for technical control')
     }
 
@@ -222,7 +223,7 @@ export const getReport = async (payload) => {
         config.redisPersit,
       )
     } catch (e) {
-      syslogLogger.info({ key: 'redis_down set_utac_vehicle', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'redis_down_set_vehicule_utac_failed', tag: 'UTAC', uuid })
     }
 
     return {

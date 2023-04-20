@@ -19,7 +19,7 @@ export const sendContactEmail = async (request, h) => {
       }).code(201)
     )
   } catch ({ message: errorMessage }) {
-    syslogLogger.error({ key: '❌ mail_format_erreur Error while formating mail', tag: 'MAIL', uuid: payload.uuid, value: errorMessage })
+    syslogLogger.error({ key: 'mail_format_erreur', tag: 'MAIL', uuid: payload.uuid, value: errorMessage })
 
     throw Boom.badImplementation(errorMessage, { success: false, message: errorMessage })
   }
