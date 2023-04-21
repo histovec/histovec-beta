@@ -1059,6 +1059,7 @@ export default defineComponent({
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
+              id="report-accordion-synthese"
               class="background-default-white"
               title="Synthèse"
               :expanded-id="expandedId"
@@ -1081,6 +1082,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              id="report-accordion-vehicule"
               class="background-default-white"
               title="Véhicule"
               :expanded-id="expandedId"
@@ -1093,6 +1095,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              id="report-accordion-titulaire"
               class="background-default-white"
               title="Titulaire et Titre"
               :expanded-id="expandedId"
@@ -1109,6 +1112,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              id="report-accordion-situation-administrative"
               class="background-default-white"
               title="Situation administrative"
               :expanded-id="expandedId"
@@ -1123,6 +1127,7 @@ export default defineComponent({
           </li>
           <li>
             <DsfrAccordion
+              id="report-accordion-historique"
               class="background-default-white"
               title="Historique"
               :expanded-id="expandedId"
@@ -1139,6 +1144,7 @@ export default defineComponent({
           <li>
             <DsfrAccordion
               v-if="isControleTechniqueDisponible"
+              id="report-accordion-controles-techniques"
               class="background-default-white"
               title="Contrôles techniques"
               :expanded-id="expandedId"
@@ -1153,6 +1159,7 @@ export default defineComponent({
           <li>
             <DsfrAccordion
               v-if="isControleTechniqueDisponible"
+              id="report-accordion-kilometrage"
               class="background-default-white"
               title="Kilométrage"
               :expanded-id="expandedId"
