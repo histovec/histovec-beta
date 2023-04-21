@@ -113,6 +113,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
 
       const mappedVehicule = vehiculeMapping(normalizedReport, config.isPublicApi)
       syslogLogger.debug({ key: 'siv_decrypted_and_mapped', tag: logLabel, uuid, value: { ...mappedVehicule } })
+      syslogLogger.info({ key: 'vehicule_vole', tag: logLabel, uuid, value: { vehicule_vole: mappedVehicule.etat.vole } })
 
       if (!askControlesTechniques) {
         const reportWithoutControlesTechniques = {
