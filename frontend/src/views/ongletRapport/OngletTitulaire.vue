@@ -32,7 +32,7 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12  fr-pb-2w">
       <h3 class="fr-mb-0 fr-h5">
-        Titulaire et Titre
+        Titulaire & Titre
       </h3>
     </div>
 

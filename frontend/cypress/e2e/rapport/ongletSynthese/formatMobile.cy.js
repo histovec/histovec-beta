@@ -86,18 +86,18 @@ context('Rapport vehicule cas simple - ouverture format mobile', () => {
     cy.get("ul[class*='fr-accordions-group']")
       .find("h3[class*='fr-accordion__title']")
       .find("button[aria-controls*='report-accordion-titulaire']")
-      .contains("Titulaire et Titre").click().wait(500)
+      .contains("Titulaire & Titre").click().wait(500)
 
     cy.get("ul[class*='fr-accordions-group']")
       .find("h3[class*='fr-accordion__title']")
       .find("button[aria-controls*='report-accordion-titulaire']")
       .should('have.attr', 'aria-expanded', 'true')
-      .contains("Titulaire et Titre")
+      .contains("Titulaire & Titre")
 
     cy.get("div[id*='report-accordion-titulaire']")
       .find("div[class*='fr-col-12 fr-pb-2w']")
       .find("h3")
-      .contains("Titulaire et Titre")
+      .contains("Titulaire & Titre")
 
     //Selection Situation administrative
     cy.get("ul[class*='fr-accordions-group']")

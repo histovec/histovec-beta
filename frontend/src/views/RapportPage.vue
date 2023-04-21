@@ -1097,7 +1097,7 @@ export default defineComponent({
             <DsfrAccordion
               id="report-accordion-titulaire"
               class="background-default-white"
-              title="Titulaire et Titre"
+              title="Titulaire & Titre"
               :expanded-id="expandedId"
               @expand="expandedId = $event"
             >
