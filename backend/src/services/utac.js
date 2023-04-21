@@ -119,9 +119,10 @@ class UTACClient {
     const authInterceptor = async (request) => {
       syslogLogger.debug(
         {
-          key: `requete_to ${request.url}`,
+          key: 'requete_to',
           tag: 'UTAC',
           value: {
+            url: request.url,
             data: request.data || {},
             auth: request.auth || {},
             headersCommon: request.headers.common || {},
@@ -159,7 +160,7 @@ class UTACClient {
   }
 
   async healthCheck () {
-    syslogLogger.debug({ key: 'Client - healthCheck', tag: 'UTAC' })
+    syslogLogger.debug({ key: 'health_check', tag: 'UTAC' })
 
     const { status } = await this.axios.get('/healthcheck').catch(err => err)
 
@@ -177,7 +178,7 @@ class UTACClient {
 
       const token = response.data && response.data.token
       if (token) {
-        syslogLogger.debug({ key: 'authentication succeed', tag: 'UTAC', value: { token } })
+        syslogLogger.debug({ key: 'authentication_succeed', tag: 'UTAC', value: { token } })
 
         const authorizationHeader = `bearer ${token}`
         this.axios.defaults.headers.common.Authorization = authorizationHeader
@@ -185,33 +186,33 @@ class UTACClient {
         return authorizationHeader
       }
 
-      syslogLogger.error({ key: 'authentication_error no_token', tag: 'UTAC' })
+      syslogLogger.error({ key: 'authentication_error_no_token', tag: 'UTAC' })
     } catch (error) {
       syslogLogger.error({ key: 'authentication_failed', tag: 'UTAC', value: { error } })
     }
   }
 
-  async readControlesTechniques ({ immat, vin }, { uuid, encryptedImmat, encryptedVin, isMocked }) {
+  async readControlesTechniques ({ immat, vin }, { uuid, isMocked }) {
     if (isMocked) {
       // Wait same times as production UTAC api response time
       const utacResponseTimeEstimationInMs = Math.trunc(248 + (100 * Math.random() - 100 / 2))
-      syslogLogger.debug({ key: 'bpsa_mock_time_to_wait', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, utacResponseTimeEstimationInMs } })
+      syslogLogger.debug({ key: 'mock_time_to_wait', tag: 'UTAC', uuid, value: { utacResponseTimeEstimationInMs } })
 
       const start = new Date()
-      syslogLogger.info({ key: 'bpsa_mock_call_start', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
+      syslogLogger.info({ key: 'mock_call_start', tag: 'UTAC', uuid })
 
       await sleep(utacResponseTimeEstimationInMs)
 
       const end = new Date()
       const executionTime = end - start
-      syslogLogger.info({ key: 'bpsa_mock_call_end', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, executionTime } })
+      syslogLogger.info({ key: 'mock_call_end', tag: 'UTAC', uuid, value: { executionTime } })
 
       const data = CONTROL_TECHNIQUES_MOCK_FOR_BPSA
 
       const { error } = utacResponseSchema.validate(data)
 
       if (error) {
-        syslogLogger.error({ key: 'malformed_mock_utac_response', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, error } })
+        syslogLogger.error({ key: 'malformed_mock_utac_response', tag: 'UTAC', uuid, value: { error } })
 
         return {
           status: 500,
@@ -227,8 +228,8 @@ class UTACClient {
     }
 
     const start = new Date()
-    syslogLogger.info({ key: 'call_start', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin } })
-    syslogLogger.debug({ key: 'readControlesTechniques', tag: 'UTAC', uuid, value: { immat, vin } })
+    syslogLogger.info({ key: 'call_utac_start', tag: 'UTAC', uuid })
+    syslogLogger.debug({ key: 'call_utac_start_data', tag: 'UTAC', uuid, value: { immat, vin } })
 
     let response = null
 
@@ -244,7 +245,7 @@ class UTACClient {
 
       const { error } = utacResponseSchema.validate(data)
       if (error) {
-        syslogLogger.error({ key: 'malformed_utac_response', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, error } })
+        syslogLogger.error({ key: 'malformed_utac_response', tag: 'UTAC', uuid, value: { error } })
 
         return {
           status: 500,
@@ -252,12 +253,12 @@ class UTACClient {
         }
       }
 
-      syslogLogger.info({ key: 'call_end call_ok', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, executionTime } })
+      syslogLogger.info({ key: 'call_utac_end_ok', tag: 'UTAC', uuid, value: { executionTime } })
     } catch (error) {
       // That should never happen
       const end = new Date()
       const executionTime = end - start
-      syslogLogger.error({ key: 'call_end call_ko', tag: 'UTAC', uuid, value: { encryptedImmat, encryptedVin, executionTime, error } })
+      syslogLogger.error({ key: 'call_utac_end_ko', tag: 'UTAC', uuid, value: { executionTime, error } })
 
       return {
         status: 500,

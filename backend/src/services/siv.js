@@ -29,7 +29,7 @@ export const getSIV = async (id, uuid) => {
     const hits = (response && response.hits && response.hits.hits) || []
 
     if (hits.length <= 0) {
-      syslogLogger.warn({ key: 'No hit in Elasticsearch', tag: 'SIV', uuid })
+      syslogLogger.warn({ key: 'elasticsearch_research_failed', tag: 'SIV', uuid })
 
       return {
         status: 404,
@@ -46,15 +46,15 @@ export const getSIV = async (id, uuid) => {
     } = hits[0]._source
 
     const askCt = rawAskCt === 'OUI'
-    syslogLogger.info({ key: 'ask_ct', tag: 'UTAC', uuid, value: { askCt, encryptedImmat, encryptedVin } })
+    syslogLogger.debug({ key: 'ask_ct_data', tag: 'UTAC', uuid, value: { encryptedVin } })
+    syslogLogger.info({ key: 'ask_ct', tag: 'UTAC', uuid, value: { askCt, encryptedImmat } })
 
     if (!sivData) {
-      const message = 'Wrong data format in Elasticsearch response'
-      syslogLogger.error({ key: message, tag: 'SIV', uuid, value: { reponse: hits } })
+      syslogLogger.error({ key: 'elasticsearch_data_format_erreur', tag: 'SIV', uuid, value: { reponse: hits } })
 
       return {
         status: 500,
-        message,
+        message: 'Wrong data format in Elasticsearch response',
         utac: {},
       }
     }
@@ -70,7 +70,7 @@ export const getSIV = async (id, uuid) => {
     }
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
-      syslogLogger.error({ key: 'elasticsearch_down get_report', tag: 'SIV', uuid, value: { error: errorMessage, id } })
+      syslogLogger.error({ key: 'elasticsearch_down_get_report_failed', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
       return {
         status: 503,
@@ -79,12 +79,11 @@ export const getSIV = async (id, uuid) => {
       }
     }
 
-    const message = 'Couldn\'t process Elasticsearch response'
-    syslogLogger.error({ key: message, tag: 'SIV', uuid, value: { error: errorMessage, id } })
+    syslogLogger.error({ key: 'elasticsearch_down', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
     return {
       status: 500,
-      message,
+      message: 'Couldn\'t process Elasticsearch response',
       utac: {},
     }
   }
