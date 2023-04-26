@@ -147,7 +147,7 @@ class UTACClient {
       const status = error?.response?.status || 'default'
       const message = ERROR_MESSAGES[status]
 
-      syslogLogger.debug({ key: 'error_interceptor', tag: 'UTAC', value: { status, message } })
+      syslogLogger.info({ key: 'error_interceptor', tag: 'UTAC', value: { status, message } })
 
       const customError = new Error(message)
       customError.status = status === 'default' ? 500 : status
