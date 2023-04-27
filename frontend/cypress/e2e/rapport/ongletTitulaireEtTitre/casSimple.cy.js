@@ -1,6 +1,6 @@
 import routes from "../../../constants/urls.json";
 
-context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
+context('Rapport vehicule cas simple - onglet Titulaire et Titre', () => {
   const listeCategories = ["Identité", "Code postal", "Date de première immatriculation", "Date du certificat d'immatriculation actuel"];
   const listeContenue = ["H**** S******", "60270", "13/05/2009", "13/05/2009"];
 
@@ -38,7 +38,7 @@ context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
     cy.url().should('eq',  Cypress.config('baseUrl') + routes.url_rapport_vendeur)
     cy.title().should('eq', 'HistoVec - Rapport vendeur')
 
-    // Onlget Titulaire & Titre selectionné
+    // Onlget Titulaire et Titre selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
       .find("li[class*='fr-tabs__item']")
@@ -46,17 +46,17 @@ context('Rapport vehicule cas simple - onglet Titulaire & Titre', () => {
       .eq(2)
       .find("button[class*='fr-tabs__tab']")
       .should('have.attr', 'aria-selected', 'false')
-      .contains("Titulaire & Titre")
+      .contains("Titulaire et Titre")
       .click()
       .should('have.attr', 'aria-selected', 'true')
   })
-  it("Affichage de l'onglet Titulaire & Titre - Titulaire & Titre", () => {
+  it("Affichage de l'onglet Titulaire et Titre - Titulaire et Titre", () => {
     // Titre
     cy.get("div[id*='report-tab-content-2']")
       .should("have.class", "fr-tabs__panel fr-tabs__panel--selected")
       .find("div[class*='fr-col-12 fr-pb-2w']")
       .should('have.length', 1)
-      .contains("Titulaire & Titre")
+      .contains("Titulaire et Titre")
 
     cy.get("div[id*='report-tab-content-2']")
       .should("have.class", "fr-tabs__panel fr-tabs__panel--selected")

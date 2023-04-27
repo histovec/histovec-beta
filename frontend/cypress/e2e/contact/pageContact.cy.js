@@ -100,7 +100,7 @@ context('Contact', () => {
     cy.contains('p', 'Remplissez le formulaire ci-dessous et expliquez-nous votre problème.')
 
     // formulaire
-    cy.contains('h2', 'Veuillez choisir un ou plusieurs thèmes :')
+    cy.contains('label', 'Veuillez choisir un ou plusieurs thèmes :')
       .parent()
       .find('ul').within(() => {
         cy.get('li').should('have.length', 5)
