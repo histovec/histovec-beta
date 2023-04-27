@@ -358,7 +358,7 @@ export default defineComponent({
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0" aria-live="polite">
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
-      <h2 class="fr-h6">Veuillez choisir un ou plusieurs thèmes :</h2>
+      <label class="fr-h6 label-themes">Veuillez choisir un ou plusieurs thèmes :</label>
       <DsfrTags
         :tags="tags"
       />
@@ -589,5 +589,8 @@ export default defineComponent({
 <style scoped>
   .text-center {
     text-align: center;
+  }
+  .label-themes {
+    display: block;
   }
 </style>

@@ -583,7 +583,7 @@ export default defineComponent({
     const defaultTabTitles = [
       { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
       { title: 'Véhicule', panelId: 'report-tab-content-1', tabId:'report-tab-1'},
-      { title: 'Titulaire & Titre', panelId: 'report-tab-content-2', tabId:'report-tab-2'},
+      { title: 'Titulaire et Titre', panelId: 'report-tab-content-2', tabId:'report-tab-2'},
       { title: 'Situation administrative', panelId: 'report-tab-content-3', tabId:'report-tab-3'},
       { title: 'Historique', panelId: 'report-tab-content-4', tabId:'report-tab-4'},
     ]
@@ -936,8 +936,7 @@ export default defineComponent({
             @click="logMonAvisImage"
           >
             <img
-              class="fr-responsive-img"
-              style="height: 5rem;"
+              class="fr-responsive-img image-avis"
               src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
               alt=""
             />
@@ -958,15 +957,14 @@ export default defineComponent({
             id="monAvisImage"
             href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
             rel="noopener noreferrer"
+            title="Lien vers jedonnemonavis.numerique.gouv.fr pour donner son avis sur la démarche HistoVec"
             target="_blank"
             @click="logMonAvisImage"
           >
             <img
-              class="fr-responsive-img"
-              style="height: 5rem;"
+              class="fr-responsive-img image-avis"
               src="https://voxusagers.numerique.gouv.fr/static/bouton-blanc.svg"
-              alt="Lien vers un formulaire permettant de donner son avis sur la démarche HistoVec"
-              title="Je donne mon avis sur cette démarche"
+              alt=""
             />
           </a>
         </div>
@@ -1698,7 +1696,7 @@ export default defineComponent({
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-pb-2w">
               <h3 class="fr-mb-0 fr-h5">
-                Titulaire & Titre
+                Titulaire et Titre
               </h3>
             </div>
 
@@ -2147,11 +2145,14 @@ export default defineComponent({
 </template>
 
 <style scoped>
-#monAvisImage[target=_blank]:after {
-  content: '';
-}
+  #monAvisImage[target=_blank]:after {
+    content: '';
+  }
 
-.text-center {
-  text-align: center;
-}
+  .text-center {
+    text-align: center;
+  }
+  .image-avis {
+    height: 5rem;
+  }
 </style>

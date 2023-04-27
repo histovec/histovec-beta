@@ -11,11 +11,12 @@ import {
   REPRODUCTION_REQUEST_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_UTAC_PERSONAL_DATA_EMAIL, SEND_LIMITATION_PERSONAL_DATA_EMAIL, SEND_OPPOSITION_PERSONAL_DATA_EMAIL,
 } from '@/constants/email.js'
 import api from '@/api/index.js'
+import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr';
 
 export default defineComponent({
   name: 'MentionsLegalesPage',
 
-  components: { RouterLink },
+  components: { DsfrBreadcrumb, RouterLink },
 
   data () {
     return {
@@ -46,8 +47,21 @@ export default defineComponent({
 <template>
   <div
     class="fr-grid-row fr-grid-row--gutters"
-    style="margin-top: 5rem"
   >
+    <div class="fr-col-12">
+      <DsfrBreadcrumb
+        class="fr-mb-0"
+        :links="[
+          {
+            to: '/accueil',
+            text: 'Accueil',
+          },
+          {
+            text: 'Mentions légales',
+          },
+        ]"
+      />
+    </div>
     <div class="fr-col-12">
       <h1>Mentions légales</h1>
 

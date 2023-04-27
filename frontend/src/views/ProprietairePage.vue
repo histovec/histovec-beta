@@ -1503,8 +1503,7 @@ export default defineComponent({
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
     <div
-      class="fr-col-6  fr-col-lg-3  fr-col-xl-3"
-      style="text-align: right"
+      class="fr-col-6  fr-col-lg-3  fr-col-xl-3 bouton-recherche"
     >
       <DsfrButton
         id="bouton-recherche"
@@ -1516,7 +1515,6 @@ export default defineComponent({
     </div>
     <div
       class="fr-col-6  fr-col-lg-3  fr-col-xl-3"
-      style="text-align: left"
     >
       <DsfrButton
         id="bouton-effacer"
@@ -1586,5 +1584,8 @@ export default defineComponent({
 }
 .card-immatriculation--radio {
   outline:none;
+}
+.bouton-recherche {
+  text-align: right;
 }
 </style>
