@@ -8,5 +8,6 @@
   "url_donnees_personnelles": "donnees-personnelles-et-cookies",
   "url_mentions_legales": "mentions-legales",
   "url_plan_site": "plan-du-site",
-  "url_accessibilite": "accessibilite"
+  "url_accessibilite": "accessibilite",
+  "url_erreur_inattendue": "erreur-inattendue"
 }
