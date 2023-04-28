@@ -46,6 +46,6 @@ export default defineComponent({
   >
     <router-view />
   </main>
-  <HistoVecFooter/>
+  <HistoVecFooter />
   <!-- </div> -->
 </template>
