@@ -1,10 +1,36 @@
 import { getElasticsearchClient } from '../connectors/elasticsearch.js'
 import { syslogLogger } from '../util/logger.js'
 import config from '../config.js'
+import { VEHICULE_COMPLET, VEHICULE_MIN, ENCRYPT_DATA } from '../constant/bouchon_data.js'
 
 const elasticsearchClient = getElasticsearchClient()
 
-export const getSIV = async (id, uuid) => {
+const isMockedSiv = config.isSIVMockActivated
+
+export const getSIV = async (id, uuid, nom) => {
+  if (isMockedSiv) {
+    if (nom === 'vehiculeMin') {
+      return {
+        status: 200,
+        sivData: VEHICULE_MIN,
+        utac: {
+          askCt: false,
+          encryptedImmat: ENCRYPT_DATA.encrypt_immat,
+          encryptedVin: ENCRYPT_DATA.encrypt_vin,
+        },
+      }
+    } else {
+      return {
+        status: 200,
+        sivData: VEHICULE_COMPLET,
+        utac: {
+          askCt: true,
+          encryptedImmat: ENCRYPT_DATA.encrypt_immat,
+          encryptedVin: ENCRYPT_DATA.encrypt_vin,
+        },
+      }
+    }
+  }
   try {
     const response = await elasticsearchClient.search({
       index: config.esSIVIndex,
@@ -44,7 +70,6 @@ export const getSIV = async (id, uuid) => {
       utac_encrypted_immat: encryptedImmat = null,
       utac_encrypted_vin: encryptedVin = null,
     } = hits[0]._source
-
     const askCt = rawAskCt === 'OUI'
     syslogLogger.debug({ key: 'ask_ct_data', tag: 'UTAC', uuid, value: { encryptedVin } })
     syslogLogger.info({ key: 'ask_ct', tag: 'UTAC', uuid, value: { askCt, encryptedImmat } })

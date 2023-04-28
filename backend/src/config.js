@@ -14,6 +14,7 @@ const config = {
   isTest: process.env.NODE_ENV === 'test',
   isDevelopmentMode,
   isPublicApi,
+  isSIVMockActivated: process.env.IS_SIV_MOCK_ACTIVATED === 'true' || process.env.IS_SIV_MOCK_ACTIVATED === true,
   isHistovecUnavailable: process.env.PUBLIC_BACKEND_IS_HISTOVEC_UNAVAILABLE === 'true',
   isUtacCacheIgnorable: isDevelopmentMode || process.env.IS_UTAC_CACHE_IGNORABLE === 'true',
   env: process.env.NODE_ENV,
