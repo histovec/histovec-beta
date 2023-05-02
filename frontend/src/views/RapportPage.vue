@@ -1783,15 +1783,15 @@ export default defineComponent({
                   </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
+                  <ul class="fr-text--md fr-raw-list">
+                    <li
                       v-for="(gageInfos, index) in reportLabels.gagesInfos"
                       :key="index"
                     >
                       <span v-if="gageInfos.date">{{ gageInfos.date }} - </span>
                       <span class="fr-text--bleu">{{ gageInfos.label }}</span>
-                    </span>
-                  </p>
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
@@ -1810,8 +1810,8 @@ export default defineComponent({
                   </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
+                  <ul class="fr-text--md fr-raw-list">
+                    <li
                       v-for="(oppositionInfos, index) in reportLabels.oppositionsInfos"
                       :key="index"
                     >
@@ -1822,8 +1822,8 @@ export default defineComponent({
                       >
                         ( Appelez le 08 21 08 00 31 )
                       </span>
-                    </span>
-                  </p>
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
@@ -1848,15 +1848,15 @@ export default defineComponent({
                   </h3>
                 </div>
                 <div class="fr-col-12  fr-pb-0  fr-pt-0">
-                  <p class="fr-text--md">
-                    <span
+                  <ul class="fr-text--md fr-raw-list">
+                    <li
                       v-for="(dvs, index) in reportLabels.dvsInfos"
                       :key="index"
                     >
                       <span v-if="dvs.date">{{ dvs.date }} - </span>
                       <span class="fr-text--bleu">{{ dvs.label }}</span>
-                    </span>
-                  </p>
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
