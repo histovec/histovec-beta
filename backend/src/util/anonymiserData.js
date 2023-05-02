@@ -43,7 +43,6 @@ export const anonymizeIdentite = (identite) => {
   const anonymizedDataIdentite =
     {
       alreadyHasIdAndKey: identite.alreadyHasIdAndKey,
-      uuid: identite.uuid,
       anonymizedNom: identite.nom ? anonymizeText(identite.nom) : undefined,
       anonymizedPrenom: (identite.prenoms && identite.typeImmatriculation === TYPE_IMMATRICULATION.SIV) ? anonymizeText(identite.prenoms[0]) : undefined,
       anonymizedRaisonSociale: identite.raisonSociale ? anonymizeText(identite.raisonSociale) : undefined,

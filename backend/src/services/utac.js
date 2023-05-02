@@ -2,7 +2,7 @@ import axios from 'axios'
 import { readFileSync } from 'fs'
 import { utacResponseSchema } from '../services/utac/schemas/response.js'
 import { Agent as HttpsAgent } from 'https'
-import { appLogger } from '../util/logger.js'
+import { syslogLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 
@@ -117,13 +117,19 @@ class UTACClient {
     }
 
     const authInterceptor = async (request) => {
-      appLogger.debug({
-        debug: `UTAC - ${request.url}`,
-        data: request.data || {},
-        auth: request.auth || {},
-        headersCommon: request.headers.common || {},
-        headers: request.headers || {},
-      })
+      syslogLogger.debug(
+        {
+          key: 'requete_to',
+          tag: 'UTAC',
+          value: {
+            url: request.url,
+            data: request.data || {},
+            auth: request.auth || {},
+            headersCommon: request.headers.common || {},
+            headers: request.headers || {},
+          },
+        },
+      )
 
       if (!needAuth(request)) {
         return request
@@ -141,12 +147,7 @@ class UTACClient {
       const status = error?.response?.status || 'default'
       const message = ERROR_MESSAGES[status]
 
-      appLogger.debug({
-        debug: 'errorInterceptor',
-        error,
-        status,
-        message,
-      })
+      syslogLogger.info({ key: 'error_interceptor', tag: 'UTAC', value: { status, message } })
 
       const customError = new Error(message)
       customError.status = status === 'default' ? 500 : status
@@ -159,9 +160,7 @@ class UTACClient {
   }
 
   async healthCheck () {
-    appLogger.debug({
-      debug: '[UTAC] Client - healthCheck',
-    })
+    syslogLogger.debug({ key: 'health_check', tag: 'UTAC' })
 
     const { status } = await this.axios.get('/healthcheck').catch(err => err)
 
@@ -179,10 +178,7 @@ class UTACClient {
 
       const token = response.data && response.data.token
       if (token) {
-        appLogger.debug({
-          debug: '[UTAC] authentication succeed',
-          token,
-        })
+        syslogLogger.debug({ key: 'authentication_succeed', tag: 'UTAC', value: { token } })
 
         const authorizationHeader = `bearer ${token}`
         this.axios.defaults.headers.common.Authorization = authorizationHeader
@@ -190,40 +186,33 @@ class UTACClient {
         return authorizationHeader
       }
 
-      appLogger.error({
-        error: '[UTAC] authentication_error no_token',
-      })
+      syslogLogger.error({ key: 'authentication_error_no_token', tag: 'UTAC' })
     } catch (error) {
-      appLogger.error({
-        error: '[UTAC] authentication_failed',
-        remoteError: error,
-      })
+      syslogLogger.error({ key: 'authentication_failed', tag: 'UTAC', value: { error } })
     }
   }
 
-  async readControlesTechniques ({ immat, vin }, { uuid, encryptedImmat, encryptedVin, isMocked }) {
+  async readControlesTechniques ({ immat, vin }, { uuid, isMocked }) {
     if (isMocked) {
       // Wait same times as production UTAC api response time
       const utacResponseTimeEstimationInMs = Math.trunc(248 + (100 * Math.random() - 100 / 2))
-      appLogger.debug(`-- utacResponseTimeEstimationInMs begin ==> ${utacResponseTimeEstimationInMs}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_time_to_wait ${utacResponseTimeEstimationInMs}`)
+      syslogLogger.debug({ key: 'mock_time_to_wait', tag: 'UTAC', uuid, value: { utacResponseTimeEstimationInMs } })
 
       const start = new Date()
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_start`)
+      syslogLogger.info({ key: 'mock_call_start', tag: 'UTAC', uuid })
 
       await sleep(utacResponseTimeEstimationInMs)
 
       const end = new Date()
       const executionTime = end - start
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} bpsa_mock_call_end ${executionTime}`)
+      syslogLogger.info({ key: 'mock_call_end', tag: 'UTAC', uuid, value: { executionTime } })
 
       const data = CONTROL_TECHNIQUES_MOCK_FOR_BPSA
 
       const { error } = utacResponseSchema.validate(data)
 
       if (error) {
-        appLogger.info(`[UTAC] response validation error : ${error}`)
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} malformed_utac_response`)
+        syslogLogger.error({ key: 'malformed_mock_utac_response', tag: 'UTAC', uuid, value: { error } })
 
         return {
           status: 500,
@@ -239,13 +228,8 @@ class UTACClient {
     }
 
     const start = new Date()
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_start`)
-
-    appLogger.debug({
-      debug: 'UTACClient - readControlesTechniques',
-      immat,
-      vin,
-    })
+    syslogLogger.info({ key: 'call_utac_start', tag: 'UTAC', uuid })
+    syslogLogger.debug({ key: 'call_utac_start_data', tag: 'UTAC', uuid, value: { immat, vin } })
 
     let response = null
 
@@ -261,22 +245,20 @@ class UTACClient {
 
       const { error } = utacResponseSchema.validate(data)
       if (error) {
+        syslogLogger.error({ key: 'malformed_utac_response', tag: 'UTAC', uuid, value: { error } })
+
         return {
           status: 500,
           message: ERROR_MESSAGES.malformedResponse,
         }
       }
 
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ok`)
+      syslogLogger.info({ key: 'call_utac_end_ok', tag: 'UTAC', uuid, value: { executionTime } })
     } catch (error) {
       // That should never happen
       const end = new Date()
       const executionTime = end - start
-      appLogger.info(`Error while reading technical controls (${uuid}): ${error}`)
-
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_end ${executionTime}`)
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_ko`)
+      syslogLogger.error({ key: 'call_utac_end_ko', tag: 'UTAC', uuid, value: { executionTime, error } })
 
       return {
         status: 500,
@@ -284,12 +266,7 @@ class UTACClient {
       }
     }
 
-    appLogger.debug({
-      debug: '[UTAC] result found',
-      immat,
-      ct: response.data.ct,
-      update_date: response.data.update_date,
-    })
+    syslogLogger.debug({ key: 'result_found', tag: 'UTAC', uuid, value: { immat, ct: response.data.ct, update_date: response.data.update_date } })
 
     return {
       status: response.status,

@@ -8,7 +8,7 @@ import Joi from 'joi'
 import { sendContactEmail } from './handlers/feedback.js'
 import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX, NUMERO_SIREN_REGEX, VERSION_REGEX } from './constant/regex.js'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from './constant/type.js'
-import { appLogger } from './util/logger.js'
+import { syslogLogger } from './util/logger.js'
 
 import config from './config.js'
 
@@ -38,10 +38,10 @@ const routes = [
     },
     handler: (request, h) => {
       // HistoVec backend and HistoVec public-backend will be merged soon, so version number is share between both
-      appLogger.info(`[VERSION] config.version = ${config.version}`)
+      syslogLogger.info({ key: 'api_version', tag: 'VERSION', value: config.version })
 
       const match = Boolean(VERSION_REGEX.test(config.version))
-      appLogger.info(`[VERSION] match = ${match}`)
+      syslogLogger.info({ key: 'format_version_validate', tag: 'VERSION', value: match })
 
       return { version: config.version }
     },

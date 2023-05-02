@@ -8,7 +8,7 @@ import {
   urlSafeBase64Encode,
 } from '../util/crypto'
 import config from '../config.js'
-import { appLogger } from '../util/logger.js'
+import { syslogLogger } from '../util/logger.js'
 import { getAsync, setAsync } from '../connectors/redis.js'
 
 import { VIN_REGEX } from '../constant/regex.js'
@@ -49,9 +49,7 @@ const getSIV = async (id, uuid) => {
     const hits = (response && response.hits && response.hits.hits) || []
 
     if (hits.length <= 0) {
-      appLogger.warn({
-        error: 'No hit',
-      })
+      syslogLogger.warn({ key: 'elasticsearch_research_failed', tag: 'SIV', uuid })
 
       return {
         status: 404,
@@ -68,17 +66,15 @@ const getSIV = async (id, uuid) => {
     } = hits[0]._source
 
     const askCt = rawAskCt === 'OUI'
-    appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ask_ct ${askCt}`)
+    syslogLogger.debug({ key: 'ask_ct_data', tag: 'UTAC', uuid, value: { encryptedVin } })
+    syslogLogger.info({ key: 'ask_ct', tag: 'UTAC', uuid, value: { askCt, encryptedImmat } })
 
     if (!sivData) {
-      appLogger.error({
-        error: 'Bad Content in elasticsearch response',
-        response: hits,
-      })
+      syslogLogger.error({ key: 'elasticsearch_data_format_erreur', tag: 'SIV', uuid, value: { reponse: hits } })
 
       return {
         status: 500,
-        message: 'Bad Content from Elasticsearch',
+        message: 'Wrong data format in Elasticsearch response',
         utac: {},
       }
     }
@@ -94,12 +90,7 @@ const getSIV = async (id, uuid) => {
     }
   } catch ({ message: errorMessage }) {
     if (errorMessage === 'No Living connections') {
-      appLogger.error({
-        error: 'Elasticsearch service not available',
-        id,
-        uuid,
-        remote_error: errorMessage,
-      })
+      syslogLogger.error({ key: 'elasticsearch_down_get_report_failed', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
       return {
         status: 502,
@@ -108,12 +99,7 @@ const getSIV = async (id, uuid) => {
       }
     }
 
-    appLogger.error({
-      error: 'Couldn\'t process Elasticsearch response',
-      id,
-      uuid,
-      remote_error: errorMessage,
-    })
+    syslogLogger.error({ key: 'elasticsearch_down', tag: 'SIV', uuid, value: { error: errorMessage, id } })
 
     return {
       status: 500,
@@ -127,9 +113,6 @@ const validateTechnicalControls = (sentVin, technicalControls) => {
   const inconsistentVin = technicalControls.find(ct => ct.ct_vin !== sentVin)
 
   if (inconsistentVin) {
-    appLogger.error({
-      message: 'VINs are differents',
-    })
     return false
   }
 
@@ -149,19 +132,15 @@ const computeUtacDataKey = (encryptedImmat = 'h4ZWsQLmpOZf') => {
   }
 }
 
+// @todo: a supprimer, pas utilisé
 export const generateGetReport = (utacClient) =>
   async (req, res) => {
     const { id, uuid, options: { ignoreUtacCache } } = req.body
-    appLogger.warn(`-- CONFIG -- ignoreUtacCache => ${ignoreUtacCache}`)
-
-    appLogger.info(`-- idv ==> ${id}`)
+    syslogLogger.debug({ key: 'get_vehicule', tag: 'CONFIG', uuid, value: { ignoreUtacCache } })
+    syslogLogger.info({ key: 'idv', tag: 'CONFIG', uuid, value: { idv: id } })
 
     if (!checkUuid(uuid) || !checkId(id)) {
-      appLogger.error({
-        error: 'Bad request - invalid uuid or id',
-        id,
-        uuid,
-      })
+      syslogLogger.error({ key: 'invalid_uuid_or_id', tag: 'SIV', uuid })
 
       res.status(400).json({
         success: false,
@@ -191,7 +170,7 @@ export const generateGetReport = (utacClient) =>
     }
 
     const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-    appLogger.debug(`-- immat ==> ${immat}`)
+    syslogLogger.debug({ key: 'immatriculation', tag: 'UTAC', uuid, value: { immatriculation: immat } })
 
     // 2 - UTAC
 
@@ -209,15 +188,15 @@ export const generateGetReport = (utacClient) =>
     const isAnnulationCI = Boolean(!encryptedImmat)
     if (!askCt || isAnnulationCI || !isApiActivated) {
       if (!askCt) {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call ask_ct_false`)
+        syslogLogger.info({ key: 'no_call_ask_ct_false', tag: 'UTAC', uuid })
       }
 
       if (isAnnulationCI) {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call annulation_CI`)
+        syslogLogger.info({ key: 'no_call_annulation_CI', tag: 'UTAC', uuid })
       }
 
       if (!isApiActivated) {
-        appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} no_call api_not_activated`)
+        syslogLogger.info({ key: 'no_call_api_not_activated', tag: 'UTAC', uuid })
       }
 
       res.status(200).json({
@@ -241,11 +220,11 @@ export const generateGetReport = (utacClient) =>
     const utacData = await getAsync(utacDataCacheId)
 
     if (ignoreUtacCache) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} ignore_cache`)
+      syslogLogger.info({ key: 'ignore_cache', tag: 'UTAC', uuid })
     }
 
     if (!ignoreUtacCache && utacData) {
-      appLogger.info(`[UTAC] ${uuid} ${encryptedImmat}_${encryptedVin} call_cached`)
+      syslogLogger.info({ key: 'call_cached', tag: 'UTAC', uuid })
 
       try {
         res.status(200).json({
@@ -256,33 +235,24 @@ export const generateGetReport = (utacClient) =>
         })
         return
       } catch (error) {
-        appLogger.error({
-          error: 'Couldn\'t decrypt cached UTAC response',
-          remote_error: error.message,
-        })
-
+        syslogLogger.info({ key: 'redis_down_can_not_read_cache', tag: 'UTAC', uuid })
         // Let's asking UTAC api to fix it
       }
     }
 
     const normalizedImmat = normalizeImmatForUtac(immat)
-    appLogger.debug(`-- normalized immat ==> ${normalizedImmat}`)
-
     const validImmatRegex = /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}|[0-9]{1,4}[ ]{0,}[A-Z]{1,3}[ ]{0,}[0-9]{1,3}$/
     const isValidImmat = Boolean(validImmatRegex.test(normalizedImmat))
 
     const vin = encryptedVin ? decryptXOR(encryptedVin, config.utacIdKey) : ''
-    appLogger.debug(`-- vin ==> ${vin}`)
-
     const normalizedVin = vin.toUpperCase()
-    appLogger.debug(`-- normalized vin ==> ${normalizedVin}`)
+
+    syslogLogger.debug({ key: 'informations_vehicule', tag: 'SIV', uuid, value: { immatriculation: normalizedImmat, vin: normalizedVin } })
 
     const isValidVin = Boolean(VIN_REGEX.test(vin))
 
     if (!isValidImmat) {
-      appLogger.error({
-        error: 'Invalid immatriculation for UTAC api',
-      })
+      syslogLogger.error({ key: 'immatriculation_format_invalid', tag: 'SIV', uuid })
 
       // Cache unsupported vehicles
       await setAsync(
@@ -302,9 +272,7 @@ export const generateGetReport = (utacClient) =>
     }
 
     if (!isValidVin) {
-      appLogger.warn({
-        error: 'Malformed VIN',
-      })
+      syslogLogger.warn({ key: 'malformed_vin', tag: 'SIV', uuid })
     }
 
     try {
@@ -322,11 +290,7 @@ export const generateGetReport = (utacClient) =>
       })
 
       if (utacStatus !== 200) {
-        appLogger.error({
-          error: '[UTAC] response call_failed',
-          status: utacStatus,
-          remote_error: utacMessage,
-        })
+        syslogLogger.error({ key: 'call_utac_failed', tag: 'UTAC', uuid, value: { status: utacStatus, remoteError: utacMessage } })
 
         if (utacStatus === 404 || utacStatus === 406) {
           // Cache unsupported vehicles
@@ -361,6 +325,7 @@ export const generateGetReport = (utacClient) =>
       }
 
       if (!validateTechnicalControls(vin, ct)) {
+        syslogLogger.error({ key: 'vin_not_match_with_ct', tag: 'UTAC', uuid })
         throw new Error('Inconsistency for technical control')
       }
 
@@ -384,10 +349,7 @@ export const generateGetReport = (utacClient) =>
         utacDataKey,
       })
     } catch ({ message: errorMessage }) {
-      appLogger.error({
-        error: '[UTAC] call_error',
-        remote_error: errorMessage,
-      })
+      syslogLogger.error({ key: 'call_error', tag: 'UTAC', uuid, value: { errorMessage } })
 
       // Don't cache errors
       res.status(200).json({

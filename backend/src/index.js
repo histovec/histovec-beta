@@ -2,66 +2,54 @@ import { createServer } from './server.js'
 import { getRedisClient } from './connectors/redis.js'
 import { getElasticsearchClient } from './connectors/elasticsearch.js'
 import { getUtacClient } from './connectors/utac.js'
-import { appLogger, techLogger } from './util/logger.js'
+import { syslogLogger } from './util/logger.js'
 import config from './config.js'
-
-const API_NAME = config.apiName // 'backend' or 'public-backend'
 
 const elasticsearchClient = getElasticsearchClient()
 const redisClient = getRedisClient()
 const utacClient = getUtacClient()
 
 const cleanUp = async (server, code, reason) => {
-  appLogger.info(`${API_NAME} REST server shutting down… (${reason})`)
+  syslogLogger.info({ key: 'server_shutting_down', tag: 'SERVER-STOP', value: { code, reason } })
 
   if (!config.isHistovecUnavailable) {
     try {
       // Closing elasticsearch connection
       await elasticsearchClient.close()
-      appLogger.info('elasticsearch client is shutting down properly…')
-      appLogger.info('[SERVER-STOP] elasticsearch quit')
+      syslogLogger.info({ key: 'elasticsearch_shutdown_properly', tag: 'SERVER-STOP' })
     } catch (error) {
-      appLogger.info(`elasticsearch client shutdown with error: ${error}`)
-      appLogger.info('[SERVER-STOP] elasticsearch error')
+      syslogLogger.info({ key: 'elasticsearch_shutdown_error', tag: 'SERVER-STOP', value: error })
     }
 
     try {
       // Closing redis connection
       await redisClient.quit()
-      appLogger.info('redis client is shutting down properly…')
-      appLogger.info('[SERVER-STOP] redis quit')
+      syslogLogger.info({ key: 'redis_shutdown_properly', tag: 'SERVER-STOP' })
     } catch (error) {
-      appLogger.info('Error while shutting down properly.')
-      appLogger.info('redis client is shutting down hardly…')
+      syslogLogger.info({ key: 'redis_shutdown_hardly', tag: 'SERVER-STOP' })
       try {
         await redisClient.disconnect()
-        appLogger.info('[SERVER-STOP] redis disconnect')
+        syslogLogger.info({ key: 'redis_disconnect', tag: 'SERVER-STOP' })
       } catch {
-        appLogger.info('[SERVER-STOP] redis is already stopped')
+        syslogLogger.info({ key: 'redis_already_stopped', tag: 'SERVER-STOP' })
       }
     }
-    appLogger.info('redis client shutdown complete')
+    syslogLogger.info({ key: 'redis_shutdown_complete', tag: 'SERVER-STOP' })
   }
 
   // Stopping server
   try {
     await server.stop({ timeout: 10000 }) // Wait 10s to stop
-    appLogger.info(`${API_NAME} REST server shutdown complete`)
-    appLogger.info('[SERVER-STOP] server graceful-stop')
+    syslogLogger.info({ key: 'server_shutdown_complete', tag: 'SERVER-STOP' })
   } catch (error) {
-    appLogger.info(`${API_NAME} REST server shutdown complete with error: ${error}`)
-    appLogger.info('[SERVER-STOP] server hard-stop')
+    syslogLogger.info({ key: 'server_hardstop_shutdown_complete_with_error', tag: 'SERVER-STOP', value: error })
   }
   process.exit(code)
 }
 
 const initServer = async () => {
-  techLogger.debug(
-    `🔧  ${JSON.stringify(config)}`,
-  )
-  appLogger.info(`[CONFIG] usePreviousMonthForData ${config.usePreviousMonthForData}`)
-  appLogger.info(`[CONFIG] previousMonthShift ${config.previousMonthShift}`)
-  appLogger.info(`[CONFIG] version ${config.version}`)
+  syslogLogger.debug({ key: 'detail_informations_configuration', tag: 'CONFIG', value: config })
+  syslogLogger.info({ key: 'detail_informations_configuration', tag: 'CONFIG', value: { usePreviousMonthForData: config.usePreviousMonthForData, previousMonthShift: config.previousMonthShift, version: config.version } })
 
   const server = await createServer()
 
@@ -72,67 +60,36 @@ const initServer = async () => {
         q: 'version',
         size: '1',
       })
-      techLogger.info(
-        `✅  ${API_NAME} REST server connected to elasticsearch`,
-      )
-      appLogger.info('[SERVER-START] elasticsearch connect')
+      syslogLogger.info({ key: 'elasticsearch_up_and_connected', tag: 'SERVER-START' })
     } catch (error) {
-      techLogger.error(
-        `❌  ${API_NAME} REST server could not connect to elasticsearch…`,
-      )
-      techLogger.error(error)
-      appLogger.info('[SERVER-START] elasticsearch_down unable_to_connect_at_start')
-      appLogger.info('-- elasticsearch is down => cannot connect to elasticsearch')
+      syslogLogger.info({ key: 'elasticsearch_down_unable_to_connect', tag: 'SERVER-START', value: error })
     }
 
     try {
-      await redisClient.get('')
-      techLogger.info(
-        `✅  ${API_NAME} REST server connected to redis`,
-      )
-      appLogger.info('[SERVER-START] redis connect')
+      await redisClient.get('', '')
+      syslogLogger.info({ key: 'redis_up_and_connected', tag: 'SERVER-START' })
     } catch (error) {
-      techLogger.error(
-        `❌  ${API_NAME} REST server could not connect to redis…`,
-      )
-      techLogger.error(error)
-      appLogger.info('[SERVER-START] redis_down unable_to_connect_at_start')
-      appLogger.info('-- redis is down => cannot connect to redis')
+      syslogLogger.info({ key: 'redis_down_unable_to_connect', tag: 'SERVER-START', value: error })
     }
 
     try {
       const response = await utacClient.healthCheck()
 
       if (response.status === 200) {
-        techLogger.info(
-          '✅  UTAC API server is ok',
-        )
-        appLogger.info('[SERVER-START] utac_api ok')
+        syslogLogger.info({ key: 'utac_api_ok', tag: 'SERVER-START' })
       } else {
-        techLogger.info(
-          `❌  UTAC API is not available… (status : ${response.status})`,
-        )
-        appLogger.info(`[SERVER-START] utac_api ko ${response.status}`)
+        syslogLogger.info({ key: 'utac_api_ko', tag: 'SERVER-START', value: { status: response.status } })
       }
     } catch (error) {
-      techLogger.error(
-        '❌  UTAC API is not available…',
-      )
-      techLogger.error(error)
-      appLogger.info('[SERVER-START] utac_api ko')
+      syslogLogger.info({ key: 'utac_api_ko', tag: 'SERVER-START', value: error })
     }
   }
 
   try {
     await server.start()
-    techLogger.info(
-      `✅  ${API_NAME} REST server started at ${server.info.uri}`,
-    )
+    syslogLogger.info({ key: 'server_started', tag: 'SERVER-START', value: { uri: server.info.uri } })
   } catch (error) {
-    techLogger.error(
-      `❌  ${API_NAME} REST server failed to start, exiting…`,
-    )
-    techLogger.error(error)
+    syslogLogger.error({ key: 'server_failed_to_start', tag: 'SERVER-START', value: error })
   }
 
   // Uncatched errors
