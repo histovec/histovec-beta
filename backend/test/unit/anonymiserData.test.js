@@ -109,7 +109,6 @@ lab.experiment('anonymisation identité', () => {
   lab.test('propriétaire siv particulier', () => {
     const identite = {
       alreadyHasIdAndKey: false,
-      uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
       typeImmatriculation: 'SIV',
       prenoms: ['Alexandre'],
       nom: 'Roullier',
@@ -121,7 +120,6 @@ lab.experiment('anonymisation identité', () => {
     const anonymizedIdentiteResultat = {
       anonymizedDataIdentite: {
         alreadyHasIdAndKey: false,
-        uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
         anonymizedNom: 'R*******',
         anonymizedPrenom: 'A********',
         anonymizedRaisonSociale: undefined,
@@ -140,7 +138,6 @@ lab.experiment('anonymisation identité', () => {
   lab.test('propriétaire siv professionel', () => {
     const identite = {
       alreadyHasIdAndKey: false,
-      uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
       typeImmatriculation: 'SIV',
       raisonSociale: 'SARL JAMES INTERNATIONAL',
       siren: '351222856',
@@ -152,7 +149,6 @@ lab.experiment('anonymisation identité', () => {
     const anonymizedIdentiteResultat = {
       anonymizedDataIdentite: {
         alreadyHasIdAndKey: false,
-        uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
         anonymizedNom: undefined,
         anonymizedPrenom: undefined,
         anonymizedRaisonSociale: 'S*** J**** I************',
@@ -171,7 +167,6 @@ lab.experiment('anonymisation identité', () => {
   lab.test('propriétaire fni particulier', () => {
     const identite = {
       alreadyHasIdAndKey: false,
-      uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
       typeImmatriculation: 'FNI',
       nom: 'aaaa bbbbbbb',
       prenoms: [''],
@@ -183,7 +178,6 @@ lab.experiment('anonymisation identité', () => {
     const anonymizedIdentiteResultat = {
       anonymizedDataIdentite: {
         alreadyHasIdAndKey: false,
-        uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
         anonymizedNom: 'a*** b******',
         anonymizedPrenom: undefined,
         anonymizedRaisonSociale: undefined,
@@ -202,7 +196,6 @@ lab.experiment('anonymisation identité', () => {
   lab.test('propriétaire fni professionel', () => {
     const identite = {
       alreadyHasIdAndKey: false,
-      uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
       raisonSociale: 'SARL JAMES INTERNATIONAL',
       siren: '351222856',
       typeImmatriculation: 'FNI',
@@ -214,7 +207,6 @@ lab.experiment('anonymisation identité', () => {
     const anonymizedIdentiteResultat = {
       anonymizedDataIdentite: {
         alreadyHasIdAndKey: false,
-        uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
         anonymizedNom: undefined,
         anonymizedPrenom: undefined,
         anonymizedRaisonSociale: 'S*** J**** I************',
@@ -236,7 +228,6 @@ lab.experiment('anonymisation identité', () => {
       key: '7hlYY6JMJ3bNu8nZx48LTv6wYa/r+hmcoEEFYWK/b+k=',
       logLabel: 'PUBLIC_ROUTE_REPORT_BY_CODE',
       alreadyHasIdAndKey: true,
-      uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
       typeImmatriculation: 'SIV'
     }
     const anonymizedIdentite = anonymizeIdentite(identite)
@@ -244,7 +235,6 @@ lab.experiment('anonymisation identité', () => {
     const anonymizedIdentiteResultat = {
       anonymizedDataIdentite: {
         alreadyHasIdAndKey: true,
-        uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
         anonymizedNom: undefined,
         anonymizedPrenom: undefined,
         anonymizedRaisonSociale: undefined,
