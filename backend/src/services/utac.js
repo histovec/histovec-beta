@@ -5,54 +5,8 @@ import { Agent as HttpsAgent } from 'https'
 import { syslogLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
+import { CONTROL_TECHNIQUES_MOCK_FOR_BPSA } from '../constant/utac.js'
 
-// @todo: A supprimer si on ne souhaite plus avoir de mock API UTAC
-// @todo: Ou à migrer vers un serveur de mock API UTAC
-const CONTROL_TECHNIQUES_MOCK_FOR_BPSA = {
-  ct: [
-    {
-      ct_id: 1,
-      ct_pv: null,
-      ct_centre: null,
-      ct_date: '11/12/2014',
-      ct_deb: null,
-      ct_fin: null,
-      ct_nature: 'VTP',
-      ct_resultat: 'A',
-      ct_km: 98429,
-      ct_immat: 'AW-753-TD',
-      ct_vin: 'VF7JM8HZC97374672',
-    },
-    {
-      ct_id: 2,
-      ct_pv: null,
-      ct_centre: null,
-      ct_date: '10/12/2016',
-      ct_deb: null,
-      ct_fin: null,
-      ct_nature: 'VTP',
-      ct_resultat: 'A',
-      ct_km: 132874,
-      ct_immat: 'DN-134-AG',
-      ct_vin: 'VF7JM8HZC97374672',
-    },
-    {
-      ct_id: 3,
-      ct_pv: null,
-      ct_centre: null,
-      ct_date: '26/12/2018',
-      ct_deb: null,
-      ct_fin: null,
-      ct_nature: 'VTP',
-      ct_resultat: 'A',
-      ct_km: 160532,
-      ct_immat: 'DN-134-AG',
-      ct_vin: 'VF7JM8HZC97374672',
-    },
-  ],
-  update_date: '01/08/2021',
-  status: 200,
-}
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const ERROR_MESSAGES = {
