@@ -237,6 +237,9 @@ export HISTOVEC_PFX_PASSPHRASE
 export INES_TOKEN
 export UTAC_PEM
 
+# API data confs
+export API_DATA_URL
+
 
 ##############################################
 #               backend confs                #
