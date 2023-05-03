@@ -12,12 +12,24 @@ export const lab = Lab.script()
 
 lab.experiment('anonymisation des immatriculations et vins', () => {
   lab.test('immatriculation', () => {
-    const prenomAnonymize = anonymize('AA-123-BB')
-    expect(prenomAnonymize).to.equal('AA*****BB')
+    const immatAnonymize = anonymize('AA-123-BB')
+    expect(immatAnonymize).to.equal('AA*****BB')
   })
-  lab.test('vin', () => {
-    const prenomAnonymize = anonymize('2013BZ80335')
-    expect(prenomAnonymize).to.equal('20*******35')
+  lab.test('vin par défaut', () => {
+    const vinAnonymize = anonymize('2013BZ80335')
+    expect(vinAnonymize).to.equal('20*******35')
+  })
+  lab.test('vin avec un chiffre visible', () => {
+    const vinAnonymize = anonymize('2013BZ80335', 1)
+    expect(vinAnonymize).to.equal('2*********5')
+  })
+  lab.test('vin avec trois chiffres visibles', () => {
+    const vinAnonymize = anonymize('2013BZ80335', 3)
+    expect(vinAnonymize).to.equal('201*****335')
+  })
+  lab.test('vin avec quatre chiffres visibles', () => {
+    const vinAnonymize = anonymize('2013BZ80335', 4)
+    expect(vinAnonymize).to.equal('2013***0335')
   })
 });
 
