@@ -58,6 +58,7 @@ services:
       - PUBLIC_BACKEND_API_UUID=${PUBLIC_BACKEND_API_UUID}
       - USE_PREVIOUS_MONTH_FOR_DATA=${USE_PREVIOUS_MONTH_FOR_DATA}
       - PREVIOUS_MONTH_SHIFT=${PREVIOUS_MONTH_SHIFT}
+      - API_DATA_URL=${API_DATA_URL}
     volumes:
       - ${BACKEND}/src:/${APP}/src/
       - ${BACKEND}/dist:/${APP}/dist/

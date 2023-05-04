@@ -54,6 +54,11 @@ const config = {
       rejectUnauthorized: false,
     },
   },
+
+  // API data
+  apiData: {
+    apiUrl: process.env.API_DATA_URL,
+  },
 }
 
 export default config
