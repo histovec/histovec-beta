@@ -58,6 +58,7 @@ services:
       - PUBLIC_BACKEND_API_UUID=${PUBLIC_BACKEND_API_UUID}
       - USE_PREVIOUS_MONTH_FOR_DATA=${USE_PREVIOUS_MONTH_FOR_DATA}
       - PREVIOUS_MONTH_SHIFT=${PREVIOUS_MONTH_SHIFT}
+      - API_DATA_URL=${API_DATA_URL}
     restart: on-failure
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${PUBLIC_BACKEND_PORT}/${APP}/api/v1/health"]

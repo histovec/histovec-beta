@@ -57,6 +57,7 @@ services:
       - MAIL_TO=${MAIL_TO}
       - PUBLIC_BACKEND=false
       - IS_UTAC_CACHE_IGNORABLE=${IS_UTAC_CACHE_IGNORABLE}
+      - API_DATA_URL=${API_DATA_URL}
     volumes:
       - ${BACKEND}/src:/${APP}/src/
       - ${BACKEND}/dist:/${APP}/dist/
