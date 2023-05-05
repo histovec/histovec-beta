@@ -99,7 +99,6 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
       const res = await getReport({
         uuid,
         id: base64EncodedReportId,
-        nom,
         options: {
           ignoreControlesTechniques: !askControlesTechniques,
           ignoreUtacCache,
