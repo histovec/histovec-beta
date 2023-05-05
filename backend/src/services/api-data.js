@@ -1,10 +1,12 @@
 import axios from 'axios'
 import config from '../config.js'
+import { SIV_PHYSIQUE, SIV_PHYSIQUE_MIN } from '../constant/bouchon/siv_physique.js'
+
+// utiliser cette variable pour gérer le bouchon de l'appel à l'API data
+const bouchonActive = config.isSIVMockActivated
 
 export class ApiDataCLient {
   constructor () {
-    // utiliser cette variable pour gérer le bouchon de l'appel à l'API data
-    // const bouchonActive = config.apiData.isMocked
     const baseURL = config.apiData.apiUrl
 
     const options = {
@@ -14,11 +16,11 @@ export class ApiDataCLient {
       },
     }
 
-    this.axios = axios.create(options)
+    this._axios = axios.create(options)
   }
 
   get = async (url) => {
-    return await this.axios.get(url)
+    return await this._axios.get(url)
       .then(response => {
         return response.data
       })
@@ -28,9 +30,18 @@ export class ApiDataCLient {
   }
 
   post = async (url, data) => {
-    return await this.axios.post(url, data)
+    return await this._axios.post(url, data)
       .then(response => {
-        return response.data
+        if (response.data.length <= 0) {
+          return {
+            status: 404,
+            message: 'Report not found',
+          }
+        }
+        return {
+          status: 200,
+          sivData: response.data,
+        }
       })
       .catch(error => {
         throw error
@@ -38,10 +49,26 @@ export class ApiDataCLient {
   }
 
   getByCode = async (uuid, clefAcheteur) => {
+    if (bouchonActive) {
+      return SIV_PHYSIQUE
+    }
     return await this.get('/report_by_code/' + uuid + '/' + clefAcheteur)
   }
 
   getSivPhysique = async (uuid, data) => {
+    if (bouchonActive) {
+      if (data.nom === 'vehiculeMin') {
+        return {
+          status: 200,
+          sivData: SIV_PHYSIQUE_MIN,
+        }
+      } else {
+        return {
+          status: 200,
+          sivData: SIV_PHYSIQUE,
+        }
+      }
+    }
     return await this.post('/report_by_data/siv/physique/' + uuid, data)
   }
 
