@@ -15,7 +15,7 @@ const utacClient = getUtacClient()
 const redisClient = getRedisClient()
 
 export const getReport = async (payload) => {
-  const { uuid, id: base64EncodedId, nom, options: { ignoreControlesTechniques, ignoreUtacCache } = {} } = payload
+  const { uuid, id: base64EncodedId, options: { ignoreControlesTechniques, ignoreUtacCache } = {} } = payload
   const isUtacMockForBpsaActivated = config.utac.isUtacMockForBpsaActivated
   syslogLogger.debug({ key: 'get_vehicule', tag: 'CONFIG', uuid, value: { ignoreUtacCache, ignoreControlesTechniques, isUtacMockForBpsaActivated } })
 
@@ -32,7 +32,7 @@ export const getReport = async (payload) => {
       encryptedImmat,
       encryptedVin,
     },
-  } = await getSIV(urlSafeBase64EncodedId, uuid, nom)
+  } = await getSIV(urlSafeBase64EncodedId, uuid)
 
   if (sivStatus !== 200) {
     switch (sivStatus) {

@@ -108,7 +108,7 @@ export const generateReportRoute = ({ path, logLabel, payloadSchema }) => {
 
       const { sivData, utacData: rawAnonymizedControlesTechniques } = res
 
-      const report = config.isSIVMockActivated ? sivData : decryptJson(sivData, base64EncodedReportKeyBuffer)
+      const report = decryptJson(sivData, base64EncodedReportKeyBuffer)
       const normalizedReport = normalizeReport(report)
       syslogLogger.debug({ key: 'siv_decrypted', tag: logLabel, uuid, value: { ...normalizedReport } })
 
