@@ -42,7 +42,7 @@ export class ApiDataCLient {
   }
 
   getSivPhysique = async (uuid, data) => {
-    return await this.post('/report_by_params/siv/physique/' + uuid, data)
+    return await this.post('/report_by_data/siv/physique/' + uuid, data)
   }
 
   getDictionnaireOpaType = async () => {

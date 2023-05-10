@@ -10,11 +10,9 @@ import { VIN_REGEX } from '../../../constant/regex.js'
 import { syslogLogger } from '../../../util/logger.js'
 import config from '../../../config.js'
 import { anonymize, anonymizedControlesTechniques } from '../../../util/anonymiserData.js'
-import { ApiDataCLient } from '../../../services/api-data.js'
 
 const utacClient = getUtacClient()
 const redisClient = getRedisClient()
-const apiData = new ApiDataCLient()
 
 export const getReport = async (payload) => {
   const { uuid, id: base64EncodedId, options: { ignoreControlesTechniques, ignoreUtacCache } = {} } = payload
@@ -23,23 +21,6 @@ export const getReport = async (payload) => {
 
   const urlSafeBase64EncodedId = urlSafeEncode(base64EncodedId)
   syslogLogger.info({ key: 'idv', tag: 'CONFIG', uuid, value: { idv: urlSafeBase64EncodedId } })
-
-  // API data
-  // --- début exemple requete sur l'API data
-  const data = {
-    nom: 'BLANCHET',
-    prenom: 'MARCEL',
-    immat: 'AA-948-BM',
-    numero_formule: '2015CC11207',
-  }
-
-  try {
-    syslogLogger.info({ key: 'api_data_call_start', tag: 'API_DATA', uuid, value: data })
-    await apiData.getSivPhysique('400e3437-aa6a-4c8f-81b2-819fe27a2d65', data)
-  } catch (error) {
-    syslogLogger.error({ key: 'api_data_call_failed', tag: 'API_DATA', uuid, value: { status: error.response.status, statusText: error.response.statusText } })
-  }
-  // --- fin exemple requete sur l'API data
 
   // 1 - SIV
   const {
