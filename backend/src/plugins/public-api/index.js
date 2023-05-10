@@ -1,6 +1,6 @@
 import reportByData from './routes/reportByData.js'
 import reportByCode from './routes/reportByCode.js'
-import reportByDataSicPersonne from './routes/reportByDataSivPersonne.js'
+import reportByDataSivPersonne from './routes/reportByDataSivPersonne.js'
 
 export const plugin = {
   name: 'publicApi',
@@ -10,9 +10,9 @@ export const plugin = {
 
     reportByData.path = apiPrefix + reportByData.path
     reportByCode.path = apiPrefix + reportByCode.path
-    reportByDataSicPersonne.path = apiPrefix + reportByDataSicPersonne.path
+    reportByDataSivPersonne.path = apiPrefix + reportByDataSivPersonne.path
 
-    const routes = [reportByData, reportByCode, reportByDataSicPersonne]
+    const routes = [reportByData, reportByCode, reportByDataSivPersonne]
 
     server.route(routes)
   },
