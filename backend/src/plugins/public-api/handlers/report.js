@@ -50,22 +50,15 @@ export const getReport = async (payload) => {
 
   syslogLogger.info({ key: 'siv_data_reponse', tag: 'SIV', uuid, value: sivData })
 
-  const immat = decryptXOR(encryptedImmat, config.utacIdKey)
-  syslogLogger.info({ key: 'immatriculation_anonymisee', tag: 'UTAC', uuid, value: { immatriculation: anonymize(immat) } })
-
   // 2 - UTAC
-  const utacDataKey = computeUtacDataKey(encryptedImmat)
-
   const emptyUtacData = {
     ct: [],
     ctUpdateDate: null,
   }
 
-  const encryptedEmptyUtacData = encryptJson(emptyUtacData, utacDataKey)
-
   // Only annulationCI vehicles don't have encryptedImmat
   const isCIAnnule = Boolean(!encryptedImmat)
-  if (!askCt || isCIAnnule || !config.utac.isApiActivated) {
+  if (!askCt || isCIAnnule || !encryptedImmat || !encryptedVin || !config.utac.isApiActivated) {
     if (!askCt) {
       syslogLogger.info({ key: 'no_call_ask_ct_false', tag: 'UTAC', uuid })
     }
@@ -78,14 +71,26 @@ export const getReport = async (payload) => {
       syslogLogger.info({ key: 'no_call_api_not_activated', tag: 'UTAC', uuid })
     }
 
+    if (!encryptedImmat) {
+      syslogLogger.info({ key: 'no_call_encrypted_immat_null', tag: 'UTAC', uuid })
+    }
+
+    if (!encryptedVin) {
+      syslogLogger.info({ key: 'no_call_encrypted_vin_null', tag: 'UTAC', uuid })
+    }
+
     return {
       sivData,
       utacData: emptyUtacData,
     }
   }
 
-  const utacDataCacheId = urlSafeBase64Encode(hash(urlSafeBase64EncodedId))
+  const immat = decryptXOR(encryptedImmat, config.utacIdKey)
+  syslogLogger.info({ key: 'immatriculation_anonymisee', tag: 'UTAC', uuid, value: { immatriculation: anonymize(immat) } })
 
+  const utacDataKey = computeUtacDataKey(encryptedImmat)
+  const encryptedEmptyUtacData = encryptJson(emptyUtacData, utacDataKey)
+  const utacDataCacheId = urlSafeBase64Encode(hash(urlSafeBase64EncodedId))
   const ignoreCache = config.isUtacCacheIgnorable && ignoreUtacCache
 
   // revoir ici
