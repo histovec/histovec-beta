@@ -41,8 +41,8 @@ export const getSIV = async (id, uuid) => {
     const {
       v: sivData,
       utac_ask_ct: rawAskCt = '',
-      utac_encrypted_immat: encryptedImmat = '',
-      utac_encrypted_vin: encryptedVin = '',
+      utac_encrypted_immat: encryptedImmat = null,
+      utac_encrypted_vin: encryptedVin = null,
     } = hits[0]._source
 
     const askCt = rawAskCt === 'OUI'
