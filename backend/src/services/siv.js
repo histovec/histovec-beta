@@ -44,6 +44,7 @@ export const getSIV = async (id, uuid) => {
       utac_encrypted_immat: encryptedImmat = null,
       utac_encrypted_vin: encryptedVin = null,
     } = hits[0]._source
+
     const askCt = rawAskCt === 'OUI'
     syslogLogger.debug({ key: 'ask_ct_data', tag: 'UTAC', uuid, value: { encryptedVin } })
     syslogLogger.info({ key: 'ask_ct', tag: 'UTAC', uuid, value: { askCt, encryptedImmat } })

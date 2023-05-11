@@ -3,7 +3,7 @@ import config from '../config.js'
 import { SIV_PHYSIQUE, SIV_PHYSIQUE_MIN } from '../constant/bouchon/siv_physique.js'
 
 // utiliser cette variable pour gérer le bouchon de l'appel à l'API data
-const bouchonActive = config.isSIVMockActivated
+const bouchonActive = config.apiData.isSIVMockActivated
 
 export class ApiDataCLient {
   constructor () {
@@ -16,11 +16,11 @@ export class ApiDataCLient {
       },
     }
 
-    this._axios = axios.create(options)
+    this.axios = axios.create(options)
   }
 
   get = async (url) => {
-    return await this._axios.get(url)
+    return await this.axios.get(url)
       .then(response => {
         return response.data
       })
@@ -30,18 +30,9 @@ export class ApiDataCLient {
   }
 
   post = async (url, data) => {
-    return await this._axios.post(url, data)
+    return await this.axios.post(url, data)
       .then(response => {
-        if (response.data.length <= 0) {
-          return {
-            status: 404,
-            message: 'Report not found',
-          }
-        }
-        return {
-          status: 200,
-          sivData: response.data,
-        }
+        return response.data
       })
       .catch(error => {
         throw error
