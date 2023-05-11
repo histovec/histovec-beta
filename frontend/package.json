@@ -11,9 +11,11 @@
     "format": "eslint src --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "lint:js": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "start": "NODE_OPTIONS=--openssl-legacy-provider vite",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "cy:run": "cypress run"
+    "pretest": "echo ajouter test lint",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:cy": "cypress run"
   },
   "dependencies": {
     "@gouvfr/dsfr": "~1.4.1",
