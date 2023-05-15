@@ -3,6 +3,7 @@ import { sendMail } from '../connectors/send-mail.js'
 import config from '../config.js'
 
 import { TYPE_PERSONNE, TYPE_IMMATRICULATION } from '../constant/type.js'
+import { FR_DATE_FORMAT } from '../constant/date/format.js'
 
 const formDataShortcut = (identity) => {
   const {
@@ -41,9 +42,9 @@ const formDataShortcut = (identity) => {
 
     case TYPE_IMMATRICULATION.FNI:
       if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        elements = [nom, plaque, dateCertificat.toLocaleDateString('fr-FR')]
+        elements = [nom, plaque, dateCertificat.toLocaleDateString(FR_DATE_FORMAT)]
       } else if (typePersonne === TYPE_PERSONNE.PRO) {
-        elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat.toLocaleDateString('fr-FR')]
+        elements = [raisonSociale, siren, emptyNom, plaque, dateCertificat.toLocaleDateString(FR_DATE_FORMAT)]
       }
       break
   }

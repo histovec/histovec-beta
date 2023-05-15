@@ -1,6 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
-import dayjs from 'dayjs'
+import add from 'date-fns/add'
+import format from 'date-fns/format'
 import QrcodeVue from 'qrcode.vue'
 
 import orderBy from 'lodash.orderby'
@@ -231,13 +232,12 @@ export default defineComponent({
     // ----- Partage du rapport acheteur par le vendeur -----
 
     currentMonthNumber () {
-      let date = dayjs().add(-7, 'day')
+      let date = add(new Date(),  {days: -7})
 
       if (this.flags.usePreviousMonthForData) {
-        date = date.add(-this.flags.previousMonthShift, 'month')
+        date = add(date, {months: -this.flags.previousMonthShift})
       }
-
-      return date.format('YYYYMM')
+      return format(date, 'yyyyMM')
     },
     titulaireId () {
       if (this.formData.typePersonne === TYPE_PERSONNE.PARTICULIER) {

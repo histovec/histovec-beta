@@ -1,1 +1,1 @@
-export const FR_DATE_FORMAT = 'DD/MM/YYYY'
+export const FR_DATE_FORMAT = 'fr-FR'

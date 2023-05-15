@@ -3,11 +3,9 @@ import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { detect } from 'detect-browser'
-import dayjs from 'dayjs'
 
 import api from '@Api/index.js'
 
-import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '@Assets/js/format.js'
 import {
   CONTACT_TAG_TYPES,
   CONTACT_THEME,
@@ -273,11 +271,7 @@ export default defineComponent({
         dateEmissionCertificatImmatriculation = '',
       } = fniData
 
-      const isoDateCertificat = (
-        dateEmissionCertificatImmatriculation ?
-          dayjs(dateEmissionCertificatImmatriculation, FR_DATE_FORMAT).format(ISO_DATE_FORMAT) :
-          ''
-      )
+      const isoDateCertificat = dateEmissionCertificatImmatriculation ? dateEmissionCertificatImmatriculation.split('/').reverse().join('-') : ''
 
       return {
         dateCertificat: isoDateCertificat,
