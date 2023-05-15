@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
-import TuileDsfrNonCliquable from '../../../components/TuileDsfrNonCliquable.vue';
+import TuileDsfrNonCliquable from '@Components/TuileDsfrNonCliquable.vue';
 
 describe('TuileDsfrNonCliquable', () => {
   it('Doit afficher une tuile avec le bon titre', () => {

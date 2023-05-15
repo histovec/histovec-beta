@@ -1,4 +1,4 @@
-import icons from '@/assets/json/controlesTechniquesIcons.json'
+import icons from '@Assets/json/controlesTechniquesIcons.json'
 
 
 const labelize = (controleTechnique) => {

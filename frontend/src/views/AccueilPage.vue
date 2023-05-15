@@ -1,16 +1,16 @@
 <script>
 import {defineComponent} from 'vue'
 
-import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import CarteDsfrNonCliquable from '@/components/CarteDsfrNonCliquable.vue';
-import ImagePresentation from '@/components/ImagePresentation.vue';
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
+import CarteDsfrNonCliquable from '@Components/CarteDsfrNonCliquable.vue';
+import ImagePresentation from '@Components/ImagePresentation.vue';
 
-import confidentielSvg from '@/assets/img/confidentiel.svg?url'
-import gratuitSvg from '@/assets/img/gratuit.svg?url'
-import officielSvg from '@/assets/img/officiel.svg?url'
-import simpleSvg from '@/assets/img/simple.svg?url'
-import accueilSVG from '@/assets/img/accueil.svg?url'
-import api from '@/api/index.js'
+import confidentielSvg from '@Assets/img/confidentiel.svg?url'
+import gratuitSvg from '@Assets/img/gratuit.svg?url'
+import officielSvg from '@Assets/img/officiel.svg?url'
+import simpleSvg from '@Assets/img/simple.svg?url'
+import accueilSVG from '@Assets/img/accueil.svg?url'
+import api from '@Api/index.js'
 
 export default defineComponent({
   name: 'AccueilPage',

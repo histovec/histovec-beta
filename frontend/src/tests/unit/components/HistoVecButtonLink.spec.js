@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
-import HistoVecButtonLink from '../../../components/HistoVecButtonLink.vue'
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
 
 describe('HistoVecButtonLink', () => {
   it('Doit afficher un router link avec "to" étant une string et les props par defaut', () => {

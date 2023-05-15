@@ -1,29 +1,29 @@
 <script>
 import { defineComponent } from 'vue'
-import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import ImagePresentation from '@/components/ImagePresentation.vue'
-import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@/utils/collerPressePapierEtDistribuerDansFormulaire.js'
-import { sleep } from '../utils/sleep';
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
+import ImagePresentation from '@Components/ImagePresentation.vue'
+import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@Utils/collerPressePapierEtDistribuerDansFormulaire.js'
+import { sleep } from '@Utils/sleep';
 
-import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@/constants/regex.js'
-import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
+import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@Constants/regex.js'
+import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 
-import '@/assets/stylesheets/globale.css'
+import '@Assets/stylesheets/globale.css'
 
-import plaqueNonSupporteeSvg from '@/assets/img/plaque_non_supportee.svg?url'
-import plaqueFniSvg from '@/assets/img/plaque_fni.svg?url'
-import plaqueSivSvg from '@/assets/img/plaque_siv.svg?url'
-import proprietaireSVG from '@/assets/img/proprietaire.svg?url'
+import plaqueNonSupporteeSvg from '@Assets/img/plaque_non_supportee.svg?url'
+import plaqueFniSvg from '@Assets/img/plaque_fni.svg?url'
+import plaqueSivSvg from '@Assets/img/plaque_siv.svg?url'
+import proprietaireSVG from '@Assets/img/proprietaire.svg?url'
 
-import imageNomEtPrenomsFNI from '@/assets/img/aide/fni_nom_et_prenoms.jpg'
-import imagePlaqueImmatriculationFNI from '@/assets/img/aide/fni_plaque_immatriculation.jpg'
-import imageDateEmissionCertificatImmatriculationFNI from '@/assets/img/aide/fni_date_emission_certificat_immatriculation.jpg'
+import imageNomEtPrenomsFNI from '@Assets/img/aide/fni_nom_et_prenoms.jpg'
+import imagePlaqueImmatriculationFNI from '@Assets/img/aide/fni_plaque_immatriculation.jpg'
+import imageDateEmissionCertificatImmatriculationFNI from '@Assets/img/aide/fni_date_emission_certificat_immatriculation.jpg'
 
-import imageNomSIV from '@/assets/img/aide/siv_nom.jpg'
-import imagePrenomsSIV from '@/assets/img/aide/siv_prenoms.jpg'
-import imagePlaqueImmatriculationSIV from '@/assets/img/aide/siv_plaque_immatriculation.jpg'
-import imageNumeroFormuleSIV from '@/assets/img/aide/siv_numero_formule.jpg'
-import api from '@/api/index.js'
+import imageNomSIV from '@Assets/img/aide/siv_nom.jpg'
+import imagePrenomsSIV from '@Assets/img/aide/siv_prenoms.jpg'
+import imagePlaqueImmatriculationSIV from '@Assets/img/aide/siv_plaque_immatriculation.jpg'
+import imageNumeroFormuleSIV from '@Assets/img/aide/siv_numero_formule.jpg'
+import api from '@Api/index.js'
 
 export default defineComponent({
   name: 'ProprietairePage',

@@ -1,4 +1,4 @@
-import { getExposant } from '../../../utils/format';
+import { getExposant } from '@Utils/format';
 import { describe, expect } from 'vitest';
 
 describe('getExposant', () => {
