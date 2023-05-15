@@ -842,10 +842,10 @@ export default defineComponent({
                   autocomplete="family-name"
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
                   aria-required="true"
                   :aria-invalid="!isNomSivValid"
                   aria-errormessage="nom-particulier-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_NOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -880,10 +880,10 @@ export default defineComponent({
                   autocomplete="given-name"
                   hint="Tel(s) qu'indiqué(s) sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
                   aria-required="true"
                   :aria-invalid="!isPrenomsSivValid"
                   aria-errormessage="prenom-particulier-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_PRENOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -925,10 +925,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationSivValid"
                   aria-errormessage="numero-immatriculation-particulier-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -964,10 +964,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                   aria-required="true"
                   :aria-invalid="!isNumeroFormuleSivValid"
                   aria-errormessage="numero-formule-particulier-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1020,10 +1020,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
                   aria-required="true"
                   :aria-invalid="!isRaisonSocialeSivValid"
                   aria-errormessage="raison-sociale-personne-morale-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_RAISON_SOCIALE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1034,7 +1034,7 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenSivValid"
-                :error-message='!isNumeroSirenSivValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'
+                :error-message="!isNumeroSirenSivValid?&quot;Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.&quot;:&quot;&quot;"
                 description-id="numero-siren-personne-morale-SIV-erreur-message"
               >
                 <DsfrInput
@@ -1043,9 +1043,9 @@ export default defineComponent({
                   label="Numéro S&#8203;I&#8203;R&#8203;E&#8203;N"
                   label-visible
                   hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
                   :aria-invalid="!isNumeroSirenSivValid"
                   aria-errormessage="numero-siren-personne-morale-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_SIREN, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -1086,10 +1086,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : AA-123-AA."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationSivValid"
                   aria-errormessage="numero-immatriculation-personne-morale-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1125,10 +1125,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 2013BZ80335."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                   aria-required="true"
                   :aria-invalid="!isNumeroFormuleSivValid"
                   aria-errormessage="numero-formule-personne-morale-SIV-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.SIV_FORMULE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1192,10 +1192,10 @@ export default defineComponent({
                   autocomplete="name"
                   hint="Tel qu'indiqué sur le certificat d'immatriculation."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
                   aria-required="true"
                   :aria-invalid="!isNomEtPrenomsFniValid"
                   aria-errormessage="nom-et-prenom-particulier-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_NOM_PRENOM, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1238,10 +1238,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationFniValid"
                   aria-errormessage="numero-immatriculation-particulier-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1277,10 +1277,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                   aria-required="true"
                   :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
                   aria-errormessage="date-emission-certificat-immatriculation-particulier-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1333,10 +1333,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
                   aria-required="true"
                   :aria-invalid="!isRaisonSocialeFniValid"
                   aria-errormessage="raison-sociale-personne-morale-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_RAISON_SOCIALE, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1347,7 +1347,7 @@ export default defineComponent({
             <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
               <DsfrInputGroup
                 :is-valid="isNumeroSirenFniValid"
-                :error-message='!isNumeroSirenFniValid?"Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.":""'
+                :error-message="!isNumeroSirenFniValid?&quot;Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.&quot;:&quot;&quot;"
                 description-id="numero-siren-personne-morale-FNI-erreur-message"
               >
                 <DsfrInput
@@ -1356,9 +1356,9 @@ export default defineComponent({
                   label="Numéro S&#8203;I&#8203;R&#8203;E&#8203;N"
                   label-visible
                   hint="Tel qu'indiqué sur le k&#8203;b&#8203;i&#8203;s&#8203;. Format: 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9 ou vide si vous n'en avez pas."
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
                   :aria-invalid="!isNumeroSirenFniValid"
                   aria-errormessage="numero-siren-personne-morale-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_SIREN, $event)"
                 >
                   <template #required-tip>
                     <span
@@ -1400,10 +1400,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 123-ABC-45."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                   aria-required="true"
                   :aria-invalid="!isNumeroImmatriculationFniValid"
                   aria-errormessage="numero-immatriculation-personne-morale-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_IMMATRICULATION, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
@@ -1439,10 +1439,10 @@ export default defineComponent({
                   label-visible
                   hint="Tel qu'indiqué sur le certificat d'immatriculation. Format : 31/12/2020."
                   required
-                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                   aria-required="true"
                   :aria-invalid="!isDateEmissionCertificatImmatriculationFniValid"
                   aria-errormessage="date-emission-certificat-immatriculation-personne-morale-FNI-erreur-message"
+                  @paste="collerPressePapierEtDistribuerDansFormulaire(formData, CHAMP_MODIFIE.FNI_DATE_CERTIFICAT, $event)"
                 >
                   <template #required-tip>
                     <em class="required-label"> *</em>
