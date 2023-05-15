@@ -1,5 +1,5 @@
-import { writeFooter } from './footer.js'
-import { formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
+import { writeFooter } from '@Utils/csaAsPdf/footer.js'
+import { formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@Assets/js/format.js'
 
 import {
 	COLUMN_WIDTH,
@@ -15,7 +15,7 @@ import {
 	MISSING_VALUE,
 	TO_BE_CONTINUED_SYMBOL,
 	TOP_PAGE_MARGIN,
-} from '@/constants/csaAsPdf.js'
+} from '@Constants/csaAsPdf.js'
 
 import {
 	getEmbeddedFont,
@@ -24,7 +24,7 @@ import {
 	writeText,
 	writeTitle,
 	writeWithSpacing,
-} from './utils.js'
+} from '@Utils/csaAsPdf/utils.js'
 
 
 const SECTION_TITLE_BULLET = '-'

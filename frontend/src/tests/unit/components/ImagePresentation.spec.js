@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
-import ImagePresentation from '../../../components/ImagePresentation.vue'
+import ImagePresentation from '@Components/ImagePresentation.vue'
 
 describe('ImagePresentation', () => {
   it('Doit afficher une image avec les bonnes informations', () => {

@@ -5,18 +5,18 @@ import { RouterLink } from 'vue-router'
 import { detect } from 'detect-browser'
 import dayjs from 'dayjs'
 
-import api from '@/api/index.js'
+import api from '@Api/index.js'
 
-import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '@/assets/js/format.js'
+import { FR_DATE_FORMAT, ISO_DATE_FORMAT } from '@Assets/js/format.js'
 import {
   CONTACT_TAG_TYPES,
   CONTACT_THEME,
   READONLY_CONTACT_THEME_VALUES,
   ALL_CONTACT_THEMES_OPTIONS, DEFAULT_CONTACT_THEMES_OPTIONS, CONTACT_THEMES_OPTIONS,
-} from '@/constants/contact.js'
-import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@/constants/type.js'
-import { EMAIL_REGEX } from '@/constants/regex.js'
-import '@/assets/stylesheets/globale.css'
+} from '@Constants/contact.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
+import { EMAIL_REGEX } from '@Constants/regex.js'
+import '@Assets/stylesheets/globale.css'
 
 export default defineComponent({
   name: 'ContactPage',

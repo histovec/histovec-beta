@@ -2,14 +2,13 @@ import { createApp } from 'vue'
 
 import '@gouvminint/vue-dsfr/styles'
 import VueDsfr from '@gouvminint/vue-dsfr'
-import * as icons from './icons.js'
+import * as icons from '@/icons.js'
 
 import VueClipboard from 'vue3-clipboard'
 
-import App from './App.vue'
-import router from './router/index.js'
-
-import { apiUrl } from './config.js'
+import App from '@/App.vue'
+import router from '@/router/index.js'
+import { apiUrl } from '@/config.js'
 
 
 import dayjs from 'dayjs'

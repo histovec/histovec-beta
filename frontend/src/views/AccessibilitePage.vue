@@ -2,8 +2,8 @@
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { mailTo } from '@/utils/email.js'
-import { HISTOVEC_BASE_URL, HISTOVEC_SUPPORT_EMAIL, REPORT_ACCESSIBILITY_ERROR_EMAIL } from '@/constants/email.js'
+import { mailTo } from '@Utils/email.js'
+import { HISTOVEC_BASE_URL, HISTOVEC_SUPPORT_EMAIL, REPORT_ACCESSIBILITY_ERROR_EMAIL } from '@Constants/email.js'
 
 
 export default defineComponent({
