@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import { FR_DATE_EXTRACT_REGEX, ISO_8601_DATE_EXTRACT_REGEX } from '../../../constant/date/regex.js'
+import { FR_DATE_FORMAT } from '../../../constant/date/format.js'
 
 // @todo @booleanNormalization:
 // Supprimer la normalisation des booléens lorsque la DATA utilisera des booléens dans tous les champs du V
@@ -49,7 +50,7 @@ const normalizeToISODate = (value) => {
   if (dateEn) return dateEn;
 
   if (value.match(ISO_8601_DATE_EXTRACT_REGEX)) {
-    const dateTimeFr = new Date(value).toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' })
+    const dateTimeFr = new Date(value).toLocaleDateString(FR_DATE_FORMAT, { timeZone: 'Europe/Paris' })
 
     const dateTimeEn = formatDateFrToEn(dateTimeFr)
     if (dateTimeEn) return dateTimeEn;
