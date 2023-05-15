@@ -87,7 +87,8 @@ export default defineComponent({
           titre="Pour les vendeurs"
         >
           <ul>
-            <li> Prendre connaissance des démarches
+            <li>
+              Prendre connaissance des démarches
               <a
                 class="fr-link"
                 href="https://service-public.fr"
@@ -95,15 +96,18 @@ export default defineComponent({
               > (Service Public)
               </a>
             </li>
-            <li> Télécharger le certificat de situation administrative
+            <li>
+              Télécharger le certificat de situation administrative
               <router-link
                 class="fr-link"
                 to="/proprietaire"
                 title="Proprietaire - HISTOVEC - Nouvelle fenêtre"
-              > (HistoVec)
+              >
+                (HistoVec)
               </router-link>
             </li>
-            <li> Déclarer la cession d'un véhicule
+            <li>
+              Déclarer la cession d'un véhicule
               <a
                 class="fr-link"
                 href="https://immatriculation.ants.gouv.fr"
@@ -120,7 +124,8 @@ export default defineComponent({
           titre="Pour les acheteurs"
         >
           <ul>
-            <li> Prendre connaissance des démarches
+            <li>
+              Prendre connaissance des démarches
               <a
                 class="fr-link"
                 href="https://service-public.fr"
@@ -128,7 +133,8 @@ export default defineComponent({
               > (Service Public)
               </a>
             </li>
-            <li> Faire une demande de changement de titulaire du certificat d'immatriculation
+            <li>
+              Faire une demande de changement de titulaire du certificat d'immatriculation
               <a
                 class="fr-link"
                 href="https://immatriculation.ants.gouv.fr"
@@ -159,9 +165,13 @@ export default defineComponent({
         description="Sélectionnez un thème parmi les suivants."
       />
     </div>
-    <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10" aria-live="polite">
+    <div
+      class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10"
+      aria-live="polite"
+    >
       <div
-        v-if="selectedTheme === FAQ_THEMES.WHY_HISTOVEC" >
+        v-if="selectedTheme === FAQ_THEMES.WHY_HISTOVEC"
+      >
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
@@ -219,7 +229,8 @@ export default defineComponent({
       </div>
 
       <div
-        v-if="selectedTheme === FAQ_THEMES.HOW_HISTOVEC">
+        v-if="selectedTheme === FAQ_THEMES.HOW_HISTOVEC"
+      >
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
@@ -307,9 +318,9 @@ export default defineComponent({
                 </li>
                 <li>
                   Le rapport ne semble pas ou plus disponible.
-                  <br/>
+                  <br />
                   Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur.
-                  <br/>
+                  <br />
                   Si le problème persiste avec votre vendeur : contactez-nous.
                 </li>
               </ol>
@@ -323,8 +334,10 @@ export default defineComponent({
               :expanded-id="expandedId"
               @expand="expandedId = $event"
             >
-              <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes
-                :</p>
+              <p>
+                Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes
+                :
+              </p>
               <ul class="fr-ml-4w  fr-pl-0">
                 <li>Propriétaire: il s'agit du propriétaire du véhicule et qui peut donc le vendre.</li>
                 <li>Titulaire: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</li>
@@ -347,7 +360,7 @@ export default defineComponent({
               <p>
                 Il convient de renouveler votre recherche sur un autre navigateur ainsi qu'un autre appareil, de
                 préférence un ordinateur.
-                <br/>
+                <br />
                 Pour un usage optimal, nous conseillons l'utilisation de la dernière version de Firefox.
               </p>
             </DsfrAccordion>
@@ -439,7 +452,8 @@ export default defineComponent({
       </div>
 
       <div
-        v-if="selectedTheme === FAQ_THEMES.VEHICLE_NOT_FOUND" >
+        v-if="selectedTheme === FAQ_THEMES.VEHICLE_NOT_FOUND"
+      >
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
@@ -636,9 +650,9 @@ export default defineComponent({
                 </li>
                 <li>
                   Le rapport ne semble pas ou plus disponible.
-                  <br/>
+                  <br />
                   Dans tous ces cas, il convient de demander à nouveau le rapport à votre vendeur.
-                  <br/>
+                  <br />
                   Si le problème persiste avec votre vendeur : contactez-nous.
                 </li>
               </ol>
@@ -648,7 +662,8 @@ export default defineComponent({
       </div>
 
       <div
-        v-if="selectedTheme === FAQ_THEMES.AVAILABLE_INFORMATIONS" >
+        v-if="selectedTheme === FAQ_THEMES.AVAILABLE_INFORMATIONS"
+      >
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
@@ -733,8 +748,10 @@ export default defineComponent({
               :expanded-id="expandedId"
               @expand="expandedId = $event"
             >
-              <p>Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes
-                :</p>
+              <p>
+                Propriétaire du véhicule et titulaire du certificat d'immatriculation sont deux notions différentes
+                :
+              </p>
               <ul class="fr-ml-4w  fr-pl-0">
                 <li>Propriétaire: il s'agit du propriétaire du véhicule et qui peut donc le vendre.</li>
                 <li>Titulaire: il s'agit de la ou les personne(s) titulaire du droit à circuler avec le véhicule.</li>
@@ -895,7 +912,8 @@ export default defineComponent({
       </div>
 
       <div
-        v-if="selectedTheme === FAQ_THEMES.ERROR_IN_DISPLAYED_INFORMATIONS" >
+        v-if="selectedTheme === FAQ_THEMES.ERROR_IN_DISPLAYED_INFORMATIONS"
+      >
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion
@@ -932,7 +950,8 @@ export default defineComponent({
       </div>
 
       <div
-        v-if="selectedTheme === FAQ_THEMES.KILOMETERS_AND_TECHNICAL_CONTROLS" >
+        v-if="selectedTheme === FAQ_THEMES.KILOMETERS_AND_TECHNICAL_CONTROLS"
+      >
         <DsfrAccordionsGroup>
           <li>
             <DsfrAccordion

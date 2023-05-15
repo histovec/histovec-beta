@@ -356,7 +356,10 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0" aria-live="polite">
+  <div
+    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-0"
+    aria-live="polite"
+  >
     <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
       <label class="fr-h6 label-themes">Veuillez choisir un ou plusieurs thèmes :</label>
       <DsfrTags
@@ -378,7 +381,9 @@ export default defineComponent({
     <template v-if="isReadonlyTheme">
       <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mt-4w">
         <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-0">
-          <h2 class="fr-h5">Marche à suivre</h2>
+          <h2 class="fr-h5">
+            Marche à suivre
+          </h2>
         </div>
       </div>
       <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w  fr-mt-0">

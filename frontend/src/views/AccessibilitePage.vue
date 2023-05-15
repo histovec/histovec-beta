@@ -173,7 +173,8 @@ export default defineComponent({
             validator.w3.org
           </a>
         </li>
-        <li>Vérification des contrastes de couleur :
+        <li>
+          Vérification des contrastes de couleur :
           <ul class="fr-ml-4w  fr-pl-0 sous-liste">
             <li>
               <a
@@ -191,7 +192,8 @@ export default defineComponent({
         </li>
         <li>Désactivation du JavaScript : JavaScript Switcher</li>
         <li>Outillage web : Web Developer (plugin)</li>
-        <li>Outils d’évaluation de pages web (plugins) :
+        <li>
+          Outils d’évaluation de pages web (plugins) :
           <ul class="fr-ml-4w  fr-pl-0 sous-liste">
             <li>Tanaguru webext</li>
             <li>Axe DevTools</li>
