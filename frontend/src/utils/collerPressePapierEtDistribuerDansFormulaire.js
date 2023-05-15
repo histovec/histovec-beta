@@ -1,4 +1,4 @@
-import {TYPE_IMMATRICULATION, TYPE_PERSONNE} from '@/constants/type.js'
+import {TYPE_IMMATRICULATION, TYPE_PERSONNE} from '@Constants/type.js'
 
 export const CHAMP_MODIFIE = {
   SIV_NOM: 'SIV_NOM',

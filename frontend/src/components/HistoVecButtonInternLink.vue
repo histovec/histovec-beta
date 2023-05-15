@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
-import router from '../router';
+import router from '@/router';
 
 
 export default defineComponent({

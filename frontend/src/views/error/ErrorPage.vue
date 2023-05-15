@@ -1,9 +1,9 @@
 <script>
 import { defineComponent } from 'vue'
-import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import ImagePresentation from '@/components/ImagePresentation.vue'
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
+import ImagePresentation from '@Components/ImagePresentation.vue'
 
-import erreurSvg from '@/assets/img/erreur.svg?url'
+import erreurSvg from '@Assets/img/erreur.svg?url'
 
 export default defineComponent({
   name: 'ErreurPage',

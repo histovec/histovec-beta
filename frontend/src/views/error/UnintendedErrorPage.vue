@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
-import ErrorPage from '@/views/error/ErrorPage.vue'
+import ErrorPage from '@Views/error/ErrorPage.vue'
 
 
 export default defineComponent({

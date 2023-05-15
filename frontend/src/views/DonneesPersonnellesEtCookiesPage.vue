@@ -2,12 +2,12 @@
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { mailTo } from '@/utils/email.js'
+import { mailTo } from '@Utils/email.js'
 import {
   HISTOVEC_BASE_URL,
   ANTS_PERSONAL_DATA_EMAIL, UTAC_PERSONAL_DATA_EMAIL, HISTOVEC_SUPPORT_EMAIL, OPPOSITION_PERSONAL_DATA_EMAIL,
   READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_UTAC_PERSONAL_DATA_EMAIL, SEND_LIMITATION_PERSONAL_DATA_EMAIL, SEND_OPPOSITION_PERSONAL_DATA_EMAIL,
-} from '@/constants/email.js'
+} from '@Constants/email.js'
 
 export default defineComponent({
   name: 'DonneePersonnellesPage',

@@ -5,49 +5,49 @@ import QrcodeVue from 'qrcode.vue'
 
 import orderBy from 'lodash.orderby'
 
-import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
-import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
-import LoaderComponent from '@/components/LoaderComponent.vue';
-import ImagePresentation from '@/components/ImagePresentation.vue';
-import HistoVecModale from '@/components/HistoVecModale.vue';
-import AlerteComponent from '@/components/AlerteComponent.vue';
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
+import ControlesTechniquesLineChart from '@Components/ControlesTechniquesLineChart.vue'
+import TuileDsfrNonCliquable from '@Components/TuileDsfrNonCliquable.vue'
+import LoaderComponent from '@Components/LoaderComponent.vue';
+import ImagePresentation from '@Components/ImagePresentation.vue';
+import HistoVecModale from '@Components/HistoVecModale.vue';
+import AlerteComponent from '@Components/AlerteComponent.vue';
 
-import { hash } from '@/utils/crypto.js'
-import { generateCsa } from '@/utils/csaAsPdf/index.js'
-import { RAPPORT_FILENAME } from '@/constants/csaAsPdf.js'
-import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@/utils/dataPreparationFormat.js'
-import { base64Encode, urlSafeBase64Encode, base64Decode, urlSafeBase64Decode } from '@/utils/encoding.js'
-import { downloadBlob } from '@/utils/file.js'
-import { getExposant } from '@/utils/format.js'
-import { mailTo } from '@/utils/email.js'
-import { getShareReportEmail } from '@/utils/dynamicEmail.js'
+import { hash } from '@Utils/crypto.js'
+import { generateCsa } from '@Utils/csaAsPdf/index.js'
+import { RAPPORT_FILENAME } from '@Constants/csaAsPdf.js'
+import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@Utils/dataPreparationFormat.js'
+import { base64Encode, urlSafeBase64Encode, base64Decode, urlSafeBase64Decode } from '@Utils/encoding.js'
+import { downloadBlob } from '@Utils/file.js'
+import { getExposant } from '@Utils/format.js'
+import { mailTo } from '@Utils/email.js'
+import { getShareReportEmail } from '@Utils/dynamicEmail.js'
 
-import api from '@/api/index.js'
+import api from '@Api/index.js'
 
 import reportService from '@/services/report.js'
 
-import { formatIsoToFrDate } from '@/assets/js/format.js'
-import siv from '@/assets/js/siv.js'
-import operationsMapping from '@/assets/json/operations.json'
-import syntheseMapping from '@/assets/json/synthese.json'
+import { formatIsoToFrDate } from '@Assets/js/format.js'
+import siv from '@Assets/js/siv.js'
+import operationsMapping from '@Assets/json/operations.json'
+import syntheseMapping from '@Assets/json/synthese.json'
 
-import { RESULTAT } from '@/constants/controlesTechniques.js'
-import { REPORT_TABS } from '@/constants/reportTabs.js'
-import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@/constants/type.js'
-import { DEFAULT_DATE_UPDATE } from '@/constants/v.js'
-import { DEFAULT_NUMERO_SIREN } from '@/constants/vehicle/numeroSiren.js'
-import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@/constants/usagesSynthese.js'
+import { RESULTAT } from '@Constants/controlesTechniques.js'
+import { REPORT_TABS } from '@Constants/reportTabs.js'
+import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@Constants/type.js'
+import { DEFAULT_DATE_UPDATE } from '@Constants/v.js'
+import { DEFAULT_NUMERO_SIREN } from '@Constants/vehicle/numeroSiren.js'
+import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@Constants/usagesSynthese.js'
 
-import rapportAcheteurSvg from '@/assets/img/acheteur.svg?url'
-import rapportVendeurSvg from '@/assets/img/rapport.svg?url'
-import logoSimplimmat from '@/assets/img/simplimmat.png'
+import rapportAcheteurSvg from '@Assets/img/acheteur.svg?url'
+import rapportVendeurSvg from '@Assets/img/rapport.svg?url'
+import logoSimplimmat from '@Assets/img/simplimmat.png'
 
 import '@/assets/stylesheets/globale.css'
 
 // CSA
-import logoHistoVec from '@/assets/img/deprecated/logo_histovec_avec_titre.png'
-import logoMI from '@/assets/img/deprecated/logo_ministere_interieur.png'
+import logoHistoVec from '@Assets/img/deprecated/logo_histovec_avec_titre.png'
+import logoMI from '@Assets/img/deprecated/logo_ministere_interieur.png'
 
 
 export default defineComponent({

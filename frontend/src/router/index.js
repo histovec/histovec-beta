@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AccueilPage from '@/views/AccueilPage.vue'
-import { TYPE_RAPPORT } from '../constants/type'
+import AccueilPage from '@Views/AccueilPage.vue'
+import { TYPE_RAPPORT } from '@Constants/type'
 
-const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
-const AcheteurPage = () => import('@/views/AcheteurPage.vue')
-const ContactPage = () => import('@/views/ContactPage.vue')
-const DonneesPersonnellesEtCookiesPage = () => import('@/views/DonneesPersonnellesEtCookiesPage.vue')
-const FAQPage = () => import('@/views/FAQPage.vue')
-const MentionsLegalesPage = () => import('@/views/MentionsLegalesPage.vue')
-const PlanDuSitePage = () => import('@/views/PlanDuSitePage.vue')
-const ProprietairePage = () => import('@/views/ProprietairePage.vue')
-const RapportPage = () => import('@/views/RapportPage.vue')
-const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
-const UnavailableServicePage = () => import('@/views/error/UnavailableServicePage.vue')
-const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue')
+const AccessibilitePage = () => import('@Views/AccessibilitePage.vue')
+const AcheteurPage = () => import('@Views/AcheteurPage.vue')
+const ContactPage = () => import('@Views/ContactPage.vue')
+const DonneesPersonnellesEtCookiesPage = () => import('@Views/DonneesPersonnellesEtCookiesPage.vue')
+const FAQPage = () => import('@Views/FAQPage.vue')
+const MentionsLegalesPage = () => import('@Views/MentionsLegalesPage.vue')
+const PlanDuSitePage = () => import('@Views/PlanDuSitePage.vue')
+const ProprietairePage = () => import('@Views/ProprietairePage.vue')
+const RapportPage = () => import('@Views/RapportPage.vue')
+const NotFoundPage = () => import('@Views/error/NotFoundPage.vue')
+const UnavailableServicePage = () => import('@Views/error/UnavailableServicePage.vue')
+const UnintendedErrorPage = () => import('@Views/error/UnintendedErrorPage.vue')
 
 
 // @flag @makeSiteUnavailable

@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink } from 'vue-router'
-import '@/assets/stylesheets/globale.css'
+import '@Assets/stylesheets/globale.css'
 
 export default defineComponent({
   name: 'PlanDuSitePage',
