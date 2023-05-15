@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest'
 import {mount} from '@vue/test-utils'
-import CarteDsfrNonCliquable from '../../../components/CarteDsfrNonCliquable.vue';
-import simpleSvg from '@/assets/img/simple.svg?url'
+import CarteDsfrNonCliquable from '@Components/CarteDsfrNonCliquable.vue';
+import simpleSvg from '@Assets/img/simple.svg?url'
 
 describe('CarteDsfrNonCliquable', () => {
   it('Doit afficher une carte sans un id donné', () => {

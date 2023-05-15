@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect } from 'vitest'
-import HistoVecModale from '../../../components/HistoVecModale.vue'
+import HistoVecModale from '@Components/HistoVecModale.vue'
 
 describe('HistoVecModale', () => {
   it('Ne doit pas afficher la modale', () => {

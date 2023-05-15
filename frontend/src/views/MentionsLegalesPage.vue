@@ -4,13 +4,13 @@ import { RouterLink } from 'vue-router'
 
 import '@/assets/stylesheets/globale.css'
 
-import { mailTo } from '@/utils/email.js'
+import { mailTo } from '@Utils/email.js'
 import {
   HISTOVEC_BASE_URL,
   ANTS_PERSONAL_DATA_EMAIL, UTAC_PERSONAL_DATA_EMAIL, HISTOVEC_SUPPORT_EMAIL, OPPOSITION_PERSONAL_DATA_EMAIL,
   REPRODUCTION_REQUEST_EMAIL, READ_OR_UPDATE_ANTS_PERSONAL_DATA_EMAIL, READ_OR_UPDATE_UTAC_PERSONAL_DATA_EMAIL, SEND_LIMITATION_PERSONAL_DATA_EMAIL, SEND_OPPOSITION_PERSONAL_DATA_EMAIL,
-} from '@/constants/email.js'
-import api from '@/api/index.js'
+} from '@Constants/email.js'
+import api from '@Api/index.js'
 import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr';
 
 export default defineComponent({

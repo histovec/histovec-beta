@@ -1,10 +1,10 @@
 
 import orderBy from 'lodash.orderby'
 
-import { MISSING_VALUE } from '@/assets/js/constants.js'
-import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
-import operationsMapping from '@/assets/json/operations.json'
-import suspensionsMapping from '@/assets/json/suspensions.json'
+import { MISSING_VALUE } from '@Assets/js/constants.js'
+import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@Assets/js/format.js'
+import operationsMapping from '@Assets/json/operations.json'
+import suspensionsMapping from '@Assets/json/suspensions.json'
 
 
 const normalizeForFrontendDisplay = (elements, format) => {
@@ -41,7 +41,7 @@ const labelizeCertifDepuis = (nbMonths) => {
   if((month>6)&& (year >=10)){
     return `${year+1} ans`
   }
-  
+
   return yearLabel
 }
 

@@ -1,10 +1,10 @@
 <script>
 import { defineComponent } from 'vue'
 
-import HistoVecHeader from '@/components/HistoVecHeader.vue'
-import HistoVecFooter from '@/components/HistoVecFooter.vue'
+import HistoVecHeader from '@Components/HistoVecHeader.vue'
+import HistoVecFooter from '@Components/HistoVecFooter.vue'
 import '@/assets/stylesheets/globale.css'
-import LienEvitement from '@/components/LienEvitement.vue'
+import LienEvitement from '@Components/LienEvitement.vue'
 
 import { v4 as uuidv4 } from 'uuid'
 
