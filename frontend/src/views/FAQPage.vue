@@ -1,20 +1,20 @@
 <script>
 import { defineComponent } from 'vue'
 
-import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import ImagePresentation from '@/components/ImagePresentation.vue';
-import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
+import ImagePresentation from '@Components/ImagePresentation.vue';
+import TuileDsfrNonCliquable from '@Components/TuileDsfrNonCliquable.vue'
 
 import {
   FAQ_THEMES,
   FAQ_THEMES_OPTIONS,
-} from '@/constants/faq.js'
+} from '@Constants/faq.js'
 
-import faqSvg from '@/assets/img/faq.svg?url'
+import faqSvg from '@Assets/img/faq.svg?url'
 
-import { mailTo } from '@/utils/email.js'
-import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@/constants/email.js'
-import api from '@/api/index.js'
+import { mailTo } from '@Utils/email.js'
+import { CAS_TOULOUSE_EMAIL, ABOUT_UNPAID_PV_EMAIL } from '@Constants/email.js'
+import api from '@Api/index.js'
 
 import '@/assets/stylesheets/globale.css'
 

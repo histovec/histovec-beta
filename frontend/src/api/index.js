@@ -1,5 +1,5 @@
 import 'whatwg-fetch'
-import { apiUrl } from '../config.js'
+import { apiUrl } from '@/config.js'
 
 const VITE_DISABLE_API_LOG = import.meta.env.VITE_DISABLE_API_LOG
 const IS_API_LOG_DISABLED = VITE_DISABLE_API_LOG === 'true'

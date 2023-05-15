@@ -1,13 +1,13 @@
 <script>
 import { defineComponent } from 'vue'
-import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
-import ImagePresentation from '@/components/ImagePresentation.vue'
+import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
+import ImagePresentation from '@Components/ImagePresentation.vue'
 
-import api from '@/api/index.js'
-import { mailTo } from '@/utils/email.js'
-import { ASK_REPORT_EMAIL } from '@/constants/email.js'
+import api from '@Api/index.js'
+import { mailTo } from '@Utils/email.js'
+import { ASK_REPORT_EMAIL } from '@Constants/email.js'
 
-import acheteurSvg from '@/assets/img/acheteur.svg?url'
+import acheteurSvg from '@Assets/img/acheteur.svg?url'
 
 export default defineComponent({
   name: 'AcheteurPage',

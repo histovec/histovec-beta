@@ -10,7 +10,7 @@
 <script>
 
 import orderBy from 'lodash.orderby'
-import { formatIsoToFrDate } from '@/assets/js/format.js'
+import { formatIsoToFrDate } from '@Assets/js/format.js'
 
 import { Line as LineChart } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale } from 'chart.js'

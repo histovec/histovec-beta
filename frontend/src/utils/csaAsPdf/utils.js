@@ -16,7 +16,7 @@ import {
 	FONT_SPACING,
 	FONT_STYLES,
 	FOOTER_LOGO_X,
-} from '@/constants/csaAsPdf.js'
+} from '@Constants/csaAsPdf.js'
 
 
 export const getEmbeddedFont = ({ style, embeddedFonts }) => {
