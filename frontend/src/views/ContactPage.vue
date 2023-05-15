@@ -271,7 +271,7 @@ export default defineComponent({
         dateEmissionCertificatImmatriculation = '',
       } = fniData
 
-      const isoDateCertificat = dateEmissionCertificatImmatriculation.split('/').reverse().join('-')
+      const isoDateCertificat = dateEmissionCertificatImmatriculation ? dateEmissionCertificatImmatriculation.split('/').reverse().join('-') : ''
 
       return {
         dateCertificat: isoDateCertificat,
