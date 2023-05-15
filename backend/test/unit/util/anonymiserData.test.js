@@ -5,8 +5,8 @@ import {
   anonymizeText,
   anonymizedControlesTechniques,
   anonymizeIdentite
-} from '../../src/util/anonymiserData.js'
-import { CONTROL_TECHNIQUES_MOCK_FOR_BPSA } from '../../src/constant/utac.js';
+} from '../../../src/util/anonymiserData.js'
+import { CONTROL_TECHNIQUES_MOCK_FOR_BPSA } from '../../../src/constant/utac.js';
 
 export const lab = Lab.script()
 

@@ -22,7 +22,11 @@ export class ApiDataCLient {
   get = async (url) => {
     return await this.axios.get(url)
       .then(response => {
-        return response.data
+        return {
+          status: response.status,
+          message: response.statusText,
+          payload: response.data,
+        }
       })
       .catch(error => {
         throw error
@@ -32,7 +36,11 @@ export class ApiDataCLient {
   post = async (url, data) => {
     return await this.axios.post(url, data)
       .then(response => {
-        return response.data
+        return {
+          status: response.status,
+          message: response.statusText,
+          payload: response.data,
+        }
       })
       .catch(error => {
         throw error
