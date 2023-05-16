@@ -50,13 +50,15 @@ export class ApiDataCLient {
     if (bouchonActive) {
       if (data.nom === 'vehiculeMin') {
         return {
-          status: 200,
-          sivData: SIV_PHYSIQUE_MIN,
+          status: SIV_PHYSIQUE_MIN.status,
+          message: SIV_PHYSIQUE_MIN.message,
+          payload: SIV_PHYSIQUE_MIN.payload,
         }
       } else {
         return {
-          status: 200,
-          sivData: SIV_PHYSIQUE,
+          status: SIV_PHYSIQUE.status,
+          message: SIV_PHYSIQUE.message,
+          payload: SIV_PHYSIQUE.payload,
         }
       }
     }
