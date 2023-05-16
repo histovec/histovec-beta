@@ -58,6 +58,7 @@ const config = {
   // API data
   apiData: {
     apiUrl: process.env.API_DATA_URL,
+    isSIVMockActivated: process.env.IS_API_DATA_MOCK_ACTIVATED === 'true' || process.env.IS_API_DATA_MOCK_ACTIVATED === true,
   },
 }
 
