@@ -41,7 +41,11 @@ export class ApiDataCLient {
 
   getByCode = async (uuid, clefAcheteur) => {
     if (bouchonActive) {
-      return SIV_PHYSIQUE
+      return {
+        status: SIV_PHYSIQUE.status,
+        message: SIV_PHYSIQUE.message,
+        payload: SIV_PHYSIQUE.payload,
+      }
     }
     return await this.get('/report_by_code/' + uuid + '/' + clefAcheteur)
   }
