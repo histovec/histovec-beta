@@ -1,0 +1,80 @@
+export const SUSPENSIONS = [
+  {
+    date: '2023-04-28',
+    motif: 'PVE',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'DES',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'REI',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'TRA',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'VOL',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'PEN',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'PJU',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'SOR',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'FNIM',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'FNIV',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2023-04-28',
+    motif: 'ADM',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2013-08-01 00:00:00.0',
+    motif: 'PVE',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+  {
+    date: '2014-05-03 00:00:00.0',
+    motif: 'REI',
+    remise_titre: 'NON',
+    retrait_titre: 'NON',
+  },
+]
