@@ -25,7 +25,7 @@ export const genererReportRoute = ({ path, logLabel, payloadSchema, appelApiData
         const responseError = error.response
 
         if (responseError) {
-          const message = responseError.statusTextt
+          const message = responseError.statusText
 
           switch (responseError.status) {
             case 404:
