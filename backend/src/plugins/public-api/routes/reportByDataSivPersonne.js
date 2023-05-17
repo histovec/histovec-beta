@@ -1,6 +1,5 @@
 import Joi from 'joi'
 import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_REGEX } from '../../../constant/regex.js'
-import config from '../../../config.js'
 import { ApiDataCLient } from '../../../services/api-data.js'
 import { syslogLogger } from '../../../util/logger.js'
 import { genererReportRoute } from './reportCommonData.js'
@@ -28,12 +27,10 @@ const reportByDataPayloadSchema = Joi.object({
   }).label('controles_techniques_option_by_data'),
 }).label('Report_by_data_payload')
 
-const DEFAULT_UUID = config.isPublicApi ? config.apiUuid : ''
 const apiData = new ApiDataCLient()
 
-const appelApiData = async (request) => {
+const appelApiData = async (request, uuid) => {
   const {
-    uuid = DEFAULT_UUID,
     particulier: {
       nom,
       prenoms,
@@ -51,17 +48,17 @@ const appelApiData = async (request) => {
     numero_formule: numeroFormule,
   }
 
-  let reponse = null
+  let response = null
 
   try {
     syslogLogger.info({ key: 'api_data_call_siv_physique_start', tag: 'API_DATA', uuid, value: data })
-    reponse = await apiData.getSivPhysique('400e3437-aa6a-4c8f-81b2-819fe27a2d65', data)
+    response = await apiData.getSivPhysique('400e3437-aa6a-4c8f-81b2-819fe27a2d65', data)
   } catch (error) {
-    syslogLogger.error({ key: 'api_data_call_siv_physique_failed', tag: 'API_DATA', uuid, value: { erreur: error } })
+    syslogLogger.error({ key: 'api_data_call_siv_physique_failed', tag: 'API_DATA', uuid, value: { status: error.response.status, statusText: error.response.statusText, code: error.code, message: error.message, method: error.config.method } })
     throw error
   }
 
-  return reponse
+  return response
 }
 
 export default genererReportRoute({ path: '/report_by_data/siv/personne', logLabel: 'PUBLIC_ROUTE_REPORT_BY_DATA', payloadSchema: reportByDataPayloadSchema, appelApiData })
