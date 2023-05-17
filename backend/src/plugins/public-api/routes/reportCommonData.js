@@ -1,4 +1,8 @@
 import Boom from '@hapi/boom'
+import { verificationsData } from '../handlers/validationData.js'
+import config from '../../../config.js'
+
+const DEFAULT_UUID = config.isPublicApi ? config.apiUuid : ''
 
 export const genererReportRoute = ({ path, logLabel, payloadSchema, appelApiData }) => {
   return {
@@ -11,16 +15,19 @@ export const genererReportRoute = ({ path, logLabel, payloadSchema, appelApiData
       },
     },
     handler: async (request, h) => {
-      let reponse
+      const uuid = request.payload && request.payload.uuid ? request.payload.uuid : DEFAULT_UUID
+      let response
 
+      // appel à l'API data
       try {
-        reponse = await appelApiData(request)
-      } catch (erreur) {
-        const reponse = erreur.response
+        response = await appelApiData(request, uuid)
+      } catch (error) {
+        const responseError = error.response
 
-        if (reponse && reponse.status !== 200) {
-          const message = reponse.statusText
-          switch (reponse.status) {
+        if (responseError) {
+          const message = responseError.statusText
+
+          switch (responseError.status) {
             case 404:
               throw Boom.notFound(message)
             case 502:
@@ -29,14 +36,17 @@ export const genererReportRoute = ({ path, logLabel, payloadSchema, appelApiData
               throw Boom.serverUnavailable(message)
             case 500:
             default:
-              throw Boom.badImplementation(message)
+              throw Boom.serverUnavailable('Service indisponible.')
           }
         }
 
         throw Boom.serverUnavailable('Service indisponible.')
       }
 
-      return reponse
+      // traitement des datas
+      verificationsData(response, uuid)
+
+      return response
     },
   }
 }

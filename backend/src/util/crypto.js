@@ -33,6 +33,8 @@ export const urlSafeBase64Decode = (text) => {
 
 export const hash = (text) => crypto.createHash('sha256').update(text).digest()
 
+export const hashHexdigest = (text) => crypto.createHash('sha256').update(text).digest('hex')
+
 // weak encryption (used for encryptedImmat)
 export const decryptXOR = (encrypted, key) => String.fromCharCode(
   ...Buffer.from(encrypted, 'base64')
