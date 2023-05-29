@@ -10,15 +10,15 @@ const reportByDataPayloadSchema = Joi.object({
     separator: '-',
   }).meta({ swaggerHidden: true }),
   particulier: Joi.object({
-    nom: Joi.string().trim()
+    nom: Joi.string().trim().required()
       .description('Nom tel que renseigné sur le certificat d\'immatriculation.'),
-    prenoms: Joi.array().items(Joi.string().allow('').trim())
+    prenoms: Joi.array().items(Joi.string().allow('').trim()).required()
       .description('Prénoms tels que renseignés sur le certificat d\'immatriculation. Renseigner un prénom par élément de liste.'),
   }).description('Information du particulier.'),
   vehicule: Joi.object({
     numero_immatriculation: Joi.string().pattern(NUMERO_IMMATRICULATION_REGEX).required()
       .description('Numéro d\'immatriculation tel que renseigné sur le certificat d\'immatriculation.'),
-    numero_formule: Joi.string().pattern(NUMERO_FORMULE_REGEX)
+    numero_formule: Joi.string().pattern(NUMERO_FORMULE_REGEX).required()
       .description('Numéro de formule tel que renseigné sur le certificat d\'immatriculation. Remplir UNIQUEMENT si le véhicule possède un numéro d\'immatriculation au format SIV.'),
   }).label('vehicule_by_data'),
   options: Joi.object({
