@@ -1,6 +1,7 @@
 import Boom from '@hapi/boom'
 import { hashHexdigest } from '../../../util/crypto.js'
 import { syslogLogger } from '../../../util/logger.js'
+import { apiDataResponseSchema } from '../routes/schemas/apiDataResponseSchema.js'
 
 export const verificationStatus = (status, uuid) => {
   if (status === 204) {
@@ -15,15 +16,21 @@ export const verificationStatus = (status, uuid) => {
   return true
 }
 
-export const verificationImmatriculation = (payload, uuid) => {
-  if (payload && payload.incoming_query && payload.incoming_query.immat && payload.plaq_immat_hash) {
-    if (hashHexdigest(payload.incoming_query.immat) !== payload.plaq_immat_hash) {
-      syslogLogger.error({ key: 'plaque_immatriculation_incorrecte', tag: 'API_DATA', uuid })
-      throw Boom.preconditionFailed('Un problème est survenu lors de la récupération des informations.')
-    }
-  } else {
-    syslogLogger.error({ key: 'plaque_immatriculation_information_manquante', tag: 'API_DATA', uuid })
+export const verificationFormat = (payload, uuid) => {
+  const { error } = apiDataResponseSchema.validate(payload)
+
+  if (error) {
+    syslogLogger.error({ key: 'format_reponse_api_data_erreur', tag: 'API_DATA', uuid, value: { error_message: error.details[0].message } })
     throw Boom.badGateway('Un problème est survenu lors de la récupération des informations.')
+  }
+
+  return true
+}
+
+export const verificationImmatriculation = (payload, uuid) => {
+  if (hashHexdigest(payload.incoming_query.immat) !== payload.plaq_immat_hash) {
+    syslogLogger.error({ key: 'plaque_immatriculation_incorrecte', tag: 'API_DATA', uuid })
+    throw Boom.preconditionFailed('Un problème est survenu lors de la récupération des informations.')
   }
 
   return true
@@ -68,9 +75,10 @@ export const verificationVehiculeVole = (payload, uuid) => {
 
 export const verificationsData = (response, uuid) => {
   const statusValide = verificationStatus(response.status, uuid)
+  const formatValide = verificationFormat(response.payload, uuid)
   const immatriculationValide = verificationImmatriculation(response.payload, uuid)
   const controleTechniqueValide = verificationControleTechnique(response.payload, uuid)
   const vehiculeVole = verificationVehiculeVole(response.payload, uuid)
 
-  return { statusValide, immatriculationValide, controleTechniqueValide, vehiculeVole }
+  return { statusValide, formatValide, immatriculationValide, controleTechniqueValide, vehiculeVole }
 }
