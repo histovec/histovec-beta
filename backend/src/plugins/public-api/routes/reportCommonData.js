@@ -1,6 +1,7 @@
 import Boom from '@hapi/boom'
 import { verificationsData } from '../handlers/validationData.js'
 import config from '../../../config.js'
+import { vehiculeMapping } from '../util/mapper.js'
 
 const DEFAULT_UUID = config.isPublicApi ? config.apiUuid : ''
 
@@ -45,8 +46,8 @@ export const genererReportRoute = ({ path, logLabel, payloadSchema, appelApiData
 
       // traitement des datas
       verificationsData(response, uuid)
-
-      return response
+      const reponseMappe = vehiculeMapping(response, config.isPublicApi)
+      return reponseMappe
     },
   }
 }
