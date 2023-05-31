@@ -1,3 +1,90 @@
+/* eslint-disable */
+
+export function historiqueMapping(historique) {
+    return historique.map(({opa_date, opa_type}) => (
+      {
+        date: opa_date,
+        type: opa_type,
+      }
+    ))
+}
+export function queryMapping(incoming_query) {
+  const {
+    nom,
+    prenom,
+    numero_formule,
+    immat,
+    raison_sociale,
+    siren,
+    date_emission_ci,
+    nom_prenom,
+  } = incoming_query
+  return {
+    ...((numero_formule)?
+      (nom || prenom) ?
+        {
+          nom: nom,
+          prenom: prenom,
+          immat: immat,
+          numero_formule: numero_formule,
+        } : {
+          raison_sociale: raison_sociale,
+          siren: siren,
+          immat: immat,
+          numero_formule: numero_formule,
+        } : {}
+    ),
+    ...((date_emission_ci)?
+      (raison_sociale || siren) ?
+        {
+          raison_sociale: raison_sociale,
+          siren: siren,
+          immat: immat,
+          date_emission_ci: date_emission_ci,
+        }:
+        {
+          nom_prenom: nom_prenom,
+          immat: immat,
+          date_emission_ci: date_emission_ci,
+        } : {}
+    ),
+  };
+}
+export function titulaireMapping(nom_naissance, prenom, raison_sociale, siren, code_postal) {
+  return {
+    ...(
+      (nom_naissance || prenom) ?
+        {
+          particulier: {
+            pers_nom_naissance_tit: nom_naissance,
+            pers_prenom_tit: prenom,
+          },
+        } : {}
+    ),
+    ...(
+      (raison_sociale || siren) ?
+        {
+          personne_morale: {
+            raison_soc: raison_sociale,
+            siren: siren,
+          },
+        } : {}
+    ),
+    code_postal: code_postal,
+  };
+}
+
+export function controlesTechniquesMapping(controlesTechniques) {
+    return controlesTechniques.map(({ct_date, ct_nature, ct_resultat, ct_km}) => (
+      {
+        date: ct_date,
+        nature: ct_nature,
+        resultat: ct_resultat,
+        km: ct_km,
+      }
+    ))
+}
+
 export const vehiculeMapping = (report, isPublicApi) => {
   const {
     vehicule:
@@ -64,16 +151,11 @@ export const vehiculeMapping = (report, isPublicApi) => {
             date_annulation,
             is_ci_vole,
             is_duplicata,
-            has_gages: reportGages = [],
+            has_gages,
             is_ci_perdu,
-            has_dvs: reportDeclarationsValantSaisie = [],
-            has_suspensions: reportSuspensions = [],
-            has_oppositions: {
-              oves: reportOves = [],
-              oveis: reportOveis = [],
-              otcis: reportOtcis = [],
-              otcis_pv: reportOtcisPv = [],
-            },
+            has_dvs,
+            has_suspensions,
+            has_oppositions,
             is_veh_vole,
           },
         accidents:
@@ -104,93 +186,20 @@ export const vehiculeMapping = (report, isPublicApi) => {
         age,
         date_emission,
       },
+    clef_acheteur,
+    message_usager,
+    plaq_immat_hash,
+    incoming_query,
+    validite_clef_acheteur,
   } = report
 
-  const mappedTitulaire = {
-    ...(
-      (nom_naissance || prenom) ?
-        {
-          particulier: {
-            pers_nom_naissance_tit: nom_naissance,
-            pers_prenom_tit: prenom,
-          },
-        } : {}
-    ),
-    ...(
-      (raison_sociale || siren) ?
-        {
-          personne_morale: {
-            raison_soc: raison_sociale,
-            siren: siren,
-            code_postal: code_postal,
-          },
-        } : {}
-    ),
-    code_postal: code_postal,
-  }
+  const mappedTitulaire = titulaireMapping(nom_naissance, prenom, raison_sociale, siren, code_postal)
 
-  const historiqueMapping = (historique) => {
-    return historique.map(({ opa_date, opa_type, ope_date_annul }) => (
-      {
-        date: opa_date,
-        type: opa_type,
-        ...(
-          ope_date_annul ?
-            {date_annulation: ope_date_annul} :
-            {}
-        ),
-      }
-    ))
-  }
   const mappedHistorique = historiqueMapping(reportHistorique)
 
-  const controlesTechniquesMapping = (controlesTechniques) => {
-    return controlesTechniques.map(({ ct_date, ct_nature, ct_resultat, ct_km }) => (
-      {
-        date: ct_date,
-        nature: ct_nature,
-        resultat: ct_resultat,
-        km: ct_km,
-      }
-    ))
-  }
   const mappedControlesTechniques = controlesTechniquesMapping(reportControlesTechniques)
 
-  const mappedDeclarationsValantSaisie = reportDeclarationsValantSaisie.map(({ date, dvs_autorite }) => (
-    {
-      date,
-      nom_personne_morale: dvs_autorite,
-    }
-  ))
-
-  const mappedGages = reportGages.map(({ date, nom_creancier }) => (
-    {
-      date,
-      nom_creancier,
-    }
-  ))
-
-  const oppositionsMapping = (oppositions) => {
-    return oppositions.map(({date}) => (
-      {
-        date,
-      }
-    ))
-  }
-
-  const mappedOppositionOves = oppositionsMapping(reportOves)
-  const mappedOppositionOveis = oppositionsMapping(reportOveis)
-  const mappedOppositionOtcis = oppositionsMapping(reportOtcis)
-  const mappedOppositionOtcisPv = oppositionsMapping(reportOtcisPv)
-
-  const mappedSuspensions = reportSuspensions.map(({ date, motif, remise_titre, retrait_titre }) => (
-    {
-      date,
-      motif,
-      remise_du_titre: remise_titre,
-      retrait_du_titre: retrait_titre,
-    }
-  ))
+  const mappedQuery = queryMapping(incoming_query)
 
   const extraSection = (
     isPublicApi ? {} : {
@@ -265,16 +274,11 @@ export const vehiculeMapping = (report, isPublicApi) => {
             date_annulation,
             is_ci_vole,
             is_duplicata,
-            has_gages: mappedGages,
+            has_gages,
             is_ci_perdu,
-            has_dvs: mappedDeclarationsValantSaisie,
-            has_suspensions: mappedSuspensions,
-            has_oppositions: {
-              oves: mappedOppositionOves,
-              oveis: mappedOppositionOveis,
-              otcis: mappedOppositionOtcis,
-              otcis_pv: mappedOppositionOtcisPv,
-            },
+            has_dvs,
+            has_suspensions,
+            has_oppositions,
             is_veh_vole,
           },
         accidents:
@@ -285,14 +289,18 @@ export const vehiculeMapping = (report, isPublicApi) => {
           },
         historique: mappedHistorique,
         controles_techniques: mappedControlesTechniques,
-        proprietaire: mappedTitulaire,
-        certificat_immatriculation:
+      },
+      proprietaire: mappedTitulaire,
+      certificat_immatriculation:
           {
             age,
             date_emission,
           },
-
-      },
     ...extraSection,
+    clef_acheteur,
+    message_usager,
+    plaq_immat_hash,
+    incoming_query: mappedQuery,
+    validite_clef_acheteur,
   }
 }
