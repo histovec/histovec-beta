@@ -34,6 +34,8 @@ export default defineConfig({
     '@Constants': path.resolve(__dirname, './src/constants'),
     '@Utils': path.resolve(__dirname, './src/utils'),
     '@Views': path.resolve(__dirname, './src/views'),
+    '@Stores': path.resolve(__dirname, './src/stores'),
+    '@Services': path.resolve(__dirname, './src/services'),
   },
 },
   root: ".", //Define the root
