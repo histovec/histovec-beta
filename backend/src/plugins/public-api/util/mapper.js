@@ -25,16 +25,16 @@ export function queryMapping (incoming_query) {
       (numero_formule) ?
           (nom || prenom) ?
               {
-                nom: nom,
-                prenom: prenom,
-                immat: immat,
-                numero_formule: numero_formule,
+                nom,
+                prenom,
+                immat,
+                numero_formule,
               } :
               {
-                raison_sociale: raison_sociale,
-                siren: siren,
-                immat: immat,
-                numero_formule: numero_formule,
+                raison_sociale,
+                siren,
+                immat,
+                numero_formule,
               } :
           {}
     ),
@@ -42,15 +42,15 @@ export function queryMapping (incoming_query) {
       (date_emission_ci) ?
           (raison_sociale || siren) ?
               {
-                raison_sociale: raison_sociale,
-                siren: siren,
-                immat: immat,
-                date_emission_ci: date_emission_ci,
+                raison_sociale,
+                siren,
+                immat,
+                date_emission_ci,
               } :
               {
-                nom_prenom: nom_prenom,
-                immat: immat,
-                date_emission_ci: date_emission_ci,
+                nom_prenom,
+                immat,
+                date_emission_ci,
               } :
           {}
     ),
@@ -75,12 +75,12 @@ export function titulaireMapping (nom_naissance, prenom, raison_sociale, siren, 
             personne_morale:
               {
                 raison_soc: raison_sociale,
-                siren: siren,
+                siren,
               },
           } :
           {}
     ),
-    code_postal: code_postal,
+    code_postal,
   }
 }
 
