@@ -1,14 +1,15 @@
-/* eslint-disable */
+/* eslint-disable camelcase */
+/* eslint operator-linebreak: ["error", "after"] */
 
-export function historiqueMapping(historique) {
-    return historique.map(({opa_date, opa_type}) => (
-      {
-        date: opa_date,
-        type: opa_type,
-      }
-    ))
+export function historiqueMapping (historique) {
+  return historique.map(({ opa_date, opa_type }) => (
+    {
+      date: opa_date,
+      type: opa_type,
+    }
+  ))
 }
-export function queryMapping(incoming_query) {
+export function queryMapping (incoming_query) {
   const {
     nom,
     prenom,
@@ -20,72 +21,81 @@ export function queryMapping(incoming_query) {
     nom_prenom,
   } = incoming_query
   return {
-    ...((numero_formule)?
-      (nom || prenom) ?
-        {
-          nom: nom,
-          prenom: prenom,
-          immat: immat,
-          numero_formule: numero_formule,
-        } : {
-          raison_sociale: raison_sociale,
-          siren: siren,
-          immat: immat,
-          numero_formule: numero_formule,
-        } : {}
+    ...(
+      (numero_formule) ?
+          (nom || prenom) ?
+              {
+                nom: nom,
+                prenom: prenom,
+                immat: immat,
+                numero_formule: numero_formule,
+              } :
+              {
+                raison_sociale: raison_sociale,
+                siren: siren,
+                immat: immat,
+                numero_formule: numero_formule,
+              } :
+          {}
     ),
-    ...((date_emission_ci)?
-      (raison_sociale || siren) ?
-        {
-          raison_sociale: raison_sociale,
-          siren: siren,
-          immat: immat,
-          date_emission_ci: date_emission_ci,
-        }:
-        {
-          nom_prenom: nom_prenom,
-          immat: immat,
-          date_emission_ci: date_emission_ci,
-        } : {}
+    ...(
+      (date_emission_ci) ?
+          (raison_sociale || siren) ?
+              {
+                raison_sociale: raison_sociale,
+                siren: siren,
+                immat: immat,
+                date_emission_ci: date_emission_ci,
+              } :
+              {
+                nom_prenom: nom_prenom,
+                immat: immat,
+                date_emission_ci: date_emission_ci,
+              } :
+          {}
     ),
-  };
+  }
 }
-export function titulaireMapping(nom_naissance, prenom, raison_sociale, siren, code_postal) {
+export function titulaireMapping (nom_naissance, prenom, raison_sociale, siren, code_postal) {
   return {
     ...(
       (nom_naissance || prenom) ?
-        {
-          particulier: {
-            pers_nom_naissance_tit: nom_naissance,
-            pers_prenom_tit: prenom,
-          },
-        } : {}
+          {
+            particulier:
+              {
+                pers_nom_naissance_tit: nom_naissance,
+                pers_prenom_tit: prenom,
+              },
+          } :
+          {}
     ),
     ...(
       (raison_sociale || siren) ?
-        {
-          personne_morale: {
-            raison_soc: raison_sociale,
-            siren: siren,
-          },
-        } : {}
+          {
+            personne_morale:
+              {
+                raison_soc: raison_sociale,
+                siren: siren,
+              },
+          } :
+          {}
     ),
     code_postal: code_postal,
-  };
+  }
 }
 
-export function controlesTechniquesMapping(controlesTechniques) {
-    return controlesTechniques.map(({ct_date, ct_nature, ct_resultat, ct_km}) => (
-      {
-        date: ct_date,
-        nature: ct_nature,
-        resultat: ct_resultat,
-        km: ct_km,
-      }
-    ))
+export function controlesTechniquesMapping (controlesTechniques) {
+  return controlesTechniques.map(({ ct_date, ct_nature, ct_resultat, ct_km }) => (
+    {
+      date: ct_date,
+      nature: ct_nature,
+      resultat: ct_resultat,
+      km: ct_km,
+    }
+  ))
 }
 
-export const vehiculeMapping = (report, isPublicApi) => {
+export const vehiculeMapping = (report) => {
   const {
     vehicule:
       {
@@ -201,14 +211,6 @@ export const vehiculeMapping = (report, isPublicApi) => {
 
   const mappedQuery = queryMapping(incoming_query)
 
-  const extraSection = (
-    isPublicApi ? {} : {
-        extra: {
-          // @info @extraFieldForFront: C'est ici qu'on peut passer des champs uniquement au frontend, sans impacter le format de sortie de l'api grand public
-          // Ces champs ne doivent pas apparaître dans la documentation swagger (utiliser .meta({ swaggerHidden: true }) sur le validateur Joi)
-        },
-      }
-  )
   return {
     vehicule:
       {
@@ -290,13 +292,12 @@ export const vehiculeMapping = (report, isPublicApi) => {
         historique: mappedHistorique,
         controles_techniques: mappedControlesTechniques,
       },
-      proprietaire: mappedTitulaire,
-      certificat_immatriculation:
-          {
-            age,
-            date_emission,
-          },
-    ...extraSection,
+    proprietaire: mappedTitulaire,
+    certificat_immatriculation:
+      {
+        age,
+        date_emission,
+      },
     clef_acheteur,
     message_usager,
     plaq_immat_hash,

@@ -46,7 +46,7 @@ export const genererReportRoute = ({ path, logLabel, payloadSchema, appelApiData
 
       // traitement des datas
       verificationsData(response, uuid)
-      const reponseMappe = vehiculeMapping(response, config.isPublicApi)
+      const reponseMappe = vehiculeMapping(response.payload, config.isPublicApi)
       return reponseMappe
     },
   }
