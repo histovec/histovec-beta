@@ -11,7 +11,7 @@ import {
   formDataSivParticulier,
   formDataSivPersonneMorale,
   formDataSivPersonneMoraleSansNumeroSiren,
-} from '../../fixtures/formData'
+} from '@/tests/fixtures/formData'
 
 describe('genererId, générer id du titulaire', async () => {
   test('Generer Id du titulaire SIV particulier', async () => {

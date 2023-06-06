@@ -1,9 +1,9 @@
-import { normalizeKeyAsDataPreparation } from '../utils/dataPreparationFormat'
+import { normalizeKeyAsDataPreparation } from '@Utils/dataPreparationFormat'
 import genererId from './genererId'
 import { base64Encode } from '@Utils/encoding'
 import { hash } from '@Utils/crypto.js'
 
-const cleProptietaire = async (formData) => {
+const cleProprietaire = async (formData) => {
   if (!formData) {
     return null
   }
@@ -14,5 +14,5 @@ const cleProptietaire = async (formData) => {
 }
 
 export default {
-  cleProptietaire,
+  cleProprietaire,
 }

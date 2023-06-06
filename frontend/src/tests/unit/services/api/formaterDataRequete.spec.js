@@ -11,7 +11,7 @@ import {
   formDataFniPersonneMoraleFormates,
   formDataSivParticulierFormates,
   formDataSivPersonneMoraleFormates,
-} from '../../../fixtures/formDataFormates'
+} from '@/tests/fixtures/formDataFormates'
 
 describe('formaterDataRequete', async () => {
   let spyLocalStorage

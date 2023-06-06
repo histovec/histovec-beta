@@ -1,7 +1,7 @@
 import { formaterDataRequete } from './formaterDataRequete'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 import { useRapportStore } from '@Stores/rapport'
-import genererId from '../genererId'
+import genererId from '@Services/genererId'
 import api from '@Api/index.js'
 
 const store = useRapportStore()

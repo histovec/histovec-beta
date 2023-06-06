@@ -26,7 +26,7 @@ import imagePlaqueImmatriculationSIV from '@Assets/img/aide/siv_plaque_immatricu
 import imageNumeroFormuleSIV from '@Assets/img/aide/siv_numero_formule.jpg'
 import api from '@Api/index.js'
 import { useRapportStore } from '@Stores/rapport'
-import gestionAppelApi from '../services/api/gestionAppelApi'
+import gestionAppelApi from '@Services/api/gestionAppelApi'
 import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 
 export default defineComponent({

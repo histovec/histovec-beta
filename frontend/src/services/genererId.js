@@ -1,7 +1,7 @@
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 import { DEFAULT_NUMERO_SIREN } from '@Constants/vehicle/numeroSiren.js'
-import { normalizeIdvAsDataPreparation } from '../utils/dataPreparationFormat'
-import { base64Encode } from '../utils/encoding'
+import { normalizeIdvAsDataPreparation } from '@Utils/dataPreparationFormat'
+import { base64Encode } from '@Utils/encoding'
 import { hash } from '@Utils/crypto.js'
 import { getAnneeEtMois } from '@Utils/date';
 

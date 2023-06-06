@@ -47,9 +47,9 @@ import logoMI from '@Assets/img/deprecated/logo_ministere_interieur.png'
 
 import genererId from '@Services/genererId'
 import genererCle from '@Services/genererCle'
-import gestionAppelApi from '../services/api/gestionAppelApi'
-import gestionRapportErreur from '../services/api/gestionRapportErreur'
-import { useRapportStore } from '../stores/rapport'
+import gestionAppelApi from '@Services/api/gestionAppelApi'
+import gestionRapportErreur from '@Services/api/gestionRapportErreur'
+import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
   name: 'RapportVendeurPage',
@@ -400,7 +400,7 @@ export default defineComponent({
 
     // Calcul des informations du propriétaire pour pouvoir créer un lien acheteur et le code Partage HistoVec
     this.holderId = await genererId.proprietaireId(this.formData)
-    this.holderKey = await genererCle.cleProptietaire(this.formData)
+    this.holderKey = await genererCle.cleProprietaire(this.formData)
 
     // Récupération de la donnée du rapport HistoVec
     let report = {}

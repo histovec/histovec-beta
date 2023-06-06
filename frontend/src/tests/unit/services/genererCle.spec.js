@@ -9,7 +9,7 @@ import {
   formDataFniPersonneMorale,
   formDataSivParticulier,
   formDataSivPersonneMorale,
-} from '../../fixtures/formData';
+} from '@/tests/fixtures/formData';
 
 describe('genererCle', async () => {
   let spyVehiculeId
@@ -45,15 +45,15 @@ describe('genererCle', async () => {
   })
 
   test('Doit retourner null avec null en entre', async () => {
-    expect(await genererCle.cleProptietaire(null)).toBeNull()
+    expect(await genererCle.cleProprietaire(null)).toBeNull()
   })
 
   test('Doit retourner null avec undefined en entre', async () => {
-    expect(await genererCle.cleProptietaire(undefined)).toBeNull()
+    expect(await genererCle.cleProprietaire(undefined)).toBeNull()
   })
 
   test('Doit retourner une cle pour un proprietaire SIV particulier', async () => {
-    expect(await genererCle.cleProptietaire(formDataSivParticulier)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
+    expect(await genererCle.cleProprietaire(formDataSivParticulier)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
 
     expect(spyVehiculeId).toHaveBeenCalledTimes(1)
     expect(spyVehiculeId).toBeCalledWith(formDataSivParticulier)
@@ -69,7 +69,7 @@ describe('genererCle', async () => {
   })
 
   test('Doit retourner une cle pour un proprietaire SIV personne morale', async () => {
-    expect(await genererCle.cleProptietaire(formDataSivPersonneMorale)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
+    expect(await genererCle.cleProprietaire(formDataSivPersonneMorale)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
 
     expect(spyVehiculeId).toHaveBeenCalledTimes(1)
     expect(spyVehiculeId).toBeCalledWith(formDataSivPersonneMorale)
@@ -85,7 +85,7 @@ describe('genererCle', async () => {
   })
 
   test('Doit retourner une cle pour un proprietaire FNI particulier', async () => {
-    expect(await genererCle.cleProptietaire(formDataFniParticulier)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
+    expect(await genererCle.cleProprietaire(formDataFniParticulier)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
 
     expect(spyVehiculeId).toHaveBeenCalledTimes(1)
     expect(spyVehiculeId).toBeCalledWith(formDataFniParticulier)
@@ -101,7 +101,7 @@ describe('genererCle', async () => {
   })
 
   test('Doit retourner une cle pour un proprietaire FNI personne morale', async () => {
-    expect(await genererCle.cleProptietaire(formDataFniPersonneMorale)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
+    expect(await genererCle.cleProprietaire(formDataFniPersonneMorale)).toBe('ug3MHWbREx5dhxmqFklU0mm9HY-cM923ZGDF5PvrDYQ=')
 
     expect(spyVehiculeId).toHaveBeenCalledTimes(1)
     expect(spyVehiculeId).toBeCalledWith(formDataFniPersonneMorale)
