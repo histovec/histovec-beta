@@ -6,6 +6,7 @@ import api from '../../../api/index'
 import { formDataSivParticulierFormates } from '../../fixtures/formDataFormates'
 import { reponseRequeteApi200, reponseRequeteApi404, reponseRequeteApiErreur500 } from '../../fixtures/reponseRequeteApi'
 import { id } from '../../fixtures/constantes'
+import { vehiculeMapping } from '@Utils/mapping/mapper'
 
 vi.mock('axios')
 
@@ -14,6 +15,11 @@ describe('Rapport store', () => {
   beforeAll(() => {
     setActivePinia(createPinia())
     spyApi = vi.spyOn(api, 'log').mockReturnValue(true)
+    vi.mock('@Utils/mapping/mapper', () => {
+      return {
+        vehiculeMapping: vi.fn(() => { return reponseRequeteApi200.data.payload }),
+      }
+    })
   })
 
   afterEach(() => {
@@ -27,8 +33,11 @@ describe('Rapport store', () => {
     expect(rapport.chargement).toBe(false)
     await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
 
-    expect(axios.post.callCount).toBe(1)
+    expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
+
+    expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(1)
+    expect(vi.mocked(vehiculeMapping)).toBeCalledWith(reponseRequeteApi200.data.payload)
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApi200.status)
@@ -44,10 +53,12 @@ describe('Rapport store', () => {
     expect(rapport.chargement).toBe(false)
     await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
 
-    expect(axios.post.callCount).toBe(1)
+    expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
 
-    expect(spyApi.callCount).toBe(1)
+    expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(0)
+
+    expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/notFound')
 
     expect(rapport.id).toBe(id)
@@ -66,10 +77,12 @@ describe('Rapport store', () => {
     expect(rapport.chargement).toBe(false)
     await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
 
-    expect(axios.post.callCount).toBe(1)
+    expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
 
-    expect(spyApi.callCount).toBe(1)
+    expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(0)
+
+    expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/unavailable')
 
     expect(rapport.id).toBe(id)

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import api from '@Api/index.js'
+import { vehiculeMapping } from '@Utils/mapping/mapper'
 
 export const useRapportStore = defineStore('rapport',{
   state: () => ({
@@ -45,7 +46,7 @@ export const useRapportStore = defineStore('rapport',{
           this.id = id
           this.status = data.status
           this.message = data.message
-          this.rapportData = data.data.payload
+          this.rapportData = vehiculeMapping(data.data.payload)
           this.chargement = false
         }
       }
