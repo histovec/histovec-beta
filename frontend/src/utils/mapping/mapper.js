@@ -1,4 +1,3 @@
-
 export function historiqueMapping (historique) {
   return historique.map(({ opa_date, opa_type }) => (
     {
@@ -7,6 +6,7 @@ export function historiqueMapping (historique) {
     }
   ))
 }
+
 export function queryMapping (incomingQuery) {
   const {
     nom,
@@ -60,6 +60,7 @@ export function queryMapping (incomingQuery) {
     }
   }
 }
+
 export function titulaireMapping (nomNaissance, prenom, raisonSociale, siren, codePostal) {
   if(nomNaissance || prenom) {
     return {
