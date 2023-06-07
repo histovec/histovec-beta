@@ -9,6 +9,8 @@ import VueClipboard from 'vue3-clipboard'
 import App from '@/App.vue'
 import router from '@/router/index.js'
 import { apiUrl } from '@/config.js'
+import { createPinia } from 'pinia'
+import axios from 'axios';
 
 window.addEventListener('beforeunload', function () {
   navigator.sendBeacon(apiUrl + '/log/exit')
@@ -19,6 +21,8 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+axios.defaults.baseURL = `/${import.meta.env.VITE_TITLE}/api/v1`
+
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
   // On paramètre vue3-clipboard pour sélectionner
@@ -28,4 +32,5 @@ createApp(App)
     appendToBody: true,
   })
   .use(router)
+  .use(createPinia())
   .mount('#app')
