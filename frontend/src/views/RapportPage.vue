@@ -1,7 +1,5 @@
 <script>
 import { defineComponent } from 'vue'
-import add from 'date-fns/add'
-import format from 'date-fns/format'
 import QrcodeVue from 'qrcode.vue'
 
 import orderBy from 'lodash.orderby'
@@ -14,11 +12,9 @@ import ImagePresentation from '@Components/ImagePresentation.vue';
 import HistoVecModale from '@Components/HistoVecModale.vue';
 import AlerteComponent from '@Components/AlerteComponent.vue';
 
-import { hash } from '@Utils/crypto.js'
 import { generateCsa } from '@Utils/csaAsPdf/index.js'
 import { RAPPORT_FILENAME } from '@Constants/csaAsPdf.js'
-import { normalizeIdvAsDataPreparation, normalizeKeyAsDataPreparation } from '@Utils/dataPreparationFormat.js'
-import { base64Encode, urlSafeBase64Encode, base64Decode, urlSafeBase64Decode } from '@Utils/encoding.js'
+import { base64Encode, urlSafeBase64Decode } from '@Utils/encoding.js'
 import { downloadBlob } from '@Utils/file.js'
 import { getExposant } from '@Utils/format.js'
 import { mailTo } from '@Utils/email.js'
@@ -35,9 +31,8 @@ import syntheseMapping from '@Assets/json/synthese.json'
 
 import { RESULTAT } from '@Constants/controlesTechniques.js'
 import { REPORT_TABS } from '@Constants/reportTabs.js'
-import { TYPE_IMMATRICULATION, TYPE_PERSONNE, TYPE_RAPPORT } from '@Constants/type.js'
+import { TYPE_IMMATRICULATION, TYPE_RAPPORT } from '@Constants/type.js'
 import { DEFAULT_DATE_UPDATE } from '@Constants/v.js'
-import { DEFAULT_NUMERO_SIREN } from '@Constants/vehicle/numeroSiren.js'
 import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@Constants/usagesSynthese.js'
 
 import rapportAcheteurSvg from '@Assets/img/acheteur.svg?url'
@@ -50,6 +45,11 @@ import '@/assets/stylesheets/globale.css'
 import logoHistoVec from '@Assets/img/deprecated/logo_histovec_avec_titre.png'
 import logoMI from '@Assets/img/deprecated/logo_ministere_interieur.png'
 
+import genererId from '@Services/genererId'
+import genererCle from '@Services/genererCle'
+import gestionAppelApi from '@Services/api/gestionAppelApi'
+import gestionRapportErreur from '@Services/api/gestionRapportErreur'
+import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
   name: 'RapportVendeurPage',
@@ -165,8 +165,7 @@ export default defineComponent({
         codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
         // Flag du 8
-        usePreviousMonthForData: true, // @flag @usePreviousMonthForData
-        previousMonthShift: 1, // @flag @previousMonthShift
+        usePreviousMonthForData: false, // @flag @usePreviousMonthForData
 
         // @flag @ignoreUtacCache
         // Outil de debug (doublé par côté backend pour empêcher son usage en PROD)
@@ -177,6 +176,7 @@ export default defineComponent({
       texteNotification: '',
       typeNotification: 'success',
       isLoading: false,
+      store: useRapportStore(),
     }
   },
 
@@ -227,55 +227,6 @@ export default defineComponent({
 
     currentTab () {
       return this.tabs.mapping[this.tabs.selectedTabIndex]
-    },
-
-    // ----- Partage du rapport acheteur par le vendeur -----
-
-    currentMonthNumber () {
-      let date = add(new Date(),  {days: -7})
-
-      if (this.flags.usePreviousMonthForData) {
-        date = add(date, {months: -this.flags.previousMonthShift})
-      }
-      return format(date, 'yyyyMM')
-    },
-    titulaireId () {
-      if (this.formData.typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
-          return this.formData.siv.titulaire.particulier.nom + this.formData.siv.titulaire.particulier.prenoms
-        }
-
-        if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-          return this.formData.fni.titulaire.particulier.nomEtPrenoms
-        }
-
-        return ''
-      }
-
-      if (this.formData.typePersonne === TYPE_PERSONNE.PRO) {
-        if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
-          const numeroSiren = this.formData.siv.titulaire.personneMorale.numeroSiren || DEFAULT_NUMERO_SIREN
-          return this.formData.siv.titulaire.personneMorale.raisonSociale + numeroSiren
-        }
-
-        if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-          const numeroSiren = this.formData.fni.titulaire.personneMorale.numeroSiren || DEFAULT_NUMERO_SIREN
-          return this.formData.fni.titulaire.personneMorale.raisonSociale + numeroSiren
-        }
-      }
-
-      return ''
-    },
-    vehicleId () {
-      if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
-        return this.formData.siv.numeroImmatriculation + this.formData.siv.numeroFormule
-      }
-
-      if (this.formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
-        return this.formData.fni.numeroImmatriculation + this.formData.fni.dateEmissionCertificatImmatriculation
-      }
-
-      return ''
     },
 
     codePartageHistoVec () {
@@ -448,114 +399,133 @@ export default defineComponent({
     }
 
     // Calcul des informations du propriétaire pour pouvoir créer un lien acheteur et le code Partage HistoVec
-    this.holderId = await this.computeHolderId()
-    this.holderKey = await this.computeHolderKey()
+    this.holderId = await genererId.proprietaireId(this.formData)
+    this.holderKey = await genererCle.cleProprietaire(this.formData)
 
     // Récupération de la donnée du rapport HistoVec
     let report = {}
 
-    if (this.isRapportAcheteur) {
-      if (this.isValidBuyer) {
-        const buyerReportResponse = await this.getBuyerReport()
+    await gestionAppelApi.fetchRapportProprietaire(this.formData)
 
-        if (buyerReportResponse === null || buyerReportResponse.status === 500) {
-          // Cas: Aucune Reponse du back
+    // todo retirer la vaiable refonteEnCours
+    const refonteEnCours = true
+    if (!refonteEnCours && this.store.getStatus !== 200) {
+      gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
+    }
+
+    // todo a supprimer a la fin de la refonte
+    // ---- Debut a supprimer
+    if (refonteEnCours) {
+      if (this.isRapportAcheteur) {
+        if (this.isValidBuyer) {
+          const buyerReportResponse = await this.getBuyerReport()
+
+          if (buyerReportResponse === null || buyerReportResponse.status === 500) {
+            // Cas: Aucune Reponse du back
+            this.$router.push({
+              name: 'erreurInattendue',
+            })
+            return
+          }
+
+          if (buyerReportResponse.status === 404) {
+            // Cas: véhicule non trouvé
+            this.$router.push({
+              name: 'pageNonTrouvee',
+              query: {
+                errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
+                errorMessages: JSON.stringify([
+                  'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
+                  'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
+                ]),
+                primaryAction: JSON.stringify({
+                  label: 'Revenir au formulaire de recherche',
+                  icon: 'ri-arrow-right-fill',
+                  to: '/proprietaire',
+                }),
+              },
+            })
+            return
+          }
+
+          if (buyerReportResponse.status !== 200) {
+            // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
+            this.$router.push({
+              name: 'serviceIndisponible',
+            })
+            return
+          }
+
+          report = buyerReportResponse.report
+        } else {
+          // Cas: lien acheteur invalide
+          api.log('/buyer/invalid')
+
           this.$router.push({
             name: 'erreurInattendue',
-          })
-          return
-        }
-
-        if (buyerReportResponse.status === 404) {
-          // Cas: véhicule non trouvé
-          this.$router.push({
-            name: 'pageNonTrouvee',
             query: {
-              errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
+              errorTitle: 'Lien de partage HistoVec invalide',
               errorMessages: JSON.stringify([
-                'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
-                'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
+                'Veuillez demander un nouveau lien au vendeur.',
               ]),
               primaryAction: JSON.stringify({
-                label: 'Revenir au formulaire de recherche',
+                label: 'Demander le rapport à un vendeur',
                 icon: 'ri-arrow-right-fill',
-                to: '/proprietaire',
+                to: '/acheteur',
               }),
             },
           })
           return
         }
+      } else if (this.isRapportVendeur) {
+        if (this.formData) {
+          const holderReportResponse = await this.getHolderReport()
 
-        if (buyerReportResponse.status !== 200) {
-          // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
+          if (holderReportResponse === null || holderReportResponse.status === 500) {
+            // Cas: Aucune Reponse du back
+            this.$router.push({
+              name: 'erreurInattendue',
+            })
+            return
+          }
+
+          if (holderReportResponse.status === 404) {
+            // Cas: véhicule non trouvé
+            this.$router.push({
+              name: 'pageNonTrouvee',
+              query: {
+                errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
+                errorMessages: JSON.stringify([
+                  'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
+                  'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
+                ]),
+                primaryAction: JSON.stringify({
+                  label: 'Revenir au formulaire de recherche',
+                  icon: 'ri-arrow-right-fill',
+                  to: '/proprietaire',
+                }),
+              },
+            })
+            return
+          }
+
+          if (holderReportResponse.status !== 200) {
+            // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
+            this.$router.push({
+              name: 'serviceIndisponible',
+            })
+            return
+          }
+
+          report = holderReportResponse.report
+        } else {
+          // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
+          api.log('/holder/invalid')
           this.$router.push({
-            name: 'serviceIndisponible',
+            name: 'proprietaire',
           })
           return
         }
-
-        report = buyerReportResponse.report
-      } else {
-        // Cas: lien acheteur invalide
-        api.log('/buyer/invalid')
-
-        this.$router.push({
-          name: 'erreurInattendue',
-          query: {
-            errorTitle: 'Lien de partage HistoVec invalide',
-            errorMessages: JSON.stringify([
-              'Veuillez demander un nouveau lien au vendeur.',
-            ]),
-            primaryAction: JSON.stringify({
-              label: 'Demander le rapport à un vendeur',
-              icon: 'ri-arrow-right-fill',
-              to: '/acheteur',
-            }),
-          },
-        })
-        return
-      }
-    } else if (this.isRapportVendeur) {
-      if (this.formData) {
-        const holderReportResponse = await this.getHolderReport()
-
-        if (holderReportResponse === null || holderReportResponse.status === 500) {
-          // Cas: Aucune Reponse du back
-          this.$router.push({
-            name: 'erreurInattendue',
-          })
-          return
-        }
-
-        if (holderReportResponse.status === 404) {
-          // Cas: véhicule non trouvé
-          this.$router.push({
-            name: 'pageNonTrouvee',
-            query: {
-              errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
-              errorMessages: JSON.stringify([
-                'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
-                'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
-              ]),
-              primaryAction: JSON.stringify({
-                label: 'Revenir au formulaire de recherche',
-                icon: 'ri-arrow-right-fill',
-                to: '/proprietaire',
-              }),
-            },
-          })
-          return
-        }
-
-        if (holderReportResponse.status !== 200) {
-          // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-          this.$router.push({
-            name: 'serviceIndisponible',
-          })
-          return
-        }
-
-        report = holderReportResponse.report
       } else {
         // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
         api.log('/holder/invalid')
@@ -564,14 +534,8 @@ export default defineComponent({
         })
         return
       }
-    } else {
-      // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
-      api.log('/holder/invalid')
-      this.$router.push({
-        name: 'proprietaire',
-      })
-      return
     }
+    // ---- Fin a supprimer
 
     const { vehicule: vehiculeData, controlesTechniques } = report
 
@@ -597,8 +561,6 @@ export default defineComponent({
         defaultTabTitles
     )
 
-    // @todo: Implémenter un mécanisme de notification dans la DsfrModal
-    // pour confirmer visuellement la prise en compte des actions
     this.modaleActions = [
       {
         label: 'Copier le lien',
@@ -676,46 +638,6 @@ export default defineComponent({
       this.tabs.selectedTabIndex = idx
 
       await this.onTabSelected(idx)
-    },
-
-    async computeHolderId () {
-      if (!this.formData) {
-        return null
-      }
-
-      const id = `${this.titulaireId}${this.vehicleId}${this.currentMonthNumber}`
-      const normalizedId = normalizeIdvAsDataPreparation(id)
-
-      const hashedIdBuffer = await hash(normalizedId)
-      const holderId = base64Encode(hashedIdBuffer)
-
-      /* ------------------ @todo @urlUnsafe6: Supprimer bloc de code ------------------ */
-      // Ces logs sont utiles pour debugger un éventuel souci sur la migration
-      // de l'ancien format des liens acheteur (urlSafeBase64Encoded)
-      // vers le nouveau format des liens acheteurs (urlUnsafeBase64Encoded)
-
-      // eslint-disable-next-line no-console
-      console.log(`[NEW] id base64Encoded = ${this.holderId}`)
-
-      const urlSafeBase64EncodedId = urlSafeBase64Encode(base64Decode(holderId))
-      // eslint-disable-next-line no-console
-      console.log(`[OLD] id urlSafeBase64Encoded = ${urlSafeBase64EncodedId}`)
-
-      // eslint-disable-next-line no-console
-      console.log(`[ID] are they different ? ${holderId !== urlSafeBase64EncodedId}`)
-      /* ------------------------------------------------------------------------------------------ */
-
-      return holderId
-    },
-
-    async computeHolderKey () {
-      if (!this.formData) {
-        return null
-      }
-
-      const normalizedKey = normalizeKeyAsDataPreparation(this.vehicleId)
-      const hashedKeyBuffer = await hash(normalizedKey)
-      return base64Encode(hashedKeyBuffer)
     },
 
     async getBuyerReport () {
@@ -1005,7 +927,7 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-6w">
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <TuileDsfrNonCliquable
-        :is-loading="isLoading"
+        :is-loading="isLoading || store.getChargement"
         titre="Le véhicule"
       >
         {{ getVehiculeDescription }}
@@ -1013,7 +935,7 @@ export default defineComponent({
     </div>
     <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
       <TuileDsfrNonCliquable
-        :is-loading="isLoading"
+        :is-loading="isLoading || store.getChargement"
         titre="Informations du Ministère de l'Intérieur"
       >
         {{ getMiDescription }}
@@ -1033,7 +955,7 @@ export default defineComponent({
         @select-tab="selectTab"
       >
         <LoaderComponent
-          v-if="isLoading"
+          v-if="isLoading || store.getChargement"
           taille="md"
         />
         <DsfrTabContent

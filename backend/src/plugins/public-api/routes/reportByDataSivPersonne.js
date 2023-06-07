@@ -9,7 +9,7 @@ const reportByDataPayloadSchema = Joi.object({
     version: ['uuidv4'],
     separator: '-',
   }).meta({ swaggerHidden: true }),
-  particulier: Joi.object({
+  proprietaire: Joi.object({
     nom: Joi.string().trim().required()
       .description('Nom tel que renseigné sur le certificat d\'immatriculation.'),
     prenoms: Joi.array().items(Joi.string().allow('').trim()).required()
@@ -31,7 +31,7 @@ const apiData = new ApiDataCLient()
 
 const appelApiData = async (request, uuid) => {
   const {
-    particulier: {
+    proprietaire: {
       nom,
       prenoms,
     } = {},
