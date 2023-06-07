@@ -66,11 +66,61 @@ export const apiDataResponseSchema = Joi.object({
       date_annulation: Joi.string().pattern(DATE_EN_REGEX).allow(null, '').description('Date d\'annumation.'),
       is_ci_vole: Joi.boolean().required().description('Certification d\'immatriculation volé.'),
       is_duplicata: Joi.boolean().required().description('Duplicata.'),
-      has_gages: Joi.boolean().required().description('Possède des gages.'),
+      gages: Joi.object({
+        has_gages: Joi.boolean().required().description('Possède des gages.'),
+        informations: Joi.array().items(
+          Joi.object({
+            date: Joi.string().pattern(DATE_EN_REGEX).required().description('Date du gages.'),
+            nom_creancier: Joi.string().required().description('Nom du créancier.'),
+          }).allow(null, ''),
+        ).required().label('informations_gages').description('Liste d\'informations sur les gages.'),
+      }).required().label('gages').description('Gages.'),
       is_ci_perdu: Joi.boolean().required().description('Certification d\'immatriculation perdu.'),
-      has_dvs: Joi.boolean().required().description('Possède un DVS.'),
-      has_suspensions: Joi.boolean().required().description('Possède des suspensions.'),
-      has_oppositions: Joi.boolean().required().description('Possède des oppositions.'),
+      dvs: Joi.object({
+        has_dvs: Joi.boolean().required().description('Possède des déclarations valant saisie.'),
+        informations: Joi.array().items(
+          Joi.object({
+            date: Joi.string().pattern(DATE_EN_REGEX).allow(null, '').description('Date du dvs.'),
+            dvs_autorite: Joi.string().required().description('dvs autorité.'),
+          }).allow(null, ''),
+        ).required().label('informations_dvs').description('Liste d\'informations sur les dvs.'),
+      }).required().label('dvs').description('Déclarations valant saisie.'),
+      suspensions: Joi.object({
+        has_suspensions: Joi.boolean().required().description('Possède des suspensions.'),
+        informations: Joi.array().items(
+          Joi.object({
+            date: Joi.string().pattern(DATE_EN_REGEX).required().description('Date de la suspensions.'),
+            motif: Joi.string().required().description('Motif de la suspension.'),
+            remise_titre: Joi.string().required().description('Titre remis.'),
+            retrait_titre: Joi.string().required().description('Titre suspendu.'),
+          }).allow(null, ''),
+        ).required().label('informations_suspensions').description('Liste d\'informations sur les suspensions.'),
+      }).required().label('suspensions').description('Suspensions.'),
+      oppositions: Joi.object({
+        has_oppositions: Joi.boolean().required().description('Possède des oppositions.'),
+        informations: Joi.object({
+          oves: Joi.array().items(
+            Joi.object({
+              date: Joi.string().pattern(DATE_EN_REGEX).required().description('Date de l\'oves.'),
+            }).allow(null, ''),
+          ).required().label('oves').description('Liste d\'informations sur l\'oves.'),
+          oveis: Joi.array().items(
+            Joi.object({
+              date: Joi.string().pattern(DATE_EN_REGEX).required().description('Date de l\'oveis.'),
+            }).allow(null, ''),
+          ).required().label('oveis').description('Liste d\'informations sur l\'oveis.'),
+          otcis_pv: Joi.array().items(
+            Joi.object({
+              date: Joi.string().pattern(DATE_EN_REGEX).required().description('Date de l\'otcis pv.'),
+            }).allow(null, ''),
+          ).required().label('otcis_pv').description('Liste d\'informations sur l\'otcis pv.'),
+          otcis: Joi.array().items(
+            Joi.object({
+              date: Joi.string().pattern(DATE_EN_REGEX).required().description('Date de l\'otcis.'),
+            }).allow(null, ''),
+          ).required().label('otcis').description('Liste d\'informations sur l\'otcis.'),
+        }).required().description('Liste des informations sur les oppositions.'),
+      }).required().label('oppositions').description('Oppositions.'),
       is_veh_vole: Joi.boolean().required().description('Véhicule volé.'),
     }).required().label('situation_admin').description('Situation administrative sur le véhicule.'),
     accidents: Joi.object({

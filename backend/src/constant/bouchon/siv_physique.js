@@ -1,6 +1,7 @@
 import { HISTORIQUE } from './mock_historique.js'
 import { SUSPENSIONS } from './mock_suspensions.js'
 import { MESSAGE, STATUS } from './mock_status_et_message.js'
+import { format, addMonths } from 'date-fns'
 
 export const SIV_PHYSIQUE = {
   status: STATUS.success,
@@ -70,52 +71,64 @@ export const SIV_PHYSIQUE = {
             date_annulation: '2023-12-01',
             is_ci_vole: true,
             is_duplicata: true,
-            has_gages: [
-              {
-                date: '2019-05-09 00:00:00.0',
-                nom_creancier: 'SOREFI',
-              },
-              {
-                date: '2019-04-28 00:00:00.0',
-                nom_creancier: 'SANO',
-              },
-            ],
+            gages: {
+              has_gages: true,
+              informations: [
+                {
+                  date: '2019-05-09',
+                  nom_creancier: 'SOREFI',
+                },
+                {
+                  date: '2019-04-28',
+                  nom_creancier: 'SANO',
+                },
+              ],
+            },
             is_ci_perdu: false,
-            has_dvs: [
-              {
-                date: '',
-                dvs_autorite: 'TRIBUNAL JUDICIAIRE',
+            dvs: {
+              has_dvs: true,
+              informations: [
+                {
+                  date: '',
+                  dvs_autorite: 'TRIBUNAL JUDICIAIRE',
+                },
+                {
+                  date: '2023-04-28',
+                  dvs_autorite: 'TRIBUNAL JUDICIAIRE II',
+                },
+              ],
+            },
+            suspensions: {
+              has_suspensions: true,
+              informations: SUSPENSIONS,
+            },
+            oppositions: {
+              has_oppositions: true,
+              informations: {
+                oves: [
+                  {
+                    date: '2023-04-28',
+                  },
+                  {
+                    date: '2023-04-27',
+                  },
+                ],
+                oveis: [
+                  {
+                    date: '2023-04-28',
+                  },
+                ],
+                otcis_pv: [
+                  {
+                    date: '2023-04-28',
+                  },
+                ],
+                otcis: [
+                  {
+                    date: '2023-04-28',
+                  },
+                ],
               },
-              {
-                date: '28/04/2023',
-                dvs_autorite: 'TRIBUNAL JUDICIAIRE II',
-              },
-            ],
-            has_suspensions: SUSPENSIONS,
-            has_oppositions: {
-              oves: [
-                {
-                  date: '2023-04-28 00:00:00.0',
-                },
-                {
-                  date: '2023-04-27 00:00:00.0',
-                },
-              ],
-              oveis: [
-                {
-                  date: '2023-04-28 00:00:00.0',
-                },
-              ],
-              otcis_pv: [
-                {
-                  date: '2023-04-28 00:00:00.0',
-                },
-              ],
-              otcis: [
-                {
-                  date: '2023-04-28 00:00:00.0',
-                },
-              ],
             },
             is_veh_vole: false,
           },
@@ -147,6 +160,7 @@ export const SIV_PHYSIQUE = {
         date_emission: '2015-05-18',
       },
     clef_acheteur: '1be8d184-417e-4d26-9e91-fa318d920efd',
+    validite_clef_acheteur: format(addMonths(new Date(), 1), 'yyy-MM-dd'),
     message_usager: null,
     plaq_immat_hash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
     incoming_query:
@@ -227,11 +241,35 @@ export const SIV_PHYSIQUE_MIN = {
             date_annulation: '2023-12-01',
             is_ci_vole: true,
             is_duplicata: true,
-            has_gages: false,
+            gages: {
+              has_gages: false,
+              informations: [],
+            },
             is_ci_perdu: false,
-            has_dvs: false,
-            has_suspensions: false,
-            has_oppositions: false,
+            dvs: {
+              has_dvs: false,
+              informations: [],
+            },
+            suspensions: {
+              has_suspensions: false,
+              informations: [],
+            },
+            oppositions: {
+              has_oppositions: false,
+              informations: {
+                oves: [
+                  {
+                    date: '2023-04-28',
+                  },
+                  {
+                    date: '2023-04-27',
+                  },
+                ],
+                oveis: [],
+                otcis_pv: [],
+                otcis: [],
+              },
+            },
             is_veh_vole: false,
           },
         accidents:
@@ -262,6 +300,7 @@ export const SIV_PHYSIQUE_MIN = {
         date_emission: '2015-05-18',
       },
     clef_acheteur: '1be8d184-417e-4d26-9e91-fa318d920efd',
+    validite_clef_acheteur: format(addMonths(new Date(), 1), 'yyy-MM-dd'),
     message_usager: null,
     plaq_immat_hash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
     incoming_query:

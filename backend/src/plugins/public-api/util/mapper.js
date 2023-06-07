@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-
 export function historiqueMapping (historique) {
   return historique.map(({ opa_date, opa_type }) => (
     {
@@ -8,6 +7,7 @@ export function historiqueMapping (historique) {
     }
   ))
 }
+
 export function queryMapping (incoming_query) {
   const {
     nom,
@@ -55,6 +55,7 @@ export function queryMapping (incoming_query) {
     ),
   }
 }
+
 export function titulaireMapping (nom_naissance, prenom, raison_sociale, siren, code_postal) {
   return {
     ...(
@@ -62,8 +63,8 @@ export function titulaireMapping (nom_naissance, prenom, raison_sociale, siren, 
         ? {
             particulier:
               {
-                pers_nom_naissance_tit: nom_naissance,
-                pers_prenom_tit: prenom,
+                nom_naissance,
+                prenom,
               },
           }
         : {}
@@ -90,6 +91,81 @@ export function controlesTechniquesMapping (controlesTechniques) {
       nature: ct_nature,
       resultat: ct_resultat,
       km: ct_km,
+    }
+  ))
+}
+
+export function gagesMapping (has_gages, gages) {
+  if (!has_gages) { return [] }
+
+  return gages.map(({ date, nom_creancier }) => (
+    {
+      date,
+      nom_creancier,
+    }
+  ))
+}
+
+export function dvsMapping (has_dvs, dvs) {
+  if (!has_dvs) { return [] }
+
+  return dvs.map(({ date, dvs_autorite }) => (
+    {
+      date,
+      dvs_autorite,
+    }
+  ))
+}
+
+export function suspensionsMapping (has_suspenstions, suspensions) {
+  if (!has_suspenstions) { return [] }
+
+  return suspensions.map(({ date, motif, remise_titre, retrait_titre }) => (
+    {
+      date,
+      motif,
+      remise_titre,
+      retrait_titre,
+    }
+  ))
+}
+
+export function ovesMapping (has_oppositions, oves) {
+  if (!has_oppositions) { return [] }
+
+  return oves.map(({ date }) => (
+    {
+      date,
+    }
+  ))
+}
+
+export function oveisMapping (has_oppositions, oveis) {
+  if (!has_oppositions) { return [] }
+
+  return oveis.map(({ date }) => (
+    {
+      date,
+    }
+  ))
+}
+
+export function otcisPvMapping (has_oppositions, otcisPv) {
+  if (!has_oppositions) { return [] }
+
+  return otcisPv.map(({ date }) => (
+    {
+      date,
+    }
+  ))
+}
+
+export function otcisMapping (has_oppositions, otcis) {
+  if (!has_oppositions) { return [] }
+
+  return otcis.map(({ date }) => (
+    {
+      date,
     }
   ))
 }
@@ -160,11 +236,28 @@ export const vehiculeMapping = (report) => {
             date_annulation,
             is_ci_vole,
             is_duplicata,
-            has_gages,
+            gages: {
+              has_gages,
+              informations: gagesInformations,
+            },
             is_ci_perdu,
-            has_dvs,
-            has_suspensions,
-            has_oppositions,
+            dvs: {
+              has_dvs,
+              informations: dvsInformations,
+            },
+            suspensions: {
+              has_suspensions,
+              informations: suspensionsInformations,
+            },
+            oppositions: {
+              has_oppositions,
+              informations: {
+                oves,
+                oveis,
+                otcis_pv: otcisPv,
+                otcis,
+              },
+            },
             is_veh_vole,
           },
         accidents:
@@ -203,12 +296,16 @@ export const vehiculeMapping = (report) => {
   } = report
 
   const mappedTitulaire = titulaireMapping(nom_naissance, prenom, raison_sociale, siren, code_postal)
-
   const mappedHistorique = historiqueMapping(reportHistorique)
-
   const mappedControlesTechniques = controlesTechniquesMapping(reportControlesTechniques)
-
   const mappedQuery = queryMapping(incoming_query)
+  const mappedGages = gagesMapping(has_gages, gagesInformations)
+  const mappedDvs = dvsMapping(has_dvs, dvsInformations)
+  const mappedSuspensions = suspensionsMapping(has_suspensions, suspensionsInformations)
+  const mappedOves = ovesMapping(has_oppositions, oves)
+  const mappedOveis = oveisMapping(has_oppositions, oveis)
+  const mappedOtcisPv = otcisPvMapping(has_oppositions, otcisPv)
+  const mappedOtcis = otcisMapping(has_oppositions, otcis)
 
   return {
     vehicule:
@@ -275,11 +372,28 @@ export const vehiculeMapping = (report) => {
             date_annulation,
             is_ci_vole,
             is_duplicata,
-            has_gages,
+            gages: {
+              has_gages,
+              informations: mappedGages,
+            },
             is_ci_perdu,
-            has_dvs,
-            has_suspensions,
-            has_oppositions,
+            dvs: {
+              has_dvs,
+              informations: mappedDvs,
+            },
+            suspensions: {
+              has_suspensions,
+              informations: mappedSuspensions,
+            },
+            oppositions: {
+              has_oppositions,
+              informations: {
+                oves: mappedOves,
+                oveis: mappedOveis,
+                otcis_pv: mappedOtcisPv,
+                otcis: mappedOtcis,
+              },
+            },
             is_veh_vole,
           },
         accidents:

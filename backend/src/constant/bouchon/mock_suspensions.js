@@ -66,13 +66,13 @@ export const SUSPENSIONS = [
     retrait_titre: 'NON',
   },
   {
-    date: '2013-08-01 00:00:00.0',
+    date: '2013-08-01',
     motif: 'PVE',
     remise_titre: 'NON',
     retrait_titre: 'NON',
   },
   {
-    date: '2014-05-03 00:00:00.0',
+    date: '2014-05-03',
     motif: 'REI',
     remise_titre: 'NON',
     retrait_titre: 'NON',
