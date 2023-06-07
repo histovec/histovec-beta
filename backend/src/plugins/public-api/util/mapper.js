@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-/* eslint operator-linebreak: ["error", "after"] */
 
 export function historiqueMapping (historique) {
   return historique.map(({ opa_date, opa_type }) => (
@@ -22,63 +21,63 @@ export function queryMapping (incoming_query) {
   } = incoming_query
   return {
     ...(
-      (numero_formule) ?
-          (nom || prenom) ?
-              {
+      (numero_formule)
+        ? (nom || prenom)
+            ? {
                 nom,
                 prenom,
                 immat,
                 numero_formule,
-              } :
-              {
+              }
+            : {
                 raison_sociale,
                 siren,
                 immat,
                 numero_formule,
-              } :
-          {}
+              }
+        : {}
     ),
     ...(
-      (date_emission_ci) ?
-          (raison_sociale || siren) ?
-              {
+      (date_emission_ci)
+        ? (raison_sociale || siren)
+            ? {
                 raison_sociale,
                 siren,
                 immat,
                 date_emission_ci,
-              } :
-              {
+              }
+            : {
                 nom_prenom,
                 immat,
                 date_emission_ci,
-              } :
-          {}
+              }
+        : {}
     ),
   }
 }
 export function titulaireMapping (nom_naissance, prenom, raison_sociale, siren, code_postal) {
   return {
     ...(
-      (nom_naissance || prenom) ?
-          {
+      (nom_naissance || prenom)
+        ? {
             particulier:
               {
                 pers_nom_naissance_tit: nom_naissance,
                 pers_prenom_tit: prenom,
               },
-          } :
-          {}
+          }
+        : {}
     ),
     ...(
-      (raison_sociale || siren) ?
-          {
+      (raison_sociale || siren)
+        ? {
             personne_morale:
               {
                 raison_soc: raison_sociale,
                 siren,
               },
-          } :
-          {}
+          }
+        : {}
     ),
     code_postal,
   }
