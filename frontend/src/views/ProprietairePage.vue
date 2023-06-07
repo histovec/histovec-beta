@@ -1,8 +1,8 @@
 <script>
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
-import ImagePresentation from '@Components/ImagePresentation.vue'
 import LoaderComponent from '@Components/LoaderComponent.vue';
+import TitrePresentationPage from '@Components/TitrePresentationPage.vue'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@Utils/collerPressePapierEtDistribuerDansFormulaire.js'
 import { sleep } from '@Utils/sleep';
 
@@ -32,7 +32,7 @@ import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 export default defineComponent({
   name: 'ProprietairePage',
 
-  components: {HistoVecButtonLink, ImagePresentation, LoaderComponent},
+  components: {HistoVecButtonLink, LoaderComponent, TitrePresentationPage},
 
   data () {
     const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
@@ -128,12 +128,19 @@ export default defineComponent({
       // types
       TYPE_IMMATRICULATION,
       OLD_IMMATRICULATION_TYPE,
-
+      imagePresentation: {
+        id: 'image-proprietaire',
+        proprietaireSVG,
+      },
+      enTete:{
+        titre: 'Rassurez vos acheteurs potentiels',
+        sousTitre: 'Partagez l\'historique de votre véhicule',
+        description: 'Vous souhaitez vendre votre véhicule et rassurer le futur acheteur ? Un acheteur potentiel vous demande le rapport ? Partagez-leur l\'historique de votre véhicule.',
+      },
       images: {
         plaqueNonSupporteeSvg,
         plaqueFniSvg,
         plaqueSivSvg,
-        proprietaireSVG,
 
         aide: {
           imageNomEtPrenomsFNI,
@@ -508,18 +515,13 @@ export default defineComponent({
         ]"
       />
     </div>
-    <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="images.proprietaireSVG" />
-    </div>
-    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
-      <h1>Rassurez vos acheteurs potentiels</h1>
-      <h2>Partagez l'historique de votre véhicule</h2>
-      <p class="fr-text--xl">
-        Vous souhaitez vendre votre véhicule et rassurer le futur acheteur ?
-        Un acheteur potentiel vous demande le rapport ?
-        Partagez-leur l'historique de votre véhicule.
-      </p>
-    </div>
+    <TitrePresentationPage
+      :id="imagePresentation.id"
+      :src="imagePresentation.proprietaireSVG"
+      :titre="enTete.titre"
+      :sous-titre="enTete.sousTitre"
+      :description="enTete.description"
+    />
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters">

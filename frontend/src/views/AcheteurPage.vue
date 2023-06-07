@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
-import ImagePresentation from '@Components/ImagePresentation.vue'
+import TitrePresentationPage from '@Components/TitrePresentationPage.vue'
 
 import api from '@Api/index.js'
 import { mailTo } from '@Utils/email.js'
@@ -12,7 +12,7 @@ import acheteurSvg from '@Assets/img/acheteur.svg?url'
 export default defineComponent({
   name: 'AcheteurPage',
 
-  components: { HistoVecButtonLink, ImagePresentation },
+  components: { HistoVecButtonLink, TitrePresentationPage },
 
   beforeRouteEnter(to, from) {
     if (from.href) {
@@ -26,6 +26,12 @@ export default defineComponent({
     return {
       image:{
         acheteurSvg,
+        id: 'image-acheteur',
+      },
+      enTete:{
+        titre: 'Achetez en confiance un véhicule d\'occasion',
+        sousTitre: 'Demandez l\'historique du véhicule',
+        description: 'Vous souhaitez acquérir un véhicule d\'occasion ? Vous avez fait une sélection de véhicules parmi des annonces ? Demandez au vendeur de partager l\'historique de son véhicule.',
       },
     }
   },
@@ -56,18 +62,13 @@ export default defineComponent({
         ]"
       />
     </div>
-    <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.acheteurSvg" />
-    </div>
-    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
-      <h1>Achetez en confiance un véhicule d'occasion</h1>
-      <h2>Demandez l'historique du véhicule</h2>
-      <p class="fr-text--xl">
-        Vous souhaitez acquérir un véhicule d'occasion ?
-        Vous avez fait une sélection de véhicules parmi des annonces ?
-        Demandez au vendeur de partager l'historique de son véhicule.
-      </p>
-    </div>
+    <TitrePresentationPage
+      :id="image.id"
+      :src="image.acheteurSvg"
+      :titre="enTete.titre"
+      :sous-titre="enTete.sousTitre"
+      :description="enTete.description"
+    />
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters">
