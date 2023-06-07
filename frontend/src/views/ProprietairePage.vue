@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
 import ImagePresentation from '@Components/ImagePresentation.vue'
+import LoaderComponent from '@Components/LoaderComponent.vue';
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@Utils/collerPressePapierEtDistribuerDansFormulaire.js'
 import { sleep } from '@Utils/sleep';
 
@@ -24,11 +25,14 @@ import imagePrenomsSIV from '@Assets/img/aide/siv_prenoms.jpg'
 import imagePlaqueImmatriculationSIV from '@Assets/img/aide/siv_plaque_immatriculation.jpg'
 import imageNumeroFormuleSIV from '@Assets/img/aide/siv_numero_formule.jpg'
 import api from '@Api/index.js'
+import { useRapportStore } from '@Stores/rapport'
+import gestionAppelApi from '@Services/api/gestionAppelApi'
+import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 
 export default defineComponent({
   name: 'ProprietairePage',
 
-  components: {HistoVecButtonLink, ImagePresentation},
+  components: {HistoVecButtonLink, ImagePresentation, LoaderComponent},
 
   data () {
     const cachedFormData = JSON.parse(sessionStorage.getItem('formData'))
@@ -142,6 +146,7 @@ export default defineComponent({
           imageNumeroFormuleSIV,
         },
       },
+      store: useRapportStore(),
     }
   },
 
@@ -420,6 +425,15 @@ export default defineComponent({
 
     async onSubmit () {
       this.persistFormData()
+
+      await gestionAppelApi.fetchRapportProprietaire(this.formData)
+
+      // todo retirer la vaiable refonteEnCours
+      const refonteEnCours = true
+      if (!refonteEnCours && this.store.getStatus !== 200) {
+        gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
+        return
+      }
 
       this.$router.push({
         name: 'rapportVendeur',
@@ -815,6 +829,10 @@ export default defineComponent({
         :tab-titles="tabSivTitles"
         @select-tab="selectSivTab"
       >
+        <LoaderComponent
+          v-if="store.getChargement"
+          taille="md"
+        />
         <DsfrTabContent
           class="background-default-white"
           panel-id="siv-tab-content-0"
@@ -1509,7 +1527,7 @@ export default defineComponent({
         id="bouton-recherche"
         label="Rechercher"
         icon="ri-search-line"
-        :disabled="!isFormValid"
+        :disabled="!isFormValid || store.getChargement"
         @click="onSubmit"
       />
     </div>
@@ -1521,6 +1539,7 @@ export default defineComponent({
         label="Effacer"
         icon="ri-close-line"
         secondary
+        :disabled="store.getChargement"
         @click="onClear"
       />
     </div>
