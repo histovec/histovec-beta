@@ -33,7 +33,6 @@ import {
 } from '@/tests/fixtures/index'
 
 describe('mapper', () => {
-  // eslint-disable-next-line no-undef
   test('doit mapper un historique', () => {
     const historique = reponseRequeteApiSivParticulier200.data.vehicule.historique
     const historiqueOutput = reponseSivParticulierFormat200.vehicule.historique
