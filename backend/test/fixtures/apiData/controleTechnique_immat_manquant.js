@@ -60,11 +60,28 @@ export const reponseApiDataControleTechniqueImmatManquant = {
         date_annulation: null,
         is_ci_vole: true,
         is_duplicata: true,
-        has_gages: false,
+        gages: {
+          has_gages: false,
+          informations: [],
+        },
         is_ci_perdu: false,
-        has_dvs: false,
-        has_suspensions: false,
-        has_oppositions: false,
+        dvs: {
+          has_dvs: false,
+          informations: [],
+        },
+        suspensions: {
+          has_suspensions: false,
+          informations: [],
+        },
+        oppositions: {
+          has_oppositions: false,
+          informations: {
+            oves: [],
+            oveis: [],
+            otcis_pv: [],
+            otcis: [],
+          },
+        },
         is_veh_vole: false
       },
       accidents: {

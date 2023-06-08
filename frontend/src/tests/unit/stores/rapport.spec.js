@@ -4,7 +4,7 @@ import { describe, expect, vi, it, beforeAll, afterEach } from 'vitest'
 import axios from 'axios'
 import api from '@Api/index'
 import { formDataSivParticulierFormates } from '@/tests/fixtures/formDataFormates'
-import { reponseRequeteApi200, reponseRequeteApi404, reponseRequeteApiErreur500 } from '@/tests/fixtures/reponseRequeteApi'
+import { reponseRequeteApiSivParticulier200, reponseRequeteApi404, reponseRequeteApiErreur500 } from '@/tests/fixtures/index'
 import { id } from '@/tests/fixtures/constantes'
 import { vehiculeMapping } from '@Utils/mapping/mapper'
 
@@ -17,7 +17,7 @@ describe('Rapport store', () => {
     spyApi = vi.spyOn(api, 'log').mockReturnValue(true)
     vi.mock('@Utils/mapping/mapper', () => {
       return {
-        vehiculeMapping: vi.fn(() => { return reponseRequeteApi200.data.payload }),
+        vehiculeMapping: vi.fn(() => { return reponseRequeteApiSivParticulier200.data.payload }),
       }
     })
   })
@@ -28,7 +28,7 @@ describe('Rapport store', () => {
 
   it('requete api avec réponse en 200', async () => {
     const rapport = useRapportStore()
-    axios.post.mockResolvedValue(reponseRequeteApi200)
+    axios.post.mockResolvedValue(reponseRequeteApiSivParticulier200)
 
     expect(rapport.chargement).toBe(false)
     await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
@@ -37,12 +37,12 @@ describe('Rapport store', () => {
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
 
     expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(1)
-    expect(vi.mocked(vehiculeMapping)).toBeCalledWith(reponseRequeteApi200.data.payload)
+    expect(vi.mocked(vehiculeMapping)).toBeCalledWith(reponseRequeteApiSivParticulier200.data.payload)
 
     expect(rapport.id).toBe(id)
-    expect(rapport.status).toBe(reponseRequeteApi200.status)
-    expect(rapport.message).toBe(reponseRequeteApi200.message)
-    expect(rapport.rapportData).toStrictEqual(reponseRequeteApi200.data.payload)
+    expect(rapport.status).toBe(reponseRequeteApiSivParticulier200.status)
+    expect(rapport.message).toBe(reponseRequeteApiSivParticulier200.message)
+    expect(rapport.rapportData).toStrictEqual(reponseRequeteApiSivParticulier200.data.payload)
     expect(rapport.chargement).toBe(false)
   })
 

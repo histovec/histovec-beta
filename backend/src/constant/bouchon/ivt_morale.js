@@ -1,6 +1,7 @@
 import { HISTORIQUE } from './mock_historique.js'
 import { SUSPENSIONS } from './mock_suspensions.js'
 import { MESSAGE, STATUS } from './mock_status_et_message.js'
+import { format, addMonths } from 'date-fns'
 
 export const IVT_MORALE = {
   status: STATUS.success,
@@ -70,11 +71,35 @@ export const IVT_MORALE = {
             date_annulation: '',
             is_ci_vole: false,
             is_duplicata: false,
-            has_gages: false,
+            gages: {
+              has_gages: false,
+              informations: [],
+            },
             is_ci_perdu: false,
-            has_dvs: false,
-            has_suspensions: SUSPENSIONS,
-            has_oppositions: false,
+            dvs: {
+              has_dvs: false,
+              informations: [],
+            },
+            suspensions: {
+              has_suspensions: true,
+              informations: SUSPENSIONS,
+            },
+            oppositions: {
+              has_oppositions: false,
+              informations: {
+                oves: [
+                  {
+                    date: '2023-04-28',
+                  },
+                  {
+                    date: '2023-04-27',
+                  },
+                ],
+                oveis: [],
+                otcis_pv: [],
+                otcis: [],
+              },
+            },
             is_veh_vole: false,
           },
         accidents:
@@ -105,6 +130,7 @@ export const IVT_MORALE = {
         date_emission: '2015-06-09',
       },
     clef_acheteur: '1be8d184-417e-4d26-9e91-fa318d920efd',
+    validite_clef_acheteur: format(addMonths(new Date(), 1), 'yyy-MM-dd'),
     message_usager: null,
     plaq_immat_hash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
     incoming_query:
@@ -185,11 +211,35 @@ export const IVT_MORALE_MIN = {
             date_annulation: '',
             is_ci_vole: false,
             is_duplicata: false,
-            has_gages: false,
+            gages: {
+              has_gages: false,
+              informations: [],
+            },
             is_ci_perdu: false,
-            has_dvs: false,
-            has_suspensions: false,
-            has_oppositions: false,
+            dvs: {
+              has_dvs: false,
+              informations: [],
+            },
+            suspensions: {
+              has_suspensions: false,
+              informations: [],
+            },
+            oppositions: {
+              has_oppositions: false,
+              informations: {
+                oves: [
+                  {
+                    date: '2023-04-28',
+                  },
+                  {
+                    date: '2023-04-27',
+                  },
+                ],
+                oveis: [],
+                otcis_pv: [],
+                otcis: [],
+              },
+            },
             is_veh_vole: false,
           },
         accidents:
@@ -220,6 +270,7 @@ export const IVT_MORALE_MIN = {
         date_emission: '2015-06-09',
       },
     clef_acheteur: '1be8d184-417e-4d26-9e91-fa318d920efd',
+    validite_clef_acheteur: format(addMonths(new Date(), 1), 'yyy-MM-dd'),
     message_usager: null,
     plaq_immat_hash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
     incoming_query:

@@ -60,11 +60,78 @@ export const reponseApiDataCode200 = {
         date_annulation: null,
         is_ci_vole: true,
         is_duplicata: true,
-        has_gages: false,
+        gages: {
+          has_gages: true,
+          informations: [
+            {
+              date: '2019-05-09',
+              nom_creancier: 'SOREFI',
+            },
+            {
+              date: '2019-04-28',
+              nom_creancier: 'SANO',
+            },
+          ],
+        },
         is_ci_perdu: false,
-        has_dvs: false,
-        has_suspensions: false,
-        has_oppositions: false,
+        dvs: {
+          has_dvs: true,
+          informations: [
+            {
+              date: '',
+              dvs_autorite: 'TRIBUNAL JUDICIAIRE',
+            },
+            {
+              date: '2023-04-28',
+              dvs_autorite: 'TRIBUNAL JUDICIAIRE II',
+            },
+          ],
+        },
+        suspensions: {
+          has_suspensions: true,
+          informations: [
+            {
+              date: '2023-04-28',
+              motif: 'PVE',
+              remise_titre: 'NON',
+              retrait_titre: 'NON',
+            },
+            {
+              date: '2023-04-28',
+              motif: 'DES',
+              remise_titre: 'NON',
+              retrait_titre: 'NON',
+            },
+          ],
+        },
+        oppositions: {
+          has_oppositions: true,
+          informations: {
+            oves: [
+              {
+                date: '2023-04-28',
+              },
+              {
+                date: '2023-04-27',
+              },
+            ],
+            oveis: [
+              {
+                date: '2023-04-28',
+              },
+            ],
+            otcis_pv: [
+              {
+                date: '2023-04-28',
+              },
+            ],
+            otcis: [
+              {
+                date: '2023-04-28',
+              },
+            ],
+          },
+        },
         is_veh_vole: false
       },
       accidents: {
