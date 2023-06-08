@@ -59,10 +59,6 @@ export const useRapportStore = defineStore('rapport',{
           this.status = data.status
           this.message = data.message
           this.rapportData = rapport
-          this.id = id
-          this.status = data.status
-          this.message = data.message
-          this.rapportData = vehiculeMapping(data.data.payload)
           this.chargement = false
         }
       }
