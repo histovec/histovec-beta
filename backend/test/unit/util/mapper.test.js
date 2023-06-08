@@ -6,10 +6,7 @@ import {
   dvsMapping,
   gagesMapping,
   historiqueMapping,
-  otcisMapping,
-  otcisPvMapping,
-  oveisMapping,
-  ovesMapping,
+  oppositionsMapping,
   queryMapping,
   suspensionsMapping,
   titulaireMapping,
@@ -240,10 +237,10 @@ lab.experiment('mapper', () => {
     expect(mappedDvs).to.equal(reponseDvs)
   })
   lab.test('dvsMapping doit retourner un tableau vide.', () => {
-    const dvs = reponseApiDataCode200SansDvs.payload.vehicule.situation_admin.gages
+    const dvs = reponseApiDataCode200SansDvs.payload.vehicule.situation_admin.dvs
     const reponseDvs = []
 
-    const mappedDvs = gagesMapping(dvs.has_dvs, dvs.informations)
+    const mappedDvs = dvsMapping(dvs.has_dvs, dvs.informations)
 
     expect(mappedDvs).to.equal(reponseDvs)
   })
@@ -276,7 +273,7 @@ lab.experiment('mapper', () => {
 
     expect(mappedSuspensions).to.equal(reponseSuspensions)
   })
-  lab.test('ovesMapping doit retourner les oves.', () => {
+  lab.test('oppositionsMapping doit retourner les oves.', () => {
     const oppositions = reponseApiDataCode200.payload.vehicule.situation_admin.oppositions
     const reponseOves = [
       {
@@ -287,27 +284,27 @@ lab.experiment('mapper', () => {
       },
     ]
 
-    const mappedOves = ovesMapping(oppositions.has_oppositions, oppositions.informations.oves)
+    const mappedOves = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.oves)
 
     expect(mappedOves).to.equal(reponseOves)
   })
-  lab.test('ovesMapping doit retourner un tableau vide avec oppositions à true.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les oves avec oppositions à true.', () => {
     const oppositions = reponseApiDataCode200SansOves.payload.vehicule.situation_admin.oppositions
     const reponseOves = []
 
-    const mappedOves = ovesMapping(oppositions.has_oppositions, oppositions.informations.oves)
+    const mappedOves = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.oves)
 
     expect(mappedOves).to.equal(reponseOves)
   })
-  lab.test('ovesMapping doit retourner un tableau vide avec oppositions à false.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les oves avec oppositions à false.', () => {
     const oppositions = reponseApiDataCode200SansOppositions.payload.vehicule.situation_admin.oppositions
     const reponseOves = []
 
-    const mappedOves = ovesMapping(oppositions.has_oppositions, oppositions.informations.oves)
+    const mappedOves = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.oves)
 
     expect(mappedOves).to.equal(reponseOves)
   })
-  lab.test('oveisMapping doit retourner les oveis.', () => {
+  lab.test('oppositionsMapping doit retourner les oveis.', () => {
     const oppositions = reponseApiDataCode200.payload.vehicule.situation_admin.oppositions
     const reponseOveis = [
       {
@@ -315,27 +312,27 @@ lab.experiment('mapper', () => {
       },
     ]
 
-    const mappedOveis = oveisMapping(oppositions.has_oppositions, oppositions.informations.oveis)
+    const mappedOveis = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.oveis)
 
     expect(mappedOveis).to.equal(reponseOveis)
   })
-  lab.test('oveisMapping doit retourner un tableau vide avec oppositions à true.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les oveis avec oppositions à true.', () => {
     const oppositions = reponseApiDataCode200SansOveis.payload.vehicule.situation_admin.oppositions
     const reponseOveis = []
 
-    const mappedOveis = oveisMapping(oppositions.has_oppositions, oppositions.informations.oveis)
+    const mappedOveis = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.oveis)
 
     expect(mappedOveis).to.equal(reponseOveis)
   })
-  lab.test('oveisMapping doit retourner un tableau vide avec oppositions à false.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les oveis avec oppositions à false.', () => {
     const oppositions = reponseApiDataCode200SansOppositions.payload.vehicule.situation_admin.oppositions
     const reponseOveis = []
 
-    const mappedOveis = oveisMapping(oppositions.has_oppositions, oppositions.informations.oveis)
+    const mappedOveis = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.oveis)
 
     expect(mappedOveis).to.equal(reponseOveis)
   })
-  lab.test('otcisPvMapping doit retourner les otcisPv.', () => {
+  lab.test('oppositionsMapping doit retourner les otcisPv.', () => {
     const oppositions = reponseApiDataCode200.payload.vehicule.situation_admin.oppositions
     const reponseOtcisPv = [
       {
@@ -343,27 +340,27 @@ lab.experiment('mapper', () => {
       },
     ]
 
-    const mappedOtcisPv = otcisPvMapping(oppositions.has_oppositions, oppositions.informations.otcis_pv)
+    const mappedOtcisPv = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.otcis_pv)
 
     expect(mappedOtcisPv).to.equal(reponseOtcisPv)
   })
-  lab.test('otcisPvMapping doit retourner un tableau vide avec oppositions à true.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les otcisPv avec oppositions à true.', () => {
     const oppositions = reponseApiDataCode200SansOtcisPv.payload.vehicule.situation_admin.oppositions
     const reponseOtcisPv = []
 
-    const mappedOtcisPv = otcisPvMapping(oppositions.has_oppositions, oppositions.informations.otcis_pv)
+    const mappedOtcisPv = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.otcis_pv)
 
     expect(mappedOtcisPv).to.equal(reponseOtcisPv)
   })
-  lab.test('otcisPvMapping doit retourner un tableau vide avec oppositions à false.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les otcisPv avec oppositions à false.', () => {
     const oppositions = reponseApiDataCode200SansOppositions.payload.vehicule.situation_admin.oppositions
     const reponseOtcisPv = []
 
-    const mappedOtcisPv = otcisPvMapping(oppositions.has_oppositions, oppositions.informations.otcis_pv)
+    const mappedOtcisPv = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.otcis_pv)
 
     expect(mappedOtcisPv).to.equal(reponseOtcisPv)
   })
-  lab.test('otcisMapping doit retourner les otcis.', () => {
+  lab.test('oppositionsMapping doit retourner les otcis.', () => {
     const oppositions = reponseApiDataCode200.payload.vehicule.situation_admin.oppositions
     const reponseOtcis = [
       {
@@ -371,23 +368,23 @@ lab.experiment('mapper', () => {
       },
     ]
 
-    const mappedOtcis = otcisMapping(oppositions.has_oppositions, oppositions.informations.otcis)
+    const mappedOtcis = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.otcis)
 
     expect(mappedOtcis).to.equal(reponseOtcis)
   })
-  lab.test('otcisMapping doit retourner un tableau vide avec oppositions à true.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les otcis avec oppositions à true.', () => {
     const oppositions = reponseApiDataCode200SansOtcis.payload.vehicule.situation_admin.oppositions
     const reponseOtcis = []
 
-    const mappedOtcis = otcisMapping(oppositions.has_oppositions, oppositions.informations.otcis)
+    const mappedOtcis = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.otcis)
 
     expect(mappedOtcis).to.equal(reponseOtcis)
   })
-  lab.test('otcisMapping doit retourner un tableau vide avec oppositions à false.', () => {
+  lab.test('oppositionsMapping doit retourner un tableau vide pour les otcis avec oppositions à false.', () => {
     const oppositions = reponseApiDataCode200SansOppositions.payload.vehicule.situation_admin.oppositions
     const reponseOtcis = []
 
-    const mappedOtcis = otcisPvMapping(oppositions.has_oppositions, oppositions.informations.otcis)
+    const mappedOtcis = oppositionsMapping(oppositions.has_oppositions, oppositions.informations.otcis)
 
     expect(mappedOtcis).to.equal(reponseOtcis)
   })

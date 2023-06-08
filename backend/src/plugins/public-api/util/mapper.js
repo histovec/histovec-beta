@@ -130,40 +130,10 @@ export function suspensionsMapping (has_suspenstions, suspensions) {
   ))
 }
 
-export function ovesMapping (has_oppositions, oves) {
+export function oppositionsMapping (has_oppositions, oppositionsType) {
   if (!has_oppositions) { return [] }
 
-  return oves.map(({ date }) => (
-    {
-      date,
-    }
-  ))
-}
-
-export function oveisMapping (has_oppositions, oveis) {
-  if (!has_oppositions) { return [] }
-
-  return oveis.map(({ date }) => (
-    {
-      date,
-    }
-  ))
-}
-
-export function otcisPvMapping (has_oppositions, otcisPv) {
-  if (!has_oppositions) { return [] }
-
-  return otcisPv.map(({ date }) => (
-    {
-      date,
-    }
-  ))
-}
-
-export function otcisMapping (has_oppositions, otcis) {
-  if (!has_oppositions) { return [] }
-
-  return otcis.map(({ date }) => (
+  return oppositionsType.map(({ date }) => (
     {
       date,
     }
@@ -302,10 +272,10 @@ export const vehiculeMapping = (report) => {
   const mappedGages = gagesMapping(has_gages, gagesInformations)
   const mappedDvs = dvsMapping(has_dvs, dvsInformations)
   const mappedSuspensions = suspensionsMapping(has_suspensions, suspensionsInformations)
-  const mappedOves = ovesMapping(has_oppositions, oves)
-  const mappedOveis = oveisMapping(has_oppositions, oveis)
-  const mappedOtcisPv = otcisPvMapping(has_oppositions, otcisPv)
-  const mappedOtcis = otcisMapping(has_oppositions, otcis)
+  const mappedOves = oppositionsMapping(has_oppositions, oves)
+  const mappedOveis = oppositionsMapping(has_oppositions, oveis)
+  const mappedOtcisPv = oppositionsMapping(has_oppositions, otcisPv)
+  const mappedOtcis = oppositionsMapping(has_oppositions, otcis)
 
   return {
     vehicule:
