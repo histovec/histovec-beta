@@ -1,4 +1,4 @@
-export const reponseRequeteApiSivParticulier200 = {
+export const reponseRequeteApiIvtProfessionnel200 = {
   status: 200,
   message: 'OK',
   data: {
@@ -175,9 +175,9 @@ export const reponseRequeteApiSivParticulier200 = {
       ],
     },
     proprietaire: {
-      particulier: {
-        nom_naissance: 'B******T',
-        prenom: 'M****L',
+      personne_morale: {
+        raison_sociale: 'raison_sociale',
+        siren: 'siren',
       },
       code_postal: '94400',
     },
@@ -189,10 +189,10 @@ export const reponseRequeteApiSivParticulier200 = {
     message_usager: null,
     plaq_immat_hash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
     incoming_query: {
-      nom: 'BLANCHET',
-      prenom: 'MARCEL',
-      immat: 'AA-948-BM',
-      numero_formule: '2015CC11207',
+      raison_sociale: 'raison_sociale',
+      siren: 'siren',
+      immat: '664RLD75',
+      date_emission_ci: '31/05/2023',
     },
     validite_clef_acheteur: '2023-06-03',
   },

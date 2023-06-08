@@ -1,4 +1,4 @@
-export const reponseSivParticulierFormat200 = {
+export const reponseIvtParticulierFormat200 = {
   vehicule: {
     caracteristiques: {
       marque: 'RENAULT',
@@ -173,8 +173,8 @@ export const reponseSivParticulierFormat200 = {
   },
   proprietaire: {
     particulier: {
-      nomNaissance: 'B******T',
-      prenom: 'M****L',
+      nomNaissance: 'nom_prenom_IVT',
+      prenom: '',
     },
     codePostal: '94400',
   },
@@ -186,10 +186,9 @@ export const reponseSivParticulierFormat200 = {
   messageUsager: null,
   plaqImmatHash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
   incomingQuery: {
-    nom: 'BLANCHET',
-    prenom: 'MARCEL',
-    immat: 'AA-948-BM',
-    numeroFormule: '2015CC11207',
+    nomPrenom: 'nom_prenom_IVT',
+    immat: '664RLD75',
+    dateEmissionCi: '31/05/2023',
   },
   validiteClefAcheteur: '2023-06-03',
 }
