@@ -117,8 +117,8 @@ export function dvsMapping (has_dvs, dvs) {
   ))
 }
 
-export function suspensionsMapping (has_suspenstions, suspensions) {
-  if (!has_suspenstions) { return [] }
+export function suspensionsMapping (has_suspensions, suspensions) {
+  if (!has_suspensions) { return [] }
 
   return suspensions.map(({ date, motif, remise_titre, retrait_titre }) => (
     {

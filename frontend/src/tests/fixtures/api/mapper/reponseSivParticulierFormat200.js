@@ -57,11 +57,78 @@ export const reponseSivParticulierFormat200 = {
       dateAnnulation: null,
       isCiVole: true,
       isDuplicata: true,
-      hasGages: false,
+      gages: {
+        hasGages: true,
+        informations: [
+          {
+            date: '2019-05-09',
+            nomCreancier: 'SOREFI',
+          },
+          {
+            date: '2019-04-28',
+            nomCreancier: 'SANO',
+          },
+        ],
+      },
       isCiPerdu: false,
-      hasDvs: false,
-      hasSuspensions: false,
-      hasOppositions: false,
+      dvs: {
+        hasDvs: true,
+        informations: [
+          {
+            date: '',
+            dvsAutorite: 'TRIBUNAL JUDICIAIRE',
+          },
+          {
+            date: '2023-04-28',
+            dvsAutorite: 'TRIBUNAL JUDICIAIRE II',
+          },
+        ],
+      },
+      suspensions: {
+        hasSuspensions: true,
+        informations: [
+          {
+            date: '2023-04-28',
+            motif: 'PVE',
+            remiseTitre: 'NON',
+            retraitTitre: 'NON',
+          },
+          {
+            date: '2023-04-28',
+            motif: 'DES',
+            remiseTitre: 'NON',
+            retraitTitre: 'NON',
+          },
+        ],
+      },
+      oppositions: {
+        hasOppositions: true,
+        informations: {
+          oves: [
+            {
+              date: '2023-04-28',
+            },
+            {
+              date: '2023-04-27',
+            },
+          ],
+          oveis: [
+            {
+              date: '2023-04-28',
+            },
+          ],
+          otcisPv: [
+            {
+              date: '2023-04-28',
+            },
+          ],
+          otcis: [
+            {
+              date: '2023-04-28',
+            },
+          ],
+        },
+      },
       isVehVole: false,
     },
     accidents: {
