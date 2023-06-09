@@ -1,14 +1,12 @@
 <script>
 import {defineComponent} from 'vue'
 
+import syntheseMapping from '@Assets/json/synthese.json'
+
 export default defineComponent({
   name: 'OngletSituationAdministrative',
 
   props: {
-    assets: {
-      type: Object,
-      default: null,
-    },
     reportLabels: {
       type: Object,
       default: null,
@@ -17,6 +15,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      syntheseMapping,
+    }
   },
 })
 </script>
@@ -33,7 +36,7 @@ export default defineComponent({
               <a
                 class="fr-link"
                 title="En savoir plus sur les gages - Lien vers service-public.fr"
-                :href="assets.syntheseMapping['otci'].link"
+                :href="syntheseMapping['otci'].link"
                 rel="noopener noreferrer"
                 target="_blank"
               > En savoir plus
@@ -60,7 +63,7 @@ export default defineComponent({
               <a
                 class="fr-link"
                 title="En savoir plus sur les oppositions - Lien vers service-public.fr"
-                :href="assets.syntheseMapping['otci'].link"
+                :href="syntheseMapping['otci'].link"
                 rel="noopener noreferrer"
                 target="_blank"
               > En savoir plus

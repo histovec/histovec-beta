@@ -1,53 +1,47 @@
 <script>
 import {defineComponent} from 'vue'
 
+import syntheseMapping from '@Assets/json/synthese.json'
+import { formatIsoToFrDate } from '@Assets/js/format'
+import { getExposant } from '@Utils/format.js'
+import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@Constants/usagesSynthese.js'
+
 export default defineComponent({
   name: 'OngletSynthese',
 
   props: {
-    caracteristiquesTechniques: {
-      type: Object,
-      default: null,
-    },
     processedVehiculeData: {
       type: Object,
       default: null,
-    },
-    constants: {
-      type: Object,
-      default: null,
-    },
-    certificat: {
-      type: Object,
-      default: null,
-    },
-    utils: {
-      type: Object,
-      default: null,
-    },
-    datePremiereImmatriculationFR: {
-      type: String,
-      default: '',
-    },
-    assets: {
-      type: Object,
-      default: null,
-    },
-    synthese: {
-      type: Object,
-      default: null,
-    },
-    hasProcedureVEEnCours:{
-      type: Boolean,
-      default: false,
     },
     isRapportVendeur: {
       type: Boolean,
       default: false,
     },
-    isRapportAcheteur: {
-      type: Boolean,
-      default: false,
+  },
+  data() {
+    return {
+      syntheseMapping,
+      formatIsoToFrDate,
+      getExposant,
+
+      constants: {
+        USAGE_AGRICOLE,
+        USAGE_COLLECTION,
+      },
+    }
+  },
+  computed: {
+    hasProcedureVEEnCours () {
+      return this.processedVehiculeData.administratif.hasProcedureVEEnCours
+    },
+
+    datePremiereImmatriculationFR () {
+      return formatIsoToFrDate(this.processedVehiculeData.certificat.datePremiereImmatriculation)
+    },
+
+    isRapportAcheteur () {
+      return !this.isRapportVendeur
     },
   },
 })
@@ -69,21 +63,21 @@ export default defineComponent({
         </h4>
 
         <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
-          {{ caracteristiquesTechniques.marque }} {{ caracteristiquesTechniques.modele }}
+          {{ processedVehiculeData.caracteristiquesTechniques.marque }} {{ processedVehiculeData.caracteristiquesTechniques.modele }}
         </p>
 
         <p
-          v-if="caracteristiquesTechniques.puissance.cv"
+          v-if="processedVehiculeData.caracteristiquesTechniques.puissance.cv"
           class="fr-text--md  fr-mb-1v"
         >
-          Puissance fiscale : <span class="fr-text--bleu">{{ caracteristiquesTechniques.puissance.cv }} ch</span>
+          Puissance fiscale : <span class="fr-text--bleu">{{ processedVehiculeData.caracteristiquesTechniques.puissance.cv }} ch</span>
         </p>
 
         <p
           v-if="isRapportAcheteur"
           class="fr-text--md  fr-mb-1v"
         >
-          Calculez le montant de votre certificat d'immatriculation
+          Calculez le montant de votre processedVehiculeData.certificat d'immatriculation
           <br />
           <a
             class="fr-link"
@@ -169,23 +163,23 @@ export default defineComponent({
           <span class="fr-text--bleu">{{ processedVehiculeData.titulaire.identite }}</span>
           depuis
           <span
-            v-if="certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
+            v-if="processedVehiculeData.certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
             class="fr-text--bleu"
           >
-            {{ certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }}
+            {{ processedVehiculeData.certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }}
           </span>
           <span
-            v-if="!certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
+            v-if="!processedVehiculeData.certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
             class="fr-text--bleu"
           >
             une durée inconnue
           </span>
           <br />
-          <template v-if="!certificat.isVehiculeImporteDepuisEtranger">
+          <template v-if="!processedVehiculeData.certificat.isVehiculeImporteDepuisEtranger">
             <template v-if="isRapportVendeur">
               Vous êtes le
               <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
-              <sup class="fr-text--bleu">{{ utils.getExposant(processedVehiculeData.titulairesCount) }}</sup>
+              <sup class="fr-text--bleu">{{ getExposant(processedVehiculeData.titulairesCount) }}</sup>
               titulaire de ce véhicule
             </template>
             <template v-if="isRapportAcheteur">
@@ -193,11 +187,11 @@ export default defineComponent({
               <span class="fr-text--bleu">{{ processedVehiculeData.titulairesCount }}</span>
               titulaire(s), en l'achetant vous serez le
               <span class="fr-text--bleu">{{ Number(processedVehiculeData.titulairesCount) + 1 }}</span>
-              <sup class="fr-text--bleu">{{ utils.getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
+              <sup class="fr-text--bleu">{{ getExposant(Number(processedVehiculeData.titulairesCount) + 1) }}</sup>
             </template>
           </template>
           <br />
-          <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+          <template v-if="processedVehiculeData.certificat.isVehiculeImporteDepuisEtranger">
             Le nombre exact de titulaires ne peut être calculé avec précision
             <br />
             (première immatriculation à l'étranger)
@@ -223,7 +217,7 @@ export default defineComponent({
           </template>
         </p>
 
-        <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+        <template v-if="processedVehiculeData.certificat.isVehiculeImporteDepuisEtranger">
           <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
             <span class="fr-text--bleu">
               <VIcon
@@ -300,13 +294,13 @@ export default defineComponent({
             v-if="processedVehiculeData.isApte"
             class="fr-text--bleu"
           >
-            {{ assets.syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
+            {{ syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
           </span>
           <span
             v-else
             class="fr-text--bleu"
           >
-            {{ assets.syntheseMapping['ove'].adv }}
+            {{ syntheseMapping['ove'].adv }}
           </span>
 
           <br />
@@ -314,12 +308,12 @@ export default defineComponent({
             v-if="processedVehiculeData.hasSinistre && processedVehiculeData.sinistresCount > 1"
             class="fr-text--bleu"
           >
-            {{ assets.syntheseMapping['multi_ove'].adv }}
+            {{ syntheseMapping['multi_ove'].adv }}
           </span>
         </p>
 
         <p
-          v-if="synthese.length === 0 && !processedVehiculeData.lastSinistreYear"
+          v-if="processedVehiculeData.administratif.reportLabels.synthese.length === 0 && !processedVehiculeData.lastSinistreYear"
           class="fr-text--md  fr-mb-1v"
         >
           <span class="fr-text--bleu">
@@ -333,24 +327,24 @@ export default defineComponent({
         </p>
 
         <p
-          v-for="(entry, index) in synthese"
+          v-for="(entry, index) in processedVehiculeData.administratif.reportLabels.synthese"
           :key="index"
         >
           <span class="fr-text--bleu">
             <VIcon
-              :name="assets.syntheseMapping[entry].icon"
+              :name="syntheseMapping[entry].icon"
             />
           </span>
-          {{ assets.syntheseMapping[entry].text }}
+          {{ syntheseMapping[entry].text }}
           <!-- @todo: Voir avec la DSR s'il est utile de rediriger vers l'ongler "Situation administrative" ? -->
           <br />
-          {{ assets.syntheseMapping[entry].adv }}
+          {{ syntheseMapping[entry].adv }}
           <br />
           <a
-            v-if="assets.syntheseMapping[entry].link"
+            v-if="syntheseMapping[entry].link"
             class="fr-link"
             title="Lien vers service-public.fr"
-            :href="assets.syntheseMapping[entry].link"
+            :href="syntheseMapping[entry].link"
             rel="noopener noreferrer"
             target="_blank"
           >

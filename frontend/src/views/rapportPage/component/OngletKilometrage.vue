@@ -1,23 +1,32 @@
 <script>
 import {defineComponent} from 'vue'
 import ControlesTechniquesLineChart from '@/components/ControlesTechniquesLineChart.vue'
+
+import { LabeliserControlesTechniques } from '@Utils/controlesTechniquesComposant'
+
 export default defineComponent({
   name: 'OngletKilometrage',
   components: {
     ControlesTechniquesLineChart,
   },
   props: {
-    erreurControlesTechniques: {
-      type: String,
-      default: '',
-    },
-    controlesTechniquesHistorique: {
+    controlesTechniquesData: {
       type: Object,
       default: null,
     },
-    controlesTechniquesHistoriqueAriaLabel: {
-      type: String,
-      default: '',
+  },
+  data () {
+    return {
+      LabeliserControlesTechniques,
+    }
+  },
+  computed: {
+    controlesTechniquesHistorique () {
+      return this.controlesTechniquesData || []
+    },
+    erreurControlesTechniques () {
+      return this.controlesTechniquesData.erreur
+      // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
     },
   },
 })
@@ -46,7 +55,7 @@ export default defineComponent({
         v-if="controlesTechniquesHistorique.length > 0"
         class="fr-col-12"
         :controles-techniques="controlesTechniquesHistorique"
-        :aria-label="controlesTechniquesHistoriqueAriaLabel"
+        :aria-label="LabeliserControlesTechniques(controlesTechniquesHistorique)"
       />
       <div
         v-if="controlesTechniquesHistorique === 0"

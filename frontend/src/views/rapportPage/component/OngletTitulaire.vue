@@ -1,5 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
+import { formatIsoToFrDate } from '@Assets/js/format'
 
 export default defineComponent({
   name: 'OngletTitulaire',
@@ -13,18 +14,12 @@ export default defineComponent({
       type: Object,
       default: null,
     },
-    datePremiereImmatriculationFR: {
-      type: String,
-      default: '',
-    },
-    datePremiereImmatriculationEnFranceFR: {
-      type: String,
-      default: '',
-    },
-    dateEmissionCIFR: {
-      type: String,
-      default: '',
-    },
+  },
+
+  data () {
+    return {
+      formatIsoToFrDate,
+    }
   },
 })
 </script>
@@ -92,7 +87,7 @@ export default defineComponent({
       id="valeur-date-immatriculation"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ datePremiereImmatriculationFR }}
+      {{ formatIsoToFrDate(certificat.datePremiereImmatriculation) }}
     </div>
 
     <template v-if="certificat.isVehiculeImporteDepuisEtranger">
@@ -106,7 +101,7 @@ export default defineComponent({
         id="valeur-date-immatriculation-france"
         class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
       >
-        {{ datePremiereImmatriculationEnFranceFR }}
+        {{ formatIsoToFrDate(certificat.datePremiereImmatriculationEnFrance) }}
       </div>
     </template>
 
@@ -120,7 +115,7 @@ export default defineComponent({
       id="valeur-date-certificat"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >
-      {{ dateEmissionCIFR }}
+      {{ formatIsoToFrDate(certificat.dateEmissionCI) }}
     </div>
   </div>
 </template>

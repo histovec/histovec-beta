@@ -1,18 +1,29 @@
 <script>
 import {defineComponent} from 'vue'
 import { RESULTAT } from '@/constants/controlesTechniques.js'
+import { normalizedControlesTechniquesHistorique } from '@Utils/controlesTechniquesComposant'
 
 export default defineComponent({
   name: 'OngletControlesTechniques',
 
   props: {
-    erreurControlesTechniques: {
-      type: String,
-      default: '',
-    },
-    normalizedControlesTechniquesHistorique: {
+    controlesTechniquesData: {
       type: Object,
       default: null,
+    },
+  },
+  data () {
+    return {
+      normalizedControlesTechniquesHistorique,
+    }
+  },
+  computed: {
+    controlesTechniquesHistorique () {
+      return this.controlesTechniquesData || []
+    },
+    erreurControlesTechniques () {
+      return this.controlesTechniquesData.erreur
+      // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
     },
   },
   methods: {
@@ -47,7 +58,7 @@ export default defineComponent({
       />
     </div>
     <template v-if="!erreurControlesTechniques">
-      <template v-if="normalizedControlesTechniquesHistorique.length > 0">
+      <template v-if="normalizedControlesTechniquesHistorique(controlesTechniquesHistorique).length > 0">
         <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
           <h3 class="fr-mb-0 fr-h5">
             Date
@@ -69,7 +80,7 @@ export default defineComponent({
           </h3>
         </div>
         <template
-          v-for="(entry, index) in normalizedControlesTechniquesHistorique"
+          v-for="(entry, index) in normalizedControlesTechniquesHistorique(controlesTechniquesHistorique)"
           :key="index"
         >
           <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
@@ -91,7 +102,7 @@ export default defineComponent({
         </template>
       </template>
       <div
-        v-if="normalizedControlesTechniquesHistorique === 0"
+        v-if="normalizedControlesTechniquesHistorique(controlesTechniquesHistorique) === []"
         class="fr-col-12"
       >
         Ce véhicule ne possède actuellement aucun contrôle technique.

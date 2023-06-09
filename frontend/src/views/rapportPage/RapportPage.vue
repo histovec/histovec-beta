@@ -2,21 +2,19 @@
 import { defineComponent } from 'vue'
 import QrcodeVue from 'qrcode.vue'
 
-import orderBy from 'lodash.orderby'
-
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
 import ImagePresentation from '@/components/ImagePresentation.vue';
 import HistoVecModale from '@/components/HistoVecModale.vue';
 import AlerteComponent from '@/components/AlerteComponent.vue';
-import OngletSynthese from '@/views/ongletRapport/OngletSynthese.vue';
-import OngletVehicule from '@/views/ongletRapport/OngletVehicule.vue';
-import OngletTitulaire from '@/views/ongletRapport/OngletTitulaire.vue';
-import OngletSituationAdministrative from '@/views/ongletRapport/OngletSituationAdministrative.vue';
-import OngletHistorique from '@/views/ongletRapport/OngletHistorique.vue';
-import OngletControlesTechniques from '@/views/ongletRapport/OngletControlesTechniques.vue';
-import OngletKilometrage from '@/views/ongletRapport/OngletKilometrage.vue';
+import OngletSynthese from '@/views/rapportPage/component/OngletSynthese.vue';
+import OngletVehicule from '@/views/rapportPage/component/OngletVehicule.vue';
+import OngletTitulaire from '@/views/rapportPage/component/OngletTitulaire.vue';
+import OngletSituationAdministrative from '@/views/rapportPage/component/OngletSituationAdministrative.vue';
+import OngletHistorique from '@/views/rapportPage/component/OngletHistorique.vue';
+import OngletControlesTechniques from '@/views/rapportPage/component/OngletControlesTechniques.vue';
+import OngletKilometrage from '@/views/rapportPage/component/OngletKilometrage.vue';
 
 import { generateCsa } from '@Utils/csaAsPdf/index.js'
 import { RAPPORT_FILENAME } from '@Constants/csaAsPdf.js'
@@ -35,7 +33,6 @@ import siv from '@Assets/js/siv.js'
 import operationsMapping from '@Assets/json/operations.json'
 import syntheseMapping from '@Assets/json/synthese.json'
 
-import { RESULTAT } from '@Constants/controlesTechniques.js'
 import { REPORT_TABS } from '@Constants/reportTabs.js'
 import { TYPE_IMMATRICULATION, TYPE_RAPPORT } from '@Constants/type.js'
 import { DEFAULT_DATE_UPDATE } from '@Constants/v.js'
@@ -300,38 +297,8 @@ export default defineComponent({
     certificat () {
       return this.processedVehiculeData.certificat
     },
-    controlesTechniquesHistorique () {
-      return this.controlesTechniques.historique || []
-    },
-    controlesTechniquesHistoriqueAriaLabel () {
-      let ariaLabel = 'Graphique représentant l\'évolution du kilométrage relevé lors des controles techniques en fonction des années. '
-      if(this.normalizedControlesTechniquesHistorique && this.normalizedControlesTechniquesHistorique.length >0){
-        for (const controleTechnique of this.normalizedControlesTechniquesHistorique) {
-          ariaLabel = ariaLabel + controleTechnique.date + ': ' + controleTechnique.km + ' km ' + controleTechnique.resultatLibelle + '. '
-        }
-        return ariaLabel
-      }
-      return ariaLabel + 'Ce véhicule ne possède actuellement aucun contrôle technique.'
-
-    },
-    dateEmissionCIFR () {
-      return formatIsoToFrDate(this.certificat.dateEmissionCI)
-    },
     dateMiseAJourFR () {
       return formatIsoToFrDate(this.processedVehiculeData.dateMiseAJour)
-    },
-    datePremiereImmatriculationFR () {
-      return formatIsoToFrDate(this.certificat.datePremiereImmatriculation)
-    },
-    datePremiereImmatriculationEnFranceFR () {
-      return formatIsoToFrDate(this.certificat.datePremiereImmatriculationEnFrance)
-    },
-    erreurControlesTechniques () {
-      return this.controlesTechniques.erreur
-      // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
-    },
-    hasProcedureVEEnCours () {
-      return this.processedVehiculeData.administratif.hasProcedureVEEnCours
     },
     isCIAnnule () {
       return Boolean(
@@ -352,28 +319,8 @@ export default defineComponent({
     isValidBuyer () {
       return Boolean(this.buyerId && this.buyerKey)
     },
-    normalizedControlesTechniquesHistorique () {
-      if (this.controlesTechniquesHistorique && this.controlesTechniquesHistorique.length > 0) {
-        const orderedControlesTechniques = orderBy(this.controlesTechniquesHistorique, ['date'], ['desc'])
-
-        return orderedControlesTechniques.map((controleTechnique) => {
-          return {
-            ...controleTechnique,
-            date: formatIsoToFrDate(controleTechnique.date),
-          }
-        })
-      }
-
-      return []
-    },
-    oppositionSection () {
-      return this.processedVehiculeData.administratif.opposition
-    },
     reportLabels () {
       return this.processedVehiculeData.administratif.reportLabels
-    },
-    synthese () {
-      return this.processedVehiculeData.administratif.reportLabels.synthese
     },
     titulaire () {
       return this.processedVehiculeData.titulaire
@@ -732,20 +679,6 @@ export default defineComponent({
       )
     },
 
-    /** DsfrBadge **/
-    getDsfrBadgeType (resultatControleTechnique) {
-      if (resultatControleTechnique === RESULTAT.A || resultatControleTechnique === RESULTAT.AP) {
-        return 'success'
-      }
-      if (resultatControleTechnique === RESULTAT.S || resultatControleTechnique === RESULTAT.SP) {
-        return 'warning'
-      }
-      if (resultatControleTechnique === RESULTAT.R || resultatControleTechnique === RESULTAT.RP) {
-        return 'error'
-      }
-      // RESULTAT.X or undefined => undefined (Grey color for DsfrBadge)
-    },
-
     /** logs **/
     async logSimplimmatImage () {
       await api.log('/simplimmat/image')
@@ -978,17 +911,8 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletSynthese
-            :caracteristiques-techniques="caracteristiquesTechniques"
             :processed-vehicule-data="processedVehiculeData"
-            :constants="constants"
-            :certificat="certificat"
-            :utils="utils"
-            :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
-            :assets="assets"
-            :synthese="synthese"
-            :has-procedure-v-e-en-cours="hasProcedureVEEnCours"
             :is-rapport-vendeur="isRapportVendeur"
-            :is-rapport-acheteur="!isRapportVendeur"
           />
         </DsfrTabContent>
 
@@ -1014,9 +938,6 @@ export default defineComponent({
           <OngletTitulaire
             :titulaire="titulaire"
             :certificat="certificat"
-            :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
-            :date-premiere-immatriculation-en-france-f-r="datePremiereImmatriculationEnFranceFR"
-            :date-emission-c-i-f-r="dateEmissionCIFR"
           />
         </DsfrTabContent>
 
@@ -1028,7 +949,6 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletSituationAdministrative
-            :assets="assets"
             :report-labels="reportLabels"
             :is-rapport-vendeur="isRapportVendeur"
           />
@@ -1042,10 +962,8 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletHistorique
-            :assets="assets"
             :certificat="certificat"
-            :date-premiere-immatriculation-f-r="datePremiereImmatriculationFR"
-            :processed-vehicule-data="processedVehiculeData"
+            :historique="processedVehiculeData.historique"
           />
         </DsfrTabContent>
 
@@ -1057,8 +975,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletControlesTechniques
-            :erreur-controles-techniques="erreurControlesTechniques"
-            :normalized-controles-techniques-historique="normalizedControlesTechniquesHistorique"
+            :controles-techniques-data="controlesTechniques.historique"
           />
         </DsfrTabContent>
 
@@ -1070,9 +987,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletKilometrage
-            :erreur-controles-techniques="erreurControlesTechniques"
-            :controles-techniques-historique="controlesTechniquesHistorique"
-            :controles-techniques-historique-aria-label="controlesTechniquesHistoriqueAriaLabel"
+            :controles-techniques-data="controlesTechniques.historique"
           />
         </DsfrTabContent>
       </DsfrTabs>

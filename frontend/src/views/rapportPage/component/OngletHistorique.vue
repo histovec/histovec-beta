@@ -1,26 +1,28 @@
 <script>
 import {defineComponent} from 'vue'
+import { formatIsoToFrDate } from '@Assets/js/format'
+
+import operationsMapping from '@Assets/json/operations.json'
 
 export default defineComponent({
   name: 'OngletHistorique',
 
   props: {
-    assets: {
-      type: Object,
-      default: null,
-    },
     certificat: {
       type: Object,
       default: null,
     },
-    datePremiereImmatriculationFR: {
-      type: String,
-      default: '',
-    },
-    processedVehiculeData: {
+    historique: {
       type: Object,
       default: null,
     },
+  },
+  data () {
+    return {
+      formatIsoToFrDate,
+
+      operationsMapping,
+    }
   },
 })
 </script>
@@ -47,7 +49,7 @@ export default defineComponent({
         </h4>
       </div>
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-        {{ datePremiereImmatriculationFR }}
+        {{ formatIsoToFrDate(certificat.datePremiereImmatriculation) }}
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
         <!-- @todo:
@@ -55,7 +57,7 @@ export default defineComponent({
           et dans le fichier assets/js/operations.json afin de tokenizer les opérations et réduire les erreurs liées à une typo
           Pas urgent : en pratique, on ne se sert que très peu de ces HISTORIQUE_OPERATION_TYPE (appelé opa_type dans le SIV)
         -->
-        {{ assets.operationsMapping['IMMAT_NORMALE_PREM_ETRANGER'] }}
+        {{ operationsMapping['IMMAT_NORMALE_PREM_ETRANGER'] }}
       </div>
     </template>
 
@@ -76,7 +78,7 @@ export default defineComponent({
     </div>
 
     <template
-      v-for="(entry, index) in processedVehiculeData.historique"
+      v-for="(entry, index) in historique"
       :key="index"
     >
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
