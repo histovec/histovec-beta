@@ -1,28 +1,49 @@
 <script>
 import {defineComponent} from 'vue'
 import { formatIsoToFrDate } from '@Assets/js/format'
+import { useRapportStore } from '@Stores/rapport'
 
 import operationsMapping from '@Assets/json/operations.json'
 
 export default defineComponent({
   name: 'OngletHistorique',
 
-  props: {
-    certificat: {
-      type: Object,
-      default: null,
-    },
-    historique: {
-      type: Object,
-      default: null,
-    },
-  },
   data () {
     return {
       formatIsoToFrDate,
 
       operationsMapping,
+      store: useRapportStore(),
+      historique: [],
+      vehiculeImport: {},
+      datePremiereImmatriculationEtr: '',
+
     }
+  },
+  computed: {
+    historiqueData () {
+      const rapport = this.store.getRapport
+      if (rapport) {
+        return rapport.vehicule.historique || []
+      }
+      return this.historique
+    },
+
+    vehiculeImporte () {
+      const rapport = this.store.getRapport
+      if (rapport) {
+        return rapport.vehicule.infosImport.isImported
+      }
+      return this.vehiculeImport
+    },
+
+    datePremiereImmatriculationEtranger () {
+      const rapport = this.store.getRapport
+      if(rapport) {
+        return formatIsoToFrDate(rapport.vehicule.infosImport.datePremiereImmatEtranger)
+      }
+      return this.datePremiereImmatriculationEtr
+    },
   },
 })
 </script>
@@ -32,7 +53,7 @@ export default defineComponent({
   <div
     class="fr-grid-row  fr-grid-row--gutters"
   >
-    <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+    <template v-if="vehiculeImporte">
       <div class="fr-col-12  fr-pb-3w">
         <h3 class="fr-mb-0 fr-h5">
           Historique des opérations à l'étranger
@@ -49,7 +70,7 @@ export default defineComponent({
         </h4>
       </div>
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-        {{ formatIsoToFrDate(certificat.datePremiereImmatriculation) }}
+        {{ datePremiereImmatriculationEtranger }}
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
         <!-- @todo:
@@ -78,15 +99,16 @@ export default defineComponent({
     </div>
 
     <template
-      v-for="(entry, index) in historique"
+      v-for="(entry, index) in historiqueData"
       :key="index"
     >
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-        <span class="txt-small-12">{{ entry.date }}</span>
+        <span class="txt-small-12">{{ formatIsoToFrDate(entry.date) }}</span>
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-text--bleu">
         <span class="info_red txt-small-12">
-          {{ entry.nature }}
+          <!-- @todo: a deplacer soit dans le back soit dans l'api data          -->
+          {{ operationsMapping[entry.type] }}
         </span>
       </div>
     </template>

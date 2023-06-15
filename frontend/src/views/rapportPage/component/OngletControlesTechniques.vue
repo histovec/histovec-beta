@@ -2,27 +2,29 @@
 import {defineComponent} from 'vue'
 import { RESULTAT } from '@/constants/controlesTechniques.js'
 import { normalizedControlesTechniquesHistorique } from '@Utils/controlesTechniquesComposant'
+import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
   name: 'OngletControlesTechniques',
 
-  props: {
-    controlesTechniquesData: {
-      type: Object,
-      default: null,
-    },
-  },
   data () {
     return {
       normalizedControlesTechniquesHistorique,
+      store: useRapportStore(),
+      controlesTechniques: {},
     }
   },
   computed: {
+
     controlesTechniquesHistorique () {
-      return this.controlesTechniquesData || []
+      const rapport = this.store.getRapport
+      if(rapport) {
+        return rapport.vehicule.controlesTechniques || []
+      }
+      return this.controlesTechniques
     },
     erreurControlesTechniques () {
-      return this.controlesTechniquesData.erreur
+      return false
       // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
     },
   },
@@ -87,17 +89,17 @@ export default defineComponent({
             {{ entry.date }}
           </div>
           <div class="fr-col-6 fr-col-sm-4 fr-col-md-4  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-text--bleu">
-            {{ entry.natureLibelle }}
+            {{ entry.nature }}
           </div>
           <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-text--bleu">
             <DsfrBadge
-              :label="entry.resultatLibelle"
+              :label="entry.resultat"
               :type="getDsfrBadgeType(entry.resultat)"
               :no-icon="true"
             />
           </div>
           <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-pb-2w  fr-text--bleu">
-            {{ entry.kmLibelle }} km
+            {{ entry.km }} km
           </div>
         </template>
       </template>

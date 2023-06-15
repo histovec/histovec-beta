@@ -29,7 +29,6 @@ import api from '@Api/index.js'
 import reportService from '@/services/report.js'
 
 import { formatIsoToFrDate } from '@Assets/js/format.js'
-import siv from '@Assets/js/siv.js'
 import operationsMapping from '@Assets/json/operations.json'
 import syntheseMapping from '@Assets/json/synthese.json'
 
@@ -86,28 +85,7 @@ export default defineComponent({
       holderId: null,
       holderKey: null,
       processedVehiculeData: {
-        administratif: {
-          opposition: {},
-          csaLabels: {},
-          reportLabels: {
-            synthese: [],
-            titre: {},
-          },
-        },
-        certificat: {},
-        caracteristiquesTechniques: {
-          carrosserie: {},
-          places: {},
-          puissance: {},
-          reception: {},
-          PT: {},
-        },
-        titulaire: {},
-        etranger: {},
-        usage: {},
-      },
-      controlesTechniques: {
-        historique: [],
+        administratif: {},
       },
       formData: null,
       tabTitles: [],
@@ -174,7 +152,7 @@ export default defineComponent({
         codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
         // Flag du 8
-        usePreviousMonthForData: false, // @flag @usePreviousMonthForData
+        usePreviousMonthForData: true, // @flag @usePreviousMonthForData
 
         // @flag @ignoreUtacCache
         // Outil de debug (doublé par côté backend pour empêcher son usage en PROD)
@@ -193,8 +171,8 @@ export default defineComponent({
     getVehiculeDescription () {
       return (
         this.isCIAnnule ?
-          `Le certificat demandé a été annulé : ${ this.processedVehiculeData.plaque }` :
-          `Numéro d'immatriculation : ${ this.processedVehiculeData.plaque }`
+          `Le certificat demandé a été annulé : ${ this.processedVehiculeData.incomingQuery?.immat }` :
+          `Numéro d'immatriculation : ${ this.processedVehiculeData.incomingQuery?.immat }`
       )
     },
     getMiDescription () {
@@ -291,20 +269,14 @@ export default defineComponent({
 
     // ----- Accès rapide aux données du rapport -----
 
-    caracteristiquesTechniques () {
-      return this.processedVehiculeData.caracteristiquesTechniques
-    },
-    certificat () {
-      return this.processedVehiculeData.certificat
-    },
     dateMiseAJourFR () {
-      return formatIsoToFrDate(this.processedVehiculeData.dateMiseAJour)
+      return this.processedVehiculeData.dateMiseAJour? formatIsoToFrDate(this.processedVehiculeData.dateMiseAJour): '01/01/1900'
     },
     isCIAnnule () {
       return Boolean(
-        this.processedVehiculeData &&
-        this.processedVehiculeData.administratif &&
-        this.processedVehiculeData.administratif.isCIAnnule,
+        this.processedVehiculeData && this.processedVehiculeData.vehicule &&
+        this.processedVehiculeData.vehicule.situationAdmin &&
+        this.processedVehiculeData.vehicule.situationAdmin.isCiAnnule,
       )
     },
     isDefaultDataDate () {
@@ -318,12 +290,6 @@ export default defineComponent({
     },
     isValidBuyer () {
       return Boolean(this.buyerId && this.buyerKey)
-    },
-    reportLabels () {
-      return this.processedVehiculeData.administratif.reportLabels
-    },
-    titulaire () {
-      return this.processedVehiculeData.titulaire
     },
 
     // ------------------ email ---------------------
@@ -362,10 +328,7 @@ export default defineComponent({
     this.holderKey = await genererCle.cleProprietaire(this.formData)
 
     // Récupération de la donnée du rapport HistoVec
-    let report = {}
-
     await gestionAppelApi.fetchRapportProprietaire(this.formData)
-
     // todo retirer la vaiable refonteEnCours
     const refonteEnCours = true
     if (!refonteEnCours && this.store.getStatus !== 200) {
@@ -415,7 +378,6 @@ export default defineComponent({
             return
           }
 
-          report = buyerReportResponse.report
         } else {
           // Cas: lien acheteur invalide
           api.log('/buyer/invalid')
@@ -475,8 +437,6 @@ export default defineComponent({
             })
             return
           }
-
-          report = holderReportResponse.report
         } else {
           // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
           api.log('/holder/invalid')
@@ -496,12 +456,11 @@ export default defineComponent({
     }
     // ---- Fin a supprimer
 
-    const { vehicule: vehiculeData, controlesTechniques } = report
+    const rapport = this.store.getRapport
+    this.processedVehiculeData = rapport
+    this.controlesTechniques = rapport.vehicule.controlesTechniques
 
-    this.processedVehiculeData = siv.processVehiculeData(vehiculeData)
-    this.controlesTechniques = controlesTechniques
-
-    const { isDonneeDisponible: areControlesTechinquesDisponibles, historique } = this.controlesTechniques
+    const areControlesTechinquesDisponibles = this.controlesTechniques.length
 
     const defaultTabTitles = [
       { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
@@ -512,7 +471,7 @@ export default defineComponent({
     ]
 
     this.tabTitles = (
-      (areControlesTechinquesDisponibles && historique.length > 0) ?
+      (areControlesTechinquesDisponibles ) ?
         defaultTabTitles.concat([
           { title: 'Contrôles techniques', panelId: 'report-tab-content-5', tabId:'report-tab-5'},
           { title: 'Kilométrage', panelId: 'report-tab-content-6', tabId:'report-tab-6'},
@@ -911,7 +870,6 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletSynthese
-            :processed-vehicule-data="processedVehiculeData"
             :is-rapport-vendeur="isRapportVendeur"
           />
         </DsfrTabContent>
@@ -923,9 +881,7 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 1"
           :asc="tabs.asc"
         >
-          <OngletVehicule
-            :caracteristiques-techniques="caracteristiquesTechniques"
-          />
+          <OngletVehicule />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -935,10 +891,7 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 2"
           :asc="tabs.asc"
         >
-          <OngletTitulaire
-            :titulaire="titulaire"
-            :certificat="certificat"
-          />
+          <OngletTitulaire />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -949,7 +902,6 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletSituationAdministrative
-            :report-labels="reportLabels"
             :is-rapport-vendeur="isRapportVendeur"
           />
         </DsfrTabContent>
@@ -961,10 +913,7 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 4"
           :asc="tabs.asc"
         >
-          <OngletHistorique
-            :certificat="certificat"
-            :historique="processedVehiculeData.historique"
-          />
+          <OngletHistorique />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -974,9 +923,7 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 5"
           :asc="tabs.asc"
         >
-          <OngletControlesTechniques
-            :controles-techniques-data="controlesTechniques.historique"
-          />
+          <OngletControlesTechniques />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -986,9 +933,7 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 6"
           :asc="tabs.asc"
         >
-          <OngletKilometrage
-            :controles-techniques-data="controlesTechniques.historique"
-          />
+          <OngletKilometrage />
         </DsfrTabContent>
       </DsfrTabs>
     </div>
