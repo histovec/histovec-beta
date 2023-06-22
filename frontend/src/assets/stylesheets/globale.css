@@ -14,3 +14,7 @@ main,
 .fr-nav__link{
   background: transparent;
 }
+
+.background-default-white{
+  z-index: revert;
+}
