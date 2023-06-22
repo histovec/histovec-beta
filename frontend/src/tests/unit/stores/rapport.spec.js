@@ -4,9 +4,16 @@ import { describe, expect, vi, it, beforeAll, afterEach } from 'vitest'
 import axios from 'axios'
 import api from '@Api/index'
 import { formDataSivParticulierFormates } from '@/tests/fixtures/formDataFormates'
-import { reponseRequeteApiSivParticulier200, reponseRequeteApi404, reponseRequeteApiErreur500 } from '@/tests/fixtures/index'
+import {
+  reponseRequeteApiSivParticulier200,
+  reponseRequeteApi404,
+  reponseRequeteApiErreur500,
+  dataSivParticulierFormat200,
+  reponseSivParticulierFormat200,
+} from '@/tests/fixtures/index'
 import { id } from '@/tests/fixtures/constantes'
 import { vehiculeMapping } from '@Utils/mapping/mapper'
+import { formaterRapport } from '@Utils/format/formatRapport'
 
 vi.mock('axios')
 
@@ -17,7 +24,12 @@ describe('Rapport store', () => {
     spyApi = vi.spyOn(api, 'log').mockReturnValue(true)
     vi.mock('@Utils/mapping/mapper', () => {
       return {
-        vehiculeMapping: vi.fn(() => { return reponseRequeteApiSivParticulier200.data }),
+        vehiculeMapping: vi.fn(() => { return reponseSivParticulierFormat200 }),
+      }
+    })
+    vi.mock('@Utils/format/formatRapport', () => {
+      return {
+        formaterRapport: vi.fn(() => { return dataSivParticulierFormat200 }),
       }
     })
   })
@@ -39,10 +51,13 @@ describe('Rapport store', () => {
     expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(1)
     expect(vi.mocked(vehiculeMapping)).toBeCalledWith(reponseRequeteApiSivParticulier200.data)
 
+    expect(vi.mocked(formaterRapport)).toHaveBeenCalledTimes(1)
+    expect(vi.mocked(formaterRapport)).toBeCalledWith(reponseSivParticulierFormat200)
+
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiSivParticulier200.status)
     expect(rapport.message).toBe(reponseRequeteApiSivParticulier200.message)
-    expect(rapport.rapportData).toStrictEqual(reponseRequeteApiSivParticulier200.data)
+    expect(rapport.rapportData).toStrictEqual(dataSivParticulierFormat200)
     expect(rapport.chargement).toBe(false)
   })
 
@@ -57,6 +72,7 @@ describe('Rapport store', () => {
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
 
     expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(0)
+    expect(vi.mocked(formaterRapport)).toHaveBeenCalledTimes(0)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/notFound')
@@ -81,6 +97,7 @@ describe('Rapport store', () => {
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
 
     expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(0)
+    expect(vi.mocked(formaterRapport)).toHaveBeenCalledTimes(0)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/unavailable')
