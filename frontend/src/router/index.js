@@ -5,7 +5,7 @@ import { TYPE_RAPPORT } from '@Constants/type'
 
 const AccessibilitePage = () => import('@Views/AccessibilitePage.vue')
 const AcheteurPage = () => import('@Views/AcheteurPage.vue')
-const ContactPage = () => import('@Views/ContactPage.vue')
+const ContactPage = () => import('@Views/contact/ContactPage.vue')
 const DonneesPersonnellesEtCookiesPage = () => import('@Views/DonneesPersonnellesEtCookiesPage.vue')
 const FAQPage = () => import('@Views/FAQPage.vue')
 const MentionsLegalesPage = () => import('@Views/MentionsLegalesPage.vue')
