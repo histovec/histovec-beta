@@ -225,7 +225,6 @@ export default defineComponent({
         uuid: localStorage.getItem('userId'),
       }
       try {
-        console.log(data)
         const { status } = await api.sendContactEmail(data)
 
         if (status === 201) {
