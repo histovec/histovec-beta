@@ -17,7 +17,7 @@ describe('Rapport store', () => {
     spyApi = vi.spyOn(api, 'log').mockReturnValue(true)
     vi.mock('@Utils/mapping/mapper', () => {
       return {
-        vehiculeMapping: vi.fn(() => { return reponseRequeteApiSivParticulier200.data.payload }),
+        vehiculeMapping: vi.fn(() => { return reponseRequeteApiSivParticulier200.data }),
       }
     })
   })
@@ -37,12 +37,12 @@ describe('Rapport store', () => {
     expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
 
     expect(vi.mocked(vehiculeMapping)).toHaveBeenCalledTimes(1)
-    expect(vi.mocked(vehiculeMapping)).toBeCalledWith(reponseRequeteApiSivParticulier200.data.payload)
+    expect(vi.mocked(vehiculeMapping)).toBeCalledWith(reponseRequeteApiSivParticulier200.data)
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiSivParticulier200.status)
     expect(rapport.message).toBe(reponseRequeteApiSivParticulier200.message)
-    expect(rapport.rapportData).toStrictEqual(reponseRequeteApiSivParticulier200.data.payload)
+    expect(rapport.rapportData).toStrictEqual(reponseRequeteApiSivParticulier200.data)
     expect(rapport.chargement).toBe(false)
   })
 

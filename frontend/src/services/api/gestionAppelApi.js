@@ -11,7 +11,7 @@ const fetchRapportProprietaire = async (data) => {
 
   // recherche dans le store si la data est déjà récupérée
   if (store.getRapport && store.getId === idProprietaire) {
-    api.log('/holder/cached')
+    api.log('/holder/cached') // todo modifier le log car appelé à chaque redirection sur la page
     return
   }
 
