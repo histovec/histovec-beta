@@ -2,8 +2,8 @@
 import { defineComponent } from 'vue'
 
 import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
-import ImagePresentation from '@Components/ImagePresentation.vue';
 import TuileDsfrNonCliquable from '@Components/TuileDsfrNonCliquable.vue'
+import TitrePresentationPage from '@Components/TitrePresentationPage.vue'
 
 import {
   FAQ_THEMES,
@@ -21,7 +21,7 @@ import '@/assets/stylesheets/globale.css'
 export default defineComponent({
   name: 'FAQPage',
 
-  components: { HistoVecButtonLink, ImagePresentation, TuileDsfrNonCliquable },
+  components: { HistoVecButtonLink, TuileDsfrNonCliquable, TitrePresentationPage },
 
   data () {
     return {
@@ -29,6 +29,12 @@ export default defineComponent({
 
       image:{
         faqSvg,
+        id:'image-faq',
+      },
+      enTete:{
+        titre: 'Besoin d\'aide ?',
+        sousTitre: 'Consultez la FAQ et les liens utiles',
+        description: 'Si vous ne trouvez pas de réponse à votre question, n\'hésitez pas à nous contacter.',
       },
       selectedTheme: undefined,
 
@@ -64,16 +70,13 @@ export default defineComponent({
         ]"
       />
     </div>
-    <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.faqSvg" />
-    </div>
-    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
-      <h1>Besoin d'aide ?</h1>
-      <h2>Consultez la FAQ et les liens utiles</h2>
-      <p class="fr-text--xl">
-        Si vous ne trouvez pas de réponse à votre question, n'hésitez pas à nous contacter.
-      </p>
-    </div>
+    <TitrePresentationPage
+      :id="image.id"
+      :src="image.faqSvg"
+      :titre="enTete.titre"
+      :sous-titre="enTete.sousTitre"
+      :description="enTete.description"
+    />
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters">

@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 
 import HistoVecButtonLink from '@Components/HistoVecButtonLink.vue'
 import CarteDsfrNonCliquable from '@Components/CarteDsfrNonCliquable.vue';
-import ImagePresentation from '@Components/ImagePresentation.vue';
+import TitrePresentationPage from '@Components/TitrePresentationPage.vue'
 
 import confidentielSvg from '@Assets/img/confidentiel.svg?url'
 import gratuitSvg from '@Assets/img/gratuit.svg?url'
@@ -15,7 +15,7 @@ import api from '@Api/index.js'
 export default defineComponent({
   name: 'AccueilPage',
 
-  components: {CarteDsfrNonCliquable, HistoVecButtonLink, ImagePresentation},
+  components: {TitrePresentationPage, CarteDsfrNonCliquable, HistoVecButtonLink},
 
   data() {
     return {
@@ -62,8 +62,12 @@ export default defineComponent({
       ],
       image: {
         id: 'image-accueil',
-        alt: 'Illustration de la page d\'accueil',
         accueilSVG,
+      },
+      enTete:{
+        titre: 'Partagez l\'historique de votre véhicule',
+        sousTitre: 'Jouez la transparence',
+        description: 'Vous souhaitez vendre votre véhicule ? Vous avez fait une sélection de véhicules parmi des annonces ? Partagez ou consultez l\'historique du véhicule.',
       },
     }
   },
@@ -86,22 +90,13 @@ export default defineComponent({
         ]"
       />
     </div>
-
-    <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation
-        :id="image.id"
-        :src="image.accueilSVG"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v">
-      <h1>Partagez l'historique de votre véhicule</h1>
-      <h2>Jouez la transparence</h2>
-      <p class="fr-text--xl">
-        Vous souhaitez vendre votre véhicule ?
-        Vous avez fait une sélection de véhicules parmi des annonces ?
-        Partagez ou consultez l'historique du véhicule.
-      </p>
-    </div>
+    <TitrePresentationPage
+      :id="image.id"
+      :src="image.accueilSVG"
+      :titre="enTete.titre"
+      :sous-titre="enTete.sousTitre"
+      :description="enTete.description"
+    />
   </div>
 
   <div class="fr-grid-row fr-grid-row--gutters">
