@@ -48,5 +48,3 @@ export const padString = (n, width, padChar='0') => {
 	const padding = new Array(width - stringifiedN.length + 1).join(padChar)
 	return  `${padding}${stringifiedN}`
 }
-
-export const camelize = (str) => str.replace(/\W+(.)/g, (match, chr) => chr.toUpperCase())
