@@ -1,8 +1,8 @@
 export function historiqueMapping (historique) {
-  return historique.map(({ opa_date, opa_type }) => (
+  return historique.map(({ date, type }) => (
     {
-      date: opa_date,
-      type: opa_type,
+      date,
+      type,
     }
   ))
 }
@@ -61,41 +61,148 @@ export function queryMapping (incomingQuery) {
   }
 }
 
-export function titulaireMapping (nomNaissance, prenom, raisonSociale, siren, codePostal) {
-  if(nomNaissance || prenom) {
-    return {
-      particulier:
-        {
-          nomNaissance,
-          prenom,
-        },
-      codePostal,
-    }
-  }
-  else if (raisonSociale || siren) {
-    return  {
-      personneMorale:
-        {
-          raisonSociale,
-          siren,
-        },
-      codePostal,
-    }
-  }
-}
-
 export function controlesTechniquesMapping (controlesTechniques) {
-  return controlesTechniques.map(({ ct_date, ct_nature, ct_resultat, ct_km }) => (
+  return controlesTechniques.map(({ date, nature, resultat, km }) => (
     {
-      date: ct_date,
-      nature: ct_nature,
-      resultat: ct_resultat,
-      km: ct_km,
+      date,
+      nature,
+      resultat,
+      km,
     }
   ))
 }
 
-export const vehiculeMapping = (report) => {
+export function proprietaireMapping(proprietaire) {
+  if (proprietaire.particulier) {
+    return {
+      particulier:
+        {
+          nomNaissance: proprietaire.particulier.nom_naissance,
+          prenom: proprietaire.particulier.prenom,
+        },
+        codePostal: proprietaire.code_postal,
+    }
+  }
+  if (proprietaire.personne_morale) {
+    return {
+      personneMorale:
+        {
+          raisonSociale: proprietaire.personne_morale.raison_sociale,
+          siren: proprietaire.personne_morale.siren,
+        },
+      codePostal: proprietaire.code_postal,
+    }
+  }
+}
+
+export function gagesMapping (gages) {
+  const {
+    has_gages: hasGages,
+    informations: gagesInformations,
+  } = gages
+
+  if (!hasGages) { return { hasGages, informations: [] } }
+
+  const informationsMapped = gagesInformations.map(({ date, nom_creancier }) => (
+    {
+      date,
+      nomCreancier: nom_creancier,
+    }
+  ))
+
+  return {
+    hasGages,
+    informations: informationsMapped,
+  }
+}
+
+export function dvsMapping (dvs) {
+  const {
+    has_dvs: hasDvs,
+    informations: dvsInformations,
+  } = dvs
+
+  if (!hasDvs) { return { hasDvs, informations: [] } }
+
+  const informationsMapped = dvsInformations.map(({ date, dvs_autorite }) => (
+    {
+      date,
+      dvsAutorite: dvs_autorite,
+    }
+  ))
+
+  return {
+    hasDvs,
+    informations: informationsMapped,
+  }
+}
+
+export function suspensionsMapping (suspensions) {
+  const {
+    has_suspensions: hasSuspensions,
+    informations: suspensionsInformations,
+  } = suspensions
+
+  if (!hasSuspensions) { return { hasSuspensions, informations: [] } }
+
+  const informationsMapped = suspensionsInformations.map(({ date, motif, remise_titre, retrait_titre }) => (
+    {
+      date,
+      motif,
+      remiseTitre: remise_titre,
+      retraitTitre: retrait_titre,
+    }
+  ))
+
+  return {
+    hasSuspensions,
+    informations: informationsMapped,
+  }
+}
+
+export function oppositionsTypeMapping (oppositionsType) {
+  return oppositionsType.map(({ date }) => (
+    {
+      date,
+    }
+  ))
+}
+
+export function oppositionsMapping (oppositions) {
+  const {
+    has_oppositions: hasOppositions,
+    informations: {
+      oves,
+      oveis,
+      otcis_pv: otcisPv,
+      otcis,
+    },
+  } = oppositions
+
+  if (!hasOppositions) {
+    return {
+      hasOppositions,
+      informations: {
+        oves: [],
+        oveis: [],
+        otcisPv: [],
+        otcis: [],
+      },
+    }
+  }
+
+  return {
+    hasOppositions,
+    informations: {
+      oves: oppositionsTypeMapping(oves),
+      oveis: oppositionsTypeMapping(oveis),
+      otcisPv: oppositionsTypeMapping(otcisPv),
+      otcis: oppositionsTypeMapping(otcis),
+    },
+  }
+}
+
+export const vehiculeMapping = (rapport) => {
   const {
     vehicule:
       {
@@ -161,11 +268,11 @@ export const vehiculeMapping = (report) => {
             date_annulation: dateAnnulation,
             is_ci_vole: isCiVole,
             is_duplicata: isDuplicata,
-            has_gages: hasGages,
+            gages: gages,
             is_ci_perdu: isCiPerdu,
-            has_dvs: hasDvs,
-            has_suspensions: hasSuspensions,
-            has_oppositions: hasOppositions,
+            dvs: dvs,
+            suspensions: suspensions,
+            oppositions: oppositions,
             is_veh_vole: isVehVole,
           },
         accidents:
@@ -177,20 +284,7 @@ export const vehiculeMapping = (report) => {
         historique: reportHistorique = [],
         controles_techniques: reportControlesTechniques = [],
       },
-    proprietaire:
-      {
-        personne_physique:
-          {
-            nom_naissance: nomNaissance,
-            prenom,
-          },
-        personne_morale:
-          {
-            raison_sociale: raisonSociale,
-            siren,
-          },
-        code_postal: codePostal,
-      },
+    proprietaire,
     certificat_immatriculation:
       {
         age,
@@ -201,15 +295,16 @@ export const vehiculeMapping = (report) => {
     plaq_immat_hash: plaqImmatHash,
     incoming_query: incomingQuery,
     validite_clef_acheteur: validiteClefAcheteur,
-  } = report
-
-  const mappedTitulaire = titulaireMapping(nomNaissance, prenom, raisonSociale, siren, codePostal)
+  } = rapport
 
   const mappedHistorique = historiqueMapping(reportHistorique)
-
   const mappedControlesTechniques = controlesTechniquesMapping(reportControlesTechniques)
-
   const mappedQuery = queryMapping(incomingQuery)
+  const mappedProprietaire = proprietaireMapping(proprietaire)
+  const mappedGages = gagesMapping(gages)
+  const mappedDvs = dvsMapping(dvs)
+  const mappedSuspensions = suspensionsMapping(suspensions)
+  const mappedOppositions = oppositionsMapping(oppositions)
 
   return {
     vehicule:
@@ -276,11 +371,11 @@ export const vehiculeMapping = (report) => {
             dateAnnulation,
             isCiVole,
             isDuplicata,
-            hasGages,
+            gages: mappedGages,
             isCiPerdu,
-            hasDvs,
-            hasSuspensions,
-            hasOppositions,
+            dvs: mappedDvs,
+            suspensions: mappedSuspensions,
+            oppositions: mappedOppositions,
             isVehVole,
           },
         accidents:
@@ -292,7 +387,7 @@ export const vehiculeMapping = (report) => {
         historique: mappedHistorique,
         controlesTechniques: mappedControlesTechniques,
       },
-    proprietaire: mappedTitulaire,
+    proprietaire: mappedProprietaire,
     certificatImmatriculation:
       {
         age,
