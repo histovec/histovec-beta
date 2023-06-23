@@ -5,7 +5,6 @@ import syntheseMapping from '@Assets/json/synthese.json'
 import { formatIsoToFrDate } from '@Assets/js/format'
 import { getExposant } from '@Utils/format.js'
 import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@Constants/usagesSynthese.js'
-import { useRapportStore } from '@Stores/rapport'
 import { syntheseVehiculeMapping } from '@Utils/normaliserDonneesPageRapport'
 
 export default defineComponent({
@@ -16,6 +15,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    rapportData: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -23,7 +26,6 @@ export default defineComponent({
       formatIsoToFrDate,
       getExposant,
 
-      store: useRapportStore(),
       hasProcedureVE:{},
       datePremImmatriculationFR:{},
       processedVehicule:{
@@ -32,20 +34,13 @@ export default defineComponent({
         },
         certificatImmatriculation:{},
         vehicule:{
-          accidents:{},
-          caracteristiques: {},
-          infos:{},
-          infosImport:{},
           situationAdmin:{
             dvs:{},
             gages:{},
             oppositions:{},
             suspensions:{},
           },
-          usage:{},
         },
-
-
       },
 
       constants: {
@@ -55,48 +50,38 @@ export default defineComponent({
     }
   },
   computed: {
-    processedVehiculeData(){
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return rapport
-      }
-      return this.processedVehicule
-    },
     situationAdministrative(){
-      const rapport = this.store.getRapport
-      if(rapport) {
+      if(this.rapportData.vehicule.situationAdmin) {
         const etatCi = {
-          isDuplicata: rapport.vehicule.situationAdmin.isDuplicata,
-          isCIAnnule: rapport.vehicule.situationAdmin.isCiAnnule,
-          isCIPerdu: rapport.vehicule.situationAdmin.isCiPerdu,
-          isCIVole: rapport.vehicule.situationAdmin.isCiVole,
+          isDuplicata: this.rapportData.vehicule.situationAdmin.isDuplicata,
+          isCIAnnule: this.rapportData.vehicule.situationAdmin.isCiAnnule,
+          isCIPerdu: this.rapportData.vehicule.situationAdmin.isCiPerdu,
+          isCIVole: this.rapportData.vehicule.situationAdmin.isCiVole,
         }
-        const isVehVol = rapport.vehicule.situationAdmin.isVehVole
+        const isVehVol = this.rapportData.vehicule.situationAdmin.isVehVole
         const syntheseSituationAdmin = {
-          hasDeclarationsValantSaisie: rapport.vehicule.situationAdmin.dvs.hasDvs,
-          hasGage: rapport.vehicule.situationAdmin.gages.hasGages,
-          hasOtci: rapport.vehicule.situationAdmin.oppositions.informations.otcis.length > 0,
-          hasOtciPV: rapport.vehicule.situationAdmin.oppositions.informations.otcisPv.length> 0,
-          hasOve: rapport.vehicule.situationAdmin.oppositions.informations.oves.length> 0,
-          hasOvei: rapport.vehicule.situationAdmin.oppositions.informations.oveis.length> 0,
-          hasSuspension: rapport.vehicule.situationAdmin.suspensions.hasSuspensions,
+          hasDeclarationsValantSaisie: this.rapportData.vehicule.situationAdmin.dvs.hasDvs,
+          hasGage: this.rapportData.vehicule.situationAdmin.gages.hasGages,
+          hasOtci: this.rapportData.vehicule.situationAdmin.oppositions.informations.otcis.length > 0,
+          hasOtciPV: this.rapportData.vehicule.situationAdmin.oppositions.informations.otcisPv.length> 0,
+          hasOve: this.rapportData.vehicule.situationAdmin.oppositions.informations.oves.length> 0,
+          hasOvei: this.rapportData.vehicule.situationAdmin.oppositions.informations.oveis.length> 0,
+          hasSuspension: this.rapportData.vehicule.situationAdmin.suspensions.hasSuspensions,
         }
         return syntheseVehiculeMapping(etatCi, isVehVol, syntheseSituationAdmin)
       }
       return this.processedVehicule.vehicule.situationAdmin
     },
     hasProcedureVEEnCours () {
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return rapport.vehicule.accidents.dateDernierSinistre > rapport.vehicule.accidents.dateDerniereResolution
+      if(this.rapportData.vehicule.accidents) {
+        return this.rapportData.vehicule.accidents.dateDernierSinistre > this.rapportData.vehicule.accidents.dateDerniereResolution
       }
       return this.hasProcedureVE
     },
 
     datePremiereImmatriculationFR () {
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return formatIsoToFrDate(rapport.vehicule.infos.datePremiereImmatriculation)
+      if(this.rapportData.vehicule.infos) {
+        return formatIsoToFrDate(this.rapportData.vehicule.infos.datePremiereImmatriculation)
       }
       return this.datePremImmatriculationFR
     },
@@ -124,14 +109,14 @@ export default defineComponent({
         </h4>
 
         <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
-          {{ processedVehiculeData.vehicule.caracteristiques.marque }} {{ processedVehiculeData.vehicule.caracteristiques.nomCommercial }}
+          {{ rapportData?.vehicule?.caracteristiques?.marque }} {{ rapportData?.vehicule?.caracteristiques?.nomCommercial }}
         </p>
 
         <p
-          v-if="processedVehiculeData.vehicule.caracteristiques.puissanceCv"
+          v-if="rapportData?.vehicule?.caracteristiques?.puissanceCv"
           class="fr-text--md  fr-mb-1v"
         >
-          Puissance fiscale : <span class="fr-text--bleu">{{ processedVehiculeData.vehicule.caracteristiques.puissanceCv }} ch</span>
+          Puissance fiscale : <span class="fr-text--bleu">{{ rapportData?.vehicule?.caracteristiques?.puissanceCv }} ch</span>
         </p>
 
         <p
@@ -153,14 +138,14 @@ export default defineComponent({
       </div>
 
       <div
-        v-if="processedVehiculeData.vehicule.usage.isAgricole || processedVehiculeData.vehicule.usage.isCollection"
+        v-if="rapportData?.vehicule?.usage?.isAgricole || rapportData?.vehicule?.usage?.isCollection"
         class="fr-pb-3w  fr-pt-0"
       >
         <h4 class="fr-mb-0  fr-pb-2w fr-h6">
           Usage
         </h4>
         <div
-          v-if="processedVehiculeData.vehicule.usage.isCollection "
+          v-if="rapportData?.vehicule?.usage?.isCollection "
         >
           <p class="fr-text--md  fr-mb-2w">
             <span class="fr-text--bleu">
@@ -187,7 +172,7 @@ export default defineComponent({
           </p>
         </div>
         <div
-          v-if="processedVehiculeData.vehicule.usage.isAgricole"
+          v-if="rapportData?.vehicule?.usage?.isAgricole"
         >
           <p class="fr-text--md  fr-mb-0">
             <span class="fr-text--bleu">
@@ -221,38 +206,40 @@ export default defineComponent({
         </h4>
 
         <p class="fr-text--md  fr-mb-0">
-          <span class="fr-text--bleu">{{ processedVehiculeData.proprietaire.particulier.nomNaissance }} {{ processedVehiculeData.proprietaire.particulier.prenom }}</span>
+          <span class="fr-text--bleu">{{
+            rapportData?.proprietaire?.particulier?.nomNaissance
+          }} {{ rapportData?.proprietaire?.particulier?.prenom }}</span>
           depuis
           <span
-            v-if="processedVehiculeData.certificatImmatriculation.age"
+            v-if="rapportData?.certificatImmatriculation?.age"
             class="fr-text--bleu"
           >
-            {{ processedVehiculeData.certificatImmatriculation.age }}
+            {{ rapportData?.certificatImmatriculation?.age }}
           </span>
           <span
-            v-if="!processedVehiculeData.certificatImmatriculation.age"
+            v-if="!rapportData?.certificatImmatriculation?.age"
             class="fr-text--bleu"
           >
             une durée inconnue
           </span>
           <br />
-          <template v-if="!processedVehiculeData.vehicule.infosImport.isImported">
+          <template v-if="!rapportData?.vehicule?.infosImport.isImported">
             <template v-if="isRapportVendeur">
               Vous êtes le
-              <span class="fr-text--bleu">{{ processedVehiculeData.vehicule.infos.nbTitulaires }}</span>
-              <sup class="fr-text--bleu">{{ getExposant(processedVehiculeData.vehicule.infos.nbTitulaires) }}</sup>
+              <span class="fr-text--bleu">{{ rapportData?.vehicule?.infos?.nbTitulaires }}</span>
+              <sup class="fr-text--bleu">{{ getExposant(rapportData?.vehicule?.infos?.nbTitulaires) }}</sup>
               titulaire de ce véhicule
             </template>
             <template v-if="isRapportAcheteur">
               Ce véhicule a déjà eu
-              <span class="fr-text--bleu">{{ processedVehiculeData.vehicule.infos.nbTitulaires }}</span>
+              <span class="fr-text--bleu">{{ rapportData?.vehicule?.infos?.nbTitulaires }}</span>
               titulaire(s), en l'achetant vous serez le
-              <span class="fr-text--bleu">{{ Number(processedVehiculeData.vehicule.infos.nbTitulaires) + 1 }}</span>
-              <sup class="fr-text--bleu">{{ getExposant(Number(processedVehiculeData.vehicule.infos.nbTitulaires) + 1) }}</sup>
+              <span class="fr-text--bleu">{{ Number(rapportData?.vehicule?.infos?.nbTitulaires) + 1 }}</span>
+              <sup class="fr-text--bleu">{{ getExposant(Number(rapportData?.vehicule?.infos?.nbTitulaires) + 1) }}</sup>
             </template>
           </template>
           <br />
-          <template v-if="processedVehiculeData.vehicule.infosImport.isImported">
+          <template v-if="rapportData?.vehicule?.infosImport?.isImported">
             Le nombre exact de titulaires ne peut être calculé avec précision
             <br />
             (première immatriculation à l'étranger)
@@ -278,7 +265,7 @@ export default defineComponent({
           </template>
         </p>
 
-        <template v-if="processedVehiculeData.vehicule.infosImport.isImported">
+        <template v-if="rapportData?.vehicule?.infosImport?.isImported">
           <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
             <span class="fr-text--bleu">
               <VIcon
@@ -303,49 +290,51 @@ export default defineComponent({
         </h4>
 
         <p
-          v-if="hasProcedureVEEnCours || processedVehiculeData.vehicule.accidents.nbSinistres > 0"
+          v-if="hasProcedureVEEnCours || rapportData?.vehicule?.accidents.nbSinistres > 0"
           class="fr-text--md  fr-mb-1v"
         >
           <span class="fr-text--bleu">
             <VIcon
-              :name="processedVehiculeData.vehicule.situationAdmin.isApteACirculer ? 'ri-thumb-up-line' : 'ri-error-warning-fill'"
+              :name="rapportData?.vehicule?.situationAdmin?.isApteACirculer ? 'ri-thumb-up-line' : 'ri-error-warning-fill'"
             />
           </span>
           <!-- état - un seul sinistre !-->
-          <template v-if="processedVehiculeData.vehicule.accidents.nbSinistres === 1 || (processedVehiculeData.vehicule.accidents.nbSinistres === 0 && hasProcedureVEEnCours)">
+          <template v-if="rapportData?.vehicule?.accidents?.nbSinistres === 1 || (rapportData?.vehicule?.accidents?.nbSinistres === 0 && hasProcedureVEEnCours)">
             Ce véhicule a eu <span class="fr-text--bleu">un sinistre déclaré</span>
             <span
-              v-if="processedVehiculeData.vehicule.accidents.dateDernierSinistre"
+              v-if="rapportData?.vehicule?.accidents?.dateDernierSinistre"
               class="fr-text--bleu"
             >
-              en {{ processedVehiculeData.vehicule.accidents.dateDernierSinistre }}
+              en {{ rapportData?.vehicule?.accidents?.dateDernierSinistre }}
             </span>
             <br />
-            <template v-if="processedVehiculeData.vehicule.situationAdmin.isApteACirculer">
+            <template v-if="rapportData?.vehicule?.situationAdmin.isApteACirculer">
               et
               <span class="fr-text--bleu"> déclaré apte à circuler</span>
               <span
-                v-if="processedVehiculeData.vehicule.accidents.dateDerniereResolution"
+                v-if="rapportData?.vehicule?.accidents?.dateDerniereResolution"
                 class="fr-text--bleu"
               >
-                en {{ processedVehiculeData.vehicule.accidents.dateDerniereResolution }}
+                en {{ rapportData?.vehicule?.accidents?.dateDerniereResolution }}
               </span>
             </template>
           </template>
           <!-- état - plusieurs sinistres !-->
-          <template v-if="processedVehiculeData.vehicule.accidents.nbSinistres > 1">
+          <template v-if="rapportData?.vehicule?.accidents?.nbSinistres > 1">
             Ce véhicule a eu
             <span class="fr-text--bleu">plusieurs sinistres</span>
-            , dont le dernier déclaré en <span class="fr-text--bleu">{{ processedVehiculeData.vehicule.accidents.dateDernierSinistre }}</span>
+            , dont le dernier déclaré en <span class="fr-text--bleu">{{
+              rapportData?.vehicule?.accidents?.dateDernierSinistre
+            }}</span>
             <br />
-            <template v-if="processedVehiculeData.vehicule.situationAdmin.isApteACirculer">
+            <template v-if="rapportData?.vehicule?.situationAdmin?.isApteACirculer">
               Le véhicule a été
               <span class="fr-text--bleu"> déclaré apte à circuler</span>
               <span
-                v-if="processedVehiculeData.vehicule.accidents.dateDerniereResolution"
+                v-if="rapportData?.vehicule?.accidents?.dateDerniereResolution"
                 class="fr-text--bleu"
               >
-                en {{ processedVehiculeData.vehicule.accidents.dateDerniereResolution }}
+                en {{ rapportData?.vehicule?.accidents?.dateDerniereResolution }}
               </span>
             </template>
           </template>
@@ -353,7 +342,7 @@ export default defineComponent({
           <br />
           <!-- Commentaire: un ou plusieurs sinistres -->
           <span
-            v-if="processedVehiculeData.vehicule.situationAdmin.isApteACirculer"
+            v-if="rapportData?.vehicule?.situationAdmin?.isApteACirculer"
             class="fr-text--bleu"
           >
             {{ syntheseMapping[(isRapportVendeur ? 'fin_ove_vendeur' : 'fin_ove_acheteur')].adv }}
@@ -366,7 +355,7 @@ export default defineComponent({
           </span>
           <br />
           <span
-            v-if="processedVehiculeData.vehicule.accidents.nbSinistres > 0"
+            v-if="rapportData?.vehicule?.accidents?.nbSinistres > 0"
             class="fr-text--bleu"
           >
             {{ syntheseMapping['multi_ove'].adv }}
@@ -375,7 +364,7 @@ export default defineComponent({
           <br />
         </p>
         <p
-          v-if="!(processedVehiculeData.vehicule.situationAdmin.dvs.hasDvs && processedVehiculeData.vehicule.situationAdmin.gages.hasGages && processedVehiculeData.vehicule.situationAdmin.oppositions.hasOppositions && processedVehiculeData.vehicule.situationAdmin.suspensions.hasSuspensions) && !processedVehiculeData.lastSinistreYear"
+          v-if="!(rapportData?.vehicule?.situationAdmin?.dvs?.hasDvs && rapportData?.vehicule?.situationAdmin?.gages?.hasGages && rapportData?.vehicule?.situationAdmin?.oppositions?.hasOppositions && rapportData?.vehicule?.situationAdmin?.suspensions?.hasSuspensions) && !rapportData?.lastSinistreYear"
           class="fr-text--md  fr-mb-1v"
         >
           <span class="fr-text--bleu">

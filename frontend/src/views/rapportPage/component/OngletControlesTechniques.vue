@@ -2,27 +2,21 @@
 import {defineComponent} from 'vue'
 import { RESULTAT } from '@/constants/controlesTechniques.js'
 import { normalizedControlesTechniquesHistorique } from '@Utils/controlesTechniquesComposant'
-import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
   name: 'OngletControlesTechniques',
-
+  props:{
+    controlesTechniquesHistorique: {
+      type: Array,
+      default: new Array([]),
+    },
+  },
   data () {
     return {
       normalizedControlesTechniquesHistorique,
-      store: useRapportStore(),
-      controlesTechniques: {},
     }
   },
   computed: {
-
-    controlesTechniquesHistorique () {
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return rapport.vehicule.controlesTechniques || []
-      }
-      return this.controlesTechniques
-    },
     erreurControlesTechniques () {
       return false
       // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'

@@ -2,7 +2,6 @@
 import {defineComponent} from 'vue'
 
 import syntheseMapping from '@Assets/json/synthese.json'
-import { useRapportStore } from '@Stores/rapport'
 import { normalizeForFrontendDisplay } from '@Utils/normaliserDonneesPageRapport'
 
 export default defineComponent({
@@ -13,66 +12,58 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    situationAdministrative: {
+      type: Object,
+      default: null,
+    },
+    infos: {
+      type: Object,
+      default: null,
+    },
+    certificatImmatriculation: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
     return {
       syntheseMapping,
 
-      store: useRapportStore(),
-      situationAdmin: {
-        gages:{},
-        dvs:{},
-        suspensions:{},
-        oppositions:{},
-      },
-      info:{},
-      certificatImmat: {},
+      opposition:{},
     }
   },
 
   computed: {
-    situationAdministrative () {
-      const rapport = this.store.getRapport
-      if (rapport) {
-        return rapport.vehicule.situationAdmin
-      }
-      return this.situationAdmin
-    },
     oppositions () {
-      const rapport = this.store.getRapport
-      if(rapport) {
-        const oppositionsLabelise = rapport.vehicule.situationAdmin.oppositions.informations
-        const oppositionsInfos = normalizeForFrontendDisplay(
+      if(this.situationAdministrative) {
+        const oppositionsLabelise = this.situationAdministrative.oppositions.informations
+        return normalizeForFrontendDisplay(
           [
-            ...(oppositionsLabelise.oveis.length ? [{ date: oppositionsLabelise.oveis[0].date, label: 'Véhicule économiquement irréparable' }] : []),
+            ...(oppositionsLabelise.oveis.length ? [{
+              date: oppositionsLabelise.oveis[0].date,
+              label: 'Véhicule économiquement irréparable',
+            }] : []),
             // Pour les OVEs, le CSA affiche "Véhicule endommagé".
             // Il a été convenu par la DSR qu'on préfère afficher "Procédure de réparation contrôlée" dans le cas du rapport HistoVec,
             // même si cela crée une incohérence entre le rapport HistoVec et le CSA.
-            ...(oppositionsLabelise.oves.length ? [{ date: oppositionsLabelise.oves[0].date, label: 'Procédure de réparation contrôlée' }] : []),
+            ...(oppositionsLabelise.oves.length ? [{
+              date: oppositionsLabelise.oves[0].date,
+              label: 'Procédure de réparation contrôlée',
+            }] : []),
             // On pourrait identifier les différents motifs d'OTCI (trésor, véhicule bloqué, etc.) mais il a été décidé de laisser "Opposition temporaire" pour le moment.
-            ...(oppositionsLabelise.otcis.length ? [{ date: oppositionsLabelise.otcis[0].date, label: 'Opposition temporaire'}] : []),
-            ...(oppositionsLabelise.otcisPv.length ? [{ date: oppositionsLabelise.otcisPv[0].date, label: 'PV en attente' }] : []),
+            ...(oppositionsLabelise.otcis.length ? [{
+              date: oppositionsLabelise.otcis[0].date,
+              label: 'Opposition temporaire',
+            }] : []),
+            ...(oppositionsLabelise.otcisPv.length ? [{
+              date: oppositionsLabelise.otcisPv[0].date,
+              label: 'PV en attente',
+            }] : []),
           ],
         )
-        return oppositionsInfos
       }
-      return this.infos
-    },
-    infos (){
-      const rapport = this.store.getRapport
-      if(rapport){
-        return rapport.vehicule.infos
-      }
-      return this.info
-    },
-
-    certificatImmatriculation () {
-      const rapport = this.store.getRapport
-      if (rapport) {
-        return rapport.certificatImmatriculation
-      }
-      return this.certificatImmat
+      return this.opposition
     },
   },
 })
@@ -100,11 +91,11 @@ export default defineComponent({
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <div
-            v-if="situationAdministrative.gages.hasGages"
+            v-if="situationAdministrative?.gages.hasGages"
             class="fr-text--md"
           >
             <div
-              v-for="(gageInfos, index) in situationAdministrative.gages.informations"
+              v-for="(gageInfos, index) in situationAdministrative?.gages.informations"
               :key="index"
             >
               <span v-if="gageInfos.date">{{ gageInfos.date }} - </span>
@@ -112,7 +103,7 @@ export default defineComponent({
             </div>
           </div>
           <div
-            v-if="!situationAdministrative.gages.hasGages"
+            v-if="!situationAdministrative?.gages.hasGages"
             class="fr-text--md fr-text--bleu"
           >
             NON
@@ -136,7 +127,7 @@ export default defineComponent({
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <div
-            v-if="situationAdministrative.oppositions.hasOppositions"
+            v-if="situationAdministrative?.oppositions.hasOppositions"
             class="fr-text--md"
           >
             <div
@@ -153,7 +144,7 @@ export default defineComponent({
             </div>
           </div>
           <div
-            v-if="!situationAdministrative.oppositions.hasOppositions"
+            v-if="!situationAdministrative?.oppositions.hasOppositions"
             class="fr-text--md fr-text--bleu"
           >
             NON
@@ -169,7 +160,7 @@ export default defineComponent({
           Déclaré volé
         </div>
         <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
-          {{ situationAdministrative.isVehVole? 'OUI':'NON' }}
+          {{ situationAdministrative?.isVehVole? 'OUI':'NON' }}
         </div>
       </div>
     </div>
@@ -183,11 +174,11 @@ export default defineComponent({
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <div
-            v-if="situationAdministrative.dvs.hasDvs"
+            v-if="situationAdministrative?.dvs.hasDvs"
             class="fr-text--md"
           >
             <div
-              v-for="(dvs, index) in situationAdministrative.dvs.informations"
+              v-for="(dvs, index) in situationAdministrative?.dvs.informations"
               :key="index"
             >
               <span v-if="dvs.date">{{ dvs.date }} - </span>
@@ -195,7 +186,7 @@ export default defineComponent({
             </div>
           </div>
           <div
-            v-if="!situationAdministrative.dvs.hasDvs"
+            v-if="!situationAdministrative?.dvs.hasDvs"
             class="fr-text--md fr-text--bleu"
           >
             NON
@@ -209,11 +200,11 @@ export default defineComponent({
         </div>
         <div class="fr-col-12  fr-pb-0  fr-pt-0">
           <div
-            v-if="situationAdministrative.suspensions.hasSuspensions"
+            v-if="situationAdministrative?.suspensions.hasSuspensions"
             class="fr-text--md"
           >
             <div
-              v-for="(suspensionInfos, index) in situationAdministrative.suspensions.informations"
+              v-for="(suspensionInfos, index) in situationAdministrative?.suspensions.informations"
               :key="index"
             >
               <span v-if="suspensionInfos.date">{{ suspensionInfos.date }} - </span>
@@ -221,7 +212,7 @@ export default defineComponent({
             </div>
           </div>
           <div
-            v-if="!situationAdministrative.suspensions.hasSuspensions"
+            v-if="!situationAdministrative?.suspensions.hasSuspensions"
             class="fr-text--md fr-text--bleu"
           >
             NON
@@ -237,19 +228,19 @@ export default defineComponent({
           Déclaré volée
         </div>
         <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
-          {{ situationAdministrative.isCiVole? 'OUI':'NON' }}
+          {{ situationAdministrative?.isCiVole? 'OUI':'NON' }}
         </div>
         <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
           Déclaré perdue
         </div>
         <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
-          {{ situationAdministrative.isCiPerdu? 'OUI':'NON' }}
+          {{ situationAdministrative?.isCiPerdu? 'OUI':'NON' }}
         </div>
         <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
           Duplicata
         </div>
         <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
-          {{ situationAdministrative.isDuplicata? 'OUI':'NON' }}
+          {{ situationAdministrative?.isDuplicata? 'OUI':'NON' }}
         </div>
       </div>
     </div>

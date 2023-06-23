@@ -1,50 +1,34 @@
 <script>
 import {defineComponent} from 'vue'
 import { formatIsoToFrDate } from '@Assets/js/format'
-import { useRapportStore } from '@Stores/rapport'
 
 import operationsMapping from '@Assets/json/operations.json'
 
 export default defineComponent({
   name: 'OngletHistorique',
-
+  props:{
+    historiqueData: {
+      type: Array,
+      default: new Array([]),
+    },
+    vehiculeImporte: {
+      type: Boolean,
+      default: false,
+    },
+    datePremiereImmatriculationEtranger: {
+      type: String,
+      default: '',
+    },
+  },
   data () {
     return {
       formatIsoToFrDate,
 
       operationsMapping,
-      store: useRapportStore(),
-      historique: [],
-      vehiculeImport: {},
-      datePremiereImmatriculationEtr: '',
 
     }
   },
-  computed: {
-    historiqueData () {
-      const rapport = this.store.getRapport
-      if (rapport) {
-        return rapport.vehicule.historique || []
-      }
-      return this.historique
-    },
 
-    vehiculeImporte () {
-      const rapport = this.store.getRapport
-      if (rapport) {
-        return rapport.vehicule.infosImport.isImported
-      }
-      return this.vehiculeImport
-    },
-
-    datePremiereImmatriculationEtranger () {
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return formatIsoToFrDate(rapport.vehicule.infosImport.datePremiereImmatEtranger)
-      }
-      return this.datePremiereImmatriculationEtr
-    },
-  },
 })
 </script>
 

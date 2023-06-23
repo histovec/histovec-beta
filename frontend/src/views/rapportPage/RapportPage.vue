@@ -84,8 +84,12 @@ export default defineComponent({
       // Initialized beforeMount
       holderId: null,
       holderKey: null,
-      processedVehiculeData: {
+      rapportData: {
         administratif: {},
+        vehicule: {
+          caracteristiqueTechnique: {},
+          infosImport: {},
+        },
       },
       formData: null,
       tabTitles: [],
@@ -152,7 +156,7 @@ export default defineComponent({
         codePartage: false,  // @todo @feature @codePartage1: A activer quand on aura ouvert l'API grand public et qu'on communiquera dessus et que le bug clipboard sera résolu
 
         // Flag du 8
-        usePreviousMonthForData: true, // @flag @usePreviousMonthForData
+        usePreviousMonthForData: false, // @flag @usePreviousMonthForData
 
         // @flag @ignoreUtacCache
         // Outil de debug (doublé par côté backend pour empêcher son usage en PROD)
@@ -171,8 +175,8 @@ export default defineComponent({
     getVehiculeDescription () {
       return (
         this.isCIAnnule ?
-          `Le certificat demandé a été annulé : ${ this.processedVehiculeData.incomingQuery?.immat }` :
-          `Numéro d'immatriculation : ${ this.processedVehiculeData.incomingQuery?.immat }`
+          `Le certificat demandé a été annulé : ${ this.rapportData.incomingQuery?.immat }` :
+          `Numéro d'immatriculation : ${ this.rapportData.incomingQuery?.immat }`
       )
     },
     getMiDescription () {
@@ -239,6 +243,7 @@ export default defineComponent({
       // Plus besoin de mécanisme pour les distinguer.
       // @todo @urlUnsafe2 : Décommenter cette ligne
       // return `${this.baseUrl}/histovec/report${queryString}`
+
 },
 
     // ----- Interrogation de l'api pour le rapport acheteur -----
@@ -270,17 +275,17 @@ export default defineComponent({
     // ----- Accès rapide aux données du rapport -----
 
     dateMiseAJourFR () {
-      return this.processedVehiculeData.dateMiseAJour? formatIsoToFrDate(this.processedVehiculeData.dateMiseAJour): '01/01/1900'
+      return this.rapportData.dateMiseAJour? formatIsoToFrDate(this.rapportData.dateMiseAJour): '01/01/1900'
     },
     isCIAnnule () {
       return Boolean(
-        this.processedVehiculeData && this.processedVehiculeData.vehicule &&
-        this.processedVehiculeData.vehicule.situationAdmin &&
-        this.processedVehiculeData.vehicule.situationAdmin.isCiAnnule,
+        this.rapportData && this.rapportData.vehicule &&
+        this.rapportData.vehicule.situationAdmin &&
+        this.rapportData.vehicule.situationAdmin.isCiAnnule,
       )
     },
     isDefaultDataDate () {
-      return this.processedVehiculeData.dateMiseAJour === DEFAULT_DATE_UPDATE
+      return this.rapportData.dateMiseAJour === DEFAULT_DATE_UPDATE
     },
     isBuyer () {
       return Boolean(this.buyerId || this.buyerKey)
@@ -299,6 +304,13 @@ export default defineComponent({
       return mailTo(SHARE_REPORT_EMAIL)
     },
     // ----------------------------------------------
+    rapportDataStore(){
+      const rapport = this.store.getRapport
+      if(rapport) {
+        return rapport
+      }
+      return this.rapportData
+    },
   },
 
   beforeMount: async function () {
@@ -456,11 +468,8 @@ export default defineComponent({
     }
     // ---- Fin a supprimer
 
-    const rapport = this.store.getRapport
-    this.processedVehiculeData = rapport
-    this.controlesTechniques = rapport.vehicule.controlesTechniques
-
-    const areControlesTechinquesDisponibles = this.controlesTechniques.length
+    this.rapportData = this.store.getRapport
+    const areControlesTechinquesDisponibles = this.store.getControlesTechniques
 
     const defaultTabTitles = [
       { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
@@ -592,7 +601,7 @@ export default defineComponent({
         certificat: {
           datePremiereImmatriculation,
         },
-      } = this.processedVehiculeData
+      } = this.rapportData
 
       const numeroImmatriculation = this.formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV ? this.formData.siv.numeroImmatriculation : this.formData.fni.numeroImmatriculation
 
@@ -619,7 +628,7 @@ export default defineComponent({
           duplicataTitre: csaLabels.titre.duplicata,
           dvsCurrentStatusLines: csaLabels.dvsCurrentStatusLines,
           gagesCurrentStatusLines: csaLabels.gagesCurrentStatusLines,
-          historyItems: this.processedVehiculeData.historique.map((item) => `${item.date} ${item.nature}`),
+          historyItems: this.rapportData.historique.map((item) => `${item.date} ${item.nature}`),
           otcisCurrentStatusLines: csaLabels.otcisCurrentStatusLines,
           otcisPVCurrentStatusLines: csaLabels.otcisPVCurrentStatusLines,
           oveisCurrentStatusLines: csaLabels.oveisCurrentStatusLines,
@@ -871,6 +880,7 @@ export default defineComponent({
         >
           <OngletSynthese
             :is-rapport-vendeur="isRapportVendeur"
+            :rapport-data="rapportDataStore"
           />
         </DsfrTabContent>
 
@@ -881,7 +891,9 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 1"
           :asc="tabs.asc"
         >
-          <OngletVehicule />
+          <OngletVehicule
+            :caracteristiques-techniques="rapportDataStore?.vehicule?.caracteristiques"
+          />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -891,7 +903,12 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 2"
           :asc="tabs.asc"
         >
-          <OngletTitulaire />
+          <OngletTitulaire
+            :titulaires="rapportDataStore?.proprietaire"
+            :infos-import="rapportDataStore?.vehicule?.infosImport"
+            :infos="rapportDataStore?.vehicule?.infos"
+            :certificat-immatriculation="rapportDataStore?.certificatImmatriculation"
+          />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -903,6 +920,9 @@ export default defineComponent({
         >
           <OngletSituationAdministrative
             :is-rapport-vendeur="isRapportVendeur"
+            :situation-administrative="rapportDataStore?.vehicule?.situationAdmin"
+            :infos="rapportDataStore?.vehicule?.infos"
+            :certificat-immatriculation="rapportDataStore?.certificatImmatriculation"
           />
         </DsfrTabContent>
 
@@ -913,7 +933,11 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 4"
           :asc="tabs.asc"
         >
-          <OngletHistorique />
+          <OngletHistorique
+            :historique-data="rapportDataStore?.vehicule?.historique"
+            :vehicule-importe="rapportDataStore?.vehicule?.infosImport?.isImported"
+            :date-premiere-immatriculation-etranger="rapportDataStore?.vehicule?.infosImport?.datePremiereImmatEtranger"
+          />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -923,7 +947,9 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 5"
           :asc="tabs.asc"
         >
-          <OngletControlesTechniques />
+          <OngletControlesTechniques
+            :controles-techniques-historique="rapportDataStore?.vehicule?.controlesTechniques"
+          />
         </DsfrTabContent>
 
         <DsfrTabContent
@@ -933,7 +959,9 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 6"
           :asc="tabs.asc"
         >
-          <OngletKilometrage />
+          <OngletKilometrage
+            :controles-techniques-historique="rapportDataStore?.vehicule?.controlesTechniques"
+          />
         </DsfrTabContent>
       </DsfrTabs>
     </div>

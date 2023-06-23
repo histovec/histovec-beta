@@ -1,54 +1,31 @@
 <script>
 import { defineComponent } from 'vue'
 import { formatIsoToFrDate } from '@Assets/js/format'
-import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
   name: 'OngletTitulaire',
-
+  props:{
+    titulaires: {
+      type: Object,
+      default: null,
+    },
+    infosImport: {
+      type: Object,
+      default: null,
+    },
+    infos: {
+      type: Object,
+      default: null,
+    },
+    certificatImmatriculation: {
+      type: Object,
+      default: null,
+    },
+  },
   data () {
     return {
       formatIsoToFrDate,
-      store: useRapportStore(),
-      titulaire: {
-        codePostal: '',
-        particulier : {},
-      },
-      infoImport:{},
-      info:{},
-      certificatImmat: {},
     }
-  },
-
-  computed: {
-    titulaires () {
-      const rapport = this.store.getRapport
-      if (rapport) {
-        return rapport.proprietaire
-        }
-      return this.titulaire
-    },
-    infosImport () {
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return rapport.vehicule.infosImport
-      }
-      return this.infoImport
-    },
-    infos () {
-      const rapport = this.store.getRapport
-      if (rapport){
-        return rapport.vehicule.infos
-      }
-      return this.info
-    },
-    certificatImmatriculation (){
-      const rapport = this.store.getRapport
-      if (rapport){
-        return rapport.certificatImmatriculation
-      }
-      return this.certificatImmat
-    },
   },
 })
 </script>
@@ -72,7 +49,7 @@ export default defineComponent({
       id="valeur-identite"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ titulaires.particulier.nomNaissance }} {{ titulaires.particulier.prenom }}
+      {{ titulaires?.particulier?.nomNaissance }} {{ titulaires?.particulier?.prenom }}
     </div>
 
     <div
@@ -85,7 +62,7 @@ export default defineComponent({
       id="valeur-code-postal"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >
-      {{ titulaires.codePostal }}
+      {{ titulaires?.codePostal }}
     </div>
 
     <div class="fr-col-12  fr-pt-3w  fr-pb-2w">
@@ -108,14 +85,14 @@ export default defineComponent({
       id="valeur-date-immatriculation-etranger"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(infosImport.datePremiereImmatEtranger) }}
+      {{ formatIsoToFrDate(infosImport?.datePremiereImmatEtranger) }}
     </div>
     <div
       v-if="!infosImport.isImported"
       id="valeur-date-immatriculation"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(infos.datePremiereImmatriculation) }}
+      {{ formatIsoToFrDate(infos?.datePremiereImmatriculation) }}
     </div>
 
     <template v-if="infosImport.isImported">
@@ -129,7 +106,7 @@ export default defineComponent({
         id="valeur-date-immatriculation-france"
         class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
       >
-        {{ formatIsoToFrDate(infosImport.dateImportFrance) }}
+        {{ formatIsoToFrDate(infosImport?.dateImportFrance) }}
       </div>
     </template>
 
@@ -143,7 +120,7 @@ export default defineComponent({
       id="valeur-date-certificat"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(certificatImmatriculation.dateEmission) }}
+      {{ formatIsoToFrDate(certificatImmatriculation?.dateEmission) }}
     </div>
   </div>
 </template>

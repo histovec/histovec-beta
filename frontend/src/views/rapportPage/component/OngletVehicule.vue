@@ -1,26 +1,15 @@
 <script>
 import {defineComponent} from 'vue'
-import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
   name: 'OngletVehicule',
 
-  data () {
-    return {
-      store: useRapportStore(),
-      caracteristiqueTechnique: {},
-    }
-  },
-  computed: {
-    caracteristiquesTechniques () {
-      const rapport = this.store.getRapport
-      if (rapport) {
-        return rapport.vehicule.caracteristiques
-      }
-      return this.caracteristiqueTechnique
+  props:{
+    caracteristiquesTechniques: {
+      type: Object,
+      default: null,
     },
   },
-
 })
 </script>
 
@@ -40,7 +29,7 @@ export default defineComponent({
       D.1
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4 fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.marque }}
+      {{ caracteristiquesTechniques?.marque }}
     </div>
 
     <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
@@ -50,7 +39,7 @@ export default defineComponent({
       D.2
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.tvv }}
+      {{ caracteristiquesTechniques?.tvv }}
     </div>
 
     <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
@@ -60,7 +49,7 @@ export default defineComponent({
       D.2.1
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.numCnit }}
+      {{ caracteristiquesTechniques?.numCnit }}
     </div>
 
     <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
@@ -70,7 +59,7 @@ export default defineComponent({
       D.3
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.nomCommercial }}
+      {{ caracteristiquesTechniques?.nomCommercial }}
     </div>
 
     <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
@@ -79,7 +68,7 @@ export default defineComponent({
     <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.couleur }}
+      {{ caracteristiquesTechniques?.couleur }}
     </div>
 
     <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
@@ -88,7 +77,7 @@ export default defineComponent({
     <div class="fr-col-4 fr-col-sm-4 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  fr-pt-0  fr-pb-1w">
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.typeReception }}
+      {{ caracteristiquesTechniques?.typeReception }}
     </div>
 
     <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
@@ -98,10 +87,10 @@ export default defineComponent({
       E
     </div>
     <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-      {{ caracteristiquesTechniques.vin }}
+      {{ caracteristiquesTechniques?.vin }}
     </div>
 
-    <template v-if="caracteristiquesTechniques.champF1">
+    <template v-if="caracteristiquesTechniques?.champF1">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         PT techniquement admissible (kg)
       </div>
@@ -109,11 +98,11 @@ export default defineComponent({
         F.1
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.champF1 }}
+        {{ caracteristiquesTechniques?.champF1 }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.champF2">
+    <template v-if="caracteristiquesTechniques?.champF2">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         PTAC (kg)
       </div>
@@ -121,11 +110,11 @@ export default defineComponent({
         F.2
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.champF2 }}
+        {{ caracteristiquesTechniques?.champF2 }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.champF3">
+    <template v-if="caracteristiquesTechniques?.champF3">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         PTRA (kg)
       </div>
@@ -133,11 +122,11 @@ export default defineComponent({
         F.3
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.champF3 }}
+        {{ caracteristiquesTechniques?.champF3 }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.champG">
+    <template v-if="caracteristiquesTechniques?.champG">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         PT en service (kg)
       </div>
@@ -145,11 +134,11 @@ export default defineComponent({
         G
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.champG }}
+        {{ caracteristiquesTechniques?.champG }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.champG1">
+    <template v-if="caracteristiquesTechniques?.champG1">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         PTAV (kg)
       </div>
@@ -157,11 +146,11 @@ export default defineComponent({
         G.1
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.champG1 }}
+        {{ caracteristiquesTechniques?.champG1 }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.categorie">
+    <template v-if="caracteristiquesTechniques?.categorie">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Catégorie (CE)
       </div>
@@ -169,11 +158,11 @@ export default defineComponent({
         J
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.categorie }}
+        {{ caracteristiquesTechniques?.categorie }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.genre">
+    <template v-if="caracteristiquesTechniques?.genre">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Genre (National)
       </div>
@@ -181,11 +170,11 @@ export default defineComponent({
         J.1
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.genre }}
+        {{ caracteristiquesTechniques?.genre }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.carrosserieCe">
+    <template v-if="caracteristiquesTechniques?.carrosserieCe">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Carrosserie (CE)
       </div>
@@ -193,11 +182,11 @@ export default defineComponent({
         J.2
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.carrosserieCe }}
+        {{ caracteristiquesTechniques?.carrosserieCe }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.carrosserieNationale">
+    <template v-if="caracteristiquesTechniques?.carrosserieNationale">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Carrosserie (National)
       </div>
@@ -205,11 +194,11 @@ export default defineComponent({
         J.3
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.carrosserieNationale }}
+        {{ caracteristiquesTechniques?.carrosserieNationale }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.numeroReception">
+    <template v-if="caracteristiquesTechniques?.numeroReception">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Numéro de réception
       </div>
@@ -217,11 +206,11 @@ export default defineComponent({
         K
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.numeroReception }}
+        {{ caracteristiquesTechniques?.numeroReception }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.cylindree">
+    <template v-if="caracteristiquesTechniques?.cylindree">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Cylindrée (cm3)
       </div>
@@ -229,11 +218,11 @@ export default defineComponent({
         P.1
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.cylindree }}
+        {{ caracteristiquesTechniques?.cylindree }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.puissanceNette">
+    <template v-if="caracteristiquesTechniques?.puissanceNette">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Puissance nette max (kW)
       </div>
@@ -241,11 +230,11 @@ export default defineComponent({
         P.2
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.puissanceNette }}
+        {{ caracteristiquesTechniques?.puissanceNette }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.energie">
+    <template v-if="caracteristiquesTechniques?.energie">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Energie
       </div>
@@ -253,11 +242,11 @@ export default defineComponent({
         P.3
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.energie }}
+        {{ caracteristiquesTechniques?.energie }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.puissanceCv">
+    <template v-if="caracteristiquesTechniques?.puissanceCv">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Puissance CV
       </div>
@@ -265,11 +254,11 @@ export default defineComponent({
         P.6
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.puissanceCv }}
+        {{ caracteristiquesTechniques?.puissanceCv }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.rapportPuissMasse">
+    <template v-if="caracteristiquesTechniques?.rapportPuissMasse">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Puissance / masse (kW/kg)
       </div>
@@ -277,11 +266,11 @@ export default defineComponent({
         Q
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.rapportPuissMasse }}
+        {{ caracteristiquesTechniques?.rapportPuissMasse }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.nbPlacesAssises">
+    <template v-if="caracteristiquesTechniques?.nbPlacesAssises">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Places assises
       </div>
@@ -289,11 +278,11 @@ export default defineComponent({
         S.1
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.nbPlacesAssises }}
+        {{ caracteristiquesTechniques?.nbPlacesAssises }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.nbPlacesDebout">
+    <template v-if="caracteristiquesTechniques?.nbPlacesDebout">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Places debout
       </div>
@@ -301,11 +290,11 @@ export default defineComponent({
         S.2
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.nbPlacesDebout }}
+        {{ caracteristiquesTechniques?.nbPlacesDebout }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.niveauSonore">
+    <template v-if="caracteristiquesTechniques?.niveauSonore">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Niveau sonore (db(A))
       </div>
@@ -313,11 +302,11 @@ export default defineComponent({
         U.1
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.niveauSonore }}
+        {{ caracteristiquesTechniques?.niveauSonore }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.vitesseMoteur">
+    <template v-if="caracteristiquesTechniques?.vitesseMoteur">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Vitesse moteur (min-1)
       </div>
@@ -325,11 +314,11 @@ export default defineComponent({
         U.2
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.vitesseMoteur }}
+        {{ caracteristiquesTechniques?.vitesseMoteur }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.co2">
+    <template v-if="caracteristiquesTechniques?.co2">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         CO2 (g/km)
       </div>
@@ -337,11 +326,11 @@ export default defineComponent({
         V.7
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.co2 }}
+        {{ caracteristiquesTechniques?.co2 }}
       </div>
     </template>
 
-    <template v-if="caracteristiquesTechniques.pollution">
+    <template v-if="caracteristiquesTechniques?.pollution">
       <div class="fr-col-8 fr-col-sm-8 fr-col-md-6 fr-col-lg-6 fr-col-xl-6  fr-pt-0  fr-pb-1w">
         Classe environnement (CE)
       </div>
@@ -349,7 +338,7 @@ export default defineComponent({
         V.9
       </div>
       <div class="fr-col-12 fr-col-sm-12 fr-col-md-4 fr-col-lg-4 fr-col-xl-4  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ caracteristiquesTechniques.pollution }}
+        {{ caracteristiquesTechniques?.pollution }}
       </div>
     </template>
   </div>
