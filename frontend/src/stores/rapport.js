@@ -3,6 +3,7 @@ import axios from 'axios'
 import api from '@Api/index.js'
 import { vehiculeMapping } from '@Utils/mapping/mapper';
 import { formaterRapport } from '@Utils/format/formatRapport'
+import { schemaValidationData } from '@Utils/validation/schemaValidationData'
 
 export const useRapportStore = defineStore('rapport',{
   state: () => ({
@@ -33,10 +34,10 @@ export const useRapportStore = defineStore('rapport',{
     },
   },
   actions: {
-    async fetchRapportSivPersonne(dataBody, id) {
+    async fetchRapport(url, dataBody, id) {
       try {
         this.chargement = true
-        const data = await axios.post('/report_by_data/siv/personne', dataBody)
+        const data = await axios.post('/report_by_data'.concat(url), dataBody)
 
         if (data.status !== 200) {
           api.log('/holder/notFound')
@@ -47,7 +48,16 @@ export const useRapportStore = defineStore('rapport',{
           this.rapportData = null
           this.chargement = false
         } else {
-          // todo Ajouter la vérification des datas
+          // validation des datas
+          try {
+            await schemaValidationData.validateSync(data.data);
+          } catch (error) {
+            this.id = id
+            this.status = null
+            this.message = 'Un problème est survenu lors de la récupération des données. Veuillez réessayer plus tard.'
+            this.rapportData = null
+            this.chargement = false
+          }
 
           // mappe la réponse
           let rapport = vehiculeMapping(data.data)
@@ -71,6 +81,9 @@ export const useRapportStore = defineStore('rapport',{
         this.rapportData = null
         this.chargement = false
       }
+    },
+    async fetchRapportSivPersonne(dataBody, id) {
+      await this.fetchRapport('/siv/personne', dataBody, id)
     },
   },
 })
