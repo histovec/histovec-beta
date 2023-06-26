@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import api from '@Api/index.js'
 import { vehiculeMapping } from '@Utils/mapping/mapper';
+import { formaterRapport } from '@Utils/format/formatRapport'
 
 export const useRapportStore = defineStore('rapport',{
   state: () => ({
@@ -45,12 +46,16 @@ export const useRapportStore = defineStore('rapport',{
         } else {
           // todo Ajouter la vérification des datas
 
+          // mappe la réponse
+          let rapport = vehiculeMapping(data.data)
+
+          // formate les dates
+          rapport = formaterRapport(rapport)
+
           this.id = id
           this.status = data.status
           this.message = data.message
-
-          // todo ajouter le format des dates
-          this.rapportData = vehiculeMapping(data.data)
+          this.rapportData = rapport
           this.chargement = false
         }
       }
