@@ -65,11 +65,9 @@ export const syntheseVehiculeMapping = (etatCI, isVehiculeVole, syntheseSituatio
 
 
 
-export const normalizeForFrontendDisplay = (elements, format) => {
-  const formattedElements = format ? elements.map(format) : elements
-
+export const ordonneParDateAntechronologique = (elements) => {
   return orderBy(
-    formattedElements,
+    elements,
     ['date'],
     ['desc'],
   )

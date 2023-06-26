@@ -2,7 +2,7 @@
 import {defineComponent} from 'vue'
 
 import syntheseMapping from '@Assets/json/synthese.json'
-import { normalizeForFrontendDisplay } from '@Utils/normaliserDonneesPageRapport'
+import { ordonneParDateAntechronologique } from '@Utils/normaliserDonneesPageRapport'
 
 export default defineComponent({
   name: 'OngletSituationAdministrative',
@@ -38,7 +38,8 @@ export default defineComponent({
     oppositions () {
       if(this.situationAdministrative) {
         const oppositionsLabelise = this.situationAdministrative.oppositions.informations
-        return normalizeForFrontendDisplay(
+        console.log(oppositionsLabelise)
+        return ordonneParDateAntechronologique(
           [
             ...(oppositionsLabelise.oveis.length ? [{
               date: oppositionsLabelise.oveis[0].date,

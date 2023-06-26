@@ -303,13 +303,7 @@ export default defineComponent({
       return mailTo(SHARE_REPORT_EMAIL)
     },
     // ----------------------------------------------
-    rapportDataStore(){
-      const rapport = this.store.getRapport
-      if(rapport) {
-        return rapport
-      }
-      return this.rapportData
-    },
+
   },
 
   beforeMount: async function () {
@@ -879,7 +873,7 @@ export default defineComponent({
         >
           <OngletSynthese
             :is-rapport-vendeur="isRapportVendeur"
-            :rapport-data="rapportDataStore"
+            :rapport-data="rapportData"
           />
         </DsfrTabContent>
 
@@ -891,7 +885,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletVehicule
-            :caracteristiques-techniques="rapportDataStore?.vehicule?.caracteristiques"
+            :caracteristiques-techniques="rapportData?.vehicule?.caracteristiques"
           />
         </DsfrTabContent>
 
@@ -903,10 +897,10 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletTitulaire
-            :titulaires="rapportDataStore?.proprietaire"
-            :infos-import="rapportDataStore?.vehicule?.infosImport"
-            :infos="rapportDataStore?.vehicule?.infos"
-            :certificat-immatriculation="rapportDataStore?.certificatImmatriculation"
+            :titulaires="rapportData?.proprietaire"
+            :infos-import="rapportData?.vehicule?.infosImport"
+            :infos="rapportData?.vehicule?.infos"
+            :certificat-immatriculation="rapportData?.certificatImmatriculation"
           />
         </DsfrTabContent>
 
@@ -919,9 +913,9 @@ export default defineComponent({
         >
           <OngletSituationAdministrative
             :is-rapport-vendeur="isRapportVendeur"
-            :situation-administrative="rapportDataStore?.vehicule?.situationAdmin"
-            :infos="rapportDataStore?.vehicule?.infos"
-            :certificat-immatriculation="rapportDataStore?.certificatImmatriculation"
+            :situation-administrative="rapportData?.vehicule?.situationAdmin"
+            :infos="rapportData?.vehicule?.infos"
+            :certificat-immatriculation="rapportData?.certificatImmatriculation"
           />
         </DsfrTabContent>
 
@@ -933,9 +927,9 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletHistorique
-            :historique-data="rapportDataStore?.vehicule?.historique"
-            :vehicule-importe="rapportDataStore?.vehicule?.infosImport?.isImported"
-            :date-premiere-immatriculation-etranger="rapportDataStore?.vehicule?.infosImport?.datePremiereImmatEtranger"
+            :historique-data="rapportData?.vehicule?.historique"
+            :vehicule-importe="rapportData?.vehicule?.infosImport?.isImported"
+            :date-premiere-immatriculation-etranger="rapportData?.vehicule?.infosImport?.datePremiereImmatEtranger"
           />
         </DsfrTabContent>
 
@@ -947,7 +941,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletControlesTechniques
-            :controles-techniques-historique="rapportDataStore?.vehicule?.controlesTechniques"
+            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"
           />
         </DsfrTabContent>
 
@@ -959,7 +953,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletKilometrage
-            :controles-techniques-historique="rapportDataStore?.vehicule?.controlesTechniques"
+            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"
           />
         </DsfrTabContent>
       </DsfrTabs>

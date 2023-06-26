@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest';
-import { normalizeForFrontendDisplay, syntheseVehiculeMapping } from '@Utils/normaliserDonneesPageRapport'
+import { ordonneParDateAntechronologique, syntheseVehiculeMapping } from '@Utils/normaliserDonneesPageRapport'
 
 describe('ordonne par ordre croissant', () => {
 
   test('Doit ordonner dans un ordre décroissant les dates', () => {
     const dateDesordre = [{date:'2022-04-06'}, {date:'2022-04-08'}, {date:'2022-04-07'}]
     const dateOrdre = [{date:'2022-04-08'}, {date:'2022-04-07'}, {date:'2022-04-06'}]
-    expect(normalizeForFrontendDisplay(dateDesordre)).toStrictEqual(dateOrdre)
+    expect(ordonneParDateAntechronologique(dateDesordre)).toStrictEqual(dateOrdre)
   })
 
 })
