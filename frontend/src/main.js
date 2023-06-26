@@ -19,7 +19,7 @@ dayjs.extend(customParseFormat)
 
 
 window.addEventListener('beforeunload', function () {
-  navigator.sendBeacon(apiUrl + 'log/exit')
+  navigator.sendBeacon(apiUrl + '/log/exit')
 }, false)
 
 router.beforeEach((to, from, next) => {

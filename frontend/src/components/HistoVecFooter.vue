@@ -46,7 +46,7 @@ export default defineComponent({
             to: '/plan-du-site',
           },
           {
-            label: 'Accessibilité : non conforme',
+            label: 'Accessibilité : partiellement conforme',
             to: '/accessibilite',
           },
           {
