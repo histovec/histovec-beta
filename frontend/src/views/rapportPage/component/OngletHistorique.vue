@@ -1,6 +1,5 @@
 <script>
 import {defineComponent} from 'vue'
-import { formatIsoToFrDate } from '@Assets/js/format'
 
 import operationsMapping from '@Assets/json/operations.json'
 
@@ -22,10 +21,7 @@ export default defineComponent({
   },
   data () {
     return {
-      formatIsoToFrDate,
-
       operationsMapping,
-
     }
   },
 
@@ -87,7 +83,7 @@ export default defineComponent({
       :key="index"
     >
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-        <span class="txt-small-12">{{ formatIsoToFrDate(entry.date) }}</span>
+        <span class="txt-small-12">{{ entry.date }}</span>
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-text--bleu">
         <span class="info_red txt-small-12">

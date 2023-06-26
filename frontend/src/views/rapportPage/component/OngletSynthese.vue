@@ -2,7 +2,6 @@
 import {defineComponent} from 'vue'
 
 import syntheseMapping from '@Assets/json/synthese.json'
-import { formatIsoToFrDate } from '@Assets/js/format'
 import { getExposant } from '@Utils/format.js'
 import { USAGE_AGRICOLE, USAGE_COLLECTION } from '@Constants/usagesSynthese.js'
 import { syntheseVehiculeMapping } from '@Utils/normaliserDonneesPageRapport'
@@ -23,7 +22,6 @@ export default defineComponent({
   data() {
     return {
       syntheseMapping,
-      formatIsoToFrDate,
       getExposant,
 
       hasProcedureVE:{},
@@ -81,7 +79,7 @@ export default defineComponent({
 
     datePremiereImmatriculationFR () {
       if(this.rapportData.vehicule.infos) {
-        return formatIsoToFrDate(this.rapportData.vehicule.infos.datePremiereImmatriculation)
+        return this.rapportData.vehicule.infos.datePremiereImmatriculation
       }
       return this.datePremImmatriculationFR
     },

@@ -1,6 +1,5 @@
 <script>
 import { defineComponent } from 'vue'
-import { formatIsoToFrDate } from '@Assets/js/format'
 
 export default defineComponent({
   name: 'OngletTitulaire',
@@ -21,11 +20,6 @@ export default defineComponent({
       type: Object,
       default: null,
     },
-  },
-  data () {
-    return {
-      formatIsoToFrDate,
-    }
   },
 })
 </script>
@@ -85,14 +79,14 @@ export default defineComponent({
       id="valeur-date-immatriculation-etranger"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(infosImport?.datePremiereImmatEtranger) }}
+      {{ infosImport?.datePremiereImmatEtranger }}
     </div>
     <div
       v-if="!infosImport.isImported"
       id="valeur-date-immatriculation"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(infos?.datePremiereImmatriculation) }}
+      {{ infos?.datePremiereImmatriculation }}
     </div>
 
     <template v-if="infosImport.isImported">
@@ -106,7 +100,7 @@ export default defineComponent({
         id="valeur-date-immatriculation-france"
         class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
       >
-        {{ formatIsoToFrDate(infosImport?.dateImportFrance) }}
+        {{ infosImport?.dateImportFrance }}
       </div>
     </template>
 
@@ -120,7 +114,7 @@ export default defineComponent({
       id="valeur-date-certificat"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(certificatImmatriculation?.dateEmission) }}
+      {{ certificatImmatriculation?.dateEmission }}
     </div>
   </div>
 </template>

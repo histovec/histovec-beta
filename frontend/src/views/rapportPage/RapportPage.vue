@@ -28,7 +28,6 @@ import api from '@Api/index.js'
 
 import reportService from '@/services/report.js'
 
-import { formatIsoToFrDate } from '@Assets/js/format.js'
 import operationsMapping from '@Assets/json/operations.json'
 import syntheseMapping from '@Assets/json/synthese.json'
 
@@ -275,7 +274,7 @@ export default defineComponent({
     // ----- Accès rapide aux données du rapport -----
 
     dateMiseAJourFR () {
-      return this.rapportData.dateMiseAJour? formatIsoToFrDate(this.rapportData.dateMiseAJour): '01/01/1900'
+      return this.rapportData.dateMiseAJour? this.rapportData.dateMiseAJour: '01/01/1900'
     },
     isCIAnnule () {
       return Boolean(
