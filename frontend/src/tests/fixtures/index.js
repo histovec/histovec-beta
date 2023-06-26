@@ -24,7 +24,15 @@ import { reponseIvtParticulierFormat200 } from '@/tests/fixtures/api/mapper/repo
 import { reponseIvtProfessionnelFormat200 } from '@/tests/fixtures/api/mapper/reponseIvtProfessionnelFormat200'
 import { reponseCodeFormat200 } from '@/tests/fixtures/api/mapper/reponseCodeFormat200'
 
+// reponse format
+import { dataSivParticulierFormat200 } from '@/tests/fixtures/api/format/dataSivParticulierFormat200'
+import { dataSivParticulierFormat200SansGages } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansGages'
+import { dataSivParticulierFormat200SansDvs } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansDvs'
+import { dataSivParticulierFormat200SansSuspensions } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansSuspensions'
+import { dataSivParticulierFormat200SansOppositions } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansOppositions'
+
 export {
+  // reponse back OK
   reponseRequeteApiSivParticulier200,
   reponseRequeteApiSivParticulier200SansGages,
   reponseRequeteApiSivParticulier200SansDvs,
@@ -34,6 +42,10 @@ export {
   reponseRequeteApiIvtParticulier200,
   reponseRequeteApiIvtProfessionnel200,
   reponseRequeteApiCode200,
+  // reponse back KO
+  reponseRequeteApi404,
+  reponseRequeteApiErreur500,
+  // reponse mapped
   reponseSivParticulierFormat200,
   reponseSivParticulierFormat200SansGages,
   reponseSivParticulierFormat200SansDvs,
@@ -43,6 +55,10 @@ export {
   reponseIvtParticulierFormat200,
   reponseIvtProfessionnelFormat200,
   reponseCodeFormat200,
-  reponseRequeteApi404,
-  reponseRequeteApiErreur500,
+  // reponse format
+  dataSivParticulierFormat200,
+  dataSivParticulierFormat200SansGages,
+  dataSivParticulierFormat200SansDvs,
+  dataSivParticulierFormat200SansSuspensions,
+  dataSivParticulierFormat200SansOppositions,
 }
