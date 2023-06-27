@@ -1,15 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import api from '@Api/index.js'
-import { vehiculeMapping } from '@Utils/mapping/mapper';
-import { formaterRapport } from '@Utils/format/formatRapport'
-import { schemaValidationData } from '@Utils/validation/schemaValidationData'
 
 export const useRapportStore = defineStore('rapport',{
   state: () => ({
     id: null,
     status: null,
     message: null,
+    reponseData: null,
     rapportData: null,
     chargement: false,
   }),
@@ -22,6 +20,9 @@ export const useRapportStore = defineStore('rapport',{
     },
     getMessage(state){
       return state.message
+    },
+    getReponseData(state){
+      return state.reponseData
     },
     getRapport(state){
       return state.rapportData
@@ -45,30 +46,15 @@ export const useRapportStore = defineStore('rapport',{
           this.id = id
           this.status = data.status
           this.message = data.message
+          this.reponseData = null
           this.rapportData = null
           this.chargement = false
         } else {
-          // validation des datas
-          try {
-            await schemaValidationData.validateSync(data.data);
-          } catch (error) {
-            this.id = id
-            this.status = null
-            this.message = 'Un problème est survenu lors de la récupération des données. Veuillez réessayer plus tard.'
-            this.rapportData = null
-            this.chargement = false
-          }
-
-          // mappe la réponse
-          let rapport = vehiculeMapping(data.data)
-
-          // formate les dates
-          rapport = formaterRapport(rapport)
-
           this.id = id
           this.status = data.status
           this.message = data.message
-          this.rapportData = rapport
+          this.reponseData = data.data
+          this.rapportData = null
           this.chargement = false
         }
       }
@@ -78,12 +64,16 @@ export const useRapportStore = defineStore('rapport',{
         this.id = id
         this.status = error.response.status
         this.message = error.response.statusText
+        this.reponseData = null
         this.rapportData = null
         this.chargement = false
       }
     },
     async fetchRapportSivPersonne(dataBody, id) {
       await this.fetchRapport('/siv/personne', dataBody, id)
+    },
+    async setRapport(rapport) {
+      this.rapportData = rapport
     },
   },
 })

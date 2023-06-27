@@ -3,6 +3,11 @@ import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 import { useRapportStore } from '@Stores/rapport'
 import genererId from '@Services/genererId'
 import api from '@Api/index.js'
+import { vehiculeMapping } from '@Utils/mapping/mapper';
+import { formaterRapport } from '@Utils/format/formatRapport'
+import { schemaValidationData } from '@Utils/validation/schemaValidationData'
+import router from '@/router'
+import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 
 const store = useRapportStore()
 
@@ -35,6 +40,31 @@ const fetchRapportProprietaire = async (data) => {
     if (typePersonne === TYPE_PERSONNE.PRO) {
       // todo ajouter la bonne requete
     }
+  }
+
+  // todo retirer la vaiable refonteEnCours
+  const refonteEnCours = true
+  if (!refonteEnCours && this.store.getStatus !== 200) {
+    gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
+  }
+
+  try {
+    let rapport = store.getReponseData
+
+    // vérification de datas
+    await schemaValidationData.validateSync(rapport)
+
+    // mappe la réponse
+    rapport = vehiculeMapping(rapport)
+
+    // formate les dates
+    rapport = formaterRapport(rapport)
+
+    store.setRapport(rapport)
+  } catch (error) {
+    router.push({
+      name: 'serviceIndisponible',
+    })
   }
 }
 

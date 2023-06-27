@@ -8,18 +8,25 @@ import { formaterDataRequete } from '@Services/api/formaterDataRequete';
 describe('gestionAppelApi', () => {
   let spyProprietaireId
   let spyApiLog
+  let spyStoreFetch
+
+  const fetchRapportSivPersonne = () => { return true }
+  const storeMock = {
+    fetchRapportSivPersonne,
+  }
 
   beforeAll(async () => {
     // spy
     spyProprietaireId = vi.spyOn(genererId, 'proprietaireId').mockReturnValue('ug3MHWbREx5dhxmqFklU0mm9HY+cM923ZGDF5PvrDYQ=')
     spyApiLog = vi.spyOn(api, 'log').mockReturnValue(true)
+    spyStoreFetch = vi.spyOn(storeMock, 'fetchRapportSivPersonne')
 
     // mock
     vi.mock('@Stores/rapport', () => ({
       useRapportStore: vi.fn(() => { return {
-        getId: null,
+        getId: 'ug3MHWbREx5dhxmqFklU0mm9HY+cM923ZGDF5PvrDYQ=',
         getRapport: { data: 'informations vehicule'},
-        fetchRapportSivPersonne: vi.fn(() => { return true }),
+        fetchRapportSivPersonne: vi.fn((dataBody, id) => { return storeMock.fetchRapportSivPersonne(dataBody, id) }),
       } }),
     }))
     vi.mock('@Services/api/formaterDataRequete', () => {
@@ -37,12 +44,13 @@ describe('gestionAppelApi', () => {
     vi.resetAllMocks()
   })
 
-  test('récupérer les datas dans le store', async () => {
+  test('récupérer les datas du cache', async () => {
     await gestionAppelApi.fetchRapportProprietaire(formDataSivParticulier)
 
     expect(spyProprietaireId).toHaveBeenCalledTimes(1)
-    expect(spyApiLog).toHaveBeenCalledTimes(0)
-    expect(vi.mocked(formaterDataRequete)).toHaveBeenCalledTimes(1)
-    expect(vi.mocked(formaterDataRequete)).toBeCalledWith(formDataSivParticulier)
+    expect(spyApiLog).toHaveBeenCalledTimes(1)
+    expect(spyApiLog).toBeCalledWith('/holder/cached')
+    expect(vi.mocked(formaterDataRequete)).toHaveBeenCalledTimes(0)
+    expect(spyStoreFetch).toHaveBeenCalledTimes(0)
   })
 })
