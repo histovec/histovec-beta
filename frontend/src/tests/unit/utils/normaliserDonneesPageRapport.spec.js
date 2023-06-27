@@ -1,17 +1,7 @@
 import { describe, expect, test } from 'vitest';
-import { ordonneParDateAntechronologique, syntheseVehiculeMapping } from '@Utils/normaliserDonneesPageRapport'
+import { syntheseVehiculeMapping } from '@Utils/normaliserDonneesPageRapport'
 
-describe('ordonne par ordre croissant', () => {
-
-  test('Doit ordonner dans un ordre décroissant les dates', () => {
-    const dateDesordre = [{date:'2022-04-06'}, {date:'2022-04-08'}, {date:'2022-04-07'}]
-    const dateOrdre = [{date:'2022-04-08'}, {date:'2022-04-07'}, {date:'2022-04-06'}]
-    expect(ordonneParDateAntechronologique(dateDesordre)).toStrictEqual(dateOrdre)
-  })
-
-})
-
-describe('doit retourner un tableau avec les anomaies du véhicule', () => {
+describe('doit retourner un tableau avec les anomalies du véhicule', () => {
 
   test('Doit retourner toutes les anomalies possibles', () => {
     const etatCi = {

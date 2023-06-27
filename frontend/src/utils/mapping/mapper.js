@@ -1,10 +1,21 @@
+import orderBy from 'lodash.orderby';
+
+export const ordonneParDateAntechronologique = (elements) => {
+  return orderBy(
+    elements,
+    ['date'],
+    ['desc'],
+  )
+}
+
 export function historiqueMapping (historique) {
-  return historique.map(({ date, type }) => (
+  const historiqueMappe =  historique.map(({ date, type }) => (
     {
       date,
       type,
     }
   ))
+  return ordonneParDateAntechronologique(historiqueMappe)
 }
 
 export function queryMapping (incomingQuery) {
@@ -62,7 +73,7 @@ export function queryMapping (incomingQuery) {
 }
 
 export function controlesTechniquesMapping (controlesTechniques) {
-  return controlesTechniques.map(({ date, nature, resultat, km }) => (
+  const controlesTechniquesMappe = controlesTechniques.map(({ date, nature, resultat, km }) => (
     {
       date,
       nature,
@@ -70,6 +81,7 @@ export function controlesTechniquesMapping (controlesTechniques) {
       km,
     }
   ))
+  return ordonneParDateAntechronologique(controlesTechniquesMappe)
 }
 
 export function proprietaireMapping(proprietaire) {
@@ -112,7 +124,7 @@ export function gagesMapping (gages) {
 
   return {
     hasGages,
-    informations: informationsMapped,
+    informations: ordonneParDateAntechronologique(informationsMapped),
   }
 }
 
@@ -133,7 +145,7 @@ export function dvsMapping (dvs) {
 
   return {
     hasDvs,
-    informations: informationsMapped,
+    informations: ordonneParDateAntechronologique(informationsMapped),
   }
 }
 
@@ -156,16 +168,17 @@ export function suspensionsMapping (suspensions) {
 
   return {
     hasSuspensions,
-    informations: informationsMapped,
+    informations: ordonneParDateAntechronologique(informationsMapped),
   }
 }
 
 export function oppositionsTypeMapping (oppositionsType) {
-  return oppositionsType.map(({ date }) => (
+  const oppositionsMappe =  oppositionsType.map(({ date }) => (
     {
       date,
     }
   ))
+  return ordonneParDateAntechronologique(oppositionsMappe)
 }
 
 export function oppositionsMapping (oppositions) {

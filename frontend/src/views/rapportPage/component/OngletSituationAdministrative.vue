@@ -2,7 +2,7 @@
 import {defineComponent} from 'vue'
 
 import syntheseMapping from '@Assets/json/synthese.json'
-import { ordonneParDateAntechronologique } from '@Utils/normaliserDonneesPageRapport'
+import { ordonneParDateAntechronologique } from '@Utils/mapping/mapper.js'
 
 export default defineComponent({
   name: 'OngletSituationAdministrative',
@@ -38,7 +38,6 @@ export default defineComponent({
     oppositions () {
       if(this.situationAdministrative) {
         const oppositionsLabelise = this.situationAdministrative.oppositions.informations
-        console.log(oppositionsLabelise)
         return ordonneParDateAntechronologique(
           [
             ...(oppositionsLabelise.oveis.length ? [{

@@ -1,7 +1,6 @@
 <script>
 import {defineComponent} from 'vue'
 import { RESULTAT } from '@/constants/controlesTechniques.js'
-import { normalizedControlesTechniquesHistorique } from '@Utils/controlesTechniquesComposant'
 
 export default defineComponent({
   name: 'OngletControlesTechniques',
@@ -10,11 +9,6 @@ export default defineComponent({
       type: Array,
       default: new Array([]),
     },
-  },
-  data () {
-    return {
-      normalizedControlesTechniquesHistorique,
-    }
   },
   computed: {
     erreurControlesTechniques () {
@@ -54,7 +48,7 @@ export default defineComponent({
       />
     </div>
     <template v-if="!erreurControlesTechniques">
-      <template v-if="normalizedControlesTechniquesHistorique(controlesTechniquesHistorique).length > 0">
+      <template v-if="controlesTechniquesHistorique.length > 0">
         <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0">
           <h3 class="fr-mb-0 fr-h5">
             Date
@@ -76,7 +70,7 @@ export default defineComponent({
           </h3>
         </div>
         <template
-          v-for="(entry, index) in normalizedControlesTechniquesHistorique(controlesTechniquesHistorique)"
+          v-for="(entry, index) in controlesTechniquesHistorique"
           :key="index"
         >
           <div class="fr-col-6 fr-col-sm-2 fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-text--bleu">
@@ -98,7 +92,7 @@ export default defineComponent({
         </template>
       </template>
       <div
-        v-if="normalizedControlesTechniquesHistorique(controlesTechniquesHistorique) === []"
+        v-if="controlesTechniquesHistorique === []"
         class="fr-col-12"
       >
         Ce véhicule ne possède actuellement aucun contrôle technique.

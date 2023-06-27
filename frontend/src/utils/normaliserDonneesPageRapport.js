@@ -1,6 +1,3 @@
-import orderBy from 'lodash.orderby'
-
-
 export const syntheseVehiculeMapping = (etatCI, isVehiculeVole, syntheseSituationAdministrative) => {
   const {
     doesCIHasDuplicata,
@@ -61,14 +58,4 @@ export const syntheseVehiculeMapping = (etatCI, isVehiculeVole, syntheseSituatio
   } else {
     return filteredAnomalies
   }
-}
-
-
-
-export const ordonneParDateAntechronologique = (elements) => {
-  return orderBy(
-    elements,
-    ['date'],
-    ['desc'],
-  )
 }

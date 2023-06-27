@@ -126,12 +126,14 @@ export default {
 
   methods: {
     controlToPoint (controle) {
-      const point = {
-        x: controle.date,
-        y: controle.km,
+      const split = controle?.date?.split('/')
+      if(split) {
+        const point = {
+          x: `${split[2]}-${split[1]}-${split[0]}`,
+          y: controle.km,
+        }
+        return point
       }
-
-      return point
     },
   },
 }

@@ -10,6 +10,7 @@ import {
   dvsMapping,
   suspensionsMapping,
   oppositionsMapping,
+  ordonneParDateAntechronologique,
 } from '@Utils/mapping/mapper'
 import {
   reponseRequeteApiSivParticulier200,
@@ -31,6 +32,16 @@ import {
   reponseIvtProfessionnelFormat200,
   reponseCodeFormat200,
 } from '@/tests/fixtures/index'
+
+describe('ordonne par ordre antechronologique', () => {
+
+  test('Doit ordonner dans un ordre décroissant les dates', () => {
+    const dateDesordre = [{date:'2022-04-06'}, {date:'2022-04-08'}, {date:'2022-04-07'}]
+    const dateOrdre = [{date:'2022-04-08'}, {date:'2022-04-07'}, {date:'2022-04-06'}]
+    expect(ordonneParDateAntechronologique(dateDesordre)).toStrictEqual(dateOrdre)
+  })
+
+})
 
 describe('mapper', () => {
   test('doit mapper un historique', () => {
