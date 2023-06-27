@@ -40,7 +40,7 @@ describe('HistoVecFooter', () => {
         to: '/plan-du-site',
       },
       {
-        label: 'Accessibilité : non conforme',
+        label: 'Accessibilité : partiellement conforme',
         to: '/accessibilite',
       },
       {

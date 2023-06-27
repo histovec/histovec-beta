@@ -94,7 +94,7 @@ export default defineComponent({
         État de conformité
       </h3>
       <p>
-        Le site HistoVec est non conforme avec le référentiel général d'amélioration de l'accessibilité.
+        Le site HistoVec est partiellement conforme avec le référentiel général d'amélioration de l'accessibilité.
       </p>
 
       <h4>
@@ -104,7 +104,7 @@ export default defineComponent({
         L'audit de conformité réalisé en interne révèle que :
       </p>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
-        <li>41% des critères RGAA sont respectés.</li>
+        <li>73% des critères RGAA sont respectés.</li>
       </ul>
 
       <h3>
@@ -114,12 +114,10 @@ export default defineComponent({
         Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes.
       </p>
       <h4>
-        Non conformités
+        partiellement conforme
       </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
-        <li>Images : alternative textuelle des images à améliorer pour distinguer des éléments pertinents des éléments de décoration</li>
         <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité</li>
-        <li>Tableaux : configuration des titres et entêtes de tableaux à améliorer</li>
         <li>Liens : pertinence des informations associées aux liens à améliorer</li>
         <li>Scripts : gestion de la compatibilité avec les dispositifs d'assistance à améliorer</li>
         <li>Éléments obligatoires : structure HTML des pages à améliorer</li>
@@ -134,7 +132,7 @@ export default defineComponent({
         Établissement de cette déclaration d’accessibilité
       </h3>
       <p>
-        Cette déclaration a été établie le 15 novembre 2022. Elle a été mise à jour le 15 novembre 2022.
+        Cette déclaration a été établie le 7 juin 2023. Elle a été mise à jour le 7 juin 2023.
       </p>
       <h4>
         Technologies utilisées pour la réalisation du site web
