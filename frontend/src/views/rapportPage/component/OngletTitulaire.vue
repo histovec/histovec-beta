@@ -1,25 +1,25 @@
 <script>
 import { defineComponent } from 'vue'
-import { formatIsoToFrDate } from '@Assets/js/format'
 
 export default defineComponent({
   name: 'OngletTitulaire',
-
-  props: {
-    titulaire: {
+  props:{
+    titulaires: {
       type: Object,
       default: null,
     },
-    certificat: {
+    infosImport: {
       type: Object,
       default: null,
     },
-  },
-
-  data () {
-    return {
-      formatIsoToFrDate,
-    }
+    infos: {
+      type: Object,
+      default: null,
+    },
+    certificatImmatriculation: {
+      type: Object,
+      default: null,
+    },
   },
 })
 </script>
@@ -29,18 +29,9 @@ export default defineComponent({
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12  fr-pb-2w">
       <h3 class="fr-mb-0 fr-h5">
-        Titulaire & Titre
+        Titulaire et Titre
       </h3>
     </div>
-
-    <template v-if="titulaire.nature">
-      <div class="fr-col-6  fr-pt-0  fr-pb-1w">
-        Nature
-      </div>
-      <div class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu">
-        {{ titulaire.nature }}
-      </div>
-    </template>
 
     <div
       id="titre-identite"
@@ -52,7 +43,7 @@ export default defineComponent({
       id="valeur-identite"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ titulaire.identite }}
+      {{ titulaires?.particulier?.nomNaissance }} {{ titulaires?.particulier?.prenom }}
     </div>
 
     <div
@@ -65,7 +56,7 @@ export default defineComponent({
       id="valeur-code-postal"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >
-      {{ titulaire.adresse }}
+      {{ titulaires?.codePostal }}
     </div>
 
     <div class="fr-col-12  fr-pt-3w  fr-pb-2w">
@@ -79,18 +70,26 @@ export default defineComponent({
       class="fr-col-6  fr-pt-0  fr-pb-1w"
     >
       Date de première immatriculation
-      <span v-if="certificat.isVehiculeImporteDepuisEtranger">
+      <span v-if="infosImport.isImported">
         à l'étranger
       </span>
     </div>
     <div
+      v-if="infosImport.isImported"
+      id="valeur-date-immatriculation-etranger"
+      class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
+    >
+      {{ infosImport?.datePremiereImmatEtranger }}
+    </div>
+    <div
+      v-if="!infosImport.isImported"
       id="valeur-date-immatriculation"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(certificat.datePremiereImmatriculation) }}
+      {{ infos?.datePremiereImmatriculation }}
     </div>
 
-    <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+    <template v-if="infosImport.isImported">
       <div
         id="titre-date-immatriculation-france"
         class="fr-col-6  fr-pt-0  fr-pb-1w"
@@ -101,7 +100,7 @@ export default defineComponent({
         id="valeur-date-immatriculation-france"
         class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
       >
-        {{ formatIsoToFrDate(certificat.datePremiereImmatriculationEnFrance) }}
+        {{ infosImport?.dateImportFrance }}
       </div>
     </template>
 
@@ -115,7 +114,7 @@ export default defineComponent({
       id="valeur-date-certificat"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >
-      {{ formatIsoToFrDate(certificat.dateEmissionCI) }}
+      {{ certificatImmatriculation?.dateEmission }}
     </div>
   </div>
 </template>

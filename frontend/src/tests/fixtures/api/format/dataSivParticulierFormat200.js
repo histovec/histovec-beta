@@ -75,12 +75,12 @@ export const dataSivParticulierFormat200 = {
         hasDvs: true,
         informations: [
           {
-            date: null,
-            dvsAutorite: 'TRIBUNAL JUDICIAIRE',
-          },
-          {
             date: '28/04/2023',
             dvsAutorite: 'TRIBUNAL JUDICIAIRE II',
+          },
+          {
+            date: null,
+            dvsAutorite: 'TRIBUNAL JUDICIAIRE',
           },
         ],
       },
@@ -138,24 +138,24 @@ export const dataSivParticulierFormat200 = {
     },
     historique: [
       {
-        date: '20/04/2009',
-        type: 'IMMAT_NORMALE',
+        date: '26/08/2022',
+        type: 'DECLARATION_ACHAT',
       },
       {
         date: '18/05/2015',
         type: 'DUPLICATA',
       },
       {
-        date: '26/08/2022',
-        type: 'DECLARATION_ACHAT',
+        date: '20/04/2009',
+        type: 'IMMAT_NORMALE',
       },
     ],
     controlesTechniques: [
       {
-        date: '11/12/2014',
+        date: '26/12/2018',
         nature: 'VTP',
         resultat: 'A',
-        km: 98429,
+        km: 160532,
       },
       {
         date: '10/12/2016',
@@ -164,10 +164,10 @@ export const dataSivParticulierFormat200 = {
         km: 132874,
       },
       {
-        date: '26/12/2018',
+        date: '11/12/2014',
         nature: 'VTP',
         resultat: 'A',
-        km: 160532,
+        km: 98429,
       },
     ],
   },

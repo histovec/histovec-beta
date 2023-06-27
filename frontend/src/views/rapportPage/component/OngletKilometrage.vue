@@ -6,13 +6,15 @@ import { LabeliserControlesTechniques } from '@Utils/controlesTechniquesComposan
 
 export default defineComponent({
   name: 'OngletKilometrage',
+
   components: {
     ControlesTechniquesLineChart,
   },
-  props: {
-    controlesTechniquesData: {
-      type: Object,
-      default: null,
+
+  props:{
+    controlesTechniquesHistorique: {
+      type: Array,
+      default: new Array([]),
     },
   },
   data () {
@@ -21,11 +23,8 @@ export default defineComponent({
     }
   },
   computed: {
-    controlesTechniquesHistorique () {
-      return this.controlesTechniquesData || []
-    },
     erreurControlesTechniques () {
-      return this.controlesTechniquesData.erreur
+      return this.controlesTechniquesHistorique.erreur
       // return 'Un problème est survenu lors de la récupération des contrôles techniques. Veuillez réessayer plus tard.'
     },
   },
