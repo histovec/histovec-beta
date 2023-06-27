@@ -1,29 +1,30 @@
 <script>
 import {defineComponent} from 'vue'
-import { formatIsoToFrDate } from '@Assets/js/format'
 
 import operationsMapping from '@Assets/json/operations.json'
 
 export default defineComponent({
   name: 'OngletHistorique',
-
-  props: {
-    certificat: {
-      type: Object,
-      default: null,
+  props:{
+    historiqueData: {
+      type: Array,
+      default: new Array([]),
     },
-    historique: {
-      type: Object,
-      default: null,
+    vehiculeImporte: {
+      type: Boolean,
+      default: false,
+    },
+    datePremiereImmatriculationEtranger: {
+      type: String,
+      default: '',
     },
   },
   data () {
     return {
-      formatIsoToFrDate,
-
       operationsMapping,
     }
   },
+
 })
 </script>
 
@@ -32,7 +33,7 @@ export default defineComponent({
   <div
     class="fr-grid-row  fr-grid-row--gutters"
   >
-    <template v-if="certificat.isVehiculeImporteDepuisEtranger">
+    <template v-if="vehiculeImporte">
       <div class="fr-col-12  fr-pb-3w">
         <h3 class="fr-mb-0 fr-h5">
           Historique des opérations à l'étranger
@@ -49,7 +50,7 @@ export default defineComponent({
         </h4>
       </div>
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
-        {{ formatIsoToFrDate(certificat.datePremiereImmatriculation) }}
+        {{ datePremiereImmatriculationEtranger }}
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
         <!-- @todo:
@@ -78,7 +79,7 @@ export default defineComponent({
     </div>
 
     <template
-      v-for="(entry, index) in historique"
+      v-for="(entry, index) in historiqueData"
       :key="index"
     >
       <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  fr-pb-0  fr-pt-0">
@@ -86,7 +87,8 @@ export default defineComponent({
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-text--bleu">
         <span class="info_red txt-small-12">
-          {{ entry.nature }}
+          <!-- @todo: a deplacer soit dans le back soit dans l'api data          -->
+          {{ operationsMapping[entry.type] }}
         </span>
       </div>
     </template>

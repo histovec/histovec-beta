@@ -33,16 +33,16 @@ export const SIV_PHYSIQUE = {
             puissance_nette: 55,
             energie: 'ES',
             nb_places_assises: 5,
-            nb_places_debout: 0,
-            niveau_sonore: 0,
+            nb_places_debout: 12,
+            niveau_sonore: 34,
             vitesse_moteur: 4125,
             co2: 140,
             pollution: '70/220*2003/76EURO4',
-            rapport_puiss_masse: 0,
+            rapport_puiss_masse: 89,
           },
         infos:
           {
-            nb_titulaires: 0,
+            nb_titulaires: 1,
             date_premiere_immatriculation: '2009-04-20',
             date_premiere_immat_siv: '2009-04-20',
             plaque_immatriculation: 'A*******M',
@@ -50,10 +50,10 @@ export const SIV_PHYSIQUE = {
           },
         infos_import:
           {
-            date_premiere_immatriculation_france: null,
-            date_import_france: null,
-            is_imported: false,
-            date_premiere_immat_etranger: null,
+            date_premiere_immatriculation_france: '2009-04-20',
+            date_import_france: '2008-04-20',
+            is_imported: true,
+            date_premiere_immat_etranger: '2007-04-20',
             immatriculation_origine: null,
             code_pays_origine: null,
             nom_pays_origine: '',
@@ -109,23 +109,20 @@ export const SIV_PHYSIQUE = {
                   {
                     date: '2023-04-28',
                   },
-                  {
-                    date: '2023-04-27',
-                  },
                 ],
                 oveis: [
                   {
-                    date: '2023-04-28',
+                    date: '2023-04-20',
                   },
                 ],
                 otcis_pv: [
                   {
-                    date: '2023-04-28',
+                    date: '2023-03-28',
                   },
                 ],
                 otcis: [
                   {
-                    date: '2023-04-28',
+                    date: '2023-07-28',
                   },
                 ],
               },
@@ -134,11 +131,34 @@ export const SIV_PHYSIQUE = {
           },
         accidents:
           {
-            nb_sinistres: 0,
-            date_derniere_resolution: null,
-            date_dernier_sinistre: null,
+            nb_sinistres: 1,
+            date_derniere_resolution: '2023-04-28',
+            date_dernier_sinistre: '2023-04-20',
           },
         historique: HISTORIQUE,
+        controles_techniques: [
+          {
+            ct_date: '2014-12-11',
+            ct_nature: 'VTP',
+            ct_resultat: 'A',
+            ct_km: 98429,
+            ct_immat: 'AA-948-BM',
+          },
+          {
+            ct_date: '2016-12-10',
+            ct_nature: 'VTP',
+            ct_resultat: 'S',
+            ct_km: 132874,
+            ct_immat: 'AA-948-BM',
+          },
+          {
+            ct_date: '2018-12-26',
+            ct_nature: 'VTP',
+            ct_resultat: 'R',
+            ct_km: 160532,
+            ct_immat: 'AA-948-BM',
+          },
+        ],
       },
     proprietaire:
       {
@@ -156,7 +176,7 @@ export const SIV_PHYSIQUE = {
       },
     certificat_immatriculation:
       {
-        age: 0,
+        age: 123,
         date_emission: '2015-05-18',
       },
     clef_acheteur: '1be8d184-417e-4d26-9e91-fa318d920efd',
@@ -212,7 +232,7 @@ export const SIV_PHYSIQUE_MIN = {
           },
         infos:
           {
-            nb_titulaires: 0,
+            nb_titulaires: 1,
             date_premiere_immatriculation: '2009-04-20',
             date_premiere_immat_siv: '2009-04-20',
             plaque_immatriculation: 'A*******M',
@@ -231,12 +251,12 @@ export const SIV_PHYSIQUE_MIN = {
         usage:
           {
             liste_des_usages: [],
-            is_agricole: false,
+            is_agricole: true,
             is_collection: false,
           },
         situation_admin:
           {
-            is_apte_a_circuler: true,
+            is_apte_a_circuler: false,
             is_ci_annule: false,
             date_annulation: '2023-12-01',
             is_ci_vole: true,
@@ -245,7 +265,7 @@ export const SIV_PHYSIQUE_MIN = {
               has_gages: false,
               informations: [],
             },
-            is_ci_perdu: false,
+            is_ci_perdu: true,
             dvs: {
               has_dvs: false,
               informations: [],
@@ -257,14 +277,7 @@ export const SIV_PHYSIQUE_MIN = {
             oppositions: {
               has_oppositions: false,
               informations: {
-                oves: [
-                  {
-                    date: '2023-04-28',
-                  },
-                  {
-                    date: '2023-04-27',
-                  },
-                ],
+                oves: [],
                 oveis: [],
                 otcis_pv: [],
                 otcis: [],
@@ -284,19 +297,19 @@ export const SIV_PHYSIQUE_MIN = {
       {
         personne_physique:
           {
-            nom_naissance: 'B******T',
-            prenom: 'M****L',
+            nom_naissance: 'D**',
+            prenom: 'J**n',
           },
         personne_morale:
           {
             raison_sociale: '',
             siren: '',
           },
-        code_postal: '94400',
+        code_postal: '29610',
       },
     certificat_immatriculation:
       {
-        age: 0,
+        age: 1,
         date_emission: '2015-05-18',
       },
     clef_acheteur: '1be8d184-417e-4d26-9e91-fa318d920efd',
@@ -305,8 +318,8 @@ export const SIV_PHYSIQUE_MIN = {
     plaq_immat_hash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
     incoming_query:
       {
-        nom: 'BLANCHET',
-        prenom: 'MARCEL',
+        nom: 'DOE',
+        prenom: 'JOHN',
         immat: 'AA-948-BM',
         numero_formule: '2015CC11207',
       },

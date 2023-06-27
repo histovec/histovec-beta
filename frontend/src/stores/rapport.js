@@ -28,6 +28,9 @@ export const useRapportStore = defineStore('rapport',{
     getChargement(state){
       return state.chargement
     },
+    getControlesTechniques(state){
+      return state.rapportData.vehicule.controlesTechniques
+    },
   },
   actions: {
     async fetchRapportSivPersonne(dataBody, id) {
