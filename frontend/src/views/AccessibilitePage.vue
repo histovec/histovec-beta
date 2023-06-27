@@ -114,7 +114,7 @@ export default defineComponent({
         Les contenus listés ci-dessous ne sont pas accessibles pour les raisons suivantes.
       </p>
       <h4>
-        partiellement conforme
+        Non conformités
       </h4>
       <ul class="fr-ml-4w  fr-pl-0 fr-mb-3w">
         <li>Couleurs : contraste sur l'utilisation des couleurs à améliorer pour favoriser la lisibilité</li>
