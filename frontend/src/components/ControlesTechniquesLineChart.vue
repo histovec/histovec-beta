@@ -10,12 +10,14 @@
 <script>
 
 import orderBy from 'lodash.orderby'
-import { formatIsoToFrDate } from '@Assets/js/format.js'
+import {formatIsoToFrDate} from '@Assets/js/format.js'
+import {transformeDateFrEnISO} from '@Utils/format/date';
 
-import { Line as LineChart } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale } from 'chart.js'
-ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale)
+import {Line as LineChart} from 'vue-chartjs'
+import {Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, TimeScale, Title, Tooltip} from 'chart.js'
 import 'chartjs-adapter-date-fns'
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale)
 
 
 export default {
@@ -126,13 +128,11 @@ export default {
 
   methods: {
     controlToPoint (controle) {
-      const point = {
-        x: controle.date,
-        y: controle.km,
-      }
-
-      return point
-    },
+      return {
+          x: transformeDateFrEnISO(controle?.date),
+          y: controle.km,
+        }
+      },
   },
 }
 
