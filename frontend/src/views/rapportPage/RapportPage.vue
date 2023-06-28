@@ -49,7 +49,6 @@ import logoMI from '@Assets/img/deprecated/logo_ministere_interieur.png'
 import genererId from '@Services/genererId'
 import genererCle from '@Services/genererCle'
 import gestionAppelApi from '@Services/api/gestionAppelApi'
-import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 import { useRapportStore } from '@Stores/rapport'
 
 export default defineComponent({
@@ -334,14 +333,10 @@ export default defineComponent({
 
     // Récupération de la donnée du rapport HistoVec
     await gestionAppelApi.fetchRapportProprietaire(this.formData)
-    // todo retirer la vaiable refonteEnCours
-    const refonteEnCours = true
-    if (!refonteEnCours && this.store.getStatus !== 200) {
-      gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
-    }
 
     // todo a supprimer a la fin de la refonte
     // ---- Debut a supprimer
+    const refonteEnCours = true
     if (refonteEnCours) {
       if (this.isRapportAcheteur) {
         if (this.isValidBuyer) {
