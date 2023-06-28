@@ -27,7 +27,6 @@ import imageNumeroFormuleSIV from '@Assets/img/aide/siv_numero_formule.jpg'
 import api from '@Api/index.js'
 import { useRapportStore } from '@Stores/rapport'
 import gestionAppelApi from '@Services/api/gestionAppelApi'
-import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 
 export default defineComponent({
   name: 'ProprietairePage',
@@ -434,13 +433,6 @@ export default defineComponent({
       this.persistFormData()
 
       await gestionAppelApi.fetchRapportProprietaire(this.formData)
-
-      // todo retirer la vaiable refonteEnCours
-      const refonteEnCours = true
-      if (!refonteEnCours && this.store.getStatus !== 200) {
-        gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
-        return
-      }
 
       this.$router.push({
         name: 'rapportVendeur',
