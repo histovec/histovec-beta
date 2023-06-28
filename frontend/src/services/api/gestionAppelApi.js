@@ -42,10 +42,9 @@ const fetchRapportProprietaire = async (data) => {
     }
   }
 
-  // todo retirer la vaiable refonteEnCours
-  const refonteEnCours = true
-  if (!refonteEnCours && store.getStatus !== 200) {
-    gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
+  if (store.getStatus !== 200) {
+    gestionRapportErreur.redirectionPageErreur(store.getStatus)
+    return
   }
 
   try {
