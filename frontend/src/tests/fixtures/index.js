@@ -8,6 +8,7 @@ import { reponseRequeteApiSivProfessionnel200 } from '@/tests/fixtures/api/repon
 import { reponseRequeteApiIvtParticulier200 } from '@/tests/fixtures/api/reponseRequeteApiIvtParticulier200'
 import { reponseRequeteApiIvtProfessionnel200 } from '@/tests/fixtures/api/reponseRequeteApiIvtProfessionnel200'
 import { reponseRequeteApiCode200 } from '@/tests/fixtures/api/reponseRequeteApiCode200'
+import { reponseRequeteApiSivParticulier200DonneesManquantes } from '@/tests/fixtures/api/reponseRequeteApiSivParticulier200DonneesManquantes'
 
 // reponse back KO
 import { reponseRequeteApi404 } from '@/tests/fixtures/api/reponseRequeteApi404'
@@ -42,6 +43,7 @@ export {
   reponseRequeteApiIvtParticulier200,
   reponseRequeteApiIvtProfessionnel200,
   reponseRequeteApiCode200,
+  reponseRequeteApiSivParticulier200DonneesManquantes,
   // reponse back KO
   reponseRequeteApi404,
   reponseRequeteApiErreur500,
