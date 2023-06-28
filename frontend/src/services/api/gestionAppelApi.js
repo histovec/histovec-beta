@@ -44,7 +44,7 @@ const fetchRapportProprietaire = async (data) => {
 
   // todo retirer la vaiable refonteEnCours
   const refonteEnCours = true
-  if (!refonteEnCours && this.store.getStatus !== 200) {
+  if (!refonteEnCours && store.getStatus !== 200) {
     gestionRapportErreur.redirectionPageErreur(this.store.getStatus)
   }
 
