@@ -434,12 +434,14 @@ export default defineComponent({
 
       await gestionAppelApi.fetchRapportProprietaire(this.formData)
 
-      this.$router.push({
-        name: 'rapportVendeur',
-        params: {
-          formData: JSON.stringify(this.formData),
-        },
-      })
+      if (this.store.getStatus === 200) {
+        this.$router.push({
+          name: 'rapportVendeur',
+          params: {
+            formData: JSON.stringify(this.formData),
+          },
+        })
+      }
     },
 
     onClear () {
