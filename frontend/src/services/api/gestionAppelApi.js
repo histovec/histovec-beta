@@ -11,6 +11,37 @@ import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 
 const store = useRapportStore()
 
+const postFetchRapport = async () => {
+  api.log('test/1')
+  console.log(3.1)
+  if (store.getStatus !== 200) {
+    api.log('test/2')
+    console.log(3.2)
+    await gestionRapportErreur.redirectionPageErreur(store.getStatus)
+    return
+  }
+  api.log('test/3')
+
+  try {
+    let rapport = store.getReponseData
+
+    // vérification de datas
+    await schemaValidationData.validateSync(rapport)
+
+    // mappe la réponse
+    rapport = vehiculeMapping(rapport)
+
+    // formate les dates
+    rapport = formaterRapport(rapport)
+
+    store.setRapport(rapport)
+  } catch (error) {
+    router.push({
+      name: 'serviceIndisponible',
+    })
+  }
+}
+
 const fetchRapportProprietaire = async (data) => {
   const idProprietaire = await genererId.proprietaireId(data)
 
@@ -42,31 +73,17 @@ const fetchRapportProprietaire = async (data) => {
     }
   }
 
-  if (store.getStatus !== 200) {
-    gestionRapportErreur.redirectionPageErreur(store.getStatus)
-    return
-  }
+  await postFetchRapport()
+}
 
-  try {
-    let rapport = store.getReponseData
-
-    // vérification de datas
-    await schemaValidationData.validateSync(rapport)
-
-    // mappe la réponse
-    rapport = vehiculeMapping(rapport)
-
-    // formate les dates
-    rapport = formaterRapport(rapport)
-
-    store.setRapport(rapport)
-  } catch (error) {
-    router.push({
-      name: 'serviceIndisponible',
-    })
-  }
+const fetchRapportAcheteur = async (uuidNavigateur, key) => {
+  console.log(2)
+  await store.fetchRapportAcheteur(uuidNavigateur, key)
+  console.log(3)
+  await postFetchRapport()
 }
 
 export default {
   fetchRapportProprietaire,
+  fetchRapportAcheteur,
 }

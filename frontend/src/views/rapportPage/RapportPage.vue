@@ -201,17 +201,11 @@ export default defineComponent({
     },
 
     isRapportAcheteur () {
-      return (
-        this.typeRapport === TYPE_RAPPORT.ACHETEUR ||
-        (this.typeRapport !== TYPE_RAPPORT.VENDEUR && this.isBuyer)
-      )
+      return this.typeRapport === TYPE_RAPPORT.ACHETEUR
     },
 
     isRapportVendeur () {
-      return (
-        this.typeRapport === TYPE_RAPPORT.VENDEUR ||
-        (this.typeRapport !== TYPE_RAPPORT.ACHETEUR && this.isHolder)
-      )
+      return this.typeRapport === TYPE_RAPPORT.VENDEUR
     },
 
     currentTab () {
@@ -226,14 +220,14 @@ export default defineComponent({
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      const idParam = encodeURIComponent(this.holderId)
-      const keyParam = encodeURIComponent(this.holderKey)
-      const queryString = `?id=${idParam}&key=${keyParam}`
+      // const idParam = this.holderId // todo est-ce qu'on laisse l'encodage ? encodeURIComponent(this.holderId)
+      const keyParam = this.rapportData.clefAcheteur // todo est-ce qu'on laisse l'encodage ? encodeURIComponent(this.rapportData.clefAcheteur)
+      const queryString = `?key=${keyParam}`
 
       // Ajout du queryParam 'urlUnsafe' afin que le front puisse distinguer les nouveaux liens acheteurs (au format urlUnsafeBase64Encoded) des anciens (au format urlSafeBase64Encoded)
       // L'usage de ce nouveau format (urlUnsafeBase64Encoded) est nécessaire au bon fonctionnement du codePartageHistoVec et l'API associée: /report_by_code
       // @todo @urlUnsafe1 : Supprimer cette ligne
-      return `${this.baseUrl}/histovec/report${queryString}&urlUnsafe=true`
+      return `${this.baseUrl}/histovec/rapport-acheteur${queryString}&urlUnsafe=true`
 
       // Après la 8 du mois suivant la mise en PROD Vue3 + DSFR, supprimer le queryParam 'urlUnsafe'.
       // En effet, les anciens liens acheteur (au format urlSafeBase64Encoded) auront tous périmé
@@ -258,13 +252,7 @@ export default defineComponent({
       return buyerId
     },
     buyerKey () {
-      const { key: buyerKey, urlUnsafe } = this.$route.query
-
-      /* ----- @todo @urlUnsafe4 : Supprimer ce bloc de code  ------- */
-      if (!urlUnsafe && buyerKey) {  // old buyer report link
-        return base64Encode(urlSafeBase64Decode(buyerKey))
-      }
-      /* -------------------------------------------------------- */
+      const { key: buyerKey } = this.$route.query
 
       return buyerKey
     },
@@ -276,23 +264,18 @@ export default defineComponent({
       return this.rapportData.dateMiseAJour? this.rapportData.dateMiseAJour: '01/01/1900'
     },
     isCIAnnule () {
-      return Boolean(
-        this.rapportData && this.rapportData.vehicule &&
-        this.rapportData.vehicule.situationAdmin &&
-        this.rapportData.vehicule.situationAdmin.isCiAnnule,
-      )
+      return false
+      // return Boolean(
+      //   this.rapportData && this.rapportData.vehicule &&
+      //   this.rapportData.vehicule.situationAdmin &&
+      //   this.rapportData.vehicule.situationAdmin.isCiAnnule,
+      // )
     },
     isDefaultDataDate () {
       return this.rapportData.dateMiseAJour === DEFAULT_DATE_UPDATE
     },
-    isBuyer () {
-      return Boolean(this.buyerId || this.buyerKey)
-    },
-    isHolder () {
-      return Boolean(!this.buyerId && this.holderId)
-    },
     isValidBuyer () {
-      return Boolean(this.buyerId && this.buyerKey)
+      return Boolean(this.buyerKey)
     },
 
     // ------------------ email ---------------------
@@ -307,16 +290,6 @@ export default defineComponent({
 
   beforeMount: async function () {
     this.isLoading = true
-    const formDataParams = this.$route.params.formData && JSON.parse(this.$route.params.formData)
-
-    if (formDataParams) {
-      // 1er accès au rapport vendeur (suite au remplissage du formulaire de recherche)
-      this.formData = formDataParams
-    } else {
-      // accès suivant via l'url /rapport-vendeur (rafraîchissement de la page du rapport)
-      const cachedFormData = sessionStorage.getItem('formData') && JSON.parse(sessionStorage.getItem('formData'))
-      this.formData = cachedFormData
-    }
 
     // Préparation des images pour la génération du CSA
     if (!this.images.csa.logoHistoVecBytes) {
@@ -327,16 +300,63 @@ export default defineComponent({
       this.images.csa.logoMIBytes = await fetch(logoMI).then((res) => res.arrayBuffer())
     }
 
-    // Calcul des informations du propriétaire pour pouvoir créer un lien acheteur et le code Partage HistoVec
-    this.holderId = await genererId.proprietaireId(this.formData)
-    this.holderKey = await genererCle.cleProprietaire(this.formData)
+    const uuidNavigateur = localStorage.getItem('userId')
 
     // Récupération de la donnée du rapport HistoVec
-    await gestionAppelApi.fetchRapportProprietaire(this.formData)
+    if (this.isRapportVendeur) {
+      const formDataParams = this.$route.params.formData && JSON.parse(this.$route.params.formData)
+
+      if (formDataParams) {
+        // 1er accès au rapport vendeur (suite au remplissage du formulaire de recherche)
+        this.formData = formDataParams
+      } else {
+        // accès suivant via l'url /rapport-vendeur (rafraîchissement de la page du rapport)
+        this.formData = sessionStorage.getItem('formData') && JSON.parse(sessionStorage.getItem('formData'))
+      }
+
+      if (this.formData) {
+        // Calcul des informations du propriétaire pour pouvoir créer un lien acheteur et le code Partage HistoVec
+        this.holderId = await genererId.proprietaireId(this.formData)
+        this.holderKey = await genererCle.cleProprietaire(this.formData)
+
+        await gestionAppelApi.fetchRapportProprietaire(this.formData)
+      } else {
+        // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
+        this.$router.push({
+          name: 'serviceIndisponible',
+        })
+        return
+      }
+    } else if (this.isRapportAcheteur) {
+      if (this.isValidBuyer) {
+        console.log(1)
+        await gestionAppelApi.fetchRapportAcheteur(uuidNavigateur, this.buyerKey)
+      } else {
+        // Cas: lien acheteur invalide
+        api.log('/buyer/invalid')
+
+        this.$router.push({
+          name: 'erreurInattendue',
+          query: {
+            errorTitle: 'Lien de partage HistoVec invalide',
+            errorMessages: JSON.stringify([
+              'Veuillez demander un nouveau lien au vendeur.',
+            ]),
+            primaryAction: JSON.stringify({
+              label: 'Demander le rapport à un vendeur',
+              icon: 'ri-arrow-right-fill',
+              to: '/acheteur',
+            }),
+          },
+        })
+        return
+      }
+    }
+
 
     // todo a supprimer a la fin de la refonte
     // ---- Debut a supprimer
-    const refonteEnCours = true
+    const refonteEnCours = false
     if (refonteEnCours) {
       if (this.isRapportAcheteur) {
         if (this.isValidBuyer) {
@@ -455,7 +475,7 @@ export default defineComponent({
       }
     }
     // ---- Fin a supprimer
-
+    api.log('test/this.rapportData')
     this.rapportData = this.store.getRapport
     const areControlesTechinquesDisponibles = this.store.getControlesTechniques
 
@@ -848,111 +868,111 @@ export default defineComponent({
     v-if="!isCIAnnule"
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
-    <div class="fr-col-12  fr-col-lg-11  fr-col-xl-11">
-      <!-- @todo @reportAccordeon : pour la vue mobile sm et xs : utiliser un accordeon ? -->
-      <DsfrTabs
-        tab-list-name="Liste d'onglets du rapport du véhicule"
-        :tab-titles="tabTitles"
-        @select-tab="selectTab"
-      >
-        <LoaderComponent
-          v-if="isLoading || store.getChargement"
-          taille="md"
-        />
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-0"
-          tab-id="report-tab-0"
-          :selected="tabs.selectedTabIndex === 0"
-          :asc="tabs.asc"
-        >
-          <OngletSynthese
-            :is-rapport-vendeur="isRapportVendeur"
-            :rapport-data="rapportData"
-          />
-        </DsfrTabContent>
+<!--    <div class="fr-col-12  fr-col-lg-11  fr-col-xl-11">-->
+<!--      &lt;!&ndash; @todo @reportAccordeon : pour la vue mobile sm et xs : utiliser un accordeon ? &ndash;&gt;-->
+<!--      <DsfrTabs-->
+<!--        tab-list-name="Liste d'onglets du rapport du véhicule"-->
+<!--        :tab-titles="tabTitles"-->
+<!--        @select-tab="selectTab"-->
+<!--      >-->
+<!--        <LoaderComponent-->
+<!--          v-if="isLoading || store.getChargement"-->
+<!--          taille="md"-->
+<!--        />-->
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-0"-->
+<!--          tab-id="report-tab-0"-->
+<!--          :selected="tabs.selectedTabIndex === 0"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletSynthese-->
+<!--            :is-rapport-vendeur="isRapportVendeur"-->
+<!--            :rapport-data="rapportData"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
 
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-1"
-          tab-id="report-tab-1"
-          :selected="tabs.selectedTabIndex === 1"
-          :asc="tabs.asc"
-        >
-          <OngletVehicule
-            :caracteristiques-techniques="rapportData?.vehicule?.caracteristiques"
-          />
-        </DsfrTabContent>
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-1"-->
+<!--          tab-id="report-tab-1"-->
+<!--          :selected="tabs.selectedTabIndex === 1"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletVehicule-->
+<!--            :caracteristiques-techniques="rapportData?.vehicule?.caracteristiques"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
 
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-2"
-          tab-id="report-tab-2"
-          :selected="tabs.selectedTabIndex === 2"
-          :asc="tabs.asc"
-        >
-          <OngletTitulaire
-            :titulaires="rapportData?.proprietaire"
-            :infos-import="rapportData?.vehicule?.infosImport"
-            :infos="rapportData?.vehicule?.infos"
-            :certificat-immatriculation="rapportData?.certificatImmatriculation"
-          />
-        </DsfrTabContent>
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-2"-->
+<!--          tab-id="report-tab-2"-->
+<!--          :selected="tabs.selectedTabIndex === 2"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletTitulaire-->
+<!--            :titulaires="rapportData?.proprietaire"-->
+<!--            :infos-import="rapportData?.vehicule?.infosImport"-->
+<!--            :infos="rapportData?.vehicule?.infos"-->
+<!--            :certificat-immatriculation="rapportData?.certificatImmatriculation"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
 
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-3"
-          tab-id="report-tab-3"
-          :selected="tabs.selectedTabIndex === 3"
-          :asc="tabs.asc"
-        >
-          <OngletSituationAdministrative
-            :is-rapport-vendeur="isRapportVendeur"
-            :situation-administrative="rapportData?.vehicule?.situationAdmin"
-            :infos="rapportData?.vehicule?.infos"
-            :certificat-immatriculation="rapportData?.certificatImmatriculation"
-          />
-        </DsfrTabContent>
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-3"-->
+<!--          tab-id="report-tab-3"-->
+<!--          :selected="tabs.selectedTabIndex === 3"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletSituationAdministrative-->
+<!--            :is-rapport-vendeur="isRapportVendeur"-->
+<!--            :situation-administrative="rapportData?.vehicule?.situationAdmin"-->
+<!--            :infos="rapportData?.vehicule?.infos"-->
+<!--            :certificat-immatriculation="rapportData?.certificatImmatriculation"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
 
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-4"
-          tab-id="report-tab-4"
-          :selected="tabs.selectedTabIndex === 4"
-          :asc="tabs.asc"
-        >
-          <OngletHistorique
-            :historique-data="rapportData?.vehicule?.historique"
-            :vehicule-importe="rapportData?.vehicule?.infosImport?.isImported"
-            :date-premiere-immatriculation-etranger="rapportData?.vehicule?.infosImport?.datePremiereImmatEtranger"
-          />
-        </DsfrTabContent>
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-4"-->
+<!--          tab-id="report-tab-4"-->
+<!--          :selected="tabs.selectedTabIndex === 4"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletHistorique-->
+<!--            :historique-data="rapportData?.vehicule?.historique"-->
+<!--            :vehicule-importe="rapportData?.vehicule?.infosImport?.isImported"-->
+<!--            :date-premiere-immatriculation-etranger="rapportData?.vehicule?.infosImport?.datePremiereImmatEtranger"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
 
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-5"
-          tab-id="report-tab-5"
-          :selected="tabs.selectedTabIndex === 5"
-          :asc="tabs.asc"
-        >
-          <OngletControlesTechniques
-            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"
-          />
-        </DsfrTabContent>
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-5"-->
+<!--          tab-id="report-tab-5"-->
+<!--          :selected="tabs.selectedTabIndex === 5"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletControlesTechniques-->
+<!--            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
 
-        <DsfrTabContent
-          class="background-default-white"
-          panel-id="report-tab-content-6"
-          tab-id="report-tab-6"
-          :selected="tabs.selectedTabIndex === 6"
-          :asc="tabs.asc"
-        >
-          <OngletKilometrage
-            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"
-          />
-        </DsfrTabContent>
-      </DsfrTabs>
-    </div>
+<!--        <DsfrTabContent-->
+<!--          class="background-default-white"-->
+<!--          panel-id="report-tab-content-6"-->
+<!--          tab-id="report-tab-6"-->
+<!--          :selected="tabs.selectedTabIndex === 6"-->
+<!--          :asc="tabs.asc"-->
+<!--        >-->
+<!--          <OngletKilometrage-->
+<!--            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"-->
+<!--          />-->
+<!--        </DsfrTabContent>-->
+<!--      </DsfrTabs>-->
+<!--    </div>-->
   </div>
 
   <div
@@ -966,18 +986,18 @@ export default defineComponent({
         @click="generatePdf"
       />
     </div>
-    <div
-      v-if="!isCIAnnule"
-      class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center"
-    >
-      <DsfrButton
-        ref="modalPartagerRapport"
-        label="Envoyer le rapport"
-        icon="ri-send-plane-fill"
-        secondary
-        @click="onOpenModalPartagerRapport()"
-      />
-    </div>
+<!--    <div-->
+<!--      v-if="!isCIAnnule"-->
+<!--      class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center"-->
+<!--    >-->
+<!--      <DsfrButton-->
+<!--        ref="modalPartagerRapport"-->
+<!--        label="Envoyer le rapport"-->
+<!--        icon="ri-send-plane-fill"-->
+<!--        secondary-->
+<!--        @click="onOpenModalPartagerRapport()"-->
+<!--      />-->
+<!--    </div>-->
   </div>
 
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">

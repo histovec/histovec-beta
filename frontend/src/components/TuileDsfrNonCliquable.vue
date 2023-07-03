@@ -29,7 +29,7 @@ export default defineComponent({
         <span class="fr-tile__link">{{ titre }}</span>
       </h3>
       <div class="fr-tile__desc">
-        <slot />
+        <slot v-if="!isLoading" />
       </div>
     </div>
   </div>

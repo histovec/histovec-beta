@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import api from '@Api/index.js'
+import {
+  reponseRequeteApiCode200,
+} from '@/tests/fixtures/index'
 
 export const useRapportStore = defineStore('rapport',{
   state: () => ({
@@ -35,10 +38,20 @@ export const useRapportStore = defineStore('rapport',{
     },
   },
   actions: {
-    async fetchRapport(url, dataBody, id) {
+    async fetchRapport(url, id = null, dataBody = null) {
+/*
+      this.id = id
+      this.status = reponseRequeteApiCode200.status //500
+      this.message = reponseRequeteApiCode200.message
+      this.reponseData = reponseRequeteApiCode200.data
+      this.rapportData = null
+      this.chargement = false
+      return
+ */
+
       try {
         this.chargement = true
-        const data = await axios.post('/report_by_data'.concat(url), dataBody)
+        const data = await axios.post(url, dataBody)
 
         if (data.status !== 200) {
           api.log('/holder/notFound')
@@ -60,6 +73,7 @@ export const useRapportStore = defineStore('rapport',{
       }
       catch (error) {
         api.log('/holder/unavailable')
+        api.log('/holder/unavailable/' + JSON.stringify(error))
 
         this.id = id
         this.status = error.response.status
@@ -70,7 +84,10 @@ export const useRapportStore = defineStore('rapport',{
       }
     },
     async fetchRapportSivPersonne(dataBody, id) {
-      await this.fetchRapport('/siv/personne', dataBody, id)
+      await this.fetchRapport('/report_by_data/siv/personne', id, dataBody)
+    },
+    async fetchRapportAcheteur(uuidNavigateur, key) {
+      await this.fetchRapport('/report_by_code/'.concat(uuidNavigateur + '/' + key))
     },
     async setRapport(rapport) {
       this.rapportData = rapport

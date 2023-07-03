@@ -1,19 +1,28 @@
 import router from '@/router';
+import api from '@Api/index.js'
 
-const redirectionPageErreur = (status) => {
+const redirectionPageErreur = async (status) => {
+  api.log('test/2.1')
+  console.log(3.3)
   if (status === 200) {
+    console.log(3.4)
+    api.log('test/2.2')
     return
   }
-
+  api.log('test/2.3')
   if (status === 500) {
+    console.log(3.5)
+    api.log('test/2.4')
     // Cas: Aucune Reponse du back
     router.push({
       name: 'erreurInattendue',
     })
     return
   }
-
+  api.log('test/2.5')
   if (status === 404) {
+    console.log(3.6)
+    api.log('test/2.6')
     // Cas: véhicule non trouvé
     router.push({
       name: 'pageNonTrouvee',
@@ -32,7 +41,8 @@ const redirectionPageErreur = (status) => {
     })
     return
   }
-
+  api.log('test/2.7')
+  console.log(3.7)
   // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
   router.push({
     name: 'serviceIndisponible',
