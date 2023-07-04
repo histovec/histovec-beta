@@ -32,6 +32,11 @@ import { dataSivParticulierFormat200SansDvs } from '@/tests/fixtures/api/format/
 import { dataSivParticulierFormat200SansSuspensions } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansSuspensions'
 import { dataSivParticulierFormat200SansOppositions } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansOppositions'
 
+// reponse Authentification
+import { reponseAuthentification200 } from '@/tests/fixtures/api/authentification/reponseAuthentification200'
+import { reponseAuthentification500 } from '@/tests/fixtures/api/authentification/reponseAuthentification500'
+import { reponseAuthentification403 } from '@/tests/fixtures/api/authentification/reponseAuthentification403'
+
 export {
   // reponse back OK
   reponseRequeteApiSivParticulier200,
@@ -63,4 +68,8 @@ export {
   dataSivParticulierFormat200SansDvs,
   dataSivParticulierFormat200SansSuspensions,
   dataSivParticulierFormat200SansOppositions,
+  // reponse Authentification
+  reponseAuthentification200,
+  reponseAuthentification500,
+  reponseAuthentification403,
 }
