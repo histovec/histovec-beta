@@ -5,6 +5,7 @@ import HistoVecHeader from '@Components/HistoVecHeader.vue'
 import HistoVecFooter from '@Components/HistoVecFooter.vue'
 import '@/assets/stylesheets/globale.css'
 import LienEvitement from '@Components/LienEvitement.vue'
+import api from '@Api/index.js'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -18,6 +19,9 @@ if (localStorage.getItem('userId') === null) {
 export default defineComponent({
   name: 'App',
   components: {LienEvitement, HistoVecHeader, HistoVecFooter },
+  beforeMount: async function () {
+    await api.authentication()
+  },
 })
 </script>
 
