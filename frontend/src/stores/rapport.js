@@ -79,5 +79,14 @@ export const useRapportStore = defineStore('rapport',{
     async setRapport(rapport) {
       this.rapportData = rapport
     },
+    async setReponse(reponse) {
+      this.id = reponse.id
+      this.status = reponse.status
+      this.message = reponse.message
+      this.reponseData = reponse.data
+      this.rapportData = null
+      this.chargement = false
+
+    },
   },
 })

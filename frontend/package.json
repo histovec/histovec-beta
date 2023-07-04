@@ -15,6 +15,7 @@
     "test": "npm run test:unit",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:stub": "VITE_TITLE=histovec VITE_PORT=5000 VITE_AB_TESTING_PERCENTAGE=0 VITE_DISABLE_API_LOG=true BACKEND_PORT=8010 vite",
     "test:cy": "cypress run"
   },
   "dependencies": {
