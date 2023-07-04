@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-axios.defaults.baseURL = `/${import.meta.env.VITE_TITLE}/api/v1`
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_API_DATA.concat('/public/v1')
 
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
