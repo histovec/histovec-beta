@@ -29,13 +29,13 @@ export const schemaValidationData = object().shape({
       niveau_sonore: number().required(),
       vitesse_moteur: number().required(),
       co2: number().required(),
-      pollution: string().required(),
+      pollution: string().notRequired(),
       rapport_puiss_masse: number().required(),
     }).required().noUnknown(true).strict(),
     infos: object().shape({
       nb_titulaires: number().required(),
       date_premiere_immatriculation: string().required(),
-      date_premiere_immat_siv: string().required(),
+      date_premiere_immat_siv: string().notRequired(),
       plaque_immatriculation: string().required(),
       date_convertion_siv: string().notRequired(),
     }).required().noUnknown(true).strict(),
@@ -55,12 +55,16 @@ export const schemaValidationData = object().shape({
     }).required().noUnknown(true).strict(),
     situation_admin: object().shape({
       is_apte_a_circuler: boolean().required(),
-      is_ci_annule: boolean().notRequired(),
+      is_ci_annule: boolean().required(),
       date_annulation: string().notRequired(),
       is_ci_vole: boolean().required(),
       is_duplicata: boolean().required(),
       gages: object().shape({
         has_gages: boolean().required(),
+        // informations: object().shape({ // todo : reprendre format array après la correction de Patrick
+        //   gage_date: string().notRequired(),
+        //   nom_creancier: string().notRequired(),
+        // }).required().noUnknown(true).strict(),
         informations: array().of(
           object().shape({
             date: string().required(),
@@ -71,15 +75,25 @@ export const schemaValidationData = object().shape({
       is_ci_perdu: boolean().required(),
       dvs: object().shape({
         has_dvs: boolean().required(),
+        // informations: object().shape({ // todo : reprendre format array après la correction de Patrick
+        //   dvs_date: string().notRequired(),
+        //   dvs_autorite: string().notRequired(),
+        // }).required().noUnknown(true).strict(),
         informations: array().of(
           object().shape({
             date: string().notRequired(),
-            dvs_autorite: string().required(),
+            autorite: string().required(),
           }).required().noUnknown(true).strict(),
         ).required(),
       }).required().noUnknown(true).strict(),
-      suspensions: object().shape({
+      suspensions: object().shape({ // todo : reprendre format array après la correction de Patrick
         has_suspensions: boolean().required(),
+        // informations: object().shape({
+        //   suspension_date: string().notRequired(),
+        //   motif: string().notRequired(),
+        //   remise_titre: string().notRequired(),
+        //   retrait_titre: string().notRequired(),
+        // }).required().noUnknown(true).strict(),
         informations: array().of(
           object().shape({
             date: string().required(),
@@ -93,24 +107,16 @@ export const schemaValidationData = object().shape({
         has_oppositions: boolean().required(),
         informations: object().shape({
           oves: array().of(
-            object().shape({
-              date: string().required(),
-            }).required().noUnknown(true).strict(),
+            string().notRequired().strict(),
           ).required(),
           oveis: array().of(
-            object().shape({
-              date: string().required(),
-            }).required().noUnknown(true).strict(),
+            string().notRequired().strict(),
           ).required(),
           otcis_pv: array().of(
-            object().shape({
-              date: string().required(),
-            }).required().noUnknown(true).strict(),
+            string().notRequired().strict(),
           ).required(),
           otcis: array().of(
-            object().shape({
-              date: string().required(),
-            }).required().noUnknown(true).strict(),
+            string().notRequired().strict(),
           ).required(),
         }).required().noUnknown(true).strict(),
       }).required().noUnknown(true).strict(),
@@ -127,17 +133,9 @@ export const schemaValidationData = object().shape({
         type: string().notRequired(),
       }).required().noUnknown(true).strict(),
     ).required(),
-    controles_techniques: array().of(
-      object().shape({
-        date: string().required(),
-        nature: string().required(),
-        resultat: string().required(),
-        km: number().required(),
-      }).required().noUnknown(true).strict(),
-    ).notRequired(),
   }).required().noUnknown(true).strict(),
   proprietaire: object().shape({
-    particulier: object().shape({
+    personne_physique: object().shape({
       nom_naissance: string().notRequired(),
       prenom: string().notRequired(),
     }).notRequired().noUnknown(true).strict(),
@@ -151,15 +149,44 @@ export const schemaValidationData = object().shape({
     age: number().required(),
     date_emission: string().required(),
   }).required().noUnknown(true).strict(),
+  utac: object().shape({
+    update_date: string().notRequired(),
+    status: number().notRequired(),
+    ct: array().of(
+      object().shape({
+        date: string().required(),
+        resultat_raw: string().required(),
+        resultat: string().required(),
+        nature: string().required(),
+        km: number().required(),
+      }).notRequired().noUnknown(true).strict(),
+    ).required(),
+  }).required().noUnknown(true).strict(),
   incoming_query: object().shape({
-    nom: string().notRequired(),
-    prenom: string().notRequired(),
-    nom_prenom: string().notRequired(),
-    raison_sociale: string().notRequired(),
-    siren: string().notRequired(),
-    date_emission_ci: string().notRequired(),
-    numero_formule: string().notRequired(),
-    immat: string().required(),
+    siv_physique: object().shape({
+      nom: string().required(),
+      prenom: string().required(),
+      immat: string().required(),
+      numero_formule: string().required(),
+    }).required().nullable(),
+    siv_morale: object().shape({
+      raison_sociale: string().required(),
+      siren: string().required(),
+      immat: string().required(),
+      numero_formule: string().required(),
+    }).required().nullable(),
+    ivt_physique: object().shape({
+      nom_prenom: string().required(),
+      immat: string().required(),
+      date_emission_ci: string().required(),
+    }).required().nullable(),
+    ivt_morale: object().shape({
+      raison_sociale: string().required(),
+      siren: string().required(),
+      immat: string().required(),
+      date_emission_ci: string().required(),
+    }).required().nullable(),
+    code: string().notRequired(), // todo : passer a requered() quand l'indormation sera retourné par l'api data
   }).required().noUnknown(true).strict(),
   clef_acheteur: string().required(),
   message_usager: string().notRequired(),

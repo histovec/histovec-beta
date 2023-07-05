@@ -96,13 +96,13 @@ export default {
       return orderBy(this.controlesTechniques.map((controle) => this.controlToPoint(controle)), ['x'], ['asc'])
     },
     pointColors () {
-      return orderBy(this.controlesTechniques.map((controle) => this.colors[controle.resultat]), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => this.colors[controle.resultatRaw]), ['x'], ['asc'])
     },
     nature () {
-      return orderBy(this.controlesTechniques.map((controle) => controle.natureLibelle), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => controle.nature), ['x'], ['asc'])
     },
     resultat () {
-      return orderBy(this.controlesTechniques.map((controle) => controle.resultatLibelle), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => controle.resultat), ['x'], ['asc'])
     },
     lineData () {
       if (this.controlesTechniques.length > 0) {

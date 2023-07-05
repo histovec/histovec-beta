@@ -114,10 +114,13 @@ export const formaterRapport = (rapport) => {
         dateDernierSinistre,
       },
       historique,
-      controlesTechniques,
     },
     certificatImmatriculation: {
       dateEmission,
+    },
+    utac: {
+      updateDate,
+      ct,
     },
     validiteClefAcheteur,
   } = rapport
@@ -152,11 +155,15 @@ export const formaterRapport = (rapport) => {
         dateDernierSinistre: transformeDateEnFr(dateDernierSinistre),
       },
       historique: formatHistorique(historique),
-      controlesTechniques: formatControlesTechniques(controlesTechniques),
     },
     certificatImmatriculation: {
       ...rapport.certificatImmatriculation,
       dateEmission: transformeDateEnFr(dateEmission),
+    },
+    utac: {
+      ...rapport.utac,
+      updateDate: transformeDateEnFr(updateDate),
+      ct: formatControlesTechniques(ct),
     },
     validiteClefAcheteur: transformeDateEnFr(validiteClefAcheteur),
   }

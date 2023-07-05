@@ -37,10 +37,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApiSivParticulier200)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
+    await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/siv/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivParticulierFormates)
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiSivParticulier200.status)
@@ -55,10 +55,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApi404)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
+    await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/siv/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivParticulierFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/notFound')
@@ -77,10 +77,10 @@ describe('Rapport store', () => {
     )
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id)
+    await rapport.fetchRapportSivPersonne(formDataSivParticulierFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/siv/personne', formDataSivParticulierFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/siv/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivParticulierFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/unavailable')

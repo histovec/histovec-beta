@@ -20,90 +20,69 @@ export function historiqueMapping (historique) {
 
 export function queryMapping (incomingQuery) {
   const {
-    nom,
-    prenom,
-    numero_formule: numeroFormule,
-    immat,
-    raison_sociale: raisonSociale,
-    siren,
-    date_emission_ci: dateEmissionCi,
-    nom_prenom: nomPrenom,
+    siv_physique,
+    siv_morale,
+    ivt_physique,
+    ivt_morale,
     code,
   } = incomingQuery
-  if(code) {
-    return {
-      code,
-    }
-  }
-  if(dateEmissionCi) {
-    if(raisonSociale || siren){
-      return {
-        raisonSociale,
-        siren,
-        immat,
-        dateEmissionCi,
-      }
-    }
-    else{
-      return {
-        nomPrenom,
-        immat,
-        dateEmissionCi,
-      }
-    }
-  }
-  if(numeroFormule) {
-    if(nom || prenom) {
-      return {
-        nom,
-        prenom,
-        immat,
-        numeroFormule,
-      }
-    }
-    else {
-      return {
-        raisonSociale,
-        siren,
-        immat,
-        numeroFormule,
-      }
-    }
+
+  return {
+    sivPhysique: siv_physique ? {
+      nom: siv_physique.nom,
+      prenom: siv_physique.prenom,
+      immat: siv_physique.immat,
+      numeroFormule: siv_physique.numero_formule,
+    } : null,
+    sivMorale: siv_morale ? {
+      raisonSociale: siv_morale.raison_sociale,
+      siren: siv_morale.siren,
+      immat: siv_morale.immat,
+      numeroFormule: siv_morale.numero_formule,
+    } : null,
+    ivtPhysique: ivt_physique ? {
+      nomPrenom: ivt_physique.nom_prenom,
+      immat: ivt_physique.immat,
+      dateEmissionCi: ivt_physique.date_emission_ci,
+    } : null,
+    ivtMorale: ivt_morale ? {
+      raisonSociale: ivt_morale.raison_sociale,
+      siren: ivt_morale.siren,
+      immat: ivt_morale.immat,
+      dateEmissionCi: ivt_morale.date_emission_ci,
+    } : null,
+    code: code ?? null,
   }
 }
 
-export function controlesTechniquesMapping (controlesTechniques) {
-  const controlesTechniquesMappe = controlesTechniques.map(({ date, nature, resultat, km }) => (
+export function controlesTechniquesMapping (controleTechnique) {
+  const controleTechniqueMappe = controleTechnique.map(({ date, resultat_raw, resultat, nature, km }) => ( // todo : retirer ct_ apres la correction de patrick
     {
       date,
-      nature,
-      resultat,
+      resultatRaw: resultat_raw,
+      resultat: resultat,
+      nature: nature,
       km,
     }
   ))
-  return ordonneParDateAntechronologique(controlesTechniquesMappe)
+  return ordonneParDateAntechronologique(controleTechniqueMappe)
 }
 
 export function proprietaireMapping(proprietaire) {
-  if (proprietaire.particulier) {
-    return {
-      particulier:
-        {
-          nomNaissance: proprietaire.particulier.nom_naissance,
-          prenom: proprietaire.particulier.prenom,
-        },
-        codePostal: proprietaire.code_postal,
-    }
-  }
-  if (proprietaire.personne_morale) {
-    return {
-      personneMorale:
-        {
-          raisonSociale: proprietaire.personne_morale.raison_sociale,
-          siren: proprietaire.personne_morale.siren,
-        },
-      codePostal: proprietaire.code_postal,
-    }
+  return {
+    particulier: proprietaire.personne_physique.nom_naissance ?
+      {
+        nomNaissance: proprietaire.personne_physique.nom_naissance,
+        prenom: proprietaire.personne_physique.prenom,
+      }
+      : null,
+    personneMorale: proprietaire.personne_morale.raison_sociale ?
+      {
+        raisonSociale: proprietaire.personne_morale.raison_sociale,
+        siren: proprietaire.personne_morale.siren,
+      }
+      : null,
+    codePostal: proprietaire.code_postal,
   }
 }
 
@@ -115,7 +94,7 @@ export function gagesMapping (gages) {
 
   if (!hasGages) { return { hasGages, informations: [] } }
 
-  const informationsMapped = gagesInformations.map(({ date, nom_creancier }) => (
+  const informationsMapped = gagesInformations.map(({ date, nom_creancier }) => ( // todo : retirer gage_ apres la correction de patrick
     {
       date,
       nomCreancier: nom_creancier,
@@ -136,10 +115,10 @@ export function dvsMapping (dvs) {
 
   if (!hasDvs) { return { hasDvs, informations: [] } }
 
-  const informationsMapped = dvsInformations.map(({ date, dvs_autorite }) => (
+  const informationsMapped = dvsInformations.map(({ date, autorite }) => (
     {
       date,
-      dvsAutorite: dvs_autorite,
+      autorite: autorite,
     }
   ))
 
@@ -173,7 +152,7 @@ export function suspensionsMapping (suspensions) {
 }
 
 export function oppositionsTypeMapping (oppositionsType) {
-  const oppositionsMappe =  oppositionsType.map(({ date }) => (
+  const oppositionsMappe =  oppositionsType.map((date) => (
     {
       date,
     }
@@ -295,7 +274,6 @@ export const vehiculeMapping = (rapport) => {
             date_dernier_sinistre: dateDernierSinistre,
           },
         historique: reportHistorique = [],
-        controles_techniques: reportControlesTechniques = [],
       },
     proprietaire,
     certificat_immatriculation:
@@ -303,6 +281,11 @@ export const vehiculeMapping = (rapport) => {
         age,
         date_emission: dateEmission,
       },
+    utac: {
+      update_date: updateDateUtac,
+      status: statusUtac,
+      ct: reportCt,
+    },
     clef_acheteur: clefAcheteur,
     message_usager: messageUsager,
     plaq_immat_hash: plaqImmatHash,
@@ -311,7 +294,7 @@ export const vehiculeMapping = (rapport) => {
   } = rapport
 
   const mappedHistorique = historiqueMapping(reportHistorique)
-  const mappedControlesTechniques = controlesTechniquesMapping(reportControlesTechniques)
+  const mappedCt = controlesTechniquesMapping(reportCt)
   const mappedQuery = queryMapping(incomingQuery)
   const mappedProprietaire = proprietaireMapping(proprietaire)
   const mappedGages = gagesMapping(gages)
@@ -398,7 +381,6 @@ export const vehiculeMapping = (rapport) => {
             dateDernierSinistre,
           },
         historique: mappedHistorique,
-        controlesTechniques: mappedControlesTechniques,
       },
     proprietaire: mappedProprietaire,
     certificatImmatriculation:
@@ -406,6 +388,11 @@ export const vehiculeMapping = (rapport) => {
         age,
         dateEmission,
       },
+    utac: {
+      updateDate: updateDateUtac,
+      status: statusUtac,
+      ct: mappedCt,
+    },
     clefAcheteur,
     messageUsager,
     plaqImmatHash,

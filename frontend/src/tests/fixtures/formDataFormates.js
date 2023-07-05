@@ -1,58 +1,26 @@
 export const formDataSivParticulierFormates = {
-  proprietaire: {
-    nom: 'MALONGA',
-    prenoms: ['JEAN-MARIE'],
-  },
-  vehicule: {
-    numero_formule: '2010ES51284',
-    numero_immatriculation: 'BQ-910-WK',
-  },
-  uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
-  options: {
-    controles_techniques: true,
-  },
+  nom: 'MALONGA',
+  prenom: 'JEAN-MARIE',
+  numero_formule: '2010ES51284',
+  immat: 'BQ-910-WK',
 }
 
 export const formDataSivPersonneMoraleFormates = {
-  proprietaire: {
-    raison_sociale: 'SARL RAISON SOCIALE',
-    siren: '362521879',
-  },
-  vehicule: {
-    numero_formule: '2010ES51284',
-    numero_immatriculation: 'BQ-910-WK',
-  },
-  uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
-  options: {
-    controles_techniques: true,
-  },
+  raison_sociale: 'SARL RAISON SOCIALE',
+  siren: '362521879',
+  numero_formule: '2010ES51284',
+  immat: 'BQ-910-WK',
 }
 
 export const formDataFniParticulierFormates = {
-  proprietaire: {
-    nom_prenom: 'MALONGA JEAN-MARIE',
-  },
-  vehicule: {
-    date_emission_ci: '31/12/2020',
-    numero_immatriculation: 'BQ-910-WK',
-  },
-  uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
-  options: {
-    controles_techniques: true,
-  },
+  nom_prenom: 'MALONGA JEAN-MARIE',
+  date_emission_ci: '31/12/2020',
+  immat: 'BQ-910-WK',
 }
 
 export const formDataFniPersonneMoraleFormates = {
-  proprietaire: {
-    raison_sociale: 'SARL RAISON SOCIALE',
-    siren: '362521879',
-  },
-  vehicule: {
-    date_emission_ci: '31/12/2020',
-    numero_immatriculation: 'BQ-910-WK',
-  },
-  uuid: 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8',
-  options: {
-    controles_techniques: true,
-  },
+  raison_sociale: 'SARL RAISON SOCIALE',
+  siren: '362521879',
+  date_emission_ci: '31/12/2020',
+  immat: 'BQ-910-WK',
 }

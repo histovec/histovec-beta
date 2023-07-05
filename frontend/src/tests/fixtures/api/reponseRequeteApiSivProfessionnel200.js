@@ -5,17 +5,25 @@ export const reponseRequeteApiSivProfessionnel200 = {
   data: {
     ...reponseRequeteApiSivParticulier200.data,
     proprietaire: {
+      ...reponseRequeteApiSivParticulier200.data.proprietaire,
+      personne_physique: {
+        nom_naissance: '',
+        prenom: '',
+      },
       personne_morale: {
         raison_sociale: 'raison_sociale',
         siren: 'siren',
       },
-      code_postal: '94400',
     },
     incoming_query: {
-      raison_sociale: 'raison_sociale',
-      siren: 'siren',
-      immat: 'AA-948-BM',
-      numero_formule: '2015CC11207',
+      ...reponseRequeteApiSivParticulier200.data.incoming_query,
+      siv_physique: null,
+      siv_morale: {
+        raison_sociale: 'ZMF AUTO',
+        siren: '800289522',
+        immat: 'AA-149-BY',
+        numero_formule: '2012fp66022',
+      },
     },
   },
 }

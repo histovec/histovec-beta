@@ -2,52 +2,36 @@ import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 
 const formaterDataSivParticulier = (dataFormulaire) => {
   return {
-    proprietaire: {
-      nom: dataFormulaire.titulaire.particulier.nom,
-      prenoms: [dataFormulaire.titulaire.particulier.prenoms],
-    },
-    vehicule: {
-      numero_formule: dataFormulaire.numeroFormule,
-      numero_immatriculation: dataFormulaire.numeroImmatriculation,
-    },
+    nom: dataFormulaire.titulaire.particulier.nom,
+    prenom: dataFormulaire.titulaire.particulier.prenoms,
+    numero_formule: dataFormulaire.numeroFormule,
+    immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
 const formaterDataSivPersonneMorale = (dataFormulaire) => {
   return {
-    proprietaire: {
-      raison_sociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
-      siren: dataFormulaire.titulaire.personneMorale.numeroSiren,
-    },
-    vehicule: {
-      numero_formule: dataFormulaire.numeroFormule,
-      numero_immatriculation: dataFormulaire.numeroImmatriculation,
-    },
+    raison_sociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
+    siren: dataFormulaire.titulaire.personneMorale.numeroSiren,
+    numero_formule: dataFormulaire.numeroFormule,
+    immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
 const formaterDataFniParticulier = (dataFormulaire) => {
   return {
-    proprietaire: {
-      nom_prenom: dataFormulaire.titulaire.particulier.nomEtPrenoms,
-    },
-    vehicule: {
-      date_emission_ci: dataFormulaire.dateEmissionCertificatImmatriculation,
-      numero_immatriculation: dataFormulaire.numeroImmatriculation,
-    },
+    nom_prenom: dataFormulaire.titulaire.particulier.nomEtPrenoms,
+    date_emission_ci: dataFormulaire.dateEmissionCertificatImmatriculation,
+    immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
 const formaterDataFniPersonneMorale = (dataFormulaire) => {
   return {
-    proprietaire: {
-      raison_sociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
-      siren: dataFormulaire.titulaire.personneMorale.numeroSiren,
-    },
-    vehicule: {
-      date_emission_ci: dataFormulaire.dateEmissionCertificatImmatriculation,
-      numero_immatriculation: dataFormulaire.numeroImmatriculation,
-    },
+    raison_sociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
+    siren: dataFormulaire.titulaire.personneMorale.numeroSiren,
+    date_emission_ci: dataFormulaire.dateEmissionCertificatImmatriculation,
+    immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
@@ -92,12 +76,5 @@ export const formaterDataRequete = (dataFormulaire) => {
   */
   // ---- Fin a supprimer
 
-  // eslint-disable-next-line no-unreachable
-  return {
-    ...data,
-    uuid: localStorage.getItem('userId'),
-    options: {
-      controles_techniques: true,
-    },
-  }
+  return data
 }

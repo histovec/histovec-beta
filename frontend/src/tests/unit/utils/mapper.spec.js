@@ -109,8 +109,8 @@ describe('mapper', () => {
   })
 
   test('doit mapper un controle techniques', () => {
-    const controleTechniques = reponseRequeteApiIvtProfessionnel200.data.vehicule.controles_techniques
-    const controleTechniquesOutput = reponseIvtProfessionnelFormat200.vehicule.controlesTechniques
+    const controleTechniques = reponseRequeteApiIvtProfessionnel200.data.utac.ct
+    const controleTechniquesOutput = reponseIvtProfessionnelFormat200.utac.ct
     const controleTechniquesMapped = controlesTechniquesMapping(controleTechniques)
 
     expect(controleTechniquesMapped).toStrictEqual(controleTechniquesOutput)

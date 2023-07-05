@@ -47,8 +47,8 @@ describe('formatRapport', () => {
   })
 
   test('Doit formater les controles techniques correctement', () => {
-    expect(formatControlesTechniques(reponseSivParticulierFormat200.vehicule.controlesTechniques))
-      .toStrictEqual(dataSivParticulierFormat200.vehicule.controlesTechniques)
+    expect(formatControlesTechniques(reponseSivParticulierFormat200.utac.ct))
+      .toStrictEqual(dataSivParticulierFormat200.utac.ct)
   })
 
   test('Doit formater le rapport correctement', () => {
