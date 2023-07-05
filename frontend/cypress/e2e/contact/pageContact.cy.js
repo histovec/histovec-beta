@@ -1,7 +1,12 @@
 import { CONTACT_THEMES_OPTIONS, DEFAULT_CONTACT_THEMES_OPTIONS } from '../../../src/constants/contact'
-import routes from "../../constants/urls.json";
+import routes from '../../constants/urls.json';
 
 context('Contact', () => {
+  const nom = 'MALONGA NTSAYI'
+  const prenom = 'JEAN-MARIE'
+  const plaqueImmatSIV = 'BQ-910-WK'
+  const numeroFormule = '2010ES51284'
+
   function QuestionSelectAbsente(listeQuestion) {
     for (let i=0;i<listeQuestion.length; i++ ){
       cy.get('select[class*=\'fr-select\']').contains(CONTACT_THEMES_OPTIONS[listeQuestion[i]].text).should('not.exist');
@@ -250,7 +255,7 @@ context('Contact', () => {
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
+    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200' })
 
     // renseignement du formulaire
     cy.get('img[src*=\'/histovec/src/assets/img/plaque_siv.svg\']')
@@ -258,19 +263,19 @@ context('Contact', () => {
     cy.get('input[id*=\'form-siv-particulier-nom-naissance\']')
       .should('exist')
       .clear()
-      .type('nom')
+      .type(nom)
     cy.get('input[id*=\'form-siv-particulier-prenom\']')
       .should('exist')
       .clear()
-      .type('prenom')
+      .type(prenom)
     cy.get('input[id*=\'form-siv-particulier-numero-immatriculation\']')
       .should('exist')
       .clear()
-      .type('AA-123-AA')
+      .type(plaqueImmatSIV)
     cy.get('input[id*=\'form-siv-particulier-numero-formule\']')
       .should('exist')
       .clear()
-      .type('2013BZ80335')
+      .type(numeroFormule)
 
     // validation du formulaire
     cy.get('button[id*=\'bouton-recherche\']')
@@ -294,10 +299,10 @@ context('Contact', () => {
       .should('exist')
       .parent().within(() => {
         cy.get('li').should('have.length', 4)
-        cy.get('li').eq(0).contains('Nom de naissance: nom').find('span').contains('nom')
-        cy.get('li').eq(1).contains('Prénom(s): prenom').find('span').contains('prenom')
-        cy.get('li').eq(2).contains('Immatriculation: AA-123-AA').find('span').contains('AA-123-AA')
-        cy.get('li').eq(3).contains('Numéro de formule: 2013BZ80335').find('span').contains('2013BZ80335')
+        cy.get('li').eq(0).contains('Nom de naissance: '+ nom).find('span').contains(nom)
+        cy.get('li').eq(1).contains('Prénom(s): '+ prenom).find('span').contains(prenom)
+        cy.get('li').eq(2).contains('Immatriculation: '+ plaqueImmatSIV).find('span').contains(plaqueImmatSIV)
+        cy.get('li').eq(3).contains('Numéro de formule: '+ numeroFormule).find('span').contains(numeroFormule)
       })
   })
   it('Affichage données personne morale - immatriculation depuis 2009 ', () => {
@@ -515,23 +520,23 @@ context('Contact', () => {
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
+    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200' })
 
     // renseignement du formulaire
     cy.get('img[src*=\'/histovec/src/assets/img/plaque_siv.svg\']')
       .click()
     cy.get('input[id*=\'form-siv-particulier-nom-naissance\']')
       .should('exist')
-      .clear().type('nom')
+      .clear().type(nom)
     cy.get('input[id*=\'form-siv-particulier-prenom\']')
       .should('exist')
-      .clear().type('prenom')
+      .clear().type(prenom)
     cy.get('input[id*=\'form-siv-particulier-numero-immatriculation\']')
       .should('exist')
-      .clear().type('AA-123-AA')
+      .clear().type(plaqueImmatSIV)
     cy.get('input[id*=\'form-siv-particulier-numero-formule\']')
       .should('exist')
-      .clear().type('2013BZ80335')
+      .clear().type(numeroFormule)
 
     // validation du formulaire
     cy.get('button[id*=\'bouton-recherche\']')
@@ -539,7 +544,7 @@ context('Contact', () => {
       .click()
 
     // page de redirection
-    cy.wait(500);
+    cy.wait(1000);
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
     cy.title().should('eq', 'HistoVec - Rapport vendeur');
     cy.get('a[title*="Contact"]').contains('Contact').click();
