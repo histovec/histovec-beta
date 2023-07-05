@@ -173,4 +173,104 @@ context('Proprietaire', () => {
     cy.wait(500)
     cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
   })
+
+  it("Recherche d'une immatriculation depuis 2009 pour personne morale sans erreur", () => {
+    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/morale', { statusCode: 200, fixture: '/api/reponseRequeteApiSivProfessionnel200' })
+
+    // renseignement du formulaire
+    cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
+      .click()
+    cy.get("button[id*='siv-tab-1']")
+      .click()
+    cy.get("input[id*='form-siv-personne-morale-raison-sociale']")
+      .should("exist")
+      .clear()
+      .type('JohnDoe&Co')
+    cy.get("input[id*='form-siv-personne-morale-numero-siren']")
+      .should("exist")
+      .clear()
+      .type('012345678')
+    cy.get("input[id*='form-siv-personne-morale-numero-immatriculation']")
+      .should("exist")
+      .clear()
+      .type('AA-123-AA')
+    cy.get("input[id*='form-siv-personne-morale-numero-formule']")
+      .should("exist")
+      .clear()
+      .type('2013BZ80335')
+
+    // validation du formulaire
+    cy.get("button[id*='bouton-recherche']")
+      .should('not.be.disabled')
+      .click()
+
+    // page de redirection
+    cy.wait(500)
+    cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
+  })
+
+  it("Recherche d'une immatriculation avant 2009 pour particulier sans erreur", () => {
+    cy.intercept('POST', '**/histovec/api/v1/report_by_data/ivt/physique', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtParticulier200' })
+
+    // renseignement du formulaire
+    cy.get("img[src*='/histovec/src/assets/img/plaque_fni.svg']")
+      .click()
+    cy.get("input[id*='form-fni-particulier-nom-prenom']")
+      .should("exist")
+      .clear()
+      .type('nom&prenom')
+    cy.get("input[id*='form-fni-particulier-numero-immatriculation']")
+      .should("exist")
+      .clear()
+      .type('123-ABC-45')
+    cy.get("input[id*='form-fni-particulier-date-emission']")
+      .should("exist")
+      .clear()
+      .type('16/11/2000')
+
+    // validation du formulaire
+    cy.get("button[id*='bouton-recherche']")
+      .should('not.be.disabled')
+      .click()
+
+    // page de redirection
+    cy.wait(1000)
+    cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
+  })
+
+  it("Recherche d'une immatriculation avant 2009 pour personne morale sans erreur", () => {
+    cy.intercept('POST', '**/histovec/api/v1/report_by_data/ivt/morale', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtProfessionnel200' })
+
+    // renseignement du formulaire
+    cy.get("img[src*='/histovec/src/assets/img/plaque_fni.svg']")
+      .click()
+    cy.get("button[id*='fni-tab-1']")
+      .click()
+    cy.get("input[id*='form-fni-personne-morale-raison-sociale']")
+      .should("exist")
+      .clear()
+      .type('JohnDoe&Co')
+    cy.get("input[id*='form-fni-personne-morale-numero-siren']")
+      .should("exist")
+      .clear()
+      .type('012345678')
+    cy.get("input[id*='form-fni-personne-morale-numero-immatriculation']")
+      .should("exist")
+      .clear()
+      .type('123-ABC-45')
+    cy.get("input[id*='form-fni-personne-morale-date-emission']")
+      .should("exist")
+      .clear()
+      .type('16/11/2000')
+
+    // validation du formulaire
+    cy.get("button[id*='bouton-recherche']")
+      .should('not.be.disabled')
+      .click()
+
+    // page de redirection
+    cy.wait(500)
+    cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
+  })
+
 })
