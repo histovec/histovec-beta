@@ -29,16 +29,16 @@ const fetchRapportProprietaire = async (data) => {
       await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire)
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-      // todo ajouter la bonne requete
+      await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire)
     }
   }
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-      // todo ajouter la bonne requete
+      await store.fetchRapportIvtPhysique(dataRequeteBody, idProprietaire)
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-      // todo ajouter la bonne requete
+      await store.fetchRapportIvtMorale(dataRequeteBody, idProprietaire)
     }
   }
 
