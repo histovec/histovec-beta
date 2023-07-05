@@ -188,8 +188,7 @@
   "incoming_query": {
     "raison_sociale": "raison_sociale",
     "siren": "siren",
-    "immat": "AA-948-BM",
-    "numero_formule": "2015CC11207",
+    "immat": "123-ABS-12",
     "date_emission_ci": "31/05/2023"
   },
   "validite_clef_acheteur": "2023-06-03"
