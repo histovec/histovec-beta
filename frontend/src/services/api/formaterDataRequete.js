@@ -4,33 +4,33 @@ const formaterDataSivParticulier = (dataFormulaire) => {
   return {
     nom: dataFormulaire.titulaire.particulier.nom,
     prenom: dataFormulaire.titulaire.particulier.prenoms,
-    numero_formule: dataFormulaire.numeroFormule,
+    numeroFormule: dataFormulaire.numeroFormule,
     immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
 const formaterDataSivPersonneMorale = (dataFormulaire) => {
   return {
-    raison_sociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
+    raisonSociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
     siren: dataFormulaire.titulaire.personneMorale.numeroSiren,
-    numero_formule: dataFormulaire.numeroFormule,
+    numeroFormule: dataFormulaire.numeroFormule,
     immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
 const formaterDataFniParticulier = (dataFormulaire) => {
   return {
-    nom_prenom: dataFormulaire.titulaire.particulier.nomEtPrenoms,
-    date_emission_ci: dataFormulaire.dateEmissionCertificatImmatriculation,
+    nomPrenom: dataFormulaire.titulaire.particulier.nomEtPrenoms,
+    dateEmissionCi: dataFormulaire.dateEmissionCertificatImmatriculation,
     immat: dataFormulaire.numeroImmatriculation,
   }
 }
 
 const formaterDataFniPersonneMorale = (dataFormulaire) => {
   return {
-    raison_sociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
+    raisonSociale: dataFormulaire.titulaire.personneMorale.raisonSociale,
     siren: dataFormulaire.titulaire.personneMorale.numeroSiren,
-    date_emission_ci: dataFormulaire.dateEmissionCertificatImmatriculation,
+    dateEmissionCi: dataFormulaire.dateEmissionCertificatImmatriculation,
     immat: dataFormulaire.numeroImmatriculation,
   }
 }

@@ -6,10 +6,10 @@ export const reponseRequeteApiSivParticulier200SansSuspensions = {
     ...reponseRequeteApiSivParticulier200.data,
     vehicule: {
       ...reponseRequeteApiSivParticulier200.data.vehicule,
-      situation_admin: {
-        ...reponseRequeteApiSivParticulier200.data.vehicule.situation_admin,
+      situationAdmin: {
+        ...reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin,
         suspensions: {
-          has_suspensions: false,
+          hasSuspensions: false,
           informations: [],
         },
       },

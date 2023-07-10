@@ -6,10 +6,10 @@ export const reponseRequeteApiSivParticulier200SansGages = {
     ...reponseRequeteApiSivParticulier200.data,
     vehicule: {
       ...reponseRequeteApiSivParticulier200.data.vehicule,
-      situation_admin: {
-        ...reponseRequeteApiSivParticulier200.data.vehicule.situation_admin,
+      situationAdmin: {
+        ...reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin,
         gages: {
-          has_gages: false,
+          hasGages: false,
           informations: [],
         },
       },

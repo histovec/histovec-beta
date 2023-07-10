@@ -6,14 +6,14 @@ export const reponseRequeteApiSivParticulier200SansOppositions = {
     ...reponseRequeteApiSivParticulier200.data,
     vehicule: {
       ...reponseRequeteApiSivParticulier200.data.vehicule,
-      situation_admin: {
-        ...reponseRequeteApiSivParticulier200.data.vehicule.situation_admin,
+      situationAdmin: {
+        ...reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin,
         oppositions: {
-          has_oppositions: false,
+          hasOppositions: false,
           informations: {
             oves: [],
             oveis: [],
-            otcis_pv: [],
+            otcisPv: [],
             otcis: [],
           },
         },

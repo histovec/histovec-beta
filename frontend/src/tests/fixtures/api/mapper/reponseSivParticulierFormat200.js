@@ -90,14 +90,10 @@ export const reponseSivParticulierFormat200 = {
           {
             date: '2023-04-28',
             motif: 'PVE',
-            remiseTitre: 'NON',
-            retraitTitre: 'NON',
           },
           {
             date: '2023-04-28',
             motif: 'DES',
-            remiseTitre: 'NON',
-            retraitTitre: 'NON',
           },
         ],
       },
@@ -160,7 +156,7 @@ export const reponseSivParticulierFormat200 = {
     age: 0,
     dateEmission: '2015-05-18',
   },
-  utac: {
+    utac: {
     updateDate: '2022-06-26',
     status: 200,
     ct: [
@@ -200,7 +196,6 @@ export const reponseSivParticulierFormat200 = {
     sivMorale: null,
     ivtPhysique: null,
     ivtMorale: null,
-    code : null,
   },
   validiteClefAcheteur: '2023-06-03',
 }

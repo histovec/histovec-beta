@@ -7,6 +7,5 @@ export const reponseCodeFormat200 = {
     sivMorale: null,
     ivtPhysique: null,
     ivtMorale: null,
-    code: '32ba50ad-ac91-42cb-8444-c197727d018e',
   },
 }

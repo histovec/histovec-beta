@@ -90,14 +90,10 @@ export const dataSivParticulierFormat200 = {
           {
             date: '28/04/2023',
             motif: 'PVE',
-            remiseTitre: 'NON',
-            retraitTitre: 'NON',
           },
           {
             date: '28/04/2023',
             motif: 'DES',
-            remiseTitre: 'NON',
-            retraitTitre: 'NON',
           },
         ],
       },
@@ -200,7 +196,6 @@ export const dataSivParticulierFormat200 = {
     sivMorale: null,
     ivtPhysique: null,
     ivtMorale: null,
-    code: null,
   },
   validiteClefAcheteur: '03/06/2023',
 }

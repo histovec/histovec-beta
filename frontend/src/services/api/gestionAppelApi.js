@@ -59,7 +59,7 @@ const fetchRapportProprietaire = async (data) => {
     // formate les dates
     rapport = formaterRapport(rapport)
 
-    store.setRapport(rapport)
+    await store.setRapport(rapport)
   } catch (error) {
     router.push({
       name: 'serviceIndisponible',
