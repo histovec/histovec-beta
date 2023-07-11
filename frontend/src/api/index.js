@@ -1,5 +1,5 @@
 import 'whatwg-fetch'
-import { apiUrl } from '@/config.js'
+import { apiUrl, port, portBouchonne } from '@/config.js'
 import axios from 'axios'
 
 const VITE_DISABLE_API_LOG = import.meta.env.VITE_DISABLE_API_LOG
@@ -62,7 +62,7 @@ export default {
       login: import.meta.env.VITE_LOGIN_API_DATA,
       password: import.meta.env.VITE_PASSWORD_API_DATA,
     }
-
+    if( port !== portBouchonne ) {
     await axios.post('/get_token', dataBody)
       .then(response => {
         axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`
@@ -80,6 +80,7 @@ export default {
           axios.defaults.headers.common.Authorization = null
         }
       })
+    }
   },
   log: async (path) => {
     if (IS_API_LOG_DISABLED) {

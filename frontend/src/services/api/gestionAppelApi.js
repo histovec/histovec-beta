@@ -13,8 +13,8 @@ import { reponseRequeteApiSivProfessionnel200 } from '../../tests/fixtures/api/r
 import { reponseRequeteApiIvtProfessionnel200 } from '../../tests/fixtures/api/reponseRequeteApiIvtProfessionnel200';
 import { reponseRequeteApiIvtParticulier200 } from '../../tests/fixtures/api/reponseRequeteApiIvtParticulier200';
 const store = useRapportStore()
-const portBouchonne = '5000'
-const port = import.meta.env.VITE_PORT
+import { port, portBouchonne } from '@/config.js'
+
 const uuidNavigateur = localStorage.getItem('userId')
 
 const fetchRapportProprietaire = async (data) => {
