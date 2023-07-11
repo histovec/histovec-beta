@@ -88,11 +88,7 @@ export default {
 
     const uuid = localStorage.getItem('userId')
 
-    const options = {
-      method: 'PUT',
-    }
-
-    return await fetch(`${apiUrl}/log/${uuid}${path}`, options)
+    await axios.put(`/logs/${uuid}${path}`)
   },
   sendContactEmail: async (contact) => {
     const headers = new Headers()

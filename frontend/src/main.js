@@ -11,6 +11,7 @@ import router from '@/router/index.js'
 import { apiUrl } from '@/config.js'
 import { createPinia } from 'pinia'
 import axios from 'axios';
+import api from '@Api/index.js'
 
 window.addEventListener('beforeunload', function () {
   navigator.sendBeacon(apiUrl + 'log/exit')
@@ -22,6 +23,22 @@ router.beforeEach((to, from, next) => {
 })
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_API_DATA.concat('/public/v1')
+
+axios.interceptors.request.use(async function (config)  {
+  if (!config.headers.Authorization && config.url !== '/get_token') {
+    await api.authentication()
+  }
+  return config;
+});
+
+axios.interceptors.response.use(
+  response => response,
+  async function (error) {
+    if (error.response.status === 403) {
+      await api.authentication()
+      await axios.request(error.config)
+    }
+});
 
 createApp(App)
   .use(VueDsfr, { icons: Object.values(icons) } )
