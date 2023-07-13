@@ -1,7 +1,6 @@
 import { getExposant } from '@Utils/format';
 import { describe, expect, test } from 'vitest';
 
-/* global test */
 describe('getExposant', () => {
   const valeurTest = [0, 3 ,4 ,5 ,6 ,7 ,8 ,9]
 
