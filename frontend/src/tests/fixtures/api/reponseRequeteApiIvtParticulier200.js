@@ -5,16 +5,20 @@ export const reponseRequeteApiIvtParticulier200 = {
   data: {
     ...reponseRequeteApiSivParticulier200.data,
     proprietaire: {
-      particulier: {
-        nom_naissance: 'nom_prenom_IVT',
+      ...reponseRequeteApiSivParticulier200.data.proprietaire,
+      personnePhysique: {
+        nomNaissance: 'nom_prenom_IVT',
         prenom: '',
       },
-      code_postal: '94400',
     },
-    incoming_query: {
-      nom_prenom: 'nom_prenom_IVT',
-      immat: '664RLD75',
-      date_emission_ci: '31/05/2023',
+    incomingQuery: {
+      ...reponseRequeteApiSivParticulier200.data.incomingQuery,
+      sivPhysique: null,
+      ivtPhysique: {
+        nomPrenom: 'nom_prenom_IVT',
+        immat: '664RLD75',
+        dateEmissionCi: '31/05/2023',
+      },
     },
   },
 }

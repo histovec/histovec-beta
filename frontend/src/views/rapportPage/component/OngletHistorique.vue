@@ -53,12 +53,7 @@ export default defineComponent({
         {{ datePremiereImmatriculationEtranger }}
       </div>
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-4w  fr-pt-0  fr-text--bleu">
-        <!-- @todo:
-          Il serait plus sûr de créer un enum HISTORIQUE_OPERATION_TYPE pour l'utiliser ici
-          et dans le fichier assets/js/operations.json afin de tokenizer les opérations et réduire les erreurs liées à une typo
-          Pas urgent : en pratique, on ne se sert que très peu de ces HISTORIQUE_OPERATION_TYPE (appelé opa_type dans le SIV)
-        -->
-        {{ operationsMapping['IMMAT_NORMALE_PREM_ETRANGER'] }}
+        Première immatriculation à l'étranger
       </div>
     </template>
 
@@ -88,7 +83,7 @@ export default defineComponent({
       <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10  fr-pb-2w  fr-pt-0  fr-text--bleu">
         <span class="info_red txt-small-12">
           <!-- @todo: a deplacer soit dans le back soit dans l'api data          -->
-          {{ operationsMapping[entry.type] }}
+          {{ entry.type }}
         </span>
       </div>
     </template>

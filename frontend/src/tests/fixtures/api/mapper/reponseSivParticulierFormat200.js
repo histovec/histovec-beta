@@ -14,14 +14,14 @@ export const reponseSivParticulierFormat200 = {
       champF3: 2200,
       champG: 1155,
       champG1: 1195,
-      categorie: 'M1',
-      genre: 'VP',
-      carrosserieCe: 'AF',
-      carrosserieNationale: 'CI',
+      categorie: 'véhicules à moteur conçus et construits pour le transport de personnes et ayant au moins quatre roues : véhicule conçu et construit pour le transport de personnes et comportant, outre le siège du conducteur, huit places assises au maximum ;',
+      genre: 'Voitures particulières',
+      carrosserieCe: 'Véhicule à usages multiples',
+      carrosserieNationale: 'Conduite intérieure',
       numeroReception: 'e2*2001/116*0319*27',
       cylindree: 1149,
       puissanceNette: 55,
-      energie: 'ES',
+      energie: 'Essence',
       nbPlacesAssises: 5,
       nbPlacesDebout: 0,
       niveauSonore: 0,
@@ -76,11 +76,11 @@ export const reponseSivParticulierFormat200 = {
         informations: [
           {
             date: '2023-04-28',
-            dvsAutorite: 'TRIBUNAL JUDICIAIRE II',
+            autorite: 'TRIBUNAL JUDICIAIRE II',
           },
           {
             date: '',
-            dvsAutorite: 'TRIBUNAL JUDICIAIRE',
+            autorite: 'TRIBUNAL JUDICIAIRE',
           },
         ],
       },
@@ -90,14 +90,10 @@ export const reponseSivParticulierFormat200 = {
           {
             date: '2023-04-28',
             motif: 'PVE',
-            remiseTitre: 'NON',
-            retraitTitre: 'NON',
           },
           {
             date: '2023-04-28',
             motif: 'DES',
-            remiseTitre: 'NON',
-            retraitTitre: 'NON',
           },
         ],
       },
@@ -107,9 +103,6 @@ export const reponseSivParticulierFormat200 = {
           oves: [
             {
               date: '2023-04-28',
-            },
-            {
-              date: '2023-04-27',
             },
           ],
           oveis: [
@@ -139,35 +132,15 @@ export const reponseSivParticulierFormat200 = {
     historique: [
       {
         date: '2022-08-26',
-        type: 'DECLARATION_ACHAT',
+        type: 'Achat ou reprise par un professionnel',
       },
       {
         date: '2015-05-18',
-        type: 'DUPLICATA',
+        type: 'Duplicata de la carte grise',
       },
       {
         date: '2009-04-20',
-        type: 'IMMAT_NORMALE',
-      },
-    ],
-    controlesTechniques: [
-      {
-        date: '2018-12-26',
-        nature: 'VTP',
-        resultat: 'A',
-        km: 160532,
-      },
-      {
-        date: '2016-12-10',
-        nature: 'VTP',
-        resultat: 'A',
-        km: 132874,
-      },
-      {
-        date: '2014-12-11',
-        nature: 'VTP',
-        resultat: 'A',
-        km: 98429,
+        type: 'Première immatriculation d\'un véhicule neuf',
       },
     ],
   },
@@ -176,20 +149,53 @@ export const reponseSivParticulierFormat200 = {
       nomNaissance: 'B******T',
       prenom: 'M****L',
     },
+    personneMorale: null,
     codePostal: '94400',
   },
   certificatImmatriculation: {
     age: 0,
     dateEmission: '2015-05-18',
   },
+    utac: {
+    updateDate: '2022-06-26',
+    status: 200,
+    ct: [
+      {
+        date: '2018-12-26',
+        resultatRaw: 'A',
+        resultat: 'Favorable',
+        nature: 'Contrôle Technique Périodique',
+        km: 160532,
+      },
+      {
+        date: '2016-12-10',
+        resultatRaw: 'A',
+        resultat: 'Favorable',
+        nature: 'Contrôle Technique Périodique',
+        km: 132874,
+      },
+      {
+        date: '2014-12-11',
+        resultatRaw: 'A',
+        resultat: 'Favorable',
+        nature: 'Contrôle Technique Périodique',
+        km: 98429,
+      },
+    ],
+  },
   clefAcheteur: '179d0be9-e9d2-4a61-9384-94440a4bc12b',
   messageUsager: null,
   plaqImmatHash: 'acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea',
   incomingQuery: {
-    nom: 'BLANCHET',
-    prenom: 'MARCEL',
-    immat: 'AA-948-BM',
-    numeroFormule: '2015CC11207',
+    sivPhysique: {
+      nom: 'BLANCHET',
+      prenom: 'MARCEL',
+      immat: 'AA-948-BM',
+      numeroFormule: '2015CC11207',
+    },
+    sivMorale: null,
+    ivtPhysique: null,
+    ivtMorale: null,
   },
   validiteClefAcheteur: '2023-06-03',
 }

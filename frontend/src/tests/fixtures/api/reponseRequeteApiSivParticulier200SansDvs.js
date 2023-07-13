@@ -6,10 +6,10 @@ export const reponseRequeteApiSivParticulier200SansDvs = {
     ...reponseRequeteApiSivParticulier200.data,
     vehicule: {
       ...reponseRequeteApiSivParticulier200.data.vehicule,
-      situation_admin: {
-        ...reponseRequeteApiSivParticulier200.data.vehicule.situation_admin,
+      situationAdmin: {
+        ...reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin,
         dvs: {
-          has_dvs: false,
+          hasDvs: false,
           informations: [],
         },
       },

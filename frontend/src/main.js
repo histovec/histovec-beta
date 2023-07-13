@@ -14,7 +14,7 @@ import axios from 'axios';
 import api from '@Api/index.js'
 
 window.addEventListener('beforeunload', function () {
-  navigator.sendBeacon(apiUrl + '/log/exit')
+  navigator.sendBeacon( `${apiUrl}/logs/${localStorage.getItem('userId')}/exit`)
 }, false)
 
 router.beforeEach((to, from, next) => {
@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL_API_DATA.concat('/public/v1')
+axios.defaults.baseURL = apiUrl
 
 axios.interceptors.request.use(async function (config)  {
   if (!config.headers.Authorization && config.url !== '/get_token') {

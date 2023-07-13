@@ -182,7 +182,7 @@ export default defineComponent({
               :key="index"
             >
               <span v-if="dvs.date">{{ dvs.date }} - </span>
-              <span class="fr-text--bleu">{{ dvs.dvsAutorite }}</span>
+              <span class="fr-text--bleu">{{ dvs.autorite }}</span>
             </div>
           </div>
           <div

@@ -2,21 +2,21 @@
   "vehicule": {
     "date_mise_a_jour": "1900-01-01",
     "certificat_immatriculation": {
-      "date_premiere_immatriculation": "2009-05-13",
+      "datePremiereImmatriculation": "2009-05-13",
       "nombre_de_mois_depuis_date_emission_certificat_immatriculation": "149",
       "numero_immatriculation_anonymisee": "CY-9**-RX",
       "titulaire": {
         "particulier": {
           "nom_anonymise": "H****",
           "prenoms_anonymises": "S******",
-          "code_postal": "60270"
+          "codePostal": "60270"
         }
       },
       "caracteristiques_techniques": {
         "marque": "CITROEN",
         "tvv": "PNCFAC",
         "numero_cnit": "MCT1012TD456",
-        "nom_commercial": "C1",
+        "nomCommercial": "C1",
         "couleur": "GRIS CLAIR",
         "type_de_reception": "CE",
         "vin_anonymise": "WVGZ********64552",
@@ -32,13 +32,13 @@
         "carrosserie_fr": "CI",
         "numero_de_reception": "e11*2001/116*0238*06",
         "cylindree": 998,
-        "puissance_nette": 50,
+        "puissanceNette": 50,
         "energie": "ES",
-        "puissance_cv": 4,
+        "puissanceCv": 4,
         "rapport_puissance_masse": 0,
         "places_assises": 4,
         "places_debout": 0,
-        "niveau_sonore": 80,
+        "niveauSonore": 80,
         "vitesse_du_moteur": 4500,
         "emission_co2": 106,
         "classe_environnementale_ue": "70/220*2003/76EURO4"
@@ -65,8 +65,8 @@
     },
     "historique": [
       {
-        "date": "2009-05-13",
-        "type": "IMMAT_NORMALE"
+        "opaDate": "2009-05-13",
+        "opaType": "IMMAT_NORMALE"
       }
     ],
     "import_en_france": {
