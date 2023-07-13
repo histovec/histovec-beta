@@ -69,6 +69,9 @@ const routes = (
     { path: '/vehicule-non-trouve', name: 'vehiculeNonTrouve', component: VehiculeNotFound,
       meta: { title: 'HistoVec - Véhicule non trouvé' },
     },
+    { path: '/:notFound', name: 'pageNonTrouvee', component: NotFoundPage,
+      meta: { title: 'HistoVec - Page non trouvée' },
+    },
   ]
 )
 
