@@ -47,28 +47,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="fr-grid-row  fr-grid-row--gutters">
-    <div class="fr-col-12">
-      <DsfrBreadcrumb
-        class="fr-mb-0"
-        :links="[]"
-      />
-    </div>
-
-    <div class="fr-col-lg-4 fr-col-xl-4">
-      <ImagePresentation :src="image.erreurSvg" />
-    </div>
-
-    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v">
+  <div class="fr-my-7w fr-mt-md-12w fr-mb-md-10w fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-grid-row--center">
+    <div class="fr-py-0 fr-col-12 fr-col-md-6">
       <h1>{{ title }}</h1>
-      <p class="fr-error-subtitle fr-text--xs">
+      <p class="fr-text--sm fr-mb-3w">
         {{ subTitle }}
       </p>
-
-      <p class="fr-text--xl">
+      <p class="fr-text--lead fr-mb-3w">
         {{ errorTitle }}
       </p>
-
       <p
         v-for="(errorMessage, index) in errorMessages"
         :key="index"
@@ -76,28 +63,25 @@ export default defineComponent({
       >
         {{ errorMessage }}
       </p>
-    </div>
-  </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w  fr-mt-4w">
-    <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4">
-      <HistoVecButtonLink
-        v-if="primaryAction"
-        v-bind="primaryAction"
-      />
+      <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w  fr-mt-4w">
+        <div class="fr-col-6">
+          <HistoVecButtonLink
+            v-if="primaryAction"
+            v-bind="primaryAction"
+          />
+        </div>
+        <div class="fr-col-6 ">
+          <HistoVecButtonLink
+            v-if="secondaryAction"
+            v-bind="secondaryAction"
+            secondary
+          />
+        </div>
+      </div>
     </div>
-    <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4">
-      <HistoVecButtonLink
-        v-if="secondaryAction"
-        v-bind="secondaryAction"
-        secondary
-      />
+    <div class="fr-col-12 fr-col-md-3 fr-col-offset-md-1 fr-px-6w fr-px-md-0 fr-py-0">
+      <ImagePresentation :src="image.erreurSvg" />
     </div>
   </div>
 </template>
-
-<style scoped>
-.fr-error-subtitle {
-  color: var(--text-mention-grey);
-}
-</style>
