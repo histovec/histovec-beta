@@ -15,7 +15,7 @@ const RapportPage = () => import('@Views/rapportPage/RapportPage.vue')
 const NotFoundPage = () => import('@Views/error/NotFoundPage.vue')
 const UnavailableServicePage = () => import('@Views/error/UnavailableServicePage.vue')
 const UnintendedErrorPage = () => import('@Views/error/UnintendedErrorPage.vue')
-
+const VehiculeNotFound = () => import('@Views/error/VehiculeNotFound.vue')
 
 // @flag @makeSiteUnavailable
 const isHistoVecUnavailable = false
@@ -58,34 +58,16 @@ const routes = (
 
     // Errors pages
     { path: '/erreur-inattendue', name: 'erreurInattendue', component: UnintendedErrorPage,
-      props: route => ({
-        title: route.query.title,
-        errorTitle: route.query.errorTitle,
-        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
-      }),
       meta: { title: 'HistoVec - Erreur inattendue' },
     },
     { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage,
-      props: route => ({
-        title: route.query.title,
-        errorTitle: route.query.errorTitle,
-        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
-      }),
       meta: { title: 'HistoVec - Service indisponible' },
     },
-    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage,
-      props: route => ({
-        title: route.query.title,
-        errorTitle: route.query.errorTitle,
-        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
-      }),
+    { path: '/page-non-trouvee', name: 'pageNonTrouvee', component: NotFoundPage,
       meta: { title: 'HistoVec - Page non trouvée' },
+    },
+    { path: '/vehicule-non-trouve', name: 'vehiculeNonTrouve', component: VehiculeNotFound,
+      meta: { title: 'HistoVec - Véhicule non trouvé' },
     },
   ]
 )
