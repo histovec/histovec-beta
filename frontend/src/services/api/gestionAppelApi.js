@@ -10,6 +10,7 @@ import router from '@/router'
 import gestionRapportErreur from '@Services/api/gestionRapportErreur'
 
 const store = useRapportStore()
+const uuidNavigateur = localStorage.getItem('userId')
 
 const fetchRapportProprietaire = async (data) => {
   const idProprietaire = await genererId.proprietaireId(data)
@@ -26,19 +27,19 @@ const fetchRapportProprietaire = async (data) => {
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-      await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire, localStorage.getItem('userId'))
+      await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-      await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire)
+      await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
   }
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-      await store.fetchRapportIvtPhysique(dataRequeteBody, idProprietaire)
+      await store.fetchRapportIvtPhysique(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-      await store.fetchRapportIvtMorale(dataRequeteBody, idProprietaire)
+      await store.fetchRapportIvtMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
   }
 

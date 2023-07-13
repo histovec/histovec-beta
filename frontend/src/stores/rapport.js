@@ -72,14 +72,14 @@ export const useRapportStore = defineStore('rapport',{
     async fetchRapportSivPersonne(dataBody, id, uuidNavigateur) {
       await this.fetchRapport(`/siv/physique/${uuidNavigateur}`, dataBody, id)
     },
-    async fetchRapportSivMorale(dataBody, id){
-      await this.fetchRapport('/siv/morale', dataBody, id)
+    async fetchRapportSivMorale(dataBody, id, uuidNavigateur){
+      await this.fetchRapport(`/siv/morale/${uuidNavigateur}`, dataBody, id)
     },
-    async fetchRapportIvtPhysique(dataBody, id){
-      await this.fetchRapport('/ivt/physique', dataBody, id)
+    async fetchRapportIvtPhysique(dataBody, id, uuidNavigateur){
+      await this.fetchRapport(`/ivt/physique/${uuidNavigateur}`, dataBody, id)
     },
-    async fetchRapportIvtMorale(dataBody, id){
-      await this.fetchRapport('/ivt/morale', dataBody, id)
+    async fetchRapportIvtMorale(dataBody, id, uuidNavigateur){
+      await this.fetchRapport(`/ivt/morale/${uuidNavigateur}`, dataBody, id)
     },
     async setRapport(rapport) {
       this.rapportData = rapport
