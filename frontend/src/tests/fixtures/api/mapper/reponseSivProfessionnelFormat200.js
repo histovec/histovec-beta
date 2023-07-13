@@ -3,16 +3,21 @@ import { reponseSivParticulierFormat200 } from '@/tests/fixtures/api/mapper/repo
 export const reponseSivProfessionnelFormat200 = {
   ...reponseSivParticulierFormat200,
   proprietaire: {
+    ...reponseSivParticulierFormat200.proprietaire,
+    particulier: null,
     personneMorale: {
       raisonSociale: 'raison_sociale',
       siren: 'siren',
     },
-    codePostal: '94400',
   },
   incomingQuery: {
-    raisonSociale: 'raison_sociale',
-    siren: 'siren',
-    immat: 'AA-948-BM',
-    numeroFormule: '2015CC11207',
+    ...reponseSivParticulierFormat200.incomingQuery,
+    sivPhysique: null,
+    sivMorale: {
+      raisonSociale: 'ZMF AUTO',
+      siren: '800289522',
+      immat: 'AA-149-BY',
+      numeroFormule: '2012fp66022',
+    },
   },
 }

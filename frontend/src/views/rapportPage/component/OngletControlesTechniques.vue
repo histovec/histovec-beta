@@ -82,7 +82,7 @@ export default defineComponent({
           <div class="fr-col-6 fr-col-sm-3 fr-col-md-3  fr-col-lg-3  fr-col-xl-3  fr-text--bleu">
             <DsfrBadge
               :label="entry.resultat"
-              :type="getDsfrBadgeType(entry.resultat)"
+              :type="getDsfrBadgeType(entry.resultatRaw)"
               :no-icon="true"
             />
           </div>

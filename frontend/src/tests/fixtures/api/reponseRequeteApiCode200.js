@@ -5,14 +5,16 @@ export const reponseRequeteApiCode200 = {
   data: {
     ...reponseRequeteApiSivParticulier200.data,
     proprietaire: {
-      particulier: {
-        nom_naissance: 'B******T',
+      ...reponseRequeteApiSivParticulier200.data.proprietaire,
+      personnePhysique: {
+        nomNaissance: 'B******T',
         prenom: 'M****L',
       },
-      code_postal: '94400',
     },
-    incoming_query: {
-      code: '32ba50ad-ac91-42cb-8444-c197727d018e',
+    incomingQuery: {
+      ...reponseRequeteApiSivParticulier200.data.incomingQuery,
+      sivPhysique: null,
+      ivtPhysique: null,
     },
   },
 }

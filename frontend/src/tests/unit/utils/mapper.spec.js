@@ -53,7 +53,7 @@ describe('mapper', () => {
   })
 
   test('doit mapper le query pour un siv_physique', () => {
-    const incomingQuery = reponseRequeteApiSivParticulier200.data.incoming_query
+    const incomingQuery = reponseRequeteApiSivParticulier200.data.incomingQuery
     const incomingQueryOutput = reponseSivParticulierFormat200.incomingQuery
     const incomingQueryMapped = queryMapping(incomingQuery)
 
@@ -61,7 +61,7 @@ describe('mapper', () => {
   })
 
   test('doit mapper le query pour un siv_morale', () => {
-    const incomingQuery = reponseRequeteApiSivProfessionnel200.data.incoming_query
+    const incomingQuery = reponseRequeteApiSivProfessionnel200.data.incomingQuery
     const incomingQueryOutput = reponseSivProfessionnelFormat200.incomingQuery
     const incomingQueryMapped = queryMapping(incomingQuery)
 
@@ -69,7 +69,7 @@ describe('mapper', () => {
   })
 
   test('doit mapper le query pour un ivt_physique', () => {
-    const incomingQuery = reponseRequeteApiIvtParticulier200.data.incoming_query
+    const incomingQuery = reponseRequeteApiIvtParticulier200.data.incomingQuery
     const incomingQueryOutput = reponseIvtParticulierFormat200.incomingQuery
     const incomingQueryMapped = queryMapping(incomingQuery)
 
@@ -77,7 +77,7 @@ describe('mapper', () => {
   })
 
   test('doit mapper le query pour un ivt_morale', () => {
-    const incomingQuery = reponseRequeteApiIvtProfessionnel200.data.incoming_query
+    const incomingQuery = reponseRequeteApiIvtProfessionnel200.data.incomingQuery
     const incomingQueryOutput = reponseIvtProfessionnelFormat200.incomingQuery
     const incomingQueryMapped = queryMapping(incomingQuery)
 
@@ -85,7 +85,7 @@ describe('mapper', () => {
   })
 
   test('doit mapper le query pour un report par code', () => {
-    const incomingQuery = reponseRequeteApiCode200.data.incoming_query
+    const incomingQuery = reponseRequeteApiCode200.data.incomingQuery
     const incomingQueryOutput = reponseCodeFormat200.incomingQuery
     const incomingQueryMapped = queryMapping(incomingQuery)
 
@@ -109,8 +109,8 @@ describe('mapper', () => {
   })
 
   test('doit mapper un controle techniques', () => {
-    const controleTechniques = reponseRequeteApiIvtProfessionnel200.data.vehicule.controles_techniques
-    const controleTechniquesOutput = reponseIvtProfessionnelFormat200.vehicule.controlesTechniques
+    const controleTechniques = reponseRequeteApiIvtProfessionnel200.data.utac.ct
+    const controleTechniquesOutput = reponseIvtProfessionnelFormat200.utac.ct
     const controleTechniquesMapped = controlesTechniquesMapping(controleTechniques)
 
     expect(controleTechniquesMapped).toStrictEqual(controleTechniquesOutput)
@@ -118,7 +118,7 @@ describe('mapper', () => {
 
   // todo ajouter test gages
   test('doit mapper les gages', () => {
-    const gages = reponseRequeteApiSivParticulier200.data.vehicule.situation_admin.gages
+    const gages = reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin.gages
     const gagesOutput = reponseSivParticulierFormat200.vehicule.situationAdmin.gages
     const gagesMapped = gagesMapping(gages)
 
@@ -126,7 +126,7 @@ describe('mapper', () => {
   })
 
   test('ne doit pas mapper les gages', () => {
-    const gages = reponseRequeteApiSivParticulier200SansGages.data.vehicule.situation_admin.gages
+    const gages = reponseRequeteApiSivParticulier200SansGages.data.vehicule.situationAdmin.gages
     const gagesOutput = reponseSivParticulierFormat200SansGages.vehicule.situationAdmin.gages
     const gagesMapped = gagesMapping(gages)
 
@@ -135,7 +135,7 @@ describe('mapper', () => {
 
   // todo ajouter test dvsMapping
   test('doit mapper les dvs', () => {
-    const dvs = reponseRequeteApiSivParticulier200.data.vehicule.situation_admin.dvs
+    const dvs = reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin.dvs
     const dvsOutput = reponseSivParticulierFormat200.vehicule.situationAdmin.dvs
     const dvsMapped = dvsMapping(dvs)
 
@@ -143,7 +143,7 @@ describe('mapper', () => {
   })
 
   test('ne doit pas mapper les dvs', () => {
-    const dvs = reponseRequeteApiSivParticulier200SansDvs.data.vehicule.situation_admin.dvs
+    const dvs = reponseRequeteApiSivParticulier200SansDvs.data.vehicule.situationAdmin.dvs
     const dvsOutput = reponseSivParticulierFormat200SansDvs.vehicule.situationAdmin.dvs
     const dvsMapped = dvsMapping(dvs)
 
@@ -152,7 +152,7 @@ describe('mapper', () => {
 
   // todo ajouter test suspensionsMapping
   test('doit mapper les suspensions', () => {
-    const suspensions = reponseRequeteApiSivParticulier200.data.vehicule.situation_admin.suspensions
+    const suspensions = reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin.suspensions
     const suspensionsOutput = reponseSivParticulierFormat200.vehicule.situationAdmin.suspensions
     const suspensionsMapped = suspensionsMapping(suspensions)
 
@@ -160,7 +160,7 @@ describe('mapper', () => {
   })
 
   test('ne doit pas mapper les suspensions', () => {
-    const suspensions = reponseRequeteApiSivParticulier200SansSuspensions.data.vehicule.situation_admin.suspensions
+    const suspensions = reponseRequeteApiSivParticulier200SansSuspensions.data.vehicule.situationAdmin.suspensions
     const suspensionsOutput = reponseSivParticulierFormat200SansSuspensions.vehicule.situationAdmin.suspensions
     const suspensionsMapped = suspensionsMapping(suspensions)
 
@@ -169,7 +169,7 @@ describe('mapper', () => {
 
   // todo ajouter test oppositionsMapping
   test('doit mapper les oppositions', () => {
-    const oppositions = reponseRequeteApiSivParticulier200.data.vehicule.situation_admin.oppositions
+    const oppositions = reponseRequeteApiSivParticulier200.data.vehicule.situationAdmin.oppositions
     const oppositionsOutput = reponseSivParticulierFormat200.vehicule.situationAdmin.oppositions
     const oppositionsMapped = oppositionsMapping(oppositions)
 
@@ -177,7 +177,7 @@ describe('mapper', () => {
   })
 
   test('ne doit pas mapper les oppositions', () => {
-    const oppositions = reponseRequeteApiSivParticulier200SansOppositions.data.vehicule.situation_admin.oppositions
+    const oppositions = reponseRequeteApiSivParticulier200SansOppositions.data.vehicule.situationAdmin.oppositions
     const oppositionsOutput = reponseSivParticulierFormat200SansOppositions.vehicule.situationAdmin.oppositions
     const oppositionsMapped = oppositionsMapping(oppositions)
 

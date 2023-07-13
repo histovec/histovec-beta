@@ -5,17 +5,25 @@ export const reponseRequeteApiIvtProfessionnel200 = {
   data: {
     ...reponseRequeteApiSivParticulier200.data,
     proprietaire: {
-      personne_morale: {
-        raison_sociale: 'raison_sociale',
+      ...reponseRequeteApiSivParticulier200.data.proprietaire,
+      personnePhysique: {
+        nomNaissance: '',
+        prenom: '',
+      },
+      personneMorale: {
+        raisonSociale: 'raison_sociale',
         siren: 'siren',
       },
-      code_postal: '94400',
     },
-    incoming_query: {
-      raison_sociale: 'raison_sociale',
-      siren: 'siren',
-      immat: '664RLD75',
-      date_emission_ci: '31/05/2023',
+    incomingQuery: {
+      ...reponseRequeteApiSivParticulier200.data.incomingQuery,
+      sivPhysique: null,
+      ivtMorale: {
+        raisonSociale: 'raison_sociale',
+        siren: 'siren',
+        immat: '664RLD75',
+        dateEmissionCi: '31/05/2023',
+      },
     },
   },
 }

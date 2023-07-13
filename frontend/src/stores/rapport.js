@@ -31,7 +31,7 @@ export const useRapportStore = defineStore('rapport',{
       return state.chargement
     },
     getControlesTechniques(state){
-      return state.rapportData.vehicule.controlesTechniques
+      return state.rapportData.utac
     },
   },
   actions: {
@@ -69,8 +69,8 @@ export const useRapportStore = defineStore('rapport',{
         this.chargement = false
       }
     },
-    async fetchRapportSivPersonne(dataBody, id) {
-      await this.fetchRapport('/siv/personne', dataBody, id)
+    async fetchRapportSivPersonne(dataBody, id, uuidNavigateur) {
+      await this.fetchRapport(`/siv/physique/${uuidNavigateur}`, dataBody, id)
     },
     async fetchRapportSivMorale(dataBody, id){
       await this.fetchRapport('/siv/morale', dataBody, id)

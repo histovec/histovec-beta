@@ -26,7 +26,7 @@ const fetchRapportProprietaire = async (data) => {
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-      await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire)
+      await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire, localStorage.getItem('userId'))
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
       await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire)
@@ -59,7 +59,7 @@ const fetchRapportProprietaire = async (data) => {
     // formate les dates
     rapport = formaterRapport(rapport)
 
-    store.setRapport(rapport)
+    await store.setRapport(rapport)
   } catch (error) {
     router.push({
       name: 'serviceIndisponible',

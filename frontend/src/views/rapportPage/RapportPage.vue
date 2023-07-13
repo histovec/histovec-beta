@@ -173,8 +173,8 @@ export default defineComponent({
     getVehiculeDescription () {
       return (
         this.isCIAnnule ?
-          `Le certificat demandé a été annulé : ${ this.rapportData.incomingQuery?.immat }` :
-          `Numéro d'immatriculation : ${ this.rapportData.incomingQuery?.immat }`
+          `Le certificat demandé a été annulé : ${ this.rapportData.infos?.plaqueImmatriculation }` :
+          `Numéro d'immatriculation : ${ this.rapportData.infos?.plaqueImmatriculation }`
       )
     },
     getMiDescription () {
@@ -273,6 +273,7 @@ export default defineComponent({
     // ----- Accès rapide aux données du rapport -----
 
     dateMiseAJourFR () {
+      // todo : modifier la date récupérer pour être conforme à la date récupéré de l'api data
       return this.rapportData.dateMiseAJour? this.rapportData.dateMiseAJour: '01/01/1900'
     },
     isCIAnnule () {
@@ -336,7 +337,7 @@ export default defineComponent({
 
     // todo a supprimer a la fin de la refonte
     // ---- Debut a supprimer
-    const refonteEnCours = true
+    const refonteEnCours = false
     if (refonteEnCours) {
       if (this.isRapportAcheteur) {
         if (this.isValidBuyer) {
@@ -457,7 +458,7 @@ export default defineComponent({
     // ---- Fin a supprimer
 
     this.rapportData = this.store.getRapport
-    const areControlesTechinquesDisponibles = this.store.getControlesTechniques
+    const controlesTechniques = this.store.getControlesTechniques
 
     const defaultTabTitles = [
       { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
@@ -468,7 +469,7 @@ export default defineComponent({
     ]
 
     this.tabTitles = (
-      (areControlesTechinquesDisponibles ) ?
+      (controlesTechniques.status === 200 ) ?
         defaultTabTitles.concat([
           { title: 'Contrôles techniques', panelId: 'report-tab-content-5', tabId:'report-tab-5'},
           { title: 'Kilométrage', panelId: 'report-tab-content-6', tabId:'report-tab-6'},
@@ -936,7 +937,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletControlesTechniques
-            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"
+            :controles-techniques-historique="rapportData?.utac?.ct"
           />
         </DsfrTabContent>
 
@@ -948,7 +949,7 @@ export default defineComponent({
           :asc="tabs.asc"
         >
           <OngletKilometrage
-            :controles-techniques-historique="rapportData?.vehicule?.controlesTechniques"
+            :controles-techniques-historique="rapportData?.utac?.ct"
           />
         </DsfrTabContent>
       </DsfrTabs>
