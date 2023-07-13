@@ -97,10 +97,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApiSivProfessionnel200)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportSivMorale(formDataSivPersonneMoraleFormates, id)
+    await rapport.fetchRapportSivMorale(formDataSivPersonneMoraleFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/siv/morale', formDataSivPersonneMoraleFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/siv/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivPersonneMoraleFormates)
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiSivProfessionnel200.status)
@@ -115,10 +115,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApi404)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportSivMorale(formDataSivPersonneMoraleFormates, id)
+    await rapport.fetchRapportSivMorale(formDataSivPersonneMoraleFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/siv/morale', formDataSivPersonneMoraleFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/siv/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivPersonneMoraleFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/notFound')
@@ -137,10 +137,10 @@ describe('Rapport store', () => {
     )
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportSivMorale(formDataSivPersonneMoraleFormates, id)
+    await rapport.fetchRapportSivMorale(formDataSivPersonneMoraleFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/siv/morale', formDataSivPersonneMoraleFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/siv/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivPersonneMoraleFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/unavailable')
@@ -157,10 +157,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApiIvtParticulier200)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportIvtPhysique(formDataFniParticulierFormates, id)
+    await rapport.fetchRapportIvtPhysique(formDataFniParticulierFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique', formDataFniParticulierFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniParticulierFormates)
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiIvtParticulier200.status)
@@ -175,10 +175,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApi404)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportIvtPhysique(formDataFniParticulierFormates, id)
+    await rapport.fetchRapportIvtPhysique(formDataFniParticulierFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique', formDataFniParticulierFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniParticulierFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/notFound')
@@ -197,10 +197,10 @@ describe('Rapport store', () => {
     )
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportIvtPhysique(formDataFniParticulierFormates, id)
+    await rapport.fetchRapportIvtPhysique(formDataFniParticulierFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique', formDataFniParticulierFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniParticulierFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/unavailable')
@@ -217,10 +217,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApiIvtProfessionnel200)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportIvtMorale(formDataFniPersonneMoraleFormates, id)
+    await rapport.fetchRapportIvtMorale(formDataFniPersonneMoraleFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale', formDataFniPersonneMoraleFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniPersonneMoraleFormates)
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiIvtProfessionnel200.status)
@@ -235,10 +235,10 @@ describe('Rapport store', () => {
     axios.post.mockResolvedValue(reponseRequeteApi404)
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportIvtMorale(formDataFniPersonneMoraleFormates, id)
+    await rapport.fetchRapportIvtMorale(formDataFniPersonneMoraleFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale', formDataFniPersonneMoraleFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniPersonneMoraleFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/notFound')
@@ -257,10 +257,10 @@ describe('Rapport store', () => {
     )
 
     expect(rapport.chargement).toBe(false)
-    await rapport.fetchRapportIvtMorale(formDataFniPersonneMoraleFormates, id)
+    await rapport.fetchRapportIvtMorale(formDataFniPersonneMoraleFormates, id, 'd2cbf892-0f7a-401a-8f05-f71b941d1ab8')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
-    expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale', formDataFniPersonneMoraleFormates)
+    expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniPersonneMoraleFormates)
 
     expect(spyApi).toHaveBeenCalledTimes(1)
     expect(spyApi).toBeCalledWith('/holder/unavailable')
