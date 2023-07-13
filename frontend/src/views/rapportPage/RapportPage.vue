@@ -1,6 +1,5 @@
 <script>
 import { defineComponent } from 'vue'
-import QrcodeVue from 'qrcode.vue'
 
 import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
@@ -50,6 +49,7 @@ import genererId from '@Services/genererId'
 import genererCle from '@Services/genererCle'
 import gestionAppelApi from '@Services/api/gestionAppelApi'
 import { useRapportStore } from '@Stores/rapport'
+import { apiUrl } from '@/config.js'
 
 export default defineComponent({
   name: 'RapportVendeurPage',
@@ -66,7 +66,7 @@ export default defineComponent({
     TuileDsfrNonCliquable,
     HistoVecModale,
     AlerteComponent,
-    HistoVecButtonLink, QrcodeVue,
+    HistoVecButtonLink,
     ImagePresentation,
   },
 
@@ -79,6 +79,8 @@ export default defineComponent({
 
   data () {
     return  {
+      uuid: localStorage.getItem('userId'),
+      apiUrl,
       // Initialized beforeMount
       holderId: null,
       holderKey: null,
@@ -117,6 +119,7 @@ export default defineComponent({
         logoMI,
         rapportAcheteurSvg,
         rapportVendeurSvg,
+        qrcode: null,
 
         csa: {
           logoHistoVecBytes: '',
@@ -460,6 +463,20 @@ export default defineComponent({
     this.rapportData = this.store.getRapport
     const controlesTechniques = this.store.getControlesTechniques
 
+    // récupère le qrcode
+    try {
+      const qrcodeResponse = await api.getQrCode(this.rapportData.clefAcheteur)
+      const myBlob = new Blob([qrcodeResponse.data], {type: 'image/png'});
+
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        this.images.qrcode = fileReader.result;
+      };
+      fileReader.readAsDataURL(myBlob);
+    } catch (error) {
+      api.log('/qrcode-ko')
+    }
+
     const defaultTabTitles = [
       { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
       { title: 'Véhicule', panelId: 'report-tab-content-1', tabId:'report-tab-1'},
@@ -711,11 +728,11 @@ export default defineComponent({
       Ex: un lien transmis le 18/01/2022 sera accessible jusqu'au 08/02/2022.
     </p>
     <div class="text-center">
-      <qrcode-vue
-        :value="url"
-        :size="150"
-        level="L"
-      />
+      <img
+        :src="images.qrcode"
+        alt="QR code de redirection vers le lien acheteur."
+        class="image-qrcode"
+      >
     </div>
   </HistoVecModale>
   <AlerteComponent
@@ -1019,5 +1036,9 @@ export default defineComponent({
   }
   .image-avis {
     height: 5rem;
+  }
+  .image-qrcode {
+    height: 170px;
+    width: 170px;
   }
 </style>
