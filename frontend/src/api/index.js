@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const VITE_DISABLE_API_LOG = import.meta.env.VITE_DISABLE_API_LOG
 const IS_API_LOG_DISABLED = VITE_DISABLE_API_LOG === 'true'
-
+const uuid = localStorage.getItem('userId')
 
 export default {
   getHolderReport: async (payload) => {
@@ -86,8 +86,6 @@ export default {
       return new Promise(resolve => resolve())
     }
 
-    const uuid = localStorage.getItem('userId')
-
     await axios.put(`/logs/${uuid}${path}`)
   },
   sendContactEmail: async (contact) => {
@@ -111,5 +109,8 @@ export default {
         status: 500,
       }
     }
+  },
+  getQrCode: async (clefAcheteur) => {
+    return await axios.get(`/get_buyer_qrcode/${uuid}/${clefAcheteur}`, { responseType: 'blob' })
   },
 }
