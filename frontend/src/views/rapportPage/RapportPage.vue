@@ -173,8 +173,8 @@ export default defineComponent({
     getVehiculeDescription () {
       return (
         this.isCIAnnule ?
-          `Le certificat demandé a été annulé : ${ this.rapportData.infos?.plaqueImmatriculation }` :
-          `Numéro d'immatriculation : ${ this.rapportData.infos?.plaqueImmatriculation }`
+          `Le certificat demandé a été annulé : ${ this.rapportData.vehicule?.infos?.plaqueImmatriculation }` :
+          `Numéro d'immatriculation : ${ this.rapportData.vehicule?.infos?.plaqueImmatriculation }`
       )
     },
     getMiDescription () {
