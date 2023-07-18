@@ -51,7 +51,15 @@ axios.interceptors.response.use(
       compteurAuthentification++
       await api.authentication()
       error.config.headers.Authorization = axios.defaults.headers.common.Authorization
-      await axios.request(error.config)
+
+      const response = await axios.request(error.config)
+        .catch(error => {
+          return Promise.reject(error)
+        })
+
+      return Promise.resolve(response)
+    } else {
+      return Promise.reject(error)
     }
 });
 
