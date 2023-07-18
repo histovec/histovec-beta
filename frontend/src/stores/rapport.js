@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import api from '@Api/index.js'
 
 export const useRapportStore = defineStore('rapport',{
   state: () => ({
@@ -41,8 +40,6 @@ export const useRapportStore = defineStore('rapport',{
         const data = await axios.post('/report_by_data'.concat(url), dataBody)
 
         if (data.status !== 200) {
-          api.log('/holder/notFound')
-
           this.id = id
           this.status = data.status
           this.message = data.message
@@ -59,8 +56,6 @@ export const useRapportStore = defineStore('rapport',{
         }
       }
       catch (error) {
-        api.log('/holder/unavailable')
-
         this.id = id
         this.status = error.response.status
         this.message = error.response.statusText

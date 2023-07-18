@@ -68,7 +68,7 @@ export default {
         axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`
       })
       .catch(async error => {
-        if (error.response.status !== 403) {
+        if (error.response.status !== 403 && error.response.status !== 401) {
           await axios.post('/get_token', dataBody)
             .then(response => {
               axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`
