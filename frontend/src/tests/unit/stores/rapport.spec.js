@@ -2,7 +2,6 @@ import { setActivePinia, createPinia } from 'pinia'
 import { useRapportStore } from '@Stores/rapport'
 import { describe, expect, vi, it, beforeAll, afterEach } from 'vitest'
 import axios from 'axios'
-import api from '@Api/index'
 import {
   formDataSivParticulierFormates,
   formDataSivPersonneMoraleFormates,
@@ -22,10 +21,8 @@ import { id } from '@/tests/fixtures/constantes'
 vi.mock('axios')
 
 describe('Rapport store', () => {
-  let spyApi
   beforeAll(() => {
     setActivePinia(createPinia())
-    spyApi = vi.spyOn(api, 'log').mockReturnValue(true)
   })
 
   afterEach(() => {
@@ -60,9 +57,6 @@ describe('Rapport store', () => {
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivParticulierFormates)
 
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/notFound')
-
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApi404.status)
     expect(rapport.message).toBe(reponseRequeteApi404.message)
@@ -81,9 +75,6 @@ describe('Rapport store', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivParticulierFormates)
-
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/unavailable')
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiErreur500.response.status)
@@ -120,9 +111,6 @@ describe('Rapport store', () => {
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivPersonneMoraleFormates)
 
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/notFound')
-
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApi404.status)
     expect(rapport.message).toBe(reponseRequeteApi404.message)
@@ -141,9 +129,6 @@ describe('Rapport store', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/siv/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataSivPersonneMoraleFormates)
-
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/unavailable')
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiErreur500.response.status)
@@ -180,9 +165,6 @@ describe('Rapport store', () => {
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniParticulierFormates)
 
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/notFound')
-
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApi404.status)
     expect(rapport.message).toBe(reponseRequeteApi404.message)
@@ -201,9 +183,6 @@ describe('Rapport store', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/ivt/physique/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniParticulierFormates)
-
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/unavailable')
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiErreur500.response.status)
@@ -240,9 +219,6 @@ describe('Rapport store', () => {
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniPersonneMoraleFormates)
 
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/notFound')
-
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApi404.status)
     expect(rapport.message).toBe(reponseRequeteApi404.message)
@@ -261,9 +237,6 @@ describe('Rapport store', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post).toBeCalledWith('/report_by_data/ivt/morale/d2cbf892-0f7a-401a-8f05-f71b941d1ab8', formDataFniPersonneMoraleFormates)
-
-    expect(spyApi).toHaveBeenCalledTimes(1)
-    expect(spyApi).toBeCalledWith('/holder/unavailable')
 
     expect(rapport.id).toBe(id)
     expect(rapport.status).toBe(reponseRequeteApiErreur500.response.status)
