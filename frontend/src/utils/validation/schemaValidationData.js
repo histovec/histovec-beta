@@ -7,7 +7,7 @@ export const schemaValidationData = object().shape({
       nomCommercial: string().required(),
       puissanceCv: number().required(),
       couleur: string().required(),
-      tvv: string().notRequired(),
+      tvv: string().required(),
       numCnit: string().required(),
       typeReception: string().required(),
       vin: string().required(),
@@ -20,16 +20,16 @@ export const schemaValidationData = object().shape({
       genre: string().required(),
       carrosserieCe: string().required(),
       carrosserieNationale: string().required(),
-      numeroReception: string().notRequired(),
+      numeroReception: string().required(),
       cylindree: number().required(),
-      puissanceNette: number().notRequired(),
+      puissanceNette: number().required(),
       energie: string().required(),
       nbPlacesAssises: number().required(),
       nbPlacesDebout: number().required(),
       niveauSonore: number().required(),
       vitesseMoteur: number().required(),
       co2: number().required(),
-      pollution: string().notRequired(),
+      pollution: string().required(),
       rapportPuissMasse: number().required(),
     }).required().noUnknown(true).strict(),
     infos: object().shape({
@@ -73,7 +73,7 @@ export const schemaValidationData = object().shape({
         hasDvs: boolean().required(),
         informations: array().of(
           object().shape({
-            dvsDate: string().notRequired(),
+            dvsDate: string().required(),
             autorite: string().required(),
           }).required().noUnknown(true).strict(),
         ).required(),
@@ -91,16 +91,16 @@ export const schemaValidationData = object().shape({
         hasOppositions: boolean().required(),
         informations: object().shape({
           oves: array().of(
-            string().notRequired().strict(),
+            string().notRequired(),
           ).required(),
           oveis: array().of(
-            string().notRequired().strict(),
+            string().notRequired(),
           ).required(),
           otcisPv: array().of(
-            string().notRequired().strict(),
+            string().notRequired(),
           ).required(),
           otcis: array().of(
-            string().notRequired().strict(),
+            string().notRequired(),
           ).required(),
         }).required().noUnknown(true).strict(),
       }).required().noUnknown(true).strict(),

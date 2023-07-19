@@ -1,4 +1,36 @@
 import { transformeDateEnFr } from '@Utils/format/date'
+import {
+  AFFICHAGE_NUMBER_PAR_DEFAUT,
+  AFFICHAGE_STRING_PAR_DEFAUT,
+  AFFICHAGE_DATE_PAR_DEFAUT,
+  REPONSE_API_NUMBER_PAR_DEFAUT,
+  REPONSE_API_STRING_PAR_DEFAUT,
+  REPONSE_API_DATE_PAR_DEFAUT,
+} from '@Constants/valeursParDefaut'
+
+export const formatInformationStringManquante = (information) => {
+  if (information === REPONSE_API_STRING_PAR_DEFAUT) {
+    return AFFICHAGE_STRING_PAR_DEFAUT
+  }
+
+  return information
+}
+
+export const formatInformationNumberManquante = (information) => {
+  if (information === REPONSE_API_NUMBER_PAR_DEFAUT) {
+    return AFFICHAGE_NUMBER_PAR_DEFAUT
+  }
+
+  return information
+}
+
+export const formatInformationDateManquante = (information) => {
+  if (information === REPONSE_API_DATE_PAR_DEFAUT) {
+    return AFFICHAGE_DATE_PAR_DEFAUT
+  }
+
+  return transformeDateEnFr(information) ?? null
+}
 
 export const formatGages = (gages) => {
   if (!gages.hasGages) return gages
@@ -6,7 +38,7 @@ export const formatGages = (gages) => {
   const informations = gages.informations.map((value) => {
     return {
       ...value,
-      date: transformeDateEnFr(value.date) ?? null,
+      date: formatInformationDateManquante(value.date),
     }
   })
 
@@ -22,7 +54,7 @@ export const formatDvs = (dvs) => {
   const informations = dvs.informations.map((value) => (
     {
       ...value,
-      date: transformeDateEnFr(value.date) ?? null,
+      date: formatInformationDateManquante(value.date),
     }
   ))
 
@@ -38,7 +70,7 @@ export const formatSuspensions = (suspensions) => {
   const informations = suspensions.informations.map((value) => (
     {
       ...value,
-      date: transformeDateEnFr(value.date) ?? null,
+      date: formatInformationDateManquante(value.date),
     }
   ))
 
@@ -52,7 +84,7 @@ const formatOppositionsType = (oppositionsType) => {
   return oppositionsType.map((value) => (
     {
       ...value,
-      date: transformeDateEnFr(value.date) ?? null,
+      date: formatInformationDateManquante(value.date),
     }
   ))
 }
@@ -75,7 +107,7 @@ export const formatHistorique = (historique) => {
   return historique.map((value) => (
     {
       ...value,
-      date: transformeDateEnFr(value.date) ?? null,
+      date: formatInformationDateManquante(value.date),
     }
   ))
 }
@@ -84,14 +116,44 @@ export const formatControlesTechniques = (controlesTechniques) => {
   return controlesTechniques.map((value) => (
     {
       ...value,
-      date: transformeDateEnFr(value.date) ?? null,
+      date: formatInformationDateManquante(value.date),
     }
   ))
 }
 
 export const formaterRapport = (rapport) => {
   const {
-    vehicule:{
+    vehicule: {
+      caracteristiques: {
+        marque,
+        nomCommercial,
+        puissanceCv,
+        couleur,
+        tvv,
+        numCnit,
+        typeReception,
+        vin,
+        champF1,
+        champF2,
+        champF3,
+        champG,
+        champG1,
+        categorie,
+        genre,
+        carrosserieCe,
+        carrosserieNationale,
+        numeroReception,
+        cylindree,
+        puissanceNette,
+        energie,
+        nbPlacesAssises,
+        nbPlacesDebout,
+        niveauSonore,
+        vitesseMoteur,
+        co2,
+        pollution,
+        rapportPuissMasse,
+      },
       infos: {
         datePremiereImmatriculation,
         datePremiereImmatSiv,
@@ -118,6 +180,9 @@ export const formaterRapport = (rapport) => {
     certificatImmatriculation: {
       dateEmission,
     },
+    proprietaire: {
+      codePostal,
+    },
     utac: {
       updateDate,
       ct,
@@ -129,21 +194,51 @@ export const formaterRapport = (rapport) => {
     ...rapport,
     vehicule: {
       ...rapport.vehicule,
+      caracteristiques: {
+        marque: formatInformationStringManquante(marque),
+        nomCommercial: formatInformationStringManquante(nomCommercial),
+        puissanceCv: formatInformationNumberManquante(puissanceCv),
+        couleur: formatInformationStringManquante(couleur),
+        tvv: formatInformationStringManquante(tvv),
+        numCnit: formatInformationStringManquante(numCnit),
+        typeReception: formatInformationStringManquante(typeReception),
+        vin: formatInformationStringManquante(vin),
+        champF1: formatInformationNumberManquante(champF1),
+        champF2: formatInformationNumberManquante(champF2),
+        champF3: formatInformationNumberManquante(champF3),
+        champG: formatInformationNumberManquante(champG),
+        champG1: formatInformationNumberManquante(champG1),
+        categorie: formatInformationStringManquante(categorie),
+        genre: formatInformationStringManquante(genre),
+        carrosserieCe: formatInformationStringManquante(carrosserieCe),
+        carrosserieNationale: formatInformationStringManquante(carrosserieNationale),
+        numeroReception: formatInformationStringManquante(numeroReception),
+        cylindree: formatInformationNumberManquante(cylindree),
+        puissanceNette: formatInformationNumberManquante(puissanceNette),
+        energie: formatInformationStringManquante(energie),
+        nbPlacesAssises: formatInformationNumberManquante(nbPlacesAssises),
+        nbPlacesDebout: formatInformationNumberManquante(nbPlacesDebout),
+        niveauSonore: formatInformationNumberManquante(niveauSonore),
+        vitesseMoteur: formatInformationNumberManquante(vitesseMoteur),
+        co2: formatInformationNumberManquante(co2),
+        pollution: formatInformationStringManquante(pollution),
+        rapportPuissMasse: formatInformationNumberManquante(rapportPuissMasse),
+      },
       infos: {
         ...rapport.vehicule.infos,
-        datePremiereImmatriculation: transformeDateEnFr(datePremiereImmatriculation),
-        datePremiereImmatSiv: transformeDateEnFr(datePremiereImmatSiv),
-        dateConvertionSiv: transformeDateEnFr(dateConvertionSiv),
+        datePremiereImmatriculation: formatInformationDateManquante(datePremiereImmatriculation),
+        datePremiereImmatSiv: formatInformationDateManquante(datePremiereImmatSiv),
+        dateConvertionSiv: formatInformationDateManquante(dateConvertionSiv),
       },
       infosImport: {
         ...rapport.vehicule.infosImport,
-        datePremiereImmatriculationFrance: transformeDateEnFr(datePremiereImmatriculationFrance),
-        dateImportFrance: transformeDateEnFr(dateImportFrance),
-        datePremiereImmatEtranger: transformeDateEnFr(datePremiereImmatEtranger),
+        datePremiereImmatriculationFrance: formatInformationDateManquante(datePremiereImmatriculationFrance),
+        dateImportFrance: formatInformationDateManquante(dateImportFrance),
+        datePremiereImmatEtranger: formatInformationDateManquante(datePremiereImmatEtranger),
       },
       situationAdmin: {
         ...rapport.vehicule.situationAdmin,
-        dateAnnulation: transformeDateEnFr(dateAnnulation),
+        dateAnnulation: formatInformationDateManquante(dateAnnulation),
         gages: formatGages(gages),
         dvs: formatDvs(dvs),
         suspensions: formatSuspensions(suspensions),
@@ -151,20 +246,24 @@ export const formaterRapport = (rapport) => {
       },
       accidents: {
         ...rapport.vehicule.accidents,
-        dateDerniereResolution: transformeDateEnFr(dateDerniereResolution),
-        dateDernierSinistre: transformeDateEnFr(dateDernierSinistre),
+        dateDerniereResolution: formatInformationDateManquante(dateDerniereResolution),
+        dateDernierSinistre: formatInformationDateManquante(dateDernierSinistre),
       },
       historique: formatHistorique(historique),
     },
     certificatImmatriculation: {
       ...rapport.certificatImmatriculation,
-      dateEmission: transformeDateEnFr(dateEmission),
+      dateEmission: formatInformationDateManquante(dateEmission),
+    },
+    proprietaire: {
+      ...rapport.proprietaire,
+      codePostal: formatInformationStringManquante(codePostal),
     },
     utac: {
       ...rapport.utac,
-      updateDate: transformeDateEnFr(updateDate),
+      updateDate: formatInformationDateManquante(updateDate),
       ct: formatControlesTechniques(ct),
     },
-    validiteClefAcheteur: transformeDateEnFr(validiteClefAcheteur),
+    validiteClefAcheteur: formatInformationDateManquante(validiteClefAcheteur),
   }
 }

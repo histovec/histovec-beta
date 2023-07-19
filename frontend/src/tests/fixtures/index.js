@@ -9,6 +9,7 @@ import { reponseRequeteApiIvtParticulier200 } from '@/tests/fixtures/api/reponse
 import { reponseRequeteApiIvtProfessionnel200 } from '@/tests/fixtures/api/reponseRequeteApiIvtProfessionnel200'
 import { reponseRequeteApiCode200 } from '@/tests/fixtures/api/reponseRequeteApiCode200'
 import { reponseRequeteApiSivParticulier200DonneesManquantes } from '@/tests/fixtures/api/reponseRequeteApiSivParticulier200DonneesManquantes'
+import { reponseRequeteApiSivParticulier200DonneesInconnues } from '@/tests/fixtures/api/reponseRequeteApiSivParticulier200DonneesInconnues'
 
 // reponse back KO
 import { reponseRequeteApi404 } from '@/tests/fixtures/api/reponseRequeteApi404'
@@ -24,6 +25,7 @@ import { reponseSivProfessionnelFormat200 } from '@/tests/fixtures/api/mapper/re
 import { reponseIvtParticulierFormat200 } from '@/tests/fixtures/api/mapper/reponseIvtParticulierFormat200'
 import { reponseIvtProfessionnelFormat200 } from '@/tests/fixtures/api/mapper/reponseIvtProfessionnelFormat200'
 import { reponseCodeFormat200 } from '@/tests/fixtures/api/mapper/reponseCodeFormat200'
+import { reponseSivParticulierFormat200DonneesInconnues } from '@/tests/fixtures/api/mapper/reponseSivParticulierFormat200DonneesInconnues'
 
 // reponse format
 import { dataSivParticulierFormat200 } from '@/tests/fixtures/api/format/dataSivParticulierFormat200'
@@ -31,6 +33,7 @@ import { dataSivParticulierFormat200SansGages } from '@/tests/fixtures/api/forma
 import { dataSivParticulierFormat200SansDvs } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansDvs'
 import { dataSivParticulierFormat200SansSuspensions } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansSuspensions'
 import { dataSivParticulierFormat200SansOppositions } from '@/tests/fixtures/api/format/dataSivParticulierFormat200SansOppositions'
+import { dataSivParticulierFormat200DonneesInconnues } from '@/tests/fixtures/api/format/dataSivParticulierFormat200DonneesInconnues'
 
 // reponse Authentification
 import { reponseAuthentification200 } from '@/tests/fixtures/api/authentification/reponseAuthentification200'
@@ -49,6 +52,7 @@ export {
   reponseRequeteApiIvtProfessionnel200,
   reponseRequeteApiCode200,
   reponseRequeteApiSivParticulier200DonneesManquantes,
+  reponseRequeteApiSivParticulier200DonneesInconnues,
   // reponse back KO
   reponseRequeteApi404,
   reponseRequeteApiErreur500,
@@ -62,12 +66,14 @@ export {
   reponseIvtParticulierFormat200,
   reponseIvtProfessionnelFormat200,
   reponseCodeFormat200,
+  reponseSivParticulierFormat200DonneesInconnues,
   // reponse format
   dataSivParticulierFormat200,
   dataSivParticulierFormat200SansGages,
   dataSivParticulierFormat200SansDvs,
   dataSivParticulierFormat200SansSuspensions,
   dataSivParticulierFormat200SansOppositions,
+  dataSivParticulierFormat200DonneesInconnues,
   // reponse Authentification
   reponseAuthentification200,
   reponseAuthentification500,

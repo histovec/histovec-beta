@@ -78,8 +78,12 @@ export const reponseRequeteApiSivParticulier200 = {
           hasDvs: true,
           informations: [
             {
-              dvsDate: '',
+              dvsDate: 'NON_CONNU',
               autorite: 'TRIBUNAL JUDICIAIRE',
+            },
+            {
+              dvsDate: '2020-04-28',
+              autorite: 'TRIBUNAL JUDICIAIRE II',
             },
             {
               dvsDate: '2023-04-28',

@@ -13,14 +13,66 @@ import {
   dataSivParticulierFormat200SansDvs,
   dataSivParticulierFormat200SansSuspensions,
   dataSivParticulierFormat200SansOppositions,
+  dataSivParticulierFormat200DonneesInconnues,
   reponseSivParticulierFormat200,
   reponseSivParticulierFormat200SansGages,
   reponseSivParticulierFormat200SansDvs,
   reponseSivParticulierFormat200SansSuspensions,
   reponseSivParticulierFormat200SansOppositions,
+  reponseSivParticulierFormat200DonneesInconnues,
 } from '@/tests/fixtures/index'
+import {
+  formatInformationDateManquante,
+  formatInformationNumberManquante,
+  formatInformationStringManquante,
+} from '@Utils/format/formatRapport'
+import {
+  REPONSE_API_NUMBER_PAR_DEFAUT,
+  REPONSE_API_STRING_PAR_DEFAUT,
+  REPONSE_API_DATE_PAR_DEFAUT,
+} from '@Constants/valeursParDefaut'
 
 describe('formatRapport', () => {
+  test('Doit formater une string avec une valeur défini', () => {
+    expect(formatInformationStringManquante('Valeur existante'))
+      .toStrictEqual('Valeur existante')
+  })
+
+  test('Doit formater une string avec une valeur par défaut', () => {
+    expect(formatInformationStringManquante(REPONSE_API_STRING_PAR_DEFAUT))
+      .toBeNull()
+  })
+
+  test('Doit formater un nombre avec une valeur défini', () => {
+    expect(formatInformationNumberManquante(14))
+      .toStrictEqual(14)
+  })
+
+  test('Doit formater un nombre avec une valeur par défaut', () => {
+    expect(formatInformationNumberManquante(REPONSE_API_NUMBER_PAR_DEFAUT))
+      .toBeNull()
+  })
+
+  test('Doit formater une date avec une valeur défini', () => {
+    expect(formatInformationDateManquante('2023-06-12'))
+      .toStrictEqual('12/06/2023')
+  })
+
+  test('Doit formater une date avec une valeur date FR', () => {
+    expect(formatInformationDateManquante('03/08/2022'))
+      .toStrictEqual('03/08/2022')
+  })
+
+  test('Doit formater une date avec une valeur null', () => {
+    expect(formatInformationDateManquante(null))
+      .toBeNull()
+  })
+
+  test('Doit formater une date avec une valeur par défaut', () => {
+    expect(formatInformationDateManquante(REPONSE_API_DATE_PAR_DEFAUT))
+      .toBeNull()
+  })
+
   test('Doit formater les gages correctement', () => {
     expect(formatGages(reponseSivParticulierFormat200.vehicule.situationAdmin.gages))
       .toStrictEqual(dataSivParticulierFormat200.vehicule.situationAdmin.gages)
@@ -74,5 +126,10 @@ describe('formatRapport', () => {
   test('Doit formater le rapport sans oppositions correctement', () => {
     expect(formaterRapport(reponseSivParticulierFormat200SansOppositions))
       .toStrictEqual(dataSivParticulierFormat200SansOppositions)
+  })
+
+  test('Doit formater le rapport avec des données inconnues', () => {
+    expect(formaterRapport(reponseSivParticulierFormat200DonneesInconnues))
+      .toStrictEqual(dataSivParticulierFormat200DonneesInconnues)
   })
 })

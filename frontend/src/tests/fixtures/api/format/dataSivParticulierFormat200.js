@@ -79,6 +79,10 @@ export const dataSivParticulierFormat200 = {
             autorite: 'TRIBUNAL JUDICIAIRE II',
           },
           {
+            date: '28/04/2020',
+            autorite: 'TRIBUNAL JUDICIAIRE II',
+          },
+          {
             date: null,
             autorite: 'TRIBUNAL JUDICIAIRE',
           },
