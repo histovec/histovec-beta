@@ -18,8 +18,8 @@ export const schemaValidationData = object().shape({
       champG1: number().required(),
       categorie: string().required(),
       genre: string().required(),
-      carrosserieCe: string().required(),
-      carrosserieNationale: string().required(),
+      carrosserieCe: string().notRequired(),
+      carrosserieNationale: string().notRequired(),
       numeroReception: string().notRequired(),
       cylindree: number().required(),
       puissanceNette: number().notRequired(),
@@ -63,7 +63,7 @@ export const schemaValidationData = object().shape({
         hasGages: boolean().required(),
         informations: array().of(
           object().shape({
-            gageDate: string().required(),
+            gageDate: string().notRequired(),
             nomCreancier: string().required(),
           }).required().noUnknown(true).strict(),
         ).required(),
@@ -82,7 +82,7 @@ export const schemaValidationData = object().shape({
         hasSuspensions: boolean().required(),
         informations: array().of(
           object().shape({
-            suspensionDate: string().required(),
+            suspensionDate: string().notRequired(),
             motif: string().required(),
           }).required().noUnknown(true).strict(),
         ).required(),
@@ -127,7 +127,7 @@ export const schemaValidationData = object().shape({
       raisonSociale: string().notRequired(),
       siren: string().notRequired(),
     }).notRequired().noUnknown(true).strict(),
-    codePostal: string().required(),
+    codePostal: string().notRequired(),
   }).required().noUnknown(true).strict(),
   certificatImmatriculation: object().shape({
     age: number().required(),
