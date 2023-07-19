@@ -6,6 +6,7 @@ import { syslogLogger } from '../util/logger.js'
 import { decodingJWT } from '../util/jwt.js'
 import config from '../config.js'
 import { CONTROL_TECHNIQUES_MOCK_FOR_BPSA } from '../constant/utac.js'
+import { anonymizedControlesTechniques } from '../util/anonymiserData.js'
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -166,6 +167,12 @@ class UTACClient {
       const { error } = utacResponseSchema.validate(data)
 
       if (error) {
+        error._original = {
+          ...anonymizedControlesTechniques(error._original),
+          status: error._original.status,
+          update_date: error._original.update_date,
+        }
+
         syslogLogger.error({ key: 'malformed_mock_utac_response', tag: 'UTAC', uuid, value: { error } })
 
         return {
@@ -199,6 +206,12 @@ class UTACClient {
 
       const { error } = utacResponseSchema.validate(data)
       if (error) {
+        error._original = {
+          ...anonymizedControlesTechniques(error._original),
+          status: error._original.status,
+          update_date: error._original.update_date,
+        }
+
         syslogLogger.error({ key: 'malformed_utac_response', tag: 'UTAC', uuid, value: { error } })
 
         return {
