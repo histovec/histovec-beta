@@ -1,6 +1,18 @@
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '../constant/type.js'
 
 export const anonymize = (text, nbVisibleCharAtPrefixAndSuffix = 2) => {
+  if (!text) {
+    return ''
+  } else if (text.length === 1) {
+    return '*'
+  } else if (text.length <= 3) {
+    return text.substr(0, 1) + '*'.repeat(text.length - 1)
+  } else if (text.length <= (nbVisibleCharAtPrefixAndSuffix * 2)) {
+    nbVisibleCharAtPrefixAndSuffix = 1
+  } else if (text.length <= (nbVisibleCharAtPrefixAndSuffix * 2) + 1 || text.length <= (nbVisibleCharAtPrefixAndSuffix * 2) + 2) {
+    nbVisibleCharAtPrefixAndSuffix--
+  }
+
   const anonymizedText = '*'.repeat(text.length - nbVisibleCharAtPrefixAndSuffix * 2)
   return text.substr(0, nbVisibleCharAtPrefixAndSuffix) + anonymizedText + text.substr(nbVisibleCharAtPrefixAndSuffix + anonymizedText.length)
 }
