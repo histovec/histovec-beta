@@ -11,6 +11,7 @@ import {
   reponseRequeteApiIvtProfessionnel200,
   reponseCodeFormat200,
   reponseRequeteApiSivParticulier200DonneesManquantes,
+  reponseRequeteApiSivParticulier200DonneesInconnues,
 } from '@/tests/fixtures/index'
 
 describe('schemaValidationData', () => {
@@ -57,6 +58,11 @@ describe('schemaValidationData', () => {
   test('Doit valider les datas sens erreur pour rapport par code', async () => {
     expect(await schemaValidationData.validate(reponseCodeFormat200.data))
       .toStrictEqual(reponseCodeFormat200.data)
+  })
+
+  test('Doit valider les datas sens erreur pour rapport avec des données inconnues', async () => {
+    expect(await schemaValidationData.validate(reponseRequeteApiSivParticulier200DonneesInconnues.data))
+      .toStrictEqual(reponseRequeteApiSivParticulier200DonneesInconnues.data)
   })
 
   test('Doit retourner une erreur pour une donnée manquante', async () => {

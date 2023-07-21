@@ -47,12 +47,14 @@ export default defineComponent({
     </div>
 
     <div
+      v-if="titulaires?.codePostal"
       id="titre-code-postal"
       class="fr-col-6  fr-pt-0  fr-pb-0"
     >
       Code postal
     </div>
     <div
+      v-if="titulaires?.codePostal"
       id="valeur-code-postal"
       class="fr-col-6  fr-pt-0  fr-pb-0  fr-text--bleu"
     >

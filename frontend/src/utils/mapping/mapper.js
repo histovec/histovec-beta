@@ -1,11 +1,24 @@
 import orderBy from 'lodash.orderby';
+import { REPONSE_API_STRING_PAR_DEFAUT } from '@Constants/valeursParDefaut'
 
 export const ordonneParDateAntechronologique = (elements) => {
-  return orderBy(
-    elements,
+  let elementsATrier = []
+  let elementsNonTriables = []
+
+  elements.forEach((element) => {
+    if (element.date === REPONSE_API_STRING_PAR_DEFAUT) {
+      elementsNonTriables.push(element)
+    } else {
+      elementsATrier.push(element)
+    }
+  })
+
+  elementsATrier = orderBy(
+    elementsATrier,
     ['date'],
     ['desc'],
   )
+  return elementsATrier.concat(elementsNonTriables)
 }
 
 export function historiqueMapping (historique) {

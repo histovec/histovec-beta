@@ -22,6 +22,7 @@ import {
   reponseRequeteApiIvtProfessionnel200,
   reponseRequeteApiSivProfessionnel200,
   reponseRequeteApiCode200,
+  reponseRequeteApiSivParticulier200DonneesInconnues,
   reponseSivParticulierFormat200,
   reponseSivParticulierFormat200SansGages,
   reponseSivParticulierFormat200SansDvs,
@@ -31,13 +32,14 @@ import {
   reponseIvtParticulierFormat200,
   reponseIvtProfessionnelFormat200,
   reponseCodeFormat200,
+  reponseSivParticulierFormat200DonneesInconnues,
 } from '@/tests/fixtures/index'
 
 describe('ordonne par ordre antechronologique', () => {
 
   test('Doit ordonner dans un ordre décroissant les dates', () => {
-    const dateDesordre = [{date:'2022-04-06'}, {date:'2022-04-08'}, {date:'2022-04-07'}]
-    const dateOrdre = [{date:'2022-04-08'}, {date:'2022-04-07'}, {date:'2022-04-06'}]
+    const dateDesordre = [{date:'NON_CONNU'},{date:'2022-04-06'}, {date:'2022-04-08'}, {date:'2022-04-07'}]
+    const dateOrdre = [{date:'2022-04-08'}, {date:'2022-04-07'}, {date:'2022-04-06'},{date:'NON_CONNU'}]
     expect(ordonneParDateAntechronologique(dateDesordre)).toStrictEqual(dateOrdre)
   })
 
@@ -187,6 +189,14 @@ describe('mapper', () => {
   test('doit mapper la requete pour un siv_physique', () => {
     const requete = reponseRequeteApiSivParticulier200.data
     const requeteMappe = reponseSivParticulierFormat200
+    const requeteMapped = vehiculeMapping(requete)
+
+    expect(requeteMapped).toStrictEqual(requeteMappe)
+  })
+
+  test('doit mapper la requete pour un siv_physique avec des données inconnues', () => {
+    const requete = reponseRequeteApiSivParticulier200DonneesInconnues.data
+    const requeteMappe = reponseSivParticulierFormat200DonneesInconnues
     const requeteMapped = vehiculeMapping(requete)
 
     expect(requeteMapped).toStrictEqual(requeteMappe)
