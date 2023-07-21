@@ -24,11 +24,11 @@
       "energie": "Essence",
       "nbPlacesAssises": 5,
       "nbPlacesDebout": 0,
-      "niveauSonore": 0,
+      "niveauSonore": -99,
       "vitesseMoteur": 4125,
       "co2": 140,
       "pollution": "70/220*2003/76EURO4",
-      "rapportPuissMasse": 0
+      "rapportPuissMasse": -99
     },
     "infos": {
       "nbTitulaires": 0,
@@ -38,12 +38,12 @@
       "dateConvertionSiv": "2009-04-20"
     },
     "infosImport": {
-      "datePremiereImmatriculationFrance": null,
-      "dateImportFrance": null,
+      "datePremiereImmatriculationFrance": "",
+      "dateImportFrance": "",
       "isImported": false,
-      "datePremiereImmatEtranger": null,
-      "immatriculationOrigine": null,
-      "codePaysOrigine": null,
+      "datePremiereImmatEtranger": "",
+      "immatriculationOrigine": "",
+      "codePaysOrigine": "",
       "nomPaysOrigine": ""
     },
     "usage": {
@@ -65,6 +65,10 @@
             "nomCreancier": "SOREFI"
           },
           {
+            "gageDate": "NON_CONNU",
+            "nomCreancier": "SANO"
+          },
+          {
             "gageDate": "2019-04-28",
             "nomCreancier": "SANO"
           }
@@ -75,7 +79,7 @@
         "hasDvs": true,
         "informations": [
           {
-            "dvsDate": "",
+            "dvsDate": "NON_CONNU",
             "autorite": "TRIBUNAL JUDICIAIRE"
           },
           {
@@ -89,11 +93,11 @@
         "informations": [
           {
             "suspensionDate": "2023-04-28",
-            "motif": "PVE",
+            "motif": "PVE"
           },
           {
             "suspensionDate": "2023-04-28",
-            "motif": "DES",
+            "motif": "DES"
           }
         ]
       },
@@ -137,13 +141,13 @@
     ]
   },
   "proprietaire": {
+    "personnePhysique": {
+      "nomNaissance": "B******T",
+      "prenom": "M****L"
+    },
     "personneMorale": {
       "raisonSociale": "",
       "siren": ""
-    },
-    "particulier": {
-      "nomNaissance": "nom_prenom_IVT",
-      "prenom": ""
     },
     "codePostal": "94400"
   },
@@ -152,34 +156,35 @@
     "dateEmission": "2015-05-18"
   },
   "utac": {
-    "updateDate": "2022-06-26",
+    "updateDate": "2021-08-01",
     "status": 200,
     "ct": [
       {
         "ctDate": "2014-12-11",
-        "resultatRaw": "A",
         "resultat": "Favorable",
-        "nature": "Contrôle Technique Périodique",
+        "resultatRaw": "A",
+        "nature": "Visite Technique Périodique",
         "km": 98429
       },
       {
         "ctDate": "2016-12-10",
-        "resultatRaw": "A",
         "resultat": "Favorable",
-        "nature": "Contrôle Technique Périodique",
+        "resultatRaw": "A",
+        "nature": "VTP",
         "km": 132874
       },
       {
         "ctDate": "2018-12-26",
-        "resultatRaw": "A",
         "resultat": "Favorable",
-        "nature": "Contrôle Technique Périodique",
+        "resultatRaw": "A",
+        "nature": "VTP",
         "km": 160532
       }
     ]
   },
-  "clefacheteur": "179d0be9-e9d2-4a61-9384-94440a4bc12b",
-  "messageUsager": null,
+  "clefAcheteur": "179d0be9-e9d2-4a61-9384-94440a4bc12b",
+  "validiteClefAcheteur": "2023-06-03",
+  "messageUsager": [],
   "plaqImmatHash": "acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea",
   "incomingQuery": {
     "sivPhysique": null,
@@ -190,6 +195,5 @@
       "dateEmissionCi": "31/05/2023"
     },
     "ivtMorale": null
-  },
-  "validiteClefacheteur": "2023-06-03"
+  }
 }

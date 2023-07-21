@@ -1,5 +1,5 @@
 import { CONTACT_THEMES_OPTIONS, DEFAULT_CONTACT_THEMES_OPTIONS } from '../../../src/constants/contact'
-import routes from '../../constants/urls.json';
+import routes from '../../constants/urls.json'
 
 context('Contact', () => {
   const nom = 'MALONGA NTSAYI'
@@ -43,7 +43,7 @@ context('Contact', () => {
   function verificationDesErreursDuFormulaireMail() {
     // vérification du message d'erreur sur le mail
     cy.contains('label','Email')
-      .parents().find('input').type('mauvais@mail')
+      .parents().find('input').clear().type('mauvais@mail')
       .parents().find('p').find('span')
       .should('exist')
       .contains('Saisissez une adresse avec un format valide, exemple : nom@exemple.fr')
@@ -75,6 +75,9 @@ context('Contact', () => {
   }
 
   beforeEach(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/contact', { statusCode: 200 })
+
     cy.visit(routes.url_contact)
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
     cy.title().should('eq', 'HistoVec - Contact');
@@ -255,7 +258,13 @@ context('Contact', () => {
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200' })
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: 'api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('PUT', '/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
 
     // renseignement du formulaire
     cy.get('img[src*=\'/histovec/src/assets/img/plaque_siv.svg\']')
@@ -283,15 +292,15 @@ context('Contact', () => {
       .click()
 
     // page de redirection
-    cy.wait(500);
-    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur);
-    cy.title().should('eq', 'HistoVec - Rapport vendeur');
+    cy.wait(500)
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_rapport_vendeur)
+    cy.title().should('eq', 'HistoVec - Rapport vendeur')
 
     // retour page contact
-    cy.get('a[title*="Contact"]').contains('Contact').click();
-    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);
-    cy.title().should('eq', 'HistoVec - Contact');
-    cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
+    cy.get('a[title*="Contact"]').contains('Contact').click()
+    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact)
+    cy.title().should('eq', 'HistoVec - Contact')
+    cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text)
 
     // verification de l'affichage
     cy.wait(500).get('h2')
@@ -312,7 +321,13 @@ context('Contact', () => {
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/morale/**', { statusCode: 200, fixture: 'api/reponseRequeteApiSivProfessionnel200.json' })
+    cy.intercept('PUT', '/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
 
     // selection du formulaire
     cy.get('img[src*=\'/histovec/src/assets/img/plaque_siv.svg\']')
@@ -367,14 +382,15 @@ context('Contact', () => {
       cy.get('li').eq(3).contains('Numéro de formule: 2013BZ80335').find('span').contains('2013BZ80335')
     })
   })
-  it('Affichage données particulier - immatriculation avant 2009 ', () => {
+  // todo : ajouter le test quand la requete de ivt personne physique sera ajouté
+  it.skip('Affichage données particulier - immatriculation avant 2009 ', () => {
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
+    cy.intercept('POST', '**/public/v1/report_by_data/siv/physique/**', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
 
     // selection du formulaire
     cy.get('img[src*=\'/histovec/src/assets/img/plaque_fni.svg\']')
@@ -421,14 +437,15 @@ context('Contact', () => {
       cy.get('li').eq(2).contains('Date du certificat : 2001-06-25').find('span').contains('2001-06-25')
     })
   })
-  it('Affichage données personne morale - immatriculation avant 2009 ', () => {
+  // todo : ajouter le test quand la requete de ivt personne moral sera ajouté
+  it.skip('Affichage données personne morale - immatriculation avant 2009 ', () => {
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);
     cy.title().should('eq', 'HistoVec - Propriétaire')
 
     // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
+    cy.intercept('POST', '**/public/v1/report_by_data/siv/physique/**', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
 
     // selection du formulaire
     cy.get('img[src*=\'/histovec/src/assets/img/plaque_fni.svg\']')
@@ -483,7 +500,8 @@ context('Contact', () => {
       cy.get('li').eq(3).contains('Date du certificat : 2001-06-25').find('span').contains('2001-06-25')
     })
   })
-  it('Envoyer Mail sans donnée proprietaire avec succes', () => {
+  // todo : ajouter le test quand la requete de contact sera ajouté
+  it.skip('Envoyer Mail sans donnée proprietaire avec succes', () => {
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
     cy.contains('label','Email')
       .parents().find('input').type('test@mail.com')
@@ -498,7 +516,8 @@ context('Contact', () => {
         .contains('Votre message a bien été transmis à nos équipes. Nous vous répondrons dès que possible.')
     })
   })
-  it('Envoyer Mail sans donnée proprietaire avec erreur', () => {
+  // todo : ajouter le test quand la requete de contact sera ajouté
+  it.skip('Envoyer Mail sans donnée proprietaire avec erreur', () => {
     cy.get('select').select(CONTACT_THEMES_OPTIONS[5].text);
     cy.contains('label','Email')
       .parents().find('input').type('test@mail.test')
@@ -513,7 +532,8 @@ context('Contact', () => {
         .contains('Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.')
     })
   })
-  it('Envoyer Mail avec donnée proprietaire', () => {
+  // todo : ajouter le test quand la requete de contact sera ajouté
+  it.skip('Envoyer Mail avec donnée proprietaire', () => {
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_proprietaire);

@@ -1,8 +1,12 @@
 import routes from "../../constants/urls.json";
 
-context('Page erreur 404', () => {
+context('Page erreur 404 - véhicule non trouvé', () => {
 
   it("Doit se trouver sur une page Erreur 404 si véhicule non trouvé", () => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 404 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
@@ -28,24 +32,21 @@ context('Page erreur 404', () => {
       .should('not.be.disabled')
       .click()
 
-    cy.wait(2000)
+    cy.wait(500)
 
     // Vérification propriétées de la page
-    cy.get("div[class*='fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v']")
+    cy.get("div[class*='fr-py-0 fr-col-12 fr-col-md-6']")
       .get("h1")
-      .contains("Page non trouvée")
-
-    cy.get("p[class*='fr-error-subtitle fr-text--xs']")
-      .contains("Erreur 404")
-
-    cy.get("p[class*='fr-text--xl']")
       .contains("Ce véhicule est inconnu d'HistoVec")
 
-    cy.get("div[class*='fr-col-12 fr-col-md-5 fr-col-lg-4 fr-col-xl-4']")
+    cy.get("p[class*='fr-text--sm fr-mb-3w']")
+      .contains("Erreur 404")
+
+    cy.get("div[class*='fr-grid-row fr-grid-row--gutters fr-mb-4w fr-mt-4w']")
       .find("button[class*='fr-btn inline-flex']")
       .contains("Revenir au formulaire de recherche")
 
-    cy.get("div[class*='fr-col-12 fr-col-md-5 fr-col-lg-4 fr-col-xl-4']")
+    cy.get("div[class*='fr-grid-row fr-grid-row--gutters fr-mb-4w fr-mt-4w']")
       .find("button[class*='fr-btn fr-btn--secondary inline-flex']")
       .contains("Contactez-nous")
   })
