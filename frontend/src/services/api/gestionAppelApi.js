@@ -8,12 +8,7 @@ import { formaterRapport } from '@Utils/format/formatRapport'
 import { schemaValidationData } from '@Utils/validation/schemaValidationData'
 import router from '@/router'
 import gestionRapportErreur from '@Services/api/gestionRapportErreur'
-import { reponseRequeteApiSivParticulier200 } from '../../tests/fixtures/api/reponseRequeteApiSivParticulier200';
-import { reponseRequeteApiSivProfessionnel200 } from '../../tests/fixtures/api/reponseRequeteApiSivProfessionnel200';
-import { reponseRequeteApiIvtProfessionnel200 } from '../../tests/fixtures/api/reponseRequeteApiIvtProfessionnel200';
-import { reponseRequeteApiIvtParticulier200 } from '../../tests/fixtures/api/reponseRequeteApiIvtParticulier200';
 const store = useRapportStore()
-import { port, portBouchonne } from '@/config.js'
 
 const uuidNavigateur = localStorage.getItem('userId')
 
@@ -32,39 +27,19 @@ const fetchRapportProprietaire = async (data) => {
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-      if(port === portBouchonne) {
-        await store.setReponse(reponseRequeteApiSivParticulier200)
-      }
-      else {
         await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire, uuidNavigateur)
-      }
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-      if(port === portBouchonne) {
-        await store.setReponse(reponseRequeteApiSivProfessionnel200)
-      }
-      else {
         await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
-      }
     }
   }
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-      if(port === portBouchonne) {
-        await store.setReponse(reponseRequeteApiIvtParticulier200)
-      }
-      else {
         await store.fetchRapportIvtPhysique(dataRequeteBody, idProprietaire, uuidNavigateur)
-      }
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-      if(port === portBouchonne) {
-        await store.setReponse(reponseRequeteApiIvtProfessionnel200)
-      }
-      else {
         await store.fetchRapportIvtMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
-      }
     }
   }
 
