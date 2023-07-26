@@ -93,33 +93,33 @@ export default defineComponent({
 
 
 <template>
-  <div class="fr-grid-row  fr-grid-row--gutters">
-    <div class="fr-col-12  fr-pb-3w">
+  <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-col-12 fr-pb-3w">
       <h3 class="fr-mb-0 fr-h5">
         Résumé
       </h3>
     </div>
 
-    <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
-      <div class="fr-pb-3w  fr-pt-0">
-        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
+    <div class="fr-col-12 fr-col-lg-6 fr-col-xl-6">
+      <div class="fr-pb-3w fr-pt-0">
+        <h4 class="fr-mb-0 fr-pb-2w fr-h6">
           Modèle
         </h4>
 
-        <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
+        <p class="fr-text--md fr-text--bleu fr-mb-1v">
           {{ rapportData?.vehicule?.caracteristiques?.marque }} {{ rapportData?.vehicule?.caracteristiques?.nomCommercial }}
         </p>
 
         <p
           v-if="rapportData?.vehicule?.caracteristiques?.puissanceCv"
-          class="fr-text--md  fr-mb-1v"
+          class="fr-text--md fr-mb-1v"
         >
           Puissance fiscale : <span class="fr-text--bleu">{{ rapportData?.vehicule?.caracteristiques?.puissanceCv }} ch</span>
         </p>
 
         <p
           v-if="isRapportAcheteur"
-          class="fr-text--md  fr-mb-1v"
+          class="fr-text--md fr-mb-1v"
         >
           Calculez le montant de votre certificat d'immatriculation
           <br />
@@ -137,15 +137,15 @@ export default defineComponent({
 
       <div
         v-if="rapportData?.vehicule?.usage?.isAgricole || rapportData?.vehicule?.usage?.isCollection"
-        class="fr-pb-3w  fr-pt-0"
+        class="fr-pb-3w fr-pt-0"
       >
-        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
+        <h4 class="fr-mb-0 fr-pb-2w fr-h6">
           Usage
         </h4>
         <div
           v-if="rapportData?.vehicule?.usage?.isCollection "
         >
-          <p class="fr-text--md  fr-mb-2w">
+          <p class="fr-text--md fr-mb-2w">
             <span class="fr-text--bleu">
               <VIcon
                 :name="constants.USAGE_COLLECTION.icon"
@@ -155,7 +155,7 @@ export default defineComponent({
             <br />
             <span
               v-if="constants.USAGE_COLLECTION.adv"
-              class="fr-text--md  fr-mb-1w"
+              class="fr-text--md fr-mb-1w"
             >
               <a
                 class="fr-link"
@@ -172,7 +172,7 @@ export default defineComponent({
         <div
           v-if="rapportData?.vehicule?.usage?.isAgricole"
         >
-          <p class="fr-text--md  fr-mb-0">
+          <p class="fr-text--md fr-mb-0">
             <span class="fr-text--bleu">
               <VIcon
                 :name="constants.USAGE_AGRICOLE.icon"
@@ -182,7 +182,7 @@ export default defineComponent({
             <br />
             <span
               v-if="constants.USAGE_AGRICOLE.adv"
-              class="fr-text--md  fr-mb-1w"
+              class="fr-text--md fr-mb-1w"
             >
               <a
                 class="fr-link"
@@ -198,12 +198,12 @@ export default defineComponent({
         </div>
       </div>
 
-      <div class="fr-pb-0  fr-pt-0">
-        <h4 class="fr-mb-0  fr-pb-0 fr-h6">
+      <div class="fr-pb-0 fr-pt-0">
+        <h4 class="fr-mb-0 fr-pb-0 fr-h6">
           Propriétaire actuel
         </h4>
 
-        <p class="fr-text--md  fr-mb-0">
+        <p class="fr-text--md fr-mb-0">
           <span
             v-if="rapportData?.proprietaire?.particulier?.nomNaissance || rapportData?.proprietaire?.particulier?.prenom"
             class="fr-text--bleu"
@@ -259,13 +259,13 @@ export default defineComponent({
       </div>
     </div>
 
-    <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
-      <div class="fr-pb-3w  fr-pt-0">
-        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
+    <div class="fr-col-12 fr-col-lg-6 fr-col-xl-6">
+      <div class="fr-pb-3w fr-pt-0">
+        <h4 class="fr-mb-0 fr-pb-2w fr-h6">
           Immatriculation
         </h4>
 
-        <p class="fr-text--md  fr-mb-1v">
+        <p class="fr-text--md fr-mb-1v">
           <template v-if="datePremiereImmatriculationFR">
             Première immatriculation le
             <span class="fr-text--bleu">{{ datePremiereImmatriculationFR }}</span>
@@ -277,7 +277,7 @@ export default defineComponent({
         </p>
 
         <template v-if="rapportData?.vehicule?.infosImport?.isImported">
-          <p class="fr-text--md  fr-text--bleu  fr-mb-1v">
+          <p class="fr-text--md fr-text--bleu fr-mb-1v">
             <span class="fr-text--bleu">
               <VIcon
                 name="ri-earth-line"
@@ -295,14 +295,14 @@ export default defineComponent({
         </template>
       </div>
 
-      <div class="fr-pb-3w  fr-pt-0">
-        <h4 class="fr-mb-0  fr-pb-2w fr-h6">
+      <div class="fr-pb-3w fr-pt-0">
+        <h4 class="fr-mb-0 fr-pb-2w fr-h6">
           Situation administrative
         </h4>
 
         <p
           v-if="hasProcedureVEEnCours || rapportData?.vehicule?.accidents.nbSinistres > 0"
-          class="fr-text--md  fr-mb-1v"
+          class="fr-text--md fr-mb-1v"
         >
           <span class="fr-text--bleu">
             <VIcon
@@ -376,7 +376,7 @@ export default defineComponent({
         </p>
         <p
           v-if="!(rapportData?.vehicule?.situationAdmin?.dvs?.hasDvs && rapportData?.vehicule?.situationAdmin?.gages?.hasGages && rapportData?.vehicule?.situationAdmin?.oppositions?.hasOppositions && rapportData?.vehicule?.situationAdmin?.suspensions?.hasSuspensions) && !rapportData?.lastSinistreYear"
-          class="fr-text--md  fr-mb-1v"
+          class="fr-text--md fr-mb-1v"
         >
           <span class="fr-text--bleu">
             <VIcon

@@ -55,28 +55,67 @@
       "isApteACirculer": true,
       "isCiAnnule": false,
       "dateAnnulation": null,
-      "isCiVole": false,
-      "isDuplicata": false,
+      "isCiVole": true,
+      "isDuplicata": true,
       "gages": {
-        "hasGages": false,
-        "informations": []
+        "hasGages": true,
+        "informations": [
+          {
+            "gageDate": "2019-05-09",
+            "nomCreancier": "SOREFI"
+          },
+          {
+            "gageDate": "NON_CONNU",
+            "nomCreancier": "SANO"
+          },
+          {
+            "gageDate": "2019-04-28",
+            "nomCreancier": "SANO"
+          }
+        ]
       },
       "isCiPerdu": false,
       "dvs": {
-        "hasDvs": false,
-        "informations": []
+        "hasDvs": true,
+        "informations": [
+          {
+            "dvsDate": "NON_CONNU",
+            "autorite": "TRIBUNAL JUDICIAIRE"
+          },
+          {
+            "dvsDate": "2023-04-28",
+            "autorite": "TRIBUNAL JUDICIAIRE II"
+          }
+        ]
       },
       "suspensions": {
-        "hasSuspensions": false,
-        "informations": []
+        "hasSuspensions": true,
+        "informations": [
+          {
+            "suspensionDate": "2023-04-28",
+            "motif": "PVE"
+          },
+          {
+            "suspensionDate": "2023-04-28",
+            "motif": "DES"
+          }
+        ]
       },
       "oppositions": {
-        "hasOppositions": false,
+        "hasOppositions": true,
         "informations": {
-          "oves": [],
-          "oveis": [],
-          "otcisPv": [],
-          "otcis": []
+          "oves": [
+            "2023-04-28"
+          ],
+          "oveis": [
+            "2023-04-28"
+          ],
+          "otcisPv": [
+            "2023-04-28"
+          ],
+          "otcis": [
+            "2023-04-28"
+          ]
         }
       },
       "isVehVole": false

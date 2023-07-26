@@ -11,6 +11,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
     " Numéro d'identification véhicule ",
     " PT techniquement admissible (kg) ",
     " PTAC (kg) ",
+    " PTRA (kg) ",
     " PT en service (kg) ",
     " PTAV (kg) ",
     " Catégorie (CE) ",
@@ -23,7 +24,6 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
     " Energie ",
     " Puissance CV ",
     " Places assises ",
-    " Places debout ",
     " Niveau sonore (db(A)) ",
     " Vitesse moteur (min-1) ",
     " CO2 (g/km) ",
@@ -39,6 +39,7 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
     " E ",
     " F.1 ",
     " F.2 ",
+    " F.3 ",
     " G ",
     " G.1 ",
     " J ",
@@ -51,42 +52,49 @@ context('Rapport vehicule cas simple - onglet véhicule', () => {
     " P.3 ",
     " P.6 ",
     " S.1 ",
-    " S.2 ",
     " U.1 ",
     " U.2 ",
     " V.7 ",
     " V.9 ",
   ];
   const listeCaracteristiqueVehicule = [
-    "CITROEN",
-    "PNCFAC",
-    "MCT1012TD456",
-    "C1",
-    "GRIS CLAIR",
+    "RENAULT",
+    "JP0C05",
+    "MRE1116SV988",
+    "MODUS",
+    "BEIGE FONCE",
     "CE",
-    "WVGZ********64552",
-    "1190",
-    "1190",
-    "930",
-    "855",
-    "M1",
-    "VP",
-    "AB",
-    "CI",
-    "e11*2001/116*0238*06",
-    "998",
-    "50",
-    "ES",
-    "4",
-    "4",
-    null,
+    "VF1JP0C0540915794",
+    "1610",
+    "1610",
+    "2200",
+    "1155",
+    "1195",
+    "véhicules à moteur conçus et construits pour le transport de personnes et ayant au moins quatre roues : véhicule conçu et construit pour le transport de personnes et comportant, outre le siège du conducteur, huit places assises au maximum ;",
+    "Voitures particulières",
+    "Véhicule à usages multiples",
+    "Conduite intérieure",
+    "e2*2001/116*0319*27",
+    "1149",
+    "55",
+    "Essence",
+    "5",
+    "5",
     "80",
-    "4500",
-    "106",
+    "4125",
+    "140",
     "70/220*2003/76EURO4",
   ];
 
   before(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('PUT', '**/vehicle', { statusCode: 200 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')

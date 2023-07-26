@@ -742,7 +742,7 @@ export default defineComponent({
     small
     @close="fermerAlerte"
   />
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
+  <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
     <div class="fr-col-12">
       <DsfrBreadcrumb
         class="fr-mb-0"
@@ -762,12 +762,12 @@ export default defineComponent({
     </div>
     <div
       v-if="isRapportVendeur"
-      class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v"
+      class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v"
     >
       <h1>Rapport de votre véhicule</h1>
       <h2>Consultez et partagez l'historique du véhicule</h2>
-      <div class="fr-grid-row  fr-grid-row--gutters">
-        <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6  fr-mt-2w  text-center">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-6 fr-mt-2w  text-center">
           <a
             id="monAvisImage"
             href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
@@ -788,12 +788,12 @@ export default defineComponent({
 
     <div
       v-if="isRapportAcheteur"
-      class="fr-col-12  fr-col-lg-8  fr-col-xl-8  fr-mt-10v"
+      class="fr-col-12 fr-col-lg-8 fr-col-xl-8 fr-mt-10v"
     >
       <h1>Rapport du véhicule</h1>
       <h2>Consultez l'historique du véhicule</h2>
-      <div class="fr-grid-row  fr-grid-row--gutters">
-        <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6  fr-mt-2w  text-center">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-6 fr-mt-2w  text-center">
           <a
             id="monAvisImage"
             href="https://voxusagers.numerique.gouv.fr/Demarches/1867?&view-mode=formulaire-avis&nd_mode=en-ligne-enti%C3%A8rement&nd_source=button&key=8a933f17a9df32bb39598522e6d48688"
@@ -815,9 +815,9 @@ export default defineComponent({
 
   <div
     v-if="flags.outdatedData"
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-3w"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-3w"
   >
-    <div class="fr-col-12  fr-col-lg-8  fr-col-xl-8">
+    <div class="fr-col-12 fr-col-lg-8 fr-col-xl-8">
       <DsfrAlert
         type="warning"
         role="alert"
@@ -833,9 +833,9 @@ export default defineComponent({
 
   <div
     v-if="flags.outdatedData && isRapportVendeur"
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-4w"
   >
-    <div class="fr-col-12  fr-col-md-5  fr-col-lg-4  fr-col-xl-4  text-center">
+    <div class="fr-col-12 fr-col-md-5 fr-col-lg-4 fr-col-xl-4  text-center">
       <HistoVecButtonLink
         label="Obtenir le CSA à jour via l'ANTS"
         to="https://siv.interieur.gouv.fr/map-usg-ui/do/accueil_certificat"
@@ -843,8 +843,8 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-6w">
-    <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-6w">
+    <div class="fr-col-12 fr-col-lg-5 fr-col-xl-5">
       <TuileDsfrNonCliquable
         :is-loading="isLoading || store.getChargement"
         titre="Le véhicule"
@@ -852,7 +852,7 @@ export default defineComponent({
         {{ getVehiculeDescription }}
       </TuileDsfrNonCliquable>
     </div>
-    <div class="fr-col-12  fr-col-lg-5  fr-col-xl-5">
+    <div class="fr-col-12 fr-col-lg-5 fr-col-xl-5">
       <TuileDsfrNonCliquable
         :is-loading="isLoading || store.getChargement"
         titre="Informations du Ministère de l'Intérieur"
@@ -864,9 +864,9 @@ export default defineComponent({
 
   <div
     v-if="!isCIAnnule"
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-4w"
   >
-    <div class="fr-col-12  fr-col-lg-11  fr-col-xl-11">
+    <div class="fr-col-12 fr-col-lg-11 fr-col-xl-11">
       <!-- @todo @reportAccordeon : pour la vue mobile sm et xs : utiliser un accordeon ? -->
       <DsfrTabs
         tab-list-name="Liste d'onglets du rapport du véhicule"
@@ -975,9 +975,9 @@ export default defineComponent({
 
   <div
     v-if="isRapportVendeur"
-    class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
+    class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-4w"
   >
-    <div class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center">
+    <div class="fr-col-12 fr-col-md-4 fr-col-lg-3 fr-col-xl-3  text-center">
       <DsfrButton
         label="Imprimer le CSA"
         icon="ri-printer-line"
@@ -986,7 +986,7 @@ export default defineComponent({
     </div>
     <div
       v-if="!isCIAnnule"
-      class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center"
+      class="fr-col-12 fr-col-md-4 fr-col-lg-3 fr-col-xl-3  text-center"
     >
       <DsfrButton
         ref="modalPartagerRapport"
@@ -998,15 +998,15 @@ export default defineComponent({
     </div>
   </div>
 
-  <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-    <div class="fr-col-12  fr-col-md-2  fr-col-lg-2  fr-col-xl-2  text-center">
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-4w">
+    <div class="fr-col-12 fr-col-md-2 fr-col-lg-2 fr-col-xl-2  text-center">
       <img
         class="fr-responsive-img"
         :src="images.logoSimplimmat"
         alt=""
       >
     </div>
-    <div class="fr-col-12  fr-col-md-8  fr-col-lg-8  fr-col-xl-8  text-center">
+    <div class="fr-col-12 fr-col-md-8 fr-col-lg-8 fr-col-xl-8  text-center">
       <div class="fr-ml-4w">
         Utilisez maintenant l’application officielle
         <a

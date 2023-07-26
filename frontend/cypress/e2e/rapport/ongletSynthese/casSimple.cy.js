@@ -2,6 +2,14 @@ import routes from "../../../constants/urls.json";
 
 context('Rapport vehicule cas simple - onglet synthese', () => {
   before(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('PUT', '**/synthesis', { statusCode: 200 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
@@ -72,14 +80,14 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .should('have.length', 2)
       .eq(0)
       .should("have.class", "fr-text--bleu")
-      .contains("CITROEN C1")
+      .contains("RENAULT MODUS")
       .parent()
       .find("p")
       .eq(1)
       .contains("Puissance fiscale :")
       .find("span")
       .should("have.class", "fr-text--bleu")
-      .contains("4 ch")
+      .contains("5 ch")
   })
   it("Affichage de l'onglet synthese - Propriétaire actuel", () => {
     // Propriétaire actuel
@@ -100,12 +108,12 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .should('have.length', 3)
       .eq(0)
       .should("have.class", "fr-text--bleu")
-      .contains("H**** S******")
+      .contains("B******T M****L")
       .parent()
       .find("span")
       .eq(1)
       .should("have.class", "fr-text--bleu")
-      .contains("12 ans")
+      .contains("10")
       .parent()
       .find("span")
       .eq(2)
@@ -132,7 +140,7 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .contains("Première immatriculation le")
       .find("span")
       .should("have.class", "fr-text--bleu")
-      .contains("13/05/2009")
+      .contains("12/07/2003")
   })
   it("Affichage de l'onglet synthese - Situation administrative", () => {
     // Situation administrative

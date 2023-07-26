@@ -4,6 +4,8 @@ let store
 
 context('Proprietaire', () => {
   beforeEach(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
     cy.visit(routes.url_proprietaire).then(win => store = win.store)
   })
   it("Recherche d'une immatriculation depuis 2009 pour particulier", () => {
@@ -49,7 +51,7 @@ context('Proprietaire', () => {
       .should('not.be.disabled')
   })
   it("Recherche d'une immatriculation depuis 2009 pour particulier avec une erreur (vehicule non trouvé)", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 404, statusMessage: 'OK' })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 404, statusMessage: 'OK' })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
@@ -73,12 +75,12 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(500)
-    const urlErreur = Cypress.config('baseUrl') + '?errorTitle=Ce+v%C3%A9hicule+est+inconnu+d%27HistoVec&errorMessages=[%22Vos+noms+et+pr%C3%A9noms+sont+susceptibles+d%27avoir+fait+l%27objet+d%27erreurs+lors+de+la+saisie+de+votre+dossier.%22,%22Recopiez+exactement+les+donn%C3%A9es+de+votre+certificat+d%27immatriculation.+Le+certificat+d%27immatriculation+que+vous+utilisez+n%27est+peut-%C3%AAtre+pas+le+dernier+en+cours+de+validit%C3%A9+(perte,+vol,+...).%22]&primaryAction={%22label%22:%22Revenir+au+formulaire+de+recherche%22,%22icon%22:%22ri-arrow-right-fill%22,%22to%22:%22/proprietaire%22}'
-    cy.url().should('eq', urlErreur)
+    cy.wait(1250)
+
+    cy.url().should('eq', Cypress.config('baseUrl') + 'vehicule-non-trouve')
   })
   it("Recherche d'une immatriculation depuis 2009 pour particulier avec une erreur (erreur backend)", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 500, statusMessage: 'Service Unavailable' })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 500, statusMessage: 'Service Unavailable' })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
@@ -106,11 +108,12 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(500)
+    cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('erreur-inattendue'))
   })
-  it("Recherche d'une immatriculation depuis 2009 pour particulier avec une erreur (erreur lors de la récupération du rapport)", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 401, statusMessage: 'Service Unavailable' })
+  it("Recherche d'une immatriculation depuis 2009 pour particulier avec une erreur (erreur token)", () => {
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 401, fixture: 'erreurConnection.json' })
+    cy.intercept('PUT', '**/unavailable', { statusCode: 200 })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
@@ -138,11 +141,14 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(500)
+    cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('service-indisponible'))
   })
   it("Recherche d'une immatriculation depuis 2009 pour particulier sans erreur", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/personne', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200' })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
@@ -170,12 +176,14 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(500)
+    cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
   })
-
   it("Recherche d'une immatriculation depuis 2009 pour personne morale sans erreur", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/siv/morale', { statusCode: 200, fixture: '/api/reponseRequeteApiSivProfessionnel200' })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/morale/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivProfessionnel200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
@@ -205,12 +213,14 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(500)
+    cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
   })
-
   it("Recherche d'une immatriculation avant 2009 pour particulier sans erreur", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/ivt/physique', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtParticulier200' })
+    cy.intercept('POST', '/public/v1/report_by_data/ivt/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_fni.svg']")
@@ -234,12 +244,14 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(1000)
+    cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
   })
-
   it("Recherche d'une immatriculation avant 2009 pour personne morale sans erreur", () => {
-    cy.intercept('POST', '**/histovec/api/v1/report_by_data/ivt/morale', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtProfessionnel200' })
+    cy.intercept('POST', '/public/v1/report_by_data/ivt/morale/**', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtProfessionnel200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
 
     // renseignement du formulaire
     cy.get("img[src*='/histovec/src/assets/img/plaque_fni.svg']")
@@ -269,8 +281,7 @@ context('Proprietaire', () => {
       .click()
 
     // page de redirection
-    cy.wait(500)
+    cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
-  })
-
+  })z
 })

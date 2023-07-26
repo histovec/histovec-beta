@@ -71,10 +71,10 @@ export default defineComponent({
 
 
 <template>
-  <div class="fr-grid-row  fr-grid-row--gutters">
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
-      <div class="fr-grid-row  fr-grid-row--gutters">
-        <div class="fr-col-12  fr-pb-2w">
+  <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-col-12 fr-col-md-6 fr-col-lg-6 fr-col-xl-6">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-pb-2w">
           <h3 class="fr-mb-0 fr-h5">
             Gages
             <span>
@@ -89,7 +89,7 @@ export default defineComponent({
             </span>
           </h3>
         </div>
-        <div class="fr-col-12  fr-pb-0  fr-pt-0">
+        <div class="fr-col-12 fr-pb-0 fr-pt-0">
           <div
             v-if="situationAdministrative?.gages.hasGages"
             class="fr-text--md"
@@ -104,13 +104,13 @@ export default defineComponent({
           </div>
           <div
             v-if="!situationAdministrative?.gages.hasGages"
-            class="fr-text--md fr-text--bleu"
+            class="fr-text--md"
           >
-            NON
+            <span class="fr-text--bleu">NON</span>
           </div>
         </div>
 
-        <div class="fr-col-12  fr-pb-2w  fr-pt-0">
+        <div class="fr-col-12 fr-pb-2w fr-pt-0">
           <h3 class="fr-mb-0 fr-h5">
             Oppositions
             <span>
@@ -125,7 +125,7 @@ export default defineComponent({
             </span>
           </h3>
         </div>
-        <div class="fr-col-12  fr-pb-0  fr-pt-0">
+        <div class="fr-col-12 fr-pb-0 fr-pt-0">
           <div
             v-if="situationAdministrative?.oppositions.hasOppositions"
             class="fr-text--md"
@@ -145,34 +145,34 @@ export default defineComponent({
           </div>
           <div
             v-if="!situationAdministrative?.oppositions.hasOppositions"
-            class="fr-text--md fr-text--bleu"
+            class="fr-text--md"
           >
-            NON
+            <span class="fr-text--bleu">NON</span>
           </div>
         </div>
 
-        <div class="fr-col-12  fr-pb-2w  fr-pt-0">
+        <div class="fr-col-12 fr-pb-2w fr-pt-0">
           <h3 class="fr-mb-0 fr-h5">
             Véhicule
           </h3>
         </div>
-        <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
+        <div class="fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0">
           Déclaré volé
         </div>
-        <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
+        <div class="fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu">
           {{ situationAdministrative?.isVehVole? 'OUI':'NON' }}
         </div>
       </div>
     </div>
 
-    <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
-      <div class="fr-grid-row  fr-grid-row--gutters">
-        <div class="fr-col-12  fr-pb-2w">
+    <div class="fr-col-12 fr-col-md-6 fr-col-lg-6 fr-col-xl-6">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-pb-2w">
           <h3 class="fr-mb-0 fr-h5">
             Déclarations valant saisie
           </h3>
         </div>
-        <div class="fr-col-12  fr-pb-0  fr-pt-0">
+        <div class="fr-col-12 fr-pb-0 fr-pt-0">
           <div
             v-if="situationAdministrative?.dvs.hasDvs"
             class="fr-text--md"
@@ -187,18 +187,18 @@ export default defineComponent({
           </div>
           <div
             v-if="!situationAdministrative?.dvs.hasDvs"
-            class="fr-text--md fr-text--bleu"
+            class="fr-text--md"
           >
-            NON
+            <span class="fr-text--bleu">NON</span>
           </div>
         </div>
 
-        <div class="fr-col-12  fr-pb-2w  fr-pt-0">
+        <div class="fr-col-12 fr-pb-2w fr-pt-0">
           <h3 class="fr-mb-0 fr-h5">
             Suspensions
           </h3>
         </div>
-        <div class="fr-col-12  fr-pb-0  fr-pt-0">
+        <div class="fr-col-12 fr-pb-0 fr-pt-0">
           <div
             v-if="situationAdministrative?.suspensions.hasSuspensions"
             class="fr-text--md"
@@ -213,33 +213,33 @@ export default defineComponent({
           </div>
           <div
             v-if="!situationAdministrative?.suspensions.hasSuspensions"
-            class="fr-text--md fr-text--bleu"
+            class="fr-text--md"
           >
-            NON
+            <span class="fr-text--bleu">NON</span>
           </div>
         </div>
 
-        <div class="fr-col-12  fr-pb-2w  fr-pt-0">
+        <div class="fr-col-12 fr-pb-2w fr-pt-0">
           <h3 class="fr-mb-0 fr-h5">
             Certificat d'immatriculation
           </h3>
         </div>
-        <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
+        <div class="fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-0 fr-pt-0">
           Déclaré volée
         </div>
-        <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
+        <div class="fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-text--bleu">
           {{ situationAdministrative?.isCiVole? 'OUI':'NON' }}
         </div>
-        <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-0  fr-pt-0">
+        <div class="fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-0 fr-pt-0">
           Déclaré perdue
         </div>
-        <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-0  fr-pt-0  fr-text--bleu">
+        <div class="fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-0 fr-pt-0 fr-text--bleu">
           {{ situationAdministrative?.isCiPerdu? 'OUI':'NON' }}
         </div>
-        <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
+        <div class="fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0">
           Duplicata
         </div>
-        <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
+        <div class="fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu">
           {{ situationAdministrative?.isDuplicata? 'OUI':'NON' }}
         </div>
       </div>
