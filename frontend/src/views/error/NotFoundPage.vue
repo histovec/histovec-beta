@@ -32,14 +32,6 @@ export default defineComponent({
         to:'/accueil',
       }),
     },
-    secondaryAction: {
-      type: Object,
-      default: () => ({
-        label:'Contactez-nous',
-        icon:'ri-mail-line',
-        to:'/contact',
-      }),
-    },
   },
 })
 </script>

@@ -24,11 +24,11 @@
       "energie": "ES",
       "nbPlacesAssises": 5,
       "nbPlacesDebout": 0,
-      "niveauSonore": 0,
+      "niveauSonore": -99,
       "vitesseMoteur": 4125,
       "co2": 140,
       "pollution": "70/220*2003/76EURO4",
-      "rapportPuissMasse": 0
+      "rapportPuissMasse": -99
     },
     "infos": {
       "nbTitulaires": 0,
@@ -38,12 +38,12 @@
       "dateConvertionSiv": "2009-04-20"
     },
     "infosImport": {
-      "datePremiereImmatriculationFrance": null,
-      "dateImportFrance": null,
+      "datePremiereImmatriculationFrance": "",
+      "dateImportFrance": "",
       "isImported": false,
-      "datePremiereImmatEtranger": null,
-      "immatriculationOrigine": null,
-      "codePaysOrigine": null,
+      "datePremiereImmatEtranger": "",
+      "immatriculationOrigine": "",
+      "codePaysOrigine": "",
       "nomPaysOrigine": ""
     },
     "usage": {
@@ -65,6 +65,10 @@
             "nomCreancier": "SOREFI"
           },
           {
+            "gageDate": "NON_CONNU",
+            "nomCreancier": "SANO"
+          },
+          {
             "gageDate": "2019-04-28",
             "nomCreancier": "SANO"
           }
@@ -75,7 +79,7 @@
         "hasDvs": true,
         "informations": [
           {
-            "dvsDate": "",
+            "dvsDate": "NON_CONNU",
             "autorite": "TRIBUNAL JUDICIAIRE"
           },
           {
@@ -88,12 +92,12 @@
         "hasSuspensions": true,
         "informations": [
           {
-            "suspensionDate": "2023-04-28",
-            "motif": "PVE",
+            "suspensionDate": "2023-02-28",
+            "motif": "PVE"
           },
           {
             "suspensionDate": "2023-04-28",
-            "motif": "DES",
+            "motif": "DES"
           }
         ]
       },
@@ -101,27 +105,16 @@
         "hasOppositions": true,
         "informations": {
           "oves": [
-            {
-              "date": "2023-04-28"
-            },
-            {
-              "date": "2023-04-27"
-            }
+            "2023-04-28"
           ],
           "oveis": [
-            {
-              "date": "2023-04-28"
-            }
+            "2023-04-28"
           ],
           "otcisPv": [
-            {
-              "date": "2023-04-28"
-            }
+            "2023-04-28"
           ],
           "otcis": [
-            {
-              "date": "2023-04-28"
-            }
+            "2023-04-28"
           ]
         }
       },
@@ -135,42 +128,26 @@
     "historique": [
       {
         "opaDate": "2009-04-20",
-        "opaType": "IMMAT_NORMALE"
+        "opaType": "Première immatriculation d'un véhicule neuf"
       },
       {
         "opaDate": "2015-05-18",
-        "opaType": "DUPLICATA"
+        "opaType": "Duplicata de la carte grise"
       },
       {
         "opaDate": "2022-08-26",
-        "opaType": "DECLARATION_ACHAT"
-      }
-    ],
-    "controles_techniques": [
-      {
-        "date": "2014-12-11",
-        "nature": "VTP",
-        "resultat": "A",
-        "km": 98429
-      },
-      {
-        "date": "2016-12-10",
-        "nature": "VTP",
-        "resultat": "A",
-        "km": 132874
-      },
-      {
-        "date": "2018-12-26",
-        "nature": "VTP",
-        "resultat": "A",
-        "km": 160532
+        "opaType": "Achat ou reprise par un professionnel"
       }
     ]
   },
   "proprietaire": {
-    "particulier": {
+    "personnePhysique": {
       "nomNaissance": "B******T",
       "prenom": "M****L"
+    },
+    "personneMorale": {
+      "raisonSociale": "",
+      "siren": ""
     },
     "codePostal": "94400"
   },
@@ -178,14 +155,46 @@
     "age": 0,
     "dateEmission": "2015-05-18"
   },
-  "clefacheteur": "179d0be9-e9d2-4a61-9384-94440a4bc12b",
-  "messageUsager": null,
+  "utac": {
+    "updateDate": "2021-08-01",
+    "status": 200,
+    "ct": [
+      {
+        "ctDate": "2014-12-11",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Visite Technique Périodique",
+        "km": 98429
+      },
+      {
+        "ctDate": "2016-12-10",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "VTP",
+        "km": 132874
+      },
+      {
+        "ctDate": "2018-12-26",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "VTP",
+        "km": 160532
+      }
+    ]
+  },
+  "clefAcheteur": "179d0be9-e9d2-4a61-9384-94440a4bc12b",
+  "validiteClefcheteur": "2023-06-03",
+  "messageUsager": [],
   "plaqImmatHash": "acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea",
   "incomingQuery": {
-    "sivPhysique": null,
+    "sivPhysique": {
+      "nom": "",
+      "prenom": "",
+      "immat": "",
+      "numeroFormule": ""
+    },
     "sivMorale": null,
     "ivtPhysique": null,
     "ivtMorale": null
-  },
-  "validite_clefcheteur": "2023-06-03"
+  }
 }

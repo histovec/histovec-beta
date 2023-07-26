@@ -13,10 +13,6 @@ export default defineComponent({
       type: String,
       default: 'Ce véhicule est inconnu d\'HistoVec',
     },
-    errorTitle: {
-      type: String,
-      default: '',
-    },
     errorMessages: {
       type: Array,
       default: () => ([
@@ -30,6 +26,14 @@ export default defineComponent({
         label: 'Revenir au formulaire de recherche',
         icon: 'ri-arrow-right-fill',
         to: '/proprietaire',
+      }),
+    },
+    secondaryAction: {
+      type: Object,
+      default: () => ({
+        label:'Contactez-nous',
+        icon:'ri-mail-line',
+        to:'/contact',
       }),
     },
   },

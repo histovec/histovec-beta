@@ -21,7 +21,7 @@ export default defineComponent({
     },
     errorTitle: {
       type: String,
-      default: '',
+      default: null,
     },
     errorMessages: {
       type: Array,
@@ -53,7 +53,10 @@ export default defineComponent({
       <p class="fr-text--sm fr-mb-3w">
         {{ subTitle }}
       </p>
-      <p class="fr-text--lead fr-mb-3w">
+      <p
+        v-if="errorTitle"
+        class="fr-text--lead fr-mb-3w"
+      >
         {{ errorTitle }}
       </p>
       <p
