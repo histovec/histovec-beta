@@ -8,8 +8,8 @@ import { formaterRapport } from '@Utils/format/formatRapport'
 import { schemaValidationData } from '@Utils/validation/schemaValidationData'
 import router from '@/router'
 import gestionRapportErreur from '@Services/api/gestionRapportErreur'
-const store = useRapportStore()
 
+const store = useRapportStore()
 const uuidNavigateur = localStorage.getItem('userId')
 
 const fetchRapportProprietaire = async (data) => {
@@ -27,19 +27,19 @@ const fetchRapportProprietaire = async (data) => {
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.SIV) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire, uuidNavigateur)
+      await store.fetchRapportSivPersonne(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-        await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
+      await store.fetchRapportSivMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
   }
 
   if (typeImmatriculation === TYPE_IMMATRICULATION.FNI) {
     if (typePersonne === TYPE_PERSONNE.PARTICULIER) {
-        await store.fetchRapportIvtPhysique(dataRequeteBody, idProprietaire, uuidNavigateur)
+      await store.fetchRapportIvtPhysique(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
     if (typePersonne === TYPE_PERSONNE.PRO) {
-        await store.fetchRapportIvtMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
+      await store.fetchRapportIvtMorale(dataRequeteBody, idProprietaire, uuidNavigateur)
     }
   }
 

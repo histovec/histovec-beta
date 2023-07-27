@@ -62,6 +62,7 @@ export default {
       login: import.meta.env.VITE_LOGIN_API_DATA,
       password: import.meta.env.VITE_PASSWORD_API_DATA,
     }
+
     await axios.post('/get_token', dataBody)
       .then(response => {
         axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`

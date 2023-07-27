@@ -24,7 +24,7 @@ export const reponseSivParticulierFormat200 = {
       energie: 'Essence',
       nbPlacesAssises: 5,
       nbPlacesDebout: 0,
-      niveauSonore: 10,
+      niveauSonore: 0,
       vitesseMoteur: 4125,
       co2: 140,
       pollution: '70/220*2003/76EURO4',
