@@ -1,11 +1,9 @@
 const reponseRequeteApiSivParticulier200 = require('./reponseRequeteApiSivParticulier200');
 
-exports.reponseRequeteApiIvtProfessionnel200 = {
-  ...reponseRequeteApiSivParticulier200,
-  data: {
-    ...reponseRequeteApiSivParticulier200?.data,
+exports.donneesIVTProfessionnel = {
+    ...reponseRequeteApiSivParticulier200.donneesSIVParticulier,
     proprietaire: {
-      ...reponseRequeteApiSivParticulier200?.data?.proprietaire,
+      ...reponseRequeteApiSivParticulier200.donneesSIVParticulier.proprietaire,
       personnePhysique: {
         nomNaissance: '',
         prenom: '',
@@ -16,7 +14,7 @@ exports.reponseRequeteApiIvtProfessionnel200 = {
       },
     },
     incomingQuery: {
-      ...reponseRequeteApiSivParticulier200?.data?.incomingQuery,
+      ...reponseRequeteApiSivParticulier200.donneesSIVParticulier.incomingQuery,
       sivPhysique: null,
       ivtMorale: {
         raisonSociale: 'raison_sociale',
@@ -25,5 +23,4 @@ exports.reponseRequeteApiIvtProfessionnel200 = {
         dateEmissionCi: '31/05/2023',
       },
     },
-  },
-}
+  }

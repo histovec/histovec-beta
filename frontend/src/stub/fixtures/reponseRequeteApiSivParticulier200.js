@@ -1,7 +1,4 @@
-exports.reponseRequeteApiSivParticulier200 = {
-  status: 200,
-  message: 'OK',
-  data: {
+exports.donneesSIVParticulier = {
     vehicule: {
       caracteristiques: {
         marque: 'RENAULT',
@@ -78,8 +75,12 @@ exports.reponseRequeteApiSivParticulier200 = {
           hasDvs: true,
           informations: [
             {
-              dvsDate: '',
+              dvsDate: 'NON_CONNU',
               autorite: 'TRIBUNAL JUDICIAIRE',
+            },
+            {
+              dvsDate: '2020-04-28',
+              autorite: 'TRIBUNAL JUDICIAIRE II',
             },
             {
               dvsDate: '2023-04-28',
@@ -151,7 +152,7 @@ exports.reponseRequeteApiSivParticulier200 = {
       codePostal: '94400',
     },
     certificatImmatriculation: {
-      age: 0,
+      age: -99,
       dateEmission: '2015-05-18',
     },
     utac: {
@@ -196,5 +197,4 @@ exports.reponseRequeteApiSivParticulier200 = {
       ivtMorale: null,
     },
     validiteClefAcheteur: '2023-06-03',
-  },
-}
+  }

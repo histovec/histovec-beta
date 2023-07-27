@@ -1,11 +1,9 @@
 const reponseRequeteApiSivParticulier200 = require('./reponseRequeteApiSivParticulier200');
 
-exports.reponseRequeteApiSivProfessionnel200 = {
-  ...reponseRequeteApiSivParticulier200,
-  data: {
-    ...reponseRequeteApiSivParticulier200?.data,
+exports.donneesSIVProfessionnel = {
+    ...reponseRequeteApiSivParticulier200.donneesSIVParticulier,
     proprietaire: {
-      ...reponseRequeteApiSivParticulier200?.data?.proprietaire,
+      ...reponseRequeteApiSivParticulier200.donneesSIVParticulier.proprietaire,
       personnePhysique: {
         nomNaissance: '',
         prenom: '',
@@ -16,7 +14,7 @@ exports.reponseRequeteApiSivProfessionnel200 = {
       },
     },
     incomingQuery: {
-      ...reponseRequeteApiSivParticulier200?.data?.incomingQuery,
+      ...reponseRequeteApiSivParticulier200.donneesSIVParticulier.incomingQuery,
       sivPhysique: null,
       sivMorale: {
         raisonSociale: 'ZMF AUTO',
@@ -25,5 +23,4 @@ exports.reponseRequeteApiSivProfessionnel200 = {
         numeroFormule: '2012fp66022',
       },
     },
-  },
-}
+  }

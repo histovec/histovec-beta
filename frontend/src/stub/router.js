@@ -12,20 +12,20 @@ exports.apiRouter = express.Router()
       res.json(token)
     })
     .post('/report_by_data/siv/physique/:uuid', (req, res) => {
-      res.json(reponseRequeteApiSivParticulier200);
+      res.json(reponseRequeteApiSivParticulier200.donneesSIVParticulier);
     })
     .post('/report_by_data/siv/morale/:uuid', (req, res) => {
-      res.json(reponseRequeteApiSivProfessionnel200);
+      res.json(reponseRequeteApiSivProfessionnel200.donneesSIVProfessionnel);
     })
     .post('/report_by_data/ivt/physique/:uuid', (req, res) => {
-      res.json(reponseRequeteApiIvtParticulier200);
+      res.json(reponseRequeteApiIvtParticulier200.donneesIVTParticulier);
     })
     .post('/report_by_data/ivt/morale/:uuid', (req, res) => {
-      res.json(reponseRequeteApiIvtProfessionnel200);
+      res.json(reponseRequeteApiIvtProfessionnel200.donneesIVTProfessionnel);
     })
-    .put('/logs/:uuid/home', (req, res) => {
-      res.status(200);
+    .put('/logs/:uuid/:string', (req, res) => {
+      res.json(req.path);
     })
-    .put('/logs/:uuid/search', (req, res) => {
-      res.status(200);
+    .put('/logs/:uuid/:string/:status', (req, res) => {
+     res.json(req.path);
     })
