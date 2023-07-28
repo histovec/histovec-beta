@@ -1,14 +1,41 @@
 const express = require('express');
-const reponseRequeteApiSivParticulier200 = require('./fixtures/reponseRequeteApiSivParticulier200');
-const reponseRequeteApiSivProfessionnel200 = require('./fixtures/reponseRequeteApiSivProfessionnel200');
-const reponseRequeteApiIvtParticulier200 = require('./fixtures/reponseRequeteApiIvtParticulier200');
-const reponseRequeteApiIvtProfessionnel200 = require('./fixtures/reponseRequeteApiIvtProfessionnel200');
-const token = {
-  access_token: 'access_token_bouchonne',
-  };
-const qrCode = {
-  qrCode: 'qr_code_bouchonne',
+const reponseRequeteApiSivParticulier200 = require('../../cypress/fixtures/api/reponseRequeteApiSivParticulier200.json');
+const reponseRequeteApiSivProfessionnel200 = require('../../cypress/fixtures/api/reponseRequeteApiSivProfessionnel200.json');
+const reponseRequeteApiIvtParticulier200 = require('../../cypress/fixtures/api/reponseRequeteApiIvtParticulier200.json');
+const reponseRequeteApiIvtProfessionnel200 = require('../../cypress/fixtures/api/reponseRequeteApiIvtProfessionnel200.json');
+const {
+  token,
+  qrCode,
+  vehiculeNotFound,
+  unauthorized,
+  internalError,
+} = require('./fixtures/contants.js');
+
+
+function gestionErreur(incomingQuerry, res, reponse) {
+  switch (incomingQuerry) {
+    case '404':
+      res.status(404)
+      res.json(vehiculeNotFound)
+      break;
+    case '401':
+      res.status(401)
+      res.json(unauthorized)
+      break;
+    case '403':
+      res.status(403)
+      res.json(unauthorized)
+      break;
+    case '500':
+      res.status(500)
+      res.json(internalError)
+      break;
+    default:
+      res.json(reponse);
+      break;
+  }
 }
+
 exports.apiRouter = express.Router()
   // *** Token ***
     .post('/get_token', (req, res) => {
@@ -18,55 +45,31 @@ exports.apiRouter = express.Router()
   // *** Rapport ***
     .post('/report_by_data/siv/physique/:uuid', (req, res) => {
       if( req.body && req.body.nom ) {
-        if (req.body.nom === '404') {
-          res.status(404)
-        }
-        if (req.body.nom === '500') {
-          res.status(500)
-        }
+        gestionErreur(req.body.nom, res, reponseRequeteApiSivParticulier200);
       }
-      res.json(reponseRequeteApiSivParticulier200.donneesSIVParticulier);
     })
     .post('/report_by_data/siv/morale/:uuid', (req, res) => {
       if( req.body && req.body.raisonSociale ) {
-        if (req.body.raisonSociale === '404') {
-          res.status(404)
-        }
-        if (req.body.raisonSociale === '500') {
-          res.status(500)
-        }
+        gestionErreur(req.body.raisonSociale, res, reponseRequeteApiSivProfessionnel200);
       }
-      res.json(reponseRequeteApiSivProfessionnel200.donneesSIVProfessionnel);
     })
     .post('/report_by_data/ivt/physique/:uuid', (req, res) => {
       if( req.body && req.body.nomPrenom ) {
-        if (req.body.nomPrenom === '404') {
-          res.status(404)
-        }
-        if (req.body.nomPrenom === '500') {
-          res.status(500)
-        }
+        gestionErreur(req.body.nomPrenom, res, reponseRequeteApiIvtParticulier200);
       }
-      res.json(reponseRequeteApiIvtParticulier200.donneesIVTParticulier);
     })
     .post('/report_by_data/ivt/morale/:uuid', (req, res) => {
       if( req.body && req.body.raisonSociale ) {
-        if (req.body.raisonSociale === '404') {
-          res.status(404)
-        }
-        if (req.body.raisonSociale === '500') {
-          res.status(500)
-        }
+        gestionErreur(req.body.raisonSociale, res, reponseRequeteApiIvtProfessionnel200);
       }
-      res.json(reponseRequeteApiIvtProfessionnel200.donneesIVTProfessionnel);
     })
 
   // *** Logs ***
     .put('/logs/:uuid/:string', (req, res) => {
-      res.json(req.path);
+      res.json({});
     })
     .put('/logs/:uuid/:string/:status', (req, res) => {
-     res.json(req.path);
+     res.json({});
     })
 
   // *** QrCode ***
