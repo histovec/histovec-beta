@@ -283,5 +283,5 @@ context('Proprietaire', () => {
     // page de redirection
     cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
-  })z
+  })
 })
