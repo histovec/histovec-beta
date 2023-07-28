@@ -3,9 +3,9 @@ const reponseRequeteApiSivParticulier200 = require('../../cypress/fixtures/api/r
 const reponseRequeteApiSivProfessionnel200 = require('../../cypress/fixtures/api/reponseRequeteApiSivProfessionnel200.json');
 const reponseRequeteApiIvtParticulier200 = require('../../cypress/fixtures/api/reponseRequeteApiIvtParticulier200.json');
 const reponseRequeteApiIvtProfessionnel200 = require('../../cypress/fixtures/api/reponseRequeteApiIvtProfessionnel200.json');
+const path = require('path');
 const {
   token,
-  qrCode,
   vehiculeNotFound,
   unauthorized,
   internalError,
@@ -74,5 +74,6 @@ exports.apiRouter = express.Router()
 
   // *** QrCode ***
     .get('/get_buyer_qrcode/:uuid/:code', (req, res) => {
-      res.json(qrCode);
+      res.setHeader('content-type', 'image/png');
+      res.sendFile(path.join(__dirname, './fixtures/qrcode.png'));
     })
