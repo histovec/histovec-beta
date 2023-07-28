@@ -40,10 +40,18 @@ export default defineComponent({
       Identité
     </div>
     <div
+      v-if="titulaires?.particulier?.nomNaissance || titulaires?.particulier?.prenom"
       id="valeur-identite"
       class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
     >
       {{ titulaires?.particulier?.nomNaissance }} {{ titulaires?.particulier?.prenom }}
+    </div>
+    <div
+      v-else
+      id="valeur-identite"
+      class="fr-col-6  fr-pt-0  fr-pb-1w  fr-text--bleu"
+    >
+      {{ titulaires?.personneMorale?.raisonSociale }}
     </div>
 
     <div

@@ -204,9 +204,22 @@ export default defineComponent({
         </h4>
 
         <p class="fr-text--md  fr-mb-0">
-          <span class="fr-text--bleu">{{
-            rapportData?.proprietaire?.particulier?.nomNaissance
-          }} {{ rapportData?.proprietaire?.particulier?.prenom }}</span>
+          <span
+            v-if="rapportData?.proprietaire?.particulier?.nomNaissance || rapportData?.proprietaire?.particulier?.prenom"
+            class="fr-text--bleu"
+          >
+            {{
+              rapportData?.proprietaire?.particulier?.nomNaissance
+            }} {{ rapportData?.proprietaire?.particulier?.prenom }}
+          </span>
+          <span
+            v-else
+            class="fr-text--bleu"
+          >
+            {{
+              rapportData?.proprietaire?.personneMorale?.raisonSociale
+            }}
+          </span>
           depuis
           <span
             v-if="rapportData?.certificatImmatriculation?.age"
