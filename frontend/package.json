@@ -7,6 +7,7 @@
   "scripts": {
     "build": "NODE_OPTIONS=--openssl-legacy-provider vite build",
     "dev": "vite",
+    "stub": "node src/stub/server.js",
     "lint": "run-p lint:*",
     "format": "eslint src --fix --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "lint:js": "eslint src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
@@ -15,6 +16,7 @@
     "test": "npm run test:unit",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:stub": "VITE_TITLE=histovec VITE_PORT=8080 VITE_AB_TESTING_PERCENTAGE=0 VITE_DISABLE_API_LOG=false VITE_STUB_ACTIVATED=true BACKEND_PORT=8010 vite",
     "test:cy": "cypress run"
   },
   "dependencies": {
@@ -22,10 +24,13 @@
     "@gouvminint/vue-dsfr": "1.4.0",
     "axios": "^1.4.0",
     "base64-arraybuffer": "^1.0.2",
+    "body-parser": "^1.20.2",
     "chart.js": "^3.8.2",
     "chartjs-adapter-date-fns": "^2.0.0",
+    "cors": "^2.8.5",
     "date-fns": "^2.29.1",
     "detect-browser": "^5.3.0",
+    "express": "^4.18.2",
     "lodash.orderby": "^4.6.0",
     "pdf-lib": "^1.17.1",
     "pinia": "^2.1.3",
