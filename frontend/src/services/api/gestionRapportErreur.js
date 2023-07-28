@@ -5,6 +5,7 @@ const redirectionPageErreur = (status) => {
     case 200:
       return
     case 404:
+    case 422:
       // Cas: véhicule non trouvé
       router.push({
         name: 'vehiculeNonTrouve',

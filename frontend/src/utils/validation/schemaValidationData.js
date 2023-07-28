@@ -173,6 +173,6 @@ export const schemaValidationData = object().shape({
   }).required().noUnknown(true).strict(),
   clefAcheteur: string().required(),
   messageUsager: array().notRequired(),
-  plaqImmatHash: string().required(),
+  plaqImmatHash: string().notRequired(),
   validiteClefAcheteur: string().required(),
 }).noUnknown(true).strict()

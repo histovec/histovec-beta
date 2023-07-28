@@ -24,13 +24,6 @@ describe('gestionRapportErreur', async () => {
     expect(spyRouter).toHaveBeenCalledTimes(0)
   })
 
-  test('500', async () => {
-    await gestionRapportErreur.redirectionPageErreur(500)
-
-    expect(spyRouter).toHaveBeenCalledTimes(1)
-    expect(spyRouter).toBeCalledWith({ name: 'erreurInattendue' })
-  })
-
   test('404', async () => {
     await gestionRapportErreur.redirectionPageErreur(404)
 
@@ -38,6 +31,22 @@ describe('gestionRapportErreur', async () => {
     expect(spyRouter).toBeCalledWith({
       name: 'vehiculeNonTrouve',
     })
+  })
+
+  test('422', async () => {
+    await gestionRapportErreur.redirectionPageErreur(422)
+
+    expect(spyRouter).toHaveBeenCalledTimes(1)
+    expect(spyRouter).toBeCalledWith({
+      name: 'vehiculeNonTrouve',
+    })
+  })
+
+  test('500', async () => {
+    await gestionRapportErreur.redirectionPageErreur(500)
+
+    expect(spyRouter).toHaveBeenCalledTimes(1)
+    expect(spyRouter).toBeCalledWith({ name: 'erreurInattendue' })
   })
 
   test('501', async () => {

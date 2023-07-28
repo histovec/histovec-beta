@@ -6,7 +6,6 @@ context('Rapport vehicule cas simple - tuiles', () => {
     cy.intercept('PUT', '**/search', { statusCode: 200 })
     cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
     cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
-    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
     cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
 
     // redirection vers la page propriétaire

@@ -17,7 +17,7 @@ let compteurAuthentification = 0
 let derniereRequete = ''
 
 window.addEventListener('beforeunload', function () {
-  navigator.sendBeacon( `${apiUrl}/logs/${localStorage.getItem('userId')}/exit`)
+  api.log('/exit')
 }, false)
 
 router.beforeEach((to, from, next) => {

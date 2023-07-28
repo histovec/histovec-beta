@@ -5,6 +5,7 @@ context('FAQ', () => {
   beforeEach(() => {
     cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
     cy.intercept('PUT', '**/faq', { statusCode: 200 })
+    cy.intercept('PUT', '**/contact', { statusCode: 200 })
     cy.visit(routes.url_faq)
   })
   it("Filtrer les thèmes de la liste déroulante", () => {

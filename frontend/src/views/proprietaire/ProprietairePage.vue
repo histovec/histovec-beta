@@ -227,11 +227,9 @@ export default defineComponent({
       await gestionAppelApi.fetchRapportProprietaire(this.formData)
 
       if (this.store.getStatus === 200) {
+        this.store.ignorerRequete = true
         this.$router.push({
           name: 'rapportVendeur',
-          params: {
-            formData: JSON.stringify(this.formData),
-          },
         })
       }
     },
