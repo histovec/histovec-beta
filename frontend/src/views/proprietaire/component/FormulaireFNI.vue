@@ -1,4 +1,5 @@
 <script>
+/* eslint-disable vue/no-mutating-props */
 import {defineComponent} from 'vue'
 import { sleep } from '@Utils/sleep';
 
@@ -15,7 +16,7 @@ import imageDateEmissionCertificatImmatriculationFNI from '@Assets/img/aide/fni_
 export default defineComponent({
   name: 'FormulaireFNI',
   props:{
-    formulaireData: {
+    formData: {
       type: Object,
       default: null,
     },
@@ -23,7 +24,6 @@ export default defineComponent({
   data () {
     const tabFniTitles = [{ title: 'Particulier', panelId: 'fni-tab-content-0', tabId:'fni-tab-0'}, { title: 'Personne morale', panelId: 'fni-tab-content-1', tabId:'fni-tab-1'}]
     return {
-      formData: this.formulaireData,
       store: useRapportStore(),
       tabFniTitles,
       mentionChampObligatoire,
@@ -447,7 +447,7 @@ export default defineComponent({
         <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
           <DsfrInputGroup
             :is-valid="isNumeroSirenFniValid"
-            :error-message="!isNumeroSirenFniValid?&quot;Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.&quot;:&quot;&quot;"
+            :error-message="!isNumeroSirenFniValid?'Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.':''"
             description-id="numero-siren-personne-morale-FNI-erreur-message"
           >
             <DsfrInput

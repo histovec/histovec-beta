@@ -1,4 +1,5 @@
 <script>
+/* eslint-disable vue/no-mutating-props */
 import {defineComponent} from 'vue'
 
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
@@ -11,7 +12,7 @@ import { sleep } from '@Utils/sleep';
 export default defineComponent({
   name: 'SelectionnerFormatImmatriculation',
   props:{
-    formulaireData: {
+    formData: {
       type: Object,
       default: null,
     },
@@ -26,7 +27,6 @@ export default defineComponent({
   },
   data () {
     return {
-      formData: this.formulaireData,
       TYPE_IMMATRICULATION,
       OLD_IMMATRICULATION_TYPE,
 

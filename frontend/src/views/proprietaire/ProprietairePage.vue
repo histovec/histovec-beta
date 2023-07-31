@@ -7,20 +7,8 @@ import { DATE_FR_REGEX, NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, 
 import { OLD_IMMATRICULATION_TYPE, TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 
 import '@Assets/stylesheets/globale.css'
-
-import plaqueNonSupporteeSvg from '@Assets/img/plaque_non_supportee.svg?url'
-import plaqueFniSvg from '@Assets/img/plaque_fni.svg?url'
-import plaqueSivSvg from '@Assets/img/plaque_siv.svg?url'
 import proprietaireSVG from '@Assets/img/proprietaire.svg?url'
 
-import imageNomEtPrenomsFNI from '@Assets/img/aide/fni_nom_et_prenoms.jpg'
-import imagePlaqueImmatriculationFNI from '@Assets/img/aide/fni_plaque_immatriculation.jpg'
-import imageDateEmissionCertificatImmatriculationFNI from '@Assets/img/aide/fni_date_emission_certificat_immatriculation.jpg'
-
-import imageNomSIV from '@Assets/img/aide/siv_nom.jpg'
-import imagePrenomsSIV from '@Assets/img/aide/siv_prenoms.jpg'
-import imagePlaqueImmatriculationSIV from '@Assets/img/aide/siv_plaque_immatriculation.jpg'
-import imageNumeroFormuleSIV from '@Assets/img/aide/siv_numero_formule.jpg'
 import api from '@Api/index.js'
 import { useRapportStore } from '@Stores/rapport'
 import gestionAppelApi from '@Services/api/gestionAppelApi'
@@ -33,7 +21,10 @@ export default defineComponent({
   components: {
     FormulaireSIV,
     FormulaireFNI,
-    SelectionnerFormatImmatriculation, HistoVecButtonLink, TitrePresentationPage},
+    SelectionnerFormatImmatriculation,
+    HistoVecButtonLink,
+    TitrePresentationPage,
+  },
 
   data () {
     const focusSIV = false
@@ -78,49 +69,6 @@ export default defineComponent({
       formData,
       focusSIV,
       focusFNI,
-      modals: {
-        common: {
-          numeroSiren: {
-            opened: false,
-          },
-        },
-        siv: {
-          nom: {
-            opened: false,
-          },
-          prenoms: {
-            opened: false,
-          },
-          numeroImmatriculation: {
-            opened: false,
-          },
-          numeroFormule: {
-            opened: false,
-          },
-        },
-        fni: {
-          nomEtPrenoms: {
-            opened: false,
-          },
-          numeroImmatriculation: {
-            opened: false,
-          },
-          dateEmissionCertificatImmatriculation: {
-            opened: false,
-          },
-        },
-      },
-
-      tabs: {
-        siv: {
-          selectedTabIndex: 0,
-          tabsAsc: true,
-        },
-        fni: {
-          selectedTabIndex: 0,
-          tabsAsc: true,
-        },
-      },
 
       // types
       TYPE_IMMATRICULATION,
@@ -133,22 +81,6 @@ export default defineComponent({
         titre: 'Rassurez vos acheteurs potentiels',
         sousTitre: 'Partagez l\'historique de votre véhicule',
         description: 'Vous souhaitez vendre votre véhicule et rassurer le futur acheteur ? Un acheteur potentiel vous demande le rapport ? Partagez-leur l\'historique de votre véhicule.',
-      },
-      images: {
-        plaqueNonSupporteeSvg,
-        plaqueFniSvg,
-        plaqueSivSvg,
-
-        aide: {
-          imageNomEtPrenomsFNI,
-          imagePlaqueImmatriculationFNI,
-          imageDateEmissionCertificatImmatriculationFNI,
-
-          imageNomSIV,
-          imagePrenomsSIV,
-          imagePlaqueImmatriculationSIV,
-          imageNumeroFormuleSIV,
-        },
       },
       store: useRapportStore(),
     }
@@ -372,7 +304,7 @@ export default defineComponent({
   </div>
 
   <SelectionnerFormatImmatriculation
-    :formulaire-data="formData"
+    :form-data="formData"
     :focus-s-i-v="focusSIV"
     :focus-f-n-i="focusFNI"
   />
@@ -384,13 +316,13 @@ export default defineComponent({
       v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
       class="fr-col-12"
     >
-      <FormulaireSIV :formulaire-data="formData" />
+      <FormulaireSIV :form-data="formData" />
     </div>
     <div
       v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
       class="fr-col-12"
     >
-      <FormulaireFNI :formulaire-data="formData" />
+      <FormulaireFNI :form-data="formData" />
     </div>
   </div>
   <div
@@ -451,63 +383,9 @@ export default defineComponent({
   </div>
 </template>
 <style scoped>
-.histovec-input-group-title {
-  font-weight: bold !important;
-}
-
-.required-label {
-  color: var(--red-marianne-main-472);
-}
 
 .text-center {
   text-align: center;
-}
-
-.help-link {
-  margin-left: 1rem;
-  cursor: pointer;
-}
-
-.help-icon {
-  margin-left: 0.2rem;
-}
-.card-immatriculation {
-  text-align: center;
-  width: 270px;
-  margin: 1rem;
-  cursor: pointer;
-  background: var(--background-default-grey);
-  border: 2px var(--grey-925-125) solid;
-  padding: 1rem;
-  display:block;
-}
-.card-immatriculation--active {
-  border-color: var(--blue-france-sun-113-625);
-}
-.card-immatriculation:hover,
-.card-immatriculation:focus,
-.card-immatriculation:focus-within {
-  background: var(--grey-1000-50-hover);
-  outline: 2px solid var(--info-425-625-hover);
-}
-.card-immatriculation:hover img,
-.card-immatriculation:focus img,
-.card-immatriculation:focus-within img {
-  opacity: 1;
-}
-.card-immatriculation--image--wrap {
-  height: 70px;
-  width: 100%;
-}
-.card-immatriculation--image {
-  background: var(--background-default-grey);
-  height: 3rem;
-}
-.card-immatriculation--image--opacity {
-  opacity: 0.2;
-}
-.card-immatriculation--radio {
-  outline:none;
 }
 .bouton-recherche {
   text-align: right;

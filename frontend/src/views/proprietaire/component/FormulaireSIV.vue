@@ -1,4 +1,5 @@
 <script>
+/* eslint-disable vue/no-mutating-props */
 import {defineComponent} from 'vue'
 import LoaderComponent from '@Components/LoaderComponent.vue';
 
@@ -23,7 +24,7 @@ export default defineComponent({
   },
 
   props:{
-    formulaireData: {
+    formData: {
       type: Object,
       default: null,
     },
@@ -31,7 +32,6 @@ export default defineComponent({
   data () {
     const tabSivTitles = [{ title: 'Particulier', panelId: 'siv-tab-content-0', tabId:'siv-tab-0'}, { title: 'Personne morale', panelId: 'siv-tab-content-1', tabId:'siv-tab-1'}]
     return {
-      formData: this.formulaireData,
       store: useRapportStore(),
       tabSivTitles,
       mentionChampObligatoire,
@@ -524,7 +524,7 @@ export default defineComponent({
         <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
           <DsfrInputGroup
             :is-valid="isNumeroSirenSivValid"
-            :error-message="!isNumeroSirenSivValid?&quot;Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.&quot;:&quot;&quot;"
+            :error-message="!isNumeroSirenSivValid?'Le numéro S&#8203;I&#8203;R&#8203;E&#8203;N doit comporter 9 chiffres ou être vide. Format : 1&#8203;2&#8203;3&#8203;4&#8203;5&#8203;6&#8203;7&#8203;8&#8203;9.':''"
             description-id="numero-siren-personne-morale-SIV-erreur-message"
           >
             <DsfrInput
