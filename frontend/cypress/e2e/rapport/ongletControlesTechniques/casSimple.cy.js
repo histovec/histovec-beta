@@ -3,9 +3,17 @@ import routes from "../../../constants/urls.json";
 context('Rapport vehicule cas simple - onglet Contrôles techniques', () => {
   const listeDate = ["26/12/2018", "10/12/2016", "11/12/2014"];
   const listeNature = ["Contrôle Technique Périodique", "Visite Technique Périodique", "Visite Technique Périodique"];
-  const listeKilometrage = ["160,532 km ", "132,874 km ", "98,429 km "];
+  const listeKilometrage = ["160532 km ", "132874 km ", "98429 km "];
 
   before(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('PUT', '**/technical-control', { statusCode: 200 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')

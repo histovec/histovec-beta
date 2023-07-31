@@ -55,28 +55,67 @@
       "isApteACirculer": true,
       "isCiAnnule": false,
       "dateAnnulation": null,
-      "isCiVole": false,
-      "isDuplicata": false,
+      "isCiVole": true,
+      "isDuplicata": true,
       "gages": {
-        "hasGages": false,
-        "informations": []
+        "hasGages": true,
+        "informations": [
+          {
+            "gageDate": "2019-05-09",
+            "nomCreancier": "SOREFI"
+          },
+          {
+            "gageDate": "NON_CONNU",
+            "nomCreancier": "SANO"
+          },
+          {
+            "gageDate": "2019-04-28",
+            "nomCreancier": "SANO"
+          }
+        ]
       },
       "isCiPerdu": false,
       "dvs": {
-        "hasDvs": false,
-        "informations": []
+        "hasDvs": true,
+        "informations": [
+          {
+            "dvsDate": "NON_CONNU",
+            "autorite": "TRIBUNAL JUDICIAIRE"
+          },
+          {
+            "dvsDate": "2023-04-28",
+            "autorite": "TRIBUNAL JUDICIAIRE II"
+          }
+        ]
       },
       "suspensions": {
-        "hasSuspensions": false,
-        "informations": []
+        "hasSuspensions": true,
+        "informations": [
+          {
+            "suspensionDate": "2023-04-28",
+            "motif": "PVE"
+          },
+          {
+            "suspensionDate": "2023-04-28",
+            "motif": "DES"
+          }
+        ]
       },
       "oppositions": {
-        "hasOppositions": false,
+        "hasOppositions": true,
         "informations": {
-          "oves": [],
-          "oveis": [],
-          "otcisPv": [],
-          "otcis": []
+          "oves": [
+            "2023-04-28"
+          ],
+          "oveis": [
+            "2023-04-28"
+          ],
+          "otcisPv": [
+            "2023-04-28"
+          ],
+          "otcis": [
+            "2023-04-28"
+          ]
         }
       },
       "isVehVole": false
@@ -103,12 +142,12 @@
   },
   "proprietaire": {
     "personnePhysique": {
-      "nomNaissance": "",
-      "prenom": ""
+      "nomNaissance": "B******T",
+      "prenom": "M****L"
     },
     "personneMorale": {
-      "raisonSociale": "raison_sociale",
-      "siren": "siren"
+      "raisonSociale": "",
+      "siren": ""
     },
     "codePostal": "94400"
   },
@@ -149,13 +188,12 @@
   "plaqImmatHash": "acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea",
   "incomingQuery": {
     "sivPhysique": null,
-    "sivMorale": {
-      "raisonSociale": "raison_sociale",
-      "siren": "siren",
+    "sivMorale": null,
+    "ivtPhysique": {
+      "nomPrenom": "nom_prenom_IVT",
       "immat": "AA-948-BM",
-      "numeroFormule": "2015CC11207"
+      "dateEmissionCi": "31/05/2023"
     },
-    "ivtPhysique": null,
     "ivtMorale": null
   }
 }

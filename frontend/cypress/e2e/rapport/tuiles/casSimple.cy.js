@@ -2,6 +2,13 @@ import routes from "../../../constants/urls.json";
 
 context('Rapport vehicule cas simple - tuiles', () => {
   before(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
@@ -45,7 +52,7 @@ context('Rapport vehicule cas simple - tuiles', () => {
       .parent()
       .parent()
       .find("div[class*='fr-tile__desc']")
-      .contains("Numéro d'immatriculation : CY-9**-RX")
+      .contains("Numéro d'immatriculation : A*******M")
   })
   it("Affichage de la second tuile", () => {
     cy.get("div[class*='fr-tile fr-enlarge fr-tile--horizontal']")

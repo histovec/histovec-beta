@@ -2,6 +2,15 @@ import routes from "../../../constants/urls.json";
 
 context('Rapport vehicule cas simple - modale partage', () => {
   before(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('PUT', '**/share', { statusCode: 200 })
+    cy.intercept('PUT', '**/share/copy', { statusCode: 200 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
@@ -46,7 +55,7 @@ context('Rapport vehicule cas simple - modale partage', () => {
         .find("div[class*='fr-modal__body']").should('be.visible');
 
       cy.wait(500)
-        .get("button[class*='fr-btn']")
+        .get("button[class*='fr-btn inline-flex']")
         .contains("Copier le lien")
         .click();
       cy.get("dialog[class='fr-modal fr-modal--opened']").should('not.exist')

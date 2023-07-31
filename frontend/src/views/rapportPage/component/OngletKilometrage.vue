@@ -34,7 +34,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="fr-grid-row  fr-grid-row--gutters"
+    class="fr-grid-row fr-grid-row--gutters"
   >
     <div
       v-if="erreurControlesTechniques"

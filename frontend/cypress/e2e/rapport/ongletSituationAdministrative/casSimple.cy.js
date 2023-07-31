@@ -2,6 +2,14 @@ import routes from "../../../constants/urls.json";
 
 context('Rapport vehicule cas simple - onglet Situation administrative', () => {
   before(() => {
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
+    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('PUT', '**/administrative-status', { statusCode: 200 })
+
     // redirection vers la page propriétaire
     cy.visit(routes.url_proprietaire)
     cy.title().should('eq', 'HistoVec - Propriétaire')
@@ -119,6 +127,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(0)
+      .find("div[class='fr-text--md']")
       .find("span[class='fr-text--bleu']")
       .contains("NON")
 
@@ -144,6 +153,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(0)
+      .find("div[class='fr-text--md']")
       .find("span[class='fr-text--bleu']")
       .contains("NON")
 
@@ -179,6 +189,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(0)
+      .find("div[class='fr-text--md']")
       .find("span[class='fr-text--bleu']")
       .contains("NON")
 
@@ -196,6 +207,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class='fr-col-12 fr-pb-0 fr-pt-0']")
       .eq(1)
+      .find("div[class='fr-text--md']")
       .find("span[class='fr-text--bleu']")
       .contains("NON")
 

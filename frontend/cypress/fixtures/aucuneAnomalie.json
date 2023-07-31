@@ -24,18 +24,18 @@
       "energie": "ES",
       "nbPlacesAssises": 5,
       "nbPlacesDebout": 0,
-      "niveauSonore": -99,
+      "niveauSonore": 80,
       "vitesseMoteur": 4125,
       "co2": 140,
       "pollution": "70/220*2003/76EURO4",
       "rapportPuissMasse": -99
     },
     "infos": {
-      "nbTitulaires": 0,
-      "datePremiereImmatriculation": "2009-04-20",
-      "datePremiereImmatSiv": "2009-04-20",
+      "nbTitulaires": 1,
+      "datePremiereImmatriculation": "2003-07-12",
+      "datePremiereImmatSiv": "2003-07-12",
       "plaqueImmatriculation": "A*******M",
-      "dateConvertionSiv": "2009-04-20"
+      "dateConvertionSiv": "2003-07-12"
     },
     "infosImport": {
       "datePremiereImmatriculationFrance": "",
@@ -113,7 +113,7 @@
     "codePostal": "94400"
   },
   "certificatImmatriculation": {
-    "age": 0,
+    "age": 10,
     "dateEmission": "2015-05-18"
   },
   "utac": {
@@ -131,14 +131,14 @@
         "ctDate": "2016-12-10",
         "resultat": "Favorable",
         "resultatRaw": "A",
-        "nature": "VTP",
+        "nature": "Visite Technique Périodique",
         "km": 132874
       },
       {
         "ctDate": "2018-12-26",
         "resultat": "Favorable",
         "resultatRaw": "A",
-        "nature": "VTP",
+        "nature": "Contrôle Technique Périodique",
         "km": 160532
       }
     ]
