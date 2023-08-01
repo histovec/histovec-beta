@@ -8,16 +8,17 @@ import { mentionChampObligatoire } from '@Constants/proprietaireConstantes'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@Utils/collerPressePapierEtDistribuerDansFormulaire.js'
 import { DATE_FR_REGEX, NUMERO_IMMATRICULATION_FNI_REGEX, NUMERO_SIREN_REGEX } from '@Constants/regex.js'
 import { TYPE_PERSONNE } from '@Constants/type.js'
-
-import imageNomEtPrenomsFNI from '@Assets/img/aide/fni_nom_et_prenoms.jpg'
-import imagePlaqueImmatriculationFNI from '@Assets/img/aide/fni_plaque_immatriculation.jpg'
-import imageDateEmissionCertificatImmatriculationFNI from '@Assets/img/aide/fni_date_emission_certificat_immatriculation.jpg'
+import { modalesTemplates } from '@Views/proprietaire/component/contenuModales'
 
 export default defineComponent({
   name: 'FormulaireFNI',
   props:{
     formData: {
       type: Object,
+      default: null,
+    },
+    actionModale: {
+      type: Function,
       default: null,
     },
   },
@@ -27,37 +28,13 @@ export default defineComponent({
       store: useRapportStore(),
       tabFniTitles,
       mentionChampObligatoire,
-      images: {
-        aide: {
-          imageNomEtPrenomsFNI,
-          imagePlaqueImmatriculationFNI,
-          imageDateEmissionCertificatImmatriculationFNI,
-        },
-      },
       collerPressePapierEtDistribuerDansFormulaire: collerPressePapierEtDistribuerDansFormulaire,
       CHAMP_MODIFIE: CHAMP_MODIFIE,
       fni: {
         selectedTabIndex: 0,
         tabsAsc: true,
       },
-      modals: {
-        common: {
-          numeroSiren: {
-            opened: false,
-          },
-        },
-        fni: {
-          nomEtPrenoms: {
-            opened: false,
-          },
-          numeroImmatriculation: {
-            opened: false,
-          },
-          dateEmissionCertificatImmatriculation: {
-            opened: false,
-          },
-        },
-      },
+      modalesTemplates,
     }
   },
   computed: {
@@ -130,135 +107,11 @@ export default defineComponent({
       this.asc = this.fni.selectedTabIndex < idx
       this.fni.selectedTabIndex = idx
     },
-    // Modales communes (SIV et FNI)
-    onOpenModalNumeroSiren () {
-      this.modals.common.numeroSiren.opened = true
-    },
-    onCloseModalNumeroSiren () {
-      this.modals.common.numeroSiren.opened = false
-    },
-
-    // Modales FNI
-    onOpenModalFniNomEtPrenoms () {
-      this.modals.fni.nomEtPrenoms.opened = true
-    },
-    onCloseModalFniNomEtPrenoms () {
-      this.modals.fni.nomEtPrenoms.opened = false
-    },
-
-    onOpenModalFniNumeroImmatriculation () {
-      this.modals.fni.numeroImmatriculation.opened = true
-    },
-    onCloseModalFniNumeroImmatriculation () {
-      this.modals.fni.numeroImmatriculation.opened = false
-    },
-
-    onOpenModalFniDateEmissionCertificatImmatriculation () {
-      this.modals.fni.dateEmissionCertificatImmatriculation.opened = true
-    },
-    onCloseModalFniDateEmissionCertificatImmatriculation () {
-      this.modals.fni.dateEmissionCertificatImmatriculation.opened = false
-    },
-
   },
 })
 </script>
 
 <template>
-  <!-- Modals -->
-  <DsfrModal
-    ref="modalNumeroSiren"
-    :opened="modals.common.numeroSiren.opened"
-    title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N ?"
-    :origin="$refs.buttonNumeroSiren"
-    @close="onCloseModalNumeroSiren()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
-      <div class="fr-col-12">
-        <p class="fr-text--md">
-          Le <span class="fr-text--bleu">numéro S&#8203;I&#8203;R&#8203;E&#8203;N</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
-          de votre société.
-        </p>
-        <p class="fr-text--md">
-          Il figure sur le <span class="fr-text--bleu">K&#8203;B&#8203;I&#8203;S&#8203;</span> de votre société.
-        </p>
-        <p class="fr-text--md">
-          Vous pouvez aussi l'obtenir sur le site
-          <a
-            class="fr-link"
-            title="Le site de societe.com"
-            href="https://www.societe.com/"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            societe.com
-          </a>
-          en effectuant une <span class="fr-text--bleu">recherche avec le nom de votre société</span>.
-        </p>
-        <p class="fr-text--md">
-          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de S&#8203;I&#8203;R&#8203;E&#8203;N</span>.
-        </p>
-        <p class="fr-text--md">
-          Dans ce cas, <span class="fr-text--bleu">laissez le champs S&#8203;I&#8203;R&#8203;E&#8203;N vide</span>.
-        </p>
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalFniNomEtPrenoms"
-    :opened="modals.fni.nomEtPrenoms.opened"
-    title="Où trouver le nom et le(s) prénom(s) ?"
-    :origin="$refs.buttonFniNomEtPrenoms"
-    @close="onCloseModalFniNomEtPrenoms()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation nom et prénom(s) : sous le numéro d'immatriculation"
-          :src="images.aide.imageNomEtPrenomsFNI"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalFniNumeroImmatriculation"
-    :opened="modals.fni.numeroImmatriculation.opened"
-    title="Où trouver le numéro d'immatriculation ?"
-    :origin="$refs.buttonFniNumeroImmatriculation"
-    @close="onCloseModalFniNumeroImmatriculation()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation numéro d'immatriculation : au dessus du nom et prénom"
-          :src="images.aide.imagePlaqueImmatriculationFNI"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalFniDateEmissionCertificatImmatriculation"
-    :opened="modals.fni.dateEmissionCertificatImmatriculation.opened"
-    title="Où trouver la date d'émission du certificat d'immatriculation ?"
-    :origin="$refs.buttonFniDateEmissionCertificatImmatriculation"
-    @close="onCloseModalFniDateEmissionCertificatImmatriculation()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation date du certificat d'immatriculation : à droite du numéro d'immatriculation"
-          :src="images.aide.imageDateEmissionCertificatImmatriculationFNI"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
   <DsfrTabs
     tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format FNI"
     :tab-titles="tabFniTitles"
@@ -305,8 +158,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le nom et le(s) prénom(s) sur le certificat d'immatriculation au format FNI"
-                  @click="onOpenModalFniNomEtPrenoms()"
-                  @keydown.enter="onOpenModalFniNomEtPrenoms()"
+                  @click="actionModale(modalesTemplates.nomPrenom.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.nomPrenom.libelle)"
                 >
                   Où les trouver
                   <VIcon
@@ -351,8 +204,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
-                  @click="onOpenModalFniNumeroImmatriculation()"
-                  @keydown.enter="onOpenModalFniNumeroImmatriculation()"
+                  @click="actionModale(modalesTemplates.fniNumeroImmatriculation.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.fniNumeroImmatriculation.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -390,8 +243,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
-                  @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
-                  @keydown.enter="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                  @click="actionModale(modalesTemplates.dateEmission.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.dateEmission.libelle)"
                 >
                   Où la trouver
                   <VIcon
@@ -467,8 +320,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
-                  @click="onOpenModalNumeroSiren()"
-                  @keydown.enter="onOpenModalNumeroSiren()"
+                  @click="actionModale(modalesTemplates.numeroSiren.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.numeroSiren.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -513,8 +366,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format FNI"
-                  @click="onOpenModalFniNumeroImmatriculation()"
-                  @keydown.enter="onOpenModalFniNumeroImmatriculation()"
+                  @click="actionModale(modalesTemplates.fniNumeroImmatriculation.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.fniNumeroImmatriculation.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -552,8 +405,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver la date d'émission du certificat d'immatriculation sur le certificat d'immatriculation au format FNI"
-                  @click="onOpenModalFniDateEmissionCertificatImmatriculation()"
-                  @keydown.enter="onOpenModalFniDateEmissionCertificatImmatriculation()"
+                  @click="actionModale(modalesTemplates.dateEmission.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.dateEmission.libelle)"
                 >
                   Où la trouver
                   <VIcon
@@ -576,10 +429,6 @@ export default defineComponent({
 
 .required-label {
   color: var(--red-marianne-main-472);
-}
-
-.text-center {
-  text-align: center;
 }
 
 .help-link {

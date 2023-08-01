@@ -10,11 +10,7 @@ import { mentionChampObligatoire } from '@Constants/proprietaireConstantes'
 import { CHAMP_MODIFIE, collerPressePapierEtDistribuerDansFormulaire } from '@Utils/collerPressePapierEtDistribuerDansFormulaire.js'
 import { NUMERO_FORMULE_REGEX, NUMERO_IMMATRICULATION_SIV_REGEX, NUMERO_SIREN_REGEX } from '@Constants/regex.js'
 import { TYPE_PERSONNE } from '@Constants/type.js'
-
-import imageNomSIV from '@Assets/img/aide/siv_nom.jpg'
-import imagePrenomsSIV from '@Assets/img/aide/siv_prenoms.jpg'
-import imagePlaqueImmatriculationSIV from '@Assets/img/aide/siv_plaque_immatriculation.jpg'
-import imageNumeroFormuleSIV from '@Assets/img/aide/siv_numero_formule.jpg'
+import { modalesTemplates } from '@Views/proprietaire/component/contenuModales'
 
 export default defineComponent({
   name: 'FormulaireSIV',
@@ -28,6 +24,10 @@ export default defineComponent({
       type: Object,
       default: null,
     },
+    actionModale: {
+      type: Function,
+      default: null,
+    },
   },
   data () {
     const tabSivTitles = [{ title: 'Particulier', panelId: 'siv-tab-content-0', tabId:'siv-tab-0'}, { title: 'Personne morale', panelId: 'siv-tab-content-1', tabId:'siv-tab-1'}]
@@ -35,41 +35,13 @@ export default defineComponent({
       store: useRapportStore(),
       tabSivTitles,
       mentionChampObligatoire,
-      images: {
-        aide: {
-          imageNomSIV,
-          imagePrenomsSIV,
-          imagePlaqueImmatriculationSIV,
-          imageNumeroFormuleSIV,
-        },
-      },
       collerPressePapierEtDistribuerDansFormulaire: collerPressePapierEtDistribuerDansFormulaire,
       CHAMP_MODIFIE: CHAMP_MODIFIE,
       siv: {
         selectedTabIndex: 0,
         tabsAsc: true,
       },
-      modals: {
-        common: {
-          numeroSiren: {
-            opened: false,
-          },
-        },
-        siv: {
-          nom: {
-            opened: false,
-          },
-          prenoms: {
-            opened: false,
-          },
-          numeroImmatriculation: {
-            opened: false,
-          },
-          numeroFormule: {
-            opened: false,
-          },
-        },
-      },
+      modalesTemplates,
     }
   },
   computed: {
@@ -142,160 +114,11 @@ export default defineComponent({
       this.asc = this.siv.selectedTabIndex < idx
       this.siv.selectedTabIndex = idx
     },
-    // Modales communes (SIV et FNI)
-    onOpenModalNumeroSiren () {
-      this.modals.common.numeroSiren.opened = true
-    },
-    onCloseModalNumeroSiren () {
-      this.modals.common.numeroSiren.opened = false
-    },
-
-    // Modales SIV
-    onOpenModalSivNom () {
-      this.modals.siv.nom.opened = true
-    },
-    onCloseModalSivNom () {
-      this.modals.siv.nom.opened = false
-    },
-
-    onOpenModalSivPrenoms () {
-      this.modals.siv.prenoms.opened = true
-    },
-    onCloseModalSivPrenoms () {
-      this.modals.siv.prenoms.opened = false
-    },
-
-    onOpenModalSivNumeroImmatriculation () {
-      this.modals.siv.numeroImmatriculation.opened = true
-    },
-    onCloseModalSivNumeroImmatriculation () {
-      this.modals.siv.numeroImmatriculation.opened = false
-    },
-
-    onOpenModalSivNumeroFormule () {
-      this.modals.siv.numeroFormule.opened = true
-    },
-    onCloseModalSivNumeroFormule () {
-      this.modals.siv.numeroFormule.opened = false
-    },
-
   },
 })
 </script>
 
 <template>
-  <!-- Modals -->
-  <DsfrModal
-    ref="modalNumeroSiren"
-    :opened="modals.common.numeroSiren.opened"
-    title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N ?"
-    :origin="$refs.buttonNumeroSiren"
-    @close="onCloseModalNumeroSiren()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-mb-4w">
-      <div class="fr-col-12">
-        <p class="fr-text--md">
-          Le <span class="fr-text--bleu">numéro S&#8203;I&#8203;R&#8203;E&#8203;N</span> correspond au <span class="fr-text--bleu">9 premiers caractères du numéro SIRET</span>
-          de votre société.
-        </p>
-        <p class="fr-text--md">
-          Il figure sur le <span class="fr-text--bleu">K&#8203;B&#8203;I&#8203;S&#8203;</span> de votre société.
-        </p>
-        <p class="fr-text--md">
-          Vous pouvez aussi l'obtenir sur le site
-          <a
-            class="fr-link"
-            title="Le site de societe.com"
-            href="https://www.societe.com/"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            societe.com
-          </a>
-          en effectuant une <span class="fr-text--bleu">recherche avec le nom de votre société</span>.
-        </p>
-        <p class="fr-text--md">
-          En tant qu'association ou collectivité locale, il se peut que vous n'ayez <span class="fr-text--bleu">pas de numéro de S&#8203;I&#8203;R&#8203;E&#8203;N</span>.
-        </p>
-        <p class="fr-text--md">
-          Dans ce cas, <span class="fr-text--bleu">laissez le champs S&#8203;I&#8203;R&#8203;E&#8203;N vide</span>.
-        </p>
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalSivNom"
-    :opened="modals.siv.nom.opened"
-    title="Où trouver le nom ?"
-    :origin="$refs.buttonSivNom"
-    @close="onCloseModalSivNom()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation nom : au dessus du prénom"
-          :src="images.aide.imageNomSIV"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalSivPrenoms"
-    :opened="modals.siv.prenoms.opened"
-    title="Où trouver le(s) prénom(s) ?"
-    :origin="$refs.buttonSivPrenoms"
-    @close="onCloseModalSivPrenoms()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation prenom(s) : en dessous du nom"
-          :src="images.aide.imagePrenomsSIV"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalSivNumeroImmatriculation"
-    :opened="modals.siv.numeroImmatriculation.opened"
-    title="Où trouver le numéro d'immatriculation ?"
-    :origin="$refs.buttonSivNumeroImmatriculation"
-    @close="onCloseModalSivNumeroImmatriculation()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation numéro d'immatriculation : au dessus du numéro de formule"
-          :src="images.aide.imagePlaqueImmatriculationSIV"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
-  <DsfrModal
-    ref="modalSivNumeroFormule"
-    :opened="modals.siv.numeroFormule.opened"
-    title="Où trouver le numéro de formule ?"
-    :origin="$refs.buttonSivNumeroImmatriculation"
-    @close="onCloseModalSivNumeroFormule()"
-  >
-    <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w">
-      <div class="fr-col-12  text-center">
-        <img
-          alt="Indication localisation numéro de formule : sous le numéro d'immatriculation ou dans la bande MRZ ou sur la première page du certificat d'immatriculation"
-          :src="images.aide.imageNumeroFormuleSIV"
-          class="fr-responsive-img"
-        />
-      </div>
-    </div>
-  </DsfrModal>
-
   <DsfrTabs
     tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format S&#8203;I&#8203;V"
     :tab-titles="tabSivTitles"
@@ -345,8 +168,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le nom sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
-                  @click="onOpenModalSivNom()"
-                  @keydown.enter="onOpenModalSivNom()"
+                  @click="actionModale(modalesTemplates.nom.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.nom.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -383,8 +206,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le(s) prénom(s) sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
-                  @click="onOpenModalSivPrenoms()"
-                  @keydown.enter="onOpenModalSivPrenoms()"
+                  @click="actionModale(modalesTemplates.prenom.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.prenom.libelle)"
                 >
                   Où le(s) trouver
                   <VIcon
@@ -428,8 +251,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
-                  @click="onOpenModalSivNumeroImmatriculation()"
-                  @keydown.enter="onOpenModalSivNumeroImmatriculation()"
+                  @click="actionModale(modalesTemplates.sivNumeroImmatriculation.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.sivNumeroImmatriculation.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -467,8 +290,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
-                  @click="onOpenModalSivNumeroFormule()"
-                  @keydown.enter="onOpenModalSivNumeroFormule()"
+                  @click="actionModale(modalesTemplates.numeroFormule.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.numeroFormule.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -544,8 +367,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro de S&#8203;I&#8203;R&#8203;E&#8203;N de votre société ?"
-                  @click="onOpenModalNumeroSiren()"
-                  @keydown.enter="onOpenModalNumeroSiren()"
+                  @click="actionModale(modalesTemplates.numeroSiren.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.numeroSiren.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -589,8 +412,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro d'immatriculation sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
-                  @click="onOpenModalSivNumeroImmatriculation()"
-                  @keydown.enter="onOpenModalSivNumeroImmatriculation()"
+                  @click="actionModale(modalesTemplates.sivNumeroImmatriculation.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.sivNumeroImmatriculation.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -628,8 +451,8 @@ export default defineComponent({
                   role="button"
                   class="fr-link  help-link"
                   title="Où trouver le numéro de formule sur le certificat d'immatriculation au format S&#8203;I&#8203;V"
-                  @click="onOpenModalSivNumeroFormule()"
-                  @keydown.enter="onOpenModalSivNumeroFormule()"
+                  @click="actionModale(modalesTemplates.numeroFormule.libelle)"
+                  @keydown.enter="actionModale(modalesTemplates.numeroFormule.libelle)"
                 >
                   Où le trouver
                   <VIcon
@@ -652,10 +475,6 @@ export default defineComponent({
 
 .required-label {
   color: var(--red-marianne-main-472);
-}
-
-.text-center {
-  text-align: center;
 }
 
 .help-link {

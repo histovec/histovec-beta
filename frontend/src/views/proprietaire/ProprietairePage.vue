@@ -12,9 +12,11 @@ import proprietaireSVG from '@Assets/img/proprietaire.svg?url'
 import api from '@Api/index.js'
 import { useRapportStore } from '@Stores/rapport'
 import gestionAppelApi from '@Services/api/gestionAppelApi'
-import SelectionnerFormatImmatriculation from '@/views/proprietaire/component/SelectionnerFormatImmatriculation.vue';
-import FormulaireSIV from '@/views/proprietaire/component/FormulaireSIV.vue';
-import FormulaireFNI from '@/views/proprietaire/component/FormulaireFNI.vue';
+import SelectionnerFormatImmatriculation from '@/views/proprietaire/component/SelectionnerFormatImmatriculation.vue'
+import FormulaireSIV from '@Views/proprietaire/component/FormulaireSIV.vue'
+import FormulaireFNI from '@Views/proprietaire/component/FormulaireFNI.vue'
+import { modalesTemplates } from '@Views/proprietaire/component/contenuModales'
+
 export default defineComponent({
   name: 'ProprietairePage',
 
@@ -83,6 +85,10 @@ export default defineComponent({
         description: 'Vous souhaitez vendre votre véhicule et rassurer le futur acheteur ? Un acheteur potentiel vous demande le rapport ? Partagez-leur l\'historique de votre véhicule.',
       },
       store: useRapportStore(),
+      modale: {
+        open: false,
+        template: null,
+      },
     }
   },
 
@@ -191,6 +197,16 @@ export default defineComponent({
   },
 
   methods: {
+    actionModale (libelleModale) {
+      if (this.modale.open) {
+        this.modale.open = false
+        this.modale.template = null
+        return
+      }
+
+      this.modale.open = true
+      this.modale.template = modalesTemplates[libelleModale]
+    },
 
     // Form
     persistFormData () {
@@ -260,6 +276,15 @@ export default defineComponent({
 </script>
 
 <template>
+  <DsfrModal
+    :ref="modale.template?.ref"
+    :opened="modale.open"
+    :title="modale.template?.titre"
+    :origin="$refs[modale.template?.origine]"
+    @close="actionModale(modale.template?.ref)"
+  >
+    <div v-html="modale.template?.contenue" />
+  </DsfrModal>
   <div class="fr-grid-row  fr-grid-row--gutters">
     <div class="fr-col-12">
       <DsfrBreadcrumb
@@ -309,20 +334,24 @@ export default defineComponent({
     :focus-f-n-i="focusFNI"
   />
 
-  <!-- ----------------- -->
-
   <div class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-2w">
     <div
       v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.SIV"
       class="fr-col-12"
     >
-      <FormulaireSIV :form-data="formData" />
+      <FormulaireSIV
+        :form-data="formData"
+        :action-modale="actionModale"
+      />
     </div>
     <div
       v-if="formData.typeImmatriculation === TYPE_IMMATRICULATION.FNI"
       class="fr-col-12"
     >
-      <FormulaireFNI :form-data="formData" />
+      <FormulaireFNI
+        :form-data="formData"
+        :action-modale="actionModale"
+      />
     </div>
   </div>
   <div
