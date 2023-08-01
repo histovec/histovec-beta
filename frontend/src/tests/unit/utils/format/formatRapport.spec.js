@@ -6,6 +6,7 @@ import {
   formatHistorique,
   formatOppositions,
   formatSuspensions,
+  formatAge,
 } from '@Utils/format/formatRapport'
 import {
   dataSivParticulierFormat200,
@@ -49,6 +50,27 @@ describe('formatRapport', () => {
   })
 
   test('Doit formater un nombre avec une valeur par défaut', () => {
+    expect(formatInformationNumberManquante(REPONSE_API_NUMBER_PAR_DEFAUT))
+      .toBeNull()
+  })
+
+  test('Doit formater un age avec une valeur défini', () => {
+    expect(formatAge(14))
+      .toStrictEqual('14 mois')
+  })
+  test('Doit formater un age avec une valeur défini', () => {
+    expect(formatAge(37))
+      .toStrictEqual('3 ans et 1 mois')
+  })
+  test('Doit formater un age avec une valeur défini', () => {
+    expect(formatAge(20))
+      .toStrictEqual('1 an et 8 mois')
+  })
+  test('Doit formater un age avec une valeur défini', () => {
+    expect(formatAge(414))
+      .toStrictEqual('34 ans')
+  })
+  test('Doit formater un age avec une valeur par défaut', () => {
     expect(formatInformationNumberManquante(REPONSE_API_NUMBER_PAR_DEFAUT))
       .toBeNull()
   })

@@ -157,7 +157,7 @@ export const dataSivParticulierFormat200 = {
     codePostal: '94400',
   },
   certificatImmatriculation: {
-    age: 0,
+    age: '0 mois',
     dateEmission: '18/05/2015',
   },
   utac: {
