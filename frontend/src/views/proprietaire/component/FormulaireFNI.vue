@@ -1,6 +1,8 @@
 <script>
 /* eslint-disable vue/no-mutating-props */
 import {defineComponent} from 'vue'
+import LoaderComponent from '@Components/LoaderComponent.vue';
+
 import { sleep } from '@Utils/sleep';
 
 import { useRapportStore } from '@Stores/rapport'
@@ -12,6 +14,11 @@ import { modalesTemplates } from '@Views/proprietaire/component/contenuModales'
 
 export default defineComponent({
   name: 'FormulaireFNI',
+
+  components:{
+    LoaderComponent,
+  },
+
   props:{
     formData: {
       type: Object,
@@ -117,6 +124,10 @@ export default defineComponent({
     :tab-titles="tabFniTitles"
     @select-tab="selectFniTab"
   >
+    <LoaderComponent
+      v-if="store.getChargement"
+      taille="md"
+    />
     <DsfrTabContent
       class="background-default-white"
       panel-id="fni-tab-content-0"
