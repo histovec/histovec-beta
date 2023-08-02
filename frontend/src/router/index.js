@@ -10,7 +10,7 @@ const DonneesPersonnellesEtCookiesPage = () => import('@Views/DonneesPersonnelle
 const FAQPage = () => import('@Views/faq/FAQPage.vue')
 const MentionsLegalesPage = () => import('@Views/MentionsLegalesPage.vue')
 const PlanDuSitePage = () => import('@Views/PlanDuSitePage.vue')
-const ProprietairePage = () => import('@Views/ProprietairePage.vue')
+const ProprietairePage = () => import('@Views/proprietaire/ProprietairePage.vue')
 const RapportPage = () => import('@Views/rapportPage/RapportPage.vue')
 const NotFoundPage = () => import('@Views/error/NotFoundPage.vue')
 const UnavailableServicePage = () => import('@Views/error/UnavailableServicePage.vue')
