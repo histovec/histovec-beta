@@ -121,6 +121,29 @@ export const formatControlesTechniques = (controlesTechniques) => {
   ))
 }
 
+export const formatAge = (ageEnMois) =>{
+  if(ageEnMois===REPONSE_API_NUMBER_PAR_DEFAUT){
+    return formatInformationNumberManquante(ageEnMois)
+  }
+  if (ageEnMois <= 18) {
+    return `${ageEnMois} mois`
+  }
+
+  const year = Math.floor(ageEnMois / 12)
+  const yearLabel = year > 1 ? `${year} ans` : `${year} an`
+  const month = ageEnMois - 12 * year
+
+  if ((month > 0) && (year < 10)) {
+    return `${yearLabel} et ${month} mois`
+  }
+
+  if((month>6)&& (year >=10)){
+    return `${year+1} ans`
+  }
+
+  return yearLabel
+  }
+
 export const formaterRapport = (rapport) => {
   const {
     vehicule: {
@@ -179,6 +202,7 @@ export const formaterRapport = (rapport) => {
     },
     certificatImmatriculation: {
       dateEmission,
+      age,
     },
     proprietaire: {
       codePostal,
@@ -254,6 +278,7 @@ export const formaterRapport = (rapport) => {
     certificatImmatriculation: {
       ...rapport.certificatImmatriculation,
       dateEmission: formatInformationDateManquante(dateEmission),
+      age: formatAge(age),
     },
     proprietaire: {
       ...rapport.proprietaire,
