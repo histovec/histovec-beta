@@ -193,6 +193,10 @@ export default defineComponent({
   },
 
   created () {
+    if (this.formData.typeImmatriculation) {
+      this.formData.typeImmatriculation = TYPE_IMMATRICULATION.SIV
+      this.formData.typePersonne = TYPE_PERSONNE.PARTICULIER
+    }
     api.log('/search')
   },
 
