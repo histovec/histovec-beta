@@ -3,6 +3,7 @@ const reponseRequeteApiSivParticulier200 = require('../../cypress/fixtures/api/r
 const reponseRequeteApiSivProfessionnel200 = require('../../cypress/fixtures/api/reponseRequeteApiSivProfessionnel200.json');
 const reponseRequeteApiIvtParticulier200 = require('../../cypress/fixtures/api/reponseRequeteApiIvtParticulier200.json');
 const reponseRequeteApiIvtProfessionnel200 = require('../../cypress/fixtures/api/reponseRequeteApiIvtProfessionnel200.json');
+const reponseRequeteApiCode200 = require('../../cypress/fixtures/api/reponseRequeteApiCode200.json');
 const path = require('path');
 const {
   token,
@@ -63,6 +64,11 @@ exports.apiRouter = express.Router()
         gestionErreur(req.body.raisonSociale, res, reponseRequeteApiIvtProfessionnel200);
       }
     })
+    .get('/report_by_code/:uuid/:key', (req, res) => {
+      if( req.body ) {
+        gestionErreur(req.body.raisonSociale, res, reponseRequeteApiCode200);
+      }
+    })
 
   // *** Logs ***
     .put('/logs/:uuid/:string', (req, res) => {
@@ -75,5 +81,5 @@ exports.apiRouter = express.Router()
   // *** QrCode ***
     .get('/get_buyer_qrcode/:uuid/:code', (req, res) => {
       res.setHeader('content-type', 'image/png');
-      res.sendFile(path.join(__dirname, './fixtures/qrcode.png'));
+      res.sendFile(path.join(__dirname, '../../cypress/fixtures/qrcode.png'));
     })
