@@ -15,7 +15,7 @@ context('Rapport acheteur vehicule cas simple - onglet synthese', () => {
     // Onlget Synthèse selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
-      .find("li[class*='fr-tabs__item']")
+      .find("li[role*='presentation']")
       .should('have.length', 7)
       .eq(0)
       .find("button[class*='fr-tabs__tab']")

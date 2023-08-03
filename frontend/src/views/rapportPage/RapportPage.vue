@@ -5,7 +5,6 @@ import HistoVecButtonLink from '@/components/HistoVecButtonLink.vue'
 import TuileDsfrNonCliquable from '@/components/TuileDsfrNonCliquable.vue'
 import LoaderComponent from '@/components/LoaderComponent.vue';
 import ImagePresentation from '@/components/ImagePresentation.vue';
-import HistoVecModale from '@/components/HistoVecModale.vue';
 import AlerteComponent from '@/components/AlerteComponent.vue';
 import OngletSynthese from '@/views/rapportPage/component/OngletSynthese.vue';
 import OngletVehicule from '@/views/rapportPage/component/OngletVehicule.vue';
@@ -64,7 +63,6 @@ export default defineComponent({
     OngletSynthese,
     LoaderComponent,
     TuileDsfrNonCliquable,
-    HistoVecModale,
     AlerteComponent,
     HistoVecButtonLink,
     ImagePresentation,
@@ -564,8 +562,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <HistoVecModale
-    titre="Envoyer le rapport"
+  <DsfrModal
+    ref="modal-partage"
+    title="Envoyer le rapport"
     :opened="modalPartagerRapport.opened"
     :actions="modaleActions"
     @close="onCloseModalPartagerRapport()"
@@ -582,7 +581,7 @@ export default defineComponent({
         class="image-qrcode"
       >
     </div>
-  </HistoVecModale>
+  </DsfrModal>
   <AlerteComponent
     v-if="isNotificationOpened"
     :description="texteNotification"
@@ -717,6 +716,7 @@ export default defineComponent({
     <div class="fr-col-12 fr-col-lg-11 fr-col-xl-11">
       <!-- @todo @reportAccordeon : pour la vue mobile sm et xs : utiliser un accordeon ? -->
       <DsfrTabs
+        class="background-default-white"
         tab-list-name="Liste d'onglets du rapport du véhicule"
         :tab-titles="tabTitles"
         @select-tab="selectTab"
@@ -726,7 +726,6 @@ export default defineComponent({
           taille="md"
         />
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-0"
           tab-id="report-tab-0"
           :selected="tabs.selectedTabIndex === 0"
@@ -739,7 +738,6 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-1"
           tab-id="report-tab-1"
           :selected="tabs.selectedTabIndex === 1"
@@ -751,7 +749,6 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-2"
           tab-id="report-tab-2"
           :selected="tabs.selectedTabIndex === 2"
@@ -766,7 +763,6 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-3"
           tab-id="report-tab-3"
           :selected="tabs.selectedTabIndex === 3"
@@ -781,7 +777,6 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-4"
           tab-id="report-tab-4"
           :selected="tabs.selectedTabIndex === 4"
@@ -795,7 +790,6 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-5"
           tab-id="report-tab-5"
           :selected="tabs.selectedTabIndex === 5"
@@ -807,7 +801,6 @@ export default defineComponent({
         </DsfrTabContent>
 
         <DsfrTabContent
-          class="background-default-white"
           panel-id="report-tab-content-6"
           tab-id="report-tab-6"
           :selected="tabs.selectedTabIndex === 6"
@@ -875,8 +868,11 @@ export default defineComponent({
 </template>
 
 <style scoped>
+  #monAvisImage[target=_blank] {
+    background-image: none;
+  }
   #monAvisImage[target=_blank]:after {
-    content: '';
+    content: none;
   }
 
   .text-center {

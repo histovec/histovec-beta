@@ -16,7 +16,7 @@ context('Rapport acheteur vehicule cas simple - onglet Titulaire et Titre', () =
     // Onlget Titulaire et Titre selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
-      .find("li[class*='fr-tabs__item']")
+      .find("li[role*='presentation']")
       .should('have.length', 7)
       .eq(2)
       .find("button[class*='fr-tabs__tab']")

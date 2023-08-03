@@ -120,6 +120,7 @@ export default defineComponent({
 
 <template>
   <DsfrTabs
+    class="background-default-white"
     tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format FNI"
     :tab-titles="tabFniTitles"
     @select-tab="selectFniTab"
@@ -129,7 +130,6 @@ export default defineComponent({
       taille="md"
     />
     <DsfrTabContent
-      class="background-default-white"
       panel-id="fni-tab-content-0"
       tab-id="fni-tab-0"
       :selected="fni.selectedTabIndex === 0"
@@ -271,7 +271,6 @@ export default defineComponent({
     </DsfrTabContent>
 
     <DsfrTabContent
-      class="background-default-white"
       panel-id="fni-tab-content-1"
       tab-id="fni-tab-1"
       :selected="fni.selectedTabIndex === 1"

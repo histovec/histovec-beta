@@ -20,7 +20,7 @@ context('Rapport vehicule cas simple - modale partage', () => {
       .find("div[class*='fr-modal__body']").should('be.visible');
 
     cy.wait(500)
-      .get("button[class*='fr-btn inline-flex']")
+      .get("button[class*='fr-btn fr-btn--md inline-flex']")
       .contains("Copier le lien")
       .click();
     cy.get("dialog[class='fr-modal fr-modal--opened']").should('not.exist')

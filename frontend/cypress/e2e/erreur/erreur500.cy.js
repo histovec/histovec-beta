@@ -50,7 +50,7 @@ context('Page Erreur 500', () => {
       .contains("Désolé, le service rencontre un problème, nous travaillons pour le résoudre le plus rapidement possible.")
 
     cy.get("div[class*='fr-grid-row fr-grid-row--gutters fr-mb-4w fr-mt-4w']")
-      .find("button[class*='fr-btn inline-flex']")
+      .find("button[class*='fr-btn fr-btn--md inline-flex']")
       .contains("Contactez-nous")
   })
 })

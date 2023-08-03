@@ -120,6 +120,7 @@ export default defineComponent({
 
 <template>
   <DsfrTabs
+    class="background-default-white"
     tab-list-name="Liste d'onglets pour un véhicule avec un numéro d'immatriculation au format S&#8203;I&#8203;V"
     :tab-titles="tabSivTitles"
     @select-tab="selectSivTab"
@@ -129,7 +130,6 @@ export default defineComponent({
       taille="md"
     />
     <DsfrTabContent
-      class="background-default-white"
       panel-id="siv-tab-content-0"
       tab-id="siv-tab-0"
       :selected="siv.selectedTabIndex === 0"
@@ -223,7 +223,6 @@ export default defineComponent({
       <p class="fr-text--md  histovec-input-group-title  fr-mt-4w">
         Certificat d'immatriculation
       </p>
-
       <div class="fr-grid-row  fr-grid-row--gutters">
         <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
           <DsfrInputGroup
@@ -307,7 +306,6 @@ export default defineComponent({
     </DsfrTabContent>
 
     <DsfrTabContent
-      class="background-default-white"
       panel-id="siv-tab-content-1"
       tab-id="siv-tab-1"
       :selected="siv.selectedTabIndex === 1"
@@ -384,7 +382,6 @@ export default defineComponent({
       <p class="fr-text--md  histovec-input-group-title  fr-mt-4w">
         Certificat d'immatriculation
       </p>
-
       <div class="fr-grid-row  fr-grid-row--gutters">
         <div class="fr-col-12  fr-col-lg-6  fr-col-xl-6">
           <DsfrInputGroup

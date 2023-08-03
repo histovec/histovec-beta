@@ -8,6 +8,10 @@ import LienEvitement from '@Components/LienEvitement.vue'
 
 import { v4 as uuidv4 } from 'uuid'
 
+import '@gouvfr/dsfr/dist/core/core.main.min.css'            // Le CSS minimal du DSFR
+import '@gouvfr/dsfr/dist/component/component.main.min.css'  // Styles de tous les composants
+import '@gouvfr/dsfr/dist/utility/utility.main.min.css'      // Classes utilitaires: les composants de VueDsfr en ont besoin
+import '@gouvminint/vue-dsfr/styles'                         // Les styles propres aux composants de VueDsfr
 
 // Ajout d'un id anonyme pour un usage statistique
 if (localStorage.getItem('userId') === null) {

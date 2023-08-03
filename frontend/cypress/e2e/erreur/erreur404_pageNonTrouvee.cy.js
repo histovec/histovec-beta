@@ -19,7 +19,7 @@ context('Page erreur 404 - page non trouvée', () => {
       .contains("La page que vous cherchez est introuvable. Excusez-nous pour la gêne occasionnée.")
 
     cy.get("div[class*='fr-grid-row fr-grid-row--gutters fr-mb-4w fr-mt-4w']")
-      .find("button[class*='fr-btn inline-flex']")
+      .find("button[class*='fr-btn fr-btn--md inline-flex']")
       .contains("Accueil")
   })
 })
