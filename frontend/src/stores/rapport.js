@@ -9,6 +9,7 @@ export const useRapportStore = defineStore('rapport',{
     reponseData: null,
     rapportData: null,
     chargement: false,
+    ignorerRequete: false,
   }),
   getters: {
     getId(state){
@@ -29,33 +30,26 @@ export const useRapportStore = defineStore('rapport',{
     getChargement(state){
       return state.chargement
     },
+    getIgnorerRequete(state){
+      return state.ignorerRequete
+    },
     getControlesTechniques(state){
-      return state.rapportData.utac
+      return state.rapportData && state.rapportData.utac ? state.rapportData.utac : null
     },
   },
   actions: {
-    async fetchRapport(url, dataBody, id) {
+    async fetchRapport(methode, url, dataBody, id) {
       try {
         this.chargement = true
-        const data = await axios.post('/report_by_data'.concat(url), dataBody)
+        const data = await axios[methode](url, dataBody)
 
-        if (data.status !== 200) {
-          this.id = id
-          this.status = data.status
-          this.message = data.message
-          this.reponseData = null
-          this.rapportData = null
-          this.chargement = false
-        } else {
-          this.id = id
-          this.status = data.status
-          this.message = data.message
-          this.reponseData = data.data
-          this.rapportData = null
-          this.chargement = false
-        }
-      }
-      catch (error) {
+        this.id = id
+        this.status = data.status
+        this.message = data.message
+        this.reponseData = data.status === 200 ?data.data : null
+        this.rapportData = null
+        this.chargement = false
+      } catch (error) {
         this.id = id
         this.status = error.response.status
         this.message = error.response.statusText
@@ -65,19 +59,19 @@ export const useRapportStore = defineStore('rapport',{
       }
     },
     async fetchRapportSivPersonne(dataBody, id, uuidNavigateur) {
-      await this.fetchRapport(`/siv/physique/${uuidNavigateur}`, dataBody, id)
+      await this.fetchRapport('post', `/report_by_data/siv/physique/${uuidNavigateur}`, dataBody, id)
     },
     async fetchRapportSivMorale(dataBody, id, uuidNavigateur){
-      await this.fetchRapport(`/siv/morale/${uuidNavigateur}`, dataBody, id)
+      await this.fetchRapport('post', `/report_by_data/siv/morale/${uuidNavigateur}`, dataBody, id)
     },
     async fetchRapportIvtPhysique(dataBody, id, uuidNavigateur){
-      await this.fetchRapport(`/ivt/physique/${uuidNavigateur}`, dataBody, id)
+      await this.fetchRapport('post', `/report_by_data/ivt/physique/${uuidNavigateur}`, dataBody, id)
     },
     async fetchRapportIvtMorale(dataBody, id, uuidNavigateur){
-      await this.fetchRapport(`/ivt/morale/${uuidNavigateur}`, dataBody, id)
+      await this.fetchRapport('post', `/report_by_data/ivt/morale/${uuidNavigateur}`, dataBody, id)
     },
-    async setRapport(rapport) {
-      this.rapportData = rapport
+    async fetchRapportAcheteur(key, uuidNavigateur){
+      await this.fetchRapport('get', `/report_by_code/${uuidNavigateur}/${key}`, null, key)
     },
   },
 })

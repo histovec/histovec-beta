@@ -15,9 +15,15 @@ const uuidNavigateur = localStorage.getItem('userId')
 const fetchRapportProprietaire = async (data) => {
   const idProprietaire = await genererId.proprietaireId(data)
 
+  // évite la double requête si la personne passe par le formulaire
+  if (store.getIgnorerRequete) {
+    store.ignorerRequete = false
+    return
+  }
+
   // recherche dans le store si la data est déjà récupérée
   if (store.getRapport && store.getId === idProprietaire) {
-    api.log('/holder/cached') // todo modifier le log car appelé à chaque redirection sur la page
+    api.log('/holder/cached')
     return
   }
 
@@ -43,6 +49,21 @@ const fetchRapportProprietaire = async (data) => {
     }
   }
 
+  await traitementData()
+}
+
+const fetchRapportAcheteur = async (key) => {
+  // recherche dans le store si la data est déjà récupérée
+  if (store.getRapport && store.getId === key) {
+    api.log('/buyer/cached')
+    return
+  }
+
+  await store.fetchRapportAcheteur(key, uuidNavigateur)
+  await traitementData()
+}
+
+export const traitementData = async () => {
   if (store.getStatus !== 200) {
     gestionRapportErreur.redirectionPageErreur(store.getStatus)
     return
@@ -60,7 +81,7 @@ const fetchRapportProprietaire = async (data) => {
     // formate les dates
     rapport = formaterRapport(rapport)
 
-    await store.setRapport(rapport)
+    store.rapportData = rapport
   } catch (error) {
     router.push({
       name: 'serviceIndisponible',
@@ -70,4 +91,5 @@ const fetchRapportProprietaire = async (data) => {
 
 export default {
   fetchRapportProprietaire,
+  fetchRapportAcheteur,
 }

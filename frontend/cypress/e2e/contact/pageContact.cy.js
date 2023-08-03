@@ -77,6 +77,7 @@ context('Contact', () => {
   beforeEach(() => {
     cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
     cy.intercept('PUT', '**/contact', { statusCode: 200 })
+    cy.intercept('PUT', '**/exit', { statusCode: 200 })
 
     cy.visit(routes.url_contact)
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_contact);

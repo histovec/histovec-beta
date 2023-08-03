@@ -4,6 +4,7 @@ context('Accueil', () => {
   beforeEach(() => {
     cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
     cy.intercept('PUT', '**/home', { statusCode: 200 })
+    cy.intercept('PUT', '**/exit', { statusCode: 200 })
 
     cy.visit(routes.url_accueil)
     cy.title().should('eq', 'HistoVec - Accueil');

@@ -1,46 +1,16 @@
 import routes from "../../../constants/urls.json";
 
-context('Rapport vehicule cas simple - onglet synthese', () => {
+context('Rapport acheteur vehicule cas simple - onglet synthese', () => {
   before(() => {
     cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
-    cy.intercept('PUT', '**/search', { statusCode: 200 })
-    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
-    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
-    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
+    cy.intercept('GET', '/public/v1/report_by_code/**', { statusCode: 200, fixture: '/api/reponseRequeteApiCode200.json' })
+    cy.intercept('PUT', '**/buyer/ok', { statusCode: 200 })
     cy.intercept('PUT', '**/synthesis', { statusCode: 200 })
 
     // redirection vers la page propriétaire
-    cy.visit(routes.url_proprietaire)
-    cy.title().should('eq', 'HistoVec - Propriétaire')
-
-    // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
-
-    // renseignement du formulaire
-    cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
-      .click()
-    cy.get("input[id*='form-siv-particulier-nom-naissance']")
-      .should("exist")
-      .type('nom')
-    cy.get("input[id*='form-siv-particulier-prenom']")
-      .should("exist")
-      .type('prenom')
-    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
-      .should("exist")
-      .type('AA-123-AA')
-    cy.get("input[id*='form-siv-particulier-numero-formule']")
-      .should("exist")
-      .type('2013BZ80335')
-
-    // validation du formulaire
-    cy.get("button[id*='bouton-recherche']")
-      .should('not.be.disabled')
-      .click()
-
-    // page de redirection
+    cy.visit(routes.url_rapport_acheteur + '?key=b30514dd-f4e8-4036-a102-87d5ca365e66')
+    cy.title().should('eq', 'HistoVec - Rapport acheteur')
     cy.wait(500)
-    cy.url().should('eq',  Cypress.config('baseUrl') + routes.url_rapport_vendeur)
-    cy.title().should('eq', 'HistoVec - Rapport vendeur')
 
     // Onlget Synthèse selectionné
     cy.get("div[class*='fr-tabs']")
@@ -76,7 +46,7 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .contains("Modèle")
       .parent()
       .find("p")
-      .should('have.length', 2)
+      .should('have.length', 3)
       .eq(0)
       .should("have.class", "fr-text--bleu")
       .contains("RENAULT MODUS")
@@ -87,6 +57,13 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .find("span")
       .should("have.class", "fr-text--bleu")
       .contains("5 ch")
+      .parent()
+      .parent()
+      .find("p")
+      .eq(2)
+      .contains("Calculez le montant de votre certificat d'immatriculation")
+      .find("a")
+      .contains("Accédez au simulateur de calcul")
   })
   it("Affichage de l'onglet synthese - Propriétaire actuel", () => {
     // Propriétaire actuel
@@ -101,10 +78,10 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .find("p")
       .should('have.length', 1)
       .contains("depuis")
-      .contains("Vous êtes le")
-      .contains("titulaire de ce véhicule")
+      .contains("Ce véhicule a déjà eu")
+      .contains("titulaire(s), en l'achetant vous serez le")
       .find("span")
-      .should('have.length', 3)
+      .should('have.length', 4)
       .eq(0)
       .should("have.class", "fr-text--bleu")
       .contains("B******T M****L")
@@ -117,12 +94,16 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
       .find("span")
       .eq(2)
       .should("have.class", "fr-text--bleu")
-      .contains("1")
+      .contains("1").parent()
+      .find("span")
+      .eq(3)
+      .should("have.class", "fr-text--bleu")
+      .contains("2")
       .parent()
       .find("sup")
       .should('have.length', 1)
       .should("have.class", "fr-text--bleu")
-      .contains("er")
+      .contains("nd")
   })
   it("Affichage de l'onglet synthese - Immatriculation", () => {
     // Immatriculation

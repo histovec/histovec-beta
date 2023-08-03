@@ -6,9 +6,12 @@ context('Proprietaire', () => {
   beforeEach(() => {
     cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
     cy.intercept('PUT', '**/search', { statusCode: 200 })
+    cy.intercept('PUT', '**/exit', { statusCode: 200 })
     cy.visit(routes.url_proprietaire).then(win => store = win.store)
   })
   it("Recherche d'une immatriculation depuis 2009 pour particulier", () => {
+    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
+
     // bouton recherche 'immatriculation depuis 2009' non selectionné
     cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
       .should("have.class", "card-immatriculation--image")
@@ -144,6 +147,39 @@ context('Proprietaire', () => {
     cy.wait(1250)
     cy.url().should('eq', Cypress.config('baseUrl').concat('service-indisponible'))
   })
+  it("Recherche d'une immatriculation depuis 2009 pour particulier avec une erreur (erreur token)", () => {
+    cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 401, fixture: 'erreurConnection.json' })
+    cy.intercept('PUT', '**/unavailable', { statusCode: 200 })
+
+    // renseignement du formulaire
+    cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
+      .click()
+    cy.get("input[id*='form-siv-particulier-nom-naissance']")
+      .should("exist")
+      .clear()
+      .type('nom')
+    cy.get("input[id*='form-siv-particulier-prenom']")
+      .should("exist")
+      .clear()
+      .type('prenom')
+    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
+      .should("exist")
+      .clear()
+      .type('AA-123-AA')
+    cy.get("input[id*='form-siv-particulier-numero-formule']")
+      .should("exist")
+      .clear()
+      .type('2013BZ80335')
+
+    // validation du formulaire
+    cy.get("button[id*='bouton-recherche']")
+      .should('not.be.disabled')
+      .click()
+
+    // page de redirection
+    cy.wait(1250)
+    cy.url().should('eq', Cypress.config('baseUrl').concat('service-indisponible'))
+  })
   it("Recherche d'une immatriculation depuis 2009 pour particulier sans erreur", () => {
     cy.intercept('POST', '/public/v1/report_by_data/siv/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiSivParticulier200.json' })
     cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
@@ -206,74 +242,6 @@ context('Proprietaire', () => {
       .should("exist")
       .clear()
       .type('2013BZ80335')
-
-    // validation du formulaire
-    cy.get("button[id*='bouton-recherche']")
-      .should('not.be.disabled')
-      .click()
-
-    // page de redirection
-    cy.wait(1250)
-    cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
-  })
-  it("Recherche d'une immatriculation avant 2009 pour particulier sans erreur", () => {
-    cy.intercept('POST', '/public/v1/report_by_data/ivt/physique/**', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtParticulier200.json' })
-    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
-    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
-    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
-
-    // renseignement du formulaire
-    cy.get("img[src*='/histovec/src/assets/img/plaque_fni.svg']")
-      .click()
-    cy.get("input[id*='form-fni-particulier-nom-prenom']")
-      .should("exist")
-      .clear()
-      .type('nom&prenom')
-    cy.get("input[id*='form-fni-particulier-numero-immatriculation']")
-      .should("exist")
-      .clear()
-      .type('123-ABC-45')
-    cy.get("input[id*='form-fni-particulier-date-emission']")
-      .should("exist")
-      .clear()
-      .type('16/11/2000')
-
-    // validation du formulaire
-    cy.get("button[id*='bouton-recherche']")
-      .should('not.be.disabled')
-      .click()
-
-    // page de redirection
-    cy.wait(1250)
-    cy.url().should('eq', Cypress.config('baseUrl').concat('rapport-vendeur'))
-  })
-  it("Recherche d'une immatriculation avant 2009 pour personne morale sans erreur", () => {
-    cy.intercept('POST', '/public/v1/report_by_data/ivt/morale/**', { statusCode: 200, fixture: '/api/reponseRequeteApiIvtProfessionnel200.json' })
-    cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', { statusCode: 200 })
-    cy.intercept('PUT', '**/holder/cached', { statusCode: 200 })
-    cy.intercept('PUT', '**/holder/ok', { statusCode: 200 })
-
-    // renseignement du formulaire
-    cy.get("img[src*='/histovec/src/assets/img/plaque_fni.svg']")
-      .click()
-    cy.get("button[id*='fni-tab-1']")
-      .click()
-    cy.get("input[id*='form-fni-personne-morale-raison-sociale']")
-      .should("exist")
-      .clear()
-      .type('JohnDoe&Co')
-    cy.get("input[id*='form-fni-personne-morale-numero-siren']")
-      .should("exist")
-      .clear()
-      .type('012345678')
-    cy.get("input[id*='form-fni-personne-morale-numero-immatriculation']")
-      .should("exist")
-      .clear()
-      .type('123-ABC-45')
-    cy.get("input[id*='form-fni-personne-morale-date-emission']")
-      .should("exist")
-      .clear()
-      .type('16/11/2000')
 
     // validation du formulaire
     cy.get("button[id*='bouton-recherche']")

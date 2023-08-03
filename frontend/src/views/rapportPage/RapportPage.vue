@@ -92,8 +92,26 @@ export default defineComponent({
         },
       },
       formData: null,
-      tabTitles: [],
-      modaleActions: [],
+      tabTitles: [
+        { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
+        { title: 'Véhicule', panelId: 'report-tab-content-1', tabId:'report-tab-1'},
+        { title: 'Titulaire et Titre', panelId: 'report-tab-content-2', tabId:'report-tab-2'},
+        { title: 'Situation administrative', panelId: 'report-tab-content-3', tabId:'report-tab-3'},
+        { title: 'Historique', panelId: 'report-tab-content-4', tabId:'report-tab-4'},
+      ],
+      modaleActions: [
+        {
+          label: 'Copier le lien',
+          icon: 'ri-clipboard-line',
+          onClick: this.onClickCopyLienPartage,
+        },
+        {
+          label: 'Envoyer le lien par mail',
+          icon: 'ri-send-plane-fill',
+          secondary: true,
+          onClick: this.onClickMailLienPartage,
+        },
+      ],
 
       modalPartagerRapport: {
         opened: false,
@@ -169,6 +187,10 @@ export default defineComponent({
       typeNotification: 'success',
       isLoading: false,
       store: useRapportStore(),
+
+      // data triés
+      isRapportAcheteur: this.typeRapport === TYPE_RAPPORT.ACHETEUR,
+      isRapportVendeur: this.typeRapport === TYPE_RAPPORT.VENDEUR,
     }
   },
 
@@ -176,8 +198,8 @@ export default defineComponent({
     getVehiculeDescription () {
       return (
         this.isCIAnnule ?
-          `Le certificat demandé a été annulé : ${ this.rapportData.vehicule?.infos?.plaqueImmatriculation }` :
-          `Numéro d'immatriculation : ${ this.rapportData.vehicule?.infos?.plaqueImmatriculation }`
+          `Le certificat demandé a été annulé : ${ this.rapportData?.vehicule?.infos?.plaqueImmatriculation }` :
+          `Numéro d'immatriculation : ${ this.rapportData?.vehicule?.infos?.plaqueImmatriculation }`
       )
     },
     getMiDescription () {
@@ -203,20 +225,6 @@ export default defineComponent({
       ]
     },
 
-    isRapportAcheteur () {
-      return (
-        this.typeRapport === TYPE_RAPPORT.ACHETEUR ||
-        (this.typeRapport !== TYPE_RAPPORT.VENDEUR && this.isBuyer)
-      )
-    },
-
-    isRapportVendeur () {
-      return (
-        this.typeRapport === TYPE_RAPPORT.VENDEUR ||
-        (this.typeRapport !== TYPE_RAPPORT.ACHETEUR && this.isHolder)
-      )
-    },
-
     currentTab () {
       return this.tabs.mapping[this.tabs.selectedTabIndex]
     },
@@ -229,22 +237,7 @@ export default defineComponent({
       return window.location.protocol + '//' + window.location.host
     },
     url () {
-      const idParam = encodeURIComponent(this.holderId)
-      const keyParam = encodeURIComponent(this.holderKey)
-      const queryString = `?id=${idParam}&key=${keyParam}`
-
-      // Ajout du queryParam 'urlUnsafe' afin que le front puisse distinguer les nouveaux liens acheteurs (au format urlUnsafeBase64Encoded) des anciens (au format urlSafeBase64Encoded)
-      // L'usage de ce nouveau format (urlUnsafeBase64Encoded) est nécessaire au bon fonctionnement du codePartageHistoVec et l'API associée: /report_by_code
-      // @todo @urlUnsafe1 : Supprimer cette ligne
-      return `${this.baseUrl}/histovec/report${queryString}&urlUnsafe=true`
-
-      // Après la 8 du mois suivant la mise en PROD Vue3 + DSFR, supprimer le queryParam 'urlUnsafe'.
-      // En effet, les anciens liens acheteur (au format urlSafeBase64Encoded) auront tous périmé
-      // et tous les liens acheteurs générés à partir du 1er du mois auront le nouveau format (urlUnsafeBase64Encoded).
-      // Plus besoin de mécanisme pour les distinguer.
-      // @todo @urlUnsafe2 : Décommenter cette ligne
-      // return `${this.baseUrl}/histovec/report${queryString}`
-
+      return `${this.baseUrl}/histovec/rapport-acheteur?key=${this.rapportData.clefAcheteur}`
 },
 
     // ----- Interrogation de l'api pour le rapport acheteur -----
@@ -277,17 +270,17 @@ export default defineComponent({
 
     dateMiseAJourFR () {
       // todo : modifier la date récupérer pour être conforme à la date récupéré de l'api data
-      return this.rapportData.dateMiseAJour? this.rapportData.dateMiseAJour: '01/01/1900'
+      return this.rapportData?.dateMiseAJour? this.rapportData.dateMiseAJour: '01/01/1900'
     },
     isCIAnnule () {
       return Boolean(
-        this.rapportData && this.rapportData.vehicule &&
-        this.rapportData.vehicule.situationAdmin &&
-        this.rapportData.vehicule.situationAdmin.isCiAnnule,
+        this.rapportData && this.rapportData?.vehicule &&
+        this.rapportData?.vehicule.situationAdmin &&
+        this.rapportData?.vehicule.situationAdmin.isCiAnnule,
       )
     },
     isDefaultDataDate () {
-      return this.rapportData.dateMiseAJour === DEFAULT_DATE_UPDATE
+      return this.rapportData?.dateMiseAJour === DEFAULT_DATE_UPDATE
     },
     isBuyer () {
       return Boolean(this.buyerId || this.buyerKey)
@@ -311,17 +304,6 @@ export default defineComponent({
 
   beforeMount: async function () {
     this.isLoading = true
-    const formDataParams = this.$route.params.formData && JSON.parse(this.$route.params.formData)
-
-    if (formDataParams) {
-      // 1er accès au rapport vendeur (suite au remplissage du formulaire de recherche)
-      this.formData = formDataParams
-    } else {
-      // accès suivant via l'url /rapport-vendeur (rafraîchissement de la page du rapport)
-      const cachedFormData = sessionStorage.getItem('formData') && JSON.parse(sessionStorage.getItem('formData'))
-      this.formData = cachedFormData
-    }
-
     // Préparation des images pour la génération du CSA
     if (!this.images.csa.logoHistoVecBytes) {
       this.images.csa.logoHistoVecBytes = await fetch(logoHistoVec).then((res) => res.arrayBuffer())
@@ -331,200 +313,66 @@ export default defineComponent({
       this.images.csa.logoMIBytes = await fetch(logoMI).then((res) => res.arrayBuffer())
     }
 
-    // Calcul des informations du propriétaire pour pouvoir créer un lien acheteur et le code Partage HistoVec
-    this.holderId = await genererId.proprietaireId(this.formData)
-    this.holderKey = await genererCle.cleProprietaire(this.formData)
+    if (this.typeRapport === TYPE_RAPPORT.VENDEUR) {
+      this.formData = sessionStorage.getItem('formData') && JSON.parse(sessionStorage.getItem('formData'))
 
-    // Récupération de la donnée du rapport HistoVec
-    await gestionAppelApi.fetchRapportProprietaire(this.formData)
-
-    // todo a supprimer a la fin de la refonte
-    // ---- Debut a supprimer
-    const refonteEnCours = false
-    if (refonteEnCours) {
-      if (this.isRapportAcheteur) {
-        if (this.isValidBuyer) {
-          const buyerReportResponse = await this.getBuyerReport()
-
-          if (buyerReportResponse === null || buyerReportResponse.status === 500) {
-            // Cas: Aucune Reponse du back
-            this.$router.push({
-              name: 'erreurInattendue',
-            })
-            return
-          }
-
-          if (buyerReportResponse.status === 404) {
-            // Cas: véhicule non trouvé
-            this.$router.push({
-              name: 'pageNonTrouvee',
-              query: {
-                errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
-                errorMessages: JSON.stringify([
-                  'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
-                  'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
-                ]),
-                primaryAction: JSON.stringify({
-                  label: 'Revenir au formulaire de recherche',
-                  icon: 'ri-arrow-right-fill',
-                  to: '/proprietaire',
-                }),
-              },
-            })
-            return
-          }
-
-          if (buyerReportResponse.status !== 200) {
-            // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-            this.$router.push({
-              name: 'serviceIndisponible',
-            })
-            return
-          }
-
-        } else {
-          // Cas: lien acheteur invalide
-          api.log('/buyer/invalid')
-
-          this.$router.push({
-            name: 'erreurInattendue',
-            query: {
-              errorTitle: 'Lien de partage HistoVec invalide',
-              errorMessages: JSON.stringify([
-                'Veuillez demander un nouveau lien au vendeur.',
-              ]),
-              primaryAction: JSON.stringify({
-                label: 'Demander le rapport à un vendeur',
-                icon: 'ri-arrow-right-fill',
-                to: '/acheteur',
-              }),
-            },
-          })
-          return
-        }
-      } else if (this.isRapportVendeur) {
-        if (this.formData) {
-          const holderReportResponse = await this.getHolderReport()
-
-          if (holderReportResponse === null || holderReportResponse.status === 500) {
-            // Cas: Aucune Reponse du back
-            this.$router.push({
-              name: 'erreurInattendue',
-            })
-            return
-          }
-
-          if (holderReportResponse.status === 404) {
-            // Cas: véhicule non trouvé
-            this.$router.push({
-              name: 'pageNonTrouvee',
-              query: {
-                errorTitle: 'Ce véhicule est inconnu d\'HistoVec',
-                errorMessages: JSON.stringify([
-                  'Vos noms et prénoms sont susceptibles d\'avoir fait l\'objet d\'erreurs lors de la saisie de votre dossier.',
-                  'Recopiez exactement les données de votre certificat d\'immatriculation. Le certificat d\'immatriculation que vous utilisez n\'est peut-être pas le dernier en cours de validité (perte, vol, ...).',
-                ]),
-                primaryAction: JSON.stringify({
-                  label: 'Revenir au formulaire de recherche',
-                  icon: 'ri-arrow-right-fill',
-                  to: '/proprietaire',
-                }),
-              },
-            })
-            return
-          }
-
-          if (holderReportResponse.status !== 200) {
-            // Cas: erreur lors de la récupération du rapport (hors contrôles techniques)
-            this.$router.push({
-              name: 'serviceIndisponible',
-            })
-            return
-          }
-        } else {
-          // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
-          api.log('/holder/invalid')
-          this.$router.push({
-            name: 'proprietaire',
-          })
-          return
-        }
-      } else {
-        // Cas: Accès à l'url du rapport vendeur sans avoir rempli le formulaire au moins une fois
-        api.log('/holder/invalid')
+      if (!this.formData) {
         this.$router.push({
           name: 'proprietaire',
         })
         return
       }
+
+      // Récupération de la donnée du rapport HistoVec
+      await gestionAppelApi.fetchRapportProprietaire(this.formData)
+      this.rapportData = this.store.getRapport
+
+      // récupère le qrcode
+      try {
+        const qrcodeResponse = await api.getQrCode(this.rapportData.clefAcheteur)
+        const myBlob = new Blob([qrcodeResponse.data], {type: 'image/png'});
+
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          this.images.qrcode = fileReader.result;
+        };
+        fileReader.readAsDataURL(myBlob);
+      } catch (error) {
+        api.log('/qrcode-ko')
+      }
+
+      if (this.store.getStatus === 200) {
+        api.log('/holder/ok')
+      }
     }
-    // ---- Fin a supprimer
 
-    this.rapportData = this.store.getRapport
-    const controlesTechniques = this.store.getControlesTechniques
+    if (this.typeRapport === TYPE_RAPPORT.ACHETEUR) {
+      const { key, qr_code } = this.$route.query
 
-    // récupère le qrcode
-    try {
-      const qrcodeResponse = await api.getQrCode(this.rapportData.clefAcheteur)
-      const myBlob = new Blob([qrcodeResponse.data], {type: 'image/png'});
+      if (qr_code) api.log(`/qrcode/${qr_code}`)
 
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        this.images.qrcode = fileReader.result;
-      };
-      fileReader.readAsDataURL(myBlob);
-    } catch (error) {
-      api.log('/qrcode-ko')
+      await gestionAppelApi.fetchRapportAcheteur(key)
+      this.rapportData = this.store.getRapport
+
+      if (this.store.getStatus === 200) {
+        api.log('/buyer/ok')
+      }
     }
 
-    const defaultTabTitles = [
-      { title: 'Synthèse', panelId: 'report-tab-content-0', tabId:'report-tab-0'},
-      { title: 'Véhicule', panelId: 'report-tab-content-1', tabId:'report-tab-1'},
-      { title: 'Titulaire et Titre', panelId: 'report-tab-content-2', tabId:'report-tab-2'},
-      { title: 'Situation administrative', panelId: 'report-tab-content-3', tabId:'report-tab-3'},
-      { title: 'Historique', panelId: 'report-tab-content-4', tabId:'report-tab-4'},
-    ]
+    // Calcul des informations du propriétaire pour pouvoir créer un lien acheteur et le code Partage HistoVec
+    this.holderId = await genererId.proprietaireId(this.formData)
+    this.holderKey = await genererCle.cleProprietaire(this.formData)
 
     this.tabTitles = (
-      (controlesTechniques.status === 200 ) ?
-        defaultTabTitles.concat([
+      (this.store.getControlesTechniques && this.store.getControlesTechniques.status === 200 ) ?
+        this.tabTitles.concat([
           { title: 'Contrôles techniques', panelId: 'report-tab-content-5', tabId:'report-tab-5'},
           { title: 'Kilométrage', panelId: 'report-tab-content-6', tabId:'report-tab-6'},
         ]) :
-        defaultTabTitles
+        this.tabTitles
     )
 
-    this.modaleActions = [
-      {
-        label: 'Copier le lien',
-        icon: 'ri-clipboard-line',
-        onClick: this.onClickCopyLienPartage,
-      },
-      {
-        label: 'Envoyer le lien par mail',
-        icon: 'ri-send-plane-fill',
-        secondary: true,
-        onClick: this.onClickMailLienPartage,
-      },
-    ]
-
-    if (this.flags.codePartage) {
-      this.modaleActions.push({
-        label: 'Copier le \'Code partage HistoVec\'',
-        icon: 'ri-clipboard-line',
-        secondary: true,
-        onClick: this.onClickCopyCodePartage,
-      })
-    }
-
     this.isLoading = false;
-
-    if (this.isRapportAcheteur) {
-      api.log('/buyer/ok')
-    }
-    if (this.isRapportVendeur) {
-      api.log('/holder/ok')
-    }
   },
 
   methods: {
@@ -863,7 +711,7 @@ export default defineComponent({
   </div>
 
   <div
-    v-if="!isCIAnnule"
+    v-if="!isCIAnnule && store.getRapport"
     class="fr-grid-row fr-grid-row--gutters fr-grid-row--center fr-mb-4w"
   >
     <div class="fr-col-12 fr-col-lg-11 fr-col-xl-11">
