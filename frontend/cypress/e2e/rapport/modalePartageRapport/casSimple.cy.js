@@ -3,7 +3,8 @@ import {renseignerFormulairePhysiqueSIV} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - modale partage', () => {
   before(() => {
-
+    cy.intercept('PUT', '**/share', { statusCode: 200 })
+    cy.intercept('PUT', '**/share/copy', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/physique/**', '/api/reponseRequeteApiSivParticulier200.json')
 
     renseignerFormulairePhysiqueSIV()

@@ -3,8 +3,8 @@ import {renseignerFormulairePhysiqueIVT} from '../renseignerFormulaire';
 import {structureOngletKilometrage} from './fonction';
 
 context('Rapport vehicule cas simple - onglet Kilométrage', () => {
-
   before(() => {
+    cy.intercept('PUT', '**/kilometers', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/ivt/physique/**', '/api/reponseRequeteApiIvtParticulier200.json')
 
     renseignerFormulairePhysiqueIVT()

@@ -3,10 +3,9 @@ import {ongletTitulaireEtTitreMorale} from './fonction';
 import {renseignerFormulaireMoraleIVT} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - onglet Titulaire et Titre', () => {
-
   before(() => {
-
-    authentificationRapport('/public/v1/report_by_data/fni/morale/**', '/api/reponseRequeteApiIvtProfessionnel200.json')
+    cy.intercept('PUT', '**/holder', { statusCode: 200 })
+    authentificationRapport('/public/v1/report_by_data/ivt/morale/**', '/api/reponseRequeteApiIvtProfessionnel200.json')
 
     renseignerFormulaireMoraleIVT()
 

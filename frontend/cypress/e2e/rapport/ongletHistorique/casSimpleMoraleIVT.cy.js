@@ -4,6 +4,7 @@ import {contenuOngletHistorique, structureOngletHistorique} from './fonction';
 
 context('Rapport vehicule cas simple - onglet Historique', () => {
   before(() => {
+    cy.intercept('PUT', '**/history', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/ivt/morale/**', '/api/reponseRequeteApiIvtProfessionnel200.json')
 
     renseignerFormulaireMoraleIVT()

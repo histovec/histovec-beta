@@ -3,9 +3,8 @@ import {renseignerFormulairePhysiqueSIV} from '../renseignerFormulaire';
 import {contenuOngletControlesTechniques, structureOngletControlesTechniques} from './fonction';
 
 context('Rapport vehicule cas simple - onglet Contrôles techniques', () => {
-
-
   before(() => {
+    cy.intercept('PUT', '**/technical-control', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/physique/**', '/api/reponseRequeteApiSivParticulier200.json')
 
     renseignerFormulairePhysiqueSIV()

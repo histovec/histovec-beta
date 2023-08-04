@@ -3,9 +3,8 @@ import {ongletTitulaireEtTitreMorale} from './fonction';
 import {renseignerFormulaireMoraleSIV} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - onglet Titulaire et Titre', () => {
-
   before(() => {
-
+    cy.intercept('PUT', '**/holder', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/morale/**', '/api/reponseRequeteApiSivProfessionnel200.json')
 
     renseignerFormulaireMoraleSIV()

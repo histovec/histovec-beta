@@ -10,7 +10,7 @@ import {renseignerFormulairePhysiqueSIV} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - onglet synthese', () => {
   before(() => {
-
+    cy.intercept('PUT', '**/synthesis', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/physique/**', '/api/reponseRequeteApiSivParticulier200.json')
 
     renseignerFormulairePhysiqueSIV()

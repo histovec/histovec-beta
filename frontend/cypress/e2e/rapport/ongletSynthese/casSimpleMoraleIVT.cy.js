@@ -9,9 +9,8 @@ import {authentificationRapport} from '../../fonction/authentification';
 import {renseignerFormulaireMoraleIVT} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - onglet synthese', () => {
-
   before(() => {
-
+    cy.intercept('PUT', '**/synthesis', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/ivt/morale/**', '/api/reponseRequeteApiIvtProfessionnel200.json')
 
     renseignerFormulaireMoraleIVT()

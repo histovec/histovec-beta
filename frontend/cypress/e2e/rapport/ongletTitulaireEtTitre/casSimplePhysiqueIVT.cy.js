@@ -3,10 +3,9 @@ import {ongletTitulaireEtTitrePhysique} from './fonction';
 import {renseignerFormulairePhysiqueIVT} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - onglet Titulaire et Titre', () => {
-
   before(() => {
-
-    authentificationRapport('/public/v1/report_by_data/fni/physique/**', '/api/reponseRequeteApiIvtParticulier200.json')
+    cy.intercept('PUT', '**/holder', { statusCode: 200 })
+    authentificationRapport('/public/v1/report_by_data/ivt/physique/**', '/api/reponseRequeteApiIvtParticulier200.json')
 
     renseignerFormulairePhysiqueIVT()
 

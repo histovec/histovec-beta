@@ -4,6 +4,7 @@ import {verificationOngletSituationAdmin} from './fonction';
 
 context('Rapport vehicule cas simple - onglet Situation administrative', () => {
   before(() => {
+    cy.intercept('PUT', '**/administrative-status', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/morale/**', '/api/reponseRequeteApiSivProfessionnel200.json')
 
     renseignerFormulaireMoraleSIV()

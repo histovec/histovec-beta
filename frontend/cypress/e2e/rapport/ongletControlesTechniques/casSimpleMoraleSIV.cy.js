@@ -3,9 +3,8 @@ import {renseignerFormulaireMoraleSIV} from '../renseignerFormulaire';
 import {contenuOngletControlesTechniques, structureOngletControlesTechniques} from './fonction';
 
 context('Rapport vehicule cas simple - onglet Contrôles techniques', () => {
-
-
   before(() => {
+    cy.intercept('PUT', '**/technical-control', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/morale/**', '/api/reponseRequeteApiSivProfessionnel200.json')
 
     renseignerFormulaireMoraleSIV()
