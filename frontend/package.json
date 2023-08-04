@@ -17,7 +17,8 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:stub": "VITE_TITLE=histovec VITE_PORT=8080 VITE_AB_TESTING_PERCENTAGE=0 VITE_DISABLE_API_LOG=false VITE_STUB_ACTIVATED=true BACKEND_PORT=8010 vite",
-    "test:cy": "cypress run"
+    "test:cy": "cypress run --config video=false",
+    "video:cy": "cypress run"
   },
   "dependencies": {
     "@gouvfr/dsfr": "~1.4.1",
