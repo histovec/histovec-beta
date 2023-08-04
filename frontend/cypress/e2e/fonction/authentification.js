@@ -6,7 +6,6 @@ export const authentificationRapport = (route, reponse) => {
     fixture: reponse,
   })
   cy.intercept('GET', '/public/v1/get_buyer_qrcode/**', {statusCode: 200})
-  cy.intercept('PUT', '**/holder/cached', {statusCode: 200})
   cy.intercept('PUT', '**/holder/ok', {statusCode: 200})
   cy.intercept('PUT', '**/synthesis', {statusCode: 200})
 }
