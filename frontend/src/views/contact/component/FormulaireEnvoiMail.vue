@@ -2,9 +2,10 @@
 import { defineComponent } from 'vue'
 import '@Assets/stylesheets/image.css'
 import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
-import { EMAIL_REGEX } from '@Constants/regex.js'
 import {detect} from 'detect-browser'
 import api from '@Api/index.js'
+import { useVuelidate } from '@vuelidate/core'
+import {emailMessage$, required$} from './validator';
 
 export default defineComponent({
   name: 'FormulaireEnvoiMail',
@@ -13,6 +14,12 @@ export default defineComponent({
       type: String,
       default: null,
     },
+  },
+
+  setup (){
+    return {
+      v$: useVuelidate(),
+    }
   },
   data () {
 
@@ -32,32 +39,19 @@ export default defineComponent({
       isErrorAlertVisible: false,
     }
   },
+  validations () {
+    return{
+        messageEmail:{
+          required: required$,
+          email: emailMessage$(),
+          $autoDirty: true,
+        },
+        message: {required:required$, $autoDirty: true},
+    }
+  },
   computed: {
-    isFormValid () {
-      return this.isMessageEmailValid && this.isMessageValid
-    },
     isAlertVisible () {
       return this.isSuccessAlertVisible || this.isErrorAlertVisible
-    },
-    isMessageEmailValid () {
-      return this.messageEmail && this.messageEmail.match(EMAIL_REGEX)
-    },
-    messageEmailErrorMessage () {
-      return (
-        this.messageEmail !== null && !this.isMessageEmailValid ?
-          'Saisissez une adresse avec un format valide, exemple : nom@exemple.fr' :
-          ''
-      )
-    },
-    isMessageValid () {
-      return this.message && this.message.length > 0
-    },
-    messageErrorMessage () {
-      return (
-        this.message !== null && !this.isMessageValid ?
-          'Le message est obligatoire. Veuillez le renseigner.' :
-          ''
-      )
     },
     normalizedMessage () {
       if (!this.message) {
@@ -250,8 +244,7 @@ export default defineComponent({
       Tous les champs sont obligatoires.
     </p>
     <DsfrInputGroup
-      :is-valid="isMessageEmailValid"
-      :error-message="messageEmailErrorMessage"
+      :error-message="v$.messageEmail.$error? v$.messageEmail.$silentErrors[0].$message:''"
       description-id="email-erreur-message"
     >
       <DsfrInput
@@ -262,15 +255,14 @@ export default defineComponent({
         autocomplete="email"
         type="email"
         required
-        :aria-invalid="!isMessageEmailValid"
+        :aria-invalid="v$.messageEmail.$invalid"
         aria-errormessage="email-erreur-message"
       />
     </DsfrInputGroup>
   </div>
   <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
     <DsfrInputGroup
-      :is-valid="isMessageValid"
-      :error-message="messageErrorMessage"
+      :error-message="v$.message.$error? v$.message.$silentErrors[0].$message:''"
       description-id="message-erreur-message"
     >
       <DsfrInput
@@ -280,7 +272,7 @@ export default defineComponent({
         hint="Votre message"
         is-textarea
         required
-        :aria-invalid="!isMessageValid"
+        :aria-invalid="v$.message.$invalid"
         aria-errormessage="message-erreur-message"
       />
     </DsfrInputGroup>
@@ -362,7 +354,7 @@ export default defineComponent({
   >
     <DsfrButton
       id="bouton-envoyer"
-      :disabled="!isFormValid || isAlertVisible"
+      :disabled="v$.$invalid || isAlertVisible"
       label="Envoyer"
       @click="sendContactEmail"
     />

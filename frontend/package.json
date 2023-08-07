@@ -23,6 +23,8 @@
   "dependencies": {
     "@gouvfr/dsfr": "^1.9.3",
     "@gouvminint/vue-dsfr": "^4.3.0",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.3",
     "axios": "^1.4.0",
     "base64-arraybuffer": "^1.0.2",
     "body-parser": "^1.20.2",
