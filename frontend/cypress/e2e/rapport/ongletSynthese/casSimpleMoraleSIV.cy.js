@@ -8,7 +8,7 @@ import {
 import {authentificationRapport} from '../../fonction/authentification';
 import {renseignerFormulaireMoraleSIV} from '../renseignerFormulaire';
 
-context('Rapport vehicule cas simple - onglet synthese', () => {
+context('Rapport vehicule cas simple personne morale SIV - onglet synthese', () => {
   before(() => {
     cy.intercept('PUT', '**/synthesis', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/morale/**', '/api/reponseRequeteApiSivProfessionnel200.json')
@@ -18,7 +18,7 @@ context('Rapport vehicule cas simple - onglet synthese', () => {
     // Onglet Synthèse selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
-      .find("li[class*='fr-tabs__item']")
+      .find("li[role='presentation']")
       .should('have.length', 7)
       .eq(0)
       .find("button[class*='fr-tabs__tab']")

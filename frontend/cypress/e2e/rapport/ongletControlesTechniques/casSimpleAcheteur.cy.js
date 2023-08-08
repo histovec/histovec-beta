@@ -16,7 +16,7 @@ context('Rapport acheteur vehicule cas simple - onglet Contrôles techniques', (
     // Onlget Situation administrative selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
-      .find("li[class*='fr-tabs__item']")
+      .find("li[role*='presentation']")
       .should('have.length', 7)
       .eq(5)
       .find("button[class*='fr-tabs__tab']")

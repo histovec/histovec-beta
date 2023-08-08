@@ -2,7 +2,7 @@ import {authentificationRapport} from '../../fonction/authentification';
 import {verificationOngletSituationAdmin} from './fonction';
 import {renseignerFormulaireMoraleIVT} from '../renseignerFormulaire';
 
-context('Rapport vehicule cas simple - onglet Situation administrative', () => {
+context('Rapport vehicule cas simple personne morale IVT - onglet Situation administrative', () => {
   before(() => {
     cy.intercept('PUT', '**/administrative-status', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/ivt/morale/**', '/api/reponseRequeteApiIvtProfessionnel200.json')
@@ -12,7 +12,7 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
     // Onglet Situation administrative selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
-      .find("li[class*='fr-tabs__item']")
+      .find("li[role='presentation']")
       .should('have.length', 7)
       .eq(3)
       .find("button[class*='fr-tabs__tab']")

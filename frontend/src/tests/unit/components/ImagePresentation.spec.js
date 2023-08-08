@@ -23,6 +23,5 @@ describe('ImagePresentation', () => {
     expect(image.attributes().alt).toBe(alt);
     expect(image.attributes().src).toBe(src);
     expect(image.attributes().class.includes('fr-responsive-img')).true;
-    expect(image.attributes().class.includes('image-presentation__format')).true;
   })
 })

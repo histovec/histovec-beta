@@ -91,103 +91,110 @@ export default defineComponent({
       >
         Sélectionner le type de votre plaque d'immatriculation :
       </legend>
-      <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
-        <li>
-          <label
-            :for="TYPE_IMMATRICULATION.SIV"
-            class="card-immatriculation"
-            :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.SIV) }"
-          >
-            <span class="card-immatriculation--image--wrap">
-              <img
-                class="card-immatriculation--image"
-                :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.SIV) }"
-                :src="images.plaqueSivSvg"
-                alt="Format d'immatriculation depuis 2009"
-                title="Format d'immatriculation depuis 2009"
-              />
-            </span>
-            <input
-              :id="TYPE_IMMATRICULATION.SIV"
-              ref="SIVPlaque"
-              v-model="formData.typeImmatriculation"
-              name="Immatriculation depuis 2009"
-              class="card-immatriculation--radio"
-              type="radio"
-              :value="TYPE_IMMATRICULATION.SIV"
+      <div class="cards-immatriculation-position">
+        <ul class="fr-btns-group fr-btns-group--center fr-btns-group--inline-sm">
+          <li>
+            <label
+              :for="TYPE_IMMATRICULATION.SIV"
+              class="card-immatriculation"
+              :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.SIV) }"
             >
-            <span
-              class="fr-label fr-mt-3w"
-            >Immatriculation depuis 2009
-            </span>
-          </label>
-        </li>
-        <li>
-          <label
-            :for="TYPE_IMMATRICULATION.FNI"
-            class="card-immatriculation"
-            :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.FNI) }"
-          >
-            <span class="card-immatriculation--image--wrap">
-              <img
-                class="card-immatriculation--image"
-                :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.FNI) }"
-                :src="images.plaqueFniSvg"
-                alt="Format d'immatriculation avant 2009"
-                title="Format d'immatriculation avant 2009"
-              />
-            </span>
-            <input
-              :id="TYPE_IMMATRICULATION.FNI"
-              ref="FNIPlaque"
-              v-model="formData.typeImmatriculation"
-              name="Immatriculation avant 2009"
-              class="card-immatriculation--radio"
-              type="radio"
-              :value="TYPE_IMMATRICULATION.FNI"
+              <span class="card-immatriculation--image--wrap">
+                <img
+                  class="card-immatriculation--image"
+                  :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.SIV) }"
+                  :src="images.plaqueSivSvg"
+                  alt="Format d'immatriculation depuis 2009"
+                  title="Format d'immatriculation depuis 2009"
+                />
+              </span>
+              <input
+                :id="TYPE_IMMATRICULATION.SIV"
+                ref="SIVPlaque"
+                v-model="formData.typeImmatriculation"
+                name="Immatriculation depuis 2009"
+                class="card-immatriculation--radio"
+                type="radio"
+                :value="TYPE_IMMATRICULATION.SIV"
+              >
+              <span
+                class="fr-label fr-mt-3w"
+              >Immatriculation depuis 2009
+              </span>
+            </label>
+          </li>
+          <li>
+            <label
+              :for="TYPE_IMMATRICULATION.FNI"
+              class="card-immatriculation"
+              :class="{ 'card-immatriculation--active': setActive(TYPE_IMMATRICULATION.FNI) }"
             >
-            <span
-              class="fr-label fr-mt-3w"
-            >Immatriculation avant 2009
-            </span>
-          </label>
-        </li>
-        <li>
-          <label
-            :for="OLD_IMMATRICULATION_TYPE"
-            class="card-immatriculation"
-            :class="{ 'card-immatriculation--active': setActive(OLD_IMMATRICULATION_TYPE) }"
-          >
-            <span class="card-immatriculation--image--wrap">
-              <img
-                class="card-immatriculation--image"
-                :class="{ 'card-immatriculation--image--opacity': setOpacite(OLD_IMMATRICULATION_TYPE) }"
-                :src="images.plaqueNonSupporteeSvg"
-                alt="Format d'immatriculation avant 1995"
-                title="Format d'immatriculation avant 1995"
-              />
-            </span>
-            <input
-              :id="OLD_IMMATRICULATION_TYPE"
-              v-model="formData.typeImmatriculation"
-              name="Immatriculation avant 1995"
-              class="card-immatriculation--radio"
-              type="radio"
-              :value="OLD_IMMATRICULATION_TYPE"
+              <span class="card-immatriculation--image--wrap">
+                <img
+                  class="card-immatriculation--image"
+                  :class="{ 'card-immatriculation--image--opacity': setOpacite(TYPE_IMMATRICULATION.FNI) }"
+                  :src="images.plaqueFniSvg"
+                  alt="Format d'immatriculation avant 2009"
+                  title="Format d'immatriculation avant 2009"
+                />
+              </span>
+              <input
+                :id="TYPE_IMMATRICULATION.FNI"
+                ref="FNIPlaque"
+                v-model="formData.typeImmatriculation"
+                name="Immatriculation avant 2009"
+                class="card-immatriculation--radio"
+                type="radio"
+                :value="TYPE_IMMATRICULATION.FNI"
+              >
+              <span
+                class="fr-label fr-mt-3w"
+              >Immatriculation avant 2009
+              </span>
+            </label>
+          </li>
+          <li>
+            <label
+              :for="OLD_IMMATRICULATION_TYPE"
+              class="card-immatriculation"
+              :class="{ 'card-immatriculation--active': setActive(OLD_IMMATRICULATION_TYPE) }"
             >
-            <span
-              class="fr-label fr-mt-3w"
-            >Immatriculation avant 1995
-            </span>
-          </label>
-        </li>
-      </ul>
+              <span class="card-immatriculation--image--wrap">
+                <img
+                  class="card-immatriculation--image"
+                  :class="{ 'card-immatriculation--image--opacity': setOpacite(OLD_IMMATRICULATION_TYPE) }"
+                  :src="images.plaqueNonSupporteeSvg"
+                  alt="Format d'immatriculation avant 1995"
+                  title="Format d'immatriculation avant 1995"
+                />
+              </span>
+              <input
+                :id="OLD_IMMATRICULATION_TYPE"
+                v-model="formData.typeImmatriculation"
+                name="Immatriculation avant 1995"
+                class="card-immatriculation--radio"
+                type="radio"
+                :value="OLD_IMMATRICULATION_TYPE"
+              >
+              <span
+                class="fr-label fr-mt-3w"
+              >Immatriculation avant 1995
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
     </fieldset>
   </div>
 </template>
 <style scoped>
 .text-center {
   text-align: center;
+}
+.cards-immatriculation-position {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .card-immatriculation {
@@ -227,5 +234,10 @@ export default defineComponent({
 }
 .card-immatriculation--radio {
   outline:none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
 }
 </style>

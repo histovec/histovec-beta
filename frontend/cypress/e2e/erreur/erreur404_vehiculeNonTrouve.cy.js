@@ -43,11 +43,11 @@ context('Page erreur 404 - véhicule non trouvé', () => {
       .contains("Erreur 404")
 
     cy.get("div[class*='fr-grid-row fr-grid-row--gutters fr-mb-4w fr-mt-4w']")
-      .find("button[class*='fr-btn inline-flex']")
+      .find("button[class*='fr-btn fr-btn--md inline-flex']")
       .contains("Revenir au formulaire de recherche")
 
     cy.get("div[class*='fr-grid-row fr-grid-row--gutters fr-mb-4w fr-mt-4w']")
-      .find("button[class*='fr-btn fr-btn--secondary inline-flex']")
+      .find("button[class*='fr-btn fr-btn--secondary fr-btn--md inline-flex']")
       .contains("Contactez-nous")
   })
 })

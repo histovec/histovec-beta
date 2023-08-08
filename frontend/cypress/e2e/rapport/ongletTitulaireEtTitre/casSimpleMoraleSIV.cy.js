@@ -2,7 +2,7 @@ import {authentificationRapport} from '../../fonction/authentification';
 import {ongletTitulaireEtTitreMorale} from './fonction';
 import {renseignerFormulaireMoraleSIV} from '../renseignerFormulaire';
 
-context('Rapport vehicule cas simple - onglet Titulaire et Titre', () => {
+context('Rapport vehicule cas simple personne morale SIV - onglet Titulaire et Titre', () => {
   before(() => {
     cy.intercept('PUT', '**/holder', { statusCode: 200 })
     authentificationRapport('/public/v1/report_by_data/siv/morale/**', '/api/reponseRequeteApiSivProfessionnel200.json')
@@ -12,7 +12,7 @@ context('Rapport vehicule cas simple - onglet Titulaire et Titre', () => {
     // Onlget Titulaire et Titre selectionné
     cy.get("div[class*='fr-tabs']")
       .find("ul[class*='fr-tabs__list']")
-      .find("li[class*='fr-tabs__item']")
+      .find("li[role='presentation']")
       .should('have.length', 7)
       .eq(2)
       .find("button[class*='fr-tabs__tab']")

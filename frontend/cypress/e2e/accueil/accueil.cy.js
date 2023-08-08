@@ -63,7 +63,7 @@ context('Accueil', () => {
 
   it("Naviguer vers page faq via bouton", () => {
     cy.intercept('PUT', '**/faq', { statusCode: 200 })
-    cy.get("button[class*='fr-btn inline-flex']").contains("Besoin d'aide").click();
+    cy.get("button[class*='inline-flex']").contains("Besoin d'aide").click();
     cy.url().should('eq', Cypress.config('baseUrl') + routes.url_faq);
 
   })
