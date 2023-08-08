@@ -5,7 +5,7 @@ import { TYPE_IMMATRICULATION, TYPE_PERSONNE } from '@Constants/type.js'
 import {detect} from 'detect-browser'
 import api from '@Api/index.js'
 import { useVuelidate } from '@vuelidate/core'
-import {emailMessage$, required$} from './validator';
+import { emailRules$, requiredMessageRules$, requiredEmailRules$ } from '@Utils/validators/validatorContactPage';
 
 export default defineComponent({
   name: 'FormulaireEnvoiMail',
@@ -42,11 +42,14 @@ export default defineComponent({
   validations () {
     return{
         messageEmail:{
-          required: required$,
-          email: emailMessage$(),
+          required: requiredEmailRules$,
+          email: emailRules$,
           $autoDirty: true,
         },
-        message: {required:required$, $autoDirty: true},
+        message: {
+          required:requiredMessageRules$,
+          $autoDirty: true,
+        },
     }
   },
   computed: {
@@ -244,11 +247,11 @@ export default defineComponent({
       Tous les champs sont obligatoires.
     </p>
     <DsfrInputGroup
-      :error-message="v$.messageEmail.$error? v$.messageEmail.$silentErrors[0].$message:''"
+      :error-message="v$.messageEmail.$error? v$.messageEmail.$errors[0].$message:''"
       description-id="email-erreur-message"
     >
       <DsfrInput
-        v-model="messageEmail"
+        v-model="v$.messageEmail.$model"
         label="Email"
         label-visible
         hint="Votre email"
@@ -262,11 +265,11 @@ export default defineComponent({
   </div>
   <div class="fr-col-12  fr-col-md-10  fr-col-lg-10  fr-col-xl-10">
     <DsfrInputGroup
-      :error-message="v$.message.$error? v$.message.$silentErrors[0].$message:''"
+      :error-message="v$.message.$error? v$.message.$errors[0].$message:''"
       description-id="message-erreur-message"
     >
       <DsfrInput
-        v-model="message"
+        v-model="v$.message.$model"
         label="Message"
         label-visible
         hint="Votre message"
