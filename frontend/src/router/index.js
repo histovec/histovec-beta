@@ -18,7 +18,7 @@ const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue'
 
 
 // @flag @makeSiteUnavailable
-const isHistoVecUnavailable = true
+const isHistoVecUnavailable = false
 
 const routes = (
   isHistoVecUnavailable ?
