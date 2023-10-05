@@ -77,7 +77,7 @@ describe('HistoVecFooter', () => {
     const routerLink = bodyDivs[0].find('router-link');
     expect(routerLink.attributes().class).toBe('fr-footer__brand-link');
     expect(routerLink.attributes().to).toBe('/');
-    expect(routerLink.attributes().title).toBe('Ministère de l’intérieur et des outre-mer - HistoVec - Retour à l’accueil du site');
+    expect(routerLink.attributes().title).toBe('Ministère de l’Intérieur et des Outre-mer - HistoVec - Retour à l’accueil du site');
     const img = routerLink.find('img');
     expect(img.attributes().class).toBe('fr-footer__logo footer__logo__histovec');
     expect(img.attributes().alt).toBe('');
