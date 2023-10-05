@@ -1,0 +1,161 @@
+{
+  "vehicule": {
+    "caracteristiques": {
+      "marque": "RENAULT",
+      "nomCommercial": "MODUS",
+      "puissanceCv": 5,
+      "couleur": "BEIGE FONCE",
+      "tvv": "JP0C05",
+      "numCnit": "MRE1116SV988",
+      "typeReception": "CE",
+      "vin": "VF1JP0C0540915794",
+      "champF1": 1610,
+      "champF2": 1610,
+      "champF3": 2200,
+      "champG": 1155,
+      "champG1": 1195,
+      "categorie": "véhicules à moteur conçus et construits pour le transport de personnes et ayant au moins quatre roues : véhicule conçu et construit pour le transport de personnes et comportant, outre le siège du conducteur, huit places assises au maximum ;",
+      "genre": "Voitures particulières",
+      "carrosserieCe": "Véhicule à usages multiples",
+      "carrosserieNationale": "Conduite intérieure",
+      "numeroReception": "e2*2001/116*0319*27",
+      "cylindree": 1149,
+      "puissanceNette": 55,
+      "energie": "Essence",
+      "nbPlacesAssises": 5,
+      "nbPlacesDebout": 0,
+      "niveauSonore": 80,
+      "vitesseMoteur": 4125,
+      "co2": 140,
+      "pollution": "70/220*2003/76EURO4",
+      "rapportPuissMasse": -99
+    },
+    "infos": {
+      "nbTitulaires": 1,
+      "datePremiereImmatriculation": "2003-07-12",
+      "datePremiereImmatSiv": "2003-07-12",
+      "plaqueImmatriculation": "A*******M",
+      "dateConvertionSiv": "2003-07-12"
+    },
+    "infosImport": {
+      "datePremiereImmatriculationFrance": "",
+      "dateImportFrance": "",
+      "isImported": false,
+      "datePremiereImmatEtranger": "",
+      "immatriculationOrigine": "",
+      "codePaysOrigine": "",
+      "nomPaysOrigine": ""
+    },
+    "usage": {
+      "listeDesUsages": [],
+      "isAgricole": false,
+      "isCollection": false
+    },
+    "situationAdmin": {
+      "isApteACirculer": true,
+      "isCiAnnule": false,
+      "dateAnnulation": null,
+      "isCiVole": false,
+      "isDuplicata": false,
+      "gages": {
+        "hasGages": false,
+        "informations": []
+      },
+      "isCiPerdu": false,
+      "dvs": {
+        "hasDvs": false,
+        "informations": []
+      },
+      "suspensions": {
+        "hasSuspensions": false,
+        "informations": []
+      },
+      "oppositions": {
+        "hasOppositions": false,
+        "informations": {
+          "oves": [],
+          "oveis": [],
+          "otcisPv": [],
+          "otcis": []
+        }
+      },
+      "isVehVole": false
+    },
+    "accidents": {
+      "nbSinistres": 0,
+      "dateDerniereResolution": null,
+      "dateDernierSinistre": null
+    },
+    "historique": [
+      {
+        "opaDate": "2009-04-20",
+        "opaType": "Première immatriculation d'un véhicule neuf"
+      },
+      {
+        "opaDate": "2015-05-18",
+        "opaType": "Duplicata de la carte grise"
+      },
+      {
+        "opaDate": "2022-08-26",
+        "opaType": "Achat ou reprise par un professionnel"
+      }
+    ]
+  },
+  "proprietaire": {
+    "personnePhysique": {
+      "nomNaissance": "B******T",
+      "prenom": "M****L"
+    },
+    "personneMorale": {
+      "raisonSociale": "",
+      "siren": ""
+    },
+    "codePostal": "94400"
+  },
+  "certificatImmatriculation": {
+    "age": 10,
+    "dateEmission": "2015-05-18"
+  },
+  "utac": {
+    "updateDate": "2021-08-01",
+    "status": 200,
+    "ct": [
+      {
+        "ctDate": "2014-12-11",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Visite Technique Périodique",
+        "km": 98429
+      },
+      {
+        "ctDate": "2016-12-10",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Visite Technique Périodique",
+        "km": 132874
+      },
+      {
+        "ctDate": "2018-12-26",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Contrôle Technique Périodique",
+        "km": 160532
+      }
+    ]
+  },
+  "clefAcheteur": "179d0be9-e9d2-4a61-9384-94440a4bc12b",
+  "validiteClefAcheteur": "2023-06-03",
+  "messageUsager": [],
+  "plaqImmatHash": "acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea",
+  "incomingQuery": {
+    "sivPhysique": {
+      "nom": "BLANCHET",
+      "prenom": "MARCEL",
+      "immat": "AA-948-BM",
+      "numeroFormule": "2015CC11207"
+    },
+    "sivMorale": null,
+    "ivtPhysique": null,
+    "ivtMorale": null
+  }
+}

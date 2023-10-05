@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib'
 
-import { writeContent } from './content.js'
-import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from '@/constants/csaAsPdf.js'
+import { writeContent } from '@Utils/csaAsPdf/content.js'
+import { FONT, FONT_BOLD, FONT_ITALIC, FONT_STYLES, RAPPORT_FILENAME } from '@Constants/csaAsPdf.js'
 
 
 export const generateCsa = async (

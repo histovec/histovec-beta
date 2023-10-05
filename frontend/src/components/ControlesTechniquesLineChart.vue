@@ -10,12 +10,14 @@
 <script>
 
 import orderBy from 'lodash.orderby'
-import { formatIsoToFrDate } from '@/assets/js/format.js'
+import {formatIsoToFrDate} from '@Assets/js/format.js'
+import {transformeDateFrEnISO} from '@Utils/format/date';
 
-import { Line as LineChart } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale } from 'chart.js'
-ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale)
+import {Line as LineChart} from 'vue-chartjs'
+import {Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, TimeScale, Title, Tooltip} from 'chart.js'
 import 'chartjs-adapter-date-fns'
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, TimeScale, LinearScale)
 
 
 export default {
@@ -94,13 +96,13 @@ export default {
       return orderBy(this.controlesTechniques.map((controle) => this.controlToPoint(controle)), ['x'], ['asc'])
     },
     pointColors () {
-      return orderBy(this.controlesTechniques.map((controle) => this.colors[controle.resultat]), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => this.colors[controle.resultatRaw]), ['x'], ['asc'])
     },
     nature () {
-      return orderBy(this.controlesTechniques.map((controle) => controle.natureLibelle), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => controle.nature), ['x'], ['asc'])
     },
     resultat () {
-      return orderBy(this.controlesTechniques.map((controle) => controle.resultatLibelle), ['x'], ['asc'])
+      return orderBy(this.controlesTechniques.map((controle) => controle.resultat), ['x'], ['asc'])
     },
     lineData () {
       if (this.controlesTechniques.length > 0) {
@@ -126,13 +128,11 @@ export default {
 
   methods: {
     controlToPoint (controle) {
-      const point = {
-        x: controle.date,
-        y: controle.km,
-      }
-
-      return point
-    },
+      return {
+          x: transformeDateFrEnISO(controle?.date),
+          y: controle.km,
+        }
+      },
   },
 }
 

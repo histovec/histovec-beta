@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 import Vue from "@vitejs/plugin-vue";
 import * as path from "path";
+import {fileURLToPath, URL} from "url";
 
 export default defineConfig({
   plugins: [Vue({
@@ -26,7 +27,15 @@ export default defineConfig({
   },
   resolve: {
   alias: {
-    '@': path.resolve(__dirname, './src')
+    '@': path.resolve(__dirname, './src'),
+    '@Api': path.resolve(__dirname, './src/api'),
+    '@Assets': path.resolve(__dirname, './src/assets'),
+    '@Components': path.resolve(__dirname, './src/components'),
+    '@Constants': path.resolve(__dirname, './src/constants'),
+    '@Utils': path.resolve(__dirname, './src/utils'),
+    '@Views': path.resolve(__dirname, './src/views'),
+    '@Stores': path.resolve(__dirname, './src/stores'),
+    '@Services': path.resolve(__dirname, './src/services'),
   },
 },
   root: ".", //Define the root

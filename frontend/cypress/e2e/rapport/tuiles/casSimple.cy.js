@@ -1,39 +1,11 @@
-import routes from "../../../constants/urls.json";
+import {authentificationRapport} from '../../fonction/authentification';
+import {renseignerFormulairePhysiqueSIV} from '../renseignerFormulaire';
 
 context('Rapport vehicule cas simple - tuiles', () => {
   before(() => {
-    // redirection vers la page propriétaire
-    cy.visit(routes.url_proprietaire)
-    cy.title().should('eq', 'HistoVec - Propriétaire')
+    authentificationRapport('/public/v1/report_by_data/siv/physique/**', '/api/reponseRequeteApiSivParticulier200.json')
 
-    // mock de la requete
-    cy.intercept('POST', '/histovec/api/v1/report_by_data', { fixture: 'aucuneAnomalie.json' }).as('dataVehicule')
-
-    // renseignement du formulaire
-    cy.get("img[src*='/histovec/src/assets/img/plaque_siv.svg']")
-      .click()
-    cy.get("input[id*='form-siv-particulier-nom-naissance']")
-      .should("exist")
-      .type('nom')
-    cy.get("input[id*='form-siv-particulier-prenom']")
-      .should("exist")
-      .type('prenom')
-    cy.get("input[id*='form-siv-particulier-numero-immatriculation']")
-      .should("exist")
-      .type('AA-123-AA')
-    cy.get("input[id*='form-siv-particulier-numero-formule']")
-      .should("exist")
-      .type('2013BZ80335')
-
-    // validation du formulaire
-    cy.get("button[id*='bouton-recherche']")
-      .should('not.be.disabled')
-      .click()
-
-    // page de redirection
-    cy.wait(500)
-    cy.url().should('eq',  Cypress.config('baseUrl') + routes.url_rapport_vendeur)
-    cy.title().should('eq', 'HistoVec - Rapport vendeur')
+    renseignerFormulairePhysiqueSIV()
   })
   it("Affichage de la première tuile", () => {
     cy.get("div[class*='fr-tile fr-enlarge fr-tile--horizontal']")
@@ -45,7 +17,7 @@ context('Rapport vehicule cas simple - tuiles', () => {
       .parent()
       .parent()
       .find("div[class*='fr-tile__desc']")
-      .contains("Numéro d'immatriculation : CY-9**-RX")
+      .contains("Numéro d'immatriculation : A*******M")
   })
   it("Affichage de la second tuile", () => {
     cy.get("div[class*='fr-tile fr-enlarge fr-tile--horizontal']")
@@ -53,7 +25,7 @@ context('Rapport vehicule cas simple - tuiles', () => {
       .eq(1)
       .find("h3[class*='fr-tile__title']")
       .find("span[class*='fr-tile__link']")
-      .contains("Informations du Ministère de l'Intérieur")
+      .contains('Informations du Ministère de l\'Intérieur')
       .parent()
       .parent()
       .find("div[class*='fr-tile__desc']")

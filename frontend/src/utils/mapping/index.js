@@ -2,7 +2,7 @@ const historiqueVehiculeMapping = (historique) => {
   return historique.map(
     ({
       date,
-      date_annulation: dateAnnulation,
+      dateAnnulation: dateAnnulation,
       type,
     }) => (
       {

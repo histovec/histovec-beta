@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import AlerteComponent from '../../../components/AlerteComponent.vue'
+import AlerteComponent from '@Components/AlerteComponent.vue'
 import { describe, it, expect } from 'vitest'
 
 describe('AlerteComponent', () => {

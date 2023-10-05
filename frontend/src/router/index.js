@@ -1,21 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AccueilPage from '@/views/AccueilPage.vue'
-import { TYPE_RAPPORT } from '../constants/type'
+import AccueilPage from '@Views/AccueilPage.vue'
+import { TYPE_RAPPORT } from '@Constants/type'
 
-const AccessibilitePage = () => import('@/views/AccessibilitePage.vue')
-const AcheteurPage = () => import('@/views/AcheteurPage.vue')
-const ContactPage = () => import('@/views/ContactPage.vue')
-const DonneesPersonnellesEtCookiesPage = () => import('@/views/DonneesPersonnellesEtCookiesPage.vue')
-const FAQPage = () => import('@/views/FAQPage.vue')
-const MentionsLegalesPage = () => import('@/views/MentionsLegalesPage.vue')
-const PlanDuSitePage = () => import('@/views/PlanDuSitePage.vue')
-const ProprietairePage = () => import('@/views/ProprietairePage.vue')
-const RapportPage = () => import('@/views/RapportPage.vue')
-const NotFoundPage = () => import('@/views/error/NotFoundPage.vue')
-const UnavailableServicePage = () => import('@/views/error/UnavailableServicePage.vue')
-const UnintendedErrorPage = () => import('@/views/error/UnintendedErrorPage.vue')
-
+const AccessibilitePage = () => import('@Views/AccessibilitePage.vue')
+const AcheteurPage = () => import('@Views/AcheteurPage.vue')
+const ContactPage = () => import('@Views/contact/ContactPage.vue')
+const DonneesPersonnellesEtCookiesPage = () => import('@Views/DonneesPersonnellesEtCookiesPage.vue')
+const FAQPage = () => import('@Views/faq/FAQPage.vue')
+const MentionsLegalesPage = () => import('@Views/MentionsLegalesPage.vue')
+const PlanDuSitePage = () => import('@Views/PlanDuSitePage.vue')
+const ProprietairePage = () => import('@Views/proprietaire/ProprietairePage.vue')
+const RapportPage = () => import('@Views/rapportPage/RapportPage.vue')
+const NotFoundPage = () => import('@Views/error/NotFoundPage.vue')
+const UnavailableServicePage = () => import('@Views/error/UnavailableServicePage.vue')
+const UnintendedErrorPage = () => import('@Views/error/UnintendedErrorPage.vue')
+const VehiculeNotFound = () => import('@Views/error/VehiculeNotFound.vue')
 
 // @flag @makeSiteUnavailable
 const isHistoVecUnavailable = false
@@ -58,33 +58,18 @@ const routes = (
 
     // Errors pages
     { path: '/erreur-inattendue', name: 'erreurInattendue', component: UnintendedErrorPage,
-      props: route => ({
-        title: route.query.title,
-        errorTitle: route.query.errorTitle,
-        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
-      }),
       meta: { title: 'HistoVec - Erreur inattendue' },
     },
     { path: '/service-indisponible', name: 'serviceIndisponible', component: UnavailableServicePage,
-      props: route => ({
-        title: route.query.title,
-        errorTitle: route.query.errorTitle,
-        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
-      }),
       meta: { title: 'HistoVec - Service indisponible' },
     },
-    { path: '/:pathMatch(.*)*', name: 'pageNonTrouvee', component: NotFoundPage,
-      props: route => ({
-        title: route.query.title,
-        errorTitle: route.query.errorTitle,
-        errorMessages: route.query.errorMessages ? JSON.parse(route.query.errorMessages) : undefined,
-        primaryAction: route.query.primaryAction ? JSON.parse(route.query.primaryAction) : undefined,
-        secondaryAction: route.query.secondaryAction ? JSON.parse(route.query.secondaryAction) : undefined,
-      }),
+    { path: '/page-non-trouvee', name: 'pageNonTrouvee', component: NotFoundPage,
+      meta: { title: 'HistoVec - Page non trouvée' },
+    },
+    { path: '/vehicule-non-trouve', name: 'vehiculeNonTrouve', component: VehiculeNotFound,
+      meta: { title: 'HistoVec - Véhicule non trouvé' },
+    },
+    { path: '/:notFound*', name: 'pageNonTrouvee', component: NotFoundPage,
       meta: { title: 'HistoVec - Page non trouvée' },
     },
   ]

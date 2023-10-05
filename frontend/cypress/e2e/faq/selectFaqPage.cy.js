@@ -3,15 +3,10 @@ import routes from "../../constants/urls.json";
 
 context('FAQ', () => {
   beforeEach(() => {
-    cy.visit(routes.url_accueil)
-    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_accueil);
-    cy.title().should('eq', 'HistoVec - Accueil');
-
-    cy.get('a[title*="FAQ et Liens utiles"]')
-      .contains("FAQ et Liens utiles")
-      .click();
-
-    cy.url().should('eq', Cypress.config('baseUrl') + routes.url_faq);
+    cy.intercept('POST', '/public/v1/get_token', { statusCode: 200, fixture: 'token.json' })
+    cy.intercept('PUT', '**/faq', { statusCode: 200 })
+    cy.intercept('PUT', '**/contact', { statusCode: 200 })
+    cy.visit(routes.url_faq)
   })
   it("Filtrer les thèmes de la liste déroulante", () => {
 

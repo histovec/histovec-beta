@@ -2,20 +2,20 @@
   "vehicule": {
     "date_mise_a_jour": "1900-01-01",
     "certificat_immatriculation": {
-      "date_premiere_immatriculation": "2009-04-08",
+      "datePremiereImmatriculation": "2009-04-08",
       "nombre_de_mois_depuis_date_emission_certificat_immatriculation": "16",
       "numero_immatriculation_anonymisee": "BC-0**-KS",
       "titulaire": {
         "particulier": {
           "nom_anonymise": "G*****",
           "prenoms_anonymises": "A*****",
-          "code_postal": "97118"
+          "codePostal": "97118"
         }
       },
       "caracteristiques_techniques": {
         "marque": "RENAULT",
         "tvv": "BR1F0",
-        "nom_commercial": "CLIO",
+        "nomCommercial": "CLIO",
         "couleur": "GRIS FONCE",
         "vin_anonymise": "VF1L********84388",
         "ptta": 1665,
@@ -30,13 +30,13 @@
         "carrosserie_fr": "CI",
         "numero_de_reception": "e2*2001/116*0327*23",
         "cylindree": 1461,
-        "puissance_nette": 63,
+        "puissanceNette": 63,
         "energie": "GO",
-        "puissance_cv": 5,
+        "puissanceCv": 5,
         "rapport_puissance_masse": 0,
         "places_assises": 5,
         "places_debout": 0,
-        "niveau_sonore": 76,
+        "niveauSonore": 76,
         "vitesse_du_moteur": 2813,
         "emission_co2": 116,
         "classe_environnementale_ue": "70/220*2003/7"
@@ -63,44 +63,44 @@
     },
     "historique": [
       {
-        "date": "2020-06-29",
-        "type": "DECLARATION_PERTE_TITRE"
+        "opaDate": "2020-06-29",
+        "opaType": "DECLARATION_PERTE_TITRE"
       },
       {
-        "date": "2020-06-29",
-        "type": "DECLARATION_PERTE_TITRE"
+        "opaDate": "2020-06-29",
+        "opaType": "DECLARATION_PERTE_TITRE"
       },
       {
-        "date": "2020-06-26",
-        "type": "CHANG_TIT_NORMAL"
+        "opaDate": "2020-06-26",
+        "opaType": "CHANG_TIT_NORMAL"
       },
       {
-        "date": "2020-06-26",
-        "type": "DECLARATION_PERTE_TITRE"
+        "opaDate": "2020-06-26",
+        "opaType": "DECLARATION_PERTE_TITRE"
       },
       {
-        "date": "2010-07-20",
-        "type": "CHANG_TIT_NORMAL"
+        "opaDate": "2010-07-20",
+        "opaType": "CHANG_TIT_NORMAL"
       },
       {
-        "date": "2010-07-20",
-        "type": "CONVERSION_DOSSIER_FNI"
+        "opaDate": "2010-07-20",
+        "opaType": "CONVERSION_DOSSIER_FNI"
       },
       {
-        "date": "2010-07-19",
-        "type": "DECLARATION_CESSION"
+        "opaDate": "2010-07-19",
+        "opaType": "DECLARATION_CESSION"
       },
       {
-        "date": "2010-02-23",
-        "type": "DECLARATION_ACHAT"
+        "opaDate": "2010-02-23",
+        "opaType": "DECLARATION_ACHAT"
       },
       {
-        "date": "2009-11-13",
-        "type": "DECLARATION_ACHAT"
+        "opaDate": "2009-11-13",
+        "opaType": "DECLARATION_ACHAT"
       },
       {
-        "date": "2009-04-08",
-        "type": "IMMAT_NORMALE"
+        "opaDate": "2009-04-08",
+        "opaType": "IMMAT_NORMALE"
       }
     ],
     "import_en_france": {

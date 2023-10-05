@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 
-import logoHistoVec from '@/assets/img/logo_histovec_simple.svg?url'
+import logoHistoVec from '@Assets/img/logo_histovec_simple.svg?url'
 
 import '@/assets/stylesheets/globale.css'
 
@@ -103,7 +103,9 @@ export default defineComponent({
                 target="_self"
                 title="Accueil - HISTOVEC - historique du véhicule"
               >
-                <p class="fr-header__service-title">HISTOVEC</p>
+                <p class="fr-header__service-title">
+                  HISTOVEC
+                </p>
               </router-link>
               <p class="fr-header__service-tagline">
                 Historique du véhicule

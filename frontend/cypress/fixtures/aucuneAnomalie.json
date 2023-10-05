@@ -1,119 +1,161 @@
 {
   "vehicule": {
-    "date_mise_a_jour": "1900-01-01",
-    "certificat_immatriculation": {
-      "date_premiere_immatriculation": "2009-05-13",
-      "nombre_de_mois_depuis_date_emission_certificat_immatriculation": "149",
-      "numero_immatriculation_anonymisee": "CY-9**-RX",
-      "titulaire": {
-        "particulier": {
-          "nom_anonymise": "H****",
-          "prenoms_anonymises": "S******",
-          "code_postal": "60270"
+    "caracteristiques": {
+      "marque": "RENAULT",
+      "nomCommercial": "MODUS",
+      "puissanceCv": 5,
+      "couleur": "BEIGE FONCE",
+      "tvv": "JP0C05",
+      "numCnit": "MRE1116SV988",
+      "typeReception": "CE",
+      "vin": "VF1JP0C0540915794",
+      "champF1": 1610,
+      "champF2": 1610,
+      "champF3": 2200,
+      "champG": 1155,
+      "champG1": 1195,
+      "categorie": "M1",
+      "genre": "VP",
+      "carrosserieCe": "AF",
+      "carrosserieNationale": "CI",
+      "numeroReception": "e2*2001/116*0319*27",
+      "cylindree": 1149,
+      "puissanceNette": 55,
+      "energie": "ES",
+      "nbPlacesAssises": 5,
+      "nbPlacesDebout": 0,
+      "niveauSonore": 80,
+      "vitesseMoteur": 4125,
+      "co2": 140,
+      "pollution": "70/220*2003/76EURO4",
+      "rapportPuissMasse": -99
+    },
+    "infos": {
+      "nbTitulaires": 1,
+      "datePremiereImmatriculation": "2003-07-12",
+      "datePremiereImmatSiv": "2003-07-12",
+      "plaqueImmatriculation": "A*******M",
+      "dateConvertionSiv": "2003-07-12"
+    },
+    "infosImport": {
+      "datePremiereImmatriculationFrance": "",
+      "dateImportFrance": "",
+      "isImported": false,
+      "datePremiereImmatEtranger": "",
+      "immatriculationOrigine": "",
+      "codePaysOrigine": "",
+      "nomPaysOrigine": ""
+    },
+    "usage": {
+      "listeDesUsages": [],
+      "isAgricole": false,
+      "isCollection": false
+    },
+    "situationAdmin": {
+      "isApteACirculer": true,
+      "isCiAnnule": false,
+      "dateAnnulation": null,
+      "isCiVole": true,
+      "isDuplicata": true,
+      "gages": {
+        "hasGages": true,
+        "informations": []
+      },
+      "isCiPerdu": false,
+      "dvs": {
+        "hasDvs": true,
+        "informations": []
+      },
+      "suspensions": {
+        "hasSuspensions": true,
+        "informations": []
+      },
+      "oppositions": {
+        "hasOppositions": true,
+        "informations": {
+          "oves": [],
+          "oveis": [],
+          "otcisPv": [],
+          "otcis": []
         }
       },
-      "caracteristiques_techniques": {
-        "marque": "CITROEN",
-        "tvv": "PNCFAC",
-        "numero_cnit": "MCT1012TD456",
-        "nom_commercial": "C1",
-        "couleur": "GRIS CLAIR",
-        "type_de_reception": "CE",
-        "vin_anonymise": "WVGZ********64552",
-        "ptta": 1190,
-        "ptac": 1190,
-        "ptra": 0,
-        "ptes": 930,
-        "ptav": 855,
-        "date_emission": "2009-05-13",
-        "categorie_ue": "M1",
-        "genre_national": "VP",
-        "carrosserie_ue": "AB",
-        "carrosserie_fr": "CI",
-        "numero_de_reception": "e11*2001/116*0238*06",
-        "cylindree": 998,
-        "puissance_nette": 50,
-        "energie": "ES",
-        "puissance_cv": 4,
-        "rapport_puissance_masse": 0,
-        "places_assises": 4,
-        "places_debout": 0,
-        "niveau_sonore": 80,
-        "vitesse_du_moteur": 4500,
-        "emission_co2": 106,
-        "classe_environnementale_ue": "70/220*2003/76EURO4"
-      },
-      "etat": {
-        "duplicata": false,
-        "annule": false,
-        "perdu": false,
-        "vole": false
-      }
+      "isVehVole": false
     },
-    "etat": {
-      "nombre_de_titulaires": 1,
-      "vignette_critair": "2",
-      "vole": false,
-      "procedures_ve": {
-        "numero_immatriculation_au_format_fni": false,
-        "apte_a_circuler": true,
-        "nombre_de_procedures_ve": 0,
-        "procedure_ve_en_cours": false
-      },
-      "vehicule_a_usage_agricole": false,
-      "vehicule_a_usage_de_collection": false
+    "accidents": {
+      "nbSinistres": 0,
+      "dateDerniereResolution": null,
+      "dateDernierSinistre": null
     },
     "historique": [
       {
-        "date": "2009-05-13",
-        "type": "IMMAT_NORMALE"
-      }
-    ],
-    "import_en_france": {
-      "vehicule_importe_depuis_etranger": false,
-      "date_import": "2009-05-13"
-    },
-    "situation_administrative": {
-      "declarations_valant_saisie": [],
-      "gages": [],
-      "opposition": {
-        "oves": [],
-        "oveis": [],
-        "otcis": [],
-        "otcis_pv": []
+        "opaDate": "2009-04-20",
+        "opaType": "Première immatriculation d'un véhicule neuf"
       },
-      "suspensions": []
-    },
-    "extra": {}
+      {
+        "opaDate": "2015-05-18",
+        "opaType": "Duplicata de la carte grise"
+      },
+      {
+        "opaDate": "2022-08-26",
+        "opaType": "Achat ou reprise par un professionnel"
+      }
+    ]
   },
-  "controles_techniques": {
-    "date_mise_a_jour": "2021-08-01",
-    "historique": [
+  "proprietaire": {
+    "personnePhysique": {
+      "nomNaissance": "B******T",
+      "prenom": "M****L"
+    },
+    "personneMorale": {
+      "raisonSociale": "",
+      "siren": ""
+    },
+    "codePostal": "94400"
+  },
+  "certificatImmatriculation": {
+    "age": 10,
+    "dateEmission": "2015-05-18"
+  },
+  "utac": {
+    "updateDate": "2021-08-01",
+    "status": 200,
+    "ct": [
       {
-        "date": "2014-12-11",
-        "nature": "VTP",
-        "nature_libelle": "Visite Technique Périodique",
-        "resultat": "A",
-        "resultat_libelle": "Favorable",
+        "ctDate": "2014-12-11",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Visite Technique Périodique",
         "km": 98429
       },
       {
-        "date": "2016-12-10",
-        "nature": "VTP",
-        "nature_libelle": "Visite Technique Périodique",
-        "resultat": "A",
-        "resultat_libelle": "Favorable",
+        "ctDate": "2016-12-10",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Visite Technique Périodique",
         "km": 132874
       },
       {
-        "date": "2018-12-26",
-        "nature": "VTP",
-        "nature_libelle": "Contrôle Technique Périodique",
-        "resultat": "A",
-        "resultat_libelle": "Favorable",
+        "ctDate": "2018-12-26",
+        "resultat": "Favorable",
+        "resultatRaw": "A",
+        "nature": "Contrôle Technique Périodique",
         "km": 160532
       }
-    ],
-    "donnee_disponible": true
+    ]
+  },
+  "clefAcheteur": "179d0be9-e9d2-4a61-9384-94440a4bc12b",
+  "validiteClefcheteur": "2023-06-03",
+  "messageUsager": [],
+  "plaqImmatHash": "acdd4e99b514a23f9fde338679b4713da59e87621a658f68c08c90a12edcbaea",
+  "incomingQuery": {
+    "sivPhysique": {
+      "nom": "",
+      "prenom": "",
+      "immat": "",
+      "numeroFormule": ""
+    },
+    "sivMorale": null,
+    "ivtPhysique": null,
+    "ivtMorale": null
   }
 }

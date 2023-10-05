@@ -1,6 +1,6 @@
 <script>
 import {defineComponent} from 'vue'
-import '@/assets/stylesheets/image.css'
+import '@Assets/stylesheets/image.css'
 
 export default defineComponent({
   name: 'ImagePresentation',
@@ -25,7 +25,7 @@ export default defineComponent({
   <div class="fr-content-media">
     <img
       :id="id"
-      class="fr-responsive-img image-presentation__format"
+      class="fr-responsive-img"
       :alt="alt"
       :src="src"
     >

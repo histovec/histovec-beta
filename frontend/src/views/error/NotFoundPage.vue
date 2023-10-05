@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
-import ErrorPage from '@/views/error/ErrorPage.vue'
+import ErrorPage from '@Views/error/ErrorPage.vue'
 
 
 export default defineComponent({
@@ -30,14 +30,6 @@ export default defineComponent({
       default: () => ({
         label:'Accueil',
         to:'/accueil',
-      }),
-    },
-    secondaryAction: {
-      type: Object,
-      default: () => ({
-        label:'Contactez-nous',
-        icon:'ri-mail-line',
-        to:'/contact',
       }),
     },
   },

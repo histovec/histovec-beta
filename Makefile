@@ -227,6 +227,7 @@ export FAKE_UTAC_LATENCY=500
 export IS_UTAC_API_ACTIVATED?=true
 export IS_UTAC_CACHE_IGNORABLE?=false
 export IS_UTAC_MOCK_FOR_BPSA_ACTIVATED?=false
+export IS_API_DATA_MOCK_ACTIVATED?=false
 export UTAC_URL
 export UTAC_ID_KEY
 export UTAC_TIMEOUT?=5000
@@ -236,6 +237,9 @@ export HISTOVEC_PFX
 export HISTOVEC_PFX_PASSPHRASE
 export INES_TOKEN
 export UTAC_PEM
+
+# API data confs
+export API_DATA_URL
 
 
 ##############################################
