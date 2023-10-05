@@ -76,6 +76,7 @@ export default defineComponent({
                 <p class="fr-logo">
                   Ministère
                   <br>de l'intérieur
+                  <br>et des outre-mer
                 </p>
               </div>
               <div class="fr-header__operator">
