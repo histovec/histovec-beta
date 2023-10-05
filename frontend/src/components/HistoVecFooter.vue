@@ -75,8 +75,9 @@ export default defineComponent({
           <p class="fr-logo">
             Ministère
             <br>de l’intérieur
+            <br>et des outre-mer
           </p>
-          <router-link class="fr-footer__brand-link" to="/" title="Ministère de l’intérieur - HistoVec - Retour à l’accueil du site">
+          <router-link class="fr-footer__brand-link" to="/" title="Ministère de l’Intérieur et des Outre-mer - HistoVec - Retour à l’accueil du site">
             <img class="fr-footer__logo footer__logo__histovec" :src='images.logoHistoVecSvg' alt="" />
           </router-link>
         </div>
