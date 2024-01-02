@@ -2,8 +2,8 @@
 import orderBy from 'lodash.orderby'
 
 import { MISSING_VALUE } from '@/assets/js/constants.js'
+import { HISTORIQUE_OPERATION_TYPE } from '@/constants/operations.js'
 import { booleanLabel, formatIsoToFrDate, formatIsoToFrDateOrDefault } from '@/assets/js/format.js'
-import operationsMapping from '@/assets/json/operations.json'
 import suspensionsMapping from '@/assets/json/suspensions.json'
 
 
@@ -41,7 +41,7 @@ const labelizeCertifDepuis = (nbMonths) => {
   if((month>6)&& (year >=10)){
     return `${year+1} ans`
   }
-  
+
   return yearLabel
 }
 
@@ -506,12 +506,11 @@ const processVehiculeData = (vehiculeData) => {
   const lastSinistreYear = new Date(dateDerniereProcedureVE).getFullYear()
   const lastResolutionYear = new Date(dateFinDerniereProcedureVE).getFullYear()
   const hasNombreDeProceduresVE = Boolean(nombreDeProceduresVE>0)
-
   const labelizedHistorique = historique.map(elt => (
     {
       ...elt,
       date: formatIsoToFrDate(elt.date),
-      nature: operationsMapping[elt.type],
+      nature: HISTORIQUE_OPERATION_TYPE[elt.type]??null,
     }
   ))
 
