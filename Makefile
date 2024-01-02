@@ -102,12 +102,12 @@ export NGINX=${APP_PATH}/nginx
 export NGINX_LOGS=${LOGS}/nginx
 export NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
 # @rateLimitFront parameters
-export BACKEND_API_USER_LIMIT_RATE=1r/m
+export BACKEND_API_USER_LIMIT_RATE=10000r/s
 export BACKEND_API_USER_BURST=3 nodelay
 export BACKEND_API_USER_SCOPE=http_x_forwarded_for
-export BACKEND_API_GLOBAL_LIMIT_RATE=5r/s
+export BACKEND_API_GLOBAL_LIMIT_RATE=10000r/s
 export BACKEND_API_GLOBAL_BURST=20 nodelay
-export BACKEND_API_WRITE_LIMIT_RATE=10r/m
+export BACKEND_API_WRITE_LIMIT_RATE=10000r/s
 export BACKEND_API_WRITE_BURST=20 nodelay
 # packaging
 export FILE_IMAGE_NGINX_APP_VERSION = $(APP)-nginx-$(APP_VERSION)-image.tar
@@ -266,12 +266,12 @@ export PUBLIC_BACKEND_NGINX=${APP_PATH}/public-backend-nginx
 export PUBLIC_BACKEND_NGINX_LOGS=${LOGS}/public-backend-nginx
 export PUBLIC_BACKEND_NGINX_SERVER_TEMPLATE_V1=nginx-run-v1.template
 # @rateLimitAPI parameters
-export PUBLIC_BACKEND_API_USER_LIMIT_RATE=1r/m
+export PUBLIC_BACKEND_API_USER_LIMIT_RATE=10000r/s
 export PUBLIC_BACKEND_API_USER_BURST=3 nodelay
 export PUBLIC_BACKEND_API_USER_SCOPE=http_x_forwarded_for
-export PUBLIC_BACKEND_API_GLOBAL_LIMIT_RATE=5r/s
+export PUBLIC_BACKEND_API_GLOBAL_LIMIT_RATE=10000r/s
 export PUBLIC_BACKEND_API_GLOBAL_BURST=20 nodelay
-export PUBLIC_BACKEND_API_WRITE_LIMIT_RATE=10r/m
+export PUBLIC_BACKEND_API_WRITE_LIMIT_RATE=10000r/s
 # packaging
 export FILE_IMAGE_PUBLIC_BACKEND_NGINX_APP_VERSION = $(API)-public-backend-nginx-$(APP_VERSION)-image.tar
 export FILE_IMAGE_PUBLIC_BACKEND_NGINX_LATEST_VERSION = $(API)-public-backend-nginx-latest-image.tar
