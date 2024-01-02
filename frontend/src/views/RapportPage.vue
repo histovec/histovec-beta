@@ -1157,13 +1157,13 @@ export default defineComponent({
                   <span class="fr-text--bleu">{{ processedVehiculeData.titulaire.identite }}</span>
                   depuis
                   <span
-                    v-if="certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
+                    v-if="certificat.ageDuCertificatImmatriculationCourant"
                     class="fr-text--bleu"
                   >
-                    {{ certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation }}
+                    {{ certificat.ageDuCertificatImmatriculationCourant }}
                   </span>
                   <span
-                    v-if="!certificat.nombreDeMoisDepuisDateEmissionCertificatImmatriculation"
+                    v-if="!certificat.ageDuCertificatImmatriculationCourant"
                     class="fr-text--bleu"
                   >
                     une durée inconnue

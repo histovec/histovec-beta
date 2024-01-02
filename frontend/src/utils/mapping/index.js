@@ -65,7 +65,8 @@ export const vehiculeMapping = ({
   date_mise_a_jour: dateMiseAJour,
     certificat_immatriculation: {
       date_premiere_immatriculation: datePremiereImmatriculation,
-      nombre_de_mois_depuis_date_emission_certificat_immatriculation: nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
+      date_emission: dateEmissionCI,
+      age_en_mois_du_certificat_immatriculation_courant: ageEnMoisDuCertificatImmatriculationCourant,
       numero_immatriculation_anonymisee: numeroImmatriculationAnonymisee,
       titulaire: {
         particulier: {
@@ -92,7 +93,6 @@ export const vehiculeMapping = ({
         ptra,
         ptes,
         ptav,
-        date_emission: dateEmissionCI,
         categorie_ue: categorieUE,
         genre_national: genreNational,
         carrosserie_ue: carrosserieUE,
@@ -163,7 +163,8 @@ export const vehiculeMapping = ({
     dateMiseAJour,
     certificatImmatriculation: {
       datePremiereImmatriculation,
-      nombreDeMoisDepuisDateEmissionCertificatImmatriculation,
+      dateEmissionCI,
+      ageEnMoisDuCertificatImmatriculationCourant,
       numeroImmatriculationAnonymisee,
       titulaire: {
         particulier: {
@@ -190,7 +191,6 @@ export const vehiculeMapping = ({
         ptra,
         ptes,
         ptav,
-        dateEmissionCI,  // @todo : remonter d'un cran
         categorieUE,
         genreNational,
         carrosserieUE,
