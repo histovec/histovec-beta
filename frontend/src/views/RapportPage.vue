@@ -170,6 +170,7 @@ export default defineComponent({
         // @flag @ignoreUtacCache
         // Outil de debug (doublé par côté backend pour empêcher son usage en PROD)
         ignoreUtacCache: false,
+        csaActivated: false, // activer / desactiver le téléchargement du csa
       },
       sessionStorage,
       isNotificationOpened: false,
@@ -1043,6 +1044,9 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 0"
           :asc="tabs.asc"
         >
+          <div class="fr-highlight">
+            <p>Les informations relatives au vol ne sont actuellement pas disponibles.</p>
+          </div>
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-pb-3w">
               <h3 class="fr-mb-0 fr-h5">
@@ -1764,6 +1768,9 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 3"
           :asc="tabs.asc"
         >
+          <div class="fr-highlight">
+            <p>Les informations relatives au vol ne sont actuellement pas disponibles.</p>
+          </div>
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
               <div class="fr-grid-row  fr-grid-row--gutters">
@@ -2095,7 +2102,7 @@ export default defineComponent({
     v-if="isRapportVendeur"
     class="fr-grid-row  fr-grid-row--gutters  fr-grid-row--center  fr-mb-4w"
   >
-    <div class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center">
+    <div v-if="flags.csaActivated" class="fr-col-12  fr-col-md-4  fr-col-lg-3  fr-col-xl-3  text-center">
       <DsfrButton
         label="Imprimer le CSA"
         icon="ri-printer-line"
@@ -2154,5 +2161,8 @@ export default defineComponent({
   }
   .image-avis {
     height: 5rem;
+  }
+  .fr-highlight {
+    margin: 0;
   }
 </style>
