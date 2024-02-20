@@ -1044,9 +1044,6 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 0"
           :asc="tabs.asc"
         >
-          <div class="fr-highlight">
-            <p>Les informations relatives au vol ne sont actuellement pas disponibles.</p>
-          </div>
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-pb-3w">
               <h3 class="fr-mb-0 fr-h5">
@@ -1237,6 +1234,9 @@ export default defineComponent({
                 <h4 class="fr-mb-0  fr-pb-2w fr-h6">
                   Situation administrative
                 </h4>
+                <div class="fr-highlight">
+                  <p>Les informations relatives au vol ne sont actuellement pas disponibles.</p>
+                </div>
 
                 <p
                   v-if="processedVehiculeData.hasSinistre || hasProcedureVEEnCours"
@@ -1768,9 +1768,6 @@ export default defineComponent({
           :selected="tabs.selectedTabIndex === 3"
           :asc="tabs.asc"
         >
-          <div class="fr-highlight">
-            <p>Les informations relatives au vol ne sont actuellement pas disponibles.</p>
-          </div>
           <div class="fr-grid-row  fr-grid-row--gutters">
             <div class="fr-col-12  fr-col-md-6  fr-col-lg-6  fr-col-xl-6">
               <div class="fr-grid-row  fr-grid-row--gutters">
@@ -1834,15 +1831,12 @@ export default defineComponent({
                 </div>
 
                 <div class="fr-col-12  fr-pb-2w  fr-pt-0">
-                  <h3 class="fr-mb-0 fr-h5">
+                  <h3 class="fr-mb-0 fr-pb-2w fr-h5">
                     Véhicule
                   </h3>
-                </div>
-                <div class="fr-col-6  fr-col-lg-4  fr-col-xl-4  fr-pb-3w  fr-pt-0">
-                  Déclaré volé
-                </div>
-                <div class="fr-col-6  fr-col-lg-8  fr-col-xl-8  fr-pb-3w  fr-pt-0  fr-text--bleu">
-                  {{ reportLabels.vol }}
+                  <div class="fr-highlight">
+                    <p>Les informations relatives au vol ne sont actuellement pas disponibles.</p>
+                  </div>
                 </div>
               </div>
             </div>

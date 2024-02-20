@@ -63,12 +63,6 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .parent()
       .find("div[class*='fr-col-12 fr-pb-0 fr-pt-0']")
       .should('have.length', 2)
-      .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0']")
-      .should('have.length', 1)
-      .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu']")
-      .should('have.length', 1)
 
     cy.get("div[id*='report-tab-content-3']")
       .should("have.class", "fr-tabs__panel fr-tabs__panel--selected")
@@ -158,12 +152,9 @@ context('Rapport vehicule cas simple - onglet Situation administrative', () => {
       .should('have.length', 1)
       .contains("Véhicule")
       .parent()
-      .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-4 fr-col-xl-4 fr-pb-3w fr-pt-0']")
-      .contains("Déclaré volé")
-      .parent()
-      .find("div[class*='fr-col-6 fr-col-lg-8 fr-col-xl-8 fr-pb-3w fr-pt-0 fr-text--bleu']")
-      .contains("NON")
+      .find("div[class*='fr-highlight']")
+      .find("p")
+      .contains("Les informations relatives au vol ne sont actuellement pas disponibles.")
 
     // Déclarations valant saisie
     cy.get("div[id*='report-tab-content-3']")
