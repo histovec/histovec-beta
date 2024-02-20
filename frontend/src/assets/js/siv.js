@@ -41,7 +41,7 @@ const labelizeCertifDepuis = (nbMonths) => {
   if((month>6)&& (year >=10)){
     return `${year+1} ans`
   }
-  
+
   return yearLabel
 }
 
@@ -202,7 +202,8 @@ const syntheseVehiculeMapping = (etatCI, etatVehicule, syntheseSituationAdminist
     hasSuspension,
   } = syntheseSituationAdministrative
 
-  const anomalies = ['annulation_ci', 'ci_vole', 'duplicata', 'gage', 'perte_ci', 'saisie', 'suspension', 'vehicule_vole']
+  // désactivation de l'affichage de 'vehicule_vole'
+  const anomalies = ['annulation_ci', 'ci_vole', 'duplicata', 'gage', 'perte_ci', 'saisie', 'suspension']
   const anomaliesMapping = {
     annulation_ci: isCIAnnule,
     ci_vole: isCIVole,
